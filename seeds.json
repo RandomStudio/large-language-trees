@@ -1,12 +1,59 @@
 [
   {
     "id": "0",
+    "parents": [],
     "commonName": "Golden Palm",
     "description": "A curved trunk, sometimes standing up to 6 metres in height. A single cluster of green palm leaves. The fruit resemble coconuts, but are surprisingly gold in colour."
   },
   {
     "id": "1",
+    "parents": [],
     "commonName": "Giant Tree Fern",
     "description": "Despite its name, this variety of fern grows to a height of just 3 metres on average; tall for a fern but shorter than most trees in the native forest where it grows. It features fronds and hairy bark similar to most other common varieties of ferns."
+  },
+  {
+    "id": "12d8250b-eb50-48ce-ad6a-e9ab58898e82",
+    "parents": [
+      "1",
+      "0"
+    ],
+    "commonName": "Golden Fern",
+    "description": "A medium-sized plant reaching heights up to 4.5 meters, combining features from both parent plants. It has fronds similar to a fern but with a golden hue, and a trunk that curves elegantly like a palm tree. The bark is smooth and slightly shiny. The fruit produced by this plant are small and golden in color, resembling miniature coconuts."
+  },
+  {
+    "id": "bb3f4dc7-074d-4de9-8586-e73acef6d132",
+    "parents": [
+      "1",
+      "12d8250b-eb50-48ce-ad6a-e9ab58898e82"
+    ],
+    "commonName": "Golden Tree Fern",
+    "description": "The Golden Tree Fern is a majestic hybrid plant that grows to an impressive height of 5 meters, towering over typical ferns. It boasts fronds with a shimmering golden hue, reminiscent of the sun reflecting off the leaves, and a trunk that gracefully twists like a spiral staircase, providing a unique visual appeal. The bark is smooth to the touch and exudes a subtle golden sheen. Its fruit, resembling golden orbs, add a touch of magic to this enchanting botanical creation."
+  },
+  {
+    "id": "df61bf23-fdce-4e7b-9fcb-700de55d09c9",
+    "parents": [
+      "12d8250b-eb50-48ce-ad6a-e9ab58898e82",
+      "bb3f4dc7-074d-4de9-8586-e73acef6d132"
+    ],
+    "commonName": "Golden Spiral Fern",
+    "description": "The Golden Spiral Fern is an extraordinary botanical marvel, standing tall at 4.8 meters in height. Its fronds display a mesmerizing golden glow that seems to dance in the sunlight, combining the elegance of a fern with a unique spiral pattern originating from the trunk, creating a captivating visual display. The trunk of this plant twists and turns in a mesmerizing spiral, exuding a subtle golden sheen that enchants all who behold it. Its fruit are small golden orbs that seem to sparkle with an otherworldly radiance, adding a touch of magic to this enchanting creation."
+  },
+  {
+    "id": "fd41f7c8-8c4f-47bb-9652-cc14deef5727",
+    "parents": [
+      "bb3f4dc7-074d-4de9-8586-e73acef6d132",
+      "12d8250b-eb50-48ce-ad6a-e9ab58898e82"
+    ],
+    "commonName": "Golden Spiral Fern",
+    "description": "The Golden Spiral Fern is a captivating botanical wonder that grows to a height of 4.75 meters, showcasing a harmonious blend of characteristics inherited from its parent plants. Its fronds bear a striking golden hue, shimmering like flakes of gold in the sunlight, while gracefully curving like the spiral staircase of the Golden Tree Fern. The trunk of the Golden Spiral Fern combines the elegant curvature of the Golden Fern with a subtle golden sheen that adds a touch of enchantment. Its small fruits, resembling golden orbs with a hint of coconut-like texture, enhance the magical allure of this unique hybrid plant."
+  },
+  {
+    "id": "a697afa5-f627-4ac2-926a-aff78617b504",
+    "parents": [
+      "0",
+      "df61bf23-fdce-4e7b-9fcb-700de55d09c9"
+    ],
+    "commonName": "Golden Spiral Palm",
+    "description": "The Golden Spiral Palm is an awe-inspiring botanical wonder, reaching a height of 5 meters. Its trunk exhibits a graceful spiral pattern, adorned with a single cluster of palm-like leaves that shimmer with a golden hue. The fronds of this plant elegantly combine the delicate nature of ferns with the robustness of palm leaves, creating a mesmerizing visual spectacle. Its fruit, resembling golden coconuts speckled with a magical radiance, dangle like jewels from the branches, enchanting all who gaze upon them."
   }
 ]
