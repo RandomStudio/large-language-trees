@@ -52,27 +52,6 @@ const parseNewPlant = (
     logger.error("Fields missing:", Object.keys(json));
     return null;
   }
-  // const sentences = text.split(".");
-  // if (sentences.length <= 1) {
-  //   throw Error("Not enough sentences! " + sentences.length);
-  // }
-  // const plantName = sentences[0].match(/\\(".*?"\\)/g);
-  // if (plantName) {
-  //   const name = plantName.at(0);
-  //   if (name) {
-  //     logger.debug("Found plant name:", name);
-  //     const descriptionSentences = sentences.slice(1);
-  //     const description = descriptionSentences.join("");
-  //     logger.debug("New description:", description);
-  //     return {
-  //       id: uuidv4(),
-  //       parents,
-  //       commonName: name,
-  //       description,
-  //     };
-  //   }
-  // }
-  // return null;
 };
 
 const main = async () => {
