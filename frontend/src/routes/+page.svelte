@@ -18,6 +18,8 @@
         }
         return [first, second];
     };
+
+    let parents: [Plant, Plant] | null = null;
 </script>
 
 <h1>Garden</h1>
@@ -32,6 +34,25 @@
     {/each}
 </ul>
 
-<form method="POST">
-    <button>Generate</button>
-</form>
+<div>
+    <button
+        on:click={() => {
+            parents = pickRandomParents(data.seeds);
+        }}>Choose random parents</button
+    >
+    {#if parents !== null}
+        <ul>
+            {#each parents as { id, commonName }}
+                <li>#{id}: {commonName}</li>
+            {/each}
+        </ul>
+    {/if}
+
+    <form method="POST">
+        {#if parents !== null}
+            <input type="hidden" name="parent1" value={parents[0].id} />
+            <input type="hidden" name="parent2" value={parents[1].id} />
+            <button>Generate</button>
+        {/if}
+    </form>
+</div>

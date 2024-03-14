@@ -9,18 +9,37 @@ let seedsInMemory: Plant[] | null = null;
 export function load() {
   console.log("loading!");
   if (seedsInMemory === null) {
-    seedsInMemory = seeds;
+    console.log("Add from original");
+    seedsInMemory = [...seeds];
+  } else {
+    console.log("Was already populated with", seedsInMemory.length, "entries");
   }
   return { seeds: seedsInMemory };
 }
 
 export const actions = {
   default: async ({ request }) => {
-    const _data = await request.formData();
+    console.log("Start with", seedsInMemory?.length, "seeds");
+    const data = await request.formData();
+
+    const [id1, id2] = [data.get("parent1"), data.get("parent2")] as [
+      string,
+      string,
+    ];
+
+    console.log("looking for ids", id1, id2);
+
+    const plant1 = seedsInMemory?.find((s) => s.id === id1);
+    const plant2 = seedsInMemory?.find((s) => s.id === id2);
+
+    if (plant1 === undefined || plant2 === undefined) {
+      console.error(data);
+      throw Error("Where are the parents?");
+    }
+
+    console.log("got request", plant1.commonName, "x", plant2.commonName);
 
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
-
-    const [plant1, plant2] = seedsInMemory as [Plant, Plant];
 
     const completion = await openai.chat.completions.create({
       messages: [
@@ -69,7 +88,7 @@ export const actions = {
       if (offspring) {
         console.log("Offspring:", offspring);
 
-        seedsInMemory = [...seeds, offspring];
+        seedsInMemory = [...(seedsInMemory || seeds), offspring];
         // const jsonOutputPath = path.resolve(process.cwd(), config.seedsOut);
         // await fs.writeFile(jsonOutputPath, JSON.stringify(garden, null, 2));
       } else {
