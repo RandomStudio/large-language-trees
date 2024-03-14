@@ -29,3 +29,4 @@ Tidy up (might automate this soon):
 - Please modify the package name, etc. in `package.json`!
 - In `src/defaults.ts`, you should set `appName` to something more relevant, so that logs are labelled properly
 - Modify `README.md` for your project
+# large-language-trees
