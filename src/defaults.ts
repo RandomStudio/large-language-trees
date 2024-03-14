@@ -1,7 +1,8 @@
 const defaults = {
   appName: "MyApp",
   loglevel: "info",
-  seedsPath: "./seeds.json",
+  seedsIn: "./seeds.json",
+  seedsOut: "./seeds.json",
 };
 
 export default defaults;

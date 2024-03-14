@@ -55,8 +55,8 @@ const parseNewPlant = (
 };
 
 const main = async () => {
-  const jsonPath = path.resolve(process.cwd(), "./seeds.json");
-  const seedsText = await fs.readFile(jsonPath, {
+  const jsonInputPath = path.resolve(process.cwd(), config.seedsIn);
+  const seedsText = await fs.readFile(jsonInputPath, {
     encoding: "utf-8",
   });
   const seeds = JSON.parse(seedsText) as Plant[];
@@ -90,7 +90,7 @@ const main = async () => {
             2
           ) +
           "\n\n" +
-          'Describe the new plant that would result from the combination of these two. Please give the result in the same JSON format, i.e. with a field "commonName" for the common name and "description" for the description. Do not include any text besides the JSON in your response.',
+          'Describe the new plant that would result from the combination of these two. The new common name should not just be a simple combination of the two parent plant names - try to come up with a strange sounding name. Please give the result in the same JSON format, i.e. with a field "commonName" for the common name and "description" for the description. Do not include any text besides the JSON in your response.',
       },
     ],
     model: "gpt-3.5-turbo",
@@ -107,8 +107,8 @@ const main = async () => {
       logger.info("Offspring:", offspring);
 
       const garden = [...seeds, offspring];
-
-      await fs.writeFile(jsonPath, JSON.stringify(garden, null, 2));
+      const jsonOutputPath = path.resolve(process.cwd(), config.seedsOut);
+      await fs.writeFile(jsonOutputPath, JSON.stringify(garden, null, 2));
     } else {
       throw Error("Oops, couldn't parse the offspring text");
     }
