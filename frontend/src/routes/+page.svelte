@@ -1,5 +1,8 @@
 <script lang="ts">
+    import { enhance } from "$app/forms";
     import { type Plant } from "./types";
+    import { navigating } from "$app/stores";
+
     export let data: { seeds: Plant[] };
 
     const pick = <T,>(arr: T[]): T => {
@@ -58,7 +61,11 @@
             {#if parents !== null}
                 <input type="hidden" name="parent1" value={parents[0].id} />
                 <input type="hidden" name="parent2" value={parents[1].id} />
-                <button>Generate</button>
+                {#if $navigating}
+                    <i>Cross-pollinating...</i>
+                {:else}
+                    <button>Generate</button>
+                {/if}
             {/if}
         </form>
     </div>
@@ -72,9 +79,11 @@
         font-optical-sizing: auto;
         font-weight: 400;
         font-style: normal;
-        margin: 6em;
+        padding: 3em;
+        margin: 3em;
         color: #333;
-        max-width: 50vw;
+        max-width: 32em;
+        background-color: #ddd;
     }
 
     h1 {
