@@ -22,37 +22,101 @@
     let parents: [Plant, Plant] | null = null;
 </script>
 
-<h1>Garden</h1>
-<ul>
-    {#each data.seeds as { id, commonName, parents, description }}
-        <li>
-            <div>
-                <h2>#{id}: {commonName}</h2>
-                <p>{description}</p>
-            </div>
-        </li>
-    {/each}
-</ul>
+<div class="container">
+    <h1>{data.seeds.length} Seeds</h1>
+    <ul class="seeds-list">
+        {#each data.seeds as { id, commonName, parents, description }}
+            <li>
+                <div>
+                    <h2>
+                        {commonName}
+                    </h2>
+                    <div class="subtitle">
+                        {id}
+                    </div>
+                    <p>{description}</p>
+                </div>
+            </li>
+        {/each}
+    </ul>
 
-<div>
-    <button
-        on:click={() => {
-            parents = pickRandomParents(data.seeds);
-        }}>Choose random parents</button
-    >
-    {#if parents !== null}
-        <ul>
-            {#each parents as { id, commonName }}
-                <li>#{id}: {commonName}</li>
-            {/each}
-        </ul>
-    {/if}
-
-    <form method="POST">
+    <div class="interaction">
+        <button
+            on:click={() => {
+                parents = pickRandomParents(data.seeds);
+            }}>Choose random parents</button
+        >
         {#if parents !== null}
-            <input type="hidden" name="parent1" value={parents[0].id} />
-            <input type="hidden" name="parent2" value={parents[1].id} />
-            <button>Generate</button>
+            <div class="parents">
+                {#each parents as { commonName }, i}
+                    "{commonName}" {#if i == 0}<div>x</div>{/if}
+                {/each}
+            </div>
         {/if}
-    </form>
+
+        <form method="POST">
+            {#if parents !== null}
+                <input type="hidden" name="parent1" value={parents[0].id} />
+                <input type="hidden" name="parent2" value={parents[1].id} />
+                <button>Generate</button>
+            {/if}
+        </form>
+    </div>
 </div>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+    .container {
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        margin: 6em;
+        color: #333;
+        max-width: 50vw;
+    }
+
+    h1 {
+        font-size: 3em;
+        font-weight: 800;
+    }
+
+    h2 {
+        margin-bottom: 0;
+    }
+
+    .subtitle {
+        font-style: italic;
+        font-size: 1em;
+    }
+
+    /* .seeds-list {
+        max-width: 50vw;
+    } */
+
+    li {
+        margin-top: 3em;
+        list-style-type: none;
+    }
+
+    .interaction {
+        margin: 4em;
+        padding: 2em 0;
+        border-top: 1px dashed #ddd;
+    }
+
+    button {
+        cursor: pointer;
+        font-family: "Playfair Display", serif;
+        font-weight: 800;
+        border: 0;
+        padding: 1em;
+    }
+
+    .parents {
+        text-align: center;
+        margin: 3em 0;
+        font-style: italic;
+    }
+</style>
