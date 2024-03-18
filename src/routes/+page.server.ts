@@ -3,6 +3,7 @@ import { OPENAI_API_KEY } from "$env/static/private";
 import OpenAI from "openai";
 import type { Plant } from "./types";
 import { v4 as uuidv4 } from "uuid";
+import type { Actions } from "./$types";
 
 let seedsInMemory: Plant[] | null = null;
 
@@ -96,7 +97,7 @@ export const actions = {
       }
     }
   },
-};
+} satisfies Actions;
 
 const parseNewPlant = (
   text: string,
