@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
     import { type Plant } from "./types";
-    import { navigating } from "$app/stores";
+    import PlanDetails from "./PlantDetails.svelte";
+    import type { PageData, ActionData } from "./$types";
+    import PlantDetails from "./PlantDetails.svelte";
 
-    export let data: { seeds: Plant[] };
+    export let data: { seeds: Plant[]; newSeed: Plant | null };
 
     const pick = <T,>(arr: T[]): T => {
         const index = Math.round(Math.random() * (arr.length - 1));
@@ -30,22 +31,16 @@
 </script>
 
 <div class="container">
-    <h1>{data.seeds.length} Seeds</h1>
-    <ul class="seeds-list">
-        {#each data.seeds as { id, commonName, parents, description }}
-            <li>
-                <div>
-                    <h2>
-                        {commonName}
-                    </h2>
-                    <div class="subtitle">
-                        {id}
-                    </div>
-                    <p>{description}</p>
-                </div>
-            </li>
-        {/each}
-    </ul>
+    <div class="page">
+        <h1>{data.seeds.length} Seeds</h1>
+        <ul class="seeds-list">
+            {#each data.seeds as p}
+                <li>
+                    <PlantDetails props={p} />
+                </li>
+            {/each}
+        </ul>
+    </div>
 
     <div class="interaction">
         <button
@@ -66,17 +61,29 @@
             </div>
         {/if}
 
-        <form method="POST">
-            {#if parents !== null}
-                <input type="hidden" name="parent1" value={parents[0].id} />
-                <input type="hidden" name="parent2" value={parents[1].id} />
-                {#if $navigating}
-                    <i>Cross-pollinating...</i>
-                {:else}
-                    <button>Generate</button>
-                {/if}
-            {/if}
-        </form>
+        {#if parents !== null}
+            <input type="hidden" name="parent1" value={parents[0].id} />
+            <input type="hidden" name="parent2" value={parents[1].id} />
+            <button
+                on:click={async () => {
+                    const res = await fetch("/api/create", {
+                        method: "POST",
+                        body: JSON.stringify(parents),
+                    });
+                    console.log({ res });
+                    data.newSeed = await res.json();
+                }}>Generate</button
+            >
+        {/if}
+
+        {#if data.newSeed}
+            <h1>How about this chap?</h1>
+            <PlantDetails props={data.newSeed} />
+            <form method="POST">
+                <input type="hidden" value={data.newSeed} />
+                <button>Add to my Garden</button>
+            </form>
+        {/if}
     </div>
 </div>
 
@@ -88,6 +95,10 @@
         font-optical-sizing: auto;
         font-weight: 400;
         font-style: normal;
+        display: flex;
+    }
+
+    .page {
         padding: 3em;
         margin: 3em;
         color: #333;
@@ -121,7 +132,6 @@
     .interaction {
         margin: 4em;
         padding: 2em 0;
-        border-top: 1px dashed #ddd;
     }
 
     button {

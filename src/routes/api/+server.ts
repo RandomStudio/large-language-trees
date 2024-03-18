@@ -10,4 +10,6 @@ export const GET: RequestHandler = () => {
   return json(seeds);
 };
 
-// export const POST: RequestHandler = ({ url, request }) => {};
+export const POST: RequestHandler = ({ url, request }) => {
+  return new Response();
+};
