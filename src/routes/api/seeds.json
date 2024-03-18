@@ -1,12 +1,24 @@
 [
   {
-    "id": "ex-nihilo-0",
-    "commonName": "Golden Palm",
-    "description": "A curved trunk, sometimes standing up to 6 metres in height. A single cluster of green palm leaves. The fruit resemble coconuts, but are surprisingly gold in colour."
+    "id": "ex-hibiscus",
+    "commonName": "Delicious Scumglove",
+    "characteristics": {
+      "fruit": "none",
+      "flowerColour": "red",
+      "petalShape": "funnel",
+      "leafShape": "linear"
+    },
+    "description": "A large flowering shrub that thrives in temperate climates. Its flowers are prominent and sweet-smelling. There is no fruit but the leaves are poisonous if eaten."
   },
   {
-    "id": "ex-nihilo-1",
-    "commonName": "Giant Tree Fern",
-    "description": "Despite its name, this variety of fern grows to a height of just 3 metres on average; tall for a fern but shorter than most trees in the native forest where it grows. It features fronds and hairy bark similar to most other common varieties of ferns."
+    "id": "ex-palm",
+    "commonName": "Golden Palm",
+    "characteristics": {
+      "fruit": "large, golden orbs resembling coconuts",
+      "flowerColour": "white",
+      "petalShape": "butterfly",
+      "leafShape": "palmate"
+    },
+    "description": "A curved trunk, sometimes standing up to 6 metres in height. A single cluster of green palm leaves. The fruit resemble coconuts, but are surprisingly gold in colour. The fruit is edible."
   }
 ]

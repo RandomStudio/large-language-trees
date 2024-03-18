@@ -114,11 +114,6 @@
         margin-bottom: 0;
     }
 
-    .subtitle {
-        font-style: italic;
-        font-size: 1em;
-    }
-
     /* .seeds-list {
         max-width: 50vw;
     } */

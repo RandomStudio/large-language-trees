@@ -14,19 +14,18 @@ export const POST: RequestHandler = async ({ request }) => {
   const completion = await openai.chat.completions.create({
     messages: [
       {
-        role: "system",
-        content:
-          "You are a knowledgeable botanist with a flair for the imagination.",
-      },
-      {
         role: "user",
         content:
-          'I manage to cross-pollinate two plants. Don\'t worry about whether this is physically possible in real life, but feel free to speculate on the likely outcome. I will describe each plant by giving its common name and by a brief description. This will be given in JSON form, with the keys "commonName" and "description" in both cases. With the information about the two parent plants, try to come up with a plausible new plant that would result from the cross-pollination.\n\n' +
+          "Imagine you are a knowledgeable botanist with a flair for descriptive writing, and an interest in science fiction. I manage to cross-pollinate two plants. Don't worry about whether this is physically possible in real life, but feel free to speculate on the likely outcome. \n\n" +
+          'I will describe each plant in JSON form, giving its common name and by a brief description, followed by a set of key-value pairs for "characteristics". With the information about the two parent plants, try to come up with a plausible new plant that would result from the cross-pollination.\n\n' +
           "First plant JSON:\n" +
           JSON.stringify(
             {
               commonName: plant1.commonName,
               description: plant1.description,
+              properties: {
+                ...plant1.characteristics,
+              },
             },
             null,
             2,
@@ -37,12 +36,15 @@ export const POST: RequestHandler = async ({ request }) => {
             {
               commonName: plant2.commonName,
               description: plant2.description,
+              properties: {
+                ...plant1.characteristics,
+              },
             },
             null,
             2,
           ) +
           "\n\n" +
-          'Describe the new plant that would result from the combination of these two. The new common name should not just be a simple combination of the two parent plant names - try to come up with a strange sounding name. Please give the result in the same JSON format, i.e. with a field "commonName" for the common name and "description" for the description. Do not include any text besides the JSON in your response.',
+          'Describe the new plant that would result from the combination of these two. The new common name should not just be a simple combination of the two parent plant names - try to come up with a strange sounding name. Please give the result in the same JSON format, i.e. with a field "commonName" for the common name and "description" for the description, and a set of key-value pairs for the "characteristics". Do not include any text besides the JSON in your response.',
       },
     ],
     model: "gpt-3.5-turbo",
@@ -72,13 +74,14 @@ const parseNewPlant = (
   parents: [string, string],
 ): Plant | null => {
   const json = JSON.parse(text);
-  if (json["commonName"] && json["description"]) {
+  if (json["commonName"] && json["description"] && json["properties"]) {
     console.log("JSON appears to have the valid fields");
     return {
       id: uuidv4(),
       parents,
       commonName: json["commonName"],
       description: json["description"],
+      characteristics: { ...json["properties"] },
     };
   } else {
     throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
