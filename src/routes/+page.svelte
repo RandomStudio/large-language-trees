@@ -1,7 +1,5 @@
 <script lang="ts">
     import { type Plant } from "./types";
-    import PlanDetails from "./PlantDetails.svelte";
-    import type { PageData, ActionData } from "./$types";
     import PlantDetails from "./PlantDetails.svelte";
 
     export let data: { seeds: Plant[]; newSeed: Plant | null };
@@ -23,10 +21,6 @@
         return [first, second];
     };
 
-    const clearAll = () => {
-        fetch("/?clear=true", { method: "POST" });
-    };
-
     let parents: [Plant, Plant] | null = null;
 </script>
 
@@ -44,8 +38,9 @@
 
     <div class="interaction">
         <button
-            on:click={() => {
-                clearAll();
+            on:click={async () => {
+                const seeds = await fetch("/api", { method: "DELETE" });
+                data.seeds = await seeds.json();
             }}>Clear all</button
         >
         <button
@@ -77,10 +72,14 @@
         {/if}
 
         {#if data.newSeed}
-            <h1>How about this chap?</h1>
+            <h1>How about this specimen?</h1>
             <PlantDetails props={data.newSeed} />
             <form method="POST">
-                <input type="hidden" value={data.newSeed} />
+                <input
+                    type="hidden"
+                    name="newSeed"
+                    value={JSON.stringify(data.newSeed)}
+                />
                 <button>Add to my Garden</button>
             </form>
         {/if}

@@ -5,11 +5,24 @@ import type { Plant } from "../types";
 import Seeds from "./seeds.json";
 import { json } from "@sveltejs/kit";
 
+let inMemory: Plant[] = [];
+
 export const GET: RequestHandler = () => {
-  const seeds = Seeds as Plant[];
-  return json(seeds);
+  if (inMemory.length == 0) {
+    const seeds = Seeds as Plant[];
+    inMemory = seeds;
+  }
+  return json(inMemory);
 };
 
-export const POST: RequestHandler = ({ url, request }) => {
-  return new Response();
+export const DELETE: RequestHandler = () => {
+  inMemory = [];
+  return json(inMemory);
+};
+
+export const POST: RequestHandler = async ({ request }) => {
+  const plant = JSON.parse(await request.json()) as Plant;
+  console.log("add new plant", plant, typeof plant);
+  inMemory = [...inMemory, plant];
+  return json(inMemory);
 };
