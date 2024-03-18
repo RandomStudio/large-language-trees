@@ -22,6 +22,10 @@
         return [first, second];
     };
 
+    const clearAll = () => {
+        fetch("/?clear=true", { method: "POST" });
+    };
+
     let parents: [Plant, Plant] | null = null;
 </script>
 
@@ -44,6 +48,11 @@
     </ul>
 
     <div class="interaction">
+        <button
+            on:click={() => {
+                clearAll();
+            }}>Clear all</button
+        >
         <button
             on:click={() => {
                 parents = pickRandomParents(data.seeds);
