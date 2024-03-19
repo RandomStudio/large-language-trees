@@ -15,10 +15,10 @@
     <h3>Prompt Engineering</h3>
     <!-- <code>{JSON.stringify(Object.entries(config))}</code> -->
     <form>
-        {#each Object.entries(config) as [key, value]}
+        {#each Object.entries(config) as [key, entry]}
             <label>
-                {value.label}
-                <textarea value={value.text} />
+                {entry.label}
+                <textarea name={key} value={entry.text} />
             </label>
         {/each}
     </form>

@@ -89,13 +89,7 @@
 </div>
 
 <style>
-    @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
     .container {
-        font-family: "Playfair Display", serif;
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
         display: flex;
         /* display: grid;
         grid-auto-flow: column; */
@@ -107,15 +101,6 @@
         color: #333;
         max-width: 32em;
         background-color: #ddd;
-    }
-
-    h1 {
-        font-size: 3em;
-        font-weight: 800;
-    }
-
-    h2 {
-        margin-bottom: 0;
     }
 
     /* .seeds-list {
