@@ -1,7 +1,6 @@
 <script lang="ts">
     import { type Plant } from "./types";
     import PlantDetails from "./PlantDetails.svelte";
-    import PromptEngineering from "./PromptEngineering.svelte";
 
     export let data: { seeds: Plant[]; newSeed: Plant | null };
 
@@ -58,10 +57,15 @@
         {/if}
 
         {#if parents !== null}
-            <input type="hidden" name="parent1" value={parents[0].id} />
-            <input type="hidden" name="parent2" value={parents[1].id} />
-            <PromptEngineering {parents} />
-            <button
+            <form method="POST" action="/create">
+                <input
+                    type="hidden"
+                    name="parents"
+                    value={JSON.stringify(parents)}
+                />
+                <button type="submit">Select</button>
+            </form>
+            <!-- <button
                 on:click={async () => {
                     const res = await fetch("/api/create", {
                         method: "POST",
@@ -70,7 +74,7 @@
                     console.log({ res });
                     data.newSeed = await res.json();
                 }}>Generate</button
-            >
+            > -->
         {/if}
 
         {#if data.newSeed}
@@ -89,15 +93,9 @@
 </div>
 
 <style>
-    .container {
-        display: flex;
-        /* display: grid;
-        grid-auto-flow: column; */
-    }
-
     .page {
         padding: 3em;
-        margin: 3em;
+        margin: 0;
         color: #333;
         max-width: 32em;
         background-color: #ddd;
@@ -116,14 +114,6 @@
         max-width: 32em;
         margin: 4em;
         padding: 2em 0;
-    }
-
-    button {
-        cursor: pointer;
-        font-family: "Playfair Display", serif;
-        font-weight: 800;
-        border: 0;
-        padding: 1em;
     }
 
     .parents {

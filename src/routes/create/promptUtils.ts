@@ -1,5 +1,5 @@
 import type OpenAI from "openai";
-import type { Plant, PromptConfig } from "../../types";
+import type { Plant, PromptConfig } from "../types";
 
 export const buildPrompt = (
   config: PromptConfig,
@@ -42,23 +42,4 @@ export const buildPrompt = (
       "\n\n" +
       instructions.text,
   };
-};
-
-export const parseNewPlant = (
-  text: string,
-  parents: [string, string],
-): Plant | null => {
-  const json = JSON.parse(text);
-  if (json["commonName"] && json["description"] && json["properties"]) {
-    console.log("JSON appears to have the valid fields");
-    return {
-      id: crypto.randomUUID(),
-      parents,
-      commonName: json["commonName"],
-      description: json["description"],
-      characteristics: { ...json["properties"] },
-    };
-  } else {
-    throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
-  }
 };

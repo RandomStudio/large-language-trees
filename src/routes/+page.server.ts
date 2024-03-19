@@ -3,7 +3,7 @@ import type { Plant } from "./types";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch }) => {
-  console.log("page data loading!");
+  console.log("Home page data loading!");
   const res = await fetch("/api");
   const seeds = await res.json();
   return { seeds, newSeed: null };
