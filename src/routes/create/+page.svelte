@@ -23,7 +23,7 @@
         {#each Object.entries(config) as [key, entry]}
             <label>
                 {entry.label}
-                <textarea name={key} value={entry.text} />
+                <textarea name={key} bind:value={entry.text} />
             </label>
         {/each}
 
