@@ -1,6 +1,7 @@
 <script lang="ts">
     import { type Plant } from "./types";
     import PlantDetails from "./PlantDetails.svelte";
+    import PromptEngineering from "./PromptEngineering.svelte";
 
     export let data: { seeds: Plant[]; newSeed: Plant | null };
 
@@ -30,7 +31,7 @@
         <ul class="seeds-list">
             {#each data.seeds as p}
                 <li>
-                    <PlantDetails props={p} />
+                    <PlantDetails plantDetails={p} />
                 </li>
             {/each}
         </ul>
@@ -59,6 +60,7 @@
         {#if parents !== null}
             <input type="hidden" name="parent1" value={parents[0].id} />
             <input type="hidden" name="parent2" value={parents[1].id} />
+            <PromptEngineering {parents} />
             <button
                 on:click={async () => {
                     const res = await fetch("/api/create", {
@@ -73,7 +75,7 @@
 
         {#if data.newSeed}
             <h1>How about this specimen?</h1>
-            <PlantDetails props={data.newSeed} />
+            <PlantDetails plantDetails={data.newSeed} />
             <form method="POST">
                 <input
                     type="hidden"
@@ -95,6 +97,8 @@
         font-weight: 400;
         font-style: normal;
         display: flex;
+        /* display: grid;
+        grid-auto-flow: column; */
     }
 
     .page {
@@ -124,6 +128,7 @@
     }
 
     .interaction {
+        max-width: 32em;
         margin: 4em;
         padding: 2em 0;
     }

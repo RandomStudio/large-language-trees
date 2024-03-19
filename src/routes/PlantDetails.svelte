@@ -1,24 +1,24 @@
 <script lang="ts">
     import type { Plant } from "./types";
 
-    export let props: Plant;
+    export let plantDetails: Plant;
 </script>
 
 <div class="plant">
     <h2>
-        {props.commonName}
+        {plantDetails.commonName}
     </h2>
     <div class="subtitle">
-        {props.id}
+        {plantDetails.id}
     </div>
     <!-- <code>{JSON.stringify(props)}</code> -->
     <ul>
-        {#each Object.entries(props.characteristics) as [key, value]}
+        {#each Object.entries(plantDetails.characteristics) as [key, value]}
             <li>{key}: {value}</li>
             <!-- <li>{item}</li> -->
         {/each}
     </ul>
-    <p>{props.description}</p>
+    <p>{plantDetails.description}</p>
 </div>
 
 <style>
