@@ -1,6 +1,5 @@
 import type OpenAI from "openai";
 import type { Plant, PromptConfig } from "../../types";
-import { v4 as uuidv4 } from "uuid";
 
 export const buildPrompt = (
   config: PromptConfig,
@@ -53,7 +52,7 @@ export const parseNewPlant = (
   if (json["commonName"] && json["description"] && json["properties"]) {
     console.log("JSON appears to have the valid fields");
     return {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       parents,
       commonName: json["commonName"],
       description: json["description"],
