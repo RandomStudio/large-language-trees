@@ -11,6 +11,7 @@ export type Characteristics = { [key: string]: string };
 export interface PromptSection {
   label: string;
   description: string;
+  text: string;
 }
 
 export interface PromptConfig {
