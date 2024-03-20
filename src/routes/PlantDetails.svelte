@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Plant } from "./types";
+    import FlowerDrawing from "./FlowerDrawing.svelte";
 
     export let plantDetails: Plant;
 </script>
@@ -19,6 +20,7 @@
         {/each}
     </ul>
     <p>{plantDetails.description}</p>
+    <FlowerDrawing />
 </div>
 
 <style>
