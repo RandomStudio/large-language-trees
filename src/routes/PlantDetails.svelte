@@ -9,7 +9,7 @@
 <div class="plant">
     <div class="col">
         <div class="image-area">
-            {#if plantDetails.image}
+            {#if plantDetails.image && !candidateImage}
                 <img
                     src={`/plants/${plantDetails.image}`}
                     alt={`saved image of ${plantDetails.commonName}`}

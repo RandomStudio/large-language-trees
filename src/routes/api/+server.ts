@@ -40,12 +40,7 @@ export const PATCH: RequestHandler = async ({ request, params, url }) => {
   const id = url.searchParams.get("id");
   if (id && newPlantJson) {
     console.log("update plant with ID", id, "...");
-    inMemory.forEach((plant) => {
-      if (plant.id === id) {
-        console.log("updating", plant, "=>", newPlantJson);
-        plant = newPlantJson;
-      }
-    });
+    inMemory = inMemory.map((p) => (p.id === id ? newPlantJson : p));
   }
 
   updateOnDisk();
