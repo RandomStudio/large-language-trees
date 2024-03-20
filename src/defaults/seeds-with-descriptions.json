@@ -9,10 +9,10 @@
       "leafColour": "Green",
       "leafSHape": "Lanceolate",
       "leafMarginDescription": "Dentate",
-      "stemLength": 1.8,
       "stemLengthCm": 18
     },
-    "description": "With striking red blooms featuring 5-7 petals resembling roses, this plant exudes an air of elegance and sophistication. Its lanceolate green leaves with dentate margins provide the perfect backdrop for the captivating flowers. Growing on tall stems reaching 1.8 meters, with each stem measuring approximately 18 centimeters, the Gardenia brings a sense of beauty and refinement to gardens and landscapes, enchanting all who encounter its alluring presence."
+    "description": "With striking red blooms featuring 5-7 petals resembling roses, this plant exudes an air of elegance and sophistication. Its lanceolate green leaves with dentate margins provide the perfect backdrop for the captivating flowers. Growing on tall stems reaching 1.8 meters, with each stem measuring approximately 18 centimeters, the Gardenia brings a sense of beauty and refinement to gardens and landscapes, enchanting all who encounter its alluring presence.",
+    "image": "5106bca1-00ae-4c3e-9f53-cde2d1bac587.webp"
   },
   {
     "id": "ex-Hibiscus",
@@ -24,7 +24,6 @@
       "leafColour": "Green",
       "leafSHape": "Linear",
       "leafMarginDescription": "Dentate",
-      "stemLength": 1.2,
       "stemLengthCm": 12
     },
     "description": "Boasting elegant white blooms with 5-7 funnel-shaped petals, this plant is a symbol of beauty and grace. Its linear green leaves with dentate margins perfectly complement the enchanting flowers. Growing on stems reaching 1.2 meters, with each stem measuring about 12 centimeters, the Hibiscus adds a touch of tropical allure to gardens, enticing hummingbirds and garden enthusiasts with its ethereal charm and delicate appearance."
@@ -39,7 +38,6 @@
       "leafColour": "Green",
       "leafSHape": "Linear",
       "leafMarginDescription": "Entire",
-      "stemLength": 1.5,
       "stemLengthCm": 15
     },
     "description": "Displaying vibrant purple blooms with 5-7 funnel-shaped petals, this plant graces gardens with a touch of elegance. Its linear green leaves, featuring entire margins, complement the striking flowers beautifully. Growing on stems reaching 1.5 meters, each stem measuring approximately 15 centimeters, the Morning Glory adds a dash of charm and color to fences, trellises, and garden landscapes, captivating onlookers with its simple yet enchanting beauty."
@@ -54,7 +52,6 @@
       "leafColour": "Green",
       "leafSHape": "Lanceolate",
       "leafMarginDescription": "Dentate",
-      "stemLength": 1,
       "stemLengthCm": 10
     },
     "description": "The sunshine-yellow blooms of this charming plant boast 5-7 petals resembling delicate butterflies, set amidst vibrant green lanceolate leaves with dentate margins. Rising elegantly on stems reaching 1 meter, each stem measuring around 10 centimeters, this delightful flower, known for its cheerful appearance, adds a splash of color and whimsy to gardens and containers, attracting both pollinators and admirers."
@@ -69,7 +66,6 @@
       "leafColour": "Green",
       "leafSHape": "Palmately lobed",
       "leafMarginDescription": "Dentate",
-      "stemLength": 1.4,
       "stemLengthCm": 14
     },
     "description": "The exquisite 'Passionflower' showcases mesmerizing blue flowers with 10-12 petals shaped like delicate cups. Its green leaves are palmately lobed with dentate margins, adding to the allure of the plant. Growing on stems reaching 1.4 meters, with each stem measuring around 14 centimeters, this stunning flower symbolizes faith and spirituality, making a captivating addition to gardens and arbors, attracting both pollinators and admirers alike."
@@ -84,7 +80,6 @@
       "leafColour": "Green",
       "leafSHape": "Lanceolate",
       "leafMarginDescription": "Dentate",
-      "stemLength": 1.1,
       "stemLengthCm": 11
     },
     "description": "The beautiful 'Rose' features stunning pink flowers with 5-7 petals shaped like a classic rose. Its lanceolate green leaves have a dentate margin, and it grows on stems reaching up to 1.1 meters tall, with each stem measuring around 11 centimeters. This plant is a symbol of love and elegance, adding beauty to gardens and bouquets alike."
@@ -99,7 +94,6 @@
       "leafColour": "Green",
       "leafSHape": "Ovate",
       "leafMarginDescription": "Lobed",
-      "stemLength": 2,
       "stemLengthCm": 20
     },
     "description": "The radiant 'Sunflower' boasts striking orange blooms with a remarkable petal count ranging from 89 to 92, shaped like a charming vase. Its ovate green leaves have a lobed margin, and it stands tall on stems reaching up to 2 meters, with each stem measuring approximately 20 centimeters. This sun-loving plant symbolizes happiness and positivity, brightening up any garden or landscape with its cheerful appearance."
@@ -114,7 +108,6 @@
       "leafColour": "Green",
       "leafSHape": "Linear",
       "leafMarginDescription": "Entire",
-      "stemLength": 1.6,
       "stemLengthCm": 16
     },
     "description": "The captivating 'Tiger Lily' showcases vibrant red flowers with 6-8 petals forming elegant trumpet shapes. Its linear green leaves have entire margins, complementing the striking blooms gracefully. Standing tall on stems reaching 1.6 meters, with each stem measuring around 16 centimeters, this exotic plant adds a touch of wild beauty to gardens and landscapes, evoking a sense of mystery and allure."
@@ -129,7 +122,6 @@
       "leafColour": "Green",
       "leafSHape": "Linear",
       "leafMarginDescription": "Entire",
-      "stemLength": 1.3,
       "stemLengthCm": 13
     },
     "description": "The delicate 'Violet' presents charming purple flowers with 5-7 petals forming dainty cup shapes. Its linear green leaves feature entire margins, enhancing the elegance of the blooms. Standing gracefully on stems reaching 1.3 meters, with each stem measuring about 13 centimeters, this enchanting plant symbolizes modesty and faithfulness, bringing a touch of beauty and serenity to gardens and floral arrangements."
