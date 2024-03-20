@@ -2,6 +2,8 @@
     import type { Plant } from "./types";
 
     export let plantDetails: Plant;
+
+    let candidateImage: string | null = null;
 </script>
 
 <div class="plant">
@@ -10,13 +12,42 @@
             {#if plantDetails.image}
                 <img
                     src={`/plants/${plantDetails.image}`}
-                    alt={`generated image of ${plantDetails.commonName}`}
+                    alt={`saved image of ${plantDetails.commonName}`}
                 />
             {:else}
                 <button
                     on:click={async () => {
-                        await fetch("/api/image", { method: "POST" });
+                        const res = await fetch(`/api/image/generate`, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                description: plantDetails.description,
+                                id: plantDetails.id,
+                            }),
+                        });
+                        const json = await res.json();
+                        const { url } = json;
+                        if (url) {
+                            candidateImage = url;
+                        }
                     }}>Generate an image</button
+                >
+            {/if}
+            {#if candidateImage}
+                <img
+                    id={`candidate-${plantDetails.id}`}
+                    src={candidateImage}
+                    alt={`generated image of ${plantDetails.commonName}`}
+                />
+                <button
+                    on:click={async () => {
+                        await fetch("/api?id=" + plantDetails.id, {
+                            method: "PATCH",
+                            body: JSON.stringify({
+                                ...plantDetails,
+                                image: plantDetails.id + ".png",
+                            }),
+                        });
+                    }}>Save</button
                 >
             {/if}
         </div>

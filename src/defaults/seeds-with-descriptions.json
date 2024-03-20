@@ -26,7 +26,8 @@
       "leafMarginDescription": "Dentate",
       "stemLengthCm": 12
     },
-    "description": "Boasting elegant white blooms with 5-7 funnel-shaped petals, this plant is a symbol of beauty and grace. Its linear green leaves with dentate margins perfectly complement the enchanting flowers. Growing on stems reaching 1.2 meters, with each stem measuring about 12 centimeters, the Hibiscus adds a touch of tropical allure to gardens, enticing hummingbirds and garden enthusiasts with its ethereal charm and delicate appearance."
+    "description": "Boasting elegant white blooms with 5-7 funnel-shaped petals, this plant is a symbol of beauty and grace. Its linear green leaves with dentate margins perfectly complement the enchanting flowers. Growing on stems reaching 1.2 meters, with each stem measuring about 12 centimeters, the Hibiscus adds a touch of tropical allure to gardens, enticing hummingbirds and garden enthusiasts with its ethereal charm and delicate appearance.",
+    "image": "img-8rDtAfHm9kE1qIGEnT99fV1W.png"
   },
   {
     "id": "ex-Glory",
@@ -40,8 +41,10 @@
       "leafMarginDescription": "Entire",
       "stemLengthCm": 15
     },
-    "description": "Displaying vibrant purple blooms with 5-7 funnel-shaped petals, this plant graces gardens with a touch of elegance. Its linear green leaves, featuring entire margins, complement the striking flowers beautifully. Growing on stems reaching 1.5 meters, each stem measuring approximately 15 centimeters, the Morning Glory adds a dash of charm and color to fences, trellises, and garden landscapes, captivating onlookers with its simple yet enchanting beauty."
+    "description": "Displaying vibrant purple blooms with 5-7 funnel-shaped petals, this plant graces gardens with a touch of elegance. Its linear green leaves, featuring entire margins, complement the striking flowers beautifully. Growing on stems reaching 1.5 meters, each stem measuring approximately 15 centimeters, the Morning Glory adds a dash of charm and color to fences, trellises, and garden landscapes, captivating onlookers with its simple yet enchanting beauty.",
+    "image": "ex-Glory.png"
   },
+
   {
     "id": "ex-Pansy",
     "commonName": "Pansy",
