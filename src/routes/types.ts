@@ -6,7 +6,7 @@ export interface Plant {
   description?: string;
 }
 
-export type Characteristics = { [key: string]: string };
+export type Characteristics = { [key: string]: string | number };
 
 export interface PromptSection {
   label: string;

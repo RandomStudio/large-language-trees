@@ -2,7 +2,7 @@ import type { RequestHandler } from "./$types";
 
 import type { Plant } from "../types";
 
-import Seeds from "../../defaults/seeds.json";
+import Seeds from "../../defaults/seeds-with-descriptions.json";
 import { json } from "@sveltejs/kit";
 
 let inMemory: Plant[] = [];
