@@ -1,24 +1,982 @@
 [
   {
-    "id": "ex-hibiscus",
-    "commonName": "Delicious Scumglove",
-    "characteristics": {
-      "fruit": "none",
-      "flowerColour": "red",
-      "petalShape": "funnel",
-      "leafShape": "linear"
-    },
-    "description": "A large flowering shrub that thrives in temperate climates. Its flowers are prominent and sweet-smelling. There is no fruit but the leaves are poisonous if eaten."
+    "id": "ex-Hibiscus",
+    "commonName": "Hibiscus",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
   },
   {
-    "id": "ex-palm",
-    "commonName": "Golden Palm",
-    "characteristics": {
-      "fruit": "large, golden orbs resembling coconuts",
-      "flowerColour": "white",
-      "petalShape": "butterfly",
-      "leafShape": "palmate"
-    },
-    "description": "A curved trunk, sometimes standing up to 6 metres in height. A single cluster of green palm leaves. The fruit resemble coconuts, but are surprisingly gold in colour. The fruit is edible."
+    "id": "ex-Freesia",
+    "commonName": "Freesia",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "7-9",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Heart",
+    "commonName": "Bleeding Heart",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "4-6",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Serrate",
+      "stemLength": 0.8,
+      "stemLengthCm": 8
+    }
+  },
+  {
+    "id": "ex-Anemone",
+    "commonName": "Anemone",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "7-9",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
+  },
+  {
+    "id": "ex-Susan",
+    "commonName": "Black-eyed Susan",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "13-15",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Cosmos",
+    "commonName": "Cosmos",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "8-10",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.9,
+      "stemLengthCm": 9
+    }
+  },
+  {
+    "id": "ex-Blossom",
+    "commonName": "Cherry Blossom",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Ovate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Not",
+    "commonName": "Forget-Me-Not",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "5-7",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.8,
+      "stemLengthCm": 8
+    }
+  },
+  {
+    "id": "ex-Foxglove",
+    "commonName": "Foxglove",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "23-25",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Serrate",
+      "stemLength": 1.7,
+      "stemLengthCm": 17
+    }
+  },
+  {
+    "id": "ex-Hellebore",
+    "commonName": "Hellebore",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "5-7",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Glory",
+    "commonName": "Morning Glory",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Narcissus",
+    "commonName": "Narcissus",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "6-8",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Oleander",
+    "commonName": "Oleander",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Daisy",
+    "commonName": "Oxeye Daisy",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "13-15",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Rhododendron",
+    "commonName": "Rhododendron",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "8-10",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Obovate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.6,
+      "stemLengthCm": 16
+    }
+  },
+  {
+    "id": "ex-Snowdrop",
+    "commonName": "Snowdrop",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "3-5",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.9,
+      "stemLengthCm": 9
+    }
+  },
+  {
+    "id": "ex-Pea",
+    "commonName": "Sweet Pea",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
+  },
+  {
+    "id": "ex-Wisteria",
+    "commonName": "Wisteria",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "9-11",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.8,
+      "stemLengthCm": 18
+    }
+  },
+  {
+    "id": "ex-Azalea",
+    "commonName": "Azalea",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Begonia",
+    "commonName": "Begonia",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "7-9",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Ovate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Bluebell",
+    "commonName": "Bluebell",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "6-8",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Camellia",
+    "commonName": "Camellia",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.4,
+      "stemLengthCm": 14
+    }
+  },
+  {
+    "id": "ex-Lily",
+    "commonName": "Calla Lily",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "3-5",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Blossom",
+    "commonName": "Cherry Blossom",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "5-7",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Ovate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Columbine",
+    "commonName": "Columbine",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Bell",
+    "commonName": "Coral Bell",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Serrate",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
+  },
+  {
+    "id": "ex-Crocus",
+    "commonName": "Crocus",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "6-8",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.9,
+      "stemLengthCm": 9
+    }
+  },
+  {
+    "id": "ex-Delphinium",
+    "commonName": "Delphinium",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "7-9",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Freesia",
+    "commonName": "Freesia",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "7-9",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.6,
+      "stemLengthCm": 16
+    }
+  },
+  {
+    "id": "ex-Gardenia",
+    "commonName": "Gardenia",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Daisy",
+    "commonName": "Gerbera Daisy",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "34-36",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Ovate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.6,
+      "stemLengthCm": 16
+    }
+  },
+  {
+    "id": "ex-Heather",
+    "commonName": "Heather",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "4-6",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Hyacinth",
+    "commonName": "Hyacinth",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "6-8",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Valley",
+    "commonName": "Lily of the Valley",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "6-8",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.8,
+      "stemLengthCm": 8
+    }
+  },
+  {
+    "id": "ex-Magnolia",
+    "commonName": "Magnolia",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "6-8",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Obovate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.4,
+      "stemLengthCm": 14
+    }
+  },
+  {
+    "id": "ex-Mimosa",
+    "commonName": "Mimosa",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "20-22",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Nasturtium",
+    "commonName": "Nasturtium",
+    "properties": {
+      "flowerColour": "Orange",
+      "petalCountRange": "5-7",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.9,
+      "stemLengthCm": 9
+    }
+  },
+  {
+    "id": "ex-Passionflower",
+    "commonName": "Passionflower",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "10-12",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Palmately lobed",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
+  },
+  {
+    "id": "ex-Periwinkle",
+    "commonName": "Periwinkle",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.8,
+      "stemLengthCm": 8
+    }
+  },
+  {
+    "id": "ex-Petunia",
+    "commonName": "Petunia",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Primrose",
+    "commonName": "Primrose",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "5-7",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Ovate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Snapdragon",
+    "commonName": "Snapdragon",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "8-10",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
+  },
+  {
+    "id": "ex-William",
+    "commonName": "Sweet William",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Lily",
+    "commonName": "Tiger Lily",
+    "properties": {
+      "flowerColour": "Orange",
+      "petalCountRange": "6-8",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Trillium",
+    "commonName": "Trillium",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "3-5",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 0.9,
+      "stemLengthCm": 9
+    }
+  },
+  {
+    "id": "ex-Verbena",
+    "commonName": "Verbena",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "7-9",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Serrate",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Lily",
+    "commonName": "Water Lily",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "20-22",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.7,
+      "stemLengthCm": 17
+    }
+  },
+  {
+    "id": "ex-Yarrow",
+    "commonName": "Yarrow",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "15-17",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.4,
+      "stemLengthCm": 14
+    }
+  },
+  {
+    "id": "ex-Yucca",
+    "commonName": "Yucca",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "6-8",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Poinsettia",
+    "commonName": "Poinsettia",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "20-22",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Serrate",
+      "stemLength": 1.8,
+      "stemLengthCm": 18
+    }
+  },
+  {
+    "id": "ex-Peony",
+    "commonName": "Peony",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "8-10",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Obovate",
+      "leafMarginDescription": "Serrate",
+      "stemLength": 1.6,
+      "stemLengthCm": 16
+    }
+  },
+  {
+    "id": "ex-Honeysuckle",
+    "commonName": "Honeysuckle",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Gardenia",
+    "commonName": "Gardenia",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Azalea",
+    "commonName": "Azalea",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "5-7",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Hibiscus",
+    "commonName": "Hibiscus",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
+  },
+  {
+    "id": "ex-Paradise",
+    "commonName": "Bird of Paradise",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "3-5",
+      "petalShape": "Iris",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Bougainvillea",
+    "commonName": "Bougainvillea",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "6-8",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Lily",
+    "commonName": "Canna Lily",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "5-7",
+      "petalShape": "Iris",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.6,
+      "stemLengthCm": 16
+    }
+  },
+  {
+    "id": "ex-Cornflower",
+    "commonName": "Cornflower",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "10-12",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Dahlia",
+    "commonName": "Dahlia",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "10-12",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Dandelion",
+    "commonName": "Dandelion",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "20-22",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
+  },
+  {
+    "id": "ex-Gardenia",
+    "commonName": "Gardenia",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.8,
+      "stemLengthCm": 18
+    }
+  },
+  {
+    "id": "ex-Hibiscus",
+    "commonName": "Hibiscus",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.2,
+      "stemLengthCm": 12
+    }
+  },
+  {
+    "id": "ex-Glory",
+    "commonName": "Morning Glory",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.5,
+      "stemLengthCm": 15
+    }
+  },
+  {
+    "id": "ex-Pansy",
+    "commonName": "Pansy",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "5-7",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1,
+      "stemLengthCm": 10
+    }
+  },
+  {
+    "id": "ex-Passionflower",
+    "commonName": "Passionflower",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "10-12",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Palmately lobed",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.4,
+      "stemLengthCm": 14
+    }
+  },
+  {
+    "id": "ex-Rose",
+    "commonName": "Rose",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLength": 1.1,
+      "stemLengthCm": 11
+    }
+  },
+  {
+    "id": "ex-Sunflower",
+    "commonName": "Sunflower",
+    "properties": {
+      "flowerColour": "Orange",
+      "petalCountRange": "89-92",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Ovate",
+      "leafMarginDescription": "Lobed",
+      "stemLength": 2,
+      "stemLengthCm": 20
+    }
+  },
+  {
+    "id": "ex-Lily",
+    "commonName": "Tiger Lily",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "6-8",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.6,
+      "stemLengthCm": 16
+    }
+  },
+  {
+    "id": "ex-Violet",
+    "commonName": "Violet",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLength": 1.3,
+      "stemLengthCm": 13
+    }
   }
 ]

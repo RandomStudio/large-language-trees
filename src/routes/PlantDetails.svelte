@@ -11,14 +11,19 @@
     <div class="subtitle">
         {plantDetails.id}
     </div>
+    {#if plantDetails.parents}
+        From: {plantDetails.parents[0]} x {plantDetails.parents[1]}
+    {/if}
     <!-- <code>{JSON.stringify(props)}</code> -->
     <ul>
-        {#each Object.entries(plantDetails.characteristics) as [key, value]}
+        {#each Object.entries(plantDetails.properties) as [key, value]}
             <li>{key}: {value}</li>
             <!-- <li>{item}</li> -->
         {/each}
     </ul>
-    <p>{plantDetails.description}</p>
+    {#if plantDetails.description}
+        <p>{plantDetails.description}</p>
+    {/if}
 </div>
 
 <style>

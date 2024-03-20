@@ -6,7 +6,6 @@
 
     export let data: { parents: [Plant, Plant] | null; newSeed: Plant | null };
     const { parents } = data;
-    // const [parent1, parent2] = parents;
 
     let config = defaults as PromptConfig;
 </script>
@@ -53,7 +52,9 @@
     {#if parents}
         <h4>Final text:</h4>
         <p class="small">
-            {buildPrompt(config, parents[0], parents[1]).content}
+            {#each buildPrompt(config, parents[0], parents[1]) as message}
+                <p>{message.content}</p>
+            {/each}
         </p>
     {/if}
 

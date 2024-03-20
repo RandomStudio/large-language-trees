@@ -1,9 +1,9 @@
 export interface Plant {
   id: string;
   parents?: [string, string];
-  characteristics: Characteristics;
+  properties: Characteristics;
   commonName: string;
-  description: string;
+  description?: string;
 }
 
 export type Characteristics = { [key: string]: string };
