@@ -129,5 +129,24 @@
       "stemLengthCm": 13
     },
     "description": "The delicate 'Violet' presents charming purple flowers with 5-7 petals forming dainty cup shapes. Its linear green leaves feature entire margins, enhancing the elegance of the blooms. Standing gracefully on stems reaching 1.3 meters, with each stem measuring about 13 centimeters, this enchanting plant symbolizes modesty and faithfulness, bringing a touch of beauty and serenity to gardens and floral arrangements."
+  },
+  {
+    "id": "4fb96545-b235-406c-86f6-b4bb267172a6",
+    "parents": [
+      "ex-Pansy",
+      "ex-Glory"
+    ],
+    "commonName": "Butterfly Glory",
+    "description": "The Butterfly Glory plant boasts mesmerizing blooms that combine the sunshine-yellow hue of the Pansy with the vibrant purple tones of the Morning Glory, showcasing a unique blend of colors. Its petals, ranging from 5-7 in number, exhibit a delicate butterfly shape, reminiscent of both parent plants. The slender lanceolate leaves with dentate margins and exquisite funnel-shaped flowers make the Butterfly Glory a captivating addition to any garden, attracting pollinators with its charm.",
+    "properties": {
+      "flowerColour": "Yellow and Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLengthCm": 12
+    },
+    "image": "4fb96545-b235-406c-86f6-b4bb267172a6.png"
   }
 ]

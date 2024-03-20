@@ -60,7 +60,10 @@
 
     {#if data.newSeed}
         <h1>How about this specimen?</h1>
-        <PlantDetails plantDetails={data.newSeed} />
+        <PlantDetails
+            plantDetails={data.newSeed}
+            allowImageGeneration={false}
+        />
         <form method="POST" action="/">
             <input
                 type="hidden"

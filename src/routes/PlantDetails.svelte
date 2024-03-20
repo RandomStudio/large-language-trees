@@ -2,14 +2,15 @@
     import type { Plant } from "./types";
 
     export let plantDetails: Plant;
+    export let allowImageGeneration = true;
 
     let candidateImage: string | null = null;
 </script>
 
 <div class="plant">
     <div class="col">
-        <div class="image-area">
-            {#if plantDetails.image && !candidateImage}
+        <div class="image-area {allowImageGeneration ? '' : 'hidden'}">
+            {#if plantDetails.image}
                 <img
                     src={`/plants/${plantDetails.image}`}
                     alt={`saved image of ${plantDetails.commonName}`}
@@ -69,7 +70,9 @@
     </div>
     <div class="col">
         {#if plantDetails.parents}
-            From: {plantDetails.parents[0]} x {plantDetails.parents[1]}
+            <div class="subtitle">
+                From: {plantDetails.parents[0]} x {plantDetails.parents[1]}
+            </div>
         {/if}
         <!-- <code>{JSON.stringify(props)}</code> -->
 
@@ -89,6 +92,7 @@
     .subtitle {
         font-style: italic;
         font-size: 1em;
+        margin-bottom: 1em;
     }
     ul {
         padding: 1em;
@@ -105,10 +109,14 @@
 
     img {
         max-width: 10em;
+        mix-blend-mode: darken;
     }
 
     .image-area {
         margin-bottom: 2em;
+    }
+    .hidden {
+        display: none;
     }
     .plant {
         border-bottom: 1px dashed #ccc;

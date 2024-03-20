@@ -74,7 +74,7 @@
         padding: 3em;
         margin: 0;
         color: #333;
-        max-width: 32em;
+        max-width: 50%;
         background-color: #ddd;
     }
 
