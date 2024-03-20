@@ -47,6 +47,7 @@
                                 image: plantDetails.id + ".png",
                             }),
                         });
+                        candidateImage = null;
                     }}>Save</button
                 >
             {/if}
