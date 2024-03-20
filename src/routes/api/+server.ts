@@ -2,8 +2,10 @@ import type { RequestHandler } from "./$types";
 
 import type { Plant } from "../types";
 
-import Seeds from "../../defaults/seeds-with-descriptions.json";
+import Seeds from "../../../db/seeds.json";
 import { json } from "@sveltejs/kit";
+import fs from "fs/promises";
+import path from "path";
 
 let inMemory: Plant[] = [];
 
@@ -25,6 +27,8 @@ export const POST: RequestHandler = async ({ request }) => {
   const plant = JSON.parse(await request.json()) as Plant;
   console.log("add new plant", plant, typeof plant);
   inMemory = [...inMemory, plant];
+  updateOnDisk();
+
   return json(inMemory);
 };
 
@@ -44,5 +48,14 @@ export const PATCH: RequestHandler = async ({ request, params, url }) => {
     });
   }
 
+  updateOnDisk();
   return json(inMemory);
+};
+
+const updateOnDisk = async () => {
+  const formatted = JSON.stringify(inMemory, null, 2);
+  await fs.writeFile(
+    path.resolve(process.cwd(), "db") + "/seeds.json",
+    formatted,
+  );
 };
