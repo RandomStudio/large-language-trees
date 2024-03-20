@@ -31,9 +31,10 @@ export const POST: RequestHandler = async ({ request, params }) => {
     console.log("writing", filePath, "...");
     await fs.writeFile(filePath, Buffer.from(buffer), "base64");
     console.log("wrote ok");
+    return json({ description, url });
+  } else {
+    return json({});
   }
-
-  return json({ description, url });
 };
 
 const buildImagePrompt = (description: string): string =>

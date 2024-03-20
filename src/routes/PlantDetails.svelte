@@ -1,10 +1,13 @@
 <script lang="ts">
     import type { Plant } from "./types";
+    import Spinner from "./Spinner.svelte";
 
     export let plantDetails: Plant;
     export let allowImageGeneration = true;
 
     let candidateImage: string | null = null;
+
+    let busy = false;
 </script>
 
 <div class="plant">
@@ -18,6 +21,7 @@
             {:else}
                 <button
                     on:click={async () => {
+                        busy = true;
                         const res = await fetch(`/api/image/generate`, {
                             method: "POST",
                             body: JSON.stringify({
@@ -25,13 +29,17 @@
                                 id: plantDetails.id,
                             }),
                         });
+                        console.log("got response");
+                        busy = false;
                         const json = await res.json();
                         const { url } = json;
                         if (url) {
                             candidateImage = url;
                         }
-                    }}>Generate an image</button
+                    }}
                 >
+                    Generate an image
+                </button>
             {/if}
             {#if candidateImage}
                 <img
@@ -41,6 +49,7 @@
                 />
                 <button
                     on:click={async () => {
+                        busy = true;
                         await fetch("/api?id=" + plantDetails.id, {
                             method: "PATCH",
                             body: JSON.stringify({
@@ -49,12 +58,13 @@
                             }),
                         });
                         candidateImage = null;
+                        busy = false;
                     }}>Save</button
                 >
             {/if}
         </div>
         <h2>
-            {plantDetails.commonName}
+            {plantDetails.commonName}: {busy ? "busy" : "ok"}
         </h2>
         <div class="subtitle">
             {plantDetails.id}
@@ -81,6 +91,10 @@
         {/if}
     </div>
 </div>
+
+{#if busy}
+    <Spinner />
+{/if}
 
 <style>
     p {
