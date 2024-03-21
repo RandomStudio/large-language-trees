@@ -128,7 +128,8 @@
       "leafMarginDescription": "Entire",
       "stemLengthCm": 13
     },
-    "description": "The delicate 'Violet' presents charming purple flowers with 5-7 petals forming dainty cup shapes. Its linear green leaves feature entire margins, enhancing the elegance of the blooms. Standing gracefully on stems reaching 1.3 meters, with each stem measuring about 13 centimeters, this enchanting plant symbolizes modesty and faithfulness, bringing a touch of beauty and serenity to gardens and floral arrangements."
+    "description": "The delicate 'Violet' presents charming purple flowers with 5-7 petals forming dainty cup shapes. Its linear green leaves feature entire margins, enhancing the elegance of the blooms. Standing gracefully on stems reaching 1.3 meters, with each stem measuring about 13 centimeters, this enchanting plant symbolizes modesty and faithfulness, bringing a touch of beauty and serenity to gardens and floral arrangements.",
+    "image": "ex-Violet.png"
   },
   {
     "id": "4fb96545-b235-406c-86f6-b4bb267172a6",
@@ -148,5 +149,24 @@
       "stemLengthCm": 12
     },
     "image": "4fb96545-b235-406c-86f6-b4bb267172a6.png"
+  },
+  {
+    "id": "50d780d7-3dee-4d82-859f-d01d3ee63269",
+    "parents": [
+      "ex-Rose",
+      "ex-Violet"
+    ],
+    "commonName": "Rosiviolet",
+    "description": "The mystical 'Rosiviolet' boasts mesmerizing flowers that blend the soft pink hue and classic rose shape of the 'Rose' with the delicate cup-like petals and regal purple color of the 'Violet.' Its unique petals appear as a fusion of both parent plants, exuding an otherworldly charm. Growing on slender stems that reach 1.2 meters, this enigmatic hybrid symbolizes a harmonious union of love and modesty, making it a rare and captivating addition to any garden or bouquet.",
+    "properties": {
+      "flowerColour": "Blush Pink with Hints of Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose-Violet Fusion",
+      "leafColour": "Variegated Green with Purple Undertones",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated and Scalloped",
+      "stemLengthCm": 12
+    },
+    "image": "50d780d7-3dee-4d82-859f-d01d3ee63269.png"
   }
 ]
