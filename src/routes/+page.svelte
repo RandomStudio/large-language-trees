@@ -67,7 +67,7 @@
                 <button type="submit">Select</button>
             </form>
         {/if}
-        <FamilyTree data={data.seeds} />
+        <FamilyTree plants={data.seeds} />
     </div>
 </div>
 

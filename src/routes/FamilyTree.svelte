@@ -2,285 +2,122 @@
     import * as d3 from "d3";
     import type { Plant } from "./types";
 
-    export let data: Plant[];
-    const width = 640;
-    const height = 480;
+    export let plants: Plant[];
 
-    interface Level {
-        id: string;
-        parents: string[];
-        parent?: string;
-        level: number;
+    interface Node extends Plant {
+        x: number;
+        y: number;
+        radius: number;
     }
 
-    const splitLevels = (plants: Plant[]): Level[][] => {
-        let depth = 0;
+    interface Link {
+        source: string;
+        target: string;
+        value: number;
+    }
 
-        let levels: Level[][] = [];
-        let atThisLevel = plants.filter((p) => p.generation === depth);
-        while (atThisLevel.length > 0) {
-            const level = atThisLevel.map((plant) => ({
-                id: plant.id,
-                parents: plant.parents || [],
-                level: depth,
-            }));
-            levels.push(level);
-            depth++;
-            atThisLevel = plants.filter((p) => p.generation === depth);
+    // Specify the dimensions of the chart.
+    const width = 928;
+    const height = 680;
+
+    // Specify the color scale.
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // The force simulation mutates links and nodes, so create a copy
+    // so that re-evaluating this cell produces the same result.
+    let nodes: Node[] = plants.map((plant) => ({
+        ...plant,
+        x: 0,
+        y: 0,
+        radius: 5,
+    }));
+    let links: Link[] = [];
+    plants.forEach((p) => {
+        if (p.parents) {
+            p.parents.forEach((sourceId) => {
+                links.push({ source: sourceId, target: p.id, value: 2 });
+            });
         }
-
-        return levels;
-    };
-
-    let levels = splitLevels(data);
-
-    console.log({ levels });
-
-    levels.unshift([]);
-
-    // We add one pseudo node to every level to deal with parentless nodes
-    levels.forEach((l, i) => {
-        l.forEach((n, j) => {
-            n.level = i;
-            if (n.parents !== undefined) {
-                n.parent = n.parents[0];
-            } else {
-                n.parent = `pseudo-${i - 1}`;
-            }
-        });
-        l.unshift({
-            id: `pseudo-${i}`,
-            parent: i > 0 ? `pseudo-${i - 1}` : "",
-            level: i,
-            parents: [],
-        });
     });
 
-    const nodes = levels.flat();
+    console.log({ nodes, links });
 
-    console.log({ nodes });
-
-    const colours = d3
-        .scaleOrdinal()
-        .domain(
-            nodes
-                .filter((n) => n.parents)
-                .map((n) => n.parents.sort().join("-")),
+    // Create a simulation with several forces.
+    const simulation = d3
+        .forceSimulation(nodes)
+        .force(
+            "link",
+            d3.forceLink(links).id((d: any) => d.id),
         )
-        .range(d3.schemePaired);
+        .force("charge", d3.forceManyBody())
+        .force("x", d3.forceX())
+        .force("y", d3.forceY());
 
-    function getLinks(nodes) {
-        return nodes
-            .filter((n) => n.data.parents !== undefined)
-            .map((n) =>
-                n.data.parents.map((p) => ({
-                    source: nodes.find((n) => n.id === p),
-                    target: n,
-                })),
-            )
-            .flat();
-    }
+    let svgElement: SVGELement;
+    // Create the SVG container.
+    // Add a line for each link, and a circle for each node.
+    const link = svg
+        .append("g")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6)
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("stroke-width", (d) => Math.sqrt(d.value));
 
-    const offsetPerPartner = 3;
-    const drawNodePath = (d) => {
-        const radius = 5;
-        // The number of partners determines the node height
-        // But when a node has only one partner,
-        // treat it the same as when it has zero
-        const nPartners =
-            d.data.partners && d.data.partners.length > 1
-                ? d.data.partners.length
-                : 0;
+    const node = svg
+        .append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+        .selectAll("circle")
+        .data(nodes)
+        .join("circle")
+        .attr("r", 5)
+        .attr("fill", (d) => color(d.group));
 
-        // We want to centre each node
-        const straightLineOffset = (nPartners * offsetPerPartner) / 2;
+    node.append("title").text((d) => d.id);
 
-        const context = d3.path();
-        context.moveTo(-radius, 0);
-        context.lineTo(-radius, -straightLineOffset);
-        context.arc(0, -straightLineOffset, radius, -Math.PI, 0);
-        context.lineTo(radius, straightLineOffset);
-        context.arc(0, straightLineOffset, radius, 0, Math.PI);
-        context.closePath();
-
-        return context + "";
-    };
-
-    const drawLinkCurve = (x0, y0, x1, y1, offset, radius) => {
-        const context = d3.path();
-        context.moveTo(x0, y0);
-        context.lineTo(x1 - 2 * radius - offset, y0);
-
-        // If there is not enough space to draw two corners, reduce the corner radius
-        if (Math.abs(y0 - y1) < 2 * radius) {
-            radius = Math.abs(y0 - y1) / 2;
-        }
-
-        if (y0 < y1) {
-            context.arcTo(
-                x1 - offset - radius,
-                y0,
-                x1 - offset - radius,
-                y0 + radius,
-                radius,
-            );
-            context.lineTo(x1 - offset - radius, y1 - radius);
-            context.arcTo(x1 - offset - radius, y1, x1 - offset, y1, radius);
-        } else if (y0 > y1) {
-            context.arcTo(
-                x1 - offset - radius,
-                y0,
-                x1 - offset - radius,
-                y0 - radius,
-                radius,
-            );
-            context.lineTo(x1 - offset - radius, y1 + radius);
-            context.arcTo(x1 - offset - radius, y1, x1 - offset, y1, radius);
-        }
-        context.lineTo(x1, y1);
-        return context + "";
-    };
-
-    const partnershipsPerLevel = {};
-    const getPartnershipOffset = (parent, partner) => {
-        let partnershipId, level;
-        if (partner !== undefined) {
-            // On every level, every relationship gets its own offset. If a relationship
-            // spans multiple levels, the furthest level is chosen
-            level = Math.max(parent.depth, partner.level);
-            if (!partnershipsPerLevel[level]) {
-                partnershipsPerLevel[level] = [];
-            }
-            partnershipId = [parent.id, partner.id].sort().join("-");
-        } else {
-            level = parent.depth;
-            if (!partnershipsPerLevel[level]) {
-                partnershipsPerLevel[level] = [];
-            }
-            partnershipId = parent.id;
-        }
-
-        // Assume that the partnership already has a slot assigned
-        const partnershipOffset =
-            partnershipsPerLevel[level].indexOf(partnershipId);
-        if (partnershipOffset === -1) {
-            // Apparently not
-            return partnershipsPerLevel[level].push(partnershipId) - 1;
-        }
-        return partnershipOffset;
-    };
-
-    const lineRadius = 10;
-    const offsetStep = 5;
-    const linkFn = (link) => {
-        const thisParent = link.source;
-        const partnerId = link.target.data.parents.find(
-            (p) => p !== thisParent.id,
-        );
-        const partners = thisParent.data.partners || [];
-
-        // Let the first link start with this negative offset
-        // But when a node has only one partner,
-        // treat it the same as when it has zero
-        const startOffset =
-            partners.length > 1 ? -(partners.length * offsetPerPartner) / 2 : 0;
-
-        const partner = partners.find((p) => p.id === partnerId);
-
-        // Chaos has no partner, nor Zeus with Athena
-        const nthPartner =
-            partner !== undefined
-                ? partners.indexOf(partner)
-                : (partners || []).length;
-        const partnershipOffset = getPartnershipOffset(thisParent, partner);
-
-        return drawLinkCurve(
-            thisParent.y,
-            thisParent.x + startOffset + offsetPerPartner * nthPartner,
-            link.target.y,
-            link.target.x,
-            offsetStep * partnershipOffset,
-            lineRadius,
-        );
-    };
-
-    function draw(root) {
-        // Now every node has had it's position set, we can draw them now
-        const nodes = root
-            .descendants()
-            .filter((n) => !n.id.startsWith("pseudo-"));
-        const links = getLinks(nodes).filter(
-            (l) => !l.source.id.startsWith("pseudo-"),
-        );
-
-        const link = graphGroup.selectAll(".link").data(links);
-        link.exit().remove();
-        link.enter()
-            .append("path")
-            .attr("class", "link")
-            .merge(link)
-            .attr("stroke", (d) =>
-                colours(d.target.data.parents.sort().join("-")),
-            )
-            .attr("d", linkFn);
-
-        const node = graphGroup.selectAll(".node").data(nodes);
-        node.exit().remove();
-        const newNode = node.enter().append("g").attr("class", "node");
-
-        newNode.append("path").attr("d", drawNodePath);
-        newNode.append("text").attr("dy", -3).attr("x", 6);
-
-        newNode
-            .merge(node)
-            .attr("transform", (d) => `translate(${d.y},${d.x})`)
-            .selectAll("text")
-            .text((d) => d.id);
-    }
-
-    const root = d3.stratify().parentId((d) => d.parent)(nodes);
-
-    // Map the different sets of parents,
-    // assigning each parent an array of partners
-    getLinks(root.descendants())
-        .filter((l) => l.target.data.parents)
-        .forEach((l) => {
-            const parentNames = l.target.data.parents;
-            if (parentNames.length > 1) {
-                const parentNodes = parentNames.map((p) =>
-                    nodes.find((n) => n.id === p),
-                );
-
-                parentNodes.forEach((p) => {
-                    if (!p.partners) {
-                        p.partners = [];
-                    }
-                    parentNodes
-                        .filter((n) => n !== p && !p.partners.includes(n))
-                        .forEach((n) => {
-                            p.partners.push(n);
-                        });
-                });
-            }
-        });
-
-    // Take nodes with more partners first,
-    // also counting the partners of the children
-    root.sum((d) => (d.value || 0) + (d.partners || []).length).sort(
-        (a, b) => b.value - a.value,
+    // Awdd a drag behavior.
+    node.call(
+        d3
+            .drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended),
     );
 
-    const tree = d3
-        .tree()
-        .size([height, width])
-        .separation((a, b) => {
-            // More separation between nodes with many children
-            const totalPartners =
-                (a.data.partners || []).length + (b.data.partners || []).length;
-            return 1 + totalPartners / 5;
-        });
+    // Set the position attributes of links and nodes each time the simulation ticks.
+    simulation.on("tick", () => {
+        link.attr("x1", (d) => d.source.x)
+            .attr("y1", (d) => d.source.y)
+            .attr("x2", (d) => d.target.x)
+            .attr("y2", (d) => d.target.y);
 
-    draw(tree(root));
+        node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+    });
+
+    // Reheat the simulation when drag starts, and fix the subject position.
+    function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+    }
+
+    // Update the subject (dragged node) position during drag.
+    function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+    }
+
+    // Restore the target alpha so the simulation cools after dragging ends.
+    // Unfix the subject position now that it’s no longer being dragged.
+    function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+    }
+
+    return svg.node();
 </script>
 
-<svg {width} {height}> </svg>
+<svg {width} {height} bind:this={svgElement}> </svg>
