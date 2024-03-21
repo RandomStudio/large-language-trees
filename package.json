@@ -23,6 +23,7 @@
 	"type": "module",
 	"dependencies": {
 		"d3": "^7.9.0",
+		"lodash": "^4.17.21",
 		"openai": "^4.29.0"
 	}
 }
