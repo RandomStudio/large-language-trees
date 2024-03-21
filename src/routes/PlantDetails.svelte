@@ -64,7 +64,7 @@
             {/if}
         </div>
         <h2>
-            {plantDetails.commonName}: {busy ? "busy" : "ok"}
+            {plantDetails.commonName}
         </h2>
         <div class="subtitle">
             {plantDetails.id}
