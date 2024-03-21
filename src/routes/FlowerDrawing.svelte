@@ -35,10 +35,10 @@
 
         p5.DisplayPlant = () => {
             p5.clear();
-            let color = plant.characteristics.flowerColour;
+            let color = plant.properties.flowerColour;
             console.log(color);
-            let lengthofstem = plant.characteristics.lengthofstem;
-            let numberpetals = plant.characteristics.numberpetals;
+            let lengthofstem = plant.properties.lengthofstem;
+            let numberpetals = plant.properties.numberpetals;
             let x_plant1 = 300;
             let y_plant1 = 200;
             createStem(lengthofstem, x_plant1, y_plant1);

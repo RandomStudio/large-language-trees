@@ -90,16 +90,8 @@
         {#if plantDetails.description}
             <p>{plantDetails.description}</p>
         {/if}
+        <FlowerDrawing plant={plantDetails} />
     </div>
-    <!-- <code>{JSON.stringify(props)}</code> -->
-    <ul>
-        {#each Object.entries(plantDetails.characteristics) as [key, value]}
-            <li>{key}: {value}</li>
-            <!-- <li>{item}</li> -->
-        {/each}
-    </ul>
-    <p>{plantDetails.description}</p>
-    <FlowerDrawing plant={plantDetails} />
 </div>
 
 {#if busy}
