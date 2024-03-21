@@ -1,6 +1,7 @@
 <script lang="ts">
     import { type Plant } from "./types";
     import PlantDetails from "./PlantDetails.svelte";
+    import FamilyTree from "./FamilyTree.svelte";
 
     export let data: { seeds: Plant[] };
 
@@ -66,6 +67,7 @@
                 <button type="submit">Select</button>
             </form>
         {/if}
+        <FamilyTree data={[0, 1, 2, 6, 8]} />
     </div>
 </div>
 
