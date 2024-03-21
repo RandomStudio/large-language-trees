@@ -1,12 +1,13 @@
 export interface Plant {
   id: string;
-  parents?: [string, string];
-  characteristics: Characteristics;
+  parents?: string[];
+  properties: Characteristics;
   commonName: string;
-  description: string;
+  description?: string;
+  image?: string;
 }
 
-export type Characteristics = { [key: string]: string };
+export type Characteristics = { [key: string]: string | number };
 
 export interface PromptSection {
   label: string;

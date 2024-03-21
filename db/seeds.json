@@ -1,0 +1,152 @@
+[
+  {
+    "id": "ex-Gardenia",
+    "commonName": "Gardenia",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLengthCm": 18
+    },
+    "description": "With striking red blooms featuring 5-7 petals resembling roses, this plant exudes an air of elegance and sophistication. Its lanceolate green leaves with dentate margins provide the perfect backdrop for the captivating flowers. Growing on tall stems reaching 1.8 meters, with each stem measuring approximately 18 centimeters, the Gardenia brings a sense of beauty and refinement to gardens and landscapes, enchanting all who encounter its alluring presence.",
+    "image": "5106bca1-00ae-4c3e-9f53-cde2d1bac587.webp"
+  },
+  {
+    "id": "ex-Hibiscus",
+    "commonName": "Hibiscus",
+    "properties": {
+      "flowerColour": "White",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Dentate",
+      "stemLengthCm": 12
+    },
+    "description": "Boasting elegant white blooms with 5-7 funnel-shaped petals, this plant is a symbol of beauty and grace. Its linear green leaves with dentate margins perfectly complement the enchanting flowers. Growing on stems reaching 1.2 meters, with each stem measuring about 12 centimeters, the Hibiscus adds a touch of tropical allure to gardens, enticing hummingbirds and garden enthusiasts with its ethereal charm and delicate appearance.",
+    "image": "img-8rDtAfHm9kE1qIGEnT99fV1W.png"
+  },
+  {
+    "id": "ex-Glory",
+    "commonName": "Morning Glory",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Funnel",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLengthCm": 15
+    },
+    "description": "Displaying vibrant purple blooms with 5-7 funnel-shaped petals, this plant graces gardens with a touch of elegance. Its linear green leaves, featuring entire margins, complement the striking flowers beautifully. Growing on stems reaching 1.5 meters, each stem measuring approximately 15 centimeters, the Morning Glory adds a dash of charm and color to fences, trellises, and garden landscapes, captivating onlookers with its simple yet enchanting beauty.",
+    "image": "ex-Glory.png"
+  },
+  {
+    "id": "ex-Pansy",
+    "commonName": "Pansy",
+    "properties": {
+      "flowerColour": "Yellow",
+      "petalCountRange": "5-7",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLengthCm": 10
+    },
+    "description": "The sunshine-yellow blooms of this charming plant boast 5-7 petals resembling delicate butterflies, set amidst vibrant green lanceolate leaves with dentate margins. Rising elegantly on stems reaching 1 meter, each stem measuring around 10 centimeters, this delightful flower, known for its cheerful appearance, adds a splash of color and whimsy to gardens and containers, attracting both pollinators and admirers.",
+    "image": "ex-Pansy.png"
+  },
+  {
+    "id": "ex-Passionflower",
+    "commonName": "Passionflower",
+    "properties": {
+      "flowerColour": "Blue",
+      "petalCountRange": "10-12",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Palmately lobed",
+      "leafMarginDescription": "Dentate",
+      "stemLengthCm": 14
+    },
+    "description": "The exquisite 'Passionflower' showcases mesmerizing blue flowers with 10-12 petals shaped like delicate cups. Its green leaves are palmately lobed with dentate margins, adding to the allure of the plant. Growing on stems reaching 1.4 meters, with each stem measuring around 14 centimeters, this stunning flower symbolizes faith and spirituality, making a captivating addition to gardens and arbors, attracting both pollinators and admirers alike.",
+    "image": "ex-Passionflower.png"
+  },
+  {
+    "id": "ex-Rose",
+    "commonName": "Rose",
+    "properties": {
+      "flowerColour": "Pink",
+      "petalCountRange": "5-7",
+      "petalShape": "Rose",
+      "leafColour": "Green",
+      "leafSHape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLengthCm": 11
+    },
+    "description": "The beautiful 'Rose' features stunning pink flowers with 5-7 petals shaped like a classic rose. Its lanceolate green leaves have a dentate margin, and it grows on stems reaching up to 1.1 meters tall, with each stem measuring around 11 centimeters. This plant is a symbol of love and elegance, adding beauty to gardens and bouquets alike."
+  },
+  {
+    "id": "ex-Sunflower",
+    "commonName": "Sunflower",
+    "properties": {
+      "flowerColour": "Orange",
+      "petalCountRange": "89-92",
+      "petalShape": "Vase",
+      "leafColour": "Green",
+      "leafSHape": "Ovate",
+      "leafMarginDescription": "Lobed",
+      "stemLengthCm": 20
+    },
+    "description": "The radiant 'Sunflower' boasts striking orange blooms with a remarkable petal count ranging from 89 to 92, shaped like a charming vase. Its ovate green leaves have a lobed margin, and it stands tall on stems reaching up to 2 meters, with each stem measuring approximately 20 centimeters. This sun-loving plant symbolizes happiness and positivity, brightening up any garden or landscape with its cheerful appearance."
+  },
+  {
+    "id": "ex-Lily",
+    "commonName": "Tiger Lily",
+    "properties": {
+      "flowerColour": "Red",
+      "petalCountRange": "6-8",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLengthCm": 16
+    },
+    "description": "The captivating 'Tiger Lily' showcases vibrant red flowers with 6-8 petals forming elegant trumpet shapes. Its linear green leaves have entire margins, complementing the striking blooms gracefully. Standing tall on stems reaching 1.6 meters, with each stem measuring around 16 centimeters, this exotic plant adds a touch of wild beauty to gardens and landscapes, evoking a sense of mystery and allure."
+  },
+  {
+    "id": "ex-Violet",
+    "commonName": "Violet",
+    "properties": {
+      "flowerColour": "Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Cup",
+      "leafColour": "Green",
+      "leafSHape": "Linear",
+      "leafMarginDescription": "Entire",
+      "stemLengthCm": 13
+    },
+    "description": "The delicate 'Violet' presents charming purple flowers with 5-7 petals forming dainty cup shapes. Its linear green leaves feature entire margins, enhancing the elegance of the blooms. Standing gracefully on stems reaching 1.3 meters, with each stem measuring about 13 centimeters, this enchanting plant symbolizes modesty and faithfulness, bringing a touch of beauty and serenity to gardens and floral arrangements."
+  },
+  {
+    "id": "4fb96545-b235-406c-86f6-b4bb267172a6",
+    "parents": [
+      "ex-Pansy",
+      "ex-Glory"
+    ],
+    "commonName": "Butterfly Glory",
+    "description": "The Butterfly Glory plant boasts mesmerizing blooms that combine the sunshine-yellow hue of the Pansy with the vibrant purple tones of the Morning Glory, showcasing a unique blend of colors. Its petals, ranging from 5-7 in number, exhibit a delicate butterfly shape, reminiscent of both parent plants. The slender lanceolate leaves with dentate margins and exquisite funnel-shaped flowers make the Butterfly Glory a captivating addition to any garden, attracting pollinators with its charm.",
+    "properties": {
+      "flowerColour": "Yellow and Purple",
+      "petalCountRange": "5-7",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Dentate",
+      "stemLengthCm": 12
+    },
+    "image": "4fb96545-b235-406c-86f6-b4bb267172a6.png"
+  }
+]

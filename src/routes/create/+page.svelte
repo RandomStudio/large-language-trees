@@ -3,12 +3,14 @@
     import { buildPrompt } from "./promptUtils";
     import type { Plant, PromptConfig } from "../types";
     import PlantDetails from "../PlantDetails.svelte";
+    import Spinner from "../Spinner.svelte";
 
     export let data: { parents: [Plant, Plant] | null; newSeed: Plant | null };
     const { parents } = data;
-    // const [parent1, parent2] = parents;
 
     let config = defaults as PromptConfig;
+
+    let busy = false;
 </script>
 
 <div class="single container">
@@ -30,6 +32,7 @@
         <button
             on:click={async () => {
                 if (parents) {
+                    busy = true;
                     console.log("Creating...");
                     const res = await fetch("/api/generate", {
                         method: "POST",
@@ -38,6 +41,7 @@
                             parents,
                         }),
                     });
+                    busy = false;
                     console.log("...response", res);
                     if (res.ok) {
                         console.log("Success!");
@@ -53,13 +57,18 @@
     {#if parents}
         <h4>Final text:</h4>
         <p class="small">
-            {buildPrompt(config, parents[0], parents[1]).content}
+            {#each buildPrompt(config, parents[0], parents[1]) as message}
+                <p>{message.content}</p>
+            {/each}
         </p>
     {/if}
 
     {#if data.newSeed}
         <h1>How about this specimen?</h1>
-        <PlantDetails plantDetails={data.newSeed} />
+        <PlantDetails
+            plantDetails={data.newSeed}
+            allowImageGeneration={false}
+        />
         <form method="POST" action="/">
             <input
                 type="hidden"
@@ -70,6 +79,10 @@
         </form>
     {/if}
 </div>
+
+{#if busy}
+    <Spinner />
+{/if}
 
 <style>
     .container.single {

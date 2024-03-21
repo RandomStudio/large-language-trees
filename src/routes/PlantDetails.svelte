@@ -1,16 +1,95 @@
 <script lang="ts">
     import type { Plant } from "./types";
     import FlowerDrawing from "./FlowerDrawing.svelte";
+    import Spinner from "./Spinner.svelte";
 
     export let plantDetails: Plant;
+    export let allowImageGeneration = true;
+
+    let candidateImage: string | null = null;
+
+    let busy = false;
 </script>
 
 <div class="plant">
-    <h2>
-        {plantDetails.commonName}
-    </h2>
-    <div class="subtitle">
-        {plantDetails.id}
+    <div class="col">
+        <div class="image-area {allowImageGeneration ? '' : 'hidden'}">
+            {#if plantDetails.image}
+                <img
+                    src={`/plants/${plantDetails.image}`}
+                    alt={`saved image of ${plantDetails.commonName}`}
+                />
+            {:else}
+                <button
+                    on:click={async () => {
+                        busy = true;
+                        const res = await fetch(`/api/image/generate`, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                description: plantDetails.description,
+                                id: plantDetails.id,
+                            }),
+                        });
+                        console.log("got response");
+                        busy = false;
+                        const json = await res.json();
+                        const { url } = json;
+                        if (url) {
+                            candidateImage = url;
+                        }
+                    }}
+                >
+                    Generate an image
+                </button>
+            {/if}
+            {#if candidateImage}
+                <img
+                    id={`candidate-${plantDetails.id}`}
+                    src={candidateImage}
+                    alt={`generated image of ${plantDetails.commonName}`}
+                />
+                <button
+                    on:click={async () => {
+                        busy = true;
+                        await fetch("/api?id=" + plantDetails.id, {
+                            method: "PATCH",
+                            body: JSON.stringify({
+                                ...plantDetails,
+                                image: plantDetails.id + ".png",
+                            }),
+                        });
+                        candidateImage = null;
+                        busy = false;
+                    }}>Save</button
+                >
+            {/if}
+        </div>
+        <h2>
+            {plantDetails.commonName}
+        </h2>
+        <div class="subtitle">
+            {plantDetails.id}
+        </div>
+        <div class="characteristics">
+            <ul>
+                {#each Object.entries(plantDetails.properties) as [key, value]}
+                    <li>{key}: {value}</li>
+                    <!-- <li>{item}</li> -->
+                {/each}
+            </ul>
+        </div>
+    </div>
+    <div class="col">
+        {#if plantDetails.parents}
+            <div class="subtitle">
+                From: {plantDetails.parents[0]} x {plantDetails.parents[1]}
+            </div>
+        {/if}
+        <!-- <code>{JSON.stringify(props)}</code> -->
+
+        {#if plantDetails.description}
+            <p>{plantDetails.description}</p>
+        {/if}
     </div>
     <!-- <code>{JSON.stringify(props)}</code> -->
     <ul>
@@ -23,13 +102,47 @@
     <FlowerDrawing plant={plantDetails} />
 </div>
 
+{#if busy}
+    <Spinner />
+{/if}
+
 <style>
+    p {
+        margin-block-start: 0;
+    }
+    .plant {
+        display: flex;
+    }
     .subtitle {
         font-style: italic;
         font-size: 1em;
+        margin-bottom: 1em;
+    }
+    ul {
+        padding: 1em;
+        font-size: 0.8em;
     }
     li {
-        margin: 0;
         list-style-type: none;
+    }
+
+    .col {
+        width: 16em;
+        padding: 1em;
+    }
+
+    img {
+        max-width: 10em;
+        mix-blend-mode: darken;
+    }
+
+    .image-area {
+        margin-bottom: 2em;
+    }
+    .hidden {
+        display: none;
+    }
+    .plant {
+        border-bottom: 1px dashed #ccc;
     }
 </style>

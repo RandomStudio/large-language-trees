@@ -7,7 +7,7 @@ import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as {
-    prompt: ChatCompletionMessageParam;
+    prompt: ChatCompletionMessageParam[];
     parents: [Plant, Plant];
   };
 
@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
     const completion = await openai.chat.completions.create({
-      messages: [prompt],
+      messages: prompt,
       model: "gpt-3.5-turbo",
     });
 
@@ -58,7 +58,7 @@ const parseNewPlant = (
       parents: parentIds,
       commonName: json["commonName"],
       description: json["description"],
-      characteristics: { ...json["properties"] },
+      properties: { ...json["properties"] },
     };
   } else {
     throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));

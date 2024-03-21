@@ -2,7 +2,7 @@
     import { type Plant } from "./types";
     import PlantDetails from "./PlantDetails.svelte";
 
-    export let data: { seeds: Plant[]; newSeed: Plant | null };
+    export let data: { seeds: Plant[] };
 
     const pick = <T,>(arr: T[]): T => {
         const index = Math.round(Math.random() * (arr.length - 1));
@@ -65,29 +65,6 @@
                 />
                 <button type="submit">Select</button>
             </form>
-            <!-- <button
-                on:click={async () => {
-                    const res = await fetch("/api/create", {
-                        method: "POST",
-                        body: JSON.stringify(parents),
-                    });
-                    console.log({ res });
-                    data.newSeed = await res.json();
-                }}>Generate</button
-            > -->
-        {/if}
-
-        {#if data.newSeed}
-            <h1>How about this specimen?</h1>
-            <PlantDetails plantDetails={data.newSeed} />
-            <form method="POST">
-                <input
-                    type="hidden"
-                    name="newSeed"
-                    value={JSON.stringify(data.newSeed)}
-                />
-                <button>Add to my Garden</button>
-            </form>
         {/if}
     </div>
 </div>
@@ -97,13 +74,9 @@
         padding: 3em;
         margin: 0;
         color: #333;
-        max-width: 32em;
+        max-width: 50%;
         background-color: #ddd;
     }
-
-    /* .seeds-list {
-        max-width: 50vw;
-    } */
 
     li {
         margin-top: 3em;
