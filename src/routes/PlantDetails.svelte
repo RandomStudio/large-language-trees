@@ -20,7 +20,7 @@
         {/each}
     </ul>
     <p>{plantDetails.description}</p>
-    <FlowerDrawing />
+    <FlowerDrawing plant={plantDetails} />
 </div>
 
 <style>

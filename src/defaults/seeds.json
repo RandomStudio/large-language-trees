@@ -6,7 +6,10 @@
       "fruit": "none",
       "flowerColour": "red",
       "petalShape": "funnel",
-      "leafShape": "linear"
+      "leafShape": "linear",
+      "numberofleaves": "6",
+      "numberpetals": "4",
+      "lengthofstem": "1.2"
     },
     "description": "A large flowering shrub that thrives in temperate climates. Its flowers are prominent and sweet-smelling. There is no fruit but the leaves are poisonous if eaten."
   },
@@ -17,7 +20,10 @@
       "fruit": "large, golden orbs resembling coconuts",
       "flowerColour": "white",
       "petalShape": "butterfly",
-      "leafShape": "palmate"
+      "leafShape": "palmate",
+      "numberofleaves": "4",
+      "numberpetals": "7",
+      "lengthofstem": "0.8"
     },
     "description": "A curved trunk, sometimes standing up to 6 metres in height. A single cluster of green palm leaves. The fruit resemble coconuts, but are surprisingly gold in colour. The fruit is edible."
   }
