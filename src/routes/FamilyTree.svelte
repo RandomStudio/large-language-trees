@@ -1,256 +1,286 @@
 <script lang="ts">
-    //@ts-nocheck
     import * as d3 from "d3";
-    import _ from "lodash";
+    import type { Plant } from "./types";
 
-    export let data;
+    export let data: Plant[];
     const width = 640;
     const height = 480;
 
-    const background_color = "white";
+    interface Level {
+        id: string;
+        parents: string[];
+        parent?: string;
+        level: number;
+    }
 
-    const constructTangleLayout = (levels, options = {}) => {
-        // precompute level depth
-        levels.forEach((l, i) => l.forEach((n) => (n.level = i)));
+    const splitLevels = (plants: Plant[]): Level[][] => {
+        let depth = 0;
 
-        var nodes = levels.reduce((a, x) => a.concat(x), []);
-        var nodes_index = {};
-        nodes.forEach((d) => (nodes_index[d.id] = d));
+        let levels: Level[][] = [];
+        let atThisLevel = plants.filter((p) => p.generation === depth);
+        while (atThisLevel.length > 0) {
+            const level = atThisLevel.map((plant) => ({
+                id: plant.id,
+                parents: plant.parents || [],
+                level: depth,
+            }));
+            levels.push(level);
+            depth++;
+            atThisLevel = plants.filter((p) => p.generation === depth);
+        }
 
-        // objectification
-        nodes.forEach((d) => {
-            d.parents = (d.parents === undefined ? [] : d.parents).map(
-                (p) => nodes_index[p],
-            );
-        });
+        return levels;
+    };
 
-        // precompute bundles
-        levels.forEach((l, i) => {
-            var index = {};
-            l.forEach((n) => {
-                if (n.parents.length == 0) {
-                    return;
-                }
+    let levels = splitLevels(data);
 
-                var id = n.parents
-                    .map((d) => d.id)
-                    .sort()
-                    .join("-X-");
-                if (id in index) {
-                    index[id].parents = index[id].parents.concat(n.parents);
-                } else {
-                    index[id] = {
-                        id: id,
-                        parents: n.parents.slice(),
-                        level: i,
-                        span: i - d3.min(n.parents, (p) => p.level),
-                    };
-                }
-                n.bundle = index[id];
-            });
-            l.bundles = Object.keys(index).map((k) => index[k]);
-            l.bundles.forEach((b, i) => (b.i = i));
-        });
+    console.log({ levels });
 
-        var links = [];
-        nodes.forEach((d) => {
-            d.parents.forEach((p) =>
-                links.push({ source: d, bundle: d.bundle, target: p }),
-            );
-        });
+    levels.unshift([]);
 
-        var bundles = levels.reduce((a, x) => a.concat(x.bundles), []);
-
-        // reverse pointer from parent to bundles
-        bundles.forEach((b) =>
-            b.parents.forEach((p) => {
-                if (p.bundles_index === undefined) {
-                    p.bundles_index = {};
-                }
-                if (!(b.id in p.bundles_index)) {
-                    p.bundles_index[b.id] = [];
-                }
-                p.bundles_index[b.id].push(b);
-            }),
-        );
-
-        nodes.forEach((n) => {
-            if (n.bundles_index !== undefined) {
-                n.bundles = Object.keys(n.bundles_index).map(
-                    (k) => n.bundles_index[k],
-                );
+    // We add one pseudo node to every level to deal with parentless nodes
+    levels.forEach((l, i) => {
+        l.forEach((n, j) => {
+            n.level = i;
+            if (n.parents !== undefined) {
+                n.parent = n.parents[0];
             } else {
-                n.bundles_index = {};
-                n.bundles = [];
+                n.parent = `pseudo-${i - 1}`;
             }
-            n.bundles.sort((a, b) =>
-                d3.descending(
-                    d3.max(a, (d) => d.span),
-                    d3.max(b, (d) => d.span),
-                ),
+        });
+        l.unshift({
+            id: `pseudo-${i}`,
+            parent: i > 0 ? `pseudo-${i - 1}` : "",
+            level: i,
+            parents: [],
+        });
+    });
+
+    const nodes = levels.flat();
+
+    console.log({ nodes });
+
+    const colours = d3
+        .scaleOrdinal()
+        .domain(
+            nodes
+                .filter((n) => n.parents)
+                .map((n) => n.parents.sort().join("-")),
+        )
+        .range(d3.schemePaired);
+
+    function getLinks(nodes) {
+        return nodes
+            .filter((n) => n.data.parents !== undefined)
+            .map((n) =>
+                n.data.parents.map((p) => ({
+                    source: nodes.find((n) => n.id === p),
+                    target: n,
+                })),
+            )
+            .flat();
+    }
+
+    const offsetPerPartner = 3;
+    const drawNodePath = (d) => {
+        const radius = 5;
+        // The number of partners determines the node height
+        // But when a node has only one partner,
+        // treat it the same as when it has zero
+        const nPartners =
+            d.data.partners && d.data.partners.length > 1
+                ? d.data.partners.length
+                : 0;
+
+        // We want to centre each node
+        const straightLineOffset = (nPartners * offsetPerPartner) / 2;
+
+        const context = d3.path();
+        context.moveTo(-radius, 0);
+        context.lineTo(-radius, -straightLineOffset);
+        context.arc(0, -straightLineOffset, radius, -Math.PI, 0);
+        context.lineTo(radius, straightLineOffset);
+        context.arc(0, straightLineOffset, radius, 0, Math.PI);
+        context.closePath();
+
+        return context + "";
+    };
+
+    const drawLinkCurve = (x0, y0, x1, y1, offset, radius) => {
+        const context = d3.path();
+        context.moveTo(x0, y0);
+        context.lineTo(x1 - 2 * radius - offset, y0);
+
+        // If there is not enough space to draw two corners, reduce the corner radius
+        if (Math.abs(y0 - y1) < 2 * radius) {
+            radius = Math.abs(y0 - y1) / 2;
+        }
+
+        if (y0 < y1) {
+            context.arcTo(
+                x1 - offset - radius,
+                y0,
+                x1 - offset - radius,
+                y0 + radius,
+                radius,
             );
-            n.bundles.forEach((b, i) => (b.i = i));
-        });
+            context.lineTo(x1 - offset - radius, y1 - radius);
+            context.arcTo(x1 - offset - radius, y1, x1 - offset, y1, radius);
+        } else if (y0 > y1) {
+            context.arcTo(
+                x1 - offset - radius,
+                y0,
+                x1 - offset - radius,
+                y0 - radius,
+                radius,
+            );
+            context.lineTo(x1 - offset - radius, y1 + radius);
+            context.arcTo(x1 - offset - radius, y1, x1 - offset, y1, radius);
+        }
+        context.lineTo(x1, y1);
+        return context + "";
+    };
 
-        links.forEach((l) => {
-            if (l.bundle.links === undefined) {
-                l.bundle.links = [];
+    const partnershipsPerLevel = {};
+    const getPartnershipOffset = (parent, partner) => {
+        let partnershipId, level;
+        if (partner !== undefined) {
+            // On every level, every relationship gets its own offset. If a relationship
+            // spans multiple levels, the furthest level is chosen
+            level = Math.max(parent.depth, partner.level);
+            if (!partnershipsPerLevel[level]) {
+                partnershipsPerLevel[level] = [];
             }
-            l.bundle.links.push(l);
-        });
+            partnershipId = [parent.id, partner.id].sort().join("-");
+        } else {
+            level = parent.depth;
+            if (!partnershipsPerLevel[level]) {
+                partnershipsPerLevel[level] = [];
+            }
+            partnershipId = parent.id;
+        }
 
-        // layout
-        const padding = 8;
-        const node_height = 22;
-        const node_width = 70;
-        const bundle_width = 14;
-        const level_y_padding = 16;
-        const metro_d = 4;
-        const min_family_height = 22;
-
-        options.c ||= 16;
-        const c = options.c;
-        options.bigc ||= node_width + c;
-
-        nodes.forEach(
-            (n) => (n.height = (Math.max(1, n.bundles.length) - 1) * metro_d),
-        );
-
-        var x_offset = padding;
-        var y_offset = padding;
-        levels.forEach((l) => {
-            x_offset += l.bundles.length * bundle_width;
-            y_offset += level_y_padding;
-            l.forEach((n, i) => {
-                n.x = n.level * node_width + x_offset;
-                n.y = node_height + y_offset + n.height / 2;
-
-                y_offset += node_height + n.height;
-            });
-        });
-
-        var i = 0;
-        levels.forEach((l) => {
-            l.bundles.forEach((b) => {
-                b.x =
-                    d3.max(b.parents, (d) => d.x) +
-                    node_width +
-                    (l.bundles.length - 1 - b.i) * bundle_width;
-                b.y = i * node_height;
-            });
-            i += l.length;
-        });
-
-        links.forEach((l) => {
-            l.xt = l.target.x;
-            l.yt =
-                l.target.y +
-                l.target.bundles_index[l.bundle.id].i * metro_d -
-                (l.target.bundles.length * metro_d) / 2 +
-                metro_d / 2;
-            l.xb = l.bundle.x;
-            l.yb = l.bundle.y;
-            l.xs = l.source.x;
-            l.ys = l.source.y;
-        });
-
-        // compress vertical space
-        var y_negative_offset = 0;
-        levels.forEach((l) => {
-            y_negative_offset +=
-                -min_family_height +
-                    d3.min(l.bundles, (b) =>
-                        d3.min(
-                            b.links,
-                            (link) => link.ys - 2 * c - (link.yt + c),
-                        ),
-                    ) || 0;
-            l.forEach((n) => (n.y -= y_negative_offset));
-        });
-
-        // very ugly, I know
-        links.forEach((l) => {
-            l.yt =
-                l.target.y +
-                l.target.bundles_index[l.bundle.id].i * metro_d -
-                (l.target.bundles.length * metro_d) / 2 +
-                metro_d / 2;
-            l.ys = l.source.y;
-            l.c1 =
-                l.source.level - l.target.level > 1
-                    ? Math.min(options.bigc, l.xb - l.xt, l.yb - l.yt) - c
-                    : c;
-            l.c2 = c;
-        });
-
-        var layout = {
-            width: d3.max(nodes, (n) => n.x) + node_width + 2 * padding,
-            height: d3.max(nodes, (n) => n.y) + node_height / 2 + 2 * padding,
-            node_height,
-            node_width,
-            bundle_width,
-            level_y_padding,
-            metro_d,
-        };
-
-        return { levels, nodes, nodes_index, links, bundles, layout };
+        // Assume that the partnership already has a slot assigned
+        const partnershipOffset =
+            partnershipsPerLevel[level].indexOf(partnershipId);
+        if (partnershipOffset === -1) {
+            // Apparently not
+            return partnershipsPerLevel[level].push(partnershipId) - 1;
+        }
+        return partnershipOffset;
     };
 
-    const renderBundle = (b, i) => {
-        console.log("b.links", b.links);
-        const d = b.links.map(
-            (l) =>
-                `M${l.xt} ${l.yt} ` +
-                `L${l.xb - l.c1} ${l.yt} ` +
-                `A${l.c1} ${l.c1} 90 0 1 ${l.xb} ${l.yt + l.c1} ` +
-                `L${l.xb} ${l.ys - l.c2} ` +
-                `A${l.c2} ${l.c2} 90 0 0 ${l.xb + l.c2} ${l.ys} ` +
-                `L${l.xs} ${l.ys} `,
+    const lineRadius = 10;
+    const offsetStep = 5;
+    const linkFn = (link) => {
+        const thisParent = link.source;
+        const partnerId = link.target.data.parents.find(
+            (p) => p !== thisParent.id,
         );
-        console.log({ d });
-        return d;
+        const partners = thisParent.data.partners || [];
+
+        // Let the first link start with this negative offset
+        // But when a node has only one partner,
+        // treat it the same as when it has zero
+        const startOffset =
+            partners.length > 1 ? -(partners.length * offsetPerPartner) / 2 : 0;
+
+        const partner = partners.find((p) => p.id === partnerId);
+
+        // Chaos has no partner, nor Zeus with Athena
+        const nthPartner =
+            partner !== undefined
+                ? partners.indexOf(partner)
+                : (partners || []).length;
+        const partnershipOffset = getPartnershipOffset(thisParent, partner);
+
+        return drawLinkCurve(
+            thisParent.y,
+            thisParent.x + startOffset + offsetPerPartner * nthPartner,
+            link.target.y,
+            link.target.x,
+            offsetStep * partnershipOffset,
+            lineRadius,
+        );
     };
 
-    const tangleLayout = constructTangleLayout(_.cloneDeep(data));
-    console.log({ tangleLayout });
+    function draw(root) {
+        // Now every node has had it's position set, we can draw them now
+        const nodes = root
+            .descendants()
+            .filter((n) => !n.id.startsWith("pseudo-"));
+        const links = getLinks(nodes).filter(
+            (l) => !l.source.id.startsWith("pseudo-"),
+        );
+
+        const link = graphGroup.selectAll(".link").data(links);
+        link.exit().remove();
+        link.enter()
+            .append("path")
+            .attr("class", "link")
+            .merge(link)
+            .attr("stroke", (d) =>
+                colours(d.target.data.parents.sort().join("-")),
+            )
+            .attr("d", linkFn);
+
+        const node = graphGroup.selectAll(".node").data(nodes);
+        node.exit().remove();
+        const newNode = node.enter().append("g").attr("class", "node");
+
+        newNode.append("path").attr("d", drawNodePath);
+        newNode.append("text").attr("dy", -3).attr("x", 6);
+
+        newNode
+            .merge(node)
+            .attr("transform", (d) => `translate(${d.y},${d.x})`)
+            .selectAll("text")
+            .text((d) => d.id);
+    }
+
+    const root = d3.stratify().parentId((d) => d.parent)(nodes);
+
+    // Map the different sets of parents,
+    // assigning each parent an array of partners
+    getLinks(root.descendants())
+        .filter((l) => l.target.data.parents)
+        .forEach((l) => {
+            const parentNames = l.target.data.parents;
+            if (parentNames.length > 1) {
+                const parentNodes = parentNames.map((p) =>
+                    nodes.find((n) => n.id === p),
+                );
+
+                parentNodes.forEach((p) => {
+                    if (!p.partners) {
+                        p.partners = [];
+                    }
+                    parentNodes
+                        .filter((n) => n !== p && !p.partners.includes(n))
+                        .forEach((n) => {
+                            p.partners.push(n);
+                        });
+                });
+            }
+        });
+
+    // Take nodes with more partners first,
+    // also counting the partners of the children
+    root.sum((d) => (d.value || 0) + (d.partners || []).length).sort(
+        (a, b) => b.value - a.value,
+    );
+
+    const tree = d3
+        .tree()
+        .size([height, width])
+        .separation((a, b) => {
+            // More separation between nodes with many children
+            const totalPartners =
+                (a.data.partners || []).length + (b.data.partners || []).length;
+            return 1 + totalPartners / 5;
+        });
+
+    draw(tree(root));
 </script>
 
-<svg {width} {height}>
-    {#if tangleLayout}
-        {#each tangleLayout.bundles as b, i}
-            {#each renderBundle(b, i) as d}
-                <path class="link" {d} stroke="#ff0000" stroke-width="5" />
-                <path class="link" {d} stroke="#00ff00" stroke-width="2" />
-            {/each}
-        {/each}
-        {#each tangleLayout.nodes as n}
-            <path
-                class="selectable node"
-                data-id={n.id}
-                stroke="black"
-                stroke-width="8"
-                d="M{n.x} {n.y - n.height / 2} L{n.x} {n.y + n.height / 2}"
-            />
-            <path
-                class="node"
-                stroke="white"
-                stroke-width="4"
-                d="M{n.x} {n.y - n.height / 2} L{n.x} {n.y + n.height / 2}"
-            />
-
-            <text
-                class="selectable"
-                data-id={n.id}
-                x={n.x + 4}
-                y={n.y - n.height / 2 - 4}
-                stroke={background_color}
-                stroke-width="2">{n.id}</text
-            >
-            <text
-                x={n.x + 4}
-                y={n.y - n.height / 2 - 4}
-                style="pointer-events: none;">{n.id}</text
-            >`
-        {/each}
-    {/if}
-</svg>
+<svg {width} {height}> </svg>

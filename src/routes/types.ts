@@ -5,6 +5,7 @@ export interface Plant {
   commonName: string;
   description?: string;
   image?: string;
+  generation: number;
 }
 
 export type Characteristics = { [key: string]: string | number };
