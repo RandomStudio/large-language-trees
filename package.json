@@ -14,6 +14,8 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/p5": "^1.7.6",
+		"dotenv": "^16.4.5",
+		"drizzle-kit": "^0.20.14",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
 		"tslib": "^2.4.1",
@@ -22,6 +24,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@aws-sdk/client-rds-data": "^3.536.0",
+		"@aws-sdk/credential-providers": "^3.535.0",
+		"drizzle-orm": "^0.30.4",
 		"openai": "^4.29.0",
 		"p5": "^1.9.2",
 		"p5-svelte": "^3.1.2"
