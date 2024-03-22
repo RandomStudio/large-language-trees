@@ -2,17 +2,19 @@ import type { Config } from "drizzle-kit";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-const { SECRET_ARN } = process.env;
+const { DB_MASTER_PASSWORD, DB_USER, DB_HOST, DB_NAME, DB_CONNECTION_STRING } =
+  process.env;
 
 export default {
   schema: "./src/lib/server/schema.ts",
   out: "./drizzle",
   driver: "pg", // postgresql
   dbCredentials: {
-    // host: env.DB_HOST,
-    // user: env.DB_USER,
-    // password: env.DB_PASSWORD,
-    // database: env.DB_NAME,
-    connectionString: SECRET_ARN as string,
+    // host: DB_HOST as string,
+    // user: DB_USER,
+    // password: DB_MASTER_PASSWORD,
+    // database: DB_NAME as string,
+    // connectionString: "the-garden.c9m0yiyim7u1.eu-north-1.rds.amazonaws.com",
+    connectionString: DB_CONNECTION_STRING as string,
   },
 } satisfies Config;
