@@ -1,7 +1,7 @@
 import type { Plant } from "./types";
 
 import type { Actions, PageServerLoad } from "./$types";
-import { getAllPlants } from "$lib/server/router/plants";
+import { addNew, getAllPlants } from "$lib/server/router/plants";
 
 export const load: PageServerLoad = async ({}) => {
   const seeds = await getAllPlants();
@@ -9,18 +9,14 @@ export const load: PageServerLoad = async ({}) => {
 };
 
 export const actions = {
-  default: async ({ request, fetch }) => {
-    // console.log("doing nothing, for now", request);
+  default: async ({ request }) => {
     const data = await request.formData();
 
-    const newSeed = data.get("newSeed") as Plant | null;
+    const newSeed = data.get("newSeed") as string;
     if (newSeed) {
-      console.log("Adding new seed:", newSeed);
-      const res = await fetch("/api", {
-        method: "POST",
-        body: JSON.stringify(newSeed),
-      });
-      console.log({ res });
+      console.log("Adding new seed:", newSeed, typeof newSeed);
+      const plant = JSON.parse(newSeed) as Plant;
+      await addNew(plant);
     }
   },
 } satisfies Actions;

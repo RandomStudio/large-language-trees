@@ -70,19 +70,21 @@
         <div class="subtitle">
             {plantDetails.id}
         </div>
-        <div class="characteristics">
-            <ul>
-                {#each Object.entries(plantDetails.properties) as [key, value]}
-                    <li>{key}: {value}</li>
-                    <!-- <li>{item}</li> -->
-                {/each}
-            </ul>
-        </div>
+        {#if plantDetails.properties}
+            <div class="characteristics">
+                <ul>
+                    {#each Object.entries(plantDetails.properties) as [key, value]}
+                        <li>{key}: {value}</li>
+                        <!-- <li>{item}</li> -->
+                    {/each}
+                </ul>
+            </div>
+        {/if}
     </div>
     <div class="col">
-        {#if plantDetails.parents}
+        {#if plantDetails.parent1 && plantDetails.parent2}
             <div class="subtitle">
-                From: {plantDetails.parents[0]} x {plantDetails.parents[1]}
+                From: {plantDetails.parent1} x {plantDetails.parent2}
             </div>
         {/if}
         <!-- <code>{JSON.stringify(props)}</code> -->

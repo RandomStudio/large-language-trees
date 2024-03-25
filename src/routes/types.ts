@@ -1,6 +1,7 @@
 export interface Plant {
-  id: string;
-  parents?: string[];
+  id: number;
+  parent1?: number;
+  parent2?: number;
   properties: Characteristics;
   commonName: string;
   description?: string;

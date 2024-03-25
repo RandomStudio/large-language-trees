@@ -1,6 +1,6 @@
 [
   {
-    "id": "ex-Gardenia",
+    "id": 0,
     "commonName": "Gardenia",
     "properties": {
       "flowerColour": "Red",
@@ -15,7 +15,7 @@
     "imageUrl": "5106bca1-00ae-4c3e-9f53-cde2d1bac587.webp"
   },
   {
-    "id": "ex-Hibiscus",
+    "id": 0,
     "commonName": "Hibiscus",
     "properties": {
       "flowerColour": "White",
@@ -30,7 +30,7 @@
     "imageUrl": "img-8rDtAfHm9kE1qIGEnT99fV1W.png"
   },
   {
-    "id": "ex-Glory",
+    "id": 0,
     "commonName": "Morning Glory",
     "properties": {
       "flowerColour": "Purple",
@@ -45,7 +45,7 @@
     "imageUrl": "ex-Glory.png"
   },
   {
-    "id": "ex-Pansy",
+    "id": 0,
     "commonName": "Pansy",
     "properties": {
       "flowerColour": "Yellow",
@@ -60,7 +60,7 @@
     "image": "ex-Pansy.png"
   },
   {
-    "id": "ex-Passionflower",
+    "id": 0,
     "commonName": "Passionflower",
     "properties": {
       "flowerColour": "Blue",
@@ -75,7 +75,7 @@
     "image": "ex-Passionflower.png"
   },
   {
-    "id": "ex-Rose",
+    "id": 0,
     "commonName": "Rose",
     "properties": {
       "flowerColour": "Pink",
@@ -89,7 +89,7 @@
     "description": "The beautiful 'Rose' features stunning pink flowers with 5-7 petals shaped like a classic rose. Its lanceolate green leaves have a dentate margin, and it grows on stems reaching up to 1.1 meters tall, with each stem measuring around 11 centimeters. This plant is a symbol of love and elegance, adding beauty to gardens and bouquets alike."
   },
   {
-    "id": "ex-Sunflower",
+    "id": 0,
     "commonName": "Sunflower",
     "properties": {
       "flowerColour": "Orange",
@@ -103,7 +103,7 @@
     "description": "The radiant 'Sunflower' boasts striking orange blooms with a remarkable petal count ranging from 89 to 92, shaped like a charming vase. Its ovate green leaves have a lobed margin, and it stands tall on stems reaching up to 2 meters, with each stem measuring approximately 20 centimeters. This sun-loving plant symbolizes happiness and positivity, brightening up any garden or landscape with its cheerful appearance."
   },
   {
-    "id": "ex-Lily",
+    "id": 0,
     "commonName": "Tiger Lily",
     "properties": {
       "flowerColour": "Red",
@@ -117,7 +117,7 @@
     "description": "The captivating 'Tiger Lily' showcases vibrant red flowers with 6-8 petals forming elegant trumpet shapes. Its linear green leaves have entire margins, complementing the striking blooms gracefully. Standing tall on stems reaching 1.6 meters, with each stem measuring around 16 centimeters, this exotic plant adds a touch of wild beauty to gardens and landscapes, evoking a sense of mystery and allure."
   },
   {
-    "id": "ex-Violet",
+    "id": 0,
     "commonName": "Violet",
     "properties": {
       "flowerColour": "Purple",

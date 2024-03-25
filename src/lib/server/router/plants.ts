@@ -4,14 +4,14 @@ import type { Plant } from "../../../routes/types";
 import { plantsTable } from "../schema";
 
 export const getAllPlants = async () => {
-  const plants = await db.query.plantsTable.findMany();
-  if (plants.length === 0) {
+  const existingPlants = await db.query.plantsTable.findMany();
+  if (existingPlants.length === 0) {
     console.log(
       "No plants in DB, we will attempt to populate with defaults...",
     );
-    const plants: Plant[] = DefaultSeeds;
+    const newPlants: Plant[] = DefaultSeeds;
     await Promise.all(
-      plants.map((p) => {
+      newPlants.map((p) => {
         const { commonName, description, properties, imageUrl } = p;
         console.log("inserting", { commonName });
         return db
@@ -21,6 +21,17 @@ export const getAllPlants = async () => {
     );
     return await db.query.plantsTable.findMany();
   } else {
-    return plants;
+    return existingPlants;
   }
+};
+
+export const addNew = async (plant: Plant) => {
+  console.log("dd new plant", plant, typeof plant);
+  if (typeof plant === "string") {
+    throw Error("Plant is not an object");
+  }
+  const { commonName, description, properties, parent1, parent2 } = plant;
+  await db
+    .insert(plantsTable)
+    .values({ commonName, description, properties, parent1, parent2 });
 };
