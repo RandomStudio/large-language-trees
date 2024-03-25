@@ -4,7 +4,7 @@ export interface Plant {
   properties: Characteristics;
   commonName: string;
   description?: string;
-  image?: string;
+  imageUrl?: string;
 }
 
 export type Characteristics = { [key: string]: string | number };

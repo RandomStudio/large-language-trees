@@ -4,7 +4,7 @@ dotenv.config();
 
 const { DB_MASTER_PASSWORD, DB_USER, DB_HOST, DB_NAME, DB_CONNECTION_STRING } =
   process.env;
-
+// console.log("process.env", process.env, { DB_CONNECTION_STRING });
 export default {
   schema: "./src/lib/server/schema.ts",
   out: "./drizzle",

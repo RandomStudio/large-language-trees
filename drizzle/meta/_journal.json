@@ -8,6 +8,13 @@
       "when": 1711118711223,
       "tag": "0000_previous_dexter_bennett",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1711361233220,
+      "tag": "0001_wealthy_pyro",
+      "breakpoints": true
     }
   ]
 }

@@ -8,7 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 // import { drizzle } from "drizzle-orm/node-postgres";
 
-export const plantsTable = pgTable("users", {
+export const plantsTable = pgTable("plants", {
   id: serial("id").primaryKey(),
   commonName: text("common_name"),
   parent1: integer("parent1_id").references((): AnyPgColumn => plantsTable.id),
