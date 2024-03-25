@@ -1,7 +1,7 @@
 <script lang="ts">
     import defaults from "../../defaults/prompt-config.json";
     import { buildPrompt } from "./promptUtils";
-    import type { Plant, PromptConfig } from "../types";
+    import type { Plant, PromptConfig } from "../../types";
     import PlantDetails from "../PlantDetails.svelte";
     import Spinner from "../Spinner.svelte";
 
@@ -34,7 +34,7 @@
                 if (parents) {
                     busy = true;
                     console.log("Creating...");
-                    const res = await fetch("/api/generate", {
+                    const res = await fetch("/api/generate/plant", {
                         method: "POST",
                         body: JSON.stringify({
                             prompt: buildPrompt(config, parents[0], parents[1]),

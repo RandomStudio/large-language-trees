@@ -1,7 +1,7 @@
-import type { Plant } from "./types";
+import type { Plant } from "../types";
 
 import type { Actions, PageServerLoad } from "./$types";
-import { addNew, getAllPlants } from "$lib/server/router/plants";
+import { addNew, getAllPlants } from "$lib/server/server";
 
 export const load: PageServerLoad = async ({}) => {
   const seeds = await getAllPlants();

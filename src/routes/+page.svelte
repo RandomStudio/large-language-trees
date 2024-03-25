@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { type Plant } from "./types";
+    import { type Plant } from "../types";
     import PlantDetails from "./PlantDetails.svelte";
 
     export let data: { seeds: Plant[] };
@@ -57,7 +57,7 @@
         {/if}
 
         {#if parents !== null}
-            <form method="POST" action="/create">
+            <form method="POST" action="/promptDesigner">
                 <input
                     type="hidden"
                     name="parents"

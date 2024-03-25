@@ -1,5 +1,5 @@
 import type OpenAI from "openai";
-import type { Plant, PromptConfig } from "../types";
+import type { Plant, PromptConfig } from "../../types";
 
 export const buildPrompt = (
   config: PromptConfig,

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import type { Plant } from "./types";
+    import { invalidateAll } from "$app/navigation";
+    import type { Plant } from "../types";
     import FlowerDrawing from "./FlowerDrawing.svelte";
     import Spinner from "./Spinner.svelte";
 
@@ -23,7 +24,7 @@
                 <button
                     on:click={async () => {
                         busy = true;
-                        const res = await fetch(`/api/image/generate`, {
+                        const res = await fetch(`/api/generate/image`, {
                             method: "POST",
                             body: JSON.stringify({
                                 description: plantDetails.description,
@@ -51,15 +52,16 @@
                 <button
                     on:click={async () => {
                         busy = true;
-                        await fetch("/api?id=" + plantDetails.id, {
+                        await fetch("/api/plants/" + plantDetails.id, {
                             method: "PATCH",
                             body: JSON.stringify({
                                 ...plantDetails,
-                                image: plantDetails.id + ".png",
+                                imageUrl: plantDetails.id + ".png",
                             }),
                         });
                         candidateImage = null;
                         busy = false;
+                        invalidateAll();
                     }}>Save</button
                 >
             {/if}

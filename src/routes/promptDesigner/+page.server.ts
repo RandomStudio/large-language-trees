@@ -1,5 +1,5 @@
+import type { Plant } from "../../types";
 import type { Actions, PageServerLoad } from "./$types";
-import type { Plant } from "../types";
 
 export const actions = {
   default: async () => {
