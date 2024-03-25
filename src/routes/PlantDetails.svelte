@@ -14,9 +14,9 @@
 <div class="plant">
     <div class="col">
         <div class="image-area {allowImageGeneration ? '' : 'hidden'}">
-            {#if plantDetails.image}
+            {#if plantDetails.imageUrl}
                 <img
-                    src={`/plants/${plantDetails.image}`}
+                    src={`/plants/${plantDetails.imageUrl}`}
                     alt={`saved image of ${plantDetails.commonName}`}
                 />
             {:else}
