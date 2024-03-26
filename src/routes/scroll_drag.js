@@ -4,7 +4,7 @@ let dragOffsetX = 0;
 let plants = [];
 
 let scrollOffset = 0;
-let scrollSpeed = 0; 
+let scrollSpeed = 0;
 let deltaY = 0;
 
 // Infos about the initial positions
@@ -26,19 +26,18 @@ const colorsRGB = {
   Purple: [128, 0, 128],
   "Light Blue": [173, 216, 230],
   Violet: [238, 130, 238],
-  "Blue": [0, 0, 139],
+  Blue: [0, 0, 139],
   "Light Pink": [255, 182, 193],
   "Light Green": [144, 238, 144],
   "Green-Brown": [107, 142, 35],
   "Dark Red": [139, 0, 0],
   Yellow: [255, 255, 0],
   Orange: [255, 165, 0],
-  Pink: [255,192,203]
+  Pink: [255, 192, 203],
 };
 
-
 function preload() {
-  loadJSON('database.json', function(data) {
+  loadJSON("database.json", function (data) {
     for (let plant of data) {
       plants.push({
         commonName: plant.commonName,
@@ -48,7 +47,7 @@ function preload() {
         stemLength: plant.properties.stemLengthCm,
         petalCountRange: plant.properties.petalCountRange,
         inthebox: false,
-        inthebox2: false
+        inthebox2: false,
       });
     }
   });
@@ -65,8 +64,7 @@ function draw() {
   drawTargetArea(x_area1, y_area1, side);
   drawTargetArea(x_area2, y_area2, side);
 
-
-  for (let i = 0; i < plants.length; i++) { 
+  for (let i = 0; i < plants.length; i++) {
     // Met la plante dans sa position initiale dans le menu scroll (lui aussi dans sa position de base)
     let plant = plants[i];
     let y = plant.yPos;
@@ -83,7 +81,7 @@ function draw() {
     }
 
     fill(plant.color);
-    drawFlower(x,y,plant);
+    drawFlower(x, y, plant);
   }
 }
 
@@ -100,7 +98,8 @@ function updateScroll() {
   if (topCircleY > 50) {
     deltaY = 0;
     scrollSpeed = 0;
-  } else if (bottomCircleY < height - 250) { // Ajustement en fonction de la hauteur du canvas
+  } else if (bottomCircleY < height - 250) {
+    // Ajustement en fonction de la hauteur du canvas
     deltaY = 550 - (startY + (plants.length - 1) * 100);
     scrollSpeed = 0;
   } else {
@@ -120,10 +119,11 @@ function mousePressed() {
     let plant = plants[i];
     let y = plant.yPos;
     if (!plant.inthebox && !plant.inthebox2) {
-      y = y + deltaY
+      y = y + deltaY;
     }
     let x = plant.xPos;
-    if (dist(mouseX, mouseY, x, y) < 20) { // Condition ajustée pour détecter si la souris est sur le cercle
+    if (dist(mouseX, mouseY, x, y) < 20) {
+      // Condition ajustée pour détecter si la souris est sur le cercle
       draggedCircle = i;
       return;
     }
@@ -133,26 +133,35 @@ function mousePressed() {
 function mouseReleased() {
   if (draggedCircle !== -1) {
     let plant = plants[draggedCircle];
-    if (mouseX > x_area1 && mouseX < x_area1+side && mouseY > y_area1 && mouseY < y_area1+side && plants.every(plant => !plant.inthebox)) {
+    if (
+      mouseX > x_area1 &&
+      mouseX < x_area1 + side &&
+      mouseY > y_area1 &&
+      mouseY < y_area1 + side &&
+      plants.every((plant) => !plant.inthebox)
+    ) {
       // Placer le cercle au centre de la boîte
       plant.inthebox = true;
-      plant.xPos = x_area1+side/2; // Centrer le cercle dans la boîte en x
-      plant.yPos = y_area1+side/2; // Centrer le cercle dans la boîte en y
+      plant.xPos = x_area1 + side / 2; // Centrer le cercle dans la boîte en x
+      plant.yPos = y_area1 + side / 2; // Centrer le cercle dans la boîte en y
       plant.inthebox2 = false;
-    }
-    else if (mouseX > (x_area2) && mouseX < (x_area2+side) && mouseY > (y_area2) && mouseY < (y_area2+side) && plants.every(plant => !plant.inthebox2)) {
+    } else if (
+      mouseX > x_area2 &&
+      mouseX < x_area2 + side &&
+      mouseY > y_area2 &&
+      mouseY < y_area2 + side &&
+      plants.every((plant) => !plant.inthebox2)
+    ) {
       // Placer le cercle au centre de la boîte
       plant.inthebox2 = true;
-      plant.xPos = x_area2+side/2; // Centrer le cercle dans la boîte en x
-      plant.yPos = y_area2+side/2; // Centrer le cercle dans la boîte en y
+      plant.xPos = x_area2 + side / 2; // Centrer le cercle dans la boîte en x
+      plant.yPos = y_area2 + side / 2; // Centrer le cercle dans la boîte en y
       plant.inthebox = false;
-
-    } 
-    else {
+    } else {
       plant.inthebox = false;
       plant.inthebox2 = false;
-      plant.xPos = startX; 
-      plant.yPos = startY + draggedCircle*100;
+      plant.xPos = startX;
+      plant.yPos = startY + draggedCircle * 100;
     }
     draggedCircle = -1; // Réinitialiser le cercle en cours de drag
     console.log(draggedCircle);
@@ -160,8 +169,8 @@ function mouseReleased() {
 }
 
 function drawFlower(x, y, plant) {
-  const stemHeight = plant.stemLength*4; // Adjust stem height as necessary
-  const petalCount = parseInt(plant.petalCountRange.split('-')[0]);
+  const stemHeight = plant.stemLength * 4; // Adjust stem height as necessary
+  const petalCount = parseInt(plant.petalCountRange.split("-")[0]);
   // Stem
   stroke(0, 128, 0);
   strokeWeight(4);
