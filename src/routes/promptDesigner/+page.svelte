@@ -1,11 +1,14 @@
 <script lang="ts">
     import defaults from "../../defaults/prompt-config.json";
     import { buildPrompt } from "./promptUtils";
-    import type { Plant, PromptConfig } from "../../types";
+    import type { InsertPlant, PromptConfig, SelectPlant } from "../../types";
     import PlantDetails from "../PlantDetails.svelte";
     import Spinner from "../Spinner.svelte";
 
-    export let data: { parents: [Plant, Plant] | null; newSeed: Plant | null };
+    export let data: {
+        parents: [SelectPlant, SelectPlant] | null;
+        newSeed: InsertPlant | null;
+    };
     const { parents } = data;
 
     let config = defaults as PromptConfig;
@@ -74,6 +77,11 @@
                 type="hidden"
                 name="newSeed"
                 value={JSON.stringify(data.newSeed)}
+            />
+            <input
+                type="hidden"
+                name="parents"
+                value={JSON.stringify(data.parents)}
             />
             <button>Add to my Garden</button>
         </form>

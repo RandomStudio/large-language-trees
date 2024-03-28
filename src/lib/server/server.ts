@@ -40,7 +40,7 @@ export const getAllPlants = async () => {
 };
 
 export const addNew = async (plant: InsertPlant, parentIds: number[]) => {
-  console.log("add new plant", plant, typeof plant);
+  console.log("add new plant", plant, parentIds);
   if (typeof plant === "string") {
     throw Error("Plant is not an object");
   }
@@ -50,14 +50,13 @@ export const addNew = async (plant: InsertPlant, parentIds: number[]) => {
     .values({ commonName, description, properties })
     .returning({ insertedId: plants.id });
   const insertedId = insertedPlant[0].insertedId;
-  // if (parentIds.length === 2) {
-  //   await db
-  //     .insert(plantsToPlantsTable)
-  //     .values({ parent: parentIds[0], child: insertedId });
-  //   await db
-  //     .insert(plantsToPlantsTable)
-  //     .values({ parent: parentIds[1], child: insertedId });
-  // }
+  if (parentIds.length === 2) {
+    console.log("Adding two parents to this new plant:", parentIds);
+    await db
+      .update(plants)
+      .set({ parent1: parentIds[0], parent2: parentIds[1] })
+      .where(eq(plants.id, insertedId));
+  }
   if (parentIds.length !== 0 && parentIds.length !== 2) {
     throw Error("A plant can only have exactly zero or 2 parents!");
   }

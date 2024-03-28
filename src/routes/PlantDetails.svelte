@@ -1,14 +1,10 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
-    import type { SelectPlant } from "../types";
+    import type { InsertPlant, SelectPlant } from "../types";
     import FlowerDrawing from "./FlowerDrawing.svelte";
     import Spinner from "./Spinner.svelte";
 
-    type Plant = SelectPlant;
-
-    interface PlantWithParents extends Plant {
-        relatedPlants: SelectPlant[];
-    }
+    type Plant = SelectPlant | InsertPlant;
 
     export let plantDetails: Plant;
     export let allowImageGeneration = true;
@@ -103,7 +99,7 @@
                 x {plantDetails.parent2}
             </div>
         {/if} -->
-        <!-- <code>{JSON.stringify(props)}</code> -->
+        <code>{JSON.stringify(plantDetails, null, 2)}</code>
 
         {#if plantDetails.description}
             <p>{plantDetails.description}</p>

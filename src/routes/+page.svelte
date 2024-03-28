@@ -1,15 +1,17 @@
 <script lang="ts">
-    import { type Plant } from "../types";
+    import { type InsertPlant, type SelectPlant } from "../types";
     import PlantDetails from "./PlantDetails.svelte";
 
-    export let data: { seeds: Plant[] };
+    export let data: { seeds: SelectPlant[] };
 
     const pick = <T,>(arr: T[]): T => {
         const index = Math.round(Math.random() * (arr.length - 1));
         return arr[index];
     };
 
-    const pickRandomParents = (seeds: Plant[]): [Plant, Plant] => {
+    const pickRandomParents = (
+        seeds: SelectPlant[],
+    ): [SelectPlant, SelectPlant] => {
         if (seeds.length < 2) {
             throw Error("Input list must have at least 2 entries");
         }
@@ -21,7 +23,7 @@
         return [first, second];
     };
 
-    let parents: [Plant, Plant] | null = null;
+    let parents: [SelectPlant, SelectPlant] | null = null;
 </script>
 
 <div class="container">
