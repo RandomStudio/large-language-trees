@@ -3,14 +3,15 @@ import DefaultSeeds from "../../defaults/seeds.json";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
-import { plantsTable } from "./schema";
+import { plants } from "./schema";
 import { eq } from "drizzle-orm";
 import type { InsertPlant, SelectPlant } from "../../types";
 
 export const getAllPlants = async () => {
-  const existingPlants = await db.query.plantsTable.findMany({
+  const existingPlants = await db.query.plants.findMany({
     with: {
-      relations: true,
+      myParent1: true,
+      myParent2: true,
     },
   });
   if (existingPlants.length === 0) {
@@ -23,11 +24,16 @@ export const getAllPlants = async () => {
         const { commonName, description, properties, imageUrl } = p;
         console.log("inserting", { commonName });
         return db
-          .insert(plantsTable)
+          .insert(plants)
           .values({ commonName, description, properties, imageUrl });
       }),
     );
-    return await db.query.plantsTable.findMany();
+    return await db.query.plants.findMany({
+      with: {
+        myParent1: true,
+        myParent2: true,
+      },
+    });
   } else {
     return existingPlants;
   }
@@ -40,9 +46,9 @@ export const addNew = async (plant: InsertPlant, parentIds: number[]) => {
   }
   const { commonName, description, properties } = plant;
   const insertedPlant = await db
-    .insert(plantsTable)
+    .insert(plants)
     .values({ commonName, description, properties })
-    .returning({ insertedId: plantsTable.id });
+    .returning({ insertedId: plants.id });
   const insertedId = insertedPlant[0].insertedId;
   // if (parentIds.length === 2) {
   //   await db
@@ -109,10 +115,10 @@ const parseNewPlant = (text: string): InsertPlant | null => {
 
 export const attachImageToPlant = async (id: number, imageUrl: string) => {
   const res = await db
-    .update(plantsTable)
+    .update(plants)
     .set({ imageUrl })
-    .where(eq(plantsTable.id, id))
-    .returning({ updatedId: plantsTable.id });
+    .where(eq(plants.id, id))
+    .returning({ updatedId: plants.id });
   console.log("attachImageToPlant", res);
   res.forEach((r) => {
     console.log("updated ID", r.updatedId);
