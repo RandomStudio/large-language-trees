@@ -1,9 +1,9 @@
-import * as dotenv from "dotenv";
+// import * as dotenv from "dotenv";
 import postgres from "postgres";
 import { DB_CONNECTION_STRING } from "$env/static/private";
 import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
-dotenv.config();
+// dotenv.config();
 
 console.log(DB_CONNECTION_STRING);
 const client = postgres(DB_CONNECTION_STRING);

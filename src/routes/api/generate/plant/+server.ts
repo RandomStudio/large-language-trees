@@ -2,7 +2,7 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import type { Plant } from "../../../types";
+import type { Plant } from "../../../../types";
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as {
@@ -47,7 +47,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 const parseNewPlant = (
   text: string,
-  parentIds: [number, number],
+  parentIds: [number, number]
 ): Plant | null => {
   const json = JSON.parse(text);
   if (json["commonName"] && json["description"] && json["properties"]) {
