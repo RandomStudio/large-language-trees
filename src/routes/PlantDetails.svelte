@@ -1,8 +1,14 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
-    import type { Plant } from "../types";
+    import type { SelectPlant } from "../types";
     import FlowerDrawing from "./FlowerDrawing.svelte";
     import Spinner from "./Spinner.svelte";
+
+    type Plant = SelectPlant;
+
+    interface PlantWithParents extends Plant {
+        relatedPlants: SelectPlant[];
+    }
 
     export let plantDetails: Plant;
     export let allowImageGeneration = true;
@@ -84,7 +90,7 @@
         {/if}
     </div>
     <div class="col">
-        {#if plantDetails.parent1 && plantDetails.parent2}
+        <!-- {#if plantDetails.parent1 && plantDetails.parent2}
             <div class="subtitle">
                 From:
                 <span
@@ -96,7 +102,7 @@
                 </span>
                 x {plantDetails.parent2}
             </div>
-        {/if}
+        {/if} -->
         <!-- <code>{JSON.stringify(props)}</code> -->
 
         {#if plantDetails.description}

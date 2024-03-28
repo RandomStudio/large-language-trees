@@ -15,6 +15,27 @@
       "when": 1711361233220,
       "tag": "0001_wealthy_pyro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1711632651676,
+      "tag": "0002_broad_blue_blade",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1711633790563,
+      "tag": "0003_ambitious_otto_octavius",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1711634037375,
+      "tag": "0004_colorful_lady_ursula",
+      "breakpoints": true
     }
   ]
 }
