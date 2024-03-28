@@ -86,7 +86,15 @@
     <div class="col">
         {#if plantDetails.parent1 && plantDetails.parent2}
             <div class="subtitle">
-                From: {plantDetails.parent1} x {plantDetails.parent2}
+                From:
+                <span
+                    on:mouseover={() => {
+                        console.log("boo!");
+                    }}
+                >
+                    {plantDetails.parent1}
+                </span>
+                x {plantDetails.parent2}
             </div>
         {/if}
         <!-- <code>{JSON.stringify(props)}</code> -->

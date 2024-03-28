@@ -15,6 +15,17 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     await attachImageToPlant(plant.id, plant.imageUrl);
     return json(plant);
   } else {
+    console.error(
+      "This PATCH route is currently intended only for attaching images",
+    );
     return json({});
   }
 };
+
+// export const GET: RequestHandler = async ({ request, params }) => {
+//   const id = params["id"];
+//   if (id) {
+//     const plant =
+
+//   }
+// }

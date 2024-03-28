@@ -4,11 +4,13 @@ import type { ChatCompletionMessageParam } from "openai/resources/chat/completio
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { Plant } from "../../types";
-import { plantsTable } from "./schema";
+import { plants } from "./schema";
 import { eq } from "drizzle-orm";
 
 export const getAllPlants = async () => {
-  const existingPlants = await db.query.plantsTable.findMany();
+  const existingPlants = await db.query.plants.findMany({
+    with: { parents: true },
+  });
   if (existingPlants.length === 0) {
     console.log(
       "No plants in DB, we will attempt to populate with defaults...",
@@ -19,11 +21,11 @@ export const getAllPlants = async () => {
         const { commonName, description, properties, imageUrl } = p;
         console.log("inserting", { commonName });
         return db
-          .insert(plantsTable)
+          .insert(plants)
           .values({ commonName, description, properties, imageUrl });
       }),
     );
-    return await db.query.plantsTable.findMany();
+    return await db.query.plants.findMany();
   } else {
     return existingPlants;
   }
@@ -34,9 +36,9 @@ export const addNew = async (plant: Plant) => {
   if (typeof plant === "string") {
     throw Error("Plant is not an object");
   }
-  const { commonName, description, properties, parent1, parent2 } = plant;
+  const { commonName, description, properties, parents } = plant;
   await db
-    .insert(plantsTable)
+    .insert(plants)
     .values({ commonName, description, properties, parent1, parent2 });
   return plant;
 };
@@ -100,10 +102,10 @@ const parseNewPlant = (
 
 export const attachImageToPlant = async (id: number, imageUrl: string) => {
   const res = await db
-    .update(plantsTable)
+    .update(plants)
     .set({ imageUrl })
-    .where(eq(plantsTable.id, id))
-    .returning({ updatedId: plantsTable.id });
+    .where(eq(plants.id, id))
+    .returning({ updatedId: plants.id });
   console.log("attachImageToPlant", res);
   res.forEach((r) => {
     console.log("updated ID", r.updatedId);

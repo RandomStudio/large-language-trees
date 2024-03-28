@@ -1,12 +1,5 @@
-export interface Plant {
-  id: number;
-  parent1?: number;
-  parent2?: number;
-  properties: Characteristics;
-  commonName: string;
-  description?: string;
-  imageUrl?: string;
-}
+import { plants } from "$lib/server/schema";
+export type Plant = typeof plants.$inferSelect;
 
 export type Characteristics = { [key: string]: string | number };
 
