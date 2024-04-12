@@ -2,7 +2,11 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import type { InsertPlant, SelectPlant } from "../../../../types";
+import type {
+  Characteristics,
+  InsertPlant,
+  SelectPlant,
+} from "../../../../types";
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as {
@@ -30,14 +34,16 @@ export const POST: RequestHandler = async ({ request }) => {
       console.log(JSON.stringify(res));
       const formattedContent = res.message.content || "{}";
 
-      offspring = parseNewPlant(formattedContent, [
+      const parsedPlant = await parseNewPlant(formattedContent, [
         parents[0].id,
         parents[1].id,
       ]);
-      if (offspring) {
+      if (parsedPlant) {
+        offspring = parsedPlant;
         console.log("Offspring:", offspring);
       } else {
-        throw Error("Oops, couldn't parse the offspring text");
+        // offpsring will stay "null"
+        console.error("Oops, couldn't parse the offspring text");
       }
     }
   }
@@ -45,11 +51,18 @@ export const POST: RequestHandler = async ({ request }) => {
   return json(offspring);
 };
 
-const parseNewPlant = (
+const parseNewPlant = async (
   text: string,
   parentIds: [number, number],
-): InsertPlant | null => {
-  const json = JSON.parse(text);
+): Promise<InsertPlant> => {
+  const json = JSON.parse(
+    text
+      .trim()
+      .replaceAll("```json", "")
+      .replaceAll("```", "")
+      .replaceAll('."\n', '.",')
+      .replaceAll("\n", ""),
+  );
   if (json["commonName"] && json["description"] && json["properties"]) {
     console.log("JSON appears to have the valid fields");
     return {
@@ -58,11 +71,58 @@ const parseNewPlant = (
       parent2: parentIds[1],
       commonName: json["commonName"],
       description: json["description"],
-      properties: { ...json["properties"] },
+      properties: { ...(await interpretColours(json["properties"])) },
     };
   } else {
     throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
   }
 };
 
-// const selectPropertiesForPrompt = (originals: object): object => {};
+const interpretColours = async (
+  originals: Characteristics,
+): Promise<Characteristics> => {
+  const colourDescriptionKeys = Object.keys(originals).filter(
+    (k) =>
+      k.toLowerCase().includes("colour") || k.toLowerCase().includes("color"),
+  );
+  console.log(
+    colourDescriptionKeys.length,
+    "colours to interpet...",
+    colourDescriptionKeys,
+    "from keys",
+    Object.keys(originals),
+  );
+  if (colourDescriptionKeys.length == 0) {
+    return originals;
+  } else {
+    let newObject = { ...originals };
+    await Promise.all(
+      colourDescriptionKeys.map(async (descriptionKey) => {
+        const description = originals[descriptionKey] as string;
+        const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+        const completion = await openai.chat.completions.create({
+          messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            {
+              role: "user",
+              content: `Give me the hex string value for the colour "${description}". No other text in your response, please, just the hex string`,
+            },
+          ],
+          model: "gpt-3.5-turbo",
+        });
+
+        const response = completion.choices[0].message.content;
+        if (response) {
+          console.log(`interpreted colour "${description}" as ${response}`);
+          if (response.includes("#") && response.length == 7) {
+            newObject[descriptionKey + "RGB"] = response;
+          } else {
+            console.error("Does not look like a hex string value");
+          }
+        }
+      }),
+    );
+    return newObject;
+  }
+};

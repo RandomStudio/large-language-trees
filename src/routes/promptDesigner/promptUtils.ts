@@ -1,5 +1,5 @@
 import type OpenAI from "openai";
-import type { PromptConfig, SelectPlant } from "../../types";
+import type { Characteristics, PromptConfig, SelectPlant } from "../../types";
 
 export const buildPrompt = (
   config: PromptConfig,
@@ -25,9 +25,9 @@ export const buildPrompt = (
           {
             commonName: plant1.commonName,
             description: plant1.description,
-            properties: {
-              ...(plant1.properties as object),
-            },
+            properties: filterCharacteristicsForPrompt(
+              plant1.properties as Characteristics,
+            ),
           },
           null,
           2,
@@ -40,9 +40,9 @@ export const buildPrompt = (
           {
             commonName: plant2.commonName,
             description: plant2.description,
-            properties: {
-              ...(plant1.properties as object),
-            },
+            properties: filterCharacteristicsForPrompt(
+              plant2.properties as Characteristics,
+            ),
           },
           null,
           2,
@@ -52,4 +52,17 @@ export const buildPrompt = (
         instructions.text,
     },
   ];
+};
+
+/*** For now, removes any characteristics whose key contains "RGB", since these */
+const filterCharacteristicsForPrompt = (
+  originals: Characteristics,
+): Characteristics => {
+  let o: Characteristics = {};
+  Object.keys(originals).forEach((k) => {
+    if (!k.includes("RGB")) {
+      o[k] = originals[k];
+    }
+  });
+  return o;
 };
