@@ -1,9 +1,9 @@
 <script lang="ts">
-    import defaults from "../../defaults/prompt-config.json";
     import { buildPrompt } from "./promptUtils";
     import type { InsertPlant, PromptConfig, SelectPlant } from "../../types";
     import PlantDetails from "../PlantDetails.svelte";
     import Spinner from "../Spinner.svelte";
+    import DefaultPromptConfig from "../../defaults/prompt-config";
 
     export let data: {
         parents: [SelectPlant, SelectPlant] | null;
@@ -11,7 +11,7 @@
     };
     const { parents } = data;
 
-    let config = defaults as PromptConfig;
+    let config = DefaultPromptConfig;
 
     let busy = false;
 </script>
@@ -59,11 +59,9 @@
 
     {#if parents}
         <h4>Final text:</h4>
-        <p class="small">
-            {#each buildPrompt(config, parents[0], parents[1]) as message}
-                <p>{message.content}</p>
-            {/each}
-        </p>
+        {#each buildPrompt(config, parents[0], parents[1]) as message}
+            <pre class="small">{message.content}</pre>
+        {/each}
     {/if}
 
     {#if data.newSeed}
@@ -101,7 +99,7 @@
         min-height: 6em;
     }
     .small {
-        font-size: 1em;
+        font-size: 0.8em;
         line-height: 1em;
     }
 </style>

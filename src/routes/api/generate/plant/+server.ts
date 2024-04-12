@@ -2,17 +2,17 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import type { Plant } from "../../../../types";
+import type { InsertPlant, SelectPlant } from "../../../../types";
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as {
     prompt: ChatCompletionMessageParam[];
-    parents: [Plant, Plant];
+    parents: [SelectPlant, SelectPlant];
   };
 
   const { prompt, parents } = data;
 
-  let offspring: Plant | null = null;
+  let offspring: InsertPlant | null = null;
 
   if (prompt && parents) {
     console.log("Using prompt: ******** \n", prompt);
@@ -47,8 +47,8 @@ export const POST: RequestHandler = async ({ request }) => {
 
 const parseNewPlant = (
   text: string,
-  parentIds: [number, number]
-): Plant | null => {
+  parentIds: [number, number],
+): InsertPlant | null => {
   const json = JSON.parse(text);
   if (json["commonName"] && json["description"] && json["properties"]) {
     console.log("JSON appears to have the valid fields");
@@ -64,3 +64,5 @@ const parseNewPlant = (
     throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
   }
 };
+
+// const selectPropertiesForPrompt = (originals: object): object => {};
