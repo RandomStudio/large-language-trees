@@ -99,7 +99,7 @@
                 x {plantDetails.parent2}
             </div>
         {/if} -->
-        <code>{JSON.stringify(plantDetails, null, 2)}</code>
+        <!-- <code>{JSON.stringify(plantDetails, null, 2)}</code> -->
 
         {#if plantDetails.description}
             <p>{plantDetails.description}</p>
