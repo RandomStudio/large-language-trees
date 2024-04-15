@@ -4,9 +4,11 @@
     "commonName": "Gardenia",
     "properties": {
       "flowerColour": "Red",
+      "flowerColourRGB": "FF0000",
       "petalCountRange": "5-7",
       "petalShape": "Rose",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Lanceolate",
       "leafMarginDescription": "Dentate",
       "stemLengthCm": 18
@@ -19,9 +21,11 @@
     "commonName": "Hibiscus",
     "properties": {
       "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
       "petalCountRange": "5-7",
       "petalShape": "Funnel",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Linear",
       "leafMarginDescription": "Dentate",
       "stemLengthCm": 12
@@ -34,9 +38,11 @@
     "commonName": "Morning Glory",
     "properties": {
       "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
       "petalCountRange": "5-7",
       "petalShape": "Funnel",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Linear",
       "leafMarginDescription": "Entire",
       "stemLengthCm": 15
@@ -49,9 +55,11 @@
     "commonName": "Pansy",
     "properties": {
       "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
       "petalCountRange": "5-7",
       "petalShape": "Butterfly",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Lanceolate",
       "leafMarginDescription": "Dentate",
       "stemLengthCm": 10
@@ -64,9 +72,11 @@
     "commonName": "Passionflower",
     "properties": {
       "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
       "petalCountRange": "10-12",
       "petalShape": "Cup",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Palmately lobed",
       "leafMarginDescription": "Dentate",
       "stemLengthCm": 14
@@ -79,9 +89,11 @@
     "commonName": "Rose",
     "properties": {
       "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
       "petalCountRange": "5-7",
       "petalShape": "Rose",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Lanceolate",
       "leafMarginDescription": "Dentate",
       "stemLengthCm": 11
@@ -93,9 +105,11 @@
     "commonName": "Sunflower",
     "properties": {
       "flowerColour": "Orange",
+      "flowerColourRGB": "#FFA500",
       "petalCountRange": "89-92",
       "petalShape": "Vase",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Ovate",
       "leafMarginDescription": "Lobed",
       "stemLengthCm": 20
@@ -107,9 +121,11 @@
     "commonName": "Tiger Lily",
     "properties": {
       "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
       "petalCountRange": "6-8",
       "petalShape": "Trumpet",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Linear",
       "leafMarginDescription": "Entire",
       "stemLengthCm": 16
@@ -121,9 +137,11 @@
     "commonName": "Violet",
     "properties": {
       "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
       "petalCountRange": "5-7",
       "petalShape": "Cup",
       "leafColour": "Green",
+      "leafColourRGB": "#008000",
       "leafSHape": "Linear",
       "leafMarginDescription": "Entire",
       "stemLengthCm": 13
