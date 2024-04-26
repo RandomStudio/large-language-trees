@@ -1,7 +1,14 @@
-import { OPENAI_API_KEY } from "$env/static/private";
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  OPENAI_API_KEY,
+  S3_BUCKET,
+  S3_REGION,
+} from "$env/static/private";
 import { json, type RequestHandler } from "@sveltejs/kit";
+import { Upload } from "@aws-sdk/lib-storage";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import OpenAI from "openai";
-import fs from "fs/promises";
 import path from "path";
 
 export const POST: RequestHandler = async ({ request, params }) => {
@@ -25,13 +32,39 @@ export const POST: RequestHandler = async ({ request, params }) => {
 
   if (url) {
     const fetchImage = await fetch(url);
-    const buffer = await fetchImage.arrayBuffer();
+    const stream = fetchImage.body;
+    // const buffer = await fetchImage.arrayBuffer();
     const filePath =
       path.resolve(process.cwd(), "static", "plants") + "/" + id + ".png";
     console.log("writing", filePath, "...");
-    await fs.writeFile(filePath, Buffer.from(buffer), "base64");
-    console.log("wrote ok");
-    return json({ description, url });
+
+    if (stream) {
+      const s3 = new S3Client({
+        credentials: {
+          accessKeyId: AWS_ACCESS_KEY_ID,
+          secretAccessKey: AWS_SECRET_ACCESS_KEY,
+        },
+        region: S3_REGION,
+      });
+      const upload = new Upload({
+        client: s3,
+        params: {
+          Bucket: S3_BUCKET,
+          Key: `${id}`,
+          Body: stream,
+        },
+      });
+      try {
+        await upload.done();
+      } catch (e) {
+        console.error("Error uploading to S3:", e);
+      }
+
+      console.log("wrote ok");
+      return json({ description, url });
+    } else {
+      return json({});
+    }
   } else {
     return json({});
   }
