@@ -11,6 +11,8 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import OpenAI from "openai";
 import path from "path";
 
+const URL_PREFIX = "https://random-the-garden.s3.eu-north-1.amazonaws.com";
+
 export const POST: RequestHandler = async ({ request, params }) => {
   const jsonBody = await request.json();
   const { id, description } = jsonBody;
@@ -28,10 +30,10 @@ export const POST: RequestHandler = async ({ request, params }) => {
   });
   console.log("Got image result:", response);
 
-  const { url } = response.data[0];
+  const generatedUrl = response.data[0].url;
 
-  if (url) {
-    const fetchImage = await fetch(url);
+  if (generatedUrl) {
+    const fetchImage = await fetch(generatedUrl);
     const stream = fetchImage.body;
     // const buffer = await fetchImage.arrayBuffer();
     const filePath =
@@ -50,18 +52,19 @@ export const POST: RequestHandler = async ({ request, params }) => {
         client: s3,
         params: {
           Bucket: S3_BUCKET,
-          Key: `${id}`,
+          Key: `${id}.png`,
           Body: stream,
+          ContentType: "image/png",
         },
       });
       try {
-        await upload.done();
+        const output = await upload.done();
+        console.log("wrote ok:", output);
       } catch (e) {
         console.error("Error uploading to S3:", e);
       }
 
-      console.log("wrote ok");
-      return json({ description, url });
+      return json({ description, url: URL_PREFIX + "/" + id + ".png" });
     } else {
       return json({});
     }

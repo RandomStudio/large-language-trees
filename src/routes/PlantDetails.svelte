@@ -19,7 +19,7 @@
         <div class="image-area {allowImageGeneration ? '' : 'hidden'}">
             {#if plantDetails.imageUrl}
                 <img
-                    src={`/plants/${plantDetails.imageUrl}`}
+                    src={plantDetails.imageUrl}
                     alt={`saved image of ${plantDetails.commonName}`}
                 />
             {:else}
@@ -58,7 +58,7 @@
                             method: "PATCH",
                             body: JSON.stringify({
                                 ...plantDetails,
-                                imageUrl: plantDetails.id + ".png",
+                                imageUrl: candidateImage,
                             }),
                         });
                         candidateImage = null;
