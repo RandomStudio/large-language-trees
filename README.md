@@ -32,7 +32,7 @@ The `npm run dev` script will assume you want to use the local database (instead
 To avoid messing with the live/production database (on AWS), you should run a local instance of PostgreSQL database, e.g. using Docker:
 
 ```
-docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
 
 Create a `.env.development` file with identical contents to `.env` _except_ for the following line:
