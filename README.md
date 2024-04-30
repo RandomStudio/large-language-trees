@@ -49,4 +49,18 @@ In the same `.env.development` file as above, ensure that you have a line:
 LOCAL_FILES=true
 ```
 
+In addition, you can also skip image generation via OpenAI altogether. This helps to make testing faster and won't cost anything - a placeholder image will be returned instead.
+
+```
+PLACEHOLDER_IMAGES=true
+```
+
 ## Using Drizzle Studio
+
+Assuming the site is up and running on your development environment (`npm run dev`), you can open a new terminal console and run:
+
+```
+npm run dev:drizzle-studio
+```
+
+This will connect to the local database and the Studio interface will be available at https://local.drizzle.studio
