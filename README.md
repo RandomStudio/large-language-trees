@@ -35,6 +35,18 @@ To avoid messing with the live/production database (on AWS), you should run a lo
 docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
 
+The first time you run the local database:
+
+```
+npm run dev:drizzle-generate
+```
+
+then
+
+```
+npm run dev:drizzle-push
+```
+
 Create a `.env.development` file with identical contents to `.env` _except_ for the following line:
 
 ```
