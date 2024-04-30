@@ -17,6 +17,11 @@
 <div class="plant">
     <div class="col">
         <div class="image-area {allowImageGeneration ? '' : 'hidden'}">
+            {#if plantDetails.row && plantDetails.col}
+                <div>
+                    Row: {plantDetails.row} and Col: {plantDetails.col}
+                </div>
+            {/if}
             {#if plantDetails.imageUrl}
                 <img
                     src={plantDetails.imageUrl}
