@@ -23,9 +23,13 @@ DB_CONNECTION_STRING=**********************
 
 ... where `****` must be replaced with the correct keys or URL strings. Ask for these if you don't have them!
 
-## Using local database
+## Using local database and local file storage
 
-To avoid messing with the live/production database (on AWS), you may run a local instance of PostgreSQL database, e.g. using Docker:
+The `npm run dev` script will assume you want to use the local database (instead of AWS-hosted DB) and local filesystem storage (instead of AWS S3) by default.
+
+### DB
+
+To avoid messing with the live/production database (on AWS), you should run a local instance of PostgreSQL database, e.g. using Docker:
 
 ```
 docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
@@ -37,4 +41,12 @@ Create a `.env.development` file with identical contents to `.env` _except_ for 
 DB_CONNECTION_STRING=postgresql://postgres:mysecretpassword@localhost:5432
 ```
 
-The `npm run dev` script will assume you want to use the local database by default.
+### File storage
+
+In the same `.env.development` file as above, ensure that you have a line:
+
+```
+LOCAL_FILES=true
+```
+
+## Using Drizzle Studio
