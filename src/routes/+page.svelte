@@ -26,6 +26,8 @@
     let parents: [SelectPlant, SelectPlant] | null = null;
 </script>
 
+<a href="/first_page">FIRST PAGE</a>
+
 <div class="container">
     <div class="page">
         <h1>{data.seeds.length} Seeds</h1>
@@ -33,6 +35,7 @@
             {#each data.seeds as p}
                 <li>
                     <PlantDetails plantDetails={p} />
+                    {p}
                 </li>
             {/each}
         </ul>
