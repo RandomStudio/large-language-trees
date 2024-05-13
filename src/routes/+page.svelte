@@ -7,6 +7,7 @@
 
   interface GridCell {
     plant?: SelectPlant;
+    highlighted: boolean;
     column: number;
     row: number;
   }
@@ -19,32 +20,42 @@
         const plant = data.seeds.find(
           (p) => p.colIndex === c && p.rowIndex === r
         );
-        grid.push({ plant, row: r, column: c });
+        grid.push({ plant, row: r, column: c, highlighted: false });
       }
     }
   };
 
-  const updateCell = (row: number, col: number, plant: SelectPlant) => {
-    grid.forEach((cell) => {
-      if (cell.row === row && cell.column === col) {
-        cell.plant = plant;
-        console.log("inserted", plant);
-      }
-    });
-  };
-
-  function dragStart(e: DragEvent) {
+  function dragStart(e: DragEvent, srcIndex: number) {
     console.log("dragStart");
+    const data = srcIndex;
+    e.dataTransfer?.setData("text/plain", data.toString());
   }
 
-  function dragOver(e: DragEvent) {
+  function dragOver(e: DragEvent, index: number) {
     e.preventDefault();
+    grid[index].highlighted = true;
     console.log("dragOver");
   }
 
-  function drop(e: DragEvent) {
+  function dragLeave(e: DragEvent, index: number) {
     e.preventDefault();
-    console.log("drop");
+    grid[index].highlighted = false;
+  }
+
+  function drop(e: DragEvent, dstIndex: number) {
+    e.preventDefault();
+    // console.log("drop");
+    const data = e.dataTransfer?.getData("text/plain");
+    if (data) {
+      const srcIndex = parseInt(data);
+      console.log("transfer", srcIndex, "to", dstIndex);
+      const srcPlant = grid[srcIndex].plant;
+      if (srcPlant) {
+        grid[dstIndex].plant = srcPlant;
+        grid[srcIndex].plant = undefined;
+        grid[dstIndex].highlighted = false;
+      }
+    }
   }
 
   populateGrid();
@@ -56,15 +67,21 @@
   <h1>Fantasy Garden</h1>
 
   <div class="grid-container">
-    {#each grid as gridCell}
+    {#each grid as gridCell, i}
       <div
-        class="cell"
+        class={"cell" + (gridCell.highlighted ? " highlighted" : "")}
         style:left={gridCell.column * CELL_SIZE + "px"}
         style:top={gridCell.row * CELL_SIZE + "px"}
       >
         {#if gridCell.plant}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div class="populated" draggable={true} on:dragstart={dragStart}>
+          <div
+            class="populated"
+            draggable={true}
+            on:dragstart={(e) => {
+              dragStart(e, i);
+            }}
+          >
             {#if gridCell.plant.imageUrl}
               <img
                 src={gridCell.plant.imageUrl}
@@ -87,9 +104,10 @@
           <div
             class="empty"
             on:drop={(e) => {
-              drop(e);
+              drop(e, i);
             }}
-            on:dragover={dragOver}
+            on:dragover={(e) => dragOver(e, i)}
+            on:dragleave={(e) => dragLeave(e, i)}
           >
             Empty
           </div>
@@ -191,11 +209,14 @@
   }
 
   .cell .empty {
-    border: 1px solid green;
+    border: 1px solid grey;
     width: 100%;
     height: 100%;
   }
 
+  .cell.highlighted {
+    background-color: green;
+  }
   .cell .populated {
     cursor: move;
     border: 1px solid red;
