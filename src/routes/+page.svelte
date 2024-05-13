@@ -26,6 +26,8 @@
     let parents: [SelectPlant, SelectPlant] | null = null;
 </script>
 
+<a href="/first_page">FIRST PAGE</a>
+
 <div class="container">
     <div class="page">
         <h1>{data.seeds.length} Seeds</h1>
@@ -75,9 +77,10 @@
     .page {
         padding: 3em;
         margin: 0;
-        color: #333;
+        color: black;
         max-width: 50%;
-        background-color: #ddd;
+        font-size: 10px;
+        font-family: Arial, Helvetica, sans-serif;
     }
 
     li {
