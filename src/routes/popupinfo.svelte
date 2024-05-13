@@ -25,7 +25,7 @@
         display: flex;
         align-items: center; /* Centre verticalement */
         justify-content: center; /* Centre horizontalement */
-        z-index: 1000; /* Haute priorité pour rester sur le dessus */
+        z-index: 10; /* Haute priorité pour rester sur le dessus */
     }
 
     .popup {
@@ -36,12 +36,12 @@
         width: auto;
         max-width: 80%; /* Adaptation à la taille de l'écran */
         text-align: center; /* Texte centré */
-        z-index: 1000; /* S'assure que le popup est au-dessus de l'overlay */
+        z-index: 100; /* S'assure que le popup est au-dessus de l'overlay */
     }
 
     button {
         margin: 10px 0; /* Espacement autour du bouton */
         padding: 10px 20px; /* Taille du bouton */
-        z-index: 1000;
+        z-index: 999;
     }
 </style>

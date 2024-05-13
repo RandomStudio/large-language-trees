@@ -359,10 +359,6 @@
   //checkAndDrawLines(flowersArray);
   //checkProximityAndShowPopup(flowersArray);
   //   });
-
-  function handleClick() {
-    alert("Le bouton a été cliqué!");
-  }
 </script>
 
 <a href="/infoplant">Infoplant</a>
@@ -398,13 +394,12 @@
               </div>
             </div>
           </button>
-          {#if selectedPlant == gridCell.plant}
-            <Popupinfo plantDetails={selectedPlant} {closePopup}></Popupinfo>
-          {/if}
         {/if}
       </div>
     {/each}
   </div>
+
+  <Popupinfo plantDetails={selectedPlant} {closePopup}></Popupinfo>
 
   <a href="/info" class="hover-bold">?</a>
 </main>
@@ -495,13 +490,25 @@
 
   .draggable .thumbnail {
     width: 100%;
+    z-index: 2;
   }
   .thumbnail {
     width: 1%;
+    z-index: 2;
   }
 
   .plant-name {
     text-align: center;
     margin-top: 5px;
+    z-index: 2;
+  }
+
+  .draggable {
+    z-index: 2;
+    width: 100%; /* Assure que les éléments draggable sont au-dessus des cellules */
+  }
+
+  .grid-container {
+    z-index: 0;
   }
 </style>
