@@ -6,6 +6,18 @@
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
 
+  import Popupinfo from "./popupinfo.svelte";
+
+  let selectedPlant: {} | undefined;
+
+  function openPopup(plant: {} | undefined) {
+    selectedPlant = plant;
+  }
+
+  function closePopup() {
+    selectedPlant = undefined;
+  }
+
   interface GridCell {
     plant?: SelectPlant;
     column: number;
@@ -17,7 +29,7 @@
   for (let r = 0; r < GRID_HEIGHT; r++) {
     for (let c = 0; c < GRID_WIDTH; c++) {
       const plant = data.seeds.find(
-        (p) => p.colIndex === c && p.rowIndex === r
+        (p) => p.colIndex === c && p.rowIndex === r,
       );
       grid.push({ plant, row: r, column: c });
     }
@@ -347,6 +359,10 @@
   //checkAndDrawLines(flowersArray);
   //checkProximityAndShowPopup(flowersArray);
   //   });
+
+  function handleClick() {
+    alert("Le bouton a été cliqué!");
+  }
 </script>
 
 <a href="/infoplant">Infoplant</a>
@@ -362,29 +378,32 @@
         style:top={gridCell.row * CELL_SIZE + "px"}
       >
         {#if gridCell.plant}
-          <div class="draggable">
-            {#if gridCell.plant.imageUrl}
-              <img
-                src={gridCell.plant.imageUrl}
-                alt="the real plant"
-                class="thumbnail"
-              />
-            {:else}
-              <img
-                src={"/plants/placeholder.png"}
-                alt="placeholder"
-                class="thumbnail"
-              />
-            {/if}
-            <div class="plant-name">
-              {gridCell.plant.commonName}
+          <button on:click={() => openPopup(gridCell.plant)}>
+            <div class="draggable">
+              {#if gridCell.plant.imageUrl}
+                <img
+                  src={gridCell.plant.imageUrl}
+                  alt="the real plant"
+                  class="thumbnail"
+                />
+              {:else}
+                <img
+                  src={"/plants/placeholder.png"}
+                  alt="placeholder"
+                  class="thumbnail"
+                />
+              {/if}
+              <div class="plant-name">
+                {gridCell.plant.commonName}
+              </div>
             </div>
-          </div>
+          </button>
+          {#if selectedPlant == gridCell.plant}
+            <Popupinfo plantDetails={selectedPlant} {closePopup}></Popupinfo>
+          {/if}
         {/if}
       </div>
     {/each}
-    <!-- {#each data.seeds as plant}
-    {/each} -->
   </div>
 
   <a href="/info" class="hover-bold">?</a>
@@ -415,7 +434,7 @@
     transition: font-weight 0.2s ease; /* Optional: adds a smooth transition for the font weight change */
     text-decoration: none; /* Optional: removes underline from the link, depending on your design needs */
     color: inherit; /* Optional: ensures the link color matches the surrounding text unless otherwise needed */
-    z-index: 1000;
+    z-index: 10;
   }
 
   .hover-bold:hover {
@@ -437,7 +456,7 @@
     top: 10px;
     right: 10px;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 10;
     text-decoration: none;
     color: #000;
     font-size: 15px;
@@ -471,7 +490,7 @@
     width: 64px;
     height: 64px;
     border: 1px solid red;
-    z-index: 10;
+    z-index: 1;
   }
 
   .draggable .thumbnail {
