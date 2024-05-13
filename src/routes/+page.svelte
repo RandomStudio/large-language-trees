@@ -354,8 +354,6 @@
 <main>
   <h1>Fantasy Garden</h1>
 
-  <div>We have {data.seeds.length} plants!</div>
-
   <div class="grid-container">
     {#each grid as gridCell}
       <div
