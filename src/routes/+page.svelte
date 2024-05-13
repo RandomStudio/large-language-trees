@@ -5,7 +5,7 @@
 
     import "./main.css";
     import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
-    import Plantpackage from "./plantpackage.svelte";
+    import PlantCell from "./PlantCell.svelte";
 
     interface GridCell {
         plant?: SelectPlant;
@@ -363,7 +363,7 @@
                     CELL_SIZE}px; top: {gridCell.row * CELL_SIZE}px;"
             >
                 {#if gridCell.plant}
-                    <Plantpackage data={gridCell.plant} />
+                    <PlantCell data={gridCell.plant} />
                 {/if}
             </div>
         {/each}
