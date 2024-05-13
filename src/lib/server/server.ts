@@ -6,6 +6,7 @@ import { OPENAI_API_KEY } from "$env/static/private";
 import { plants } from "./schema";
 import { eq } from "drizzle-orm";
 import type { InsertPlant, SelectPlant } from "../../types";
+import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 
 export const getAllPlants = async () => {
   const existingPlants = await db.query.plants.findMany({
@@ -16,17 +17,30 @@ export const getAllPlants = async () => {
   });
   if (existingPlants.length === 0) {
     console.log(
-      "No plants in DB, we will attempt to populate with defaults...",
+      "No plants in DB, we will attempt to populate with defaults..."
     );
     const newPlants: InsertPlant[] = DefaultSeeds;
+
+    const rows = getRandomIndices(GRID_HEIGHT, newPlants.length);
+    const columns = getRandomIndices(GRID_WIDTH, newPlants.length);
+
     await Promise.all(
-      newPlants.map((p) => {
+      newPlants.map((p, index) => {
         const { commonName, description, properties, imageUrl } = p;
+        const rowIndex = rows[index];
+        const colIndex = columns[index];
         console.log("inserting", { commonName });
-        return db
-          .insert(plants)
-          .values({ commonName, description, properties, imageUrl });
-      }),
+        return db.insert(plants).values({
+          commonName,
+          description,
+          properties,
+          imageUrl,
+          rowIndex,
+          colIndex,
+          // rowIndex: rows[index],
+          // columnIndex: columns[index],
+        });
+      })
     );
     return await db.query.plants.findMany({
       with: {
@@ -38,6 +52,15 @@ export const getAllPlants = async () => {
     return existingPlants;
   }
 };
+
+function getRandomIndices(max: number, count: number): number[] {
+  const indices: Set<number> = new Set();
+  while (indices.size < count) {
+    const randomIndex = Math.floor(Math.random() * max);
+    indices.add(randomIndex);
+  }
+  return Array.from(indices);
+}
 
 export const addNew = async (plant: InsertPlant, parentIds: number[]) => {
   console.log("add new plant", plant, parentIds);
@@ -65,7 +88,7 @@ export const addNew = async (plant: InsertPlant, parentIds: number[]) => {
 
 export const generate = async (
   prompt: ChatCompletionMessageParam[],
-  parents: [SelectPlant, SelectPlant],
+  parents: [SelectPlant, SelectPlant]
 ) => {
   let offspring: InsertPlant | null = null;
 
