@@ -1,488 +1,470 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { type SelectPlant } from "../types"; // Assuming type import is correct
-  export let data: { seeds: SelectPlant[] };
+    import { onMount } from "svelte";
+    import { type SelectPlant } from "../types"; // Assuming type import is correct
+    export let data: { seeds: SelectPlant[] };
 
-  import "./main.css";
-  import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
+    import "./main.css";
+    import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
+    import Plantpackage from "./plantpackage.svelte";
 
-  interface GridCell {
-    plant?: SelectPlant;
-    column: number;
-    row: number;
-  }
-
-  let grid: GridCell[] = [];
-
-  for (let r = 0; r < GRID_HEIGHT; r++) {
-    for (let c = 0; c < GRID_WIDTH; c++) {
-      const plant = data.seeds.find(
-        (p) => p.colIndex === c && p.rowIndex === r
-      );
-      grid.push({ plant, row: r, column: c });
+    interface GridCell {
+        plant?: SelectPlant;
+        column: number;
+        row: number;
     }
-  }
 
-  //   function getOrCreatePopupContainer() {
-  //     // Check if popup container already exists
-  //     let popupContainer = document.querySelector(".popup-container");
-  //     if (!popupContainer) {
-  //       // If not, create a new one
-  //       popupContainer = document.createElement("div");
-  //       popupContainer.classList.add("popup-container");
+    let grid: GridCell[] = [];
 
-  //       // TODO: Popup should be separate Svelte component with its own CSS styling
-  //       popupContainer.style.position = "fixed";
-  //       popupContainer.style.top = "50%";
-  //       popupContainer.style.left = "50%";
-  //       popupContainer.style.transform = "translate(-50%, -50%)";
-  //       popupContainer.style.backgroundColor = "white";
-  //       popupContainer.style.padding = "20px";
-  //       popupContainer.style.borderRadius = "5px";
-  //       popupContainer.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.3)";
-  //       popupContainer.style.zIndex = "9999";
-  //       popupContainer.style.display = "none"; // Initially hide the popup container
-  //       document.body.appendChild(popupContainer);
+    for (let r = 0; r < GRID_HEIGHT; r++) {
+        for (let c = 0; c < GRID_WIDTH; c++) {
+            const plant = data.seeds.find(
+                (p) => p.colIndex === c && p.rowIndex === r,
+            );
+            grid.push({ plant, row: r, column: c });
+        }
+    }
 
-  //       // Create a message div inside the popup container
-  //       const messageDiv = document.createElement("div");
-  //       popupContainer.appendChild(messageDiv);
+    //   function getOrCreatePopupContainer() {
+    //     // Check if popup container already exists
+    //     let popupContainer = document.querySelector(".popup-container");
+    //     if (!popupContainer) {
+    //       // If not, create a new one
+    //       popupContainer = document.createElement("div");
+    //       popupContainer.classList.add("popup-container");
 
-  //       // Create close button (X)
-  //       const closeButton = document.createElement("div");
-  //       closeButton.textContent = "×";
-  //       closeButton.style.position = "absolute";
-  //       closeButton.style.top = "10px";
-  //       closeButton.style.right = "10px";
-  //       closeButton.style.fontSize = "20px";
-  //       closeButton.style.cursor = "pointer";
-  //       closeButton.onclick = function () {
-  //         popupContainer.style.display = "none";
-  //       };
-  //       popupContainer.appendChild(closeButton);
-  //     }
+    //       // TODO: Popup should be separate Svelte component with its own CSS styling
+    //       popupContainer.style.position = "fixed";
+    //       popupContainer.style.top = "50%";
+    //       popupContainer.style.left = "50%";
+    //       popupContainer.style.transform = "translate(-50%, -50%)";
+    //       popupContainer.style.backgroundColor = "white";
+    //       popupContainer.style.padding = "20px";
+    //       popupContainer.style.borderRadius = "5px";
+    //       popupContainer.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.3)";
+    //       popupContainer.style.zIndex = "9999";
+    //       popupContainer.style.display = "none"; // Initially hide the popup container
+    //       document.body.appendChild(popupContainer);
 
-  //     return popupContainer;
-  //   }
+    //       // Create a message div inside the popup container
+    //       const messageDiv = document.createElement("div");
+    //       popupContainer.appendChild(messageDiv);
 
-  //   function showPopup(message) {
-  //     const popupContainer = getOrCreatePopupContainer();
-  //     const messageDiv = popupContainer.querySelector("div");
-  //     messageDiv.textContent = message;
-  //     popupContainer.style.display = "flex";
-  //   }
+    //       // Create close button (X)
+    //       const closeButton = document.createElement("div");
+    //       closeButton.textContent = "×";
+    //       closeButton.style.position = "absolute";
+    //       closeButton.style.top = "10px";
+    //       closeButton.style.right = "10px";
+    //       closeButton.style.fontSize = "20px";
+    //       closeButton.style.cursor = "pointer";
+    //       closeButton.onclick = function () {
+    //         popupContainer.style.display = "none";
+    //       };
+    //       popupContainer.appendChild(closeButton);
+    //     }
 
-  //   onMount(() => {
-  //     // Generate a set of unique random indices
-  //     function getRandomIndices(max: number, count: number): number[] {
-  //       const indices: Set<number> = new Set();
-  //       while (indices.size < count) {
-  //         const randomIndex = Math.floor(Math.random() * max);
-  //         indices.add(randomIndex);
-  //       }
-  //       return Array.from(indices);
-  //     }
+    //     return popupContainer;
+    //   }
 
-  //     // Create a table from an array by selecting random elements
-  //     function CreateTable(array: SelectPlant[]) {
-  //       const randomIndices = getRandomIndices(array.length, 4);
-  //       return randomIndices.map((index) => array[index]);
-  //     }
+    //   function showPopup(message) {
+    //     const popupContainer = getOrCreatePopupContainer();
+    //     const messageDiv = popupContainer.querySelector("div");
+    //     messageDiv.textContent = message;
+    //     popupContainer.style.display = "flex";
+    //   }
 
-  //     // Create a grid with a specified number of columns and rows
-  //     function createGrid(numColumns = 20, numRows = 20) {
-  //       const gridContainer = document.createElement("div");
-  //       gridContainer.id = "gridContainer";
-  //       gridContainer.style.cssText = `
-  //                 display: grid;
-  //                 grid-template-columns: repeat(${numColumns}, 1fr);
-  //                 grid-template-rows: repeat(${numRows}, 1fr);
-  //                 position: absolute;
-  //                 left: 20%; top: 20%;
-  //                 width: 60%; height: 60%;
-  //                 border: 1px solid black;
-  //             `;
-  //       document.body.appendChild(gridContainer);
+    //   onMount(() => {
+    //     // Generate a set of unique random indices
+    //     function getRandomIndices(max: number, count: number): number[] {
+    //       const indices: Set<number> = new Set();
+    //       while (indices.size < count) {
+    //         const randomIndex = Math.floor(Math.random() * max);
+    //         indices.add(randomIndex);
+    //       }
+    //       return Array.from(indices);
+    //     }
 
-  //       for (let y = 0; y < numRows; y++) {
-  //         for (let x = 0; x < numColumns; x++) {
-  //           const cell = document.createElement("div");
-  //           cell.style.cssText = `
-  //                         background-color: white;
-  //                         border-right: 1px solid black;
-  //                         border-bottom: 1px solid black;
-  //                     `;
-  //           cell.dataset.rowIndex = y.toString();
-  //           cell.dataset.colIndex = x.toString();
-  //           gridContainer.appendChild(cell);
+    //     // Create a table from an array by selecting random elements
+    //     function CreateTable(array: SelectPlant[]) {
+    //       const randomIndices = getRandomIndices(array.length, 4);
+    //       return randomIndices.map((index) => array[index]);
+    //     }
 
-  //           // Attach dragover and drop events to each cell
-  //           attachDragAndDropHandlers(cell);
-  //         }
-  //       }
-  //     }
+    //     // Create a grid with a specified number of columns and rows
+    //     function createGrid(numColumns = 20, numRows = 20) {
+    //       const gridContainer = document.createElement("div");
+    //       gridContainer.id = "gridContainer";
+    //       gridContainer.style.cssText = `
+    //                 display: grid;
+    //                 grid-template-columns: repeat(${numColumns}, 1fr);
+    //                 grid-template-rows: repeat(${numRows}, 1fr);
+    //                 position: absolute;
+    //                 left: 20%; top: 20%;
+    //                 width: 60%; height: 60%;
+    //                 border: 1px solid black;
+    //             `;
+    //       document.body.appendChild(gridContainer);
 
-  //     // Create a flower package with image, alt text, and title
-  //     function createFlowerPackage(flower, src, alt, title) {
-  //       const flowerId = "flower-" + Math.random().toString(36).substr(2, 9);
-  //       flower["flowerId"] = flowerId;
-  //       const cell = document.createElement("div");
-  //       cell.style.cssText = `
-  //                 position: absolute;
-  //                 width: calc(100% / 20);
-  //                 height: calc(100% / 20);
-  //                 z-index: 10;  // Ensure this is high enough to appear above other grid elements
-  //                 draggable: true;
-  //             `;
-  //       cell.classList.add("draggable");
-  //       cell.setAttribute("draggable", "true");
-  //       cell.dataset.flowerId = flowerId;
+    //       for (let y = 0; y < numRows; y++) {
+    //         for (let x = 0; x < numColumns; x++) {
+    //           const cell = document.createElement("div");
+    //           cell.style.cssText = `
+    //                         background-color: white;
+    //                         border-right: 1px solid black;
+    //                         border-bottom: 1px solid black;
+    //                     `;
+    //           cell.dataset.rowIndex = y.toString();
+    //           cell.dataset.colIndex = x.toString();
+    //           gridContainer.appendChild(cell);
 
-  //       const img = document.createElement("img");
-  //       img.src = src;
-  //       img.alt = alt;
-  //       img.style.cssText = "width: 100%; height: 100%; object-fit: cover;";
-  //       cell.appendChild(img);
+    //           // Attach dragover and drop events to each cell
+    //           attachDragAndDropHandlers(cell);
+    //         }
+    //       }
+    //     }
 
-  //       const titleElement = document.createElement("div");
-  //       titleElement.textContent = title;
-  //       titleElement.style.cssText = "text-align: center; margin-top: 5px;";
-  //       cell.appendChild(titleElement);
+    //     // Create a flower package with image, alt text, and title
+    //     function createFlowerPackage(flower, src, alt, title) {
+    //       const flowerId = "flower-" + Math.random().toString(36).substr(2, 9);
+    //       flower["flowerId"] = flowerId;
+    //       const cell = document.createElement("div");
+    //       cell.style.cssText = `
+    //                 position: absolute;
+    //                 width: calc(100% / 20);
+    //                 height: calc(100% / 20);
+    //                 z-index: 10;  // Ensure this is high enough to appear above other grid elements
+    //                 draggable: true;
+    //             `;
+    //       cell.classList.add("draggable");
+    //       cell.setAttribute("draggable", "true");
+    //       cell.dataset.flowerId = flowerId;
 
-  //       return cell;
-  //     }
+    //       const img = document.createElement("img");
+    //       img.src = src;
+    //       img.alt = alt;
+    //       img.style.cssText = "width: 100%; height: 100%; object-fit: cover;";
+    //       cell.appendChild(img);
 
-  //     // Attach drag and drop handlers to a cell
-  //     function attachDragAndDropHandlers(cell) {
-  //       cell.addEventListener("dragover", function (event) {
-  //         event.preventDefault(); // Allow dropping
-  //       });
+    //       const titleElement = document.createElement("div");
+    //       titleElement.textContent = title;
+    //       titleElement.style.cssText = "text-align: center; margin-top: 5px;";
+    //       cell.appendChild(titleElement);
 
-  //       cell.addEventListener("drop", function (event) {
-  //         event.preventDefault();
-  //         const flowerId = event.dataTransfer.getData("text/plain");
-  //         const flowerElement = document.querySelector(
-  //           `[data-flower-id="${flowerId}"]`
-  //         );
-  //         if (flowerElement && cell !== flowerElement.parentNode) {
-  //           const rowIndex = cell.dataset.rowIndex;
-  //           const colIndex = cell.dataset.colIndex;
+    //       return cell;
+    //     }
 
-  //           // Créez une ellipse noire dans la cellule d'origine du drag
-  //           const originCell = document.querySelector(
-  //             `[data-row-index="${rowIndex}"][data-col-index="${colIndex}"]`
-  //           );
-  //           const originEllipse = document.createElement("div");
-  //           originEllipse.style.cssText = `
-  //                 position: absolute;
-  //                 bottom: 5px; /* adjust the distance from the bottom */
-  //                 left: 50%;
-  //                 transform: translateX(-50%);
-  //                 width: 20px; /* adjust the size */
-  //                 height: 20px; /* adjust the size */
-  //                 background-color: black;
-  //                 border-radius: 50%;
-  //             `;
-  //           originCell.appendChild(originEllipse);
+    //     // Attach drag and drop handlers to a cell
+    //     function attachDragAndDropHandlers(cell) {
+    //       cell.addEventListener("dragover", function (event) {
+    //         event.preventDefault(); // Allow dropping
+    //       });
 
-  //           // Déplacez l'élément de fleur vers la cellule cible
-  //           cell.appendChild(flowerElement);
+    //       cell.addEventListener("drop", function (event) {
+    //         event.preventDefault();
+    //         const flowerId = event.dataTransfer.getData("text/plain");
+    //         const flowerElement = document.querySelector(
+    //           `[data-flower-id="${flowerId}"]`
+    //         );
+    //         if (flowerElement && cell !== flowerElement.parentNode) {
+    //           const rowIndex = cell.dataset.rowIndex;
+    //           const colIndex = cell.dataset.colIndex;
 
-  //           // Mettez à jour la position de la fleur dans le tableau
-  //           updateFlowerPosition(flowerId, rowIndex, colIndex, flowersArray);
-  //           console.log(rowIndex, colIndex);
-  //         }
-  //       });
-  //     }
+    //           // Créez une ellipse noire dans la cellule d'origine du drag
+    //           const originCell = document.querySelector(
+    //             `[data-row-index="${rowIndex}"][data-col-index="${colIndex}"]`
+    //           );
+    //           const originEllipse = document.createElement("div");
+    //           originEllipse.style.cssText = `
+    //                 position: absolute;
+    //                 bottom: 5px; /* adjust the distance from the bottom */
+    //                 left: 50%;
+    //                 transform: translateX(-50%);
+    //                 width: 20px; /* adjust the size */
+    //                 height: 20px; /* adjust the size */
+    //                 background-color: black;
+    //                 border-radius: 50%;
+    //             `;
+    //           originCell.appendChild(originEllipse);
 
-  //     // Initialize flowers and place them on the grid
-  //     function initializeFlowers() {
-  //       const gridSize = 20;
-  //       const uniquePositions = getRandomIndices(
-  //         gridSize * gridSize,
-  //         flowersArray.length
-  //       );
+    //           // Déplacez l'élément de fleur vers la cellule cible
+    //           cell.appendChild(flowerElement);
 
-  //       flowersArray.forEach((flower, index) => {
-  //         const positionIndex = uniquePositions[index];
-  //         const rowIndex = Math.floor(positionIndex / gridSize);
-  //         const colIndex = positionIndex % gridSize;
+    //           // Mettez à jour la position de la fleur dans le tableau
+    //           updateFlowerPosition(flowerId, rowIndex, colIndex, flowersArray);
+    //           console.log(rowIndex, colIndex);
+    //         }
+    //       });
+    //     }
 
-  //         flower.rowIndex = rowIndex;
-  //         flower.colIndex = colIndex;
+    //     // Initialize flowers and place them on the grid
+    //     function initializeFlowers() {
+    //       const gridSize = 20;
+    //       const uniquePositions = getRandomIndices(
+    //         gridSize * gridSize,
+    //         flowersArray.length
+    //       );
 
-  //         const flowerPackage = createFlowerPackage(
-  //           flower,
-  //           flower.imageUrl,
-  //           flower.commonName,
-  //           flower.commonName
-  //         );
+    //       flowersArray.forEach((flower, index) => {
+    //         const positionIndex = uniquePositions[index];
+    //         const rowIndex = Math.floor(positionIndex / gridSize);
+    //         const colIndex = positionIndex % gridSize;
 
-  //         flowerPackage.style.zIndex = "9999";
+    //         flower.rowIndex = rowIndex;
+    //         flower.colIndex = colIndex;
 
-  //         makeDraggable(flowerPackage);
+    //         const flowerPackage = createFlowerPackage(
+    //           flower,
+    //           flower.imageUrl,
+    //           flower.commonName,
+    //           flower.commonName
+    //         );
 
-  //         const gridContainer = document.getElementById("gridContainer");
-  //         const selector = `div[data-row-index="${rowIndex}"][data-col-index="${colIndex}"]`;
-  //         const cell = gridContainer.querySelector(selector);
+    //         flowerPackage.style.zIndex = "9999";
 
-  //         if (cell) {
-  //           cell.appendChild(flowerPackage);
-  //         } else {
-  //           console.error("No cell found at the specified rowIndex and colIndex");
-  //         }
-  //       });
+    //         makeDraggable(flowerPackage);
 
-  //       enableDropZones();
-  //     }
+    //         const gridContainer = document.getElementById("gridContainer");
+    //         const selector = `div[data-row-index="${rowIndex}"][data-col-index="${colIndex}"]`;
+    //         const cell = gridContainer.querySelector(selector);
 
-  //     function makeDraggable(element) {
-  //       element.addEventListener("dragstart", function (event) {
-  //         event.dataTransfer.setData("text/plain", element.dataset.flowerId);
-  //       });
-  //     }
+    //         if (cell) {
+    //           cell.appendChild(flowerPackage);
+    //         } else {
+    //           console.error("No cell found at the specified rowIndex and colIndex");
+    //         }
+    //       });
 
-  //     // Enable drop zones for cells
-  //     function enableDropZones() {
-  //       const cells: NodeList<HTMLElement> =
-  //         document.querySelectorAll("#gridContainer div");
-  //       cells.forEach((cell) => {
-  //         cell.addEventListener("dragover", function (event) {
-  //           event.preventDefault();
-  //         });
-  //         cell.addEventListener("drop", function (event: DragEvent) {
-  //           event.preventDefault();
-  //           const flowerId = event.dataTransfer.getData("text/plain");
-  //           const flowerElement = document.querySelector(
-  //             `[data-flower-id="${flowerId}"]`
-  //           );
-  //           if (flowerElement && cell !== flowerElement.parentNode) {
-  //             cell.appendChild(flowerElement);
-  //             const rowIndex = parseInt(cell.dataset.rowIndex);
-  //             const colIndex = parseInt(cell.dataset.colIndex);
-  //             updateFlowerPosition(flowerId, rowIndex, colIndex, flowersArray);
-  //             console.log(flowersArray);
-  //             // Re-vérifiez la proximité après chaque drop
-  //             checkProximityAndShowPopup(flowersArray);
-  //           }
-  //         });
-  //       });
-  //     }
+    //       enableDropZones();
+    //     }
 
-  //     // Update flower position and check for proximity to draw lines
-  //     function updateFlowerPosition(flowerId, rowIndex, colIndex, flowersArray) {
-  //       rowIndex = parseInt(rowIndex);
-  //       colIndex = parseInt(colIndex);
-  //       console.log(flowersArray);
-  //       const flower = flowersArray.find((f) => f.flowerId === flowerId);
-  //       console.log(flower);
-  //       if (flower) {
-  //         flower.rowIndex = rowIndex;
-  //         flower.colIndex = colIndex;
+    //     function makeDraggable(element) {
+    //       element.addEventListener("dragstart", function (event) {
+    //         event.dataTransfer.setData("text/plain", element.dataset.flowerId);
+    //       });
+    //     }
 
-  //         // Appel de la vérification de proximité pour la fleur déplacée
-  //         checkProximityForFlower(flower, flowersArray);
-  //         console.log("OK");
-  //       }
-  //     }
+    //     // Enable drop zones for cells
+    //     function enableDropZones() {
+    //       const cells: NodeList<HTMLElement> =
+    //         document.querySelectorAll("#gridContainer div");
+    //       cells.forEach((cell) => {
+    //         cell.addEventListener("dragover", function (event) {
+    //           event.preventDefault();
+    //         });
+    //         cell.addEventListener("drop", function (event: DragEvent) {
+    //           event.preventDefault();
+    //           const flowerId = event.dataTransfer.getData("text/plain");
+    //           const flowerElement = document.querySelector(
+    //             `[data-flower-id="${flowerId}"]`
+    //           );
+    //           if (flowerElement && cell !== flowerElement.parentNode) {
+    //             cell.appendChild(flowerElement);
+    //             const rowIndex = parseInt(cell.dataset.rowIndex);
+    //             const colIndex = parseInt(cell.dataset.colIndex);
+    //             updateFlowerPosition(flowerId, rowIndex, colIndex, flowersArray);
+    //             console.log(flowersArray);
+    //             // Re-vérifiez la proximité après chaque drop
+    //             checkProximityAndShowPopup(flowersArray);
+    //           }
+    //         });
+    //       });
+    //     }
 
-  //     function showPopup(message) {
-  //       const popup = document.createElement("div");
-  //       popup.style.position = "fixed";
-  //       popup.style.top = "50%";
-  //       popup.style.left = "50%";
-  //       popup.style.transform = "translate(-50%, -50%)";
-  //       popup.style.padding = "20px";
-  //       popup.style.backgroundColor = "white";
-  //       popup.style.border = "1px solid black";
-  //       popup.style.zIndex = "1000"; // Assurez-vous qu'il est bien au-dessus des autres éléments
-  //       popup.textContent = message;
+    //     // Update flower position and check for proximity to draw lines
+    //     function updateFlowerPosition(flowerId, rowIndex, colIndex, flowersArray) {
+    //       rowIndex = parseInt(rowIndex);
+    //       colIndex = parseInt(colIndex);
+    //       console.log(flowersArray);
+    //       const flower = flowersArray.find((f) => f.flowerId === flowerId);
+    //       console.log(flower);
+    //       if (flower) {
+    //         flower.rowIndex = rowIndex;
+    //         flower.colIndex = colIndex;
 
-  //       document.body.appendChild(popup);
+    //         // Appel de la vérification de proximité pour la fleur déplacée
+    //         checkProximityForFlower(flower, flowersArray);
+    //         console.log("OK");
+    //       }
+    //     }
 
-  //       // Ajouter un timer pour faire disparaître le popup après quelques secondes
-  //       setTimeout(() => {
-  //         document.body.removeChild(popup);
-  //       }, 3000); // Le popup disparaît après 3 secondes
-  //     }
+    //     function showPopup(message) {
+    //       const popup = document.createElement("div");
+    //       popup.style.position = "fixed";
+    //       popup.style.top = "50%";
+    //       popup.style.left = "50%";
+    //       popup.style.transform = "translate(-50%, -50%)";
+    //       popup.style.padding = "20px";
+    //       popup.style.backgroundColor = "white";
+    //       popup.style.border = "1px solid black";
+    //       popup.style.zIndex = "1000"; // Assurez-vous qu'il est bien au-dessus des autres éléments
+    //       popup.textContent = message;
 
-  //     function checkProximityForFlower(movedFlower, flowersArray) {
-  //       flowersArray.forEach((flower) => {
-  //         if (
-  //           flower.flowerId !== movedFlower.flowerId &&
-  //           areFlowersClose(movedFlower, flower)
-  //         ) {
-  //           console.log("Les fleurs sont à côté:", movedFlower, flower);
-  //           showPopup("Creating a Flower...");
-  //         }
-  //       });
-  //     }
+    //       document.body.appendChild(popup);
 
-  //     function checkProximityAndShowPopup(flowersArray) {
-  //       let popupShown = false; // Un flag pour s'assurer qu'un seul popup s'affiche à la fois
+    //       // Ajouter un timer pour faire disparaître le popup après quelques secondes
+    //       setTimeout(() => {
+    //         document.body.removeChild(popup);
+    //       }, 3000); // Le popup disparaît après 3 secondes
+    //     }
 
-  //       for (let i = 0; i < flowersArray.length; i++) {
-  //         for (let j = i + 1; j < flowersArray.length; j++) {
-  //           if (areFlowersClose(flowersArray[i], flowersArray[j])) {
-  //             if (!popupShown) {
-  //               // Si aucun popup n'a encore été affiché
-  //               showPopup("Creating a Flower...");
-  //               popupShown = true; // Set le flag à true
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //     // Check if two flower packages are close to each other
-  //     function areFlowersClose(flower1, flower2) {
-  //       const rowDiff = Math.abs(flower1.rowIndex - flower2.rowIndex);
-  //       const colDiff = Math.abs(flower1.colIndex - flower2.colIndex);
-  //       return (rowDiff <= 1 && colDiff === 0) || (rowDiff === 0 && colDiff <= 1);
-  //     }
+    //     function checkProximityForFlower(movedFlower, flowersArray) {
+    //       flowersArray.forEach((flower) => {
+    //         if (
+    //           flower.flowerId !== movedFlower.flowerId &&
+    //           areFlowersClose(movedFlower, flower)
+    //         ) {
+    //           console.log("Les fleurs sont à côté:", movedFlower, flower);
+    //           showPopup("Creating a Flower...");
+    //         }
+    //       });
+    //     }
 
-  // let flowersArray = CreateTable(data.seeds);
-  // console.log(flowersArray);
-  // createGrid();
-  // initializeFlowers();
-  //checkAndDrawLines(flowersArray);
-  //checkProximityAndShowPopup(flowersArray);
-  //   });
+    //     function checkProximityAndShowPopup(flowersArray) {
+    //       let popupShown = false; // Un flag pour s'assurer qu'un seul popup s'affiche à la fois
+
+    //       for (let i = 0; i < flowersArray.length; i++) {
+    //         for (let j = i + 1; j < flowersArray.length; j++) {
+    //           if (areFlowersClose(flowersArray[i], flowersArray[j])) {
+    //             if (!popupShown) {
+    //               // Si aucun popup n'a encore été affiché
+    //               showPopup("Creating a Flower...");
+    //               popupShown = true; // Set le flag à true
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //     // Check if two flower packages are close to each other
+    //     function areFlowersClose(flower1, flower2) {
+    //       const rowDiff = Math.abs(flower1.rowIndex - flower2.rowIndex);
+    //       const colDiff = Math.abs(flower1.colIndex - flower2.colIndex);
+    //       return (rowDiff <= 1 && colDiff === 0) || (rowDiff === 0 && colDiff <= 1);
+    //     }
+
+    // let flowersArray = CreateTable(data.seeds);
+    // console.log(flowersArray);
+    // createGrid();
+    // initializeFlowers();
+    //checkAndDrawLines(flowersArray);
+    //checkProximityAndShowPopup(flowersArray);
+    //   });
 </script>
 
 <a href="/infoplant">Infoplant</a>
 
 <main>
-  <h1>Fantasy Garden</h1>
+    <h1>Fantasy Garden</h1>
 
-  <div class="grid-container">
-    {#each grid as gridCell}
-      <div
-        class="cell"
-        style:left={gridCell.column * CELL_SIZE + "px"}
-        style:top={gridCell.row * CELL_SIZE + "px"}
-      >
-        {#if gridCell.plant}
-          <div class="draggable">
-            {#if gridCell.plant.imageUrl}
-              <img
-                src={gridCell.plant.imageUrl}
-                alt="the real plant"
-                class="thumbnail"
-              />
-            {:else}
-              <img
-                src={"/plants/placeholder.png"}
-                alt="placeholder"
-                class="thumbnail"
-              />
-            {/if}
-            <div class="plant-name">
-              {gridCell.plant.commonName}
+    <div class="grid-container">
+        {#each grid as gridCell}
+            <div
+                class="cell"
+                style="left: {gridCell.column *
+                    CELL_SIZE}px; top: {gridCell.row * CELL_SIZE}px;"
+            >
+                {#if gridCell.plant}
+                    <Plantpackage data={gridCell.plant} />
+                {/if}
             </div>
-          </div>
-        {/if}
-      </div>
-    {/each}
-    <!-- {#each data.seeds as plant}
-    {/each} -->
-  </div>
+        {/each}
+    </div>
 
-  <a href="/info" class="hover-bold">?</a>
+    <a href="/info" class="hover-bold">?</a>
 </main>
 
 <style>
-  body {
-    font-size: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-  }
+    body {
+        font-size: 10px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-  h1 {
-    text-align: center;
-    font-size: 15px;
-  }
+    h1 {
+        text-align: center;
+        font-size: 15px;
+    }
 
-  h2 {
-    text-align: center;
-    font-size: 15px;
-  }
+    h2 {
+        text-align: center;
+        font-size: 15px;
+    }
 
-  .hover-bold {
-    font-size: 15px;
-    position: fixed;
-    left: 10px;
-    bottom: 10px;
-    cursor: pointer; /* Changes the cursor to a pointer to indicate it's interactive */
-    transition: font-weight 0.2s ease; /* Optional: adds a smooth transition for the font weight change */
-    text-decoration: none; /* Optional: removes underline from the link, depending on your design needs */
-    color: inherit; /* Optional: ensures the link color matches the surrounding text unless otherwise needed */
-    z-index: 1000;
-  }
+    .hover-bold {
+        font-size: 15px;
+        position: fixed;
+        left: 10px;
+        bottom: 10px;
+        cursor: pointer; /* Changes the cursor to a pointer to indicate it's interactive */
+        transition: font-weight 0.2s ease; /* Optional: adds a smooth transition for the font weight change */
+        text-decoration: none; /* Optional: removes underline from the link, depending on your design needs */
+        color: inherit; /* Optional: ensures the link color matches the surrounding text unless otherwise needed */
+        z-index: 1000;
+    }
 
-  .hover-bold:hover {
-    font-weight: bold; /* Makes the font bold on hover */
-  }
+    .hover-bold:hover {
+        font-weight: bold; /* Makes the font bold on hover */
+    }
 
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #000;
-  }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #000;
+    }
 
-  .close-button {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    z-index: 9999;
-    text-decoration: none;
-    color: #000;
-    font-size: 15px;
-    font-weight: bold;
-  }
+    .close-button {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        z-index: 9999;
+        text-decoration: none;
+        color: #000;
+        font-size: 15px;
+        font-weight: bold;
+    }
 
-  .popup-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    width: 300px; /* optional: define a width for the popup */
-  }
+    .popup-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        width: 300px; /* optional: define a width for the popup */
+    }
 
-  #imageContainer {
-    width: 100%;
-    text-align: center;
-  }
+    #imageContainer {
+        width: 100%;
+        text-align: center;
+    }
 
-  .custom-image {
-    max-width: 100%;
-    height: auto;
-  }
+    .custom-image {
+        max-width: 100%;
+        height: auto;
+    }
 
-  .cell {
-    position: absolute;
-    width: 64px;
-    height: 64px;
-    border: 1px solid red;
-    z-index: 10;
-  }
+    .cell {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        border: 1px solid red;
+        z-index: 10;
+    }
 
-  .draggable .thumbnail {
-    width: 100%;
-  }
-  .thumbnail {
-    width: 1%;
-  }
+    .draggable .thumbnail {
+        width: 100%;
+    }
+    .thumbnail {
+        width: 1%;
+    }
 
-  .plant-name {
-    text-align: center;
-    margin-top: 5px;
-  }
+    .plant-name {
+        text-align: center;
+        margin-top: 5px;
+    }
 </style>
