@@ -111,10 +111,13 @@
 
   <div class="grid-container">
     {#each grid as gridCell, gridIndex}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="cell"
         style="left: {gridCell.column * CELL_SIZE}px; top: {gridCell.row *
           CELL_SIZE}px;"
+        on:click={() => openPopup(gridCell.plant)}
       >
         {#if gridCell.plant}
           <PlantCell
