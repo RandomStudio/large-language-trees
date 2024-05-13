@@ -47,22 +47,8 @@
     {
       "idx": 6,
       "version": "5",
-      "when": 1714489276666,
-      "tag": "0006_noisy_rage",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1714489573873,
-      "tag": "0007_happy_sleepwalker",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1714489692438,
-      "tag": "0008_giant_aqueduct",
+      "when": 1715591112308,
+      "tag": "0006_massive_firebrand",
       "breakpoints": true
     }
   ]

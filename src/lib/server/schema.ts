@@ -9,8 +9,8 @@ export const plants = pgTable("plants", {
   imageUrl: text("image_url"),
   parent1: integer("parent1_id"),
   parent2: integer("parent2_id"),
-  row: integer("positionRow"),
-  col: integer("positionCol"),
+  rowIndex: integer("rowIndex"),
+  colIndex: integer("colIndex"),
 });
 
 export const plantRelations = relations(plants, ({ one }) => ({
