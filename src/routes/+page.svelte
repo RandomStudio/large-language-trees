@@ -322,26 +322,42 @@
       return (rowDiff <= 1 && colDiff === 0) || (rowDiff === 0 && colDiff <= 1);
     }
 
-    let flowersArray = CreateTable(data.seeds);
-    console.log(flowersArray);
-    createGrid();
-    initializeFlowers();
+    // let flowersArray = CreateTable(data.seeds);
+    // console.log(flowersArray);
+    // createGrid();
+    // initializeFlowers();
     //checkAndDrawLines(flowersArray);
     //checkProximityAndShowPopup(flowersArray);
   });
 </script>
 
-<a href="first_page/infoplant">Infoplant</a>
-
-<svelte:head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-</svelte:head>
+<a href="/infoplant">Infoplant</a>
 
 <main>
   <h1>Fantasy Garden</h1>
-  <a href="first_page/info" class="hover-bold">?</a>
+
+  <div>We have {data.seeds.length} plants!</div>
+
+  <div class="grid-container">
+    {#each data.seeds as plant}
+      <div class="draggable">
+        {#if plant.imageUrl}
+          <img src={plant.imageUrl} alt="the real plant" class="thumbnail" />
+        {:else}
+          <img
+            src={"/plants/placeholder.png"}
+            alt="placeholder"
+            class="thumbnail"
+          />
+        {/if}
+        <div class="plant-name">
+          {plant.commonName}
+        </div>
+      </div>
+    {/each}
+  </div>
+
+  <a href="/info" class="hover-bold">?</a>
 </main>
 
 <style>
@@ -418,5 +434,24 @@
   .custom-image {
     max-width: 100%;
     height: auto;
+  }
+
+  .draggable {
+    position: absolute;
+    width: calc(100% / 20);
+    height: calc(100% / 20);
+    z-index: 10;
+  }
+
+  .draggable .thumbnail {
+    width: 100%;
+  }
+  .thumbnail {
+    width: 1%;
+  }
+
+  .plant-name {
+    text-align: center;
+    margin-top: 5px;
   }
 </style>
