@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "dev:drizzle-generate": "npx dotenvx run --env-file=.env.development -- npx drizzle-kit generate:pg",
+    "dev:drizzle-generate": "npx dotenvx run --env-file=.env.development -- npx drizzle-kit generate",
     "dev:drizzle-push": "npx dotenvx run --env-file=.env.development -- npx drizzle-kit push:pg",
     "dev:drizzle-studio": "npm run dev:drizzle-generate && npm run dev:drizzle-push && npx dotenvx run --env-file=.env.development -- npx drizzle-kit studio",
     "dev:db-setup": "npm run dev:drizzle-generate && npm run dev:drizzle-push",
