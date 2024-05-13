@@ -8,8 +8,8 @@ console.log("process.env", { DB_CONNECTION_STRING });
 export default {
   schema: "./src/lib/server/schema.ts",
   out: "./drizzle",
-  driver: "pg", // postgresql
+  dialect: "postgresql",
   dbCredentials: {
-    connectionString: DB_CONNECTION_STRING as string,
+    url: DB_CONNECTION_STRING as string,
   },
 } satisfies Config;

@@ -43,6 +43,13 @@
       "when": 1711641399699,
       "tag": "0005_happy_joystick",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1715591112308,
+      "tag": "0006_massive_firebrand",
+      "breakpoints": true
     }
   ]
 }
