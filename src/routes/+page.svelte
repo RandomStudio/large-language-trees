@@ -8,9 +8,9 @@
 
   import Popupinfo from "./popupinfo.svelte";
 
-  let selectedPlant: {} | undefined;
+  let selectedPlant: SelectPlant | undefined;
 
-  function openPopup(plant: {} | undefined) {
+  function openPopup(plant?: SelectPlant) {
     selectedPlant = plant;
   }
 
