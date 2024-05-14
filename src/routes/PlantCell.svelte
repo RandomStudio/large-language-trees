@@ -21,3 +21,25 @@
         </div>
     </div>
 </div>
+
+<style>
+    .draggable {
+        position: relative;
+        color: black;
+        width: 64px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .plant-name {
+        position: absolute;
+        top: 50px;
+        color: black;
+        text-align: center;
+    }
+
+    img {
+        width: 100%;
+    }
+</style>
