@@ -2,6 +2,7 @@
   {
     "id": 0,
     "commonName": "Gardenia",
+    "imageUrl": "/plants/Gardenia.webp",
     "properties": {
       "flowerColour": "Red",
       "flowerColourRGB": "FF0000",
@@ -18,6 +19,7 @@
   {
     "id": 0,
     "commonName": "Hibiscus",
+    "imageUrl": "/plants/Hibiscus.webp",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -34,6 +36,7 @@
   {
     "id": 0,
     "commonName": "Morning Glory",
+    "imageUrl": "/plants/Morning_Glory.webp",
     "properties": {
       "flowerColour": "Purple",
       "flowerColourRGB": "#800080",
@@ -50,6 +53,7 @@
   {
     "id": 0,
     "commonName": "Pansy",
+    "imageUrl": "/plants/Pansy.webp",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
@@ -67,6 +71,7 @@
   {
     "id": 0,
     "commonName": "Passionflower",
+    "imageUrl": "/plants/PassionFlower.webp",
     "properties": {
       "flowerColour": "Blue",
       "flowerColourRGB": "#0000FF",
@@ -84,6 +89,7 @@
   {
     "id": 0,
     "commonName": "Rose",
+    "imageUrl": "/plants/Rose.webp",
     "properties": {
       "flowerColour": "Pink",
       "flowerColourRGB": "#FFC0CB",
@@ -100,6 +106,7 @@
   {
     "id": 0,
     "commonName": "Sunflower",
+    "imageUrl": "/plants/Sunflower.webp",
     "properties": {
       "flowerColour": "Orange",
       "flowerColourRGB": "#FFA500",
@@ -116,6 +123,7 @@
   {
     "id": 0,
     "commonName": "Tiger Lily",
+    "imageUrl": "/plants/Tiger_Lily.webp",
     "properties": {
       "flowerColour": "Red",
       "flowerColourRGB": "#FF0000",
@@ -132,6 +140,7 @@
   {
     "id": 0,
     "commonName": "Violet",
+    "imageUrl": "/plants/Violet.webp",
     "properties": {
       "flowerColour": "Purple",
       "flowerColourRGB": "#800080",
