@@ -122,17 +122,7 @@
 </main>
 
 <style>
-  body {
-    font-size: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
   h1 {
-    text-align: center;
-    font-size: 15px;
-  }
-
-  h2 {
     text-align: center;
     font-size: 15px;
   }
@@ -185,11 +175,6 @@
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     width: 300px; /* optional: define a width for the popup */
-  }
-
-  #imageContainer {
-    width: 100%;
-    text-align: center;
   }
 
   .custom-image {
