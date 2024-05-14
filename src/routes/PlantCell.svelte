@@ -1,11 +1,21 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import type { SelectPlant } from "../types";
 
   export let data: SelectPlant;
-  //console.log(data);
+  export let gridIndex: number;
+
+  const dispatchDragStart = createEventDispatcher();
 </script>
 
-<div class="cell">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+  class="cell"
+  draggable={true}
+  on:dragstart={(e) => {
+    dispatchDragStart("dragStart", { e, gridIndex });
+  }}
+>
   <div class="draggable">
     {#if data.imageUrl}
       <img src={data.imageUrl} alt="the real plant" class="thumbnail" />
@@ -27,5 +37,10 @@
   .thumbnail {
     width: 100%;
     height: 100%;
+  }
+
+  .plant-name {
+    position: absolute;
+    top: 0;
   }
 </style>

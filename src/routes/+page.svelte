@@ -26,10 +26,10 @@
     }
   };
 
-  function dragStart(e: DragEvent, srcIndex: number) {
-    console.log("dragStart");
-    const data = srcIndex;
-    e.dataTransfer?.setData("text/plain", data.toString());
+  function dragStart(event: CustomEvent<{ e: DragEvent; gridIndex: number }>) {
+    const { e, gridIndex } = event.detail;
+    console.log("dragStart from", gridIndex);
+    e.dataTransfer?.setData("text/plain", gridIndex.toString());
   }
 
   function dragOver(e: DragEvent, index: number) {
@@ -68,14 +68,33 @@
   <h1>Fantasy Garden</h1>
 
   <div class="grid-container">
-    {#each grid as gridCell}
+    {#each grid as gridCell, gridIndex}
       <div
         class="cell"
         style="left: {gridCell.column * CELL_SIZE}px; top: {gridCell.row *
           CELL_SIZE}px;"
       >
         {#if gridCell.plant}
-          <PlantCell data={gridCell.plant} />
+          <PlantCell
+            data={gridCell.plant}
+            {gridIndex}
+            on:dragStart={dragStart}
+          />
+        {:else}
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <div
+            class="empty"
+            on:drop={(e) => {
+              drop(e, gridIndex);
+            }}
+            on:drop={(e) => {
+              drop(e, gridIndex);
+            }}
+            on:dragover={(e) => dragOver(e, gridIndex)}
+            on:dragleave={(e) => dragLeave(e, gridIndex)}
+          >
+            empty
+          </div>
         {/if}
       </div>
     {/each}
@@ -115,5 +134,10 @@
     height: 64px;
     position: absolute;
     border: 1px solid grey;
+  }
+
+  .cell .empty {
+    width: 100%;
+    height: 100%;
   }
 </style>
