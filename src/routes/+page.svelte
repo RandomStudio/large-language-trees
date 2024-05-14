@@ -4,6 +4,7 @@
 
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
+  import PlantCell from "./PlantCell.svelte";
 
   interface GridCell {
     plant?: SelectPlant;
@@ -67,55 +68,17 @@
   <h1>Fantasy Garden</h1>
 
   <div class="grid-container">
-    {#each grid as gridCell, i}
+    {#each grid as gridCell}
       <div
-        class={"cell" + (gridCell.highlighted ? " highlighted" : "")}
-        style:left={gridCell.column * CELL_SIZE + "px"}
-        style:top={gridCell.row * CELL_SIZE + "px"}
+        class="cell"
+        style="left: {gridCell.column * CELL_SIZE}px; top: {gridCell.row *
+          CELL_SIZE}px;"
       >
         {#if gridCell.plant}
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            class="populated"
-            draggable={true}
-            on:dragstart={(e) => {
-              dragStart(e, i);
-            }}
-          >
-            {#if gridCell.plant.imageUrl}
-              <img
-                src={gridCell.plant.imageUrl}
-                alt="the real plant"
-                class="thumbnail"
-              />
-            {:else}
-              <img
-                src={"/plants/placeholder.png"}
-                alt="placeholder"
-                class="thumbnail"
-              />
-            {/if}
-            <div class="plant-name">
-              {gridCell.plant.commonName}
-            </div>
-          </div>
-        {:else}
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            class="empty"
-            on:drop={(e) => {
-              drop(e, i);
-            }}
-            on:dragover={(e) => dragOver(e, i)}
-            on:dragleave={(e) => dragLeave(e, i)}
-          >
-            Empty
-          </div>
+          <PlantCell data={gridCell.plant} />
         {/if}
       </div>
     {/each}
-    <!-- {#each data.seeds as plant}
-    {/each} -->
   </div>
 
   <a href="/info" class="hover-bold">?</a>
@@ -123,6 +86,20 @@
 
 <style>
   h1 {
+    text-align: center;
+    font-size: 15px;
+  }
+  body {
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 15px;
+  }
+
+  h2 {
     text-align: center;
     font-size: 15px;
   }
@@ -177,6 +154,22 @@
     width: 300px; /* optional: define a width for the popup */
   }
 
+  #imageContainer {
+    width: 100%;
+    text-align: center;
+  }
+  .popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 300px; /* optional: define a width for the popup */
+  }
+
   .custom-image {
     max-width: 100%;
     height: auto;
@@ -186,27 +179,13 @@
     position: absolute;
     width: 64px;
     height: 64px;
+    border: 1px solid red;
     z-index: 10;
   }
 
-  .cell .thumbnail {
+  .draggable .thumbnail {
     width: 100%;
   }
-
-  .cell .empty {
-    border: 1px solid grey;
-    width: 100%;
-    height: 100%;
-  }
-
-  .cell.highlighted {
-    background-color: green;
-  }
-  .cell .populated {
-    cursor: move;
-    border: 1px solid red;
-  }
-
   .thumbnail {
     width: 1%;
   }
