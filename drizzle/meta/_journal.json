@@ -1,54 +1,12 @@
 {
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1711118711223,
-      "tag": "0000_previous_dexter_bennett",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1711361233220,
-      "tag": "0001_wealthy_pyro",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1711632651676,
-      "tag": "0002_broad_blue_blade",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1711633790563,
-      "tag": "0003_ambitious_otto_octavius",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1711634037375,
-      "tag": "0004_colorful_lady_ursula",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1711641399699,
-      "tag": "0005_happy_joystick",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1715591112308,
-      "tag": "0006_massive_firebrand",
+      "version": "6",
+      "when": 1715679654984,
+      "tag": "0000_brown_amphibian",
       "breakpoints": true
     }
   ]

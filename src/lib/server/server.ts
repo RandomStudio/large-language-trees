@@ -9,12 +9,7 @@ import type { InsertPlant, SelectPlant } from "../../types";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 
 export const getAllPlants = async () => {
-  const existingPlants = await db.query.plants.findMany({
-    with: {
-      myParent1: true,
-      myParent2: true,
-    },
-  });
+  const existingPlants = await db.query.plants.findMany();
   if (existingPlants.length === 0) {
     console.log(
       "No plants in DB, we will attempt to populate with defaults..."
@@ -151,10 +146,10 @@ export const attachImageToPlant = async (id: number, imageUrl: string) => {
 };
 
 export const updateWholePlant = async (id: number, newData: SelectPlant) => {
-  const { id: originalId, ...allExceptId } = newData;
+  const { id: originalId, parent1, parent2, ...relevant } = newData;
   const res = await db
     .update(plants)
-    .set({ ...allExceptId })
+    .set({ ...relevant })
     .where(eq(plants.id, id))
     .returning({ updatedId: plants.id });
   res.forEach((r) => {

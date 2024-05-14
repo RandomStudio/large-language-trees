@@ -67,7 +67,34 @@
         grid[dstIndex].plant = srcPlant;
         grid[srcIndex].plant = undefined;
         grid[dstIndex].highlighted = false;
-        fetch("/api/plants/");
+
+        const dstCell = grid[dstIndex];
+
+        const updatedPlant: SelectPlant = {
+          ...srcPlant,
+          colIndex: dstCell.column,
+          rowIndex: dstCell.row,
+        };
+        fetch("/api/plants/" + updatedPlant.id, {
+          method: "PATCH",
+          body: JSON.stringify(updatedPlant),
+        })
+          .then((res) => {
+            if (res.status == 200) {
+              console.info("Updated plant on backend OK:", res);
+            } else {
+              const { status, statusText } = res;
+              console.error("Error response from server:", {
+                status,
+                statusText,
+                srcPlant,
+                updatedPlant,
+              });
+            }
+          })
+          .catch((fetchError) => {
+            console.error("Error updating plant on backend:", fetchError);
+          });
       } else {
         console.error("There was a problem moving the plant (in the frontend)");
       }

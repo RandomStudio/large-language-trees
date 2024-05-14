@@ -18,10 +18,10 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
   console.log({ params, plant });
   if (plant.imageUrl) {
     await attachImageToPlant(plant.id, plant.imageUrl);
-    return json(plant);
+    return json(plant, { status: 200 });
   } else {
     await updateWholePlant(plant.id, plant);
-    return json(plant);
+    return json(plant, { status: 200 });
   }
 };
 
