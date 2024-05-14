@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { integer, json, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const plants = pgTable("plants", {
@@ -13,13 +12,13 @@ export const plants = pgTable("plants", {
   colIndex: integer("colIndex"),
 });
 
-export const plantRelations = relations(plants, ({ one }) => ({
-  myParent1: one(plants, {
-    fields: [plants.parent1],
-    references: [plants.id],
-  }),
-  myParent2: one(plants, {
-    fields: [plants.parent2],
-    references: [plants.id],
-  }),
-}));
+// export const plantRelations = relations(plants, ({ one }) => ({
+//   myParent1: one(plants, {
+//     fields: [plants.parent1],
+//     references: [plants.id],
+//   }),
+//   myParent2: one(plants, {
+//     fields: [plants.parent2],
+//     references: [plants.id],
+//   }),
+// }));

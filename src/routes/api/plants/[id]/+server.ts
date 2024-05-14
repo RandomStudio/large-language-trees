@@ -1,4 +1,9 @@
-import { addNew, attachImageToPlant, getAllPlants } from "$lib/server/server";
+import {
+  addNew,
+  attachImageToPlant,
+  getAllPlants,
+  updateWholePlant,
+} from "$lib/server/server";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import type { SelectPlant } from "../../../../types";
 
@@ -13,12 +18,10 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
   console.log({ params, plant });
   if (plant.imageUrl) {
     await attachImageToPlant(plant.id, plant.imageUrl);
-    return json(plant);
+    return json(plant, { status: 200 });
   } else {
-    console.error(
-      "This PATCH route is currently intended only for attaching images",
-    );
-    return json({});
+    await updateWholePlant(plant.id, plant);
+    return json(plant, { status: 200 });
   }
 };
 

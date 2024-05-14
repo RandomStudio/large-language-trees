@@ -1,11 +1,11 @@
 {
-  "id": "91f29c27-a364-405b-8887-643dace430b8",
+  "id": "c2f1f20a-fa7b-44c7-9397-3de06110d89e",
   "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "users": {
-      "name": "users",
+    "public.plants": {
+      "name": "plants",
       "schema": "",
       "columns": {
         "id": {
@@ -17,18 +17,6 @@
         "common_name": {
           "name": "common_name",
           "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "parent1_id": {
-          "name": "parent1_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "parent2_id": {
-          "name": "parent2_id",
-          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -49,37 +37,34 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "parent1_id": {
+          "name": "parent1_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent2_id": {
+          "name": "parent2_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rowIndex": {
+          "name": "rowIndex",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "colIndex": {
+          "name": "colIndex",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "users_parent1_id_users_id_fk": {
-          "name": "users_parent1_id_users_id_fk",
-          "tableFrom": "users",
-          "tableTo": "users",
-          "columnsFrom": [
-            "parent1_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "users_parent2_id_users_id_fk": {
-          "name": "users_parent2_id_users_id_fk",
-          "tableFrom": "users",
-          "tableTo": "users",
-          "columnsFrom": [
-            "parent2_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
