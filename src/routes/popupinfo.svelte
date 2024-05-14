@@ -48,6 +48,11 @@
     z-index: 100; /* S'assure que le popup est au-dessus de l'overlay */
   }
 
+  .popup img {
+    width: 200px; /* Définir la largeur de l'image à 200px */
+    height: auto; /* Garantir la proportionnalité de l'image */
+  }
+
   button {
     margin: 10px 0; /* Espacement autour du bouton */
     padding: 10px 20px; /* Taille du bouton */
