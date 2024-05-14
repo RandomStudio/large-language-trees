@@ -37,12 +37,7 @@ export const getAllPlants = async () => {
         });
       })
     );
-    return await db.query.plants.findMany({
-      with: {
-        myParent1: true,
-        myParent2: true,
-      },
-    });
+    return await db.query.plants.findMany();
   } else {
     return existingPlants;
   }
