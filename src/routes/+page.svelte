@@ -55,6 +55,9 @@
         grid[dstIndex].plant = srcPlant;
         grid[srcIndex].plant = undefined;
         grid[dstIndex].highlighted = false;
+        fetch("/api/plants/");
+      } else {
+        console.error("There was a problem moving the plant (in the frontend)");
       }
     }
   }

@@ -149,3 +149,18 @@ export const attachImageToPlant = async (id: number, imageUrl: string) => {
     throw Error("nothing got updated!");
   }
 };
+
+export const updateWholePlant = async (id: number, newData: SelectPlant) => {
+  const { id: originalId, ...allExceptId } = newData;
+  const res = await db
+    .update(plants)
+    .set({ ...allExceptId })
+    .where(eq(plants.id, id))
+    .returning({ updatedId: plants.id });
+  res.forEach((r) => {
+    console.log("updated ID", r.updatedId);
+  });
+  if (res.length == 0) {
+    throw Error("nothing got updated!");
+  }
+};
