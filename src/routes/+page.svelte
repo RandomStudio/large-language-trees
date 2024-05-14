@@ -89,17 +89,7 @@
     text-align: center;
     font-size: 15px;
   }
-  body {
-    font-size: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
   h1 {
-    text-align: center;
-    font-size: 15px;
-  }
-
-  h2 {
     text-align: center;
     font-size: 15px;
   }
@@ -120,80 +110,10 @@
     font-weight: bold; /* Makes the font bold on hover */
   }
 
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #000;
-  }
-
-  .close-button {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    z-index: 9999;
-    text-decoration: none;
-    color: #000;
-    font-size: 15px;
-    font-weight: bold;
-  }
-
-  .popup-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    width: 300px; /* optional: define a width for the popup */
-  }
-
-  #imageContainer {
-    width: 100%;
-    text-align: center;
-  }
-  .popup-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    width: 300px; /* optional: define a width for the popup */
-  }
-
-  .custom-image {
-    max-width: 100%;
-    height: auto;
-  }
-
   .cell {
-    position: absolute;
     width: 64px;
     height: 64px;
-    border: 1px solid red;
-    z-index: 10;
-  }
-
-  .draggable .thumbnail {
-    width: 100%;
-  }
-  .thumbnail {
-    width: 1%;
-  }
-
-  .plant-name {
     position: absolute;
-    top: 0;
-    text-align: center;
-    margin-top: 5px;
+    border: 1px solid grey;
   }
 </style>
