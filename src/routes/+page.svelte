@@ -62,8 +62,6 @@
     populateGrid();
 </script>
 
-<a href="/infoplant">Infoplant</a>
-
 <main>
     <div class="grid-container">
         {#each grid as gridCell}
@@ -179,10 +177,5 @@
     .plant-name {
         text-align: center;
         margin-top: 5px;
-    }
-
-    a {
-        color: black;
-        text-decoration: none;
     }
 </style>
