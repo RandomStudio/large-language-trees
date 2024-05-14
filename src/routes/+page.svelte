@@ -68,9 +68,10 @@
         {#each grid as gridCell}
             <div
                 class="cell"
-                style="left: calc({gridCell.column *
-                    CELL_SIZE}px + 50% - {(GRID_WIDTH * CELL_SIZE) /
-                    2}px); top: calc({gridCell.row * CELL_SIZE}px + 10px);"
+                style:left={gridCell.column * CELL_SIZE + "px"}
+                style:top={gridCell.row * CELL_SIZE + "px"}
+                style:width={CELL_SIZE + "px"}
+                style:height={CELL_SIZE + "px"}
             >
                 {#if gridCell.plant}
                     <PlantCell data={gridCell.plant} />
