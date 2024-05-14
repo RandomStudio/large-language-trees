@@ -1,6 +1,6 @@
 {
-  "id": "74dcac58-761d-4a22-a408-e3eb88edbfb8",
-  "prevId": "8cf01d15-1234-4b2f-ba8c-a0f747a16394",
+  "id": "eb4e2d15-15fc-402d-939c-23a1b6c788cc",
+  "prevId": "1369ba26-aa8a-4615-b992-8d7f3c359302",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -50,14 +50,14 @@
           "primaryKey": false,
           "notNull": false
         },
-        "rowIndex": {
-          "name": "rowIndex",
+        "row": {
+          "name": "row",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "colIndex": {
-          "name": "colIndex",
+        "col": {
+          "name": "col",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
