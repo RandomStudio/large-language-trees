@@ -18,6 +18,41 @@
     selectedPlant = undefined;
   }
 
+  function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
+    if (
+      plant1.rowIndex !== null &&
+      plant2.rowIndex !== null &&
+      plant1.colIndex !== null &&
+      plant2.colIndex !== null
+    ) {
+      if (
+        (Math.abs(plant1.rowIndex - plant2.rowIndex) === 1 &&
+          plant1.colIndex - plant2.colIndex === 0) ||
+        (plant1.rowIndex - plant2.rowIndex === 0 &&
+          Math.abs(plant1.colIndex - plant2.colIndex) === 1)
+      ) {
+        console.log(
+          plant1.commonName + " and " + plant2.commonName + " are close!",
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  function checkAllClose() {
+    console.log("check");
+    const seeds = data.seeds;
+    for (let i = 0; i < seeds.length; i++) {
+      for (let j = i + 1; j < seeds.length; j++) {
+        areClose(seeds[i], seeds[j]);
+      }
+    }
+  }
+
   interface GridCell {
     plant?: SelectPlant;
     highlighted: boolean;
@@ -58,9 +93,9 @@
   function drop(e: DragEvent, dstIndex: number) {
     e.preventDefault();
     // console.log("drop");
-    const data = e.dataTransfer?.getData("text/plain");
-    if (data) {
-      const srcIndex = parseInt(data);
+    const cellDropData = e.dataTransfer?.getData("text/plain");
+    if (cellDropData) {
+      const srcIndex = parseInt(cellDropData);
       console.log("transfer", srcIndex, "to", dstIndex);
       const srcPlant = grid[srcIndex].plant;
       if (srcPlant) {
@@ -75,6 +110,14 @@
           colIndex: dstCell.column,
           rowIndex: dstCell.row,
         };
+        data.seeds.forEach((p) => {
+          if (p.id == updatedPlant.id) {
+            p.colIndex = updatedPlant.colIndex;
+            p.rowIndex = updatedPlant.rowIndex;
+            console.log("running");
+          }
+        });
+        checkAllClose();
         fetch("/api/plants/" + updatedPlant.id, {
           method: "PATCH",
           body: JSON.stringify(updatedPlant),
