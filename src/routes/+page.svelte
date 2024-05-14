@@ -6,6 +6,18 @@
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
   import PlantCell from "./PlantCell.svelte";
 
+  import Popupinfo from "./popupinfo.svelte";
+
+  let selectedPlant: SelectPlant | undefined;
+
+  function openPopup(plant?: SelectPlant) {
+    selectedPlant = plant;
+  }
+
+  function closePopup() {
+    selectedPlant = undefined;
+  }
+
   interface GridCell {
     plant?: SelectPlant;
     highlighted: boolean;
@@ -103,6 +115,8 @@
     {/each}
   </div>
 
+  <Popupinfo plantDetails={selectedPlant} {closePopup}></Popupinfo>
+
   <a href="/info" class="hover-bold">?</a>
 </main>
 
@@ -125,7 +139,7 @@
     transition: font-weight 0.2s ease; /* Optional: adds a smooth transition for the font weight change */
     text-decoration: none; /* Optional: removes underline from the link, depending on your design needs */
     color: inherit; /* Optional: ensures the link color matches the surrounding text unless otherwise needed */
-    z-index: 1000;
+    z-index: 10;
   }
 
   .hover-bold:hover {
