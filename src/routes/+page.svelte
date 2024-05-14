@@ -62,6 +62,7 @@
     populateGrid();
 </script>
 
+<p>Fantasy Garden</p>
 <main>
     <div class="grid-container">
         {#each grid as gridCell}
@@ -69,7 +70,7 @@
                 class="cell"
                 style="left: calc({gridCell.column *
                     CELL_SIZE}px + 50% - {(GRID_WIDTH * CELL_SIZE) /
-                    2}px); top: {gridCell.row * CELL_SIZE}px;"
+                    2}px); top: calc({gridCell.row * CELL_SIZE}px + 10px);"
             >
                 {#if gridCell.plant}
                     <PlantCell data={gridCell.plant} />
@@ -77,15 +78,19 @@
             </div>
         {/each}
     </div>
-
-    <a href="/info" class="hover-bold">?</a>
 </main>
-<p>Fantasy Garden</p>
+
+<a href="/info" class="hover-bold">?</a>
 
 <style>
     .grid-container {
-        position: relative;
-        display: inline-block;
+        position: relative; /* Allow absolute positioning for child elements */
+        max-width: 50px; /* Maximum width is the viewport width */
+        max-height: 50px; /* Maximum height is the viewport height */
+        margin: auto; /* Center horizontally */
+        display: flex;
+        justify-content: center; /* Center content horizontally */
+        align-items: center; /* Center content vertically */
     }
 
     main {
@@ -97,12 +102,6 @@
     }
 
     p {
-        text-align: center;
-        font-size: 15px;
-        z-index: 999;
-    }
-
-    h2 {
         text-align: center;
         font-size: 15px;
     }
@@ -161,8 +160,6 @@
         justify-content: center;
         align-items: center;
         position: absolute;
-        width: 64px;
-        height: 64px;
         border: 1px solid black;
         z-index: 10;
     }

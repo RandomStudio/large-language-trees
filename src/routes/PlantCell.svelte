@@ -25,8 +25,8 @@
 <style>
     .draggable {
         position: relative;
-        color: black;
-        width: 64px;
+        background-color: rgb(220, 112, 112);
+        width: 27px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -34,9 +34,9 @@
 
     .plant-name {
         position: absolute;
-        top: 50px;
-        color: black;
+        top: 0px;
         text-align: center;
+        font-size: 7px;
     }
 
     img {
