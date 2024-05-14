@@ -6,7 +6,7 @@
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
   import PlantCell from "./PlantCell.svelte";
 
-  import Popupinfo from "./popupinfo.svelte";
+  import Popupinfo from "./PopupInfo.svelte";
 
   let selectedPlant: SelectPlant | undefined;
 
@@ -31,7 +31,7 @@
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.seeds.find(
-          (p) => p.colIndex === c && p.rowIndex === r
+          (p) => p.colIndex === c && p.rowIndex === r,
         );
         grid.push({ plant, row: r, column: c, highlighted: false });
       }
