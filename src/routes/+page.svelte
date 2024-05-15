@@ -7,19 +7,15 @@
   import PlantCell from "../components/PlantCell.svelte";
 
   import PopupInfo from "../components/PopupInfo.svelte";
+  import { buildPrompt } from "../lib/promptUtils";
 
-  enum BreedState {
-    NONE,
-    CANDIDATES_SELECTED,
-    CONFIRM_AND_WAIT,
-  }
+  import DefaultPromptConfig from "../defaults/prompt-config";
 
-  let plantMixing1: SelectPlant | null = null;
-  let plantMixing2: SelectPlant | null = null;
+  let candidateParents: [SelectPlant, SelectPlant] | null = null;
+
   let timeout: NodeJS.Timeout | null = null;
 
   let selectedPlant: SelectPlant | null = null;
-  let breedingState: BreedState = BreedState.NONE;
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
     if (
@@ -37,8 +33,7 @@
         console.log(
           plant1.commonName + " and " + plant2.commonName + " are close!"
         );
-        plantMixing1 = plant1;
-        plantMixing2 = plant2;
+        candidateParents = [plant1, plant2];
         // Lancer le timer de 5 secondes
         timeout = setTimeout(() => {
           console.log(
@@ -48,12 +43,26 @@
               plant2.commonName +
               " !"
           );
-        }, 5000);
+          // const res = await fetch("/api/generate/plant", {
+          //   method: "POST",
+          //   body: JSON.stringify({
+          //     prompt: buildPrompt(DefaultPromptConfig, parents[0], parents[1]),
+          //     parents,
+          //   }),
+          // });
+        }, 4000);
 
         return true;
       } else {
-        if (plant1 == plantMixing1 && plant2 == plantMixing2 && timeout) {
+        if (
+          candidateParents &&
+          candidateParents[0] == plant1 &&
+          candidateParents[1] == plant2 &&
+          timeout !== null
+        ) {
+          console.log("cleartimeout");
           clearTimeout(timeout);
+          timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
         }
         return false;
       }
@@ -232,7 +241,7 @@
   <button
     class="debug-button"
     on:click={() => {
-      breedingState = BreedState.CANDIDATES_SELECTED;
+      // breedingState = BreedState.CANDIDATES_SELECTED;
     }}>Test breed</button
   >
 </main>
