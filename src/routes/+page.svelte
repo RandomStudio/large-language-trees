@@ -10,6 +10,10 @@
 
   let selectedPlant: SelectPlant | undefined;
 
+  let plantMixing1: SelectPlant | undefined;
+  let plantMixing2: SelectPlant | undefined;
+  let timeout: ReturnType<typeof setTimeout>;
+
   function openPopup(plant?: SelectPlant) {
     selectedPlant = plant;
   }
@@ -34,14 +38,24 @@
         console.log(
           plant1.commonName + " and " + plant2.commonName + " are close!",
         );
-
+        plantMixing1 = plant1;
+        plantMixing2 = plant2;
         // Lancer le timer de 5 secondes
-        setTimeout(() => {
-          console.log("ready for mixing !");
+        timeout = setTimeout(() => {
+          console.log(
+            "ready for mixing : " +
+              plant1.commonName +
+              " and " +
+              plant2.commonName +
+              " !",
+          );
         }, 5000);
 
         return true;
       } else {
+        if (plant1 == plantMixing1 && plant2 == plantMixing2 && timeout) {
+          clearTimeout(timeout);
+        }
         return false;
       }
     } else {
