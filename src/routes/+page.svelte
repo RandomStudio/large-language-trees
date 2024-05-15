@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { type SelectPlant } from "../types"; // Assuming type import is correct
+  import { type SelectPlant } from "../lib/types"; // Assuming type import is correct
   export let data: { seeds: SelectPlant[] };
 
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
-  import PlantCell from "./PlantCell.svelte";
+  import PlantCell from "../components/PlantCell.svelte";
 
-  import Popupinfo from "./PopupInfo.svelte";
+  import Popupinfo from "../components/PopupInfo.svelte";
 
   let selectedPlant: SelectPlant | undefined;
 

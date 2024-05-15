@@ -1,10 +1,10 @@
 import type OpenAI from "openai";
-import type { Characteristics, PromptConfig, SelectPlant } from "../../types";
+import type { Characteristics, PromptConfig, SelectPlant } from "./types";
 
 export const buildPrompt = (
   config: PromptConfig,
   plant1: SelectPlant,
-  plant2: SelectPlant,
+  plant2: SelectPlant
 ): OpenAI.Chat.Completions.ChatCompletionMessageParam[] => {
   const { preamble, explanation, instructions } = config;
   return [
@@ -26,11 +26,11 @@ export const buildPrompt = (
             commonName: plant1.commonName,
             description: plant1.description,
             properties: filterCharacteristicsForPrompt(
-              plant1.properties as Characteristics,
+              plant1.properties as Characteristics
             ),
           },
           null,
-          2,
+          2
         ) +
         "\n```" +
         "\n\n" +
@@ -41,11 +41,11 @@ export const buildPrompt = (
             commonName: plant2.commonName,
             description: plant2.description,
             properties: filterCharacteristicsForPrompt(
-              plant2.properties as Characteristics,
+              plant2.properties as Characteristics
             ),
           },
           null,
-          2,
+          2
         ) +
         "\n```" +
         "\n\n" +
@@ -56,7 +56,7 @@ export const buildPrompt = (
 
 /*** For now, removes any characteristics whose key contains "RGB", since these */
 const filterCharacteristicsForPrompt = (
-  originals: Characteristics,
+  originals: Characteristics
 ): Characteristics => {
   let o: Characteristics = {};
   Object.keys(originals).forEach((k) => {
