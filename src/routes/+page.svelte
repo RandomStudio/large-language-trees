@@ -14,8 +14,66 @@
     CONFIRM_AND_WAIT,
   }
 
+  let plantMixing1: SelectPlant | undefined;
+  let plantMixing2: SelectPlant | undefined;
+  let timeout: ReturnType<typeof setTimeout>;
+
   let selectedPlant: SelectPlant | null = null;
   let breedingState: BreedState = BreedState.NONE;
+
+  function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
+    if (
+      plant1.rowIndex !== null &&
+      plant2.rowIndex !== null &&
+      plant1.colIndex !== null &&
+      plant2.colIndex !== null
+    ) {
+      if (
+        (Math.abs(plant1.rowIndex - plant2.rowIndex) === 1 &&
+          plant1.colIndex - plant2.colIndex === 0) ||
+        (plant1.rowIndex - plant2.rowIndex === 0 &&
+          Math.abs(plant1.colIndex - plant2.colIndex) === 1)
+      ) {
+        console.log(
+          plant1.commonName + " and " + plant2.commonName + " are close!"
+        );
+        plantMixing1 = plant1;
+        plantMixing2 = plant2;
+        // Lancer le timer de 5 secondes
+        timeout = setTimeout(() => {
+          console.log(
+            "ready for mixing : " +
+              plant1.commonName +
+              " and " +
+              plant2.commonName +
+              " !"
+          );
+        }, 5000);
+
+        return true;
+      } else {
+        if (plant1 == plantMixing1 && plant2 == plantMixing2 && timeout) {
+          clearTimeout(timeout);
+        }
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  function checkAllClose(id: number) {
+    console.log("check");
+    const seeds = data.seeds;
+    const plant = data.seeds.find((e) => e.id === id);
+    if (plant) {
+      for (let j = 0; j < seeds.length; j++) {
+        if (seeds[j] != plant) {
+          areClose(plant, seeds[j]);
+        }
+      }
+    }
+  }
 
   interface GridCell {
     plant?: SelectPlant;
@@ -57,9 +115,9 @@
   function drop(e: DragEvent, dstIndex: number) {
     e.preventDefault();
     // console.log("drop");
-    const data = e.dataTransfer?.getData("text/plain");
-    if (data) {
-      const srcIndex = parseInt(data);
+    const cellDropData = e.dataTransfer?.getData("text/plain");
+    if (cellDropData) {
+      const srcIndex = parseInt(cellDropData);
       console.log("transfer", srcIndex, "to", dstIndex);
       const srcPlant = grid[srcIndex].plant;
       if (srcPlant) {
@@ -74,6 +132,14 @@
           colIndex: dstCell.column,
           rowIndex: dstCell.row,
         };
+        data.seeds.forEach((p) => {
+          if (p.id == updatedPlant.id) {
+            p.colIndex = updatedPlant.colIndex;
+            p.rowIndex = updatedPlant.rowIndex;
+            console.log("running");
+          }
+        });
+        checkAllClose(updatedPlant.id);
         fetch("/api/plants/" + updatedPlant.id, {
           method: "PATCH",
           body: JSON.stringify(updatedPlant),
