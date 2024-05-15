@@ -6,7 +6,7 @@
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
   import PlantCell from "./PlantCell.svelte";
 
-  import Popupinfo from "./PopupInfo.svelte";
+  import Popupinfo from "./popupinfo.svelte";
 
   let selectedPlant: SelectPlant | undefined;
 
@@ -34,6 +34,12 @@
         console.log(
           plant1.commonName + " and " + plant2.commonName + " are close!",
         );
+
+        // Lancer le timer de 5 secondes
+        setTimeout(() => {
+          console.log("ready for mixing !");
+        }, 5000);
+
         return true;
       } else {
         return false;
