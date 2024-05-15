@@ -64,14 +64,18 @@
 
 <p>Fantasy Garden</p>
 <main>
-    <div class="grid-container">
+    <div
+        class="grid-container"
+        style:width={GRID_WIDTH * CELL_SIZE + "px"}
+        style:height={GRID_HEIGHT * CELL_SIZE + "px"}
+    >
         {#each grid as gridCell}
             <div
                 class="cell"
                 style:left={gridCell.column * CELL_SIZE + "px"}
                 style:top={gridCell.row * CELL_SIZE + "px"}
-                style:width={CELL_SIZE + "px"}
                 style:height={CELL_SIZE + "px"}
+                style:width={CELL_SIZE + "px"}
             >
                 {#if gridCell.plant}
                     <PlantCell data={gridCell.plant} />
@@ -84,22 +88,32 @@
 <a href="/info" class="hover-bold">?</a>
 
 <style>
-    .grid-container {
-        position: relative; /* Allow absolute positioning for child elements */
-        max-width: 50px; /* Maximum width is the viewport width */
-        max-height: 50px; /* Maximum height is the viewport height */
-        margin: auto; /* Center horizontally */
+    main {
         display: flex;
-        justify-content: center; /* Center content horizontally */
-        align-items: center; /* Center content vertically */
+        align-items: center; /* Centers content vertically in the container */
+        justify-content: center; /* Centers content horizontally in the container */
+        height: 100vh; /* Full viewport height */
+        overflow: hidden; /* Hide overflow */
+        position: relative; /* Ensures that it is the positioning context for any absolutely positioned children, if needed */
     }
 
-    main {
-        font-size: 10px;
-        font-family: Arial, Helvetica, sans-serif;
+    .grid-container {
+        display: block;
+        position: relative; /* Essential for absolutely positioned children */
+        margin: auto; /* Center the container horizontally */
+        padding: 10px;
+        box-sizing: border-box; /* Include border and padding in the width/height */
+        top: -50px;
+    }
+
+    .cell {
+        position: absolute; /* Positioning relative to .grid-container */
+        border: 1px solid black;
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
+        width: 27px; /* Width of each cell */
+        height: 27px; /* Height of each cell */
     }
 
     p {
@@ -155,14 +169,6 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         width: 300px; /* optional: define a width for the popup */
-    }
-
-    .cell {
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        border: 1px solid black;
-        z-index: 10;
     }
 
     .draggable .thumbnail {
