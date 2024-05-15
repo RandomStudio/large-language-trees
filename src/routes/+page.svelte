@@ -119,17 +119,20 @@
         style:top={gridCell.row * CELL_SIZE + "px"}
         style:width={CELL_SIZE + "px"}
         style:height={CELL_SIZE + "px"}
+        on:click={() => {
+          console.log("click!");
+          if (gridCell.plant) {
+            selectedPlant = gridCell.plant;
+          } else {
+            console.error("not clickable!");
+          }
+        }}
       >
         {#if gridCell.plant}
           <PlantCell
             data={gridCell.plant}
             {gridIndex}
             on:dragStart={dragStart}
-            on:click={() => {
-              if (gridCell.plant) {
-                selectedPlant = gridCell.plant;
-              }
-            }}
           />
         {:else}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -149,13 +152,14 @@
       </div>
     {/each}
   </div>
-
-  <PopupInfo
-    plantDetails={selectedPlant}
-    closePopup={() => {
-      selectedPlant = null;
-    }}
-  ></PopupInfo>
+  {#if selectedPlant}
+    <PopupInfo
+      plantDetails={selectedPlant}
+      closePopup={() => {
+        selectedPlant = null;
+      }}
+    ></PopupInfo>
+  {/if}
 
   <a href="/info" class="hover-bold">?</a>
 
