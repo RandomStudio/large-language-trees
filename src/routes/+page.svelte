@@ -86,6 +86,7 @@
 </main>
 
 <a href="/info" class="hover-bold">?</a>
+<a href="/landing_page">Landing page</a>
 
 <style>
     main {
