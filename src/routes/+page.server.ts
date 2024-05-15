@@ -24,7 +24,7 @@ export const actions = {
       const plant = JSON.parse(newSeed) as InsertPlant;
       await addNew(
         plant,
-        parents.map((p) => p.id),
+        parents.map((p) => p.id)
       );
     }
   },

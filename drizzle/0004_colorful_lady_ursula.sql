@@ -1,1 +1,0 @@
-ALTER TABLE "parentage" ADD COLUMN "child_id" integer;
