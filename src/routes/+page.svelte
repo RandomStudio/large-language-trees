@@ -14,9 +14,9 @@
     CONFIRM_AND_WAIT,
   }
 
-  let plantMixing1: SelectPlant | undefined;
-  let plantMixing2: SelectPlant | undefined;
-  let timeout: ReturnType<typeof setTimeout>;
+  let plantMixing1: SelectPlant | null = null;
+  let plantMixing2: SelectPlant | null = null;
+  let timeout: NodeJS.Timeout | null;
 
   let selectedPlant: SelectPlant | null = null;
   let breedingState: BreedState = BreedState.NONE;
