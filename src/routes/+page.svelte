@@ -16,7 +16,7 @@
 
   let plantMixing1: SelectPlant | null = null;
   let plantMixing2: SelectPlant | null = null;
-  let timeout: NodeJS.Timeout | null;
+  let timeout: NodeJS.Timeout | null = null;
 
   let selectedPlant: SelectPlant | null = null;
   let breedingState: BreedState = BreedState.NONE;
