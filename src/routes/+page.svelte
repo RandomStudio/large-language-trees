@@ -4,9 +4,9 @@
 
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
-  import PlantCell from "./PlantCell.svelte";
+  import PlantCell from "../components/PlantCell.svelte";
 
-  import Popupinfo from "./PopupInfo.svelte";
+  import Popupinfo from "../components/PopupInfo.svelte";
 
   let selectedPlant: SelectPlant | undefined;
 
