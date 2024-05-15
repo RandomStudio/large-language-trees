@@ -6,9 +6,16 @@
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
   import PlantCell from "../components/PlantCell.svelte";
 
-  import Popupinfo from "../components/PopupInfo.svelte";
+  import PopupInfo from "../components/PopupInfo.svelte";
+
+  enum BreedState {
+    NONE,
+    CANDIDATES_SELECTED,
+    CONFIRM_AND_WAIT,
+  }
 
   let selectedPlant: SelectPlant | null = null;
+  let breedingState: BreedState = BreedState.NONE;
 
   interface GridCell {
     plant?: SelectPlant;
@@ -141,16 +148,21 @@
     {/each}
   </div>
 
-  <Popupinfo
+  <PopupInfo
     plantDetails={selectedPlant}
     closePopup={() => {
       selectedPlant = null;
     }}
-  ></Popupinfo>
+  ></PopupInfo>
 
   <a href="/info" class="hover-bold">?</a>
 
-  <button class="debug-button">Test breed</button>
+  <button
+    class="debug-button"
+    on:click={() => {
+      breedingState = BreedState.CANDIDATES_SELECTED;
+    }}>Test breed</button
+  >
 </main>
 
 <style>
