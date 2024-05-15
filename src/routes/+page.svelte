@@ -43,12 +43,15 @@
     }
   }
 
-  function checkAllClose() {
+  function checkAllClose(id: number) {
     console.log("check");
     const seeds = data.seeds;
-    for (let i = 0; i < seeds.length; i++) {
-      for (let j = i + 1; j < seeds.length; j++) {
-        areClose(seeds[i], seeds[j]);
+    const plant = data.seeds.find((e) => e.id === id);
+    if (plant) {
+      for (let j = 0; j < seeds.length; j++) {
+        if (seeds[j] != plant) {
+          areClose(plant, seeds[j]);
+        }
       }
     }
   }
@@ -117,7 +120,7 @@
             console.log("running");
           }
         });
-        checkAllClose();
+        checkAllClose(updatedPlant.id);
         fetch("/api/plants/" + updatedPlant.id, {
           method: "PATCH",
           body: JSON.stringify(updatedPlant),
