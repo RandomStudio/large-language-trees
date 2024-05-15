@@ -30,8 +30,8 @@
 
 <style>
   .cell {
-    width: 64px;
-    height: 64px;
+    width: 100%;
+    height: 100%;
   }
 
   .thumbnail {

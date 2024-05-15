@@ -103,30 +103,33 @@
   populateGrid();
 </script>
 
-<a href="/infoplant">Infoplant</a>
-
+<p>Fantasy Garden</p>
 <main>
-  <h1>Fantasy Garden</h1>
-
-  <div class="grid-container">
+  <div
+    class="grid-container"
+    style:width={GRID_WIDTH * CELL_SIZE + "px"}
+    style:height={GRID_HEIGHT * CELL_SIZE + "px"}
+  >
     {#each grid as gridCell, gridIndex}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="cell"
-        style="left: {gridCell.column * CELL_SIZE}px; top: {gridCell.row *
-          CELL_SIZE}px;"
-        on:click={() => {
-          if (gridCell.plant) {
-            selectedPlant = gridCell.plant;
-          }
-        }}
+        style:left={gridCell.column * CELL_SIZE + "px"}
+        style:top={gridCell.row * CELL_SIZE + "px"}
+        style:width={CELL_SIZE + "px"}
+        style:height={CELL_SIZE + "px"}
       >
         {#if gridCell.plant}
           <PlantCell
             data={gridCell.plant}
             {gridIndex}
             on:dragStart={dragStart}
+            on:click={() => {
+              if (gridCell.plant) {
+                selectedPlant = gridCell.plant;
+              }
+            }}
           />
         {:else}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -136,13 +139,12 @@
               drop(e, gridIndex);
             }}
             on:drop={(e) => {
+              console.log("drop");
               drop(e, gridIndex);
             }}
             on:dragover={(e) => dragOver(e, gridIndex)}
             on:dragleave={(e) => dragLeave(e, gridIndex)}
-          >
-            empty
-          </div>
+          />
         {/if}
       </div>
     {/each}
@@ -165,37 +167,45 @@
   >
 </main>
 
+<a href="/info" class="hover-bold">?</a>
+<a href="/landing_page">Landing page</a>
+
 <style>
-  h1 {
-    text-align: center;
-    font-size: 15px;
-  }
-  h1 {
-    text-align: center;
-    font-size: 15px;
+  main {
+    display: flex;
+    align-items: center; /* Centers content vertically in the container */
+    justify-content: center; /* Centers content horizontally in the container */
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Hide overflow */
+    position: relative; /* Ensures that it is the positioning context for any absolutely positioned children, if needed */
   }
 
-  .hover-bold {
+  .grid-container {
+    display: block;
+    position: relative; /* Essential for absolutely positioned children */
+    margin: auto; /* Center the container horizontally */
+    padding: 10px;
+    box-sizing: border-box; /* Include border and padding in the width/height */
+    top: -50px;
+  }
+
+  .cell {
+    position: absolute; /* Positioning relative to .grid-container */
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 27px; /* Width of each cell */
+    height: 27px; /* Height of each cell */
+  }
+
+  p {
+    text-align: center;
     font-size: 15px;
-    position: fixed;
-    left: 10px;
-    bottom: 10px;
-    cursor: pointer; /* Changes the cursor to a pointer to indicate it's interactive */
-    transition: font-weight 0.2s ease; /* Optional: adds a smooth transition for the font weight change */
-    text-decoration: none; /* Optional: removes underline from the link, depending on your design needs */
-    color: inherit; /* Optional: ensures the link color matches the surrounding text unless otherwise needed */
-    z-index: 10;
   }
 
   .hover-bold:hover {
     font-weight: bold; /* Makes the font bold on hover */
-  }
-
-  .cell {
-    width: 64px;
-    height: 64px;
-    position: absolute;
-    border: 1px solid grey;
   }
 
   .cell .empty {
