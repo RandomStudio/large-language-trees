@@ -8,15 +8,7 @@
 
   import Popupinfo from "../components/PopupInfo.svelte";
 
-  let selectedPlant: SelectPlant | undefined;
-
-  function openPopup(plant?: SelectPlant) {
-    selectedPlant = plant;
-  }
-
-  function closePopup() {
-    selectedPlant = undefined;
-  }
+  let selectedPlant: SelectPlant | null = null;
 
   interface GridCell {
     plant?: SelectPlant;
@@ -117,7 +109,11 @@
         class="cell"
         style="left: {gridCell.column * CELL_SIZE}px; top: {gridCell.row *
           CELL_SIZE}px;"
-        on:click={() => openPopup(gridCell.plant)}
+        on:click={() => {
+          if (gridCell.plant) {
+            selectedPlant = gridCell.plant;
+          }
+        }}
       >
         {#if gridCell.plant}
           <PlantCell
@@ -145,9 +141,16 @@
     {/each}
   </div>
 
-  <Popupinfo plantDetails={selectedPlant} {closePopup}></Popupinfo>
+  <Popupinfo
+    plantDetails={selectedPlant}
+    closePopup={() => {
+      selectedPlant = null;
+    }}
+  ></Popupinfo>
 
   <a href="/info" class="hover-bold">?</a>
+
+  <button class="debug-button">Test breed</button>
 </main>
 
 <style>
@@ -186,5 +189,10 @@
   .cell .empty {
     width: 100%;
     height: 100%;
+  }
+
+  .debug-button {
+    position: absolute;
+    right: 0;
   }
 </style>
