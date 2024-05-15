@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type SelectPlant } from "../types"; // Assuming type import is correct
+  import { type SelectPlant } from "../lib/types"; // Assuming type import is correct
   export let data: { seeds: SelectPlant[] };
 
   import "./main.css";
