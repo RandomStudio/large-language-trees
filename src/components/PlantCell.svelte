@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { SelectPlant } from "../types";
+  import type { SelectPlant } from "../lib/types";
 
   export let data: SelectPlant;
   export let gridIndex: number;
@@ -30,8 +30,8 @@
 
 <style>
   .cell {
-    width: 64px;
-    height: 64px;
+    width: 100%;
+    height: 100%;
   }
 
   .thumbnail {
