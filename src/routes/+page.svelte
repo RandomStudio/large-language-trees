@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { type SelectPlant } from "../lib/types"; // Assuming type import is correct
+  import { type InsertPlant, type SelectPlant } from "../lib/types"; // Assuming type import is correct
   export let data: { seeds: SelectPlant[] };
+  import { pickRandomElement } from "random-elements";
 
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
@@ -10,12 +11,35 @@
   import { buildPrompt } from "../lib/promptUtils";
 
   import DefaultPromptConfig from "../defaults/prompt-config";
+  import ConfirmBreed from "../components/ConfirmBreed.svelte";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
 
   let timeout: NodeJS.Timeout | null = null;
 
   let selectedPlant: SelectPlant | null = null;
+
+  let waitingForGeneration = false;
+
+  async function confirmBreed(
+    parents: [SelectPlant, SelectPlant]
+  ): Promise<InsertPlant> {
+    const res = await fetch("/api/generate/plant", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt: buildPrompt(DefaultPromptConfig, parents[0], parents[1]),
+        parents,
+      }),
+    });
+    if (res.status === 200) {
+      console.log("Created new candidate plant OK:", res);
+      return (await res.json()) as InsertPlant;
+    } else {
+      const { status, statusText } = res;
+      console.error("Error generating on backend:", { status, statusText });
+      throw Error("Generate failure");
+    }
+  }
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
     if (
@@ -33,24 +57,6 @@
         console.log(
           plant1.commonName + " and " + plant2.commonName + " are close!"
         );
-        candidateParents = [plant1, plant2];
-        // Lancer le timer de 5 secondes
-        timeout = setTimeout(() => {
-          console.log(
-            "ready for mixing : " +
-              plant1.commonName +
-              " and " +
-              plant2.commonName +
-              " !"
-          );
-          // const res = await fetch("/api/generate/plant", {
-          //   method: "POST",
-          //   body: JSON.stringify({
-          //     prompt: buildPrompt(DefaultPromptConfig, parents[0], parents[1]),
-          //     parents,
-          //   }),
-          // });
-        }, 4000);
 
         return true;
       } else {
@@ -71,14 +77,35 @@
     }
   }
 
-  function checkAllClose(id: number) {
+  function checkAnyCloseTo(id: number) {
     console.log("check");
-    const seeds = data.seeds;
+    const { seeds } = data;
     const plant = data.seeds.find((e) => e.id === id);
     if (plant) {
-      for (let j = 0; j < seeds.length; j++) {
-        if (seeds[j] != plant) {
-          areClose(plant, seeds[j]);
+      for (let i = 0; i < seeds.length; i++) {
+        if (seeds[i] != plant) {
+          const [plant1, plant2] = [plant, seeds[i]];
+          if (areClose(plant1, plant2)) {
+            candidateParents = [plant1, plant2];
+            timeout = setTimeout(() => {
+              console.log(
+                "ready for mixing : " +
+                  plant1.commonName +
+                  " and " +
+                  plant2.commonName +
+                  " !"
+              );
+              waitingForGeneration = true;
+              confirmBreed([plant1, plant2])
+                .then((newPlant) => {
+                  waitingForGeneration = false;
+                })
+                .catch((e) => {
+                  console.error("Error from confirm/generate breed:", e);
+                  waitingForGeneration = false;
+                });
+            }, 4000);
+          }
         }
       }
     }
@@ -148,14 +175,14 @@
             console.log("running");
           }
         });
-        checkAllClose(updatedPlant.id);
+        checkAnyCloseTo(updatedPlant.id);
         fetch("/api/plants/" + updatedPlant.id, {
           method: "PATCH",
           body: JSON.stringify(updatedPlant),
         })
           .then((res) => {
             if (res.status == 200) {
-              console.info("Updated plant on backend OK:", res);
+              console.info("Updated plant position on backend OK:", res);
             } else {
               const { status, statusText } = res;
               console.error("Error response from server:", {
@@ -236,12 +263,23 @@
     ></PopupInfo>
   {/if}
 
+  {#if candidateParents}
+    <ConfirmBreed />
+  {/if}
+
   <a href="/info" class="hover-bold">?</a>
 
   <button
     class="debug-button"
     on:click={() => {
-      // breedingState = BreedState.CANDIDATES_SELECTED;
+      const parent1 = pickRandomElement(data.seeds);
+
+      let parent2 = pickRandomElement(data.seeds);
+      while (parent1.id === parent2.id) {
+        parent2 = pickRandomElement(data.seeds);
+      }
+      console.log("random picked:", { parent1, parent2 });
+      // confirmBreed([parent1, parent2]);
     }}>Test breed</button
   >
 </main>
