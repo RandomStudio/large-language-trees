@@ -12,8 +12,8 @@
 
   import DefaultPromptConfig from "../../defaults/prompt-config";
   import ConfirmBreed from "../../components/ConfirmBreed.svelte";
-  import Spinner from "../../components/Spinner.svelte";
-  import { goto, invalidateAll } from "$app/navigation";
+  import FullScreenLoading from "../../components/FullScreenLoading.svelte";
+  import { invalidateAll } from "$app/navigation";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -303,9 +303,10 @@
 <a href="/info" class="hover-bold">?</a>
 <a href="/landing_page">Landing page</a>
 
-{#if waitingForGeneration}
-  <Spinner />
-{/if}
+<!-- {#if waitingForGeneration} -->
+<FullScreenLoading />
+
+<!-- {/if} -->
 
 <style>
   main {

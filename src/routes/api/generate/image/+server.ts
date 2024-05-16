@@ -16,7 +16,7 @@ import fs from "fs/promises";
 
 const URL_PREFIX = "https://random-the-garden.s3.eu-north-1.amazonaws.com";
 
-export const POST: RequestHandler = async ({ request, params }) => {
+export const POST: RequestHandler = async ({ request }) => {
   console.log({ PLACEHOLDER_IMAGES });
   const jsonBody = await request.json();
   const { id, description } = jsonBody;
@@ -66,7 +66,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
 };
 
 const buildImagePrompt = (description: string): string =>
-  `I want you to generate an image, an accurate botanical sketch of a plant based on the description that follows:\n\n` +
+  `I want you to generate a pixelart style image, with a white background, based on the description that follows:\n\n` +
   description;
 
 const streamToS3 = async (fetchImage: Response, id: string) => {
@@ -104,12 +104,12 @@ const uploadLocal = async (fetchImage: Response, id: string) => {
     process.cwd(),
     "static/",
     "uploads/",
-    id + ".png",
+    id + ".png"
   );
   console.log(`Writing to disk at "${filePath}"...`);
   await fs.writeFile(
     filePath,
     Buffer.from(await fetchImage.arrayBuffer()),
-    "base64",
+    "base64"
   );
 };

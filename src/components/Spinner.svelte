@@ -1,24 +1,14 @@
-<div class="container">
-    <div class="message">Please wait...</div>
-</div>
+<div class="spinner">🌼</div>
 
 <style>
-    .container {
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        margin: 0;
+  .spinner {
+    animation: spinner 5s linear infinite;
+    font-size: 4em;
+  }
 
-        background-color: rgba(0, 0, 0, 0.5);
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
     }
-    .message {
-        margin: 3em;
-        width: 100%;
-        text-align: center;
-        color: white;
-        font-size: 2em;
-        font-weight: 600;
-    }
+  }
 </style>
