@@ -303,10 +303,9 @@
 <a href="/info" class="hover-bold">?</a>
 <a href="/landing_page">Landing page</a>
 
-<!-- {#if waitingForGeneration} -->
-<FullScreenLoading />
-
-<!-- {/if} -->
+{#if waitingForGeneration}
+  <FullScreenLoading />
+{/if}
 
 <style>
   main {
