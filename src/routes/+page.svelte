@@ -276,11 +276,12 @@
         const { status, statusText } = res;
         if (status === 201) {
           console.log("Sucessfully added!");
-          invalidateAll().then(() => {
-            populateGrid();
-          });
+          await invalidateAll();
+          populateGrid();
+          candidateChild = null;
         } else {
           console.error("Error adding new plant:", { status, statusText });
+          candidateChild = null;
         }
       }}
     />
