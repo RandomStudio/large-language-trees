@@ -298,7 +298,7 @@
 
   <a href="/info" class="hover-bold">?</a>
 
-  <button
+  <!-- <button
     class="debug-button"
     on:click={async () => {
       waitingForGeneration = true;
@@ -307,7 +307,7 @@
       candidateChild = await confirmBreed([parent1, parent2]);
       waitingForGeneration = false;
     }}>Test breed</button
-  >
+  > -->
 </main>
 
 <a href="/info" class="hover-bold">?</a>
