@@ -267,7 +267,12 @@
   {/if}
 
   {#if candidateChild}
-    <ConfirmBreed {candidateChild} />
+    <ConfirmBreed
+      {candidateChild}
+      closePopup={() => {
+        candidateChild = null;
+      }}
+    />
   {/if}
 
   <a href="/info" class="hover-bold">?</a>

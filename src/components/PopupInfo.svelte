@@ -7,7 +7,7 @@
 
   const plantProperties = plantDetails.properties as PlantProperties;
 
-  export let closePopup;
+  export let closePopup: () => any;
 </script>
 
 <div class="overlay">
