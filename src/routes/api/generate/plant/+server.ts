@@ -2,11 +2,7 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import type {
-  Characteristics,
-  InsertPlant,
-  SelectPlant,
-} from "../../../../types";
+import type { Characteristics, InsertPlant, SelectPlant } from "$lib/types";
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as {
@@ -53,7 +49,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 const parseNewPlant = async (
   text: string,
-  parentIds: [number, number],
+  parentIds: [number, number]
 ): Promise<InsertPlant> => {
   const json = JSON.parse(
     text
@@ -61,7 +57,7 @@ const parseNewPlant = async (
       .replaceAll("```json", "")
       .replaceAll("```", "")
       .replaceAll('."\n', '.",')
-      .replaceAll("\n", ""),
+      .replaceAll("\n", "")
   );
   if (json["commonName"] && json["description"] && json["properties"]) {
     console.log("JSON appears to have the valid fields");
@@ -79,18 +75,18 @@ const parseNewPlant = async (
 };
 
 const interpretColours = async (
-  originals: Characteristics,
+  originals: Characteristics
 ): Promise<Characteristics> => {
   const colourDescriptionKeys = Object.keys(originals).filter(
     (k) =>
-      k.toLowerCase().includes("colour") || k.toLowerCase().includes("color"),
+      k.toLowerCase().includes("colour") || k.toLowerCase().includes("color")
   );
   console.log(
     colourDescriptionKeys.length,
     "colours to interpet...",
     colourDescriptionKeys,
     "from keys",
-    Object.keys(originals),
+    Object.keys(originals)
   );
   if (colourDescriptionKeys.length == 0) {
     return originals;
@@ -121,7 +117,7 @@ const interpretColours = async (
             console.error("Does not look like a hex string value");
           }
         }
-      }),
+      })
     );
     return newObject;
   }

@@ -5,8 +5,8 @@ import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import { plants } from "./schema";
 import { eq } from "drizzle-orm";
-import type { InsertPlant, SelectPlant } from "../../types";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
+import type { InsertPlant, SelectPlant } from "$lib/types";
 
 export const getAllPlants = async () => {
   const existingPlants = await db.query.plants.findMany();
@@ -52,28 +52,29 @@ function getRandomIndices(max: number, count: number): number[] {
   return Array.from(indices);
 }
 
-export const addNew = async (plant: InsertPlant, parentIds: number[]) => {
-  console.log("add new plant", plant, parentIds);
+export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
+  console.log("add new plant", plant);
   if (typeof plant === "string") {
     throw Error("Plant is not an object");
   }
-  const { commonName, description, properties } = plant;
+  // const { commonName, description, properties } = plant;
+  const { id, ...allExceptId } = plant;
   const insertedPlant = await db
     .insert(plants)
-    .values({ commonName, description, properties })
-    .returning({ insertedId: plants.id });
-  const insertedId = insertedPlant[0].insertedId;
-  if (parentIds.length === 2) {
-    console.log("Adding two parents to this new plant:", parentIds);
-    await db
-      .update(plants)
-      .set({ parent1: parentIds[0], parent2: parentIds[1] })
-      .where(eq(plants.id, insertedId));
-  }
-  if (parentIds.length !== 0 && parentIds.length !== 2) {
-    throw Error("A plant can only have exactly zero or 2 parents!");
-  }
-  return plant;
+    .values({ ...allExceptId, rowIndex: 0, colIndex: 0 })
+    .returning();
+  // const insertedId = insertedPlant[0].insertedId;
+  // if (plant.parent1 && plant.parent2) {
+  //   console.log("Adding two parents to this new plant:", parentIds);
+  //   await db
+  //     .update(plants)
+  //     .set({ parent1: parentIds[0], parent2: parentIds[1] })
+  //     .where(eq(plants.id, insertedId));
+  // }
+  // if (parentIds.length !== 0 && parentIds.length !== 2) {
+  //   throw Error("A plant can only have exactly zero or 2 parents!");
+  // }
+  return insertedPlant[0];
 };
 
 export const generate = async (

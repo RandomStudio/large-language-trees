@@ -4,12 +4,12 @@ import {
   getAllPlants,
   updateWholePlant,
 } from "$lib/server/server";
+import type { SelectPlant } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
-import type { SelectPlant } from "../../../../types";
 
 export const POST: RequestHandler = async ({ request }) => {
   const plant = await request.json();
-  await addNew(plant, []);
+  await addNew(plant);
   return new Response(plant);
 };
 

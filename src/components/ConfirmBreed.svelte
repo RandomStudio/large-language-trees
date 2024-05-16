@@ -3,7 +3,8 @@
 
   export let candidateChild: InsertPlant;
 
-  export let closePopup: () => any;
+  export let onCancel: () => any;
+  export let onConfirm: () => any;
 </script>
 
 <div class="overlay">
@@ -13,8 +14,8 @@
       Details: <code>{JSON.stringify(candidateChild)}</code>
     </p>
     <div>
-      <button>✅ Add </button>
-      <button on:click={closePopup}>❌ Cancel</button>
+      <button on:click={onConfirm}>✅ Add </button>
+      <button on:click={onCancel}>❌ Cancel</button>
     </div>
   </div>
 </div>

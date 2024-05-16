@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type InsertPlant, type SelectPlant } from "../lib/types"; // Assuming type import is correct
   export let data: { seeds: SelectPlant[] };
-  import { pickMultiple, pickRandomElement } from "random-elements";
+  import { pickMultiple } from "random-elements";
 
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
@@ -13,6 +13,7 @@
   import DefaultPromptConfig from "../defaults/prompt-config";
   import ConfirmBreed from "../components/ConfirmBreed.svelte";
   import Spinner from "../components/Spinner.svelte";
+  import { goto, invalidateAll } from "$app/navigation";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -124,6 +125,7 @@
   let grid: GridCell[] = [];
 
   const populateGrid = () => {
+    grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.seeds.find(
@@ -171,13 +173,6 @@
           colIndex: dstCell.column,
           rowIndex: dstCell.row,
         };
-        data.seeds.forEach((p) => {
-          if (p.id == updatedPlant.id) {
-            p.colIndex = updatedPlant.colIndex;
-            p.rowIndex = updatedPlant.rowIndex;
-            console.log("running");
-          }
-        });
         checkAnyCloseTo(updatedPlant.id);
         fetch("/api/plants/" + updatedPlant.id, {
           method: "PATCH",
@@ -186,6 +181,7 @@
           .then((res) => {
             if (res.status == 200) {
               console.info("Updated plant position on backend OK:", res);
+              invalidateAll();
             } else {
               const { status, statusText } = res;
               console.error("Error response from server:", {
@@ -269,8 +265,23 @@
   {#if candidateChild}
     <ConfirmBreed
       {candidateChild}
-      closePopup={() => {
+      onCancel={() => {
         candidateChild = null;
+      }}
+      onConfirm={async () => {
+        const res = await fetch("/api/plants", {
+          method: "POST",
+          body: JSON.stringify(candidateChild),
+        });
+        const { status, statusText } = res;
+        if (status === 201) {
+          console.log("Sucessfully added!");
+          invalidateAll().then(() => {
+            populateGrid();
+          });
+        } else {
+          console.error("Error adding new plant:", { status, statusText });
+        }
       }}
     />
   {/if}
