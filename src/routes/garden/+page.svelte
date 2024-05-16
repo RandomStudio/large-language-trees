@@ -46,6 +46,9 @@
   }
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
+    if (plant1.id === plant2.id) {
+      return false; // same plant!
+    }
     if (
       plant1.rowIndex !== null &&
       plant2.rowIndex !== null &&
