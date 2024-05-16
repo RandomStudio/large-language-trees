@@ -267,20 +267,30 @@
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={async () => {
-        const res = await fetch("/api/plants", {
-          method: "POST",
-          body: JSON.stringify(candidateChild),
-        });
-        const { status, statusText } = res;
-        if (status === 201) {
-          console.log("Sucessfully added!");
-          await invalidateAll();
-          populateGrid();
-          candidateChild = null;
+      onConfirm={async (imageURL) => {
+        if (candidateChild) {
+          if (imageURL) {
+            console.log("will attach image", imageURL);
+            candidateChild.imageUrl = imageURL;
+          }
+          const res = await fetch("/api/plants", {
+            method: "POST",
+            body: JSON.stringify(candidateChild),
+          });
+          const { status, statusText } = res;
+          if (status === 201) {
+            console.log("Sucessfully added!");
+            await invalidateAll();
+            populateGrid();
+            candidateChild = null;
+          } else {
+            console.error("Error adding new plant:", { status, statusText });
+            candidateChild = null;
+          }
         } else {
-          console.error("Error adding new plant:", { status, statusText });
-          candidateChild = null;
+          console.error(
+            "Whoops! Where is the candidate child plant we're confirming?"
+          );
         }
       }}
     />
