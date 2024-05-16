@@ -27,6 +27,7 @@
   async function confirmBreed(
     parents: [SelectPlant, SelectPlant]
   ): Promise<InsertPlant> {
+    console.log("confirmBreed...");
     const res = await fetch("/api/generate/plant", {
       method: "POST",
       body: JSON.stringify({
@@ -80,36 +81,33 @@
     }
   }
 
-  function checkAnyCloseTo(id: number) {
-    console.log("check");
+  function checkAnyCloseTo(plant: SelectPlant) {
+    console.log("checkAnyCloseTo");
     const { seeds } = data;
-    const plant = data.seeds.find((e) => e.id === id);
-    if (plant) {
-      for (let i = 0; i < seeds.length; i++) {
-        if (seeds[i] != plant) {
-          const [plant1, plant2] = [plant, seeds[i]];
-          if (areClose(plant1, plant2)) {
-            candidateParents = [plant1, plant2];
-            timeout = setTimeout(() => {
-              console.log(
-                "ready for mixing : " +
-                  plant1.commonName +
-                  " and " +
-                  plant2.commonName +
-                  " !"
-              );
-              waitingForGeneration = true;
-              confirmBreed([plant1, plant2])
-                .then((newPlant) => {
-                  candidateChild = newPlant;
-                  waitingForGeneration = false;
-                })
-                .catch((e) => {
-                  console.error("Error from confirm/generate breed:", e);
-                  waitingForGeneration = false;
-                });
-            }, 4000);
-          }
+    for (let i = 0; i < seeds.length; i++) {
+      if (seeds[i] != plant) {
+        const [plant1, plant2] = [plant, seeds[i]];
+        if (areClose(plant1, plant2)) {
+          candidateParents = [plant1, plant2];
+          timeout = setTimeout(() => {
+            console.log(
+              "ready for mixing : " +
+                plant1.commonName +
+                " and " +
+                plant2.commonName +
+                " !"
+            );
+            waitingForGeneration = true;
+            confirmBreed([plant1, plant2])
+              .then((newPlant) => {
+                candidateChild = newPlant;
+                waitingForGeneration = false;
+              })
+              .catch((e) => {
+                console.error("Error from confirm/generate breed:", e);
+                waitingForGeneration = false;
+              });
+          }, 4000);
         }
       }
     }
@@ -155,7 +153,7 @@
 
   function drop(e: DragEvent, dstIndex: number) {
     e.preventDefault();
-    // console.log("drop");
+    console.log("drop to grid index", dstIndex);
     const cellDropData = e.dataTransfer?.getData("text/plain");
     if (cellDropData) {
       const srcIndex = parseInt(cellDropData);
@@ -173,12 +171,13 @@
           colIndex: dstCell.column,
           rowIndex: dstCell.row,
         };
-        checkAnyCloseTo(updatedPlant.id);
         fetch("/api/plants/" + updatedPlant.id, {
           method: "PATCH",
           body: JSON.stringify(updatedPlant),
         })
           .then((res) => {
+            checkAnyCloseTo(updatedPlant);
+
             if (res.status == 200) {
               console.info("Updated plant position on backend OK:", res);
               invalidateAll();

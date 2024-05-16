@@ -35,13 +35,15 @@
     <h1>New plant!</h1>
     {#if candidateImage}
       <img src={candidateImage} alt="AI generated new plant" />
-    {:else}
-      <button on:click={generateImage}>Generate</button>
     {/if}
     {#if waitingForImage}
       <div>
         <div>Generating image...</div>
         <Spinner />
+      </div>
+    {:else}
+      <div>
+        <button on:click={generateImage}>Generate image</button>
       </div>
     {/if}
     <p>
