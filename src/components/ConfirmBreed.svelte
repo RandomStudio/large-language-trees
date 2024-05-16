@@ -1,6 +1,17 @@
+<script lang="ts">
+  import type { InsertPlant, SelectPlant } from "$lib/types";
+
+  export let candidateChild: InsertPlant;
+</script>
+
 <div class="overlay">
-  <button>Close</button>
-  This is a popup for confirmation.
+  <div class="popup">
+    <button>Close</button>
+    <h1>New plant!</h1>
+    <p>
+      Details: <code>{JSON.stringify(candidateChild)}</code>
+    </p>
+  </div>
 </div>
 
 <style>

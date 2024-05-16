@@ -5,6 +5,8 @@
 
   type PlantProperties = { [key: string]: string | number };
 
+  const plantProperties = plantDetails.properties as PlantProperties;
+
   export let closePopup;
 </script>
 
@@ -19,10 +21,8 @@
     <p>{plantDetails.commonName}</p>
     <p>{plantDetails.description}</p>
     <p>
-      The {plantDetails.commonName} has {plantDetails.properties[
-        "petalCountRange"
-      ]}
-      {plantDetails.properties["flowerColour"]} petals
+      The {plantDetails.commonName} has {plantProperties["petalCountRange"]}
+      {plantProperties["flowerColour"]} petals
     </p>
   </div>
 </div>

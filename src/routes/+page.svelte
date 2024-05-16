@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type InsertPlant, type SelectPlant } from "../lib/types"; // Assuming type import is correct
   export let data: { seeds: SelectPlant[] };
-  import { pickRandomElement } from "random-elements";
+  import { pickMultiple, pickRandomElement } from "random-elements";
 
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../defaults/constants";
@@ -12,8 +12,10 @@
 
   import DefaultPromptConfig from "../defaults/prompt-config";
   import ConfirmBreed from "../components/ConfirmBreed.svelte";
+  import Spinner from "../components/Spinner.svelte";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
+  let candidateChild: InsertPlant | null = null;
 
   let timeout: NodeJS.Timeout | null = null;
 
@@ -98,6 +100,7 @@
               waitingForGeneration = true;
               confirmBreed([plant1, plant2])
                 .then((newPlant) => {
+                  candidateChild = newPlant;
                   waitingForGeneration = false;
                 })
                 .catch((e) => {
@@ -263,29 +266,30 @@
     ></PopupInfo>
   {/if}
 
-  {#if candidateParents}
-    <ConfirmBreed />
+  {#if candidateChild}
+    <ConfirmBreed {candidateChild} />
   {/if}
 
   <a href="/info" class="hover-bold">?</a>
 
   <button
     class="debug-button"
-    on:click={() => {
-      const parent1 = pickRandomElement(data.seeds);
-
-      let parent2 = pickRandomElement(data.seeds);
-      while (parent1.id === parent2.id) {
-        parent2 = pickRandomElement(data.seeds);
-      }
+    on:click={async () => {
+      waitingForGeneration = true;
+      const [parent1, parent2] = pickMultiple(data.seeds, 2);
       console.log("random picked:", { parent1, parent2 });
-      // confirmBreed([parent1, parent2]);
+      candidateChild = await confirmBreed([parent1, parent2]);
+      waitingForGeneration = false;
     }}>Test breed</button
   >
 </main>
 
 <a href="/info" class="hover-bold">?</a>
 <a href="/landing_page">Landing page</a>
+
+{#if waitingForGeneration}
+  <Spinner />
+{/if}
 
 <style>
   main {
