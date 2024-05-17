@@ -63,37 +63,4 @@
 
 <style>
   @import "./popups.css";
-
-  .close-button {
-    position: absolute;
-    top: -3%; /* Haut de l'élément conteneur */
-    right: 0%; /* Droite de l'élément conteneur */
-    border: none;
-    background: none;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-  .popup img {
-    width: 20%;
-    height: auto;
-  }
-
-  .parent1 {
-    width: 40%;
-    height: auto;
-    position: absolute;
-    top: 10%;
-    right: 60%;
-    text-align: center;
-  }
-
-  .parent2 {
-    width: 40%;
-    height: auto;
-    position: absolute;
-    top: 10%;
-    right: 0%;
-    text-align: center;
-  }
 </style>
