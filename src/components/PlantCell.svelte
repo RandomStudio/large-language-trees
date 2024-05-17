@@ -33,15 +33,26 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
+    position: relative;
+    justify-content: center;
+    align-items: center;
   }
 
   .thumbnail {
-    width: 100%;
-    height: 100%;
+    width: 120%;
+    height: auto;
+  }
+
+  .draggable {
+    width: 90%; /* Ajustez selon la taille souhaitée pour l'image et le texte */
+    text-align: center; /* Centrage du texte à l'intérieur de draggable */
   }
 
   .plant-name {
     position: absolute;
-    top: 0;
+    top: 80%; /* Positionner juste en dessous de l'image */
+    width: 100%; /* Permettre au texte de s'étendre sur toute la largeur */
+    text-align: center; /* Centrer le texte horizontalement */
+    font-size: 0.4em; /* Taille de la police plus petite */
   }
 </style>
