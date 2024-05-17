@@ -28,11 +28,6 @@ in one place, to be imported by each component that needs it.
   z-index: 100;
 }
 
-.popup img {
-  width: 200px;
-  height: auto;
-}
-
 button {
   margin: 10px 0;
   padding: 10px 20px;
