@@ -19,6 +19,7 @@ export const actions: Actions = {
       username.length > 31 ||
       !/^[a-z0-9_-]+$/.test(username)
     ) {
+      console.error("invalid username");
       return fail(400, {
         message: "Invalid username",
       });
@@ -28,6 +29,7 @@ export const actions: Actions = {
       password.length < 6 ||
       password.length > 255
     ) {
+      console.error("invalid password");
       return fail(400, {
         message: "Invalid password",
       });
@@ -47,8 +49,9 @@ export const actions: Actions = {
       // Since protecting against this is non-trivial,
       // it is crucial your implementation is protected against brute-force attacks with login throttling etc.
       // If usernames are public, you may outright tell the user that the username is invalid.
+      console.log("incorrect username/password");
       return fail(400, {
-        message: "Incorrect username or password",
+        message: "unknown username or password",
       });
     }
 

@@ -3,10 +3,13 @@ import DefaultSeeds from "../../defaults/seeds.json";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
-import { plantTable } from "./schema";
+import { plantTable, userTable } from "./schema";
 import { eq } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type { InsertPlant, SelectPlant } from "$lib/types";
+import { generateIdFromEntropySize } from "lucia";
+import { hash } from "@node-rs/argon2";
+import { defaultUsers } from "../../defaults/users";
 
 export const getAllPlants = async () => {
   const existingPlants = await db.query.plantTable.findMany();
@@ -37,6 +40,7 @@ export const getAllPlants = async () => {
         });
       })
     );
+
     return await db.query.plantTable.findMany();
   } else {
     return existingPlants;
