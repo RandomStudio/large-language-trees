@@ -21,8 +21,8 @@ export const plantTable = pgTable("plant", {
 
 export const userTable = pgTable("user", {
   id: text("id").primaryKey(),
-  username: text("username").unique(),
-  passwordHash: text("password_hash"),
+  username: text("username").unique().notNull(),
+  passwordHash: text("password_hash").notNull(),
 });
 
 export const sessionTable = pgTable("session", {
