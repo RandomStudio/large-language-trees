@@ -12,4 +12,8 @@ const client = postgres(DB_CONNECTION_STRING);
 
 export const db = drizzle(client, { schema });
 
-const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);
+export const adapter = new DrizzlePostgreSQLAdapter(
+  db,
+  sessionTable,
+  userTable
+);

@@ -7,7 +7,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-export const plants = pgTable("plants", {
+export const plantTable = pgTable("plant", {
   id: serial("id").primaryKey(),
   commonName: text("common_name"),
   description: text("description"),
@@ -21,6 +21,8 @@ export const plants = pgTable("plants", {
 
 export const userTable = pgTable("user", {
   id: text("id").primaryKey(),
+  username: text("username").unique(),
+  passwordHash: text("password_hash"),
 });
 
 export const sessionTable = pgTable("session", {
