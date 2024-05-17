@@ -8,7 +8,6 @@
     <a href="/garden"><h2>Enter</h2></a>
 
     <div>
-      <a href="/login">Login</a>
       <a href="/signup">Register</a>
     </div>
   </div>

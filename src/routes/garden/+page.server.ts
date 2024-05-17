@@ -16,6 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
+  // This is for logout
   default: async (event) => {
     if (!event.locals.session) {
       return fail(401);
@@ -26,6 +27,6 @@ export const actions: Actions = {
       path: ".",
       ...sessionCookie.attributes,
     });
-    redirect(302, "/login");
+    redirect(302, "/");
   },
 };

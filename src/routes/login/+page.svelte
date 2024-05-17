@@ -10,3 +10,5 @@
   <input type="password" name="password" id="password" /><br />
   <button>Continue</button>
 </form>
+
+<a href="/signup">Register</a>
