@@ -7,7 +7,7 @@ import { db } from "$lib/server/db";
 import { userTable } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 
-export const actions: Actions = {
+export const actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const username = formData.get("username");
@@ -77,4 +77,4 @@ export const actions: Actions = {
 
     redirect(302, "/garden");
   },
-};
+} satisfies Actions;

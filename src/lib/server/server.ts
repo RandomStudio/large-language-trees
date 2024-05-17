@@ -9,7 +9,6 @@ import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type { InsertPlant, SelectPlant } from "$lib/types";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
-import { defaultUsers } from "../../defaults/users";
 
 export const getAllPlants = async () => {
   const existingPlants = await db.query.plantTable.findMany();

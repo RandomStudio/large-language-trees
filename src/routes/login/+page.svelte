@@ -1,5 +1,8 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import type { ActionData } from "./$types";
+
+  export let form: ActionData;
 </script>
 
 <h1>Sign in</h1>
@@ -10,5 +13,11 @@
   <input type="password" name="password" id="password" /><br />
   <button>Continue</button>
 </form>
+
+{#if form?.message}
+  <div>
+    Error: {form.message}
+  </div>
+{/if}
 
 <a href="/signup">Register</a>
