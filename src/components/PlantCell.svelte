@@ -33,26 +33,39 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
-    position: relative;
+    position: relative; /* Nécessaire pour le positionnement absolu des éléments à l'intérieur */
+    display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .thumbnail {
-    width: 120%;
-    height: auto;
+  .draggable {
+    width: 100%;
+    position: relative; /* Nécessaire pour positionner correctement l'image */
+    overflow: visible; /* Permet à l'image de dépasser */
   }
 
-  .draggable {
-    width: 90%; /* Ajustez selon la taille souhaitée pour l'image et le texte */
-    text-align: center; /* Centrage du texte à l'intérieur de draggable */
+  .thumbnail {
+    position: absolute;
+    width: 120%; /* Agrandir l'image à 120% de sa cellule */
+    left: 50%; /* Centrer horizontalement */
+    transform: translate(
+      -50%,
+      -50%
+    ); /* Ajustement pour le centrage vertical et horizontal */
+    height: auto; /* Garder le ratio de l'image */
+    top: 50%; /* Centrer verticalement */
   }
 
   .plant-name {
     position: absolute;
-    top: 80%; /* Positionner juste en dessous de l'image */
-    width: 100%; /* Permettre au texte de s'étendre sur toute la largeur */
-    text-align: center; /* Centrer le texte horizontalement */
-    font-size: 0.4em; /* Taille de la police plus petite */
+    top: calc(
+      100% + 13px
+    ); /* Placer le texte juste en dessous de l'image agrandie */
+    left: 50%; /* Centré horizontalement */
+    transform: translateX(-50%); /* Ajustement précis pour le centrage */
+    font-size: 0.6em;
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    overflow: visible; /* Permet au texte de dépasser du conteneur */
   }
 </style>
