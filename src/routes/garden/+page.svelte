@@ -3,7 +3,6 @@
   export let data: { seeds: SelectPlant[] };
   import { pickMultiple } from "random-elements";
 
-  import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../../defaults/constants";
   import PlantCell from "../../components/PlantCell.svelte";
 
