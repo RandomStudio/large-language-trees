@@ -1,7 +1,9 @@
 <script lang="ts">
   import { type InsertPlant, type SelectPlant } from "../../lib/types"; // Assuming type import is correct
-  export let data: { seeds: SelectPlant[] };
-  import { pickMultiple } from "random-elements";
+
+  export let data: { seeds: SelectPlant[]; username: string };
+
+  // import { pickMultiple } from "random-elements";
 
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../../defaults/constants";
   import PlantCell from "../../components/PlantCell.svelte";
@@ -205,6 +207,13 @@
   populateGrid();
 </script>
 
+<nav>
+  You are: {data.username}
+  <form method="post" use:enhance>
+    <button>Logout</button>
+  </form>
+</nav>
+
 <main>
   <div
     class="grid-container"
@@ -296,8 +305,6 @@
       }}
     />
   {/if}
-
-  <a href="/info" class="hover-bold">?</a>
 
   <!-- <button
     class="debug-button"
