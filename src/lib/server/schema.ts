@@ -1,4 +1,11 @@
-import { integer, json, pgTable, serial, text } from "drizzle-orm/pg-core";
+import {
+  integer,
+  json,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const plants = pgTable("plants", {
   id: serial("id").primaryKey(),
@@ -12,13 +19,17 @@ export const plants = pgTable("plants", {
   colIndex: integer("colIndex"),
 });
 
-// export const plantRelations = relations(plants, ({ one }) => ({
-//   myParent1: one(plants, {
-//     fields: [plants.parent1],
-//     references: [plants.id],
-//   }),
-//   myParent2: one(plants, {
-//     fields: [plants.parent2],
-//     references: [plants.id],
-//   }),
-// }));
+export const userTable = pgTable("user", {
+  id: text("id").primaryKey(),
+});
+
+export const sessionTable = pgTable("session", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
