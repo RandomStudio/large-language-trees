@@ -10,9 +10,18 @@
   export let closePopup: () => any;
 </script>
 
-<div class="overlay">
-  <div class="popup">
-    <button on:click={closePopup}>Fermer</button>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="overlay" on:click={closePopup}>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="popup" on:click|stopPropagation>
+    <button
+      type="button"
+      class="close-button"
+      on:click={closePopup}
+      aria-label="Close popup">&times;</button
+    >
     <br />
     <img
       src={plantDetails.imageUrl}
@@ -29,4 +38,14 @@
 
 <style>
   @import "./popups.css";
+
+  .close-button {
+    position: absolute;
+    top: -3%; /* Haut de l'élément conteneur */
+    right: 0%; /* Droite de l'élément conteneur */
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
 </style>
