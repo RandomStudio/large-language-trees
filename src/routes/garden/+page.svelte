@@ -25,7 +25,7 @@
   let waitingForGeneration = false;
 
   async function confirmBreed(
-    parents: [SelectPlant, SelectPlant]
+    parents: [SelectPlant, SelectPlant],
   ): Promise<InsertPlant> {
     console.log("confirmBreed...");
     const res = await fetch("/api/generate/plant", {
@@ -62,7 +62,7 @@
           Math.abs(plant1.colIndex - plant2.colIndex) === 1)
       ) {
         console.log(
-          plant1.commonName + " and " + plant2.commonName + " are close!"
+          plant1.commonName + " and " + plant2.commonName + " are close!",
         );
 
         return true;
@@ -98,7 +98,7 @@
                 plant1.commonName +
                 " and " +
                 plant2.commonName +
-                " !"
+                " !",
             );
             waitingForGeneration = true;
             confirmBreed([plant1, plant2])
@@ -130,7 +130,7 @@
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.seeds.find(
-          (p) => p.colIndex === c && p.rowIndex === r
+          (p) => p.colIndex === c && p.rowIndex === r,
         );
         grid.push({ plant, row: r, column: c, highlighted: false });
       }
@@ -291,7 +291,7 @@
           }
         } else {
           console.error(
-            "Whoops! Where is the candidate child plant we're confirming?"
+            "Whoops! Where is the candidate child plant we're confirming?",
           );
         }
       }}
@@ -347,7 +347,7 @@
 
   .cell {
     position: absolute; /* Positioning relative to .grid-container */
-    border: 1px solid black;
+    border: none;
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
   }
