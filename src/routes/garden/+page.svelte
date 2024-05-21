@@ -257,6 +257,7 @@
   {#if selectedPlant}
     <PopupInfo
       plantDetails={selectedPlant}
+      {data}
       closePopup={() => {
         selectedPlant = null;
       }}
@@ -298,8 +299,6 @@
     />
   {/if}
 
-  <a href="/info" class="hover-bold">?</a>
-
   <!-- <button
     class="debug-button"
     on:click={async () => {
@@ -312,8 +311,7 @@
   > -->
 </main>
 
-<a href="/info" class="hover-bold">?</a>
-<a href="/landing_page">Landing page</a>
+<a href="./garden/info" class="hover-bold">?</a>
 
 {#if waitingForGeneration}
   <FullScreenLoading />
@@ -347,7 +345,7 @@
 
   .cell {
     position: absolute; /* Positioning relative to .grid-container */
-    border: none;
+    border: 1px solid black;
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
   }
