@@ -7,6 +7,33 @@
   export let onCancel: () => any;
   export let onConfirm: (imageURL: string | null) => any;
 
+  let textInput = "";
+
+  function replaceWordInText(
+    text: string,
+    targetWord: string,
+    newWord: string,
+  ) {
+    const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
+    return text.replace(regex, newWord);
+  }
+
+  function handleSubmit() {
+    if (textInput.trim() === "") {
+      console.log("Please write something");
+      return;
+    }
+    console.log("Name given:", textInput);
+    if (candidateChild.description && candidateChild.commonName) {
+      candidateChild.description = replaceWordInText(
+        candidateChild.description,
+        candidateChild.commonName,
+        textInput,
+      );
+    }
+
+    candidateChild.commonName = textInput;
+  }
   let waitingForImage = false;
   let candidateImage: string | null = null;
 
@@ -65,6 +92,11 @@
     <p>
       Details: <code>{JSON.stringify(candidateChild)}</code>
     </p>
+    <p>Name your discovered flower</p>
+    <form on:submit|preventDefault={handleSubmit}>
+      <input type="text" bind:value={textInput} />
+      <button type="submit">Rename</button>
+    </form>
     <div>
       <button on:click={() => onConfirm(candidateImage)}>✅ Add </button>
       <button on:click={onCancel}>❌ Cancel</button>
