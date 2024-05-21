@@ -109,6 +109,7 @@
                   plant1,
                   plant2,
                 );
+                console.log(candidateChild);
                 waitingForGeneration = false;
               })
               .catch((e) => {
@@ -122,7 +123,7 @@
   }
 
   function checkPositionAround(
-    newPlant: SelectPlant,
+    newPlant: InsertPlant,
     parent1: SelectPlant,
     parent2: SelectPlant,
   ) {
@@ -139,23 +140,23 @@
               parent1.rowIndex + row_add,
               parent1.colIndex + col_add,
             ]);
-            if (
-              parent2.colIndex + col_add != plant.colIndex ||
-              parent2.rowIndex + row_add != plant.rowIndex
-            ) {
-              listPositions.push([
-                parent2.rowIndex + row_add,
-                parent2.colIndex + col_add,
-              ]);
-            }
+          }
+          if (
+            parent2.colIndex + col_add != plant.colIndex ||
+            parent2.rowIndex + row_add != plant.rowIndex
+          ) {
+            listPositions.push([
+              parent2.rowIndex + row_add,
+              parent2.colIndex + col_add,
+            ]);
           }
         }
       }
     }
+
     console.log(listPositions);
     let pos = selectRandomElement(listPositions);
-    let plantWithPosition: SelectPlant;
-    plantWithPosition = newPlant;
+    let plantWithPosition = newPlant;
     plantWithPosition.rowIndex = pos[0];
     plantWithPosition.colIndex = pos[1];
     return plantWithPosition;
