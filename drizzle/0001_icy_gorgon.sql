@@ -1,0 +1,1 @@
+DROP TABLE "gardens_to_plants";

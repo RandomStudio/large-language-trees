@@ -1,7 +1,10 @@
-import type { plantTable } from "$lib/server/schema";
+import type { gardens, plants, users } from "$lib/server/schema";
 
-export type SelectPlant = typeof plantTable.$inferSelect;
-export type InsertPlant = typeof plantTable.$inferInsert;
+export type SelectPlant = typeof plants.$inferSelect;
+export type InsertPlant = typeof plants.$inferInsert;
+
+export type SelectUser = typeof users.$inferSelect;
+export type SelectGarden = typeof gardens.$inferSelect;
 
 export type Characteristics = { [key: string]: string | number };
 

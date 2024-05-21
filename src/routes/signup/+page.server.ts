@@ -5,7 +5,7 @@ import { hash } from "@node-rs/argon2";
 
 import type { Actions } from "./$types";
 import { db } from "$lib/server/db";
-import { userTable } from "$lib/server/schema";
+import { users } from "$lib/server/schema";
 
 export const actions: Actions = {
   default: async (event) => {
@@ -44,7 +44,7 @@ export const actions: Actions = {
     });
 
     // TODO: check if username is already used
-    await db.insert(userTable).values({
+    await db.insert(users).values({
       id: userId,
       username,
       passwordHash,

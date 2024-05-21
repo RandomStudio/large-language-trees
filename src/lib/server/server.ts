@@ -3,46 +3,58 @@ import DefaultSeeds from "../../defaults/seeds.json";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
-import { plantTable, userTable } from "./schema";
+import { plants, users } from "./schema";
 import { eq } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
-import type { InsertPlant, SelectPlant } from "$lib/types";
+import type { InsertPlant, SelectPlant, SelectUser } from "$lib/types";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 
 export const getAllPlants = async () => {
-  const existingPlants = await db.query.plantTable.findMany();
+  const existingPlants = await db.query.plants.findMany();
   if (existingPlants.length === 0) {
     console.log(
       "No plants in DB, we will attempt to populate with defaults..."
     );
     const newPlants: InsertPlant[] = DefaultSeeds;
 
-    const rows = getRandomIndices(GRID_HEIGHT, newPlants.length);
-    const columns = getRandomIndices(GRID_WIDTH, newPlants.length);
+    // const rows = getRandomIndices(GRID_HEIGHT, newPlants.length);
+    // const columns = getRandomIndices(GRID_WIDTH, newPlants.length);
 
     await Promise.all(
       newPlants.map((p, index) => {
         const { commonName, description, properties, imageUrl } = p;
-        const rowIndex = rows[index];
-        const colIndex = columns[index];
+        // const rowIndex = rows[index];
+        // const colIndex = columns[index];
         console.log("inserting", { commonName });
-        return db.insert(plantTable).values({
+        return db.insert(plants).values({
           commonName,
           description,
           properties,
           imageUrl,
-          rowIndex,
-          colIndex,
           // rowIndex: rows[index],
           // columnIndex: columns[index],
         });
       })
     );
 
-    return await db.query.plantTable.findMany();
+    return await db.query.plants.findMany();
   } else {
     return existingPlants;
+  }
+};
+
+export const getUserGarden = async (userId: string) => {
+  // const result  = await db.select().from(users).where(eq(users.id, userId));
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, userId),
+    with: { gardens: true },
+  });
+  if (user) {
+    console.log("user has garden named", user.gardens.name);
+    return user.gardens;
+  } else {
+    throw Error(`user not found for userId "${userId}"`);
   }
 };
 
@@ -56,15 +68,15 @@ function getRandomIndices(max: number, count: number): number[] {
 }
 
 export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
-  console.log("add new plant", plant);
+  console.log("creating new plant", plant);
   if (typeof plant === "string") {
     throw Error("Plant is not an object");
   }
   // const { commonName, description, properties } = plant;
   const { id, ...allExceptId } = plant;
   const insertedPlant = await db
-    .insert(plantTable)
-    .values({ ...allExceptId, rowIndex: 0, colIndex: 0 })
+    .insert(plants)
+    .values({ ...allExceptId })
     .returning();
   // const insertedId = insertedPlant[0].insertedId;
   // if (plant.parent1 && plant.parent2) {
@@ -131,10 +143,10 @@ const parseNewPlant = (text: string): InsertPlant | null => {
 
 export const attachImageToPlant = async (id: number, imageUrl: string) => {
   const res = await db
-    .update(plantTable)
+    .update(plants)
     .set({ imageUrl })
-    .where(eq(plantTable.id, id))
-    .returning({ updatedId: plantTable.id });
+    .where(eq(plants.id, id))
+    .returning({ updatedId: plants.id });
   console.log("attachImageToPlant", res);
   res.forEach((r) => {
     console.log("updated ID", r.updatedId);
@@ -147,10 +159,10 @@ export const attachImageToPlant = async (id: number, imageUrl: string) => {
 export const updateWholePlant = async (id: number, newData: SelectPlant) => {
   const { id: originalId, parent1, parent2, ...relevant } = newData;
   const res = await db
-    .update(plantTable)
+    .update(plants)
     .set({ ...relevant })
-    .where(eq(plantTable.id, id))
-    .returning({ updatedId: plantTable.id });
+    .where(eq(plants.id, id))
+    .returning({ updatedId: plants.id });
   res.forEach((r) => {
     console.log("updated ID", r.updatedId);
   });

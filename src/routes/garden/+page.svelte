@@ -1,7 +1,17 @@
 <script lang="ts">
-  import { type InsertPlant, type SelectPlant } from "../../lib/types"; // Assuming type import is correct
+  import {
+    type InsertPlant,
+    type SelectGarden,
+    type SelectPlant,
+  } from "../../lib/types"; // Assuming type import is correct
 
-  export let data: { seeds: SelectPlant[]; username: string };
+  interface GardenViewData {
+    seeds: SelectPlant[];
+    username: string;
+    garden: SelectGarden;
+  }
+
+  export let data: GardenViewData;
 
   // import { pickMultiple } from "random-elements";
 
@@ -15,6 +25,7 @@
   import ConfirmBreed from "../../components/ConfirmBreed.svelte";
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
+  import { enhance } from "$app/forms";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -47,42 +58,43 @@
   }
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
-    if (plant1.id === plant2.id) {
-      return false; // same plant!
-    }
-    if (
-      plant1.rowIndex !== null &&
-      plant2.rowIndex !== null &&
-      plant1.colIndex !== null &&
-      plant2.colIndex !== null
-    ) {
-      if (
-        (Math.abs(plant1.rowIndex - plant2.rowIndex) === 1 &&
-          plant1.colIndex - plant2.colIndex === 0) ||
-        (plant1.rowIndex - plant2.rowIndex === 0 &&
-          Math.abs(plant1.colIndex - plant2.colIndex) === 1)
-      ) {
-        console.log(
-          plant1.commonName + " and " + plant2.commonName + " are close!"
-        );
+    return false;
+    // if (plant1.id === plant2.id) {
+    //   return false; // same plant!
+    // }
+    // if (
+    //   plant1.rowIndex !== null &&
+    //   plant2.rowIndex !== null &&
+    //   plant1.colIndex !== null &&
+    //   plant2.colIndex !== null
+    // ) {
+    //   if (
+    //     (Math.abs(plant1.rowIndex - plant2.rowIndex) === 1 &&
+    //       plant1.colIndex - plant2.colIndex === 0) ||
+    //     (plant1.rowIndex - plant2.rowIndex === 0 &&
+    //       Math.abs(plant1.colIndex - plant2.colIndex) === 1)
+    //   ) {
+    //     console.log(
+    //       plant1.commonName + " and " + plant2.commonName + " are close!"
+    //     );
 
-        return true;
-      } else {
-        if (
-          candidateParents &&
-          candidateParents[0] == plant1 &&
-          candidateParents[1] == plant2 &&
-          timeout !== null
-        ) {
-          console.log("cleartimeout");
-          clearTimeout(timeout);
-          timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
-        }
-        return false;
-      }
-    } else {
-      return false;
-    }
+    //     return true;
+    //   } else {
+    //     if (
+    //       candidateParents &&
+    //       candidateParents[0] == plant1 &&
+    //       candidateParents[1] == plant2 &&
+    //       timeout !== null
+    //     ) {
+    //       console.log("cleartimeout");
+    //       clearTimeout(timeout);
+    //       timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
+    //     }
+    //     return false;
+    //   }
+    // } else {
+    //   return false;
+    // }
   }
 
   function checkAnyCloseTo(plant: SelectPlant) {
@@ -130,10 +142,10 @@
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
-        const plant = data.seeds.find(
-          (p) => p.colIndex === c && p.rowIndex === r
-        );
-        grid.push({ plant, row: r, column: c, highlighted: false });
+        // const plant = data.seeds.find(
+        //   (p) => p.colIndex === c && p.rowIndex === r
+        // );
+        // grid.push({ plant, row: r, column: c, highlighted: false });
       }
     }
   };
@@ -172,8 +184,6 @@
 
         const updatedPlant: SelectPlant = {
           ...srcPlant,
-          colIndex: dstCell.column,
-          rowIndex: dstCell.row,
         };
         fetch("/api/plants/" + updatedPlant.id, {
           method: "PATCH",
@@ -215,6 +225,7 @@
 </nav>
 
 <main>
+  <h1>{data.garden.name}</h1>
   <div
     class="grid-container"
     style:width={GRID_WIDTH * CELL_SIZE + "px"}

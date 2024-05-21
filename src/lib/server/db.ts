@@ -4,7 +4,7 @@ import { DB_CONNECTION_STRING } from "$env/static/private";
 import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import { sessionTable, userTable } from "./schema";
+import { sessions, users } from "./schema";
 // dotenv.config();
 
 // console.log(DB_CONNECTION_STRING);
@@ -12,8 +12,4 @@ const client = postgres(DB_CONNECTION_STRING);
 
 export const db = drizzle(client, { schema });
 
-export const adapter = new DrizzlePostgreSQLAdapter(
-  db,
-  sessionTable,
-  userTable
-);
+export const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
