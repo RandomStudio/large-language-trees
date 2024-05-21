@@ -329,6 +329,7 @@
             console.log("will attach image", imageURL);
             candidateChild.imageUrl = imageURL;
           }
+          console.log(candidateChild);
           const res = await fetch("/api/plants", {
             method: "POST",
             body: JSON.stringify(candidateChild),
