@@ -104,6 +104,11 @@
             confirmBreed([plant1, plant2])
               .then((newPlant) => {
                 candidateChild = newPlant;
+                candidateChild = checkPositionAround(
+                  candidateChild,
+                  plant1,
+                  plant2,
+                );
                 waitingForGeneration = false;
               })
               .catch((e) => {
@@ -116,6 +121,53 @@
     }
   }
 
+  function checkPositionAround(
+    newPlant: SelectPlant,
+    parent1: SelectPlant,
+    parent2: SelectPlant,
+  ) {
+    let listPositions = [];
+    const numbers = [-1, 1];
+    for (const plant of data.seeds) {
+      for (const row_add of numbers) {
+        for (const col_add of numbers) {
+          if (
+            parent1.colIndex + col_add != plant.colIndex ||
+            parent1.rowIndex + row_add != plant.rowIndex
+          ) {
+            listPositions.push([
+              parent1.rowIndex + row_add,
+              parent1.colIndex + col_add,
+            ]);
+            if (
+              parent2.colIndex + col_add != plant.colIndex ||
+              parent2.rowIndex + row_add != plant.rowIndex
+            ) {
+              listPositions.push([
+                parent2.rowIndex + row_add,
+                parent2.colIndex + col_add,
+              ]);
+            }
+          }
+        }
+      }
+    }
+    console.log(listPositions);
+    let pos = selectRandomElement(listPositions);
+    let plantWithPosition: SelectPlant;
+    plantWithPosition = newPlant;
+    plantWithPosition.rowIndex = pos[0];
+    plantWithPosition.colIndex = pos[1];
+    return plantWithPosition;
+  }
+
+  function selectRandomElement(array: Array) {
+    if (array.length === 0) {
+      throw new Error("");
+    }
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+  }
   interface GridCell {
     plant?: SelectPlant;
     highlighted: boolean;
