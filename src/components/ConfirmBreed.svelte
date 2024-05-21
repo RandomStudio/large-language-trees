@@ -28,6 +28,22 @@
       console.error("Error fetching generated new image");
     }
   };
+
+  const messages = [
+    "Plants are being dug up",
+    "the roots are intertwining",
+    "DNA is being mixed up",
+    "A new seed is created",
+    "Watering the new plant",
+    "Flowers are budding",
+  ];
+  let currentIndex = 0;
+
+  setInterval(() => {
+    if (currentIndex < messages.length - 1) {
+      currentIndex = (currentIndex + 1) % messages.length;
+    }
+  }, 3000);
 </script>
 
 <div class="overlay">
@@ -38,7 +54,7 @@
     {/if}
     {#if waitingForImage}
       <div>
-        <div>Generating image...</div>
+        <div id="message">{messages[currentIndex]}</div>
         <Spinner />
       </div>
     {:else}
