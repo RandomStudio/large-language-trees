@@ -4,6 +4,8 @@
 
   export let candidateChild: InsertPlant;
 
+  export let data: { seeds: SelectPlant[] };
+
   export let onCancel: () => any;
   export let onConfirm: (imageURL: string | null) => any;
 
@@ -23,7 +25,14 @@
       console.log("Please write something");
       return;
     }
+    for (const plant of data.seeds) {
+      if (plant.commonName == textInput) {
+        console.log("this name already exists");
+        return;
+      }
+    }
     console.log("Name given:", textInput);
+
     if (candidateChild.description && candidateChild.commonName) {
       candidateChild.description = replaceWordInText(
         candidateChild.description,
@@ -31,7 +40,6 @@
         textInput,
       );
     }
-
     candidateChild.commonName = textInput;
   }
   let waitingForImage = false;

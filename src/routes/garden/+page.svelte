@@ -267,6 +267,7 @@
   {#if candidateChild}
     <ConfirmBreed
       {candidateChild}
+      {data}
       onCancel={() => {
         candidateChild = null;
       }}
