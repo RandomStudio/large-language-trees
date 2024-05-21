@@ -3,6 +3,8 @@
   export let data: { seeds: SelectPlant[] };
   import { pickMultiple } from "random-elements";
 
+  import Dropdown from "../../components/Dropdown.svelte";
+
   import "./main.css";
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../../defaults/constants";
   import PlantCell from "../../components/PlantCell.svelte";
@@ -319,6 +321,8 @@
 {#if waitingForGeneration}
   <FullScreenLoading />
 {/if}
+
+<Dropdown {data} />
 
 <style>
   main {
