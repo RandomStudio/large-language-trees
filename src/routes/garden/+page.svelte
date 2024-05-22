@@ -240,6 +240,7 @@
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
             class="empty"
+            class:highlight={gridCell.highlighted}
             on:drop={(e) => {
               drop(e, gridIndex);
             }}
@@ -399,6 +400,10 @@
   .cell .empty {
     width: 100%;
     height: 100%;
+  }
+
+  .cell .highlight {
+    border: 1px solid rgb(193, 212, 193);
   }
 
   .debug-button {
