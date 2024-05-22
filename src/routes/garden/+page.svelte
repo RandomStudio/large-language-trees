@@ -348,7 +348,6 @@
 
   .cell {
     position: absolute; /* Positioning relative to .grid-container */
-    border: 1px solid black;
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
   }

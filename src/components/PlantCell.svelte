@@ -16,6 +16,11 @@
     dispatchDragStart("dragStart", { e, gridIndex });
   }}
 >
+  <div class="dot top-left"></div>
+  <div class="dot top-right"></div>
+  <div class="dot bottom-left"></div>
+  <div class="dot bottom-right"></div>
+
   <div class="draggable">
     {#if data.imageUrl}
       <img src={data.imageUrl} alt="the real plant" class="thumbnail" />
@@ -37,6 +42,34 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .dot {
+    width: 2px; /* Width of the dot */
+    height: 2px; /* Height of the dot */
+    background-color: black; /* Color of the dot */
+    border-radius: 50%; /* Makes the dot round */
+    position: absolute; /* Needed for explicit positioning within the cell */
+  }
+
+  .top-left {
+    top: 1px;
+    left: 1px;
+  }
+
+  .top-right {
+    top: 1px;
+    right: 1px;
+  }
+
+  .bottom-left {
+    bottom: 1px;
+    left: 1px;
+  }
+
+  .bottom-right {
+    bottom: 1px;
+    right: 1px;
   }
 
   .draggable {
