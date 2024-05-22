@@ -241,6 +241,7 @@
           <div
             class="empty"
             class:highlight={gridCell.highlighted}
+            class:highlight={gridCell.highlighted}
             on:drop={(e) => {
               drop(e, gridIndex);
             }}
@@ -268,6 +269,7 @@
   {#if candidateChild}
     <ConfirmBreed
       {candidateChild}
+      {data}
       onCancel={() => {
         candidateChild = null;
       }}
@@ -318,6 +320,8 @@
   <FullScreenLoading />
 {/if}
 
+<a href="./garden/info" class="hover-bold">?</a>
+
 <style>
   main {
     display: flex;
@@ -361,6 +365,10 @@
     position: absolute; /* Positioning relative to .grid-container */
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
+  }
+
+  .cell .highlight {
+    border: 2px solid lightgreen;
   }
 
   p {

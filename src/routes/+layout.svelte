@@ -2,13 +2,9 @@
     import "./garden/main.css";
 </script>
 
-<body>
-    <div class="app">
-        <slot />
-    </div>
-</body>
-
-<a href="/garden/info" class="hover-bold">?</a>
+<div class="app">
+    <slot />
+</div>
 
 <style>
     :global(.container) {

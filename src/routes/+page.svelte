@@ -16,6 +16,8 @@
   </form>
 </main>
 
+<a href="./garden/info" class="hover-bold">?</a>
+
 <style>
   main {
     display: flex;
