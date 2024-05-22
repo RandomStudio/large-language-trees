@@ -328,8 +328,6 @@
     height: 100vh; /* Full viewport height */
     overflow: hidden; /* Hide overflow */
     position: relative; /* Ensures that it is the positioning context for any absolutely positioned children, if needed */
-    justify-content: center; /* Centers content horizontally */
-    align-items: center; /* Centers content vertically */
     height: 100vh; /* Takes full viewport height */
     margin: 0; /* Removes default margin */
     padding: 20px; /* Adds padding around the content */
@@ -338,12 +336,27 @@
   }
 
   .grid-container {
-    display: block;
+    display: grid;
     position: relative; /* Essential for absolutely positioned children */
+    grid-template-columns: repeat(20, 1fr); /* 20 columns */
+    grid-template-rows: repeat(20, 1fr); /* 20 rows */
+    gap: calc(100% / 21);
     margin: auto; /* Center the container horizontally */
     padding: 10px;
     box-sizing: border-box; /* Include border and padding in the width/height */
     top: -50px;
+    overflow: hidden;
+  }
+
+  .grid-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, #d7d1d1 5%, transparent 5%);
+    background-size: calc(100% / 20) calc(100% / 20);
   }
 
   .cell {
