@@ -38,6 +38,15 @@
 
   let waitingForGeneration = false;
 
+  interface GridCell {
+    plant?: SelectPlant;
+    highlighted: boolean;
+    column: number;
+    row: number;
+  }
+
+  let grid: GridCell[] = [];
+
   async function confirmBreed(
     parents: [SelectPlant, SelectPlant]
   ): Promise<InsertPlant> {
@@ -60,85 +69,77 @@
   }
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
-    return false;
-    // if (plant1.id === plant2.id) {
-    //   return false; // same plant!
-    // }
-    // if (
-    //   plant1.rowIndex !== null &&
-    //   plant2.rowIndex !== null &&
-    //   plant1.colIndex !== null &&
-    //   plant2.colIndex !== null
-    // ) {
-    //   if (
-    //     (Math.abs(plant1.rowIndex - plant2.rowIndex) === 1 &&
-    //       plant1.colIndex - plant2.colIndex === 0) ||
-    //     (plant1.rowIndex - plant2.rowIndex === 0 &&
-    //       Math.abs(plant1.colIndex - plant2.colIndex) === 1)
-    //   ) {
-    //     console.log(
-    //       plant1.commonName + " and " + plant2.commonName + " are close!"
-    //     );
+    const plant1Cell = grid.find((c) => c.plant && c.plant.id === plant1.id);
+    const plant2Cell = grid.find((c) => c.plant && c.plant.id === plant2.id);
 
-    //     return true;
-    //   } else {
-    //     if (
-    //       candidateParents &&
-    //       candidateParents[0] == plant1 &&
-    //       candidateParents[1] == plant2 &&
-    //       timeout !== null
-    //     ) {
-    //       console.log("cleartimeout");
-    //       clearTimeout(timeout);
-    //       timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
-    //     }
-    //     return false;
-    //   }
-    // } else {
-    //   return false;
-    // }
-  }
+    if (plant1Cell && plant2Cell) {
+      if (
+        Math.abs(plant1Cell.row - plant2Cell.row) <= 1 &&
+        Math.abs(plant1Cell.column - plant2Cell.column) <= 1
+      ) {
+        console.log(
+          plant1.commonName + " and " + plant2.commonName + " are close!"
+        );
 
-  function checkAnyCloseTo(plant: SelectPlant) {
-    console.log("checkAnyCloseTo");
-    const { seeds } = data;
-    for (let i = 0; i < seeds.length; i++) {
-      if (seeds[i] != plant) {
-        const [plant1, plant2] = [plant, seeds[i]];
-        if (areClose(plant1, plant2)) {
-          candidateParents = [plant1, plant2];
-          timeout = setTimeout(() => {
-            console.log(
-              "ready for mixing : " +
-                plant1.commonName +
-                " and " +
-                plant2.commonName +
-                " !"
-            );
-            waitingForGeneration = true;
-            confirmBreed([plant1, plant2])
-              .then((newPlant) => {
-                candidateChild = newPlant;
-                waitingForGeneration = false;
-              })
-              .catch((e) => {
-                console.error("Error from confirm/generate breed:", e);
-                waitingForGeneration = false;
-              });
-          }, 4000);
-        }
+        return true;
+      } else {
+        // if (
+        //   candidateParents &&
+        //   candidateParents[0] == plant1 &&
+        //   candidateParents[1] == plant2 &&
+        //   timeout !== null
+        // ) {
+        //   console.log("cleartimeout");
+        //   clearTimeout(timeout);
+        //   timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
+        // }
+        return false;
       }
+    } else {
+      // do not have two occupied cells to compare
+      return false;
     }
   }
 
-  interface GridCell {
-    plant?: SelectPlant;
-    highlighted: boolean;
-    column: number;
-    row: number;
+  function checkAnyCloseTo(cell: GridCell) {
+    console.log("checkAnyCloseTo cell at", cell.row, cell.column);
+    if (cell.plant) {
+      console.log("plant is", cell.plant);
+      const thisPlant = cell.plant;
+      for (const entry of data.garden.plantsInGarden) {
+        const otherPlant = entry.plant;
+        if (thisPlant.id !== otherPlant.id) {
+          // not self
+          const [plant1, plant2] = [thisPlant, otherPlant];
+          if (areClose(plant1, plant2)) {
+            candidateParents = [plant1, plant2];
+            timeout = setTimeout(() => {
+              console.log(
+                "ready for mixing : " +
+                  plant1.commonName +
+                  " and " +
+                  plant2.commonName +
+                  " !"
+              );
+              waitingForGeneration = true;
+              confirmBreed([plant1, plant2])
+                .then((newPlant) => {
+                  candidateChild = newPlant;
+                  waitingForGeneration = false;
+                })
+                .catch((e) => {
+                  console.error("Error from confirm/generate breed:", e);
+                  waitingForGeneration = false;
+                });
+            }, 4000);
+          }
+        }
+      }
+    } else {
+      // empty cell no need to check
+      return false;
+    }
   }
-
-  let grid: GridCell[] = [];
 
   const populateGrid = () => {
     console.log("populateGrid");
@@ -195,7 +196,7 @@
       const srcPlant = grid[srcIndex].plant;
       if (srcPlant) {
         grid[dstIndex].plant = srcPlant;
-        grid[srcIndex].plant = undefined;
+        grid[srcIndex].plant = undefined; // clear original cell
         grid[dstIndex].highlighted = false;
 
         const dstCell = grid[dstIndex];
@@ -217,7 +218,7 @@
           body: JSON.stringify(updated),
         })
           .then((res) => {
-            // checkAnyCloseTo(updatedPlant);
+            checkAnyCloseTo(dstCell);
 
             if (res.status == 200) {
               console.info("Updated plant position on backend OK:", res);
