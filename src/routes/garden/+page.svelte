@@ -300,8 +300,6 @@
     />
   {/if}
 
-  <a href="/info" class="hover-bold">?</a>
-
   <!-- <button
     class="debug-button"
     on:click={async () => {
@@ -314,7 +312,6 @@
   > -->
 </main>
 
-<a href="/info" class="hover-bold">?</a>
 <a href="/landing_page">Landing page</a>
 
 {#if waitingForGeneration}
@@ -391,10 +388,6 @@
     border-radius: 1px; /* Sets the border radius to 1 pixel */
     font-family: Arial, sans-serif; /* Explicitly sets the font type to Arial for the button */
     font-size: 15px;
-  }
-
-  .hover-bold:hover {
-    font-weight: bold; /* Makes the font bold on hover */
   }
 
   .cell .empty {
