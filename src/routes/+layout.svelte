@@ -1,10 +1,16 @@
-<div class="app">
-    <slot />
-</div>
+<script>
+    import "./garden/main.css";
+</script>
+
+<body>
+    <div class="app">
+        <slot />
+    </div>
+</body>
+
+<a href="/garden/info" class="hover-bold">?</a>
 
 <style>
-    @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
     :global(.container) {
         display: flex;
         margin: 2em;
@@ -32,5 +38,21 @@
         font-weight: 800;
         border: 0;
         padding: 1em;
+    }
+
+    .hover-bold:hover {
+        font-weight: bold; /* Makes the font bold on hover */
+    }
+
+    .hover-bold {
+        font-size: 15px;
+        position: fixed;
+        left: 10px;
+        bottom: 10px;
+        cursor: pointer; /* Changes the cursor to a pointer to indicate it's interactive */
+        transition: font-weight 0.2s ease; /* Optional: adds a smooth transition for the font weight change */
+        text-decoration: none; /* Optional: removes underline from the link, depending on your design needs */
+        color: inherit; /* Optional: ensures the link color matches the surrounding text unless otherwise needed */
+        z-index: 1000;
     }
 </style>

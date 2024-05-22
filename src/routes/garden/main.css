@@ -1,32 +1,16 @@
-body{
-    font-size:10px;
+body {
+    font-size: 10px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-h1{
-    text-align:center;
-    font-size:15px;
+h1 {
+    text-align: center;
+    font-size: 15px;
 }
 
-h2{
-    text-align:center;
-    font-size:15px;
-}
-
-.hover-bold {
-    font-size:15px;
-    position:fixed;
-    left:10px;
-    bottom:10px;
-    cursor: pointer; /* Changes the cursor to a pointer to indicate it's interactive */
-    transition: font-weight 0.2s ease; /* Optional: adds a smooth transition for the font weight change */
-    text-decoration: none; /* Optional: removes underline from the link, depending on your design needs */
-    color: inherit; /* Optional: ensures the link color matches the surrounding text unless otherwise needed */
-    z-index:1000;
-}
-
-.hover-bold:hover {
-    font-weight: bold; /* Makes the font bold on hover */
+h2 {
+    text-align: center;
+    font-size: 15px;
 }
 
 
@@ -61,15 +45,16 @@ h2{
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    width: 300px; /* optional: define a width for the popup */
+    width: 300px;
+    /* optional: define a width for the popup */
 }
 
 #imageContainer {
-    width: 100%; 
-    text-align:center;
+    width: 100%;
+    text-align: center;
 }
 
 .custom-image {
-    max-width: 100%; 
+    max-width: 100%;
     height: auto;
 }
