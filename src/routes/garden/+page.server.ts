@@ -13,9 +13,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   console.log("******** (re)load page data");
   if (userId) {
-    const garden = await getUserGarden(userId);
-    console.log("user garden:", garden);
     const seeds = await getAllPlants();
+    const garden = await getUserGarden(userId);
+    // console.log("retrieved user garden:", JSON.stringify(garden, null, 2));
     return { seeds, newSeed: null, username, garden };
   } else {
     throw Error("userId missing");

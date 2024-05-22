@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, type InferSelectModel } from "drizzle-orm";
 import {
   integer,
   json,
@@ -25,7 +25,7 @@ export const users = pgTable("users", {
 });
 
 export const usersRelations = relations(users, ({ one }) => ({
-  gardens: one(gardens, {
+  myGarden: one(gardens, {
     fields: [users.id],
     references: [gardens.userId],
   }),
@@ -68,13 +68,17 @@ export const gardensToPlants = pgTable(
 export const gardensToPlantsRelations = relations(
   gardensToPlants,
   ({ one }) => ({
-    garden: one(plants, {
-      fields: [gardensToPlants.plantId],
-      references: [plants.id],
-    }),
-    plant: one(gardens, {
+    garden: one(gardens, {
       fields: [gardensToPlants.gardenId],
       references: [gardens.id],
     }),
+    plant: one(plants, {
+      fields: [gardensToPlants.plantId],
+      references: [plants.id],
+    }),
   })
 );
+
+export const gardensRelations = relations(gardens, ({ many }) => ({
+  plantsInGarden: many(gardensToPlants),
+}));

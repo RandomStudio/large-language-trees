@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     type InsertPlant,
+    type MyGarden,
     type SelectGarden,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
@@ -8,7 +9,7 @@
   interface GardenViewData {
     seeds: SelectPlant[];
     username: string;
-    garden: SelectGarden;
+    garden: MyGarden;
   }
 
   export let data: GardenViewData;
@@ -139,13 +140,22 @@
   let grid: GridCell[] = [];
 
   const populateGrid = () => {
+    console.log("populateGrid");
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
-        // const plant = data.seeds.find(
-        //   (p) => p.colIndex === c && p.rowIndex === r
-        // );
-        // grid.push({ plant, row: r, column: c, highlighted: false });
+        const plant = data.garden.plantsInGarden.find(
+          (p) => p.colIndex === c && p.rowIndex === r
+        );
+        if (plant) {
+          const plantObject = plant.plant;
+          grid.push({
+            plant: plantObject,
+            row: r,
+            column: c,
+            highlighted: false,
+          });
+        }
       }
     }
   };

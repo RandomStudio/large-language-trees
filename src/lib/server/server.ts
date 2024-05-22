@@ -8,9 +8,11 @@ import { eq } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   InsertPlant,
+  MyGarden,
   SelectGarden,
   SelectPlant,
   SelectUser,
+  UserWithGarden,
 } from "$lib/types";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
@@ -30,11 +32,9 @@ export const getAllPlants = async () => {
 
     await Promise.all(
       newPlants.map((p) => {
-        const { commonName, description, properties, imageUrl } = p;
+        const { commonName, description, properties, imageUrl, id } = p;
         // const rowIndex = rows[index];
         // const colIndex = columns[index];
-        const id = uuidv4();
-        console.log("inserting", { commonName, id });
         return db.insert(plants).values({
           id,
           commonName,
@@ -53,14 +53,18 @@ export const getAllPlants = async () => {
   }
 };
 
-export const getUserGarden = async (userId: string): Promise<SelectGarden> => {
+export const getUserGarden = async (userId: string): Promise<MyGarden> => {
   // const result  = await db.select().from(users).where(eq(users.id, userId));
-  const user = await db.query.users.findFirst({
+
+  const user: UserWithGarden | undefined = await db.query.users.findFirst({
     where: eq(users.id, userId),
-    with: { gardens: true },
+    with: {
+      myGarden: { with: { plantsInGarden: { with: { plant: true } } } },
+    },
   });
   if (user) {
-    if (user.gardens === null) {
+    console.log("full result:", JSON.stringify(user, null, 2));
+    if (user.myGarden === null) {
       console.log("User has no garden (yet)");
       const id = uuidv4();
       const newGardenResult = await db
@@ -83,19 +87,40 @@ export const getUserGarden = async (userId: string): Promise<SelectGarden> => {
         console.log(
           `Adding plant ${plant.commonName} at position [${colIndex},${rowIndex}]...`
         );
+        const plantId = plant.id;
+        const gardenId = newGarden.id;
+        console.log("keys:", { plantId, gardenId });
         await db.insert(gardensToPlants).values({
-          plantId: plant.id,
-          gardenId: newGarden.id,
+          plantId,
+          gardenId,
           colIndex,
           rowIndex,
         });
       });
 
-      return newGarden;
+      const gardenWithPlants: MyGarden | undefined =
+        await db.query.gardens.findFirst({
+          where: eq(gardens.id, newGarden.id),
+          with: {
+            plantsInGarden: { with: { plant: true } },
+          },
+        });
+
+      if (gardenWithPlants) {
+        return gardenWithPlants;
+      } else {
+        throw Error("could not find garden just created");
+      }
+
       // return { id: 0, name: "bla", userId: user.id };
+    } else {
+      console.log("user has garden named", user.myGarden.name);
+      // const gardenWithPlants = await db.query.gardens.findMany({
+      //   with: { gardensToPlants: true },
+      // });
+      // console.log(JSON.stringify(gardenWithPlants, null, 2));
+      return user.myGarden;
     }
-    console.log("user has garden named", user.gardens.name);
-    return user.gardens;
   } else {
     throw Error(`user not found for userId "${userId}"`);
   }
