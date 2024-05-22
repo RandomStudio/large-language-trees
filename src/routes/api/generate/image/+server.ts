@@ -71,8 +71,7 @@ export const POST: RequestHandler = async ({ request }) => {
 };
 
 const buildImagePrompt = (description: string): string =>
-  `I want you to generate a pixelart style image, with a white background, based on the description that follows:\n\n` +
-  description;
+  "Create a pixel art image of a fictional plant depicted as growing naturally, not as part of a bouquet." + description + 'The style of the image should be reminiscent of traditional 8-bit video game graphics. Most importantly, ensure the background is exactly RGB (255,255,255) with absolutely no additional details, decorations, or colors around the plant.".';
 
 const streamToS3 = async (fetchImage: Response, id: string) => {
   const stream = fetchImage.body;
