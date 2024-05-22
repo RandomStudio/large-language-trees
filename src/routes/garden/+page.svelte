@@ -72,28 +72,13 @@
     const plant1Cell = grid.find((c) => c.plant && c.plant.id === plant1.id);
     const plant2Cell = grid.find((c) => c.plant && c.plant.id === plant2.id);
 
+    console.log("areClose", plant1.id, plant2.id);
+
     if (plant1Cell && plant2Cell) {
-      if (
+      return (
         Math.abs(plant1Cell.row - plant2Cell.row) <= 1 &&
         Math.abs(plant1Cell.column - plant2Cell.column) <= 1
-      ) {
-        console.log(
-          plant1.commonName + " and " + plant2.commonName + " are close!"
-        );
-
-        return true;
-      } else {
-        if (
-          candidateParents &&
-          candidateParents.find((p) => p.id === plant1.id) &&
-          timeout !== null
-        ) {
-          console.log("cleartimeout");
-          clearTimeout(timeout);
-          timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
-        }
-        return false;
-      }
+      );
     } else {
       // do not have two occupied cells to compare
       return false;
@@ -187,6 +172,10 @@
 
   function drop(e: DragEvent, dstIndex: number) {
     e.preventDefault();
+    if (timeout !== null) {
+      console.log("clearTimeout");
+      clearTimeout(timeout);
+    }
     console.log("drop to grid index", dstIndex);
     const cellDropData = e.dataTransfer?.getData("text/plain");
     if (cellDropData) {
