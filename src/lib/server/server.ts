@@ -3,7 +3,7 @@ import DefaultSeeds from "../../defaults/seeds.json";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
-import { gardens, plants, users } from "./schema";
+import { gardens, gardensToPlants, plants, users } from "./schema";
 import { eq } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
@@ -15,6 +15,7 @@ import type {
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
+import { pickMultipleRandomElements, pickRandomIndexes } from "random-elements";
 
 export const getAllPlants = async () => {
   const existingPlants = await db.query.plants.findMany();
@@ -28,7 +29,7 @@ export const getAllPlants = async () => {
     // const columns = getRandomIndices(GRID_WIDTH, newPlants.length);
 
     await Promise.all(
-      newPlants.map((p, index) => {
+      newPlants.map((p) => {
         const { commonName, description, properties, imageUrl } = p;
         // const rowIndex = rows[index];
         // const colIndex = columns[index];
@@ -62,7 +63,7 @@ export const getUserGarden = async (userId: string): Promise<SelectGarden> => {
     if (user.gardens === null) {
       console.log("User has no garden (yet)");
       const id = uuidv4();
-      const newGarden = await db
+      const newGardenResult = await db
         .insert(gardens)
         .values({
           id,
@@ -70,7 +71,27 @@ export const getUserGarden = async (userId: string): Promise<SelectGarden> => {
           userId: user.id,
         })
         .returning();
-      return newGarden[0];
+      const newGarden = newGardenResult[0];
+
+      // Also add default plants into this garden
+      const defaultPlants = DefaultSeeds;
+      const rowIndexes = pickRandomIndexes(GRID_HEIGHT, defaultPlants.length);
+      const colIndexes = pickRandomIndexes(GRID_WIDTH, defaultPlants.length);
+      defaultPlants.forEach(async (plant, i) => {
+        const rowIndex = rowIndexes[i];
+        const colIndex = colIndexes[i];
+        console.log(
+          `Adding plant ${plant.commonName} at position [${colIndex},${rowIndex}]...`
+        );
+        await db.insert(gardensToPlants).values({
+          plantId: plant.id,
+          gardenId: newGarden.id,
+          colIndex,
+          rowIndex,
+        });
+      });
+
+      return newGarden;
       // return { id: 0, name: "bla", userId: user.id };
     }
     console.log("user has garden named", user.gardens.name);
@@ -160,7 +181,7 @@ const parseNewPlant = (text: string): InsertPlant | null => {
   }
 };
 
-export const attachImageToPlant = async (id: number, imageUrl: string) => {
+export const attachImageToPlant = async (id: string, imageUrl: string) => {
   const res = await db
     .update(plants)
     .set({ imageUrl })
