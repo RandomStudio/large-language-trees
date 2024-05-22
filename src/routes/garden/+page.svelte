@@ -329,10 +329,25 @@
             method: "POST",
             body: JSON.stringify(candidateChild),
           });
-          const { status, statusText } = res;
+          const { status, statusText, body } = res;
           if (status === 201) {
             console.log("Sucessfully added!");
             // TODO: Also add plant to user's garden (gardenToPlants)
+            const plantId = candidateChild.id;
+            const gardenId = data.garden.id;
+            const rowIndex = 0;
+            const colIndex = 0;
+            const updated = {
+              plantId,
+              gardenId,
+              rowIndex,
+              colIndex,
+            };
+            const placementRes = await fetch("/api/plantsInGarden", {
+              method: "POST",
+              body: JSON.stringify(updated),
+            });
+            console.log("Placed in garden?", placementRes);
             await invalidateAll();
             populateGrid();
             candidateChild = null;
