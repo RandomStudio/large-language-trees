@@ -3,10 +3,15 @@ import DefaultSeeds from "../../defaults/seeds.json";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
-import { plants, users } from "./schema";
+import { gardens, plants, users } from "./schema";
 import { eq } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
-import type { InsertPlant, SelectPlant, SelectUser } from "$lib/types";
+import type {
+  InsertPlant,
+  SelectGarden,
+  SelectPlant,
+  SelectUser,
+} from "$lib/types";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 
@@ -44,13 +49,25 @@ export const getAllPlants = async () => {
   }
 };
 
-export const getUserGarden = async (userId: string) => {
+export const getUserGarden = async (userId: string): Promise<SelectGarden> => {
   // const result  = await db.select().from(users).where(eq(users.id, userId));
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: { gardens: true },
   });
   if (user) {
+    if (user.gardens === null) {
+      console.log("User has no garden (yet)");
+      const newGarden = await db
+        .insert(gardens)
+        .values({
+          name: `${user.username}'s Garden`,
+          userId: user.id,
+        })
+        .returning();
+      return newGarden[0];
+      // return { id: 0, name: "bla", userId: user.id };
+    }
     console.log("user has garden named", user.gardens.name);
     return user.gardens;
   } else {

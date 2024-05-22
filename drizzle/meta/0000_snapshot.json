@@ -1,5 +1,5 @@
 {
-  "id": "5bab93da-421b-473d-ae15-ecce68dc49e2",
+  "id": "a56f7129-1350-455b-a7c6-b2f5213721f8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -10,12 +10,18 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "INTEGER GENERATED ALWAYS AS IDENTITY",
           "primaryKey": true,
           "notNull": true
         },
         "user_id": {
           "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -46,13 +52,13 @@
       "columns": {
         "garden_id": {
           "name": "garden_id",
-          "type": "text",
+          "type": "INTEGER GENERATED ALWAYS AS IDENTITY",
           "primaryKey": false,
           "notNull": true
         },
         "plant_id": {
           "name": "plant_id",
-          "type": "serial",
+          "type": "INTEGER GENERATED ALWAYS AS IDENTITY",
           "primaryKey": false,
           "notNull": true
         },
@@ -60,13 +66,13 @@
           "name": "rowIndex",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "colIndex": {
           "name": "colIndex",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -115,7 +121,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "INTEGER GENERATED ALWAYS AS IDENTITY",
           "primaryKey": true,
           "notNull": true
         },

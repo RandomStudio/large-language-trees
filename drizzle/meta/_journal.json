@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1716287069772,
-      "tag": "0000_lame_omega_red",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1716287109957,
-      "tag": "0001_icy_gorgon",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1716287329825,
-      "tag": "0002_steady_matthew_murdock",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1716287386814,
-      "tag": "0003_slow_surge",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1716287463463,
-      "tag": "0004_faulty_swarm",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1716288632295,
-      "tag": "0005_condemned_energizer",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1716288803861,
-      "tag": "0006_robust_ben_urich",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1716289159454,
-      "tag": "0007_third_miek",
+      "when": 1716292440762,
+      "tag": "0000_charming_next_avengers",
       "breakpoints": true
     }
   ]

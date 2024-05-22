@@ -4,13 +4,12 @@ import {
   json,
   pgTable,
   primaryKey,
-  serial,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
 
 export const plants = pgTable("plants", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   commonName: text("common_name"),
   description: text("description"),
   properties: json("properties"), // TODO: could be separate table, later
@@ -55,7 +54,7 @@ export const gardensToPlants = pgTable(
     gardenId: text("garden_id")
       .notNull()
       .references(() => gardens.id),
-    plantId: serial("plant_id")
+    plantId: text("plant_id")
       .notNull()
       .references(() => plants.id),
     rowIndex: integer("rowIndex").notNull(),

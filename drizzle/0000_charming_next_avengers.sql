@@ -1,18 +1,19 @@
 CREATE TABLE IF NOT EXISTS "gardens" (
-	"id" text PRIMARY KEY NOT NULL,
-	"user_id" text
+	"id" "INTEGER GENERATED ALWAYS AS IDENTITY" PRIMARY KEY NOT NULL,
+	"user_id" text,
+	"name" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "gardens_to_plants" (
-	"garden_id" text NOT NULL,
-	"plant_id" serial NOT NULL,
-	"rowIndex" integer,
-	"colIndex" integer,
+	"garden_id" "INTEGER GENERATED ALWAYS AS IDENTITY" NOT NULL,
+	"plant_id" "INTEGER GENERATED ALWAYS AS IDENTITY" NOT NULL,
+	"rowIndex" integer NOT NULL,
+	"colIndex" integer NOT NULL,
 	CONSTRAINT "gardens_to_plants_garden_id_plant_id_pk" PRIMARY KEY("garden_id","plant_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "plants" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" "INTEGER GENERATED ALWAYS AS IDENTITY" PRIMARY KEY NOT NULL,
 	"common_name" text,
 	"description" text,
 	"properties" json,
