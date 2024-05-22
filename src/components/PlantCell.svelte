@@ -58,14 +58,17 @@
   }
 
   .plant-name {
+    display: none; /* Initially hidden */
     position: absolute;
-    top: calc(
-      100% + 13px
-    ); /* Placer le texte juste en dessous de l'image agrandie */
-    left: 50%; /* Centré horizontalement */
-    transform: translateX(-50%); /* Ajustement précis pour le centrage */
+    top: calc(100% + 13px);
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 0.6em;
-    white-space: nowrap; /* Empêche le texte de passer à la ligne */
-    overflow: visible; /* Permet au texte de dépasser du conteneur */
+    white-space: nowrap;
+    overflow: visible;
+  }
+
+  .draggable:hover .plant-name {
+    display: block; /* Show on hover */
   }
 </style>
