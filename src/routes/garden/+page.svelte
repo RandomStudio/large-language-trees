@@ -332,6 +332,7 @@
           const { status, statusText } = res;
           if (status === 201) {
             console.log("Sucessfully added!");
+            // TODO: Also add plant to user's garden (gardenToPlants)
             await invalidateAll();
             populateGrid();
             candidateChild = null;

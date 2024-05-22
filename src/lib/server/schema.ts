@@ -14,8 +14,8 @@ export const plants = pgTable("plants", {
   description: text("description"),
   properties: json("properties"), // TODO: could be separate table, later
   imageUrl: text("image_url"),
-  parent1: integer("parent1_id"),
-  parent2: integer("parent2_id"),
+  parent1: text("parent1_id"),
+  parent2: text("parent2_id"),
 });
 
 export const users = pgTable("users", {

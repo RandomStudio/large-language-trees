@@ -22,6 +22,13 @@
       "when": 1716379053440,
       "tag": "0002_woozy_mad_thinker",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1716389451526,
+      "tag": "0003_wild_black_tarantula",
+      "breakpoints": true
     }
   ]
 }
