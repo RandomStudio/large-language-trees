@@ -63,7 +63,7 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
     },
   });
   if (user) {
-    console.log("full result:", JSON.stringify(user, null, 2));
+    // console.log("full result:", JSON.stringify(user, null, 2));
     if (user.myGarden === null) {
       console.log("User has no garden (yet)");
       const id = uuidv4();
