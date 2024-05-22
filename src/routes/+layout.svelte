@@ -1,3 +1,7 @@
+<script>
+    import "./garden/main.css";
+</script>
+
 <div class="app">
     <slot />
 </div>

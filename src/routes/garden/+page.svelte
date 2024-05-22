@@ -269,6 +269,7 @@
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
             class="empty"
+            class:highlight={gridCell.highlighted}
             on:drop={(e) => {
               drop(e, gridIndex);
             }}
@@ -296,6 +297,7 @@
   {#if candidateChild}
     <ConfirmBreed
       {candidateChild}
+      {data}
       onCancel={() => {
         candidateChild = null;
       }}
@@ -340,12 +342,11 @@
   > -->
 </main>
 
-<a href="/info" class="hover-bold">?</a>
-<a href="/landing_page">Landing page</a>
-
 {#if waitingForGeneration}
   <FullScreenLoading />
 {/if}
+
+<a href="./garden/info" class="hover-bold">?</a>
 
 <style>
   main {
@@ -375,9 +376,13 @@
 
   .cell {
     position: absolute; /* Positioning relative to .grid-container */
-    border: 1px solid black;
+    border: 1px dotted #eee;
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
+  }
+
+  .cell .highlight {
+    border: 2px solid lightgreen;
   }
 
   p {

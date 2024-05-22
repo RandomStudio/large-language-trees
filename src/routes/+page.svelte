@@ -13,6 +13,8 @@
   </div>
 </main>
 
+<a href="./garden/info" class="hover-bold">?</a>
+
 <style>
   main {
     height: 100vh; /* Takes full viewport height */

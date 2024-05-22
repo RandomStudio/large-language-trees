@@ -4,9 +4,44 @@
 
   export let candidateChild: InsertPlant;
 
+  export let data: { seeds: SelectPlant[] };
+
   export let onCancel: () => any;
   export let onConfirm: (imageURL: string | null) => any;
 
+  let textInput = "";
+
+  function replaceWordInText(
+    text: string,
+    targetWord: string,
+    newWord: string,
+  ) {
+    const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
+    return text.replace(regex, newWord);
+  }
+
+  function handleSubmit() {
+    if (textInput.trim() === "") {
+      console.log("Please write something");
+      return;
+    }
+    for (const plant of data.seeds) {
+      if (plant.commonName == textInput) {
+        console.log("this name already exists");
+        return;
+      }
+    }
+    console.log("Name given:", textInput);
+
+    if (candidateChild.description && candidateChild.commonName) {
+      candidateChild.description = replaceWordInText(
+        candidateChild.description,
+        candidateChild.commonName,
+        textInput,
+      );
+    }
+    candidateChild.commonName = textInput;
+  }
   let waitingForImage = false;
   let candidateImage: string | null = null;
 
@@ -28,6 +63,22 @@
       console.error("Error fetching generated new image");
     }
   };
+
+  const messages = [
+    "Plants are being dug up",
+    "the roots are intertwining",
+    "DNA is being mixed up",
+    "A new seed is created",
+    "Watering the new plant",
+    "Flowers are budding",
+  ];
+  let currentIndex = 0;
+
+  setInterval(() => {
+    if (currentIndex < messages.length - 1) {
+      currentIndex = (currentIndex + 1) % messages.length;
+    }
+  }, 3000);
 </script>
 
 <div class="overlay">
@@ -38,7 +89,7 @@
     {/if}
     {#if waitingForImage}
       <div>
-        <div>Generating image...</div>
+        <div id="message">{messages[currentIndex]}</div>
         <Spinner />
       </div>
     {:else}
@@ -49,6 +100,11 @@
     <p>
       Details: <code>{JSON.stringify(candidateChild)}</code>
     </p>
+    <p>Name your discovered flower</p>
+    <form on:submit|preventDefault={handleSubmit}>
+      <input type="text" bind:value={textInput} />
+      <button type="submit">Rename</button>
+    </form>
     <div>
       <button on:click={() => onConfirm(candidateImage)}>✅ Add </button>
       <button on:click={onCancel}>❌ Cancel</button>
