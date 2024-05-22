@@ -313,11 +313,11 @@
   > -->
 </main>
 
-<a href="./garden/info" class="hover-bold">?</a>
-
 {#if waitingForGeneration}
   <FullScreenLoading />
 {/if}
+
+<a href="./garden/info" class="hover-bold">?</a>
 
 <style>
   main {

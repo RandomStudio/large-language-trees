@@ -14,4 +14,4 @@
 <br />
 <span>Chat GPT/ Open AI</span>
 
-<a href="/" class="close-button">&#10006;</a>
+<a href="./" class="close-button">&#10006;</a>
