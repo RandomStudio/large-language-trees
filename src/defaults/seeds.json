@@ -1,6 +1,6 @@
 [
   {
-    "id": 0,
+    "id": "original-gardenia",
     "commonName": "Gardenia",
     "imageUrl": "/plants/Gardenia.webp",
     "properties": {
@@ -17,7 +17,7 @@
     "description": "With striking red blooms featuring 5-7 petals resembling roses, this plant exudes an air of elegance and sophistication. Its lanceolate green leaves with dentate margins provide the perfect backdrop for the captivating flowers. Growing on tall stems reaching 1.8 meters, with each stem measuring approximately 18 centimeters, the Gardenia brings a sense of beauty and refinement to gardens and landscapes, enchanting all who encounter its alluring presence."
   },
   {
-    "id": 0,
+    "id": "original-hibicus",
     "commonName": "Hibiscus",
     "imageUrl": "/plants/Hibiscus.webp",
     "properties": {
@@ -34,7 +34,7 @@
     "description": "Boasting elegant white blooms with 5-7 funnel-shaped petals, this plant is a symbol of beauty and grace. Its linear green leaves with dentate margins perfectly complement the enchanting flowers. Growing on stems reaching 1.2 meters, with each stem measuring about 12 centimeters, the Hibiscus adds a touch of tropical allure to gardens, enticing hummingbirds and garden enthusiasts with its ethereal charm and delicate appearance."
   },
   {
-    "id": 0,
+    "id": "original-morning-glory",
     "commonName": "Morning Glory",
     "imageUrl": "/plants/Morning_Glory.webp",
     "properties": {
@@ -51,7 +51,7 @@
     "description": "Displaying vibrant purple blooms with 5-7 funnel-shaped petals, this plant graces gardens with a touch of elegance. Its linear green leaves, featuring entire margins, complement the striking flowers beautifully. Growing on stems reaching 1.5 meters, each stem measuring approximately 15 centimeters, the Morning Glory adds a dash of charm and color to fences, trellises, and garden landscapes, captivating onlookers with its simple yet enchanting beauty."
   },
   {
-    "id": 0,
+    "id": "original-pansy",
     "commonName": "Pansy",
     "imageUrl": "/plants/Pansy.webp",
     "properties": {
@@ -69,7 +69,7 @@
     "image": "ex-Pansy.png"
   },
   {
-    "id": 0,
+    "id": "original-passion-flower",
     "commonName": "Passionflower",
     "imageUrl": "/plants/Passion_Flower.webp",
     "properties": {
@@ -87,7 +87,7 @@
     "image": "ex-Passionflower.png"
   },
   {
-    "id": 0,
+    "id": "original-rose",
     "commonName": "Rose",
     "imageUrl": "/plants/Rose.webp",
     "properties": {
@@ -104,7 +104,7 @@
     "description": "The beautiful 'Rose' features stunning pink flowers with 5-7 petals shaped like a classic rose. Its lanceolate green leaves have a dentate margin, and it grows on stems reaching up to 1.1 meters tall, with each stem measuring around 11 centimeters. This plant is a symbol of love and elegance, adding beauty to gardens and bouquets alike."
   },
   {
-    "id": 0,
+    "id": "original-sunflower",
     "commonName": "Sunflower",
     "imageUrl": "/plants/Sunflower.webp",
     "properties": {
@@ -121,7 +121,7 @@
     "description": "The radiant 'Sunflower' boasts striking orange blooms with a remarkable petal count ranging from 89 to 92, shaped like a charming vase. Its ovate green leaves have a lobed margin, and it stands tall on stems reaching up to 2 meters, with each stem measuring approximately 20 centimeters. This sun-loving plant symbolizes happiness and positivity, brightening up any garden or landscape with its cheerful appearance."
   },
   {
-    "id": 0,
+    "id": "original-tiger-lily",
     "commonName": "Tiger Lily",
     "imageUrl": "/plants/Tiger_Lily.webp",
     "properties": {
@@ -138,7 +138,7 @@
     "description": "The captivating 'Tiger Lily' showcases vibrant red flowers with 6-8 petals forming elegant trumpet shapes. Its linear green leaves have entire margins, complementing the striking blooms gracefully. Standing tall on stems reaching 1.6 meters, with each stem measuring around 16 centimeters, this exotic plant adds a touch of wild beauty to gardens and landscapes, evoking a sense of mystery and allure."
   },
   {
-    "id": 0,
+    "id": "original-violet",
     "commonName": "Violet",
     "imageUrl": "/plants/Violet.webp",
     "properties": {
