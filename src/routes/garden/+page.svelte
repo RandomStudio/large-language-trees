@@ -155,6 +155,13 @@
             column: c,
             highlighted: false,
           });
+        } else {
+          grid.push({
+            row: r,
+            column: c,
+            plant: undefined,
+            highlighted: false,
+          });
         }
       }
     }
@@ -425,5 +432,11 @@
     position: absolute;
     right: 0;
     font-weight: normal; /* Sets font weight to normal, avoiding bold */
+  }
+
+  h1 {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 </style>
