@@ -240,6 +240,7 @@
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
             class="empty"
+            class:highlight={gridCell.highlighted}
             on:drop={(e) => {
               drop(e, gridIndex);
             }}
@@ -300,8 +301,6 @@
     />
   {/if}
 
-  <a href="/info" class="hover-bold">?</a>
-
   <!-- <button
     class="debug-button"
     on:click={async () => {
@@ -314,8 +313,7 @@
   > -->
 </main>
 
-<a href="/info" class="hover-bold">?</a>
-<a href="/landing_page">Landing page</a>
+<a href="./garden/info" class="hover-bold">?</a>
 
 {#if waitingForGeneration}
   <FullScreenLoading />
@@ -349,9 +347,13 @@
 
   .cell {
     position: absolute; /* Positioning relative to .grid-container */
-    border: 1px solid black;
+    border: 1px dotted #eee;
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
+  }
+
+  .cell .highlight {
+    border: 2px solid lightgreen;
   }
 
   p {
