@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    type GardenPlantEntry,
     type InsertPlant,
     type MyGarden,
     type SelectGarden,
@@ -199,15 +200,24 @@
 
         const dstCell = grid[dstIndex];
 
-        const updatedPlant: SelectPlant = {
-          ...srcPlant,
+        const gardenId = data.garden.id;
+        const plantId = srcPlant.id;
+        const colIndex = dstCell.column;
+        const rowIndex = dstCell.row;
+
+        const updated: GardenPlantEntry = {
+          gardenId,
+          plantId,
+          colIndex,
+          rowIndex,
         };
-        fetch("/api/plants/" + updatedPlant.id, {
+
+        fetch("/api/plantsInGarden/", {
           method: "PATCH",
-          body: JSON.stringify(updatedPlant),
+          body: JSON.stringify(updated),
         })
           .then((res) => {
-            checkAnyCloseTo(updatedPlant);
+            // checkAnyCloseTo(updatedPlant);
 
             if (res.status == 200) {
               console.info("Updated plant position on backend OK:", res);
@@ -218,7 +228,7 @@
                 status,
                 statusText,
                 srcPlant,
-                updatedPlant,
+                // updatedPlant,
               });
             }
           })
