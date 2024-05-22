@@ -83,16 +83,15 @@
 
         return true;
       } else {
-        // if (
-        //   candidateParents &&
-        //   candidateParents[0] == plant1 &&
-        //   candidateParents[1] == plant2 &&
-        //   timeout !== null
-        // ) {
-        //   console.log("cleartimeout");
-        //   clearTimeout(timeout);
-        //   timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
-        // }
+        if (
+          candidateParents &&
+          candidateParents.find((p) => p.id === plant1.id) &&
+          timeout !== null
+        ) {
+          console.log("cleartimeout");
+          clearTimeout(timeout);
+          timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
+        }
         return false;
       }
     } else {
