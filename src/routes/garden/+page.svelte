@@ -241,7 +241,6 @@
           <div
             class="empty"
             class:highlight={gridCell.highlighted}
-            class:highlight={gridCell.highlighted}
             on:drop={(e) => {
               drop(e, gridIndex);
             }}
