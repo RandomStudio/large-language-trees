@@ -6,6 +6,6 @@ export const GET: RequestHandler = async () => json(await getAllPlants());
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as InsertPlant;
-  await addNew(data);
-  return json(data, { status: 201 });
+  const result = await addNew(data);
+  return json(result, { status: 201 });
 };

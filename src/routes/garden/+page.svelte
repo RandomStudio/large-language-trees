@@ -1,9 +1,22 @@
 <script lang="ts">
-  import { type InsertPlant, type SelectPlant } from "../../lib/types"; // Assuming type import is correct
-  export let data: { seeds: SelectPlant[] };
-  import { pickMultiple } from "random-elements";
+  import {
+    type GardenPlantEntry,
+    type InsertPlant,
+    type MyGarden,
+    type SelectGarden,
+    type SelectPlant,
+  } from "../../lib/types"; // Assuming type import is correct
 
-  import "./main.css";
+  interface GardenViewData {
+    seeds: SelectPlant[];
+    username: string;
+    garden: MyGarden;
+  }
+
+  export let data: GardenViewData;
+
+  // import { pickMultiple } from "random-elements";
+
   import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../../defaults/constants";
   import PlantCell from "../../components/PlantCell.svelte";
 
@@ -14,6 +27,7 @@
   import ConfirmBreed from "../../components/ConfirmBreed.svelte";
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
+  import { enhance } from "$app/forms";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -24,8 +38,17 @@
 
   let waitingForGeneration = false;
 
+  interface GridCell {
+    plant?: SelectPlant;
+    highlighted: boolean;
+    column: number;
+    row: number;
+  }
+
+  let grid: GridCell[] = [];
+
   async function confirmBreed(
-    parents: [SelectPlant, SelectPlant],
+    parents: [SelectPlant, SelectPlant]
   ): Promise<InsertPlant> {
     console.log("confirmBreed...");
     const res = await fetch("/api/generate/plant", {
@@ -46,93 +69,86 @@
   }
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
-    if (plant1.id === plant2.id) {
-      return false; // same plant!
-    }
-    if (
-      plant1.rowIndex !== null &&
-      plant2.rowIndex !== null &&
-      plant1.colIndex !== null &&
-      plant2.colIndex !== null
-    ) {
-      if (
-        (Math.abs(plant1.rowIndex - plant2.rowIndex) === 1 &&
-          plant1.colIndex - plant2.colIndex === 0) ||
-        (plant1.rowIndex - plant2.rowIndex === 0 &&
-          Math.abs(plant1.colIndex - plant2.colIndex) === 1)
-      ) {
-        console.log(
-          plant1.commonName + " and " + plant2.commonName + " are close!",
-        );
+    const plant1Cell = grid.find((c) => c.plant && c.plant.id === plant1.id);
+    const plant2Cell = grid.find((c) => c.plant && c.plant.id === plant2.id);
 
-        return true;
-      } else {
-        if (
-          candidateParents &&
-          candidateParents[0] == plant1 &&
-          candidateParents[1] == plant2 &&
-          timeout !== null
-        ) {
-          console.log("cleartimeout");
-          clearTimeout(timeout);
-          timeout = null; // the timeout has been cleared, but this does not affect the value of the variable `timeout`
-        }
-        return false;
-      }
+    console.log("areClose", plant1.id, plant2.id);
+
+    if (plant1Cell && plant2Cell) {
+      return (
+        Math.abs(plant1Cell.row - plant2Cell.row) <= 1 &&
+        Math.abs(plant1Cell.column - plant2Cell.column) <= 1
+      );
     } else {
+      // do not have two occupied cells to compare
       return false;
     }
   }
 
-  function checkAnyCloseTo(plant: SelectPlant) {
-    console.log("checkAnyCloseTo");
-    const { seeds } = data;
-    for (let i = 0; i < seeds.length; i++) {
-      if (seeds[i] != plant) {
-        const [plant1, plant2] = [plant, seeds[i]];
-        if (areClose(plant1, plant2)) {
-          candidateParents = [plant1, plant2];
-          timeout = setTimeout(() => {
-            console.log(
-              "ready for mixing : " +
-                plant1.commonName +
-                " and " +
-                plant2.commonName +
-                " !",
-            );
-            waitingForGeneration = true;
-            confirmBreed([plant1, plant2])
-              .then((newPlant) => {
-                candidateChild = newPlant;
-                waitingForGeneration = false;
-              })
-              .catch((e) => {
-                console.error("Error from confirm/generate breed:", e);
-                waitingForGeneration = false;
-              });
-          }, 4000);
+  function checkAnyCloseTo(cell: GridCell) {
+    console.log("checkAnyCloseTo cell at", cell.row, cell.column);
+    if (cell.plant) {
+      console.log("plant is", cell.plant);
+      const thisPlant = cell.plant;
+      for (const entry of data.garden.plantsInGarden) {
+        const otherPlant = entry.plant;
+        if (thisPlant.id !== otherPlant.id) {
+          // not self
+          const [plant1, plant2] = [thisPlant, otherPlant];
+          if (areClose(plant1, plant2)) {
+            candidateParents = [plant1, plant2];
+            timeout = setTimeout(() => {
+              console.log(
+                "ready for mixing : " +
+                  plant1.commonName +
+                  " and " +
+                  plant2.commonName +
+                  " !"
+              );
+              waitingForGeneration = true;
+              confirmBreed([plant1, plant2])
+                .then((newPlant) => {
+                  candidateChild = newPlant;
+                  waitingForGeneration = false;
+                })
+                .catch((e) => {
+                  console.error("Error from confirm/generate breed:", e);
+                  waitingForGeneration = false;
+                });
+            }, 4000);
+          }
         }
       }
+    } else {
+      // empty cell no need to check
+      return false;
     }
   }
 
-  interface GridCell {
-    plant?: SelectPlant;
-    highlighted: boolean;
-    column: number;
-    row: number;
-  }
-
-  let grid: GridCell[] = [];
-
   const populateGrid = () => {
+    console.log("populateGrid");
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
-        const plant = data.seeds.find(
-          (p) => p.colIndex === c && p.rowIndex === r,
+        const plant = data.garden.plantsInGarden.find(
+          (p) => p.colIndex === c && p.rowIndex === r
         );
-        grid.push({ plant, row: r, column: c, highlighted: false });
+        if (plant) {
+          const plantObject = plant.plant;
+          grid.push({
+            plant: plantObject,
+            row: r,
+            column: c,
+            highlighted: false,
+          });
+        } else {
+          grid.push({
+            row: r,
+            column: c,
+            plant: undefined,
+            highlighted: false,
+          });
+        }
       }
     }
   };
@@ -156,6 +172,10 @@
 
   function drop(e: DragEvent, dstIndex: number) {
     e.preventDefault();
+    if (timeout !== null) {
+      console.log("clearTimeout");
+      clearTimeout(timeout);
+    }
     console.log("drop to grid index", dstIndex);
     const cellDropData = e.dataTransfer?.getData("text/plain");
     if (cellDropData) {
@@ -164,22 +184,29 @@
       const srcPlant = grid[srcIndex].plant;
       if (srcPlant) {
         grid[dstIndex].plant = srcPlant;
-        grid[srcIndex].plant = undefined;
+        grid[srcIndex].plant = undefined; // clear original cell
         grid[dstIndex].highlighted = false;
 
         const dstCell = grid[dstIndex];
 
-        const updatedPlant: SelectPlant = {
-          ...srcPlant,
-          colIndex: dstCell.column,
-          rowIndex: dstCell.row,
+        const gardenId = data.garden.id;
+        const plantId = srcPlant.id;
+        const colIndex = dstCell.column;
+        const rowIndex = dstCell.row;
+
+        const updated: GardenPlantEntry = {
+          gardenId,
+          plantId,
+          colIndex,
+          rowIndex,
         };
-        fetch("/api/plants/" + updatedPlant.id, {
+
+        fetch("/api/plantsInGarden/", {
           method: "PATCH",
-          body: JSON.stringify(updatedPlant),
+          body: JSON.stringify(updated),
         })
           .then((res) => {
-            checkAnyCloseTo(updatedPlant);
+            checkAnyCloseTo(dstCell);
 
             if (res.status == 200) {
               console.info("Updated plant position on backend OK:", res);
@@ -190,7 +217,7 @@
                 status,
                 statusText,
                 srcPlant,
-                updatedPlant,
+                // updatedPlant,
               });
             }
           })
@@ -206,7 +233,15 @@
   populateGrid();
 </script>
 
+<nav>
+  You are: {data.username}
+  <form method="post" use:enhance>
+    <button>Logout</button>
+  </form>
+</nav>
+
 <main>
+  <h1>{data.garden.name}</h1>
   <div
     class="grid-container"
     style:width={GRID_WIDTH * CELL_SIZE + "px"}
@@ -282,9 +317,25 @@
             method: "POST",
             body: JSON.stringify(candidateChild),
           });
-          const { status, statusText } = res;
+          const { status, statusText, body } = res;
           if (status === 201) {
             console.log("Sucessfully added!");
+            // TODO: Also add plant to user's garden (gardenToPlants)
+            const plantId = candidateChild.id;
+            const gardenId = data.garden.id;
+            const rowIndex = 0;
+            const colIndex = 0;
+            const updated = {
+              plantId,
+              gardenId,
+              rowIndex,
+              colIndex,
+            };
+            const placementRes = await fetch("/api/plantsInGarden", {
+              method: "POST",
+              body: JSON.stringify(updated),
+            });
+            console.log("Placed in garden?", placementRes);
             await invalidateAll();
             populateGrid();
             candidateChild = null;
@@ -294,7 +345,7 @@
           }
         } else {
           console.error(
-            "Whoops! Where is the candidate child plant we're confirming?",
+            "Whoops! Where is the candidate child plant we're confirming?"
           );
         }
       }}
@@ -396,5 +447,11 @@
     position: absolute;
     right: 0;
     font-weight: normal; /* Sets font weight to normal, avoiding bold */
+  }
+
+  h1 {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 </style>
