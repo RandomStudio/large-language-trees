@@ -364,13 +364,14 @@
   > -->
 </main>
 
-<a href="/landing_page">Landing page</a>
+<footer>
+  <a href="/landing_page">Landing page</a>
+  <a href="./garden/info" class="hover-bold">?</a>
+</footer>
 
 {#if waitingForGeneration}
   <FullScreenLoading />
 {/if}
-
-<a href="./garden/info" class="hover-bold">?</a>
 
 <style>
   main {
@@ -407,7 +408,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: radial-gradient(circle, #d7d1d1 5%, transparent 5%);
+    background-image: radial-gradient(circle, #d7d1d1 5%, transparent 10%);
     background-size: calc(100% / 20) calc(100% / 20);
   }
 
@@ -415,10 +416,6 @@
     position: absolute; /* Positioning relative to .grid-container */
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
-  }
-
-  .cell .highlight {
-    border: 2px solid lightgreen;
   }
 
   p {
@@ -454,7 +451,7 @@
   }
 
   .cell .highlight {
-    border: 1px solid rgb(193, 212, 193);
+    border: 2px solid rgb(193, 212, 193);
   }
 
   .debug-button {
@@ -467,5 +464,11 @@
     position: absolute;
     top: 0;
     right: 0;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 1em;
+    left: 1em;
   }
 </style>
