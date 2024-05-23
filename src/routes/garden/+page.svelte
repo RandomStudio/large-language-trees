@@ -364,11 +364,14 @@
   > -->
 </main>
 
+<footer>
+  <a href="/landing_page">Landing page</a>
+  <a href="./garden/info" class="hover-bold">?</a>
+</footer>
+
 {#if waitingForGeneration}
   <FullScreenLoading />
 {/if}
-
-<a href="./garden/info" class="hover-bold">?</a>
 
 <style>
   main {
@@ -378,8 +381,6 @@
     height: 100vh; /* Full viewport height */
     overflow: hidden; /* Hide overflow */
     position: relative; /* Ensures that it is the positioning context for any absolutely positioned children, if needed */
-    justify-content: center; /* Centers content horizontally */
-    align-items: center; /* Centers content vertically */
     height: 100vh; /* Takes full viewport height */
     margin: 0; /* Removes default margin */
     padding: 20px; /* Adds padding around the content */
@@ -388,23 +389,33 @@
   }
 
   .grid-container {
-    display: block;
+    display: grid;
     position: relative; /* Essential for absolutely positioned children */
+    grid-template-columns: repeat(20, 1fr); /* 20 columns */
+    grid-template-rows: repeat(20, 1fr); /* 20 rows */
+    gap: calc(100% / 21);
     margin: auto; /* Center the container horizontally */
     padding: 10px;
     box-sizing: border-box; /* Include border and padding in the width/height */
     top: -50px;
+    overflow: hidden;
+  }
+
+  .grid-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, #d7d1d1 5%, transparent 10%);
+    background-size: calc(100% / 20) calc(100% / 20);
   }
 
   .cell {
     position: absolute; /* Positioning relative to .grid-container */
-    border: 1px dotted #eee;
     width: 27px; /* Width of each cell */
     height: 27px; /* Height of each cell */
-  }
-
-  .cell .highlight {
-    border: 2px solid lightgreen;
   }
 
   p {
@@ -434,13 +445,13 @@
     font-size: 15px;
   }
 
-  .hover-bold:hover {
-    font-weight: bold; /* Makes the font bold on hover */
-  }
-
   .cell .empty {
     width: 100%;
     height: 100%;
+  }
+
+  .cell .highlight {
+    border: 2px solid rgb(193, 212, 193);
   }
 
   .debug-button {
@@ -453,5 +464,11 @@
     position: absolute;
     top: 0;
     right: 0;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 1em;
+    left: 1em;
   }
 </style>
