@@ -1,11 +1,11 @@
 {
-  "id": "f693e8af-b6f0-4a10-8311-2aaca0b1cb5f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "7b1e482c-6064-467f-b33f-60dba0c9bf74",
+  "prevId": "f693e8af-b6f0-4a10-8311-2aaca0b1cb5f",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
-    "public.gardens": {
-      "name": "gardens",
+    "public.gardens2": {
+      "name": "gardens2",
       "schema": "",
       "columns": {
         "id": {
@@ -29,9 +29,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "gardens_user_id_users_id_fk": {
-          "name": "gardens_user_id_users_id_fk",
-          "tableFrom": "gardens",
+        "gardens2_user_id_users_id_fk": {
+          "name": "gardens2_user_id_users_id_fk",
+          "tableFrom": "gardens2",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -77,10 +77,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "gardens_to_plants_garden_id_gardens_id_fk": {
-          "name": "gardens_to_plants_garden_id_gardens_id_fk",
+        "gardens_to_plants_garden_id_gardens2_id_fk": {
+          "name": "gardens_to_plants_garden_id_gardens2_id_fk",
           "tableFrom": "gardens_to_plants",
-          "tableTo": "gardens",
+          "tableTo": "gardens2",
           "columnsFrom": [
             "garden_id"
           ],

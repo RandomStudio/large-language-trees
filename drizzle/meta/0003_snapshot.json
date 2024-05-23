@@ -1,6 +1,6 @@
 {
-  "id": "f693e8af-b6f0-4a10-8311-2aaca0b1cb5f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "cb4a24ac-b1d4-453b-80f7-3c5e7ad9ed99",
+  "prevId": "7b89e305-6065-4f0a-88be-fc4f36f0f422",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -151,13 +151,13 @@
         },
         "parent1_id": {
           "name": "parent1_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "parent2_id": {
           "name": "parent2_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }
