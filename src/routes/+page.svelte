@@ -2,7 +2,7 @@
 </script>
 
 <main>
-  <h1>Welcome to the Garden.</h1>
+  <h1 class="text-3xl font-bold underline">Welcome to the Garden.</h1>
 
   <div>
     <a href="/garden"><h2>Enter</h2></a>
