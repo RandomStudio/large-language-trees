@@ -238,9 +238,9 @@
     "description": "Sunflowers are known for their large, bright yellow ligulate flowers and green heart-shaped leaves with serrated margins. These towering plants can grow up to 2 meters in height, making them a popular choice for both decorative and agricultural purposes."
   },
   {
-    "id": "passionflower",
-    "commonName": "PassionFlower",
-    "imageUrl": "/plants/PassionFlower.webp",
+    "id": "passion-flower",
+    "commonName": "Passion Flower",
+    "imageUrl": "/plants/Passion-Flower.webp",
     "properties": {
       "flowerColour": "Purple",
       "flowerColourRGB": "#800080",
