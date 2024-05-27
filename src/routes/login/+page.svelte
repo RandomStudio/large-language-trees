@@ -1,23 +1,40 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { goto } from "$app/navigation";
   import type { ActionData } from "./$types";
 
   export let form: ActionData;
 </script>
 
-<h1>Sign in</h1>
-<form method="post" use:enhance>
-  <label for="username">Username</label>
-  <input name="username" id="username" /><br />
-  <label for="password">Password</label>
-  <input type="password" name="password" id="password" /><br />
-  <button>Continue</button>
-</form>
+<main class="container mx-auto m-8">
+  <h1 class="text-xl font-bold">Sign in</h1>
+  <form method="post" use:enhance>
+    <div>
+      <label for="username">Username</label>
+      <input name="username" id="username" class="border" />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" class="border" />
+    </div>
 
-{#if form?.message}
-  <div>
-    Error: {form.message}
-  </div>
-{/if}
+    <div>
+      <button
+        class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        >Continue</button
+      >
+      <button
+        class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        on:click={() => {
+          goto("/signup");
+        }}>Register</button
+      >
+    </div>
+  </form>
 
-<a href="/signup">Register</a>
+  {#if form?.message}
+    <div>
+      Error: {form.message}
+    </div>
+  {/if}
+</main>

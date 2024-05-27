@@ -1,26 +1,20 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
 </script>
 
-<main>
-  <h1 class="text-3xl font-bold underline">Welcome to the Garden.</h1>
-
-  <div>
-    <a href="/garden"><h2>Enter</h2></a>
+<div class="container mx-auto m-8">
+  <main>
+    <h1 class="text-3xl font-bold">Welcome to the Garden</h1>
 
     <div>
-      <a href="/signup">Register</a>
+      <button on:click={() => goto("/garden")} class="btn-primary"
+        ><h2>Enter</h2></button
+      >
+      <button on:click={() => goto("/signup")} class="btn-primary"
+        >Register</button
+      >
     </div>
-  </div>
-</main>
+  </main>
 
-<a href="./garden/info" class="hover-bold">?</a>
-
-<style>
-  main {
-    height: 100vh; /* Takes full viewport height */
-    margin: 0; /* Removes default margin */
-    padding: 20px; /* Adds padding around the content */
-    font-family: Arial, sans-serif; /* Sets the font type to Arial */
-    font-size: 15px; /* Sets the font size to 15 */
-  }
-</style>
+  <a href="./garden/info" class="hover-bold">?</a>
+</div>
