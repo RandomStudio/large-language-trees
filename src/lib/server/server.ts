@@ -66,6 +66,7 @@ export const getUserSeeds = async (
     with: { plantsInSeedbank: { with: { plant: true } } },
   });
   if (seedBank) {
+    console.log(JSON.stringify({ seedBank }));
     return seedBank.plantsInSeedbank;
   } else {
     console.log("No seedbank! Will have to create one and populate it");
@@ -155,15 +156,6 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
     throw Error(`user not found for userId "${userId}"`);
   }
 };
-
-function getRandomIndices(max: number, count: number): number[] {
-  const indices: Set<number> = new Set();
-  while (indices.size < count) {
-    const randomIndex = Math.floor(Math.random() * max);
-    indices.add(randomIndex);
-  }
-  return Array.from(indices);
-}
 
 export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
   console.log("creating new plant", plant);

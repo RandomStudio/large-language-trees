@@ -7,7 +7,7 @@
   } from "../../lib/types"; // Assuming type import is correct
 
   interface GardenViewData {
-    seeds: SelectPlant[];
+    seeds: SeedbankEntryWithPlant[];
     username: string;
     garden: MyGarden;
   }
@@ -246,7 +246,9 @@
     >
   </form>
   <div>
-    Plants in your seedbank: {data.seeds.length}
+    Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
+      (s, i) => `#${i}: ${s.plant.commonName}`
+    )}
   </div>
 </div>
 <!-- </nav> -->
