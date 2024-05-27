@@ -14,7 +14,7 @@
   function replaceWordInText(
     text: string,
     targetWord: string,
-    newWord: string,
+    newWord: string
   ) {
     const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
     return text.replace(regex, newWord);
@@ -37,7 +37,7 @@
       candidateChild.description = replaceWordInText(
         candidateChild.description,
         candidateChild.commonName,
-        textInput,
+        textInput
       );
     }
     candidateChild.commonName = textInput;
@@ -81,9 +81,9 @@
   }, 3000);
 </script>
 
-<div class="overlay">
-  <div class="popup">
-    <h1>New plant!</h1>
+<div class="fixed top-0 left-0 right-0">
+  <div class="border bg-slate-100 m-8 p-4 rounded">
+    <h1 class="text-xl font-bold">New plant!</h1>
     {#if candidateImage}
       <img src={candidateImage} alt="AI generated new plant" />
     {/if}
@@ -94,7 +94,11 @@
       </div>
     {:else}
       <div>
-        <button on:click={generateImage}>Generate image</button>
+        <button
+          on:click={generateImage}
+          class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+          >Generate image</button
+        >
       </div>
     {/if}
     <p>
@@ -102,16 +106,26 @@
     </p>
     <p>Name your discovered flower</p>
     <form on:submit|preventDefault={handleSubmit}>
-      <input type="text" bind:value={textInput} />
-      <button type="submit">Rename</button>
+      <div>
+        <input type="text" bind:value={textInput} class="border" />
+        <button
+          type="submit"
+          class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+          >Rename</button
+        >
+      </div>
     </form>
     <div>
-      <button on:click={() => onConfirm(candidateImage)}>✅ Add </button>
-      <button on:click={onCancel}>❌ Cancel</button>
+      <button
+        on:click={() => onConfirm(candidateImage)}
+        class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        >✅ Add
+      </button>
+      <button
+        on:click={onCancel}
+        class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        >❌ Cancel</button
+      >
     </div>
   </div>
 </div>
-
-<style>
-  @import "./popups.css";
-</style>

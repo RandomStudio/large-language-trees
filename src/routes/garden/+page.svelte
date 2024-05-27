@@ -17,7 +17,7 @@
 
   // import { pickMultiple } from "random-elements";
 
-  import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from "../../defaults/constants";
+  import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
   import PlantCell from "../../components/PlantCell.svelte";
 
   import PopupInfo from "../../components/PopupInfo.svelte";
@@ -233,29 +233,27 @@
   populateGrid();
 </script>
 
-<nav>
+<!-- <nav> -->
+<div>
   You are: {data.username}
   <form method="post" use:enhance>
-    <button>Logout</button>
+    <button
+      class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+      >Logout</button
+    >
   </form>
-</nav>
+</div>
+<!-- </nav> -->
 
-<main>
-  <h1>{data.garden.name}</h1>
-  <div
-    class="grid-container"
-    style:width={GRID_WIDTH * CELL_SIZE + "px"}
-    style:height={GRID_HEIGHT * CELL_SIZE + "px"}
-  >
+<h1>{data.garden.name}</h1>
+
+<main class="container mx-auto">
+  <div class="grid grid-cols-6 gap-4 justify-stretch">
     {#each grid as gridCell, gridIndex}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="cell"
-        style:left={gridCell.column * CELL_SIZE + "px"}
-        style:top={gridCell.row * CELL_SIZE + "px"}
-        style:width={CELL_SIZE + "px"}
-        style:height={CELL_SIZE + "px"}
+        class="border-2"
         on:click={() => {
           console.log("click!");
           if (gridCell.plant) {
@@ -274,8 +272,7 @@
         {:else}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
-            class="empty"
-            class:highlight={gridCell.highlighted}
+            class:border-4={gridCell.highlighted}
             on:drop={(e) => {
               drop(e, gridIndex);
             }}
@@ -285,11 +282,14 @@
             }}
             on:dragover={(e) => dragOver(e, gridIndex)}
             on:dragleave={(e) => dragLeave(e, gridIndex)}
-          />
+          >
+            <img src="plants/empty.png" />
+          </div>
         {/if}
       </div>
     {/each}
   </div>
+
   {#if selectedPlant}
     <PopupInfo
       plantDetails={selectedPlant}
@@ -351,22 +351,11 @@
       }}
     />
   {/if}
-
-  <!-- <button
-    class="debug-button"
-    on:click={async () => {
-      waitingForGeneration = true;
-      const [parent1, parent2] = pickMultiple(data.seeds, 2);
-      console.log("random picked:", { parent1, parent2 });
-      candidateChild = await confirmBreed([parent1, parent2]);
-      waitingForGeneration = false;
-    }}>Test breed</button
-  > -->
 </main>
 
 <footer>
   <a href="/landing_page">Landing page</a>
-  <a href="./garden/info" class="hover-bold">?</a>
+  <a href="./garden/info">?</a>
 </footer>
 
 {#if waitingForGeneration}
@@ -374,101 +363,4 @@
 {/if}
 
 <style>
-  main {
-    display: flex;
-    align-items: center; /* Centers content vertically in the container */
-    justify-content: center; /* Centers content horizontally in the container */
-    height: 100vh; /* Full viewport height */
-    overflow: hidden; /* Hide overflow */
-    position: relative; /* Ensures that it is the positioning context for any absolutely positioned children, if needed */
-    height: 100vh; /* Takes full viewport height */
-    margin: 0; /* Removes default margin */
-    padding: 20px; /* Adds padding around the content */
-    font-family: Arial, sans-serif; /* Sets the font type to Arial */
-    font-size: 15px; /* Sets the font size to 15 */
-  }
-
-  .grid-container {
-    display: grid;
-    position: relative; /* Essential for absolutely positioned children */
-    grid-template-columns: repeat(20, 1fr); /* 20 columns */
-    grid-template-rows: repeat(20, 1fr); /* 20 rows */
-    gap: calc(100% / 21);
-    margin: auto; /* Center the container horizontally */
-    padding: 10px;
-    box-sizing: border-box; /* Include border and padding in the width/height */
-    top: -50px;
-    overflow: hidden;
-  }
-
-  .grid-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(circle, #d7d1d1 5%, transparent 10%);
-    background-size: calc(100% / 20) calc(100% / 20);
-  }
-
-  .cell {
-    position: absolute; /* Positioning relative to .grid-container */
-    width: 27px; /* Width of each cell */
-    height: 27px; /* Height of each cell */
-  }
-
-  p {
-    text-align: center;
-    flex-direction: column; /* Stacks form elements vertically */
-    align-items: center; /* Centers form elements horizontally */
-    width: 100%; /* Optional: Adjusts form width if necessary */
-    max-width: 300px; /* Optional: Restricts form width for better form field alignment */
-  }
-
-  input,
-  label {
-    width: 100%; /* Ensures labels and inputs expand to the width of the form */
-    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-    margin-bottom: 10px; /* Adds space between form elements */
-  }
-
-  button {
-    width: 30%; /* Matches the width of the form elements */
-    padding: 5px 0; /* Adds padding for better button size */
-    cursor: pointer; /* Indicates the button is clickable */
-    text-align: center; /* Ensures the text in the button is centered */
-    background-color: white; /* Sets background color to white */
-    border: 0.5px solid black; /* Defines border as 0.5 pixels thick, solid, and black */
-    border-radius: 1px; /* Sets the border radius to 1 pixel */
-    font-family: Arial, sans-serif; /* Explicitly sets the font type to Arial for the button */
-    font-size: 15px;
-  }
-
-  .cell .empty {
-    width: 100%;
-    height: 100%;
-  }
-
-  .cell .highlight {
-    border: 2px solid rgb(193, 212, 193);
-  }
-
-  .debug-button {
-    position: absolute;
-    right: 0;
-    font-weight: normal; /* Sets font weight to normal, avoiding bold */
-  }
-
-  h1 {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
-  footer {
-    position: absolute;
-    bottom: 1em;
-    left: 1em;
-  }
 </style>

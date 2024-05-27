@@ -6,17 +6,28 @@
   export let form: ActionData;
 </script>
 
-<h1>Sign up</h1>
-<form method="post" use:enhance>
-  <label for="username">Username</label>
-  <input name="username" id="username" /><br />
-  <label for="password">Password</label>
-  <input type="password" name="password" id="password" /><br />
-  <button>Continue</button>
-</form>
+<main class="container mx-auto m-8">
+  <h1 class="text-xl font-bold">Sign up</h1>
+  <form method="post" use:enhance>
+    <div>
+      <label for="username">Username</label>
+      <input name="username" id="username" class="border" />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" class="border" />
+    </div>
+    <div>
+      <button
+        class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        >Continue</button
+      >
+    </div>
+  </form>
 
-{#if form?.message}
-  <div>
-    Error: {form.message}
-  </div>
-{/if}
+  {#if form?.message}
+    <div>
+      Error: {form.message}
+    </div>
+  {/if}
+</main>
