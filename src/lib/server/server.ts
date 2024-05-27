@@ -11,7 +11,7 @@ import {
   seedbanksToPlants,
   users,
 } from "./schema";
-import { eq } from "drizzle-orm";
+import { eq, isNull, not } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   InsertPlant,
@@ -78,15 +78,21 @@ export const getUserSeeds = async (
       })
       .returning();
     const newSeedbank = result[0];
-    const plant = await db.query.plants.findFirst();
+    const plant = await db
+      .select()
+      .from(plants)
+      .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
+      .where(isNull(seedbanksToPlants));
+    console.log("plant with inSeedBanks:", plant);
+
     if (plant) {
       await db.insert(seedbanksToPlants).values({
         seedbankId: newSeedbank.id,
-        plantId: plant.id,
+        plantId: plant[0].plants.id,
       });
       return await getUserSeeds(userId);
     } else {
-      throw Error("plant not found");
+      throw Error("suitable plant not found");
     }
   }
 };

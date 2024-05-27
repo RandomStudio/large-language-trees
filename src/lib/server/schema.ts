@@ -123,3 +123,7 @@ export const seedbanksToPlantsRelations = relations(
 export const seedbanksRelations = relations(seedbanks, ({ many }) => ({
   plantsInSeedbank: many(seedbanksToPlants),
 }));
+
+export const plantsRelations = relations(plants, ({ many }) => ({
+  inSeedbanks: many(seedbanksToPlants),
+}));
