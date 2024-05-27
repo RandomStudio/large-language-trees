@@ -3,59 +3,101 @@ import DefaultSeeds from "../../defaults/seeds.json";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
-import { gardens, gardensToPlants, plants, users } from "./schema";
-import { eq } from "drizzle-orm";
+import {
+  gardens,
+  gardensToPlants,
+  plants,
+  seedbanks,
+  seedbanksToPlants,
+  users,
+} from "./schema";
+import { eq, isNull, not } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   InsertPlant,
   MyGarden,
+  SeedbankEntryWithPlant,
   SelectGarden,
   SelectPlant,
   SelectUser,
   UserWithGarden,
+  UserWithSeedbank,
 } from "$lib/types";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
 import { pickMultipleRandomElements, pickRandomIndexes } from "random-elements";
 
-export const getAllPlants = async () => {
+const populateDefaultPlants = async () => {
+  const newPlants: InsertPlant[] = DefaultSeeds;
+
+  // const rows = getRandomIndices(GRID_HEIGHT, newPlants.length);
+  // const columns = getRandomIndices(GRID_WIDTH, newPlants.length);
+
+  await Promise.all(
+    newPlants.map((p) => {
+      const { commonName, description, properties, imageUrl, id } = p;
+      return db.insert(plants).values({
+        id,
+        commonName,
+        description,
+        properties,
+        imageUrl,
+      });
+    })
+  );
+};
+
+export const checkPlantsExist = async () => {
   const existingPlants = await db.query.plants.findMany();
   if (existingPlants.length === 0) {
     console.log(
       "No plants in DB, we will attempt to populate with defaults..."
     );
-    const newPlants: InsertPlant[] = DefaultSeeds;
+    await populateDefaultPlants();
+  }
+};
 
-    // const rows = getRandomIndices(GRID_HEIGHT, newPlants.length);
-    // const columns = getRandomIndices(GRID_WIDTH, newPlants.length);
-
-    await Promise.all(
-      newPlants.map((p) => {
-        const { commonName, description, properties, imageUrl, id } = p;
-        // const rowIndex = rows[index];
-        // const colIndex = columns[index];
-        return db.insert(plants).values({
-          id,
-          commonName,
-          description,
-          properties,
-          imageUrl,
-          // rowIndex: rows[index],
-          // columnIndex: columns[index],
-        });
-      })
-    );
-
-    return await db.query.plants.findMany();
+export const getUserSeeds = async (
+  userId: string
+): Promise<SeedbankEntryWithPlant[]> => {
+  const seedBank = await db.query.seedbanks.findFirst({
+    where: eq(seedbanks.userId, userId),
+    with: { plantsInSeedbank: { with: { plant: true } } },
+  });
+  if (seedBank) {
+    console.log(JSON.stringify({ seedBank }));
+    return seedBank.plantsInSeedbank;
   } else {
-    return existingPlants;
+    console.log("No seedbank! Will have to create one and populate it");
+    const result = await db
+      .insert(seedbanks)
+      .values({
+        id: uuidv4(),
+        userId,
+      })
+      .returning();
+    const newSeedbank = result[0];
+    const plant = await db
+      .select()
+      .from(plants)
+      .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
+      .where(isNull(seedbanksToPlants));
+    console.log("plant with inSeedBanks:", plant);
+
+    if (plant) {
+      await db.insert(seedbanksToPlants).values({
+        seedbankId: newSeedbank.id,
+        plantId: plant[0].plants.id,
+      });
+      return await getUserSeeds(userId);
+    } else {
+      throw Error("suitable plant not found");
+    }
   }
 };
 
 export const getUserGarden = async (userId: string): Promise<MyGarden> => {
-  // const result  = await db.select().from(users).where(eq(users.id, userId));
-
   const user: UserWithGarden | undefined = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
@@ -79,38 +121,33 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
 
       // Also add default plants into this garden
       const defaultPlants = DefaultSeeds;
-      const rowIndexes = pickRandomIndexes(GRID_HEIGHT, defaultPlants.length);
-      const colIndexes = pickRandomIndexes(GRID_WIDTH, defaultPlants.length);
-      defaultPlants.forEach(async (plant, i) => {
-        const rowIndex = rowIndexes[i];
-        const colIndex = colIndexes[i];
-        console.log(
-          `Adding plant ${plant.commonName} at position [${colIndex},${rowIndex}]...`
-        );
-        const plantId = plant.id;
-        const gardenId = newGarden.id;
-        console.log("keys:", { plantId, gardenId });
-        await db.insert(gardensToPlants).values({
-          plantId,
-          gardenId,
-          colIndex,
-          rowIndex,
-        });
-      });
 
-      const gardenWithPlants: MyGarden | undefined =
-        await db.query.gardens.findFirst({
-          where: eq(gardens.id, newGarden.id),
-          with: {
-            plantsInGarden: { with: { plant: true } },
-          },
-        });
+      let rowIndex = 0;
+      let colIndex = 0;
 
-      if (gardenWithPlants) {
-        return gardenWithPlants;
-      } else {
-        throw Error("could not find garden just created");
-      }
+      await Promise.all(
+        defaultPlants.map(async (plant) => {
+          colIndex += 2;
+          if (colIndex >= GRID_WIDTH - 1) {
+            rowIndex += 2;
+            colIndex = 0;
+          }
+          console.log(
+            `Adding plant ${plant.commonName} at position [${colIndex},${rowIndex}]...`
+          );
+          const plantId = plant.id;
+          const gardenId = newGarden.id;
+          console.log("keys:", { plantId, gardenId });
+          await db.insert(gardensToPlants).values({
+            plantId,
+            gardenId,
+            colIndex,
+            rowIndex,
+          });
+        })
+      );
+
+      return await getUserGarden(userId);
 
       // return { id: 0, name: "bla", userId: user.id };
     } else {
@@ -125,15 +162,6 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
     throw Error(`user not found for userId "${userId}"`);
   }
 };
-
-function getRandomIndices(max: number, count: number): number[] {
-  const indices: Set<number> = new Set();
-  while (indices.size < count) {
-    const randomIndex = Math.floor(Math.random() * max);
-    indices.add(randomIndex);
-  }
-  return Array.from(indices);
-}
 
 export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
   console.log("creating new plant", plant);
