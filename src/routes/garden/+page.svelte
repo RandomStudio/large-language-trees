@@ -3,7 +3,6 @@
     type GardenPlantEntry,
     type InsertPlant,
     type MyGarden,
-    type SelectGarden,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
 
@@ -126,7 +125,11 @@
   }
 
   const populateGrid = () => {
-    console.log("populateGrid");
+    console.log(
+      "populateGrid with",
+      data.garden.plantsInGarden.length,
+      "plants"
+    );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
@@ -242,6 +245,9 @@
       >Logout</button
     >
   </form>
+  <div>
+    Plants in your seedbank: {data.seeds.length}
+  </div>
 </div>
 <!-- </nav> -->
 

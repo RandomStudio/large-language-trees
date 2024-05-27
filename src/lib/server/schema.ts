@@ -29,6 +29,10 @@ export const usersRelations = relations(users, ({ one }) => ({
     fields: [users.id],
     references: [gardens.userId],
   }),
+  mySeedbank: one(seedbanks, {
+    fields: [users.id],
+    references: [seedbanks.userId],
+  }),
 }));
 
 export const sessions = pgTable("sessions", {
@@ -81,4 +85,41 @@ export const gardensToPlantsRelations = relations(
 
 export const gardensRelations = relations(gardens, ({ many }) => ({
   plantsInGarden: many(gardensToPlants),
+}));
+
+export const seedbanks = pgTable("seedbanks", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").references(() => users.id),
+});
+
+export const seedbanksToPlants = pgTable(
+  "seedbanks_to_plants",
+  {
+    seedbankId: text("seedbank_id")
+      .notNull()
+      .references(() => seedbanks.id),
+    plantId: text("plant_id")
+      .notNull()
+      .references(() => plants.id),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.seedbankId, t.plantId] }),
+  })
+);
+
+export const seedbanksToPlantsRelations = relations(
+  seedbanksToPlants,
+  ({ one }) => ({
+    seedbank: one(seedbanks, {
+      fields: [seedbanksToPlants.seedbankId],
+      references: [seedbanks.id],
+    }),
+    plant: one(plants, {
+      fields: [seedbanksToPlants.plantId],
+      references: [plants.id],
+    }),
+  })
+);
+export const seedbanksRelations = relations(seedbanks, ({ many }) => ({
+  plantsInSeedbank: many(seedbanksToPlants),
 }));
