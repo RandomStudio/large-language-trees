@@ -233,7 +233,8 @@
   populateGrid();
 </script>
 
-<nav>
+<!-- <nav> -->
+<div>
   You are: {data.username}
   <form method="post" use:enhance>
     <button
@@ -241,7 +242,8 @@
       >Logout</button
     >
   </form>
-</nav>
+</div>
+<!-- </nav> -->
 
 <h1>{data.garden.name}</h1>
 
