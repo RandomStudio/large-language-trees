@@ -1,12 +1,66 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
+  import { backIn } from "svelte/easing";
 
-  let showButton = false;
+  // Define variables to control the fill speed and selected colour
+  let fillSpeed = "slow";
+  let selectedColour = "#FF0000";
 
-  function handleInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    showButton = input.value.length > 0;
+  onMount(() => {
+    // Load the image into the canvas and set up the functionality
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const context = canvas.getContext("2d");
+    const img = new Image();
+
+    img.onload = () => {
+      // Set the canvas size to match the image size
+      canvas.width = 200;
+      canvas.height = 200;
+
+      // Scale the image to fit inside the canvas
+      const scale = Math.min(
+        canvas.width / img.width,
+        canvas.height / img.height,
+      );
+      const newWidth = img.width * scale;
+      const newHeight = img.height * scale;
+
+      context.drawImage(img, 0, 0, newWidth, newHeight);
+
+      // Get the color of the top left pixel
+      const colorData = context.getImageData(0, 0, 1, 1).data;
+      console.log(colorData);
+      //const colorDataRange = [colorData +10
+      const backgroundColor = [colorData[0], colorData[1], colorData[2]];
+
+      // Call the function to remove background color
+      removeBackgroundColor(canvas, context, backgroundColor);
+    };
+
+    img.src = "/plants/Bamboo.png"; // Replace with your image path
+  });
+
+  function removeBackgroundColor(canvas, context, backgroundColor) {
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    const len = data.length;
+    console.log(data.len);
+    // Iterate through each pixel and remove the background color
+    for (let i = 0; i < len; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      // Check if the pixel color matches the background color
+      if (r >= 230 && g >= 230 && b >= 230) {
+        // Set the alpha channel to 0 to make it transparent
+        data[i + 3] = 0;
+      }
+    }
+
+    // Put the modified image data back onto the canvas
+    context.putImageData(imageData, 0, 0);
   }
 </script>
 
@@ -14,34 +68,13 @@
   class="flex items-center justify-center min-h-screen bg-green-300 overflow-hidden"
 >
   <main class="text-left mx-1.5">
-    <h1 class="text-3xl font-bold text-blue-600">The Garden</h1>
+    <h1 class="text-3xl text-blue-600">The Garden</h1>
 
     <div>
       <div class="flex justify-center space-x-4">
-        <img class="size-24" src="/plants/Gardenia.webp" alt="!" />
+        <canvas id="canvas"></canvas>
       </div>
-      <form class="text-center">
-        <label for="fname"></label><br />
-        <input
-          class="bg-transparent text-blue-600 py-2 px-4 border border-blue-500 rounded-full placeholder-blue-600 focus:outline-none focus:border-blue-500 custom-autofill"
-          style="background-color: transparent !important;"
-          type="text"
-          id="fname"
-          name="fname"
-          placeholder="Fill in your name"
-          on:input={handleInput}
-        /><br />
-      </form>
       <br />
-      {#if showButton}
-        <div class="flex justify-center">
-          <button
-            on:click={() => goto("/signup")}
-            class="bg-transparent text-blue-600 font-semibold py-2 px-4 border border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent"
-            >Start</button
-          >
-        </div>
-      {/if}
     </div>
     <div class="text-center">
       <p class="text-blue-600">
