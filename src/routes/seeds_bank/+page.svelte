@@ -49,8 +49,9 @@
     <br />
     <br />
     {#each data.seeds as plant}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="border-2"
         on:click={() => {
           console.log("click!");
           selectedPlant = plant.plant;
@@ -71,7 +72,9 @@
       <br />
       <br />
     {/each}
+  </div>
 
+  {#if selectedPlant}
     <PopupInfo
       plantDetails={selectedPlant}
       {data}
@@ -79,12 +82,5 @@
         selectedPlant = null;
       }}
     ></PopupInfo>
-
-    <br />
-    <span class="text-blue-600">Studio Random</span>
-    <br />
-    <span class="text-blue-600 font-semibold">Image Data:</span>
-    <br />
-    <span class="text-blue-600">Chat GPT/ Open AI</span>
-  </div>
+  {/if}
 </main>
