@@ -4,6 +4,13 @@ import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
 import { users } from "$lib/server/schema";
 import { lucia } from "$lib/server/auth";
+import {
+  checkDefaultUsers,
+  checkPlantsExist,
+  cleanUp,
+  getUserGarden,
+  getUserSeeds,
+} from "$lib/server/server";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const username = locals.user?.username;
@@ -14,12 +21,17 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   if (userId) {
+    await checkPlantsExist();
+    await checkDefaultUsers();
+    const garden = await getUserGarden(userId);
+    const seeds = await getUserSeeds(userId);
+
     const thisUser = await db.query.users.findFirst({
       where: eq(users.id, userId),
     });
     if (thisUser?.isAdmin === true) {
       console.log("Admin user authorised");
-      return { username };
+      return { username, isAdmin: true };
     } else {
       console.error(`User ${userId} is not an admin; not authorised`);
       redirect(302, "/login");
@@ -30,8 +42,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-  // This is for logout
-  default: async (event) => {
+  logout: async (event) => {
     if (!event.locals.session) {
       return fail(401);
     }
@@ -41,6 +52,11 @@ export const actions: Actions = {
       path: ".",
       ...sessionCookie.attributes,
     });
+    redirect(302, "/");
+  },
+  reset: async (event) => {
+    console.warn("Full reset happening!");
+    await cleanUp();
     redirect(302, "/");
   },
 };

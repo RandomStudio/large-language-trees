@@ -54,3 +54,10 @@ export interface MySeeds extends SelectSeedbank {
 export interface UserWithSeedbank extends SelectUser {
   mySeeds: MySeeds;
 }
+
+export interface GardenViewData {
+  seeds: SeedbankEntryWithPlant[];
+  username: string;
+  isAdmin: boolean;
+  garden: MyGarden;
+}

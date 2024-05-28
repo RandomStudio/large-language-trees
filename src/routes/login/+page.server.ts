@@ -6,6 +6,11 @@ import type { Actions } from "./$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
+import { checkDefaultUsers } from "$lib/server/server";
+
+export const load = async () => {
+  await checkDefaultUsers();
+};
 
 export const actions = {
   default: async (event) => {

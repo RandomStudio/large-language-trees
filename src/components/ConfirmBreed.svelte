@@ -4,7 +4,7 @@
 
   export let candidateChild: InsertPlant;
 
-  export let data: { seeds: SelectPlant[] };
+  export let allSeeds: SelectPlant[];
 
   export let onCancel: () => any;
   export let onConfirm: (imageURL: string | null) => any;
@@ -25,7 +25,7 @@
       console.log("Please write something");
       return;
     }
-    for (const plant of data.seeds) {
+    for (const plant of allSeeds) {
       if (plant.commonName == textInput) {
         console.log("this name already exists");
         return;

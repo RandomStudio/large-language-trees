@@ -1,13 +1,20 @@
 import type { PageServerLoad } from "./$types";
 import {
+  checkDefaultUsers,
   checkPlantsExist,
   getUserGarden,
   getUserSeeds,
 } from "$lib/server/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
+import type { GardenViewData } from "$lib/types";
+import { db } from "$lib/server/db";
+import { eq } from "drizzle-orm";
+import { users } from "$lib/server/schema";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({
+  locals,
+}): Promise<GardenViewData> => {
   const username = locals.user?.username;
   const userId = locals.user?.id;
   if (!username) {
@@ -19,18 +26,22 @@ export const load: PageServerLoad = async ({ locals }) => {
   if (userId) {
     console.log("running checks, loading data after authorisation...");
     await checkPlantsExist();
+    await checkDefaultUsers();
     const garden = await getUserGarden(userId);
     const seeds = await getUserSeeds(userId);
     console.log("...ready to render");
-    return { seeds, newSeed: null, username, garden };
+    const thisUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+    const isAdmin = thisUser?.isAdmin || false;
+    return { seeds, username, garden, isAdmin };
   } else {
     throw Error("userId missing");
   }
 };
 
 export const actions: Actions = {
-  // This is for logout
-  default: async (event) => {
+  logout: async (event) => {
     if (!event.locals.session) {
       return fail(401);
     }

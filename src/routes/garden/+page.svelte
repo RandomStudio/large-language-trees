@@ -3,17 +3,12 @@
 
   import {
     type GardenPlantEntry,
+    type GardenViewData,
     type InsertPlant,
     type MyGarden,
     type SeedbankEntryWithPlant,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
-
-  interface GardenViewData {
-    seeds: SeedbankEntryWithPlant[];
-    username: string;
-    garden: MyGarden;
-  }
 
   export let data: GardenViewData;
 
@@ -241,7 +236,8 @@
 
 <!-- <nav> -->
 <div>
-  <UserLoginStatus username={data.username}></UserLoginStatus>
+  <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
+  ></UserLoginStatus>
   <div>
     Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
       (s, i) => `#${i}: ${s.plant.commonName}`
@@ -288,6 +284,7 @@
             on:dragover={(e) => dragOver(e, gridIndex)}
             on:dragleave={(e) => dragLeave(e, gridIndex)}
           >
+            <!-- svelte-ignore a11y-missing-attribute -->
             <img src="plants/empty.png" />
           </div>
         {/if}
@@ -297,8 +294,8 @@
 
   {#if selectedPlant}
     <PopupInfo
+      allSeeds={data.seeds.map((s) => s.plant)}
       plantDetails={selectedPlant}
-      {data}
       closePopup={() => {
         selectedPlant = null;
       }}
@@ -308,7 +305,7 @@
   {#if candidateChild}
     <ConfirmBreed
       {candidateChild}
-      {data}
+      allSeeds={data.seeds.map((s) => s.plant)}
       onCancel={() => {
         candidateChild = null;
       }}
