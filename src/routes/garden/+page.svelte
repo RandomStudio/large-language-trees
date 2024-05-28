@@ -3,12 +3,11 @@
     type GardenPlantEntry,
     type InsertPlant,
     type MyGarden,
-    type SelectGarden,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
 
   interface GardenViewData {
-    seeds: SelectPlant[];
+    seeds: SeedbankEntryWithPlant[];
     username: string;
     garden: MyGarden;
   }
@@ -126,7 +125,11 @@
   }
 
   const populateGrid = () => {
-    console.log("populateGrid");
+    console.log(
+      "populateGrid with",
+      data.garden.plantsInGarden.length,
+      "plants"
+    );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
@@ -242,6 +245,11 @@
       >Logout</button
     >
   </form>
+  <div>
+    Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
+      (s, i) => `#${i}: ${s.plant.commonName}`
+    )}
+  </div>
 </div>
 <!-- </nav> -->
 
