@@ -14,6 +14,7 @@
   }
 
   export let data: GardenViewData;
+  let selectedPlant: SelectPlant | null = null;
 
   console.log(data.seeds);
   import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
@@ -48,7 +49,13 @@
     <br />
     <br />
     {#each data.seeds as plant}
-      <div>
+      <div
+        class="border-2"
+        on:click={() => {
+          console.log("click!");
+          selectedPlant = plant.plant;
+        }}
+      >
         <div class="flex justify-center">
           <img
             src={plant.plant.imageUrl}
@@ -64,6 +71,14 @@
       <br />
       <br />
     {/each}
+
+    <PopupInfo
+      plantDetails={selectedPlant}
+      {data}
+      closePopup={() => {
+        selectedPlant = null;
+      }}
+    ></PopupInfo>
 
     <br />
     <span class="text-blue-600">Studio Random</span>
