@@ -1,8 +1,11 @@
 <script lang="ts">
+  import UserLoginStatus from "../../components/UserLoginStatus.svelte";
+
   import {
     type GardenPlantEntry,
     type InsertPlant,
     type MyGarden,
+    type SeedbankEntryWithPlant,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
 
@@ -238,13 +241,7 @@
 
 <!-- <nav> -->
 <div>
-  You are: {data.username}
-  <form method="post" use:enhance>
-    <button
-      class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-      >Logout</button
-    >
-  </form>
+  <UserLoginStatus username={data.username}></UserLoginStatus>
   <div>
     Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
       (s, i) => `#${i}: ${s.plant.commonName}`

@@ -1,10 +1,8 @@
-import type { PageServerLoad } from "./$types";
-import {
-  checkPlantsExist,
-  getUserGarden,
-  getUserSeeds,
-} from "$lib/server/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+import { db } from "$lib/server/db";
+import { eq } from "drizzle-orm";
+import { users } from "$lib/server/schema";
 import { lucia } from "$lib/server/auth";
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -15,14 +13,17 @@ export const load: PageServerLoad = async ({ locals }) => {
     redirect(302, "/login");
   }
 
-  console.log("******** (re)load page data");
   if (userId) {
-    console.log("running checks, loading data after authorisation...");
-    await checkPlantsExist();
-    const garden = await getUserGarden(userId);
-    const seeds = await getUserSeeds(userId);
-    console.log("...ready to render");
-    return { seeds, newSeed: null, username, garden };
+    const thisUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+    if (thisUser?.isAdmin === true) {
+      console.log("Admin user authorised");
+      return { username };
+    } else {
+      console.error(`User ${userId} is not an admin; not authorised`);
+      redirect(302, "/login");
+    }
   } else {
     throw Error("userId missing");
   }
