@@ -1,5 +1,9 @@
 import type { PageServerLoad } from "./$types";
-import { getAllPlants, getUserGarden } from "$lib/server/server";
+import {
+  checkPlantsExist,
+  getUserGarden,
+  getUserSeeds,
+} from "$lib/server/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 
@@ -13,9 +17,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   console.log("******** (re)load page data");
   if (userId) {
-    const seeds = await getAllPlants();
+    checkPlantsExist();
     const garden = await getUserGarden(userId);
-    // console.log("retrieved user garden:", JSON.stringify(garden, null, 2));
+    const seeds = await getUserSeeds(userId);
     return { seeds, newSeed: null, username, garden };
   } else {
     throw Error("userId missing");
