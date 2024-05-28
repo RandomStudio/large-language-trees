@@ -493,23 +493,6 @@
     "description": "Olive trees are known for their small white star-shaped flowers and elliptical green leaves with entire margins. Reaching up to 6 meters, they are valued for their fruit and oil production."
   },
   {
-    "id": "euphorbia-cactus",
-    "commonName": "Euphorbia Cactus",
-    "imageUrl": "/plants/Euphorbia-Cactus.webp",
-    "properties": {
-      "flowerColour": "Yellow",
-      "flowerColourRGB": "#FFFF00",
-      "petalCountRange": "Small",
-      "petalShape": "Star",
-      "leafColour": "Green",
-      "leafColourRGB": "#008000",
-      "leafShape": "None",
-      "leafMarginDescription": "None",
-      "high(m)": 1
-    },
-    "description": "Euphorbia Cactus is a succulent known for its small yellow star-shaped flowers and its cactus-like appearance. Growing up to 1 meter, it's often used in drought-tolerant landscapes."
-  },
-  {
     "id": "lily-of-the-valley",
     "commonName": "Lily of the Valley",
     "imageUrl": "/plants/Lily-of-the-Valley.webp",
@@ -576,5 +559,39 @@
       "high(m)": 8
     },
     "description": "Acacia trees are known for their bright yellow round flowers and green bipinnate leaves with entire margins. Reaching up to 8 meters, they are often used in landscaping and for their fragrant blooms."
+  },
+  {
+    "id": "venus-flytrap",
+    "commonName": "Venus Flytrap",
+    "imageUrl": "/plants/Venus-Flytrap.webp",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5-6",
+      "petalShape": "Star",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Obovate",
+      "leafMarginDescription": "Ciliate",
+      "high(m)": 0.15
+    },
+    "description": "The Venus Flytrap is a carnivorous plant known for its distinctive trapping mechanism. It has white star-shaped flowers with 5-6 petals and green obovate leaves with ciliate margins. Typically growing to about 15 centimeters in height, this plant is famous for its ability to capture and digest insects."
+  },
+  {
+    "id": "prickly-pear",
+    "commonName": "Prickly Pear",
+    "imageUrl": "/plants/Prickly-Pear.webp",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "8-10",
+      "petalShape": "Rounded",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oblong",
+      "leafMarginDescription": "Spiny",
+      "high(m)": 1.5
+    },
+    "description": "The Prickly Pear is a type of cactus known for its vibrant yellow flowers and spiny green pads. Each flower has 8-10 rounded petals, and the green oblong pads have spiny margins. Typically growing to about 1.5 meters in height, this plant is both ornamental and produces edible fruit."
   }
 ]
