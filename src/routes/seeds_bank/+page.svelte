@@ -34,12 +34,6 @@
   class="flex items-center justify-center min-h-screen bg-green-300 text-center"
 >
   <div>
-    <div>
-      You are: {data.username}
-    </div>
-
-    <h1>{data.garden.name}</h1>
-
     <h1 class="text-3xl font-bold text-blue-600">The Garden</h1>
 
     <br />
