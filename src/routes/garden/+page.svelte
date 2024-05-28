@@ -239,9 +239,11 @@
   <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
   ></UserLoginStatus>
   <div>
-    Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
-      (s, i) => `#${i}: ${s.plant.commonName}`
-    )}
+    {#if data.seeds}
+      Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
+        (s, i) => `#${i}: ${s.plant.commonName}`
+      )}
+    {/if}
   </div>
 </div>
 <!-- </nav> -->
