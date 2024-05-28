@@ -1,15 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     theme: {
-        extend: {
-            colors: {
-                blue: {
-                    50: '#0038FF',
-                },
-                green: {
-                    50: '9EE093',
-                }
-            }
-        },
+        colors: {
+            roelblue: '#0038FF',
+            roelgreen: '#9EE093',
+        }
     },
 }
