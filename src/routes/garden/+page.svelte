@@ -33,11 +33,15 @@
   export let candidateParentsFirst: [SelectPlant, SelectPlant] | null = null;
   export let candidateChild: InsertPlant | null = null;
 
-  let candidateParents: [SelectPlant, SelectPlant] = [
-    candidateParentsFirst[0].plant,
-    candidateParentsFirst[1].plant,
-  ];
-  console.log(candidateParents[0].p);
+  let candidateParents: [SelectPlant, SelectPlant];
+
+  if (candidateParentsFirst) {
+    let candidateParents: [SelectPlant, SelectPlant] = [
+      candidateParentsFirst[0].plant,
+      candidateParentsFirst[1].plant,
+    ];
+  }
+
   let timeout: NodeJS.Timeout | null = null;
 
   if (candidateParents != null && pollination) {
