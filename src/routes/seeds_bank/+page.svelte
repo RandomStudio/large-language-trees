@@ -31,15 +31,13 @@
 </script>
 
 <main
-  class="flex items-center justify-center min-h-screen bg-green-300 text-center"
+  class="flex flex-col items-center justify-center min-h-screen bg-green-300"
 >
-  <div>
-    <h1 class="text-3xl font-bold text-blue-600">The Garden</h1>
+  <div class="self-start w-full">
+    <h1 class="text-3xl font-bold text-blue-600 ml-4">The Garden</h1>
+  </div>
 
-    <br />
-
-    <span class="text-2xl text-blue-600 font-semibold">Your Seeds Bank</span>
-
+  <div class="text-center w-full">
     <br />
     <br />
     {#each data.seeds as plant}
@@ -50,6 +48,7 @@
           console.log("click!");
           selectedPlant = plant.plant;
         }}
+        class="cursor-pointer"
       >
         <div class="flex justify-center">
           <img
