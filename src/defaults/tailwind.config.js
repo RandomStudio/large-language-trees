@@ -4,6 +4,11 @@ module.exports = {
         colors: {
             roelblue: '#0038FF',
             roelgreen: '#9EE093',
+        },
+        extend: {
+            borderWidth: {
+                "4": "4px",
+            }
         }
     },
 }
