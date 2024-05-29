@@ -3,12 +3,12 @@
     type GardenPlantEntry,
     type InsertPlant,
     type MyGarden,
-    type SelectGarden,
+    type SeedbankEntryWithPlant,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
 
   interface GardenViewData {
-    seeds: SelectPlant[];
+    seeds: SeedbankEntryWithPlant[];
     username: string;
     garden: MyGarden;
   }
@@ -48,7 +48,7 @@
   let grid: GridCell[] = [];
 
   async function confirmBreed(
-    parents: [SelectPlant, SelectPlant]
+    parents: [SelectPlant, SelectPlant],
   ): Promise<InsertPlant> {
     console.log("confirmBreed...");
     const res = await fetch("/api/generate/plant", {
@@ -103,7 +103,7 @@
                   plant1.commonName +
                   " and " +
                   plant2.commonName +
-                  " !"
+                  " !",
               );
               waitingForGeneration = true;
               confirmBreed([plant1, plant2])
@@ -126,12 +126,16 @@
   }
 
   const populateGrid = () => {
-    console.log("populateGrid");
+    console.log(
+      "populateGrid with",
+      data.garden.plantsInGarden.length,
+      "plants",
+    );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r
+          (p) => p.colIndex === c && p.rowIndex === r,
         );
         if (plant) {
           const plantObject = plant.plant;
@@ -242,6 +246,11 @@
       >Logout</button
     >
   </form>
+  <div>
+    Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
+      (s, i) => `#${i}: ${s.plant.commonName}`,
+    )}
+  </div>
 </div>
 <!-- </nav> -->
 
@@ -345,7 +354,7 @@
           }
         } else {
           console.error(
-            "Whoops! Where is the candidate child plant we're confirming?"
+            "Whoops! Where is the candidate child plant we're confirming?",
           );
         }
       }}
