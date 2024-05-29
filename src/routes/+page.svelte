@@ -1,99 +1,78 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
-  import { backIn } from "svelte/easing";
+  import {
+    convertWebPToPNG,
+    removeBackgroundColor,
+  } from "../components/ImageTransformer.svelte";
 
-  // Define variables to control the fill speed and selected colour
-  let fillSpeed = "slow";
-  let selectedColour = "#FF0000";
+  let showButton = false;
 
-  onMount(() => {
-    // Load the image into the canvas and set up the functionality
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const context = canvas.getContext("2d");
-    const img = new Image();
-
-    img.onload = () => {
-      // Set the canvas size to match the image size
-      canvas.width = 200;
-      canvas.height = 200;
-
-      // Scale the image to fit inside the canvas
-      const scale = Math.min(
-        canvas.width / img.width,
-        canvas.height / img.height,
-      );
-      const newWidth = img.width * scale;
-      const newHeight = img.height * scale;
-
-      context.drawImage(img, 0, 0, newWidth, newHeight);
-
-      // Get the color of the top left pixel
-      const colorData = context.getImageData(0, 0, 1, 1).data;
-      console.log(colorData);
-      //const colorDataRange = [colorData +10
-      const backgroundColor = [colorData[0], colorData[1], colorData[2]];
-
-      // Call the function to remove background color
-      removeBackgroundColor(canvas, context, backgroundColor);
-    };
-
-    img.src = "/plants/Bamboo.png"; // Replace with your image path
-  });
-
-  function removeBackgroundColor(canvas, context, backgroundColor) {
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    const len = data.length;
-    console.log(data.len);
-    // Iterate through each pixel and remove the background color
-    for (let i = 0; i < len; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-
-      // Check if the pixel color matches the background color
-      if (r >= 230 && g >= 230 && b >= 230) {
-        // Set the alpha channel to 0 to make it transparent
-        data[i + 3] = 0;
-      }
-    }
-
-    // Put the modified image data back onto the canvas
-    context.putImageData(imageData, 0, 0);
+  function handleInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    showButton = input.value.length > 0;
   }
+
+  onMount(async () => {
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    canvas.width = 150;
+    canvas.height = 150;
+    canvas.setAttribute("data-image-url", "/plants/Acacia.webp");
+
+    try {
+      const pngUrl = await convertWebPToPNG(canvas);
+      removeBackgroundColor(canvas, 25); // Apply background removal with tolerance
+      document.getElementById("displayImage").src = pngUrl;
+    } catch (error) {
+      console.error("Failed to process image:", error);
+    }
+  });
 </script>
 
 <div
   class="flex items-center justify-center min-h-screen bg-green-300 overflow-hidden"
 >
-  <main class="text-left mx-1.5">
-    <h1 class="text-3xl text-blue-600">The Garden</h1>
-
-    <div>
-      <div class="flex justify-center space-x-4">
-        <canvas id="canvas"></canvas>
-      </div>
-      <br />
+  <main class="mx-10 w-full max-w-4xl">
+    <div class="text-left">
+      <h1 class="text-3xl text-blue-600">The Garden</h1>
     </div>
-    <div class="text-center">
+    <div class="flex justify-center space-x-4 my-8">
+      <canvas id="canvas" style="display:none;"></canvas>
+      <img id="displayImage" alt="Converted Image" style="display:block;" />
+    </div>
+    <form class="mt-8 text-center" style="min-height: 100px;">
+      <!-- Adjust the min-height as needed -->
+      <input
+        class="bg-transparent text-blue-600 py-2 px-4 border border-blue-500 rounded-full placeholder-blue-600 focus:outline-none focus:border-blue-500"
+        type="text"
+        id="fname"
+        name="fname"
+        placeholder="Fill in your name"
+        style="width:250px"
+        on:input={handleInput}
+      /><br />
+      {#if showButton}
+        <button
+          on:click={() => goto("/signup")}
+          class="bg-transparent text-blue-600 font-semibold py-2 px-4 border-4 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+          style="width:250px;">Start</button
+        >
+      {/if}
+    </form>
+    <div class="text-left mt-4">
       <p class="text-blue-600">
         Welcome to the common garden of Lucullus. This Digital Common Garden is
-        about connection and cross-pollination.
-        <br />
-        <br />Find other Gardeners to start cross-breeding and witness the
-        offspring flourish in the common garden of Lucullus.
+        about connection and cross-pollination.<br /><br />
+        Find other Gardeners to start cross-breeding and witness the offspring flourish
+        in the common garden of Lucullus.
       </p>
+      <br />
+      <div class="text-left">
+        <span class="text-blue-600 font-semibold">Production:</span><br />
+        <span class="text-blue-600">Studio Random</span><br />
+        <span class="text-blue-600 font-semibold">Image Data:</span><br />
+        <span class="text-blue-600">Chat GPT/ Open AI</span><br /><br />
+      </div>
     </div>
-    <br />
-    <span class="text-blue-600 font-semibold">Production:</span>
-    <br />
-    <span class="text-blue-600">Studio Random</span>
-    <br />
-    <span class="text-blue-600 font-semibold">Image Data:</span>
-    <br />
-    <span class="text-blue-600">Chat GPT/ Open AI</span>
-    <br />
-    <br />
   </main>
 </div>
