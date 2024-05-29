@@ -63,6 +63,32 @@
         context.putImageData(imageData, 0, 0);
     }
 
+    export function transformToBlue(canvas) {
+        const context = canvas.getContext("2d");
+        if (!context) {
+            console.error("Failed to get canvas context");
+            return;
+        }
+        const imageData = context.getImageData(
+            0,
+            0,
+            canvas.width,
+            canvas.height,
+        );
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] !== 0) {
+                // If the pixel is not transparent
+                data[i] = 0; // Red channel
+                data[i + 1] = 0; // Green channel
+                data[i + 2] = 255; // Blue channel
+            }
+        }
+
+        context.putImageData(imageData, 0, 0);
+    }
+
     function isWithinTolerance(pixelColor, targetColor, tolerance) {
         return (
             Math.abs(pixelColor[0] - targetColor[0]) <= tolerance &&
