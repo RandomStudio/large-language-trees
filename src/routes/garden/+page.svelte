@@ -14,6 +14,7 @@
   }
 
   export let data: GardenViewData;
+  export let pollination: boolean;
 
   // import { pickMultiple } from "random-elements";
 
@@ -29,10 +30,38 @@
   import { invalidateAll } from "$app/navigation";
   import { enhance } from "$app/forms";
 
-  let candidateParents: [SelectPlant, SelectPlant] | null = null;
-  let candidateChild: InsertPlant | null = null;
+  export let candidateParentsFirst: [SelectPlant, SelectPlant] | null = null;
+  export let candidateChild: InsertPlant | null = null;
 
+  let candidateParents: [SelectPlant, SelectPlant] = [
+    candidateParentsFirst[0].plant,
+    candidateParentsFirst[1].plant,
+  ];
+  console.log(candidateParents[0].p);
   let timeout: NodeJS.Timeout | null = null;
+
+  if (candidateParents != null && pollination) {
+    timeout = setTimeout(() => {
+      console.log(
+        "ready for mixing : " +
+          candidateParents[0].commonName +
+          " and " +
+          candidateParents[1].commonName +
+          " !",
+      );
+      waitingForGeneration = true;
+
+      confirmBreed(candidateParents)
+        .then((newPlant) => {
+          candidateChild = newPlant;
+          waitingForGeneration = false;
+        })
+        .catch((e) => {
+          console.error("Error from confirm/generate breed:", e);
+          waitingForGeneration = false;
+        });
+    }, 4000);
+  }
 
   let selectedPlant: SelectPlant | null = null;
 
