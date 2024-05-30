@@ -61,7 +61,7 @@
 </script>
 
 <div
-  class="flex items-center justify-center min-h-screen bg-green-300 overflow-hidden"
+  class="flex items-center justify-center min-h-screen bg-roel_green overflow-hidden"
 >
   <main class="mx-10 w-full max-w-4xl">
     <div class="fixed top-10 left-10">
