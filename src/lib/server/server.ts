@@ -17,6 +17,7 @@ import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   InsertPlant,
   MyGarden,
+  MySeeds,
   SeedbankEntryWithPlant,
   SelectGarden,
   SelectPlant,
@@ -60,16 +61,14 @@ export const checkPlantsExist = async () => {
   }
 };
 
-export const getUserSeeds = async (
-  userId: string
-): Promise<SeedbankEntryWithPlant[]> => {
+export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
   const seedBank = await db.query.seedbanks.findFirst({
     where: eq(seedbanks.userId, userId),
     with: { plantsInSeedbank: { with: { plant: true } } },
   });
   if (seedBank) {
     console.log(JSON.stringify({ seedBank }));
-    return seedBank.plantsInSeedbank;
+    return seedBank;
   } else {
     console.log("No seedbank! Will have to create one and populate it");
     const result = await db
@@ -170,19 +169,8 @@ export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
   if (typeof plant === "string") {
     throw Error("Plant is not an object");
   }
-  // const { commonName, description, properties } = plant;
   const insertedPlant = await db.insert(plants).values(plant).returning();
-  // const insertedId = insertedPlant[0].insertedId;
-  // if (plant.parent1 && plant.parent2) {
-  //   console.log("Adding two parents to this new plant:", parentIds);
-  //   await db
-  //     .update(plants)
-  //     .set({ parent1: parentIds[0], parent2: parentIds[1] })
-  //     .where(eq(plants.id, insertedId));
-  // }
-  // if (parentIds.length !== 0 && parentIds.length !== 2) {
-  //   throw Error("A plant can only have exactly zero or 2 parents!");
-  // }
+
   return insertedPlant[0];
 };
 

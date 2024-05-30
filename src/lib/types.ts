@@ -56,8 +56,7 @@ export interface UserWithSeedbank extends SelectUser {
 }
 
 export interface GardenViewData {
-  seeds: SeedbankEntryWithPlant[];
-  username: string;
-  isAdmin: boolean;
+  seedBank: MySeeds;
+  user: SelectUser;
   garden: MyGarden;
 }

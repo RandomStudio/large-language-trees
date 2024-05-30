@@ -28,13 +28,22 @@ export const load: PageServerLoad = async ({
     await checkPlantsExist();
     await checkDefaultUsers();
     const garden = await getUserGarden(userId);
-    const seeds = await getUserSeeds(userId);
+    const seedBank = await getUserSeeds(userId);
     console.log("...ready to render");
     const thisUser = await db.query.users.findFirst({
       where: eq(users.id, userId),
+      with: { mySeedbank: true },
     });
-    const isAdmin = thisUser?.isAdmin || false;
-    return { seeds, username, garden, isAdmin };
+    if (thisUser) {
+      return {
+        // TODO: just load the user seedbank (including its seeds, not seeds + seedbankId separately)
+        user: thisUser,
+        seedBank,
+        garden,
+      };
+    } else {
+      throw Error("could not find user when querying");
+    }
   } else {
     throw Error("userId missing");
   }

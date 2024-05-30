@@ -6,6 +6,7 @@
     type GardenViewData,
     type InsertPlant,
     type MyGarden,
+    type SeedbankEntry,
     type SeedbankEntryWithPlant,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
@@ -24,7 +25,6 @@
   import ConfirmBreed from "../../components/ConfirmBreed.svelte";
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
-  import { enhance } from "$app/forms";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -231,16 +231,77 @@
     }
   }
 
+  async function addNewPlant(imageURL: string | null) {
+    if (candidateChild) {
+      if (imageURL) {
+        console.log("will attach image", imageURL);
+        candidateChild.imageUrl = imageURL;
+      }
+      const res = await fetch("/api/plants", {
+        method: "POST",
+        body: JSON.stringify(candidateChild),
+      });
+      const { status, statusText, body } = res;
+      if (status === 201) {
+        console.log("Sucessfully added!");
+
+        // Also place in garden...
+        const plantId = candidateChild.id;
+        const gardenId = data.garden.id;
+        const rowIndex = 0;
+        const colIndex = 0;
+        const updated = {
+          plantId,
+          gardenId,
+          rowIndex,
+          colIndex,
+        };
+        const placementRes = await fetch("/api/plantsInGarden", {
+          method: "POST",
+          body: JSON.stringify(updated),
+        });
+        console.log("Placed in garden?", placementRes);
+
+        // Also place in user seedbank...
+        const entry: SeedbankEntry = {
+          plantId,
+          seedbankId: data.seedBank.id,
+        };
+        const seedbankRes = await fetch("/api/plantsInSeedbank", {
+          method: "POST",
+          body: JSON.stringify(entry),
+        });
+        if (seedbankRes.status === 201) {
+          console.log("successsfully added to Seedbank");
+        }
+
+        // Reload data for page
+        await invalidateAll();
+        populateGrid();
+        candidateChild = null;
+      } else {
+        console.error("Error adding new plant:", { status, statusText });
+        candidateChild = null;
+      }
+    } else {
+      console.error(
+        "Whoops! Where is the candidate child plant we're confirming?"
+      );
+    }
+  }
+
   populateGrid();
 </script>
 
 <!-- <nav> -->
 <div>
-  <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
+  <UserLoginStatus
+    isAdmin={data.user.isAdmin || false}
+    username={data.user.username}
   ></UserLoginStatus>
   <div>
-    {#if data.seeds}
-      Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
+    {#if data.seedBank}
+      Plants in your seedbank: {data.seedBank.plantsInSeedbank.length}: {data.seedBank.plantsInSeedbank.map(
         (s, i) => `#${i}: ${s.plant.commonName}`
       )}
     {/if}
@@ -296,7 +357,7 @@
 
   {#if selectedPlant}
     <PopupInfo
-      allSeeds={data.seeds.map((s) => s.plant)}
+      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
       plantDetails={selectedPlant}
       closePopup={() => {
         selectedPlant = null;
@@ -307,52 +368,11 @@
   {#if candidateChild}
     <ConfirmBreed
       {candidateChild}
-      allSeeds={data.seeds.map((s) => s.plant)}
+      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={async (imageURL) => {
-        if (candidateChild) {
-          if (imageURL) {
-            console.log("will attach image", imageURL);
-            candidateChild.imageUrl = imageURL;
-          }
-          const res = await fetch("/api/plants", {
-            method: "POST",
-            body: JSON.stringify(candidateChild),
-          });
-          const { status, statusText, body } = res;
-          if (status === 201) {
-            console.log("Sucessfully added!");
-            // TODO: Also add plant to user's garden (gardenToPlants)
-            const plantId = candidateChild.id;
-            const gardenId = data.garden.id;
-            const rowIndex = 0;
-            const colIndex = 0;
-            const updated = {
-              plantId,
-              gardenId,
-              rowIndex,
-              colIndex,
-            };
-            const placementRes = await fetch("/api/plantsInGarden", {
-              method: "POST",
-              body: JSON.stringify(updated),
-            });
-            console.log("Placed in garden?", placementRes);
-            await invalidateAll();
-            populateGrid();
-            candidateChild = null;
-          } else {
-            console.error("Error adding new plant:", { status, statusText });
-            candidateChild = null;
-          }
-        } else {
-          console.error(
-            "Whoops! Where is the candidate child plant we're confirming?"
-          );
-        }
-      }}
+      onConfirm={addNewPlant}
     />
   {/if}
 </main>
@@ -365,6 +385,7 @@
 {#if waitingForGeneration}
   <FullScreenLoading />
 {/if}
+seedBank
 
 <style>
 </style>

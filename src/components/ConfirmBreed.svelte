@@ -7,7 +7,7 @@
   export let allSeeds: SelectPlant[];
 
   export let onCancel: () => any;
-  export let onConfirm: (imageURL: string | null) => any;
+  export let onConfirm: (imageURL: string | null) => Promise<void>;
 
   let textInput = "";
 
@@ -85,7 +85,7 @@
   <div class="border bg-slate-100 m-8 p-4 rounded">
     <h1 class="text-xl font-bold">New plant!</h1>
     {#if candidateImage}
-      <img src={candidateImage} alt="AI generated new plant" />
+      <img src={candidateImage} alt="AI generated new plant" class="max-w-20" />
     {/if}
     {#if waitingForImage}
       <div>
