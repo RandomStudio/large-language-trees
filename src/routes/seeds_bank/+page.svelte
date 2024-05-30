@@ -29,12 +29,25 @@
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
   import { enhance } from "$app/forms";
+
+  import { canvaWithoutBG } from "$lib/removeBG";
+  import { onMount } from "svelte";
+
+  onMount(() => {
+    for (let plant of data.seeds)
+      canvaWithoutBG(
+        "canvas_" + plant.plant.commonName,
+        plant.plant.commonName,
+        plant.plant.imageUrl,
+      );
+  });
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden">
   <div class="fixed top-10 left-10">
     <h1 class="text-3xl text-roel_blue">The Garden</h1>
   </div>
+
   <main class="mx-10 mt-20">
     <div class="text-center w-full">
       <br />
@@ -50,10 +63,16 @@
           class="cursor-pointer"
         >
           <div class="flex justify-center">
+            <canvas
+              id={"canvas_" + plant.plant.commonName}
+              style="display:none;"
+            ></canvas>
+            <!-- svelte-ignore a11y-img-redundant-alt -->
             <img
               src={plant.plant.imageUrl}
               alt={plant.plant.commonName}
               width="70%"
+              id={plant.plant.commonName}
             />
           </div>
           <br />
