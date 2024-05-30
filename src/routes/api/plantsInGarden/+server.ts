@@ -5,6 +5,26 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 import { pickRandomIndex } from "random-elements";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../../defaults/constants";
+import { SHARED_GARDEN_USERID } from "$env/static/private";
+
+const findEmpty = (
+  otherPlants: GardenPlantEntry[],
+  closeTo: { row: number; col: number }
+) => {
+  let col = closeTo.col;
+  let row = closeTo.row;
+
+  while (
+    otherPlants.find(
+      (entry) => entry.colIndex === col && entry.rowIndex === row
+    )
+  ) {
+    col = Math.floor(Math.random() * GRID_WIDTH);
+    row = Math.floor(Math.random() * GRID_HEIGHT);
+  }
+
+  return { col, row };
+};
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as GardenPlantEntry;
@@ -20,22 +40,41 @@ export const POST: RequestHandler = async ({ request }) => {
     where: eq(gardensToPlants.gardenId, gardenId),
   });
 
-  let c = colIndex;
-  let r = rowIndex;
+  const { col, row } = findEmpty(otherPlants, { row: rowIndex, col: colIndex });
 
-  while (
-    otherPlants.find((entry) => entry.colIndex === c && entry.rowIndex === r)
-  ) {
-    c = Math.floor(Math.random() * GRID_WIDTH);
-    r = Math.floor(Math.random() * GRID_HEIGHT);
-  }
-
-  console.log("Found empty spot:", { column: c, row: r });
+  console.log("Found empty spot:", { col, row });
 
   const result = await db
     .insert(gardensToPlants)
-    .values({ ...data, rowIndex: r, colIndex: c })
+    .values({ ...data, rowIndex: row, colIndex: col })
     .returning();
+
+  if (SHARED_GARDEN_USERID) {
+    console.warn(
+      "SHARED_GARDEN_USERID env variable is active; will also add this plant to default garden"
+    );
+    const { col, row } = findEmpty(otherPlants, {
+      row: rowIndex,
+      col: colIndex,
+    });
+    const defaultGarden = await db.query.gardens.findFirst({
+      where: eq(gardens.userId, SHARED_GARDEN_USERID),
+    });
+    if (defaultGarden) {
+      const result2 = await db
+        .insert(gardensToPlants)
+        .values({
+          ...data,
+          rowIndex: row,
+          colIndex: col,
+          gardenId: defaultGarden.id,
+        })
+        .returning();
+      console.log("Added to default garden as entry", result2);
+    } else {
+      console.error("Where is the default user's garden?");
+    }
+  }
 
   return json(result[0], { status: 201 });
 };
