@@ -4,7 +4,9 @@ export default {
   theme: {
     colors: {
       'roel_green': '#9EE093',
+      'roel_blue': '#0038FF',
     }
   },
   plugins: [],
 }
+

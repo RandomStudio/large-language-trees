@@ -20,7 +20,7 @@
 >
   <main class="mx-10 w-full max-w-4xl">
     <div class="fixed top-10 left-10">
-      <h1 class="text-3xl text-blue-600">The Garden</h1>
+      <h1 class="text-3xl text-roel_blue">The Garden</h1>
     </div>
     <div class="flex justify-center space-x-4 my-8">
       <canvas id="canvas" style="display:none;"></canvas>
@@ -49,7 +49,7 @@
       {/if}
     </form>
     <div class="text-left mt-4">
-      <p class="text-blue-600">
+      <p class="text-roel_blue">
         Welcome to the common garden of Lucullus. This Digital Common Garden is
         about connection and cross-pollination.<br /><br />
         Find other Gardeners to start cross-breeding and witness the offspring flourish
@@ -57,10 +57,10 @@
       </p>
       <br />
       <div class="text-left">
-        <span class="text-blue-600 font-semibold">Production:</span><br />
-        <span class="text-blue-600">Studio Random</span><br />
-        <span class="text-blue-600 font-semibold">Image Data:</span><br />
-        <span class="text-blue-600">Chat GPT/ Open AI</span><br /><br />
+        <span class="text-roel_blue font-semibold">Production:</span><br />
+        <span class="text-roel_blue">Studio Random</span><br />
+        <span class="text-roel_blue font-semibold">Image Data:</span><br />
+        <span class="text-roel_blue">Chat GPT/ Open AI</span><br /><br />
       </div>
     </div>
   </main>
