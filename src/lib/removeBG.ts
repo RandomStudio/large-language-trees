@@ -1,5 +1,5 @@
-export function canvaWithoutBG(CanvaId: string, imageId: string, imgSource: string) {
-    const canvas = document.getElementById(CanvaId) as HTMLCanvasElement;
+export function canvaWithoutBG(canvaId: string, imageId: string, imgSource: string) {
+    const canvas = document.getElementById(canvaId) as HTMLCanvasElement;
     if (!canvas) return;
     const context = canvas.getContext("2d");
     if (!context) return;
@@ -18,7 +18,7 @@ export function canvaWithoutBG(CanvaId: string, imageId: string, imgSource: stri
         const yOffset = (canvas.height - scaledHeight) / 2;
         context.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
         const topLeftColor = context.getImageData(0, 0, 1, 1).data;
-        const tolerance = 25;
+        const tolerance = 10;
         const imageData = context.getImageData(
             0,
             0,
@@ -46,7 +46,7 @@ export function canvaWithoutBG(CanvaId: string, imageId: string, imgSource: stri
     img.src = imgSource; // Load the .webp image
 }
 
-function isWithinTolerance(pixelColor, targetColor, tolerance) {
+function isWithinTolerance(pixelColor: Array<number>, targetColor: Array<number>, tolerance: number) {
     return (
         Math.abs(pixelColor[0] - targetColor[0]) <= tolerance &&
         Math.abs(pixelColor[1] - targetColor[1]) <= tolerance &&
