@@ -30,50 +30,50 @@
   import { enhance } from "$app/forms";
 </script>
 
-<main
-  class="flex flex-col items-center justify-center min-h-screen bg-green-300"
->
-  <div class="self-start w-full">
-    <h1 class="text-3xl font-bold text-blue-600 ml-4">The Garden</h1>
-  </div>
+<div class="min-h-screen bg-green-300 overflow-hidden">
+  <main class="mx-10 mt-20">
+    <div class="fixed top-10 left-10">
+      <h1 class="text-3xl text-blue-600">The Garden</h1>
+    </div>
 
-  <div class="text-center w-full">
-    <br />
-    <br />
-    {#each data.seeds as plant}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        on:click={() => {
-          console.log("click!");
-          selectedPlant = plant.plant;
-        }}
-        class="cursor-pointer"
-      >
-        <div class="flex justify-center">
-          <img
-            src={plant.plant.imageUrl}
-            alt={plant.plant.commonName}
-            width="70%"
-          />
+    <div class="text-center w-full">
+      <br />
+      <br />
+      {#each data.seeds as plant}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+          on:click={() => {
+            console.log("click!");
+            selectedPlant = plant.plant;
+          }}
+          class="cursor-pointer"
+        >
+          <div class="flex justify-center">
+            <img
+              src={plant.plant.imageUrl}
+              alt={plant.plant.commonName}
+              width="70%"
+            />
+          </div>
+          <br />
+          <p class="text-center text-blue-600 font-semibold">
+            {plant.plant.commonName}
+          </p>
         </div>
         <br />
-        <p class="text-center text-blue-600 font-semibold">
-          {plant.plant.commonName}
-        </p>
-      </div>
-      <br />
-      <br />
-    {/each}
-  </div>
+        <br />
+      {/each}
+    </div>
 
-  {#if selectedPlant}
-    <PopupInfo
-      plantDetails={selectedPlant}
-      {data}
-      closePopup={() => {
-        selectedPlant = null;
-      }}
-    ></PopupInfo>
-  {/if}
-</main>
+    {#if selectedPlant}
+      <PopupInfo
+        plantDetails={selectedPlant}
+        {data}
+        closePopup={() => {
+          selectedPlant = null;
+        }}
+      ></PopupInfo>
+    {/if}
+  </main>
+</div>
