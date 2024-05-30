@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
+  import { canvaWithoutBG } from "$lib/removeBG";
+
   let showButton = false;
 
   function handleInput(event: Event) {
@@ -9,55 +11,8 @@
   }
 
   onMount(() => {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-    if (!context) return;
-    const img = new Image();
-
-    img.onload = () => {
-      canvas.width = 150;
-      canvas.height = 150;
-      const scale = Math.min(
-        canvas.width / img.width,
-        canvas.height / img.height,
-      );
-      const scaledWidth = img.width * scale;
-      const scaledHeight = img.height * scale;
-      const xOffset = (canvas.width - scaledWidth) / 2;
-      const yOffset = (canvas.height - scaledHeight) / 2;
-      context.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
-      const topLeftColor = context.getImageData(0, 0, 1, 1).data;
-      const tolerance = 25;
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-
-      for (let i = 0; i < data.length; i += 4) {
-        if (
-          isWithinTolerance(
-            [data[i], data[i + 1], data[i + 2]],
-            [topLeftColor[0], topLeftColor[1], topLeftColor[2]],
-            tolerance,
-          )
-        ) {
-          data[i + 3] = 0;
-        }
-      }
-      context.putImageData(imageData, 0, 0);
-      const pngUrl = canvas.toDataURL("image/png");
-      document.getElementById("displayImage").src = pngUrl;
-    };
-
-    img.src = "/plants/Acacia.webp"; // Load the .webp image
+    canvaWithoutBG("canvas", "displayImage", "/plants/Acacia.webp");
   });
-
-  function isWithinTolerance(pixelColor, targetColor, tolerance) {
-    return (
-      Math.abs(pixelColor[0] - targetColor[0]) <= tolerance &&
-      Math.abs(pixelColor[1] - targetColor[1]) <= tolerance &&
-      Math.abs(pixelColor[2] - targetColor[2]) <= tolerance
-    );
-  }
 </script>
 
 <div
@@ -69,6 +24,7 @@
     </div>
     <div class="flex justify-center space-x-4 my-8">
       <canvas id="canvas" style="display:none;"></canvas>
+      <!-- svelte-ignore a11y-img-redundant-alt -->
       <img id="displayImage" alt="Converted Image" style="display:block;" />
     </div>
     <form class="mt-8 text-center" style="min-height: 100px;">
