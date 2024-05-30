@@ -21,8 +21,8 @@
     const img = new Image();
 
     img.onload = () => {
-      canvas.width = 150;
-      canvas.height = 150;
+      canvas.width = 350;
+      canvas.height = 350;
       const scale = Math.min(
         canvas.width / img.width,
         canvas.height / img.height,
@@ -53,7 +53,7 @@
       document.getElementById("displayImage").src = pngUrl;
     };
 
-    img.src = "/plants/Acacia.webp"; // Load the .webp image
+    img.src = "/titleimg.png"; // Load the .webp image
   });
 
   function isWithinTolerance(pixelColor, targetColor, tolerance) {
@@ -69,10 +69,6 @@
   class="flex items-center justify-center min-h-screen bg-roel_green overflow-hidden"
 >
   <main class="mx-10 w-full max-w-4xl">
-    <div class="fixed top-10 left-10">
-      <h1 class="text-3xl text-roel_blue">The Garden</h1>
-    </div>
-
     <div class="flex justify-center space-x-4 my-8">
       <canvas id="canvas" style="display:none;"></canvas>
       <img id="displayImage" alt="Converted Image" style="display:block;" />
