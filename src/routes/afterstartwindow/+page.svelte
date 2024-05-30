@@ -25,36 +25,35 @@
     </div>
 
     <main class="mx-10 mt-20">
-        <p class="text-roel_blue text-2xl">
-            Dear aspiring gardener, We have selected a plant for you!
-        </p>
         <div class="text-left">
             {#if selectedPlant}
                 <div class="flex justify-center my-4">
                     <img
                         src={selectedPlant.imageUrl}
                         alt={selectedPlant.commonName}
-                        style="width: 50%;"
+                        style="width: 100%;"
                     />
                 </div>
                 <p class="flex justify-center text-roel_blue">
                     {selectedPlant.commonName}
                 </p>
-                <p class="text-roel_blue">
-                    {selectedPlant.description}
-                </p>
             {:else}
                 <p class="text-roel_blue">No plants available</p>
             {/if}
         </div>
+        <br />
+        <p class="text-roel_blue text-2xl">
+            Find a fellow gardener irl and scan their barcode to start
+            pollinating.
+        </p>
 
         <div class="mt-4 text-center">
             <button
                 class="bg-transparent text-roel_blue py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
                 style="width:250px;"
-                on:click={() => goto("/afterstartwindow")}
+                on:click={() => goto("/seeds_bank")}
             >
-                Great!
+                Start Pollinating
             </button>
         </div>
     </main>
