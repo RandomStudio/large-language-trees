@@ -51,11 +51,15 @@
         class="cursor-pointer"
       >
         <div class="flex justify-center">
-          <img
-            src={plant.plant.imageUrl}
-            alt={plant.plant.commonName}
-            width="70%"
-          />
+          {#if plant.plant.pngImageUrl}
+            <img
+              src={plant.plant.pngImageUrl}
+              alt={plant.plant.commonName}
+              width="70%"
+            />
+          {:else}
+            <p>Loading...</p>
+          {/if}
         </div>
         <br />
         <p class="text-center text-blue-600 font-semibold">
