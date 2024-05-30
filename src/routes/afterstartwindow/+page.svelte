@@ -62,7 +62,7 @@
 <style>
     @font-face {
         font-family: "Garamond";
-        src: url("/static/Garamond.ttf") format("truetype");
+        src: url("/Garamond.ttf") format("truetype");
         font-weight: normal;
         font-style: normal;
     }
