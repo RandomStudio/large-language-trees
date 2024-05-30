@@ -276,8 +276,10 @@
         }
 
         // Reload data for page
+        console.log("Reloading page data...");
         await invalidateAll();
         populateGrid();
+        console.log("...done");
         candidateChild = null;
       } else {
         console.error("Error adding new plant:", { status, statusText });
