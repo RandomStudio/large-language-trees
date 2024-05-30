@@ -80,6 +80,6 @@ export const actions = {
       ...sessionCookie.attributes,
     });
 
-    redirect(302, "/garden");
+    redirect(302, "/startwindow");
   },
 } satisfies Actions;

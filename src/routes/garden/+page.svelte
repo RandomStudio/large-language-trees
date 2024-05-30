@@ -5,9 +5,7 @@
     type GardenPlantEntry,
     type GardenViewData,
     type InsertPlant,
-    type MyGarden,
     type SeedbankEntry,
-    type SeedbankEntryWithPlant,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
 
