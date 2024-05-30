@@ -31,17 +31,17 @@
   import { enhance } from "$app/forms";
 
   export let candidateParentsFirst: [SelectPlant, SelectPlant] | null = null;
-  export let candidateChild: InsertPlant | null = null;
-
+  let candidateChild: InsertPlant | null = null;
+  console.log(candidateParentsFirst);
   let candidateParents: [SelectPlant, SelectPlant];
 
   if (candidateParentsFirst) {
-    let candidateParents: [SelectPlant, SelectPlant] = [
+    candidateParents = [
       candidateParentsFirst[0].plant,
       candidateParentsFirst[1].plant,
     ];
   }
-
+  console.log(candidateParents);
   let timeout: NodeJS.Timeout | null = null;
 
   if (candidateParents != null && pollination) {
