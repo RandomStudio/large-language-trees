@@ -1,20 +1,18 @@
-import type { PageServerLoad } from "./$types";
-import {
-  checkDefaultUsers,
-  checkPlantsExist,
-  getUserGarden,
-  getUserSeeds,
-} from "$lib/server/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
-import { lucia } from "$lib/server/auth";
-import type { GardenViewData } from "$lib/types";
+import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
 import { users } from "$lib/server/schema";
+import { lucia } from "$lib/server/auth";
+import {
+  checkDefaultUsers,
+  checkPlantsExist,
+  cleanUp,
+  getUserGarden,
+  getUserSeeds,
+} from "$lib/server/server";
 
-export const load: PageServerLoad = async ({
-  locals,
-}): Promise<GardenViewData> => {
+export const load: PageServerLoad = async ({ locals }) => {
   const username = locals.user?.username;
   const userId = locals.user?.id;
   if (!username) {
@@ -22,27 +20,21 @@ export const load: PageServerLoad = async ({
     redirect(302, "/login");
   }
 
-  console.log("******** (re)load page data");
   if (userId) {
-    console.log("running checks, loading data after authorisation...");
     await checkPlantsExist();
     await checkDefaultUsers();
     const garden = await getUserGarden(userId);
-    const seedBank = await getUserSeeds(userId);
-    console.log("...ready to render");
+    const seeds = await getUserSeeds(userId);
+
     const thisUser = await db.query.users.findFirst({
       where: eq(users.id, userId),
-      with: { mySeedbank: true },
     });
-    if (thisUser) {
-      return {
-        // TODO: just load the user seedbank (including its seeds, not seeds + seedbankId separately)
-        user: thisUser,
-        seedBank,
-        garden,
-      };
+    if (thisUser?.isAdmin === true) {
+      console.log("Admin user authorised");
+      return { username, isAdmin: true };
     } else {
-      throw Error("could not find user when querying");
+      console.error(`User ${userId} is not an admin; not authorised`);
+      redirect(302, "/login");
     }
   } else {
     throw Error("userId missing");
@@ -60,6 +52,11 @@ export const actions: Actions = {
       path: ".",
       ...sessionCookie.attributes,
     });
+    redirect(302, "/");
+  },
+  reset: async (event) => {
+    console.warn("Full reset happening!");
+    await cleanUp();
     redirect(302, "/");
   },
 };

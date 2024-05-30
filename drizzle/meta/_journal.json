@@ -36,6 +36,13 @@
       "when": 1716811626826,
       "tag": "0004_living_the_hunter",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1716886798953,
+      "tag": "0005_quiet_supreme_intelligence",
+      "breakpoints": true
     }
   ]
 }
