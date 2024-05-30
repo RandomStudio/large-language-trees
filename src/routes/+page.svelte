@@ -1,11 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
-  import {
-    convertWebPToPNG,
-    removeBackgroundColor,
-  } from "../components/ImageTransformer.svelte";
-
+  import ImageTransformer from "../components/ImageTransformer.svelte";
   let showButton = false;
 
   function handleInput(event: Event) {
@@ -13,27 +9,63 @@
     showButton = input.value.length > 0;
   }
 
-  onMount(async () => {
+  onMount(() => {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    canvas.width = 150;
-    canvas.height = 150;
-    canvas.setAttribute("data-image-url", "/plants/Acacia.webp");
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const img = new Image();
 
-    try {
-      const pngUrl = await convertWebPToPNG(canvas);
-      removeBackgroundColor(canvas, 25); // Apply background removal with tolerance
+    img.onload = () => {
+      canvas.width = 150;
+      canvas.height = 150;
+      const scale = Math.min(
+        canvas.width / img.width,
+        canvas.height / img.height,
+      );
+      const scaledWidth = img.width * scale;
+      const scaledHeight = img.height * scale;
+      const xOffset = (canvas.width - scaledWidth) / 2;
+      const yOffset = (canvas.height - scaledHeight) / 2;
+      context.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
+      const topLeftColor = context.getImageData(0, 0, 1, 1).data;
+      const tolerance = 25;
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+
+      for (let i = 0; i < data.length; i += 4) {
+        if (
+          isWithinTolerance(
+            [data[i], data[i + 1], data[i + 2]],
+            [topLeftColor[0], topLeftColor[1], topLeftColor[2]],
+            tolerance,
+          )
+        ) {
+          data[i + 3] = 0;
+        }
+      }
+      context.putImageData(imageData, 0, 0);
+      const pngUrl = canvas.toDataURL("image/png");
       document.getElementById("displayImage").src = pngUrl;
-    } catch (error) {
-      console.error("Failed to process image:", error);
-    }
+    };
+
+    img.src = "/plants/Acacia.webp"; // Load the .webp image
   });
+
+  function isWithinTolerance(pixelColor, targetColor, tolerance) {
+    return (
+      Math.abs(pixelColor[0] - targetColor[0]) <= tolerance &&
+      Math.abs(pixelColor[1] - targetColor[1]) <= tolerance &&
+      Math.abs(pixelColor[2] - targetColor[2]) <= tolerance
+    );
+  }
 </script>
 
 <div
   class="flex items-center justify-center min-h-screen bg-green-300 overflow-hidden"
 >
   <main class="mx-10 w-full max-w-4xl">
-    <div class="text-left">
+    <div class="fixed top-10 left-10">
       <h1 class="text-3xl text-blue-600">The Garden</h1>
     </div>
     <div class="flex justify-center space-x-4 my-8">
@@ -53,10 +85,12 @@
       /><br />
       {#if showButton}
         <button
-          on:click={() => goto("/signup")}
-          class="bg-transparent text-blue-600 font-semibold py-2 px-4 border-4 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
-          style="width:250px;">Start</button
+          on:click={() => goto("/startwindow")}
+          class="bg-transparent text-blue-600 font-semibold py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+          style="width:250px;"
         >
+          Start
+        </button>
       {/if}
     </form>
     <div class="text-left mt-4">
@@ -75,4 +109,18 @@
       </div>
     </div>
   </main>
+  <ImageTransformer />
 </div>
+
+<style>
+  @font-face {
+    font-family: "Garamond";
+    src: url("/static/Garamond.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  h1 {
+    font-family: "Garamond", serif;
+  }
+</style>
