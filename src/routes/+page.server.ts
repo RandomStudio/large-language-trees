@@ -2,7 +2,7 @@ import { lucia } from "$lib/server/auth";
 import { fail, redirect } from "@sveltejs/kit";
 import { verify } from "@node-rs/argon2";
 
-import type { Actions } from "./$types";
+import type { Actions } from "./login/$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
