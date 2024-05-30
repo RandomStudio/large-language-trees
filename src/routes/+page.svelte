@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
-  import ImageTransformer from "../components/ImageTransformer.svelte";
   let showButton = false;
 
   function handleInput(event: Event) {
@@ -109,13 +108,12 @@
       </div>
     </div>
   </main>
-  <ImageTransformer />
 </div>
 
 <style>
   @font-face {
     font-family: "Garamond";
-    src: url("/static/Garamond.ttf") format("truetype");
+    src: url("/Garamond.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
   }
