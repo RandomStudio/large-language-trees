@@ -16,7 +16,8 @@
     console.log(data.seeds);
 
     // Automatically select the first plant in the list to display
-    let selectedPlant = data.seeds.length > 0 ? data.seeds[0].plant : null;
+    let selectedPlant = data.seeds.plantsInSeedbank[0].plant;
+    console.log(selectedPlant);
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden">
