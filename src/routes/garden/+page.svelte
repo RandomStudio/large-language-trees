@@ -1,17 +1,13 @@
 <script lang="ts">
+  import UserLoginStatus from "../../components/UserLoginStatus.svelte";
+
   import {
     type GardenPlantEntry,
+    type GardenViewData,
     type InsertPlant,
-    type MyGarden,
-    type SeedbankEntryWithPlant,
+    type SeedbankEntry,
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
-
-  interface GardenViewData {
-    seeds: SeedbankEntryWithPlant[];
-    username: string;
-    garden: MyGarden;
-  }
 
   export let data: GardenViewData;
   export let pollination: boolean;
@@ -28,7 +24,6 @@
   import ConfirmBreed from "../../components/ConfirmBreed.svelte";
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
-  import { enhance } from "$app/forms";
 
   export let candidateParentsFirst: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -267,35 +262,84 @@
     }
   }
 
+  async function addNewPlant(imageURL: string | null) {
+    if (candidateChild) {
+      if (imageURL) {
+        console.log("will attach image", imageURL);
+        candidateChild.imageUrl = imageURL;
+      }
+      const res = await fetch("/api/plants", {
+        method: "POST",
+        body: JSON.stringify(candidateChild),
+      });
+      const { status, statusText, body } = res;
+      if (status === 201) {
+        console.log("Sucessfully added!");
+
+        // Also place in garden...
+        const plantId = candidateChild.id;
+        const gardenId = data.garden.id;
+        const rowIndex = 0;
+        const colIndex = 0;
+        const updated = {
+          plantId,
+          gardenId,
+          rowIndex,
+          colIndex,
+        };
+        const placementRes = await fetch("/api/plantsInGarden", {
+          method: "POST",
+          body: JSON.stringify(updated),
+        });
+        console.log("Placed in garden?", placementRes);
+
+        // Also place in user seedbank...
+        const entry: SeedbankEntry = {
+          plantId,
+          seedbankId: data.seedBank.id,
+        };
+        const seedbankRes = await fetch("/api/plantsInSeedbank", {
+          method: "POST",
+          body: JSON.stringify(entry),
+        });
+        if (seedbankRes.status === 201) {
+          console.log("successsfully added to Seedbank");
+        }
+
+        // Reload data for page
+        console.log("Reloading page data...");
+        await invalidateAll();
+        populateGrid();
+        console.log("...done");
+        candidateChild = null;
+      } else {
+        console.error("Error adding new plant:", { status, statusText });
+        candidateChild = null;
+      }
+    } else {
+      console.error(
+        "Whoops! Where is the candidate child plant we're confirming?",
+      );
+    }
+  }
+
   populateGrid();
 </script>
 
 <!-- <nav> -->
 <div>
-  You are: {data.username}
-  <form method="post" use:enhance>
-    <button
-      class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-      >Logout</button
-    >
-  </form>
-  <div>
-    Plants in your seedbank: {data.seeds.length}: {data.seeds.map(
-      (s, i) => `#${i}: ${s.plant.commonName}`,
-    )}
-  </div>
+  <UserLoginStatus
+    isAdmin={data.user.isAdmin || false}
+    username={data.user.username}
+  ></UserLoginStatus>
 </div>
 <!-- </nav> -->
 
-<h1>{data.garden.name}</h1>
-
-<main class="container mx-auto">
-  <div class="grid grid-cols-6 gap-4 justify-stretch">
+<main class="container mx-auto overflow-visible">
+  <div class="grid grid-cols-6 gap-4 justify-stretch overflow-visible">
     {#each grid as gridCell, gridIndex}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="border-2"
+        class="relative bg-roel_blue min-w-[100px] min-h-[100px] overflow-visible"
         on:click={() => {
           console.log("click!");
           if (gridCell.plant) {
@@ -306,26 +350,24 @@
         }}
       >
         {#if gridCell.plant}
-          <PlantCell
-            data={gridCell.plant}
-            {gridIndex}
-            on:dragStart={dragStart}
-          />
+          <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] z-10">
+            <img
+              src={gridCell.plant.imageUrl}
+              alt={gridCell.plant.commonName}
+              class="scale-125"
+            />
+          </div>
         {:else}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
-            class:border-4={gridCell.highlighted}
+            class:bg-roel_blue={gridCell.highlighted}
             on:drop={(e) => {
-              drop(e, gridIndex);
-            }}
-            on:drop={(e) => {
-              console.log("drop");
               drop(e, gridIndex);
             }}
             on:dragover={(e) => dragOver(e, gridIndex)}
             on:dragleave={(e) => dragLeave(e, gridIndex)}
           >
-            <img src="plants/empty.png" />
+            <!-- Optionally maintain a placeholder or remove content entirely -->
           </div>
         {/if}
       </div>
@@ -333,72 +375,38 @@
   </div>
 
   {#if selectedPlant}
-    <PopupInfo
-      plantDetails={selectedPlant}
-      {data}
-      closePopup={() => {
-        selectedPlant = null;
-      }}
-    ></PopupInfo>
+    <div
+      class="fixed inset-0 bg-roel_blue flex items-center justify-center z-50 p-4 overflow-auto"
+    >
+      <div
+        class="m-auto bg-white p-4 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto shadow-lg"
+      >
+        <PopupInfo
+          allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
+          plantDetails={selectedPlant}
+          closePopup={() => {
+            selectedPlant = null;
+          }}
+        />
+      </div>
+    </div>
   {/if}
 
   {#if candidateChild}
     <ConfirmBreed
       {candidateChild}
-      {data}
+      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={async (imageURL) => {
-        if (candidateChild) {
-          if (imageURL) {
-            console.log("will attach image", imageURL);
-            candidateChild.imageUrl = imageURL;
-          }
-          const res = await fetch("/api/plants", {
-            method: "POST",
-            body: JSON.stringify(candidateChild),
-          });
-          const { status, statusText, body } = res;
-          if (status === 201) {
-            console.log("Sucessfully added!");
-            // TODO: Also add plant to user's garden (gardenToPlants)
-            const plantId = candidateChild.id;
-            const gardenId = data.garden.id;
-            const rowIndex = 0;
-            const colIndex = 0;
-            const updated = {
-              plantId,
-              gardenId,
-              rowIndex,
-              colIndex,
-            };
-            const placementRes = await fetch("/api/plantsInGarden", {
-              method: "POST",
-              body: JSON.stringify(updated),
-            });
-            console.log("Placed in garden?", placementRes);
-            await invalidateAll();
-            populateGrid();
-            candidateChild = null;
-          } else {
-            console.error("Error adding new plant:", { status, statusText });
-            candidateChild = null;
-          }
-        } else {
-          console.error(
-            "Whoops! Where is the candidate child plant we're confirming?",
-          );
-        }
-      }}
+      onConfirm={addNewPlant}
     />
   {/if}
-</main>
 
-<footer>
-  <a href="/landing_page">Landing page</a>
-  <a href="./garden/info">?</a>
-</footer>
+  {#if waitingForGeneration}
+    <FullScreenLoading />
+  {/if}
+</main>
 
 {#if waitingForGeneration}
   <FullScreenLoading />

@@ -6,9 +6,12 @@ import { hash } from "@node-rs/argon2";
 import type { Actions } from "./$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
+import { checkDefaultUsers } from "$lib/server/server";
 
 export const actions: Actions = {
   default: async (event) => {
+    await checkDefaultUsers();
+
     const formData = await event.request.formData();
     const username = formData.get("username");
     const password = formData.get("password");

@@ -4,10 +4,10 @@
 
   export let candidateChild: InsertPlant;
 
-  export let data: { seeds: SelectPlant[] };
+  export let allSeeds: SelectPlant[];
 
   export let onCancel: () => any;
-  export let onConfirm: (imageURL: string | null) => any;
+  export let onConfirm: (imageURL: string | null) => Promise<void>;
 
   let textInput = "";
 
@@ -25,7 +25,7 @@
       console.log("Please write something");
       return;
     }
-    for (const plant of data.seeds) {
+    for (const plant of allSeeds) {
       if (plant.commonName == textInput) {
         console.log("this name already exists");
         return;
@@ -85,7 +85,7 @@
   <div class="border bg-slate-100 m-8 p-4 rounded">
     <h1 class="text-xl font-bold">New plant!</h1>
     {#if candidateImage}
-      <img src={candidateImage} alt="AI generated new plant" />
+      <img src={candidateImage} alt="AI generated new plant" class="max-w-20" />
     {/if}
     {#if waitingForImage}
       <div>

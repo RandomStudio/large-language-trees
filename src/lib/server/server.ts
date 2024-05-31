@@ -9,6 +9,7 @@ import {
   plants,
   seedbanks,
   seedbanksToPlants,
+  sessions,
   users,
 } from "./schema";
 import { eq, isNull, not } from "drizzle-orm";
@@ -16,6 +17,7 @@ import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   InsertPlant,
   MyGarden,
+  MySeeds,
   SeedbankEntryWithPlant,
   SelectGarden,
   SelectPlant,
@@ -27,6 +29,7 @@ import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
 import { pickMultipleRandomElements, pickRandomIndexes } from "random-elements";
+import { defaultUsers } from "../../defaults/users";
 
 const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -58,16 +61,14 @@ export const checkPlantsExist = async () => {
   }
 };
 
-export const getUserSeeds = async (
-  userId: string
-): Promise<SeedbankEntryWithPlant[]> => {
+export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
   const seedBank = await db.query.seedbanks.findFirst({
     where: eq(seedbanks.userId, userId),
     with: { plantsInSeedbank: { with: { plant: true } } },
   });
   if (seedBank) {
     console.log(JSON.stringify({ seedBank }));
-    return seedBank.plantsInSeedbank;
+    return seedBank;
   } else {
     console.log("No seedbank! Will have to create one and populate it");
     const result = await db
@@ -168,19 +169,8 @@ export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
   if (typeof plant === "string") {
     throw Error("Plant is not an object");
   }
-  // const { commonName, description, properties } = plant;
   const insertedPlant = await db.insert(plants).values(plant).returning();
-  // const insertedId = insertedPlant[0].insertedId;
-  // if (plant.parent1 && plant.parent2) {
-  //   console.log("Adding two parents to this new plant:", parentIds);
-  //   await db
-  //     .update(plants)
-  //     .set({ parent1: parentIds[0], parent2: parentIds[1] })
-  //     .where(eq(plants.id, insertedId));
-  // }
-  // if (parentIds.length !== 0 && parentIds.length !== 2) {
-  //   throw Error("A plant can only have exactly zero or 2 parents!");
-  // }
+
   return insertedPlant[0];
 };
 
@@ -262,4 +252,45 @@ export const updateWholePlant = async (id: string, newData: SelectPlant) => {
   if (res.length == 0) {
     throw Error("nothing got updated!");
   }
+};
+
+export const checkDefaultUsers = async () => {
+  const userList = await db.query.users.findMany();
+  if (userList.length === 0) {
+    console.log("User list empty! Should generate default users");
+    await Promise.all(
+      defaultUsers.map(async (u) => {
+        console.log(`Auto-registering user ${u.id}:${u.username}`);
+        const passwordHash = await hash(u.password, {
+          // recommended minimum parameters
+          memoryCost: 19456,
+          timeCost: 2,
+          outputLen: 32,
+          parallelism: 1,
+        });
+        await db.insert(users).values({
+          id: u.id,
+          username: u.username,
+          passwordHash,
+          isAdmin: true,
+        });
+      })
+    );
+  }
+};
+
+/** Empty all the tables, in the correct order.
+ * This *could* be done with Foreign Key Actions (https://orm.drizzle.team/docs/rqb#foreign-key-actions)
+ * but for now we do it manually.
+ */
+export const cleanUp = async () => {
+  console.warn("Starting cleanup...");
+  await db.delete(seedbanksToPlants);
+  await db.delete(gardensToPlants);
+  await db.delete(seedbanks);
+  await db.delete(gardens);
+  await db.delete(sessions);
+  await db.delete(users);
+  await db.delete(plants);
+  console.log("...cleanup complete!");
 };
