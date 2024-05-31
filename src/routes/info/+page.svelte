@@ -21,8 +21,8 @@
         const img = new Image();
 
         img.onload = () => {
-            canvas.width = 150;
-            canvas.height = 150;
+            canvas.width = 350;
+            canvas.height = 250;
             const scale = Math.min(
                 canvas.width / img.width,
                 canvas.height / img.height,
@@ -68,55 +68,53 @@
             Math.abs(pixelColor[2] - targetColor[2]) <= tolerance
         );
     }
+
+    function goBack() {
+        window.history.back();
+    }
 </script>
 
-<div
-    class="flex items-center justify-center min-h-screen bg-roel_green overflow-hidden"
->
-    <main class="mx-10 w-full max-w-4xl">
-        <div class="fixed top-10 left-10">
-            <h1 class="text-3xl text-roel_blue">The Garden</h1>
-        </div>
+<div class="relative min-h-screen bg-roel_green overflow-hidden">
+    <button
+        type="button"
+        class="absolute top-4 right-4 text-roel_blue text-2xl font-semibold bg-transparent focus:outline-none"
+        on:click={goBack}
+        aria-label="Go back"
+    >
+        &times;
+    </button>
 
-        <div class="flex justify-center space-x-4 my-8">
-            <canvas id="canvas" style="display:none;"></canvas>
-            <img
-                id="displayImage"
-                alt="Converted Image"
-                style="display:block;"
-            />
-        </div>
-
-        <div class="text-left mt-4">
-            <p class="text-roel_blue">
-                Welcome to the common garden of Lucullus. This Digital Common
-                Garden is about connection and cross-pollination.<br /><br />
-                Find other Gardeners to start cross-breeding and witness the offspring
-                flourish in the common garden of Lucullus.
-            </p>
-            <br />
-            <div class="text-left">
-                <span class="text-roel_blue font-semibold">Production:</span><br
-                />
-                <span class="text-roel_blue">Studio Random</span><br />
-                <span class="text-roel_blue font-semibold">Image Data:</span><br
-                />
-                <span class="text-roel_blue">Chat GPT/ Open AI</span><br /><br
+    <div class="flex items-center justify-center min-h-screen">
+        <main class="mx-10 w-full max-w-4xl">
+            <div class="flex justify-center space-x-4 my-8">
+                <canvas id="canvas" style="display:none;"></canvas>
+                <!-- svelte-ignore a11y-img-redundant-alt -->
+                <img
+                    id="displayImage"
+                    alt="Converted Image"
+                    style="display:block;"
                 />
             </div>
-        </div>
-    </main>
+
+            <div class="text-left mt-4">
+                <p class="text-roel_blue">
+                    Welcome to the common garden of Lucullus. This Digital
+                    Common Garden is about connection and cross-pollination.<br
+                    /><br />
+                    Find other Gardeners to start cross-breeding and witness the
+                    offspring flourish in the common garden of Lucullus.
+                </p>
+                <br />
+                <div class="text-left">
+                    <span class="text-roel_blue font-semibold">Production:</span
+                    ><br />
+                    <span class="text-roel_blue">Studio Random</span><br />
+                    <span class="text-roel_blue font-semibold">Image Data:</span
+                    ><br />
+                    <span class="text-roel_blue">Chat GPT/ Open AI</span><br
+                    /><br />
+                </div>
+            </div>
+        </main>
+    </div>
 </div>
-
-<style>
-    @font-face {
-        font-family: "Garamond";
-        src: url("/Garamond.ttf") format("truetype");
-        font-weight: normal;
-        font-style: normal;
-    }
-
-    h1 {
-        font-family: "Garamond", serif;
-    }
-</style>

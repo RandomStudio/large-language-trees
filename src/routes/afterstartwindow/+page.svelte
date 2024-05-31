@@ -14,10 +14,6 @@
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden">
-    <div class="fixed top-10 left-10">
-        <h1 class="text-3xl text-roel_blue">The Garden</h1>
-    </div>
-
     <main class="mx-10 mt-20">
         <div class="text-left">
             {#if selectedPlant}
@@ -30,7 +26,7 @@
             {/if}
         </div>
         <br />
-        <p class="text-roel_blue text-2xl">
+        <p class="text-roel_blue">
             Find a fellow gardener irl and scan their barcode to start
             pollinating.
         </p>
@@ -46,16 +42,3 @@
         </div>
     </main>
 </div>
-
-<style>
-    @font-face {
-        font-family: "Garamond";
-        src: url("/Garamond.ttf") format("truetype");
-        font-weight: normal;
-        font-style: normal;
-    }
-
-    h1 {
-        font-family: "Garamond", serif;
-    }
-</style>
