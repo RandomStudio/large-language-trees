@@ -25,6 +25,9 @@
         <div class="text-left">
             {#if selectedPlant}
                 <PlantDisplay plant={selectedPlant} width="70%"></PlantDisplay>
+                <p class="text-roel_blue">
+                    {selectedPlant.description}
+                </p>
             {:else}
                 <p class="text-roel_blue">No plants available</p>
             {/if}

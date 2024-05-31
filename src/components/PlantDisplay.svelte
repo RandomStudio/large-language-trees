@@ -30,6 +30,3 @@
 <p class="flex justify-center text-roel_blue">
     {plant.commonName}
 </p>
-<p class="text-roel_blue">
-    {plant.description}
-</p>
