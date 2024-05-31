@@ -43,7 +43,7 @@
   let grid: GridCell[] = [];
 
   async function confirmBreed(
-    parents: [SelectPlant, SelectPlant]
+    parents: [SelectPlant, SelectPlant],
   ): Promise<InsertPlant> {
     console.log("confirmBreed...");
     const res = await fetch("/api/generate/plant", {
@@ -98,7 +98,7 @@
                   plant1.commonName +
                   " and " +
                   plant2.commonName +
-                  " !"
+                  " !",
               );
               waitingForGeneration = true;
               confirmBreed([plant1, plant2])
@@ -124,13 +124,13 @@
     console.log(
       "populateGrid with",
       data.garden.plantsInGarden.length,
-      "plants"
+      "plants",
     );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r
+          (p) => p.colIndex === c && p.rowIndex === r,
         );
         if (plant) {
           const plantObject = plant.plant;
@@ -285,7 +285,7 @@
       }
     } else {
       console.error(
-        "Whoops! Where is the candidate child plant we're confirming?"
+        "Whoops! Where is the candidate child plant we're confirming?",
       );
     }
   }
@@ -299,25 +299,14 @@
     isAdmin={data.user.isAdmin || false}
     username={data.user.username}
   ></UserLoginStatus>
-  <div>
-    {#if data.seedBank}
-      Plants in your seedbank: {data.seedBank.plantsInSeedbank.length}: {data.seedBank.plantsInSeedbank.map(
-        (s, i) => `#${i}: ${s.plant.commonName}`
-      )}
-    {/if}
-  </div>
 </div>
 <!-- </nav> -->
 
-<h1>{data.garden.name}</h1>
-
-<main class="container mx-auto">
-  <div class="grid grid-cols-6 gap-4 justify-stretch">
+<main class="container mx-auto overflow-visible">
+  <div class="grid grid-cols-6 gap-4 justify-stretch overflow-visible">
     {#each grid as gridCell, gridIndex}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="border-2"
+        class="relative bg-roel_blue min-w-[100px] min-h-[100px] overflow-visible"
         on:click={() => {
           console.log("click!");
           if (gridCell.plant) {
@@ -328,27 +317,24 @@
         }}
       >
         {#if gridCell.plant}
-          <PlantCell
-            data={gridCell.plant}
-            {gridIndex}
-            on:dragStart={dragStart}
-          />
+          <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] z-10">
+            <img
+              src={gridCell.plant.imageUrl}
+              alt={gridCell.plant.commonName}
+              class="scale-125"
+            />
+          </div>
         {:else}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
-            class:border-4={gridCell.highlighted}
+            class:bg-roel_blue={gridCell.highlighted}
             on:drop={(e) => {
-              drop(e, gridIndex);
-            }}
-            on:drop={(e) => {
-              console.log("drop");
               drop(e, gridIndex);
             }}
             on:dragover={(e) => dragOver(e, gridIndex)}
             on:dragleave={(e) => dragLeave(e, gridIndex)}
           >
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <img src="plants/empty.png" />
+            <!-- Optionally maintain a placeholder or remove content entirely -->
           </div>
         {/if}
       </div>
@@ -356,13 +342,21 @@
   </div>
 
   {#if selectedPlant}
-    <PopupInfo
-      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
-      plantDetails={selectedPlant}
-      closePopup={() => {
-        selectedPlant = null;
-      }}
-    ></PopupInfo>
+    <div
+      class="fixed inset-0 bg-roel_blue flex items-center justify-center z-50 p-4 overflow-auto"
+    >
+      <div
+        class="m-auto bg-white p-4 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto shadow-lg"
+      >
+        <PopupInfo
+          allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
+          plantDetails={selectedPlant}
+          closePopup={() => {
+            selectedPlant = null;
+          }}
+        />
+      </div>
+    </div>
   {/if}
 
   {#if candidateChild}
@@ -375,17 +369,15 @@
       onConfirm={addNewPlant}
     />
   {/if}
-</main>
 
-<footer>
-  <a href="/landing_page">Landing page</a>
-  <a href="./garden/info">?</a>
-</footer>
+  {#if waitingForGeneration}
+    <FullScreenLoading />
+  {/if}
+</main>
 
 {#if waitingForGeneration}
   <FullScreenLoading />
 {/if}
-seedBank
 
 <style>
 </style>

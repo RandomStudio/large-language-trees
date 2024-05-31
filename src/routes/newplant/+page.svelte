@@ -20,6 +20,19 @@
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden">
+    <div class="fixed top-10 left-10">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <h1
+            class="text-3xl text-roel_blue"
+            on:click={() => {
+                goto("/info");
+            }}
+        >
+            The Garden
+        </h1>
+    </div>
+
     <main class="mx-10 mt-20">
         <div class="text-left">
             {#if selectedPlant}
@@ -38,9 +51,8 @@
             {/if}
         </div>
         <br />
-        <p class="text-roel_blue">
-            Find a fellow gardener irl and scan their barcode to start
-            pollinating.
+        <p class="text-roel_blue text-2xl">
+            Hooray you made a new plant. What would you like it to be named?
         </p>
 
         <div class="mt-4 text-center">
@@ -49,8 +61,36 @@
                 style="width:250px;"
                 on:click={() => goto("/seeds_bank")}
             >
-                Start Pollinating
+                Proposed new name
+            </button>
+            <br />
+            <button
+                class="bg-transparent text-roel_blue py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+                style="width:170px;"
+                on:click={() => goto("/seeds_bank")}
+            >
+                Yes
+            </button>
+            <button
+                class="bg-transparent text-roel_blue py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+                style="width:80px;"
+                on:click={() => goto("/seeds_bank")}
+            >
+                Nay?
             </button>
         </div>
     </main>
 </div>
+
+<style>
+    @font-face {
+        font-family: "Garamond";
+        src: url("/Garamond.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    h1 {
+        font-family: "Garamond", serif;
+    }
+</style>
