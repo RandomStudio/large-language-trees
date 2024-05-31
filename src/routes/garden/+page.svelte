@@ -39,27 +39,29 @@
   console.log(candidateParents);
   let timeout: NodeJS.Timeout | null = null;
 
-  if (candidateParents != null && pollination) {
-    timeout = setTimeout(() => {
-      console.log(
-        "ready for mixing : " +
-          candidateParents[0].commonName +
-          " and " +
-          candidateParents[1].commonName +
-          " !",
-      );
-      waitingForGeneration = true;
+  export function Pollinate() {
+    if (candidateParents != null && pollination) {
+      timeout = setTimeout(() => {
+        console.log(
+          "ready for mixing : " +
+            candidateParents[0].commonName +
+            " and " +
+            candidateParents[1].commonName +
+            " !",
+        );
+        waitingForGeneration = true;
 
-      confirmBreed(candidateParents)
-        .then((newPlant) => {
-          candidateChild = newPlant;
-          waitingForGeneration = false;
-        })
-        .catch((e) => {
-          console.error("Error from confirm/generate breed:", e);
-          waitingForGeneration = false;
-        });
-    }, 4000);
+        confirmBreed(candidateParents)
+          .then((newPlant) => {
+            candidateChild = newPlant;
+            waitingForGeneration = false;
+          })
+          .catch((e) => {
+            console.error("Error from confirm/generate breed:", e);
+            waitingForGeneration = false;
+          });
+      }, 4000);
+    }
   }
 
   let selectedPlant: SelectPlant | null = null;

@@ -9,7 +9,7 @@
 
     import QrGenerate from "../../components/qr_generate.svelte";
     import { goto } from "$app/navigation";
-    import Grid from "../garden/+page.svelte";
+    import { Pollinate } from "../garden/+page.svelte";
     import { onMount } from "svelte";
     import {
         BrowserMultiFormatReader,
@@ -80,13 +80,8 @@
 <main
     class="flex flex-col items-center justify-center min-h-screen bg-green-300"
 >
-    <div class="w-full">
-        <h1 class="text-3xl font-bold text-blue-600 ml-4">The Garden</h1>
-    </div>
     <br />
-    <p class="text-2xl text-blue-600 ml-4">
-        Point your camera to another gardeners
-    </p>
+    <p class="text-2xl text-blue-600 ml-4">Scan another plant to pollinate</p>
     <video
         bind:this={videoElement}
         class="w-full aspect-video md:aspect-square"
@@ -101,6 +96,7 @@
     <p>{parent1Id} and {parent2Id} will Crossbreed</p>
 
     {#if candidateParentsFirst[1] && candidateParentsFirst[0]}
-        <Grid {candidateParentsFirst} pollination={true} {data}></Grid>
+        <Pollinate {candidateParentsFirst} pollination={true} {data}
+        ></Pollinate>
     {/if}
 </main>
