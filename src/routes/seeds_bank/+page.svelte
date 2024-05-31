@@ -1,11 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import {
-    type SeedbankEntryWithPlant,
-    type GardenViewData,
-    type MyGarden,
-    type SelectPlant,
-  } from "../../lib/types"; // Adjust the import paths as necessary
+  import { type GardenViewData, type SelectPlant } from "../../lib/types"; // Adjust the import paths as necessary
 
   export let data: GardenViewData;
 
