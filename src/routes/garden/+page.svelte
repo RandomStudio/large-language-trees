@@ -9,6 +9,7 @@
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
 
+  import PlantDisplay from "../../components/PlantDisplay.svelte";
   export let data: GardenViewData;
 
   // import { pickMultiple } from "random-elements";
@@ -318,11 +319,7 @@
       >
         {#if gridCell.plant}
           <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] z-10">
-            <img
-              src={gridCell.plant.imageUrl}
-              alt={gridCell.plant.commonName}
-              class="scale-125"
-            />
+            <PlantDisplay plant={gridCell.plant} width="70%"></PlantDisplay>
           </div>
         {:else}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
