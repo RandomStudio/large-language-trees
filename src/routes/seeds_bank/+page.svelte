@@ -1,46 +1,16 @@
 <script lang="ts">
-  import {
-    type GardenPlantEntry,
-    type InsertPlant,
-    type MyGarden,
-    type SeedbankEntryWithPlant,
-    type SelectPlant,
-  } from "../../lib/types"; // Assuming type import is correct
-
   import { goto } from "$app/navigation";
-  interface GardenViewData {
-    seeds: SeedbankEntryWithPlant[];
-    username: string;
-    garden: MyGarden;
-  }
+  import { type GardenViewData, type SelectPlant } from "../../lib/types"; // Adjust the import paths as necessary
 
   export let data: GardenViewData;
+
+  import PlantDisplay from "../../components/PlantDisplay.svelte";
   let selectedPlant: SelectPlant | null = null;
 
-  console.log(data.seeds);
-  import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
-  import PlantCell from "../../components/PlantCell.svelte";
-
   import PopupInfo from "../../components/PopupInfo.svelte";
-  import { buildPrompt } from "../../lib/promptUtils";
 
-  import DefaultPromptConfig from "../../defaults/prompt-config";
-  import ConfirmBreed from "../../components/ConfirmBreed.svelte";
-  import FullScreenLoading from "../../components/FullScreenLoading.svelte";
-  import { invalidateAll } from "$app/navigation";
-  import { enhance } from "$app/forms";
-
-  import { canvaWithoutBG } from "$lib/removeBG";
-  import { onMount } from "svelte";
-
-  onMount(() => {
-    for (let plant of data.seeds)
-      canvaWithoutBG(
-        "canvas_" + plant.plant.commonName,
-        plant.plant.commonName,
-        plant.plant.imageUrl,
-      );
-  });
+  let seedBank = data.seedBank.plantsInSeedbank;
+  let allSeeds = data.garden.plantsInGarden;
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden">
@@ -52,7 +22,7 @@
     <div class="text-center w-full">
       <br />
       <br />
-      {#each data.seeds as plant}
+      {#each seedBank as plant}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
@@ -62,23 +32,9 @@
           }}
           class="cursor-pointer"
         >
-          <div class="flex justify-center">
-            <canvas
-              id={"canvas_" + plant.plant.commonName}
-              style="display:none;"
-            ></canvas>
-            <!-- svelte-ignore a11y-img-redundant-alt -->
-            <img
-              src={plant.plant.imageUrl}
-              alt={plant.plant.commonName}
-              width="70%"
-              id={plant.plant.commonName}
-            />
+          <div class="text-left">
+            <PlantDisplay plant={plant.plant} width="70%"></PlantDisplay>
           </div>
-          <br />
-          <p class="text-center text-roel_blue">
-            {plant.plant.commonName}
-          </p>
         </div>
         <br />
         <br />
@@ -88,7 +44,7 @@
     {#if selectedPlant}
       <PopupInfo
         plantDetails={selectedPlant}
-        {data}
+        {allSeeds}
         closePopup={() => {
           selectedPlant = null;
         }}
