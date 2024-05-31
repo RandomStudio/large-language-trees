@@ -10,6 +10,7 @@
   import PopupInfo from "../../components/PopupInfo.svelte";
 
   let seedBank = data.seedBank.plantsInSeedbank;
+  let allSeeds = data.garden.plantsInGarden;
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden">
@@ -43,7 +44,7 @@
     {#if selectedPlant}
       <PopupInfo
         plantDetails={selectedPlant}
-        {data}
+        {allSeeds}
         closePopup={() => {
           selectedPlant = null;
         }}

@@ -71,9 +71,5 @@
     {/if}
     <p>{plantDetails.commonName}</p>
     <p>{plantDetails.description}</p>
-    <p>
-      The {plantDetails.commonName} has {plantProperties["petalCountRange"]}
-      {plantProperties["flowerColour"]} petals
-    </p>
   </div>
 </div>
