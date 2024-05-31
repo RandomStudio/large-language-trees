@@ -1,29 +1,11 @@
 <script lang="ts">
     import {
-        type GardenPlantEntry,
         type GardenPlantEntryWithPlant,
-        type InsertPlant,
         type MyGarden,
         type SeedbankEntryWithPlant,
         type SelectPlant,
+        type GardenViewData,
     } from "../../lib/types"; // Assuming type import is correct
-
-    interface GardenViewData {
-        seeds: SeedbankEntryWithPlant[];
-        username: string;
-        garden: MyGarden;
-    }
-
-    export let data: GardenViewData;
-
-    console.log(data.garden.plantsInGarden);
-
-    function findPlantById(
-        plants: GardenPlantEntryWithPlant[],
-        plantId: string,
-    ): SelectPlant | undefined {
-        return plants.find((plant) => plant.plantId === plantId);
-    }
 
     import QrGenerate from "../../components/qr_generate.svelte";
     import { goto } from "$app/navigation";
@@ -34,10 +16,19 @@
         NotFoundException,
     } from "@zxing/library";
 
-    let videoElement: HTMLVideoElement;
+    export let data: GardenViewData;
 
-    let parent1Id = data.seeds[0].plantId;
+    let parent1Id = data.seedBank.plantsInSeedbank[0].plant.id;
     let parent2Id: string = "";
+
+    function findPlantById(
+        plants: GardenPlantEntryWithPlant[],
+        plantId: string,
+    ) {
+        return plants.find((plant) => plant.plantId === plantId);
+    }
+
+    let videoElement: HTMLVideoElement;
 
     $: candidateParentsFirst = [
         findPlantById(data.garden.plantsInGarden, parent1Id),
@@ -59,7 +50,7 @@
             .getUserMedia(constraints)
             .then((stream) => {
                 videoElement.srcObject = stream;
-                videoElement.setAttribute("playsinline", true); // Required to tell iOS safari we don't want fullscreen
+                videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
                 videoElement.play();
                 codeReader.decodeFromStream(
                     stream,
@@ -84,11 +75,6 @@
             codeReader.reset();
         };
     });
-
-    function navigate() {
-        // Supposons que vous voulez passer des paramètres à la page de destination
-        goto("/some-page?param=value");
-    }
 </script>
 
 <main
