@@ -2,7 +2,7 @@
   {
     "id": "echeveria",
     "commonName": "Echeveria",
-    "imageUrl": "/plants/Echeveria.webp",
+    "imageUrl": "/plants/Echeveria.png",
     "properties": {
       "flowerColour": "Pink",
       "flowerColourRGB": "#FFC0CB",
@@ -19,7 +19,7 @@
   {
     "id": "baobab",
     "commonName": "Baobab",
-    "imageUrl": "/plants/Baobab.webp",
+    "imageUrl": "/plants/Baobab.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -36,7 +36,7 @@
   {
     "id": "palm",
     "commonName": "Palm",
-    "imageUrl": "/plants/Palm.webp",
+    "imageUrl": "/plants/Palm.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
@@ -53,7 +53,7 @@
   {
     "id": "bonzai",
     "commonName": "Bonzai",
-    "imageUrl": "/plants/Bonzai.webp",
+    "imageUrl": "/plants/Bonzai.png",
     "properties": {
       "flowerColour": "Varied",
       "flowerColourRGB": "#FFD700",
@@ -70,7 +70,7 @@
   {
     "id": "prunus-serrulata",
     "commonName": "Prunus Serrulata",
-    "imageUrl": "/plants/Prunus-Serrulata.webp",
+    "imageUrl": "/plants/Prunus-Serrulata.png",
     "properties": {
       "flowerColour": "Pink",
       "flowerColourRGB": "#FFC0CB",
@@ -87,7 +87,7 @@
   {
     "id": "rose",
     "commonName": "Rose",
-    "imageUrl": "/plants/Rose.webp",
+    "imageUrl": "/plants/Rose.png",
     "properties": {
       "flowerColour": "Red",
       "flowerColourRGB": "#FF0000",
@@ -104,7 +104,7 @@
   {
     "id": "fir-tree",
     "commonName": "Fir Tree",
-    "imageUrl": "/plants/Fir-Tree.webp",
+    "imageUrl": "/plants/Fir-Tree.png",
     "properties": {
       "flowerColour": "None",
       "flowerColourRGB": "#000000",
@@ -121,7 +121,7 @@
   {
     "id": "fern",
     "commonName": "Fern",
-    "imageUrl": "/plants/Fern.webp",
+    "imageUrl": "/plants/Fern.png",
     "properties": {
       "flowerColour": "None",
       "flowerColourRGB": "#000000",
@@ -138,7 +138,7 @@
   {
     "id": "liatris",
     "commonName": "Liatris",
-    "imageUrl": "/plants/Liatris.webp",
+    "imageUrl": "/plants/Liatris.png",
     "properties": {
       "flowerColour": "Purple",
       "flowerColourRGB": "#800080",
@@ -155,7 +155,7 @@
   {
     "id": "dandelion",
     "commonName": "Dandelion",
-    "imageUrl": "/plants/Dandelion.webp",
+    "imageUrl": "/plants/Dandelion.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
@@ -172,7 +172,7 @@
   {
     "id": "water-lily",
     "commonName": "Water Lily",
-    "imageUrl": "/plants/Water-Lily.webp",
+    "imageUrl": "/plants/Water-Lily.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -189,7 +189,7 @@
   {
     "id": "aloe-vera",
     "commonName": "Aloe Vera",
-    "imageUrl": "/plants/Aloe-Vera.webp",
+    "imageUrl": "/plants/Aloe-Vera.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
@@ -206,7 +206,7 @@
   {
     "id": "mangrove",
     "commonName": "Mangrove",
-    "imageUrl": "/plants/Mangrove.webp",
+    "imageUrl": "/plants/Mangrove.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -223,7 +223,7 @@
   {
     "id": "sunflower",
     "commonName": "Sunflower",
-    "imageUrl": "/plants/Sunflower.webp",
+    "imageUrl": "/plants/Sunflower.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
@@ -240,7 +240,7 @@
   {
     "id": "passion-flower",
     "commonName": "Passion Flower",
-    "imageUrl": "/plants/Passion-Flower.webp",
+    "imageUrl": "/plants/Passion-Flower.png",
     "properties": {
       "flowerColour": "Purple",
       "flowerColourRGB": "#800080",
@@ -257,7 +257,7 @@
   {
     "id": "violette",
     "commonName": "Violette",
-    "imageUrl": "/plants/Violette.webp",
+    "imageUrl": "/plants/Violette.png",
     "properties": {
       "flowerColour": "Violet",
       "flowerColourRGB": "#EE82EE",
@@ -274,7 +274,7 @@
   {
     "id": "pansy",
     "commonName": "Pansy",
-    "imageUrl": "/plants/Pansy.webp",
+    "imageUrl": "/plants/Pansy.png",
     "properties": {
       "flowerColour": "Multicolor",
       "flowerColourRGB": "#FFD700",
@@ -291,7 +291,7 @@
   {
     "id": "hibiscus",
     "commonName": "Hibiscus",
-    "imageUrl": "/plants/Hibiscus.webp",
+    "imageUrl": "/plants/Hibiscus.png",
     "properties": {
       "flowerColour": "Red",
       "flowerColourRGB": "#FF0000",
@@ -308,7 +308,7 @@
   {
     "id": "morning-glory",
     "commonName": "Morning Glory",
-    "imageUrl": "/plants/Morning-Glory.webp",
+    "imageUrl": "/plants/Morning-Glory.png",
     "properties": {
       "flowerColour": "Blue",
       "flowerColourRGB": "#0000FF",
@@ -325,7 +325,7 @@
   {
     "id": "oak",
     "commonName": "Oak",
-    "imageUrl": "/plants/Oak.webp",
+    "imageUrl": "/plants/Oak.png",
     "properties": {
       "flowerColour": "None",
       "flowerColourRGB": "#000000",
@@ -342,7 +342,7 @@
   {
     "id": "euphorbia-obesa",
     "commonName": "Euphorbia Obesa",
-    "imageUrl": "/plants/Euphorbia-Obesa.webp",
+    "imageUrl": "/plants/Euphorbia-Obesa.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
@@ -359,7 +359,7 @@
   {
     "id": "calliandra-haematocephala",
     "commonName": "Calliandra Haematocephala",
-    "imageUrl": "/plants/Calliandra-Haematocephala.webp",
+    "imageUrl": "/plants/Calliandra-Haematocephala.png",
     "properties": {
       "flowerColour": "Red",
       "flowerColourRGB": "#FF0000",
@@ -376,7 +376,7 @@
   {
     "id": "garrya-elliptica",
     "commonName": "Garrya Elliptica",
-    "imageUrl": "/plants/Garrya-Elliptica.webp",
+    "imageUrl": "/plants/Garrya-Elliptica.png",
     "properties": {
       "flowerColour": "Gray",
       "flowerColourRGB": "#808080",
@@ -393,7 +393,7 @@
   {
     "id": "tulipe",
     "commonName": "Tulipe",
-    "imageUrl": "/plants/Tulipe.webp",
+    "imageUrl": "/plants/Tulipe.png",
     "properties": {
       "flowerColour": "Various",
       "flowerColourRGB": "#FF6347",
@@ -410,7 +410,7 @@
   {
     "id": "lys",
     "commonName": "Lys",
-    "imageUrl": "/plants/Lys.webp",
+    "imageUrl": "/plants/Lys.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -427,7 +427,7 @@
   {
     "id": "thistle",
     "commonName": "Thistle",
-    "imageUrl": "/plants/Thistle.webp",
+    "imageUrl": "/plants/Thistle.png",
     "properties": {
       "flowerColour": "Purple",
       "flowerColourRGB": "#800080",
@@ -444,7 +444,7 @@
   {
     "id": "cypress",
     "commonName": "Cypress",
-    "imageUrl": "/plants/Cypress.webp",
+    "imageUrl": "/plants/Cypress.png",
     "properties": {
       "flowerColour": "None",
       "flowerColourRGB": "#000000",
@@ -461,7 +461,7 @@
   {
     "id": "fly-agaric",
     "commonName": "Fly Agaric",
-    "imageUrl": "/plants/Fly-Agaric.webp",
+    "imageUrl": "/plants/Fly-Agaric.png",
     "properties": {
       "flowerColour": "Red",
       "flowerColourRGB": "#FF0000",
@@ -478,7 +478,7 @@
   {
     "id": "olive-tree",
     "commonName": "Olive Tree",
-    "imageUrl": "/plants/Olive-Tree.webp",
+    "imageUrl": "/plants/Olive-Tree.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -495,7 +495,7 @@
   {
     "id": "lily-of-the-valley",
     "commonName": "Lily of the Valley",
-    "imageUrl": "/plants/Lily-of-the-Valley.webp",
+    "imageUrl": "/plants/Lily-of-the-Valley.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -512,7 +512,7 @@
   {
     "id": "bamboo",
     "commonName": "Bamboo",
-    "imageUrl": "/plants/Bamboo.webp",
+    "imageUrl": "/plants/Bamboo.png",
     "properties": {
       "flowerColour": "Rare",
       "flowerColourRGB": "#000000",
@@ -529,7 +529,7 @@
   {
     "id": "monstera-deliciosa",
     "commonName": "Monstera Deliciosa",
-    "imageUrl": "/plants/Monstera-Deliciosa.webp",
+    "imageUrl": "/plants/Monstera-Deliciosa.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -546,7 +546,7 @@
   {
     "id": "acacia",
     "commonName": "Acacia",
-    "imageUrl": "/plants/Acacia.webp",
+    "imageUrl": "/plants/Acacia.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
@@ -563,7 +563,7 @@
   {
     "id": "venus-flytrap",
     "commonName": "Venus Flytrap",
-    "imageUrl": "/plants/Venus-Flytrap.webp",
+    "imageUrl": "/plants/Venus-Flytrap.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
@@ -580,7 +580,7 @@
   {
     "id": "prickly-pear",
     "commonName": "Prickly Pear",
-    "imageUrl": "/plants/Prickly-Pear.webp",
+    "imageUrl": "/plants/Prickly-Pear.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
