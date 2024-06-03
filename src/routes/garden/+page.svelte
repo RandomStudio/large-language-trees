@@ -10,7 +10,6 @@
   } from "../../lib/types"; // Assuming type import is correct
 
   export let data: GardenViewData;
-  export let pollination: boolean;
 
   // import { pickMultiple } from "random-elements";
 
@@ -21,46 +20,15 @@
   import { buildPrompt } from "../../lib/promptUtils";
 
   import DefaultPromptConfig from "../../defaults/prompt-config";
-  import ConfirmBreed from "../../components/ConfirmBreed.svelte";
+  import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
+  import { confirmBreed } from "$lib/confirmBreed";
 
-  export let candidateParentsFirst: [SelectPlant, SelectPlant] | null = null;
+  let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
-  console.log(candidateParentsFirst);
-  let candidateParents: [SelectPlant, SelectPlant];
 
-  if (candidateParentsFirst) {
-    candidateParents = [
-      candidateParentsFirst[0].plant,
-      candidateParentsFirst[1].plant,
-    ];
-  }
-  console.log(candidateParents);
   let timeout: NodeJS.Timeout | null = null;
-
-  if (candidateParents != null && pollination) {
-    timeout = setTimeout(() => {
-      console.log(
-        "ready for mixing : " +
-          candidateParents[0].commonName +
-          " and " +
-          candidateParents[1].commonName +
-          " !",
-      );
-      waitingForGeneration = true;
-
-      confirmBreed(candidateParents)
-        .then((newPlant) => {
-          candidateChild = newPlant;
-          waitingForGeneration = false;
-        })
-        .catch((e) => {
-          console.error("Error from confirm/generate breed:", e);
-          waitingForGeneration = false;
-        });
-    }, 4000);
-  }
 
   let selectedPlant: SelectPlant | null = null;
 
@@ -74,27 +42,6 @@
   }
 
   let grid: GridCell[] = [];
-
-  async function confirmBreed(
-    parents: [SelectPlant, SelectPlant],
-  ): Promise<InsertPlant> {
-    console.log("confirmBreed...");
-    const res = await fetch("/api/generate/plant", {
-      method: "POST",
-      body: JSON.stringify({
-        prompt: buildPrompt(DefaultPromptConfig, parents[0], parents[1]),
-        parents,
-      }),
-    });
-    if (res.status === 200) {
-      console.log("Created new candidate plant OK:", res);
-      return (await res.json()) as InsertPlant;
-    } else {
-      const { status, statusText } = res;
-      console.error("Error generating on backend:", { status, statusText });
-      throw Error("Generate failure");
-    }
-  }
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
     const plant1Cell = grid.find((c) => c.plant && c.plant.id === plant1.id);
@@ -395,9 +342,8 @@
   {/if}
 
   {#if candidateChild}
-    <ConfirmBreed
+    <ConfirmBreedPopup
       {candidateChild}
-      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
       onCancel={() => {
         candidateChild = null;
       }}

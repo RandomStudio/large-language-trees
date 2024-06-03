@@ -5,21 +5,30 @@
         type SeedbankEntryWithPlant,
         type SelectPlant,
         type GardenViewData,
+        type InsertPlant,
     } from "../../lib/types"; // Assuming type import is correct
 
     import QrGenerate from "../../components/qr_generate.svelte";
     import { goto } from "$app/navigation";
-    import Pollinate from "../garden/+page.svelte";
+    import { confirmBreed } from "$lib/confirmBreed";
     import { onMount } from "svelte";
     import {
         BrowserMultiFormatReader,
         NotFoundException,
     } from "@zxing/library";
+    import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
 
     export let data: GardenViewData;
 
-    let parent1Id = data.seedBank.plantsInSeedbank[0].plant.id;
-    let parent2Id: string = "";
+    let parent1: SelectPlant | null =
+        data.seedBank.plantsInSeedbank.find(
+            (plant) =>
+                plant.plant.parent1 == null && plant.plant.parent2 == null,
+        )?.plant || null;
+
+    let parent2: SelectPlant | null = null;
+
+    let candidateChild: InsertPlant | null = null;
 
     function findPlantById(
         plants: GardenPlantEntryWithPlant[],
@@ -30,20 +39,11 @@
 
     let videoElement: HTMLVideoElement;
 
-    $: candidateParentsFirst = [
-        findPlantById(data.garden.plantsInGarden, parent1Id),
-        findPlantById(data.garden.plantsInGarden, parent2Id),
-    ];
-
-    console.log(parent1Id);
-
     onMount(() => {
         const codeReader = new BrowserMultiFormatReader();
 
         const constraints = {
-            video: {
-                facingMode: { exact: "user" }, // Utiliser la caméra frontale
-            },
+            video: {},
         };
 
         navigator.mediaDevices
@@ -59,7 +59,19 @@
                         if (result) {
                             // Handle the result here
                             console.log(result.getText());
-                            parent2Id = result.getText();
+                            const parent2Id = result.getText();
+                            fetch("/api/plants/" + parent2Id).then(
+                                async (res) => {
+                                    if (res.status == 200) {
+                                        parent2 = await res.json();
+                                        if (parent1 && parent2) {
+                                            candidateChild = await confirmBreed(
+                                                [parent1, parent2],
+                                            );
+                                        }
+                                    }
+                                },
+                            );
                         }
                         if (err && !(err instanceof NotFoundException)) {
                             console.error(err);
@@ -89,14 +101,21 @@
         <track kind="captions" srclang="en" label="English captions" />
     </video>
 
-    <p aria-live="polite">{parent2Id}</p>
+    {#if parent1}
+        <QrGenerate text={parent1.id}></QrGenerate>
+    {/if}
 
-    <QrGenerate text={parent1Id}></QrGenerate>
+    {#if parent2}
+        <p>{parent2.id}</p>
+    {/if}
 
-    <p>{parent1Id} and {parent2Id} will Crossbreed</p>
-
-    {#if candidateParentsFirst[1] && candidateParentsFirst[0]}
-        <Pollinate {candidateParentsFirst} pollination={true} {data}
-        ></Pollinate>
+    {#if candidateChild}
+        <ConfirmBreedPopup
+            {candidateChild}
+            onCancel={() => {
+                candidateChild = null;
+            }}
+            onConfirm={async (url) => {}}
+        ></ConfirmBreedPopup>
     {/if}
 </main>
