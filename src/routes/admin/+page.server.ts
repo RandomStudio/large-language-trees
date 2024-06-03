@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ locals }) => {
       return { username, isAdmin: true };
     } else {
       console.error(`User ${userId} is not an admin; not authorised`);
-      redirect(302, "/login");
+      redirect(302, "/");
     }
   } else {
     throw Error("userId missing");

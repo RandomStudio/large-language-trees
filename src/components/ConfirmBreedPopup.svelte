@@ -12,7 +12,7 @@
   function replaceWordInText(
     text: string,
     targetWord: string,
-    newWord: string,
+    newWord: string
   ) {
     const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
     return text.replace(regex, newWord);
@@ -30,7 +30,7 @@
       candidateChild.description = replaceWordInText(
         candidateChild.description,
         candidateChild.commonName,
-        textInput,
+        textInput
       );
     }
     candidateChild.commonName = textInput;
@@ -91,6 +91,10 @@
           on:click={generateImage}
           class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
           >Generate image</button
+        >
+        <button
+          class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+          >Remove background</button
         >
       </div>
     {/if}

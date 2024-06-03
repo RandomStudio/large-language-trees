@@ -1,4 +1,5 @@
 <script lang="ts">
+  import TransparencyMaker from "../../components/TransparencyMaker.svelte";
   import UserLoginStatus from "../../components/UserLoginStatus.svelte";
 
   interface AdminViewData {
@@ -12,7 +13,7 @@
 <main class="container mx-auto">
   <h1 class="text-xl">Admin Page</h1>
 
-  <div>
+  <div class="m-4">
     <form method="POST">
       <button
         class="bg-red-500 text-white py-2 px-4 rounded"
@@ -20,8 +21,14 @@
       >
     </form>
   </div>
+  <div class="m-4">
+    <h2>Image transparency test:</h2>
+    <TransparencyMaker src={"/plants/Mangrove.png"} />
+  </div>
 
-  <p>If you can see this, you must be an admin user.</p>
+  <div class="m-4">
+    <p>If you can see this, you must be an admin user.</p>
+  </div>
   <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
   ></UserLoginStatus>
 </main>
