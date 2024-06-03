@@ -78,7 +78,7 @@
   let grid: GridCell[] = [];
 
   async function confirmBreed(
-    parents: [SelectPlant, SelectPlant],
+    parents: [SelectPlant, SelectPlant]
   ): Promise<InsertPlant> {
     console.log("confirmBreed...");
     const res = await fetch("/api/generate/plant", {
@@ -133,7 +133,7 @@
                   plant1.commonName +
                   " and " +
                   plant2.commonName +
-                  " !",
+                  " !"
               );
               waitingForGeneration = true;
               confirmBreed([plant1, plant2])
@@ -159,13 +159,13 @@
     console.log(
       "populateGrid with",
       data.garden.plantsInGarden.length,
-      "plants",
+      "plants"
     );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r,
+          (p) => p.colIndex === c && p.rowIndex === r
         );
         if (plant) {
           const plantObject = plant.plant;
@@ -320,7 +320,7 @@
       }
     } else {
       console.error(
-        "Whoops! Where is the candidate child plant we're confirming?",
+        "Whoops! Where is the candidate child plant we're confirming?"
       );
     }
   }
@@ -340,6 +340,8 @@
 <main class="container mx-auto overflow-visible">
   <div class="grid grid-cols-6 gap-4 justify-stretch overflow-visible">
     {#each grid as gridCell, gridIndex}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="relative bg-roel_blue min-w-[100px] min-h-[100px] overflow-visible"
         on:click={() => {
