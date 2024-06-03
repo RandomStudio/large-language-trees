@@ -24,10 +24,9 @@
   font-style: normal;
 }
 
-h1 {
-  font-family: "Garamond", serif;
-}
-
-main {
-  font-family: "Inter", serif;
+@font-face {
+  font-family: "OldStandard";
+  src: url("/OldStandard.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
