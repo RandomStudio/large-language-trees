@@ -304,10 +304,13 @@
 <!-- </nav> -->
 
 <main class="container mx-auto overflow-visible">
-  <div class="grid grid-cols-6 gap-4 justify-stretch overflow-visible">
+  <div class="grid grid-cols-6 gap-0 justify-stretch overflow-visible">
     {#each grid as gridCell, gridIndex}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="relative bg-roel_blue min-w-[100px] min-h-[100px] overflow-visible"
+        class="relative bg-roel_green min-w-[100px] min-h-[100px] overflow-visible"
+        style="width: calc(100vw / 6); height: calc(100vw / 6);"
         on:click={() => {
           console.log("click!");
           if (gridCell.plant) {
