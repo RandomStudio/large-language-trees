@@ -55,7 +55,7 @@
       <button
         class="bg-transparent text-roel_blue py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
         style="width:250px;"
-        on:click={() => goto("/seeds_bank")}
+        on:click={() => goto("/pollination")}
       >
         Start Pollinating
       </button>
