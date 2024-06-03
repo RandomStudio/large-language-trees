@@ -4,17 +4,15 @@
 
   export let candidateChild: InsertPlant;
 
-  export let allSeeds: SelectPlant[];
-
   export let onCancel: () => any;
-  export let onConfirm: (imageURL: string | null) => Promise<void>;
+  export let onConfirm: () => Promise<void>;
 
   let textInput = "";
 
   function replaceWordInText(
     text: string,
     targetWord: string,
-    newWord: string
+    newWord: string,
   ) {
     const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
     return text.replace(regex, newWord);
@@ -25,19 +23,14 @@
       console.log("Please write something");
       return;
     }
-    for (const plant of allSeeds) {
-      if (plant.commonName == textInput) {
-        console.log("this name already exists");
-        return;
-      }
-    }
+
     console.log("Name given:", textInput);
 
     if (candidateChild.description && candidateChild.commonName) {
       candidateChild.description = replaceWordInText(
         candidateChild.description,
         candidateChild.commonName,
-        textInput
+        textInput,
       );
     }
     candidateChild.commonName = textInput;

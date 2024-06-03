@@ -1,4 +1,5 @@
-import type { PromptConfig } from "../types";
+import type { PromptConfig } from "$lib/types";
+
 
 const DefaultPrompt: PromptConfig = {
   preamble: {
