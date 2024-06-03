@@ -39,29 +39,27 @@
   console.log(candidateParents);
   let timeout: NodeJS.Timeout | null = null;
 
-  export function Pollinate() {
-    if (candidateParents != null && pollination) {
-      timeout = setTimeout(() => {
-        console.log(
-          "ready for mixing : " +
-            candidateParents[0].commonName +
-            " and " +
-            candidateParents[1].commonName +
-            " !",
-        );
-        waitingForGeneration = true;
+  if (candidateParents != null && pollination) {
+    timeout = setTimeout(() => {
+      console.log(
+        "ready for mixing : " +
+          candidateParents[0].commonName +
+          " and " +
+          candidateParents[1].commonName +
+          " !",
+      );
+      waitingForGeneration = true;
 
-        confirmBreed(candidateParents)
-          .then((newPlant) => {
-            candidateChild = newPlant;
-            waitingForGeneration = false;
-          })
-          .catch((e) => {
-            console.error("Error from confirm/generate breed:", e);
-            waitingForGeneration = false;
-          });
-      }, 4000);
-    }
+      confirmBreed(candidateParents)
+        .then((newPlant) => {
+          candidateChild = newPlant;
+          waitingForGeneration = false;
+        })
+        .catch((e) => {
+          console.error("Error from confirm/generate breed:", e);
+          waitingForGeneration = false;
+        });
+    }, 4000);
   }
 
   let selectedPlant: SelectPlant | null = null;
@@ -78,7 +76,7 @@
   let grid: GridCell[] = [];
 
   async function confirmBreed(
-    parents: [SelectPlant, SelectPlant]
+    parents: [SelectPlant, SelectPlant],
   ): Promise<InsertPlant> {
     console.log("confirmBreed...");
     const res = await fetch("/api/generate/plant", {
@@ -133,7 +131,7 @@
                   plant1.commonName +
                   " and " +
                   plant2.commonName +
-                  " !"
+                  " !",
               );
               waitingForGeneration = true;
               confirmBreed([plant1, plant2])
@@ -159,13 +157,13 @@
     console.log(
       "populateGrid with",
       data.garden.plantsInGarden.length,
-      "plants"
+      "plants",
     );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r
+          (p) => p.colIndex === c && p.rowIndex === r,
         );
         if (plant) {
           const plantObject = plant.plant;
@@ -320,7 +318,7 @@
       }
     } else {
       console.error(
-        "Whoops! Where is the candidate child plant we're confirming?"
+        "Whoops! Where is the candidate child plant we're confirming?",
       );
     }
   }

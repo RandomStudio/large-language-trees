@@ -9,7 +9,7 @@
 
     import QrGenerate from "../../components/qr_generate.svelte";
     import { goto } from "$app/navigation";
-    import { Pollinate } from "../garden/+page.svelte";
+    import Pollinate from "../garden/+page.svelte";
     import { onMount } from "svelte";
     import {
         BrowserMultiFormatReader,
