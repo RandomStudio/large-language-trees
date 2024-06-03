@@ -5,7 +5,7 @@
   export let candidateChild: InsertPlant;
 
   export let onCancel: () => any;
-  export let onConfirm: (imageURL: string | null) => Promise<void>;
+  export let onConfirm: () => Promise<void>;
 
   let textInput = "";
 

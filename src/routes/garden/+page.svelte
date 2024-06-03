@@ -23,7 +23,7 @@
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
-  import { confirmBreed } from "$lib/confirmBreed";
+  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -209,67 +209,6 @@
     }
   }
 
-  async function addNewPlant(imageURL: string | null) {
-    if (candidateChild) {
-      if (imageURL) {
-        console.log("will attach image", imageURL);
-        candidateChild.imageUrl = imageURL;
-      }
-      const res = await fetch("/api/plants", {
-        method: "POST",
-        body: JSON.stringify(candidateChild),
-      });
-      const { status, statusText, body } = res;
-      if (status === 201) {
-        console.log("Sucessfully added!");
-
-        // Also place in garden...
-        const plantId = candidateChild.id;
-        const gardenId = data.garden.id;
-        const rowIndex = 0;
-        const colIndex = 0;
-        const updated = {
-          plantId,
-          gardenId,
-          rowIndex,
-          colIndex,
-        };
-        const placementRes = await fetch("/api/plantsInGarden", {
-          method: "POST",
-          body: JSON.stringify(updated),
-        });
-        console.log("Placed in garden?", placementRes);
-
-        // Also place in user seedbank...
-        const entry: SeedbankEntry = {
-          plantId,
-          seedbankId: data.seedBank.id,
-        };
-        const seedbankRes = await fetch("/api/plantsInSeedbank", {
-          method: "POST",
-          body: JSON.stringify(entry),
-        });
-        if (seedbankRes.status === 201) {
-          console.log("successsfully added to Seedbank");
-        }
-
-        // Reload data for page
-        console.log("Reloading page data...");
-        await invalidateAll();
-        populateGrid();
-        console.log("...done");
-        candidateChild = null;
-      } else {
-        console.error("Error adding new plant:", { status, statusText });
-        candidateChild = null;
-      }
-    } else {
-      console.error(
-        "Whoops! Where is the candidate child plant we're confirming?",
-      );
-    }
-  }
-
   populateGrid();
 </script>
 
@@ -347,7 +286,12 @@
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={addNewPlant}
+      onConfirm={async () => {
+        if (candidateChild) {
+          addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+          populateGrid();
+        }
+      }}
     />
   {/if}
 

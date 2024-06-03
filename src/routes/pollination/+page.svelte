@@ -10,7 +10,7 @@
 
     import QrGenerate from "../../components/qr_generate.svelte";
     import { goto } from "$app/navigation";
-    import { confirmBreed } from "$lib/confirmBreed";
+    import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
     import { onMount } from "svelte";
     import {
         BrowserMultiFormatReader,
@@ -115,7 +115,16 @@
             onCancel={() => {
                 candidateChild = null;
             }}
-            onConfirm={async (url) => {}}
-        ></ConfirmBreedPopup>
+            onConfirm={async () => {
+                if (candidateChild) {
+                    await addNewPlant(
+                        candidateChild,
+                        data.garden.id,
+                        data.seedBank.id,
+                    );
+                    candidateChild = null;
+                }
+            }}
+        />
     {/if}
 </main>
