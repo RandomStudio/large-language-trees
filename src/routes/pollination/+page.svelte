@@ -40,34 +40,15 @@
         return plants.find((plant) => plant.plantId === plantId);
     }
 
-    function existingChild(
-        plant1: SelectPlant | null,
-        plant2: SelectPlant | null,
-    ) {
-        if (plant1 && plant2) {
-            if (
-                data.seedBank.plantsInSeedbank.find(
-                    (plant) =>
-                        (plant.plant.parent1 == plant1.id &&
-                            plant.plant.parent2 == plant2.id) ||
-                        (plant.plant.parent2 == plant1.id &&
-                            plant.plant.parent1 == plant2.id),
-                )
-            ) {
-                return data.seedBank.plantsInSeedbank.find(
-                    (plant) =>
-                        (plant.plant.parent1 == plant1.id &&
-                            plant.plant.parent2 == plant2.id) ||
-                        (plant.plant.parent2 == plant1.id &&
-                            plant.plant.parent1 == plant2.id),
-                );
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
+    const existingChild = (
+        parents: [SelectPlant, SelectPlant],
+    ): SelectPlant | null =>
+        data.seedBank.plantsInSeedbank.find(
+            (plant) =>
+                parents.find((p) => p.id == plant.plant.parent1) ||
+                parents.find((p) => p.id == plant.plant.parent2),
+        )?.plant || null;
+
     let videoElement: HTMLVideoElement;
 
     onMount(() => {
@@ -96,16 +77,12 @@
                                     if (res.status == 200) {
                                         parent2 = await res.json();
                                         if (parent1 && parent2) {
-                                            if (
-                                                existingChild(parent1, parent2)
-                                            ) {
-                                                child = existingChild(
-                                                    parent1,
-                                                    parent2,
-                                                )?.plant;
-                                                console.log(child);
-                                            } else {
-                                                console.log("coucou");
+                                            child = existingChild([
+                                                parent1,
+                                                parent2,
+                                            ]);
+                                            console.log(child);
+                                            if (child == null) {
                                                 candidateChild =
                                                     await confirmBreed([
                                                         parent1,
