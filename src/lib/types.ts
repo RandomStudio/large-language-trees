@@ -60,3 +60,7 @@ export interface GardenViewData {
   user: SelectUser;
   garden: MyGarden;
 }
+
+export interface PlantProperties {
+  [key: string]: number | string;
+}
