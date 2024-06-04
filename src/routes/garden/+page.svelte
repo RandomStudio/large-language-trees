@@ -9,6 +9,7 @@
     type SelectPlant,
   } from "../../lib/types"; // Assuming type import is correct
 
+  import PlantDisplay from "../../components/PlantDisplay.svelte";
   export let data: GardenViewData;
 
   // import { pickMultiple } from "random-elements";
@@ -78,7 +79,7 @@
                   plant1.commonName +
                   " and " +
                   plant2.commonName +
-                  " !",
+                  " !"
               );
               waitingForGeneration = true;
               confirmBreed([plant1, plant2])
@@ -104,13 +105,13 @@
     console.log(
       "populateGrid with",
       data.garden.plantsInGarden.length,
-      "plants",
+      "plants"
     );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r,
+          (p) => p.colIndex === c && p.rowIndex === r
         );
         if (plant) {
           const plantObject = plant.plant;
@@ -222,12 +223,13 @@
 <!-- </nav> -->
 
 <main class="container mx-auto overflow-visible">
-  <div class="grid grid-cols-6 gap-4 justify-stretch overflow-visible">
+  <div class="grid grid-cols-6 gap-0 justify-stretch overflow-visible">
     {#each grid as gridCell, gridIndex}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="relative bg-roel_blue min-w-[100px] min-h-[100px] overflow-visible"
+        class="relative bg-roel_green min-w-[100px] min-h-[100px] overflow-visible"
+        style="width: calc(100vw / 6); height: calc(100vw / 6);"
         on:click={() => {
           console.log("click!");
           if (gridCell.plant) {
@@ -239,11 +241,7 @@
       >
         {#if gridCell.plant}
           <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] z-10">
-            <img
-              src={gridCell.plant.imageUrl}
-              alt={gridCell.plant.commonName}
-              class="scale-125"
-            />
+            <PlantDisplay plant={gridCell.plant} width="70%"></PlantDisplay>
           </div>
         {:else}
           <!-- svelte-ignore a11y-no-static-element-interactions -->
