@@ -11,6 +11,8 @@
   let doUpload: boolean = false;
 
   onMount(async () => {
+    // This nonsense is necessary because otherwise "window" is not defined
+    // when Sveltekit tries to do server-side rendering
     const ff = await import("q-floodfill");
     const FloodFill = ff.default;
 
