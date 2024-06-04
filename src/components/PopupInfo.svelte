@@ -20,7 +20,7 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div class="border bg-roel_blue m-8 p-4 rounded" on:click|stopPropagation>
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex justify-end items-center mb-4">
       <button
         type="button"
         class="bg-transparent text-roel_green font-semibold"
@@ -47,6 +47,6 @@
       </div>
     {/if}
     <p class="mt-4 text-center text-roel_green">{plantDetails.commonName}</p>
-    <p class=" text-roel_green">{plantDetails.description}</p>
+    <p class="text-center text-roel_green">{plantDetails.description}</p>
   </div>
 </div>
