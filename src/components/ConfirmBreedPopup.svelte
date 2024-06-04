@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { InsertPlant, SelectPlant } from "$lib/types";
   import Spinner from "./Spinner.svelte";
+  import TransparencyMaker from "./TransparencyMaker.svelte";
 
   export let candidateChild: InsertPlant;
 
@@ -78,7 +79,8 @@
   <div class="border bg-slate-100 m-8 p-4 rounded">
     <h1 class="text-xl font-bold">New plant!</h1>
     {#if candidateImage}
-      <img src={candidateImage} alt="AI generated new plant" class="max-w-20" />
+      <!-- <img src={candidateImage} alt="AI generated new plant" class="max-w-20" /> -->
+      <TransparencyMaker src={candidateImage} plantId={candidateChild.id} />
     {/if}
     {#if waitingForImage}
       <div>
@@ -114,7 +116,7 @@
     </form>
     <div>
       <button
-        on:click={() => onConfirm(candidateImage)}
+        on:click={onConfirm}
         class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
         >✅ Add
       </button>
