@@ -20,7 +20,7 @@
             showNewParagraph = true; // Show the new paragraph
             buttonText = "Start Pollinating!";
         } else {
-            goto("/pollination"); // Navigate to the pollination route
+            goto("./pollination"); // Navigate to the pollination route
         }
     }
 </script>
@@ -28,11 +28,11 @@
 <div>
     <main class="mx-14 mt-20">
         {#if showMessage}
-            <p class="text-roel_blue">
+            <p class="text-roel_blue font-garamond text-3xl">
                 Dear aspiring gardener, We have selected a plant for you!
             </p>
         {/if}
-        <div class="text-left mb-8">
+        <div class="text-left mb-8 font-oldstandard">
             {#if selectedPlant}
                 <PlantDisplay plant={selectedPlant} width="70%"></PlantDisplay>
                 <p class="text-roel_blue mt-4 mb-8">
@@ -44,7 +44,7 @@
         </div>
         {#if showNewParagraph}
             <div class="relative flex mt-6 mb-6 border border-transparent">
-                <p class="text-roel_blue">
+                <p class="text-roel_blue font-garamond text-3xl">
                     Find a fellow gardener irl and scan their barcode to start
                     pollinating.
                 </p>
@@ -52,7 +52,7 @@
         {/if}
         <div class="mt-6 text-center">
             <button
-                class="bg-transparent text-roel_blue py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent"
+                class="bg-transparent text-roel_blue font-oldstandard py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent"
                 style="width:300px;"
                 on:click={handleButtonClick}
             >
