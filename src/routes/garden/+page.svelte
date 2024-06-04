@@ -79,7 +79,7 @@
                   plant1.commonName +
                   " and " +
                   plant2.commonName +
-                  " !",
+                  " !"
               );
               waitingForGeneration = true;
               confirmBreed([plant1, plant2])
@@ -105,13 +105,13 @@
     console.log(
       "populateGrid with",
       data.garden.plantsInGarden.length,
-      "plants",
+      "plants"
     );
     grid = [];
     for (let r = 0; r < GRID_HEIGHT; r++) {
       for (let c = 0; c < GRID_WIDTH; c++) {
         const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r,
+          (p) => p.colIndex === c && p.rowIndex === r
         );
         if (plant) {
           const plantObject = plant.plant;
