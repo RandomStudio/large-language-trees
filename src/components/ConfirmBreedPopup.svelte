@@ -1,18 +1,21 @@
 <script lang="ts">
-  import type { InsertPlant, SelectPlant } from "$lib/types";
+  import type { GeneratedImageResult, InsertPlant } from "$lib/types";
   import Spinner from "./Spinner.svelte";
+  import TransparencyMaker from "./TransparencyMaker.svelte";
 
   export let candidateChild: InsertPlant;
 
   export let onCancel: () => any;
-  export let onConfirm: () => Promise<void>;
+  export let onConfirm: (imageUrl: string | null) => Promise<void>;
 
-  let textInput = "";
+  let textInput = candidateChild.commonName || "";
+  let waitingForImage = false;
+  let candidateImageUrl: string | null = null;
 
   function replaceWordInText(
     text: string,
     targetWord: string,
-    newWord: string,
+    newWord: string
   ) {
     const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
     return text.replace(regex, newWord);
@@ -30,32 +33,41 @@
       candidateChild.description = replaceWordInText(
         candidateChild.description,
         candidateChild.commonName,
-        textInput,
+        textInput
       );
     }
     candidateChild.commonName = textInput;
   }
-  let waitingForImage = false;
-  let candidateImage: string | null = null;
 
   const generateImage = async () => {
     waitingForImage = true;
-    const res = await fetch("/api/generate/image", {
+    const imageGenerationResponse = await fetch("/api/generate/image", {
       method: "POST",
       body: JSON.stringify({
         description: candidateChild.description,
       }),
     });
     waitingForImage = false;
-    if (res.status == 200) {
-      const json = await res.json();
+    if (imageGenerationResponse.status == 200) {
+      const json =
+        (await imageGenerationResponse.json()) as GeneratedImageResult;
       const { url } = json;
       console.log("got candidate image URL:", url);
-      candidateImage = url;
+      candidateImageUrl = url;
     } else {
       console.error("Error fetching generated new image");
     }
   };
+
+  function replaceImage(url: string) {
+    console.log(
+      "ConfirmBreedPopup replacing url",
+      candidateImageUrl,
+      "=>",
+      url
+    );
+    candidateImageUrl = url;
+  }
 
   const messages = [
     "Plants are being dug up",
@@ -92,8 +104,14 @@
       Hooray you made a new plant. What would you like it to be named?
     </p>
 
-    {#if candidateImage}
-      <img src={candidateImage} alt="AI generated new plant" />
+    {#if candidateImageUrl}
+      <TransparencyMaker
+        src={candidateImageUrl}
+        useFloodFill={false}
+        tolerance={8}
+        doUpload={true}
+        onUploadComplete={replaceImage}
+      />
     {/if}
     {#if waitingForImage}
       <div>
@@ -121,12 +139,12 @@
     <p class=" text-roel_green mt-4">
       {candidateChild.description}
     </p>
-    {#if candidateImage}
+    {#if candidateImageUrl}
       <div
         class="flex gap-4 flex-nowrap h-12 bg-transparent text-roel_green mt-4"
       >
         <button
-          on:click={() => onConfirm()}
+          on:click={() => onConfirm(candidateImageUrl)}
           class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
           >Add
         </button>

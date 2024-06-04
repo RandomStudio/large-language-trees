@@ -138,16 +138,3 @@
     </div>
   </main>
 </div>
-
-<style>
-  @font-face {
-    font-family: "Garamond";
-    src: url("/Garamond.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  h1 {
-    font-family: "Garamond", serif;
-  }
-</style>
