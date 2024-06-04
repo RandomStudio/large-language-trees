@@ -80,21 +80,20 @@
   });
 </script>
 
-<main
-  class="flex flex-col items-center justify-center min-h-screen bg-green-300"
->
-  {#if parent1}
-    <PlantDisplay plant={parent1} />
-  {/if}
+<main class="mx-14 mt-20">
   <br />
-  <p class="text-2xl text-blue-600 ml-4">Scan another plant to pollinate</p>
-  <video bind:this={videoElement} class="w-full aspect-video md:aspect-square">
-    <track kind="captions" srclang="en" label="English captions" />
-  </video>
+  <p class="text-roel_blue font-garamond text-3xl mb-6">
+    Scan another plant to pollinate
+  </p>
+  <div class="relative w-full md:aspect-square h-full object-cover">
+    <video bind:this={videoElement} class="">
+      <track kind="captions" srclang="en" label="English captions" />
+    </video>
 
-  {#if parent1}
-    <QrGenerate text={parent1.id}></QrGenerate>
-  {/if}
+    {#if parent1}
+      <QrGenerate text={parent1.id} />
+    {/if}
+  </div>
 
   {#if parent2}
     <p>{parent2.id}</p>
