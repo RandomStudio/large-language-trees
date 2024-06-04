@@ -36,6 +36,7 @@
       >
     </div>
     <img
+      class="md:max-w-20"
       src={plantDetails.imageUrl}
       alt="Drawing of a {plantDetails.commonName}"
     />
