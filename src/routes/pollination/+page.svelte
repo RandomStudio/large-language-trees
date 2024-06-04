@@ -17,6 +17,7 @@
         NotFoundException,
     } from "@zxing/library";
     import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
+    import PopupInfo from "../../components/PopupInfo.svelte";
 
     export let data: GardenViewData;
 
@@ -30,6 +31,8 @@
 
     let candidateChild: InsertPlant | null = null;
 
+    let child: SelectPlant | null = null;
+
     function findPlantById(
         plants: GardenPlantEntryWithPlant[],
         plantId: string,
@@ -37,6 +40,34 @@
         return plants.find((plant) => plant.plantId === plantId);
     }
 
+    function existingChild(
+        plant1: SelectPlant | null,
+        plant2: SelectPlant | null,
+    ) {
+        if (plant1 && plant2) {
+            if (
+                data.seedBank.plantsInSeedbank.find(
+                    (plant) =>
+                        (plant.plant.parent1 == plant1.id &&
+                            plant.plant.parent2 == plant2.id) ||
+                        (plant.plant.parent2 == plant1.id &&
+                            plant.plant.parent1 == plant2.id),
+                )
+            ) {
+                return data.seedBank.plantsInSeedbank.find(
+                    (plant) =>
+                        (plant.plant.parent1 == plant1.id &&
+                            plant.plant.parent2 == plant2.id) ||
+                        (plant.plant.parent2 == plant1.id &&
+                            plant.plant.parent1 == plant2.id),
+                );
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
     let videoElement: HTMLVideoElement;
 
     onMount(() => {
@@ -65,9 +96,22 @@
                                     if (res.status == 200) {
                                         parent2 = await res.json();
                                         if (parent1 && parent2) {
-                                            candidateChild = await confirmBreed(
-                                                [parent1, parent2],
-                                            );
+                                            if (
+                                                existingChild(parent1, parent2)
+                                            ) {
+                                                child = existingChild(
+                                                    parent1,
+                                                    parent2,
+                                                )?.plant;
+                                                console.log(child);
+                                            } else {
+                                                console.log("coucou");
+                                                candidateChild =
+                                                    await confirmBreed([
+                                                        parent1,
+                                                        parent2,
+                                                    ]);
+                                            }
                                         }
                                     }
                                 },
@@ -87,6 +131,9 @@
             codeReader.reset();
         };
     });
+
+    console.log(parent1);
+    console.log(parent2);
 </script>
 
 <main
@@ -124,6 +171,16 @@
                     );
                     candidateChild = null;
                 }
+            }}
+        />
+    {/if}
+
+    {#if child}
+        <PopupInfo
+            allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
+            plantDetails={child}
+            closePopup={() => {
+                child = null;
             }}
         />
     {/if}
