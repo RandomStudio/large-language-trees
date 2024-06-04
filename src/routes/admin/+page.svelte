@@ -39,7 +39,8 @@
           <TransparencyMaker
             src={plant.imageUrl}
             plantId={plant.id}
-            useFloodFill={true}
+            useFloodFill={false}
+            tolerance={8}
           />
         {/if}
       {/each}

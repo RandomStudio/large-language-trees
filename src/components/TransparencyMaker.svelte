@@ -3,7 +3,7 @@
 
   export let src: string;
   export let plantId: string;
-  export let tolerance = 6;
+  export let tolerance = 15;
   export let useFloodFill = true;
 
   let canvasElement: HTMLCanvasElement;
