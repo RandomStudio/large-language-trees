@@ -36,7 +36,11 @@
       {#each data.allPlants as plant}
         <h2>Image transparency test:</h2>
         {#if plant.imageUrl}
-          <TransparencyMaker src={plant.imageUrl} plantId={plant.id} />
+          <TransparencyMaker
+            src={plant.imageUrl}
+            plantId={plant.id}
+            useFloodFill={true}
+          />
         {/if}
       {/each}
     </div>

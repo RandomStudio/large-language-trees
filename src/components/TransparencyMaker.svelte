@@ -3,7 +3,8 @@
 
   export let src: string;
   export let plantId: string;
-  export let tolerance = 10;
+  export let tolerance = 6;
+  export let useFloodFill = true;
 
   let canvasElement: HTMLCanvasElement;
 
@@ -32,12 +33,35 @@
         const topLeftColor = ctx.getImageData(0, 0, 1, 1).data;
         console.log({ topLeftColor });
 
-        const floodFill = new FloodFill(imageData);
-        floodFill.fill("rgba(0,0,0,0)", 0, 0, tolerance);
+        if (useFloodFill) {
+          const floodFill = new FloodFill(imageData);
+          floodFill.fill("rgba(0,0,0,0)", 0, 0, tolerance);
 
-        const count = floodFill.modifiedPixelsCount;
+          const count = floodFill.modifiedPixelsCount;
 
-        console.log("modified", count, "pixels ok");
+          console.log("modified", count, "pixels ok using floodfill");
+        } else {
+          let count = 0;
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            if (
+              isWithinTolerance(
+                [
+                  imageData.data[i],
+                  imageData.data[i + 1],
+                  imageData.data[i + 2],
+                ],
+                [topLeftColor[0], topLeftColor[1], topLeftColor[2]],
+                tolerance
+              )
+            ) {
+              count++;
+              imageData.data[i + 3] = 0; // Set alpha to 0, making the pixel transparent.
+              // data[i] = 1;
+            }
+          }
+          console.log("altered", count, "pixels use simple replace");
+        }
+
         ctx.putImageData(imageData, 0, 0);
 
         canvasElement.toBlob((blob) => {
