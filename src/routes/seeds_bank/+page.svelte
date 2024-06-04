@@ -18,7 +18,7 @@
     <div class="text-center w-full">
       <br />
       <br />
-      {#each seedBank as plant}
+      {#each seedBank as plant, index}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
@@ -28,9 +28,7 @@
           }}
           class="cursor-pointer"
         >
-          <div class="text-left">
-            <PlantDisplay plant={plant.plant} width="70%"></PlantDisplay>
-          </div>
+          <PlantDisplay plant={plant.plant} width="70%" {index}></PlantDisplay>
         </div>
         <br />
         <br />
@@ -49,7 +47,7 @@
 
     <div class="mt-4 text-center">
       <button
-        class="bg-transparent text-roel_blue py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+        class="bg-transparent text-roel_blue py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
         style="width:250px;"
         on:click={() => goto("/pollination")}
       >
