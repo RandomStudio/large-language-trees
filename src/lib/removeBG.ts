@@ -1,5 +1,5 @@
-export function canvaWithoutBG(canvaId, imgSource) {
-    const canvas = document.getElementById(canvaId);
+export function canvaWithoutBG(canvaId: string, imgSource: string) {
+    const canvas = document.getElementById(canvaId) as HTMLCanvasElement;
     if (!canvas) return;
     const context = canvas.getContext("2d");
     if (!context) return;
@@ -42,7 +42,7 @@ export function canvaWithoutBG(canvaId, imgSource) {
     img.src = imgSource;
 }
 
-function isWithinTolerance(pixelColor, targetColor, tolerance) {
+function isWithinTolerance(pixelColor: number[], targetColor: number[], tolerance: number) {
     return (
         Math.abs(pixelColor[0] - targetColor[0]) <= tolerance &&
         Math.abs(pixelColor[1] - targetColor[1]) <= tolerance &&

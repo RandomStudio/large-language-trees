@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     // @ts-ignore
     import QRCode from "qrcode";
     import { canvaWithoutBG } from "$lib/removeBG";
 
-    export let text = "palm";
+    export let text: String = "palm";
     let qrCodeUrl = "";
     let canvasId = "canvas_qrCode";
 
-    const generateQRCode = async (text) => {
+    const generateQRCode = async (text: String) => {
         try {
             qrCodeUrl = await QRCode.toDataURL(text);
             console.log(qrCodeUrl);
