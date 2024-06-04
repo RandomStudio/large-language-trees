@@ -38,7 +38,7 @@ export const uploadLocal = async (fetchImage: Response, basename: string) => {
   );
 };
 export async function streamToS3(
-  id: string,
+  baseName: string,
   stream: ReadableStream<Uint8Array>
 ) {
   const s3 = new S3Client({
@@ -52,7 +52,7 @@ export async function streamToS3(
     client: s3,
     params: {
       Bucket: S3_BUCKET,
-      Key: `${id}.png`,
+      Key: `${baseName}.png`,
       Body: stream,
       ContentType: "image/png",
     },

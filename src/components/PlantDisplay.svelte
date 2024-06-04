@@ -1,9 +1,7 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
-  import { onMount } from "svelte";
 
   export let plant: SelectPlant;
-  export let width: string;
 </script>
 
 <div class="flex justify-center">
@@ -12,8 +10,8 @@
   <img
     src={plant.imageUrl}
     alt={plant.commonName}
-    {width}
     id={plant.commonName}
+    class="max-w-20"
   />
 </div>
 <p class="flex justify-center text-roel_blue">

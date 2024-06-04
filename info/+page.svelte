@@ -1,10 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
-  import type { ActionData } from "../src/routes/info/$types";
   import { onMount } from "svelte";
-
-  export let form: ActionData;
 
   let showButton = false;
 

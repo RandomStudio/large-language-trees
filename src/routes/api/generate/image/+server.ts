@@ -15,8 +15,8 @@ import path from "path";
 import fs from "fs/promises";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3, uploadLocal } from "$lib/server/images";
-
-const URL_PREFIX = "https://random-the-garden.s3.eu-north-1.amazonaws.com";
+import type { GeneratedImageResult } from "$lib/types";
+import { URL_PREFIX } from "../../../../defaults/constants";
 
 export const POST: RequestHandler = async ({ request }) => {
   console.log({ PLACEHOLDER_IMAGES });
@@ -24,7 +24,10 @@ export const POST: RequestHandler = async ({ request }) => {
   const { description } = jsonBody;
 
   if (PLACEHOLDER_IMAGES === "true") {
-    return json({ description, url: "/plants/placeholder.png" });
+    const jsonResponse: GeneratedImageResult = {
+      url: "/plants/placeholder.png",
+    };
+    return json(jsonResponse, { status: 200 });
   }
 
   const prompt = buildImagePrompt(description);
@@ -45,22 +48,27 @@ export const POST: RequestHandler = async ({ request }) => {
   if (generatedUrl) {
     const fetchImage = await fetch(generatedUrl);
 
-    const basename = uuidv4();
+    const baseName = uuidv4();
+
     if (LOCAL_FILES === "true") {
       try {
-        await uploadLocal(fetchImage, basename);
-        return json(
-          { description, url: `/uploads/${basename}.png` },
-          { status: 200 }
-        );
+        await uploadLocal(fetchImage, baseName);
+        const jsonResponse: GeneratedImageResult = {
+          url: `/uploads/${baseName}.png`,
+        };
+        return json(jsonResponse, { status: 200 });
       } catch (e) {
         console.error("Failed to upload to local filesystem:", e);
         return error(500);
       }
     } else {
       try {
-        await uploadToS3(fetchImage, basename);
-        return json({ description, url: URL_PREFIX + "/" + basename + ".png" });
+        await uploadToS3(fetchImage, baseName);
+        const jsonResponse: GeneratedImageResult = {
+          url: URL_PREFIX + "/" + baseName + ".png",
+        };
+
+        return json(jsonResponse, { status: 200 });
       } catch (e) {
         console.error("Error uploading to S3:", e);
         return error(500);
