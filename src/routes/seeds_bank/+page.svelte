@@ -13,11 +13,7 @@
   let allSeeds = data.garden.plantsInGarden;
 </script>
 
-<div class="min-h-screen bg-roel_green overflow-hidden">
-  <div class="fixed top-10 left-10">
-    <h1 class="text-3xl text-roel_blue">The Garden</h1>
-  </div>
-
+<div class="min-h-screen bg-roel_green overflow-hidden font-oldstandard">
   <main class="mx-10 mt-20">
     <div class="text-center w-full">
       <br />
