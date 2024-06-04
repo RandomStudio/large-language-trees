@@ -100,7 +100,7 @@
         </video>
 
         {#if parent1}
-            <QrGenerate text={parent1.id} />
+            <QrGenerate text={parent1.id}></QrGenerate>
         {/if}
     </div>
 
