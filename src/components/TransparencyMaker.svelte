@@ -2,9 +2,12 @@
   import { onMount } from "svelte";
 
   export let src: string;
+  export let plantId: string;
   export let tolerance = 10;
 
   let canvasElement: HTMLCanvasElement;
+
+  let finalImageData: Uint8ClampedArray | null = null;
 
   onMount(() => {
     const img = new Image();
@@ -38,6 +41,24 @@
         }
         console.log("altered", count, "pixels");
         ctx.putImageData(imageData, 0, 0);
+
+        canvasElement.toBlob((blob) => {
+          if (blob) {
+            console.log("look, a Blob:", blob);
+            const formData = new FormData();
+            formData.append("img", blob);
+            fetch(`/api/plants/replaceImage/${plantId}`, {
+              method: "POST",
+              body: formData,
+            })
+              .then((res) => {
+                console.log("Response to upload", res);
+              })
+              .catch((e) => {
+                console.error("error uploading:", e);
+              });
+          }
+        }, "image/png");
       }
     };
   });
@@ -53,6 +74,8 @@
       Math.abs(pixelColor[2] - targetColor[2]) <= tolerance
     );
   }
+
+  function replaceImage(plantId: string, imageData: Uint8ClampedArray) {}
 </script>
 
 <div>
@@ -62,4 +85,15 @@
     height="1024"
     class="max-w-full"
   />
+
+  {#if finalImageData}
+    <button
+      class="bg-blue-500 text-white py-2 px-4 rounded"
+      on:click={() => {
+        if (plantId && finalImageData) {
+          replaceImage(plantId, finalImageData);
+        }
+      }}>Upload</button
+    >
+  {/if}
 </div>

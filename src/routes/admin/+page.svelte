@@ -23,7 +23,7 @@
   </div>
   <div class="m-4">
     <h2>Image transparency test:</h2>
-    <TransparencyMaker src={"/plants/Mangrove.png"} />
+    <TransparencyMaker src={"/plants/Mangrove.png"} plantId="mangrove" />
   </div>
 
   <div class="m-4">
