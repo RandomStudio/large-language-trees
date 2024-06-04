@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
     extend: {
@@ -8,7 +8,11 @@ export default {
         'roel_blue': '#0038FF',
       },
       scale: {
-        '125': '1.25', // Represents scaling to 125%
+        '125': '1.25',
+      },
+      fontFamily: {
+        'garamond': ['Garamond', 'serif'],
+        'oldstandard': ['OldStandard', 'serif']
       },
     }
   },

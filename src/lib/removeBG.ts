@@ -35,7 +35,7 @@ export function canvaWithoutBG(canvaId: string, imageId: string, imgSource: stri
                     tolerance,
                 )
             ) {
-                data[i + 3] = 0;
+                data[i + 3] = 0; // Set alpha to 0, making the pixel transparent.
             }
         }
         context.putImageData(imageData, 0, 0);
@@ -43,7 +43,7 @@ export function canvaWithoutBG(canvaId: string, imageId: string, imgSource: stri
         document.getElementById(imageId).src = pngUrl;
     };
 
-    img.src = imgSource; // Load the .webp image
+    img.src = imgSource; // Load the .png image
 }
 
 function isWithinTolerance(pixelColor: Array<number>, targetColor: Array<number>, tolerance: number) {

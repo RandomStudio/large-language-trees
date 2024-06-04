@@ -21,9 +21,10 @@
   import { buildPrompt } from "../../lib/promptUtils";
 
   import DefaultPromptConfig from "../../defaults/prompt-config";
-  import ConfirmBreed from "../../components/ConfirmBreed.svelte";
+  import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
   import FullScreenLoading from "../../components/FullScreenLoading.svelte";
   import { invalidateAll } from "$app/navigation";
+  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
 
   let candidateParents: [SelectPlant, SelectPlant] | null = null;
   let candidateChild: InsertPlant | null = null;
@@ -42,27 +43,6 @@
   }
 
   let grid: GridCell[] = [];
-
-  async function confirmBreed(
-    parents: [SelectPlant, SelectPlant],
-  ): Promise<InsertPlant> {
-    console.log("confirmBreed...");
-    const res = await fetch("/api/generate/plant", {
-      method: "POST",
-      body: JSON.stringify({
-        prompt: buildPrompt(DefaultPromptConfig, parents[0], parents[1]),
-        parents,
-      }),
-    });
-    if (res.status === 200) {
-      console.log("Created new candidate plant OK:", res);
-      return (await res.json()) as InsertPlant;
-    } else {
-      const { status, statusText } = res;
-      console.error("Error generating on backend:", { status, statusText });
-      throw Error("Generate failure");
-    }
-  }
 
   function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
     const plant1Cell = grid.find((c) => c.plant && c.plant.id === plant1.id);
@@ -230,67 +210,6 @@
     }
   }
 
-  async function addNewPlant(imageURL: string | null) {
-    if (candidateChild) {
-      if (imageURL) {
-        console.log("will attach image", imageURL);
-        candidateChild.imageUrl = imageURL;
-      }
-      const res = await fetch("/api/plants", {
-        method: "POST",
-        body: JSON.stringify(candidateChild),
-      });
-      const { status, statusText, body } = res;
-      if (status === 201) {
-        console.log("Sucessfully added!");
-
-        // Also place in garden...
-        const plantId = candidateChild.id;
-        const gardenId = data.garden.id;
-        const rowIndex = 0;
-        const colIndex = 0;
-        const updated = {
-          plantId,
-          gardenId,
-          rowIndex,
-          colIndex,
-        };
-        const placementRes = await fetch("/api/plantsInGarden", {
-          method: "POST",
-          body: JSON.stringify(updated),
-        });
-        console.log("Placed in garden?", placementRes);
-
-        // Also place in user seedbank...
-        const entry: SeedbankEntry = {
-          plantId,
-          seedbankId: data.seedBank.id,
-        };
-        const seedbankRes = await fetch("/api/plantsInSeedbank", {
-          method: "POST",
-          body: JSON.stringify(entry),
-        });
-        if (seedbankRes.status === 201) {
-          console.log("successsfully added to Seedbank");
-        }
-
-        // Reload data for page
-        console.log("Reloading page data...");
-        await invalidateAll();
-        populateGrid();
-        console.log("...done");
-        candidateChild = null;
-      } else {
-        console.error("Error adding new plant:", { status, statusText });
-        candidateChild = null;
-      }
-    } else {
-      console.error(
-        "Whoops! Where is the candidate child plant we're confirming?",
-      );
-    }
-  }
-
   populateGrid();
 </script>
 
@@ -360,13 +279,17 @@
   {/if}
 
   {#if candidateChild}
-    <ConfirmBreed
+    <ConfirmBreedPopup
       {candidateChild}
-      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={addNewPlant}
+      onConfirm={async () => {
+        if (candidateChild) {
+          addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+          populateGrid();
+        }
+      }}
     />
   {/if}
 

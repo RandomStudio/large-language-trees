@@ -8,7 +8,7 @@
 <div class="min-h-screen bg-roel_green relative">
   <div class="fixed top-10 left-10 p-2">
     <h1
-      class="text-3xl text-roel_blue cursor-pointer"
+      class="text-3xl text-roel_blue cursor-pointer font-garamond"
       on:click={() => {
         goto("/info");
       }}
