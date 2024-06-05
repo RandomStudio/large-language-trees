@@ -43,7 +43,6 @@
     {#if selectedPlant}
       <PopupInfo
         plantDetails={selectedPlant}
-        {allSeeds}
         closePopup={() => {
           selectedPlant = null;
         }}
