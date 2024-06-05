@@ -8,15 +8,19 @@
 
   let alt = "alt placeholder";
 
-  let minPlantHeight = 0.32; //0.1 squared is (about) 0.32
-  let maxPlantHeight = 5.5; //30 squared is (about 5.5)
+  let rootScale = 2; //maths root not plant roots lol
+  let minPlantHeight = Math.pow(0.1, 1 / rootScale); //0.1 squared is (about) 0.32
+  let maxPlantHeight = Math.pow(30, 1 / rootScale); //30 squared is (about 5.5)
 
   let minPlantHeightOutput = 100;
-  let maxPlantHeightOutput = 200;
+  let maxPlantHeightOutput = 300;
+  let animationLength = 8;
+  let animationDegree = 5;
 
   let monitorWidth = 1920;
   let monitorHeight = 1080;
   let frameSize = 50;
+  let topBorder = 100;
 
   let low1 = minPlantHeight;
   let low2 = 0;
@@ -32,28 +36,22 @@
     return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
   }
 
-  function scaleFromPlantHeight(plant: GardenPlantEntryWithPlant): number {
+  function plantHeight(plant: GardenPlantEntryWithPlant): number {
+    return (plant.plant.properties as PlantProperties)["high(m)"] as number;
+  }
+
+  function rootScaleFromPlantHeight(plant: GardenPlantEntryWithPlant): number {
     return Math.min(
-      Math.sqrt(
+      Math.pow(
         (plant.plant.properties as PlantProperties)["high(m)"] as number,
+        1 / rootScale,
       ),
       30,
     );
   }
 
-  function squaredScaleFromPlantHeight(
-    plant: GardenPlantEntryWithPlant,
-  ): number {
-    return Math.min(
-      Math.sqrt(
-        (plant.plant.properties as PlantProperties)["high(m)"] as number,
-      ),
-      30,
-    );
-  }
-
-  function remapPlantHeight(value: any) {
-    return mapRange(value, low1, high1, low2, high2);
+  function remapPlantHeight(value: any, lowIn: any, highIn: any) {
+    return mapRange(value, lowIn, highIn, low2, high2);
   }
 
   function placePlantOnXAxis(plant: GardenPlantEntryWithPlant) {
@@ -66,9 +64,20 @@
   function placePlantOnYAxis(plant: GardenPlantEntryWithPlant) {
     return (
       frameSize +
-      (monitorHeight - maxPlantHeightOutput - frameSize) *
-        (1 - remapPlantHeight(scaleFromPlantHeight(plant))) // One minus remapped value in order to make the plants go from small to big
+      topBorder +
+      (monitorHeight - minPlantHeightOutput - frameSize * 2 - topBorder) *
+        (1 -
+          remapPlantHeight(
+            Math.log(rootScaleFromPlantHeight(plant)) + 1,
+            Math.log(minPlantHeight) + 1,
+            Math.log(maxPlantHeight) + 1,
+          )) + // one minus remapped value in order to make the plants go from small to big
+      (Math.random() - 0.5) * 10 // a bit of random ofset
     );
+  }
+
+  function randomAnimationDelay(): number {
+    return (Math.random() * -animationLength) / 3;
   }
 </script>
 
@@ -80,14 +89,28 @@
       <img
         src={plant.plant.imageUrl}
         {alt}
-        class="fixed"
+        class="fixed skew-animated"
         style:width={minPlantHeightOutput +
-          remapPlantHeight(scaleFromPlantHeight(plant)) * maxPlantHeightOutput +
+          remapPlantHeight(
+            rootScaleFromPlantHeight(plant),
+            minPlantHeight,
+            maxPlantHeight,
+          ) *
+            (maxPlantHeightOutput - minPlantHeightOutput) +
           "px"}
         style:margin-left={placePlantOnXAxis(plant) + "px"}
         style:margin-top={placePlantOnYAxis(plant) + "px"}
+        style:animation-duration={animationLength + "s"}
+        style:animation-delay={randomAnimationDelay() + "s"}
+        style:z-index={3000 - plantHeight(plant) * 100}
         on:click={() => {
-          console.log(remapPlantHeight(scaleFromPlantHeight(plant)));
+          console.log(
+            remapPlantHeight(
+              Math.log(rootScaleFromPlantHeight(plant)) + 1,
+              Math.log(minPlantHeight) + 1,
+              Math.log(maxPlantHeight) + 1,
+            ),
+          );
         }}
       />
     {/each}
@@ -95,4 +118,22 @@
 </body>
 
 <style>
+  @keyframes skew-animation {
+    0% {
+      transform: skew(5deg);
+      left: -7px;
+    }
+    50% {
+      transform: skew(-5deg);
+      left: 7px;
+    }
+    100% {
+      transform: skew(5deg);
+      left: -7px;
+    }
+  }
+
+  .skew-animated {
+    animation: skew-animation infinite;
+  }
 </style>
