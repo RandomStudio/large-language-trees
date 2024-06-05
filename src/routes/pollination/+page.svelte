@@ -17,7 +17,7 @@
 
   let parent1: SelectPlant | null =
     data.seedBank.plantsInSeedbank.find(
-      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
+      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null,
     )?.plant || null;
 
   let parent2: SelectPlant | null = null;
@@ -27,12 +27,12 @@
   let child: SelectPlant | null = null;
 
   const existingChild = (
-    parents: [SelectPlant, SelectPlant]
+    parents: [SelectPlant, SelectPlant],
   ): SelectPlant | null =>
     data.seedBank.plantsInSeedbank.find(
       (plant) =>
         parents.find((p) => p.id == plant.plant.parent1) ||
-        parents.find((p) => p.id == plant.plant.parent2)
+        parents.find((p) => p.id == plant.plant.parent2),
     )?.plant || null;
 
   let videoElement: HTMLVideoElement;
@@ -91,10 +91,6 @@
       <QrGenerate text={parent1.id} />
     {/if}
   </div>
-
-  {#if parent2}
-    <p>{parent2.id}</p>
-  {/if}
 
   {#if candidateChild}
     <ConfirmBreedPopup
