@@ -1,16 +1,15 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     // @ts-ignore
     import QRCode from "qrcode";
 
-    export let text = "palm";
+    export let text: string = "";
     let qrCodeUrl = "";
-    let canvasId = "canvas_qrCode";
 
-    const generateQRCode = async (text) => {
+    const generateQRCode = async (text: string) => {
         try {
             qrCodeUrl = await QRCode.toDataURL(text);
-            console.log(qrCodeUrl);
+            console.log(text);
         } catch (err) {
             console.error(err);
         }
@@ -18,6 +17,7 @@
 
     onMount(() => {
         generateQRCode(text);
+        console.log(text);
     });
 </script>
 
