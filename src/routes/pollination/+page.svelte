@@ -26,15 +26,14 @@
 
   let child: SelectPlant | null = null;
 
-  const existingChild = (
+  $: existingChild = (
     parents: [SelectPlant, SelectPlant],
   ): SelectPlant | null =>
     data.seedBank.plantsInSeedbank.find(
       (plant) =>
-        parents.find((p) => p.id == plant.plant.parent1) ||
+        parents.find((p) => p.id == plant.plant.parent1) &&
         parents.find((p) => p.id == plant.plant.parent2),
     )?.plant || null;
-
   let videoElement: HTMLVideoElement;
 
   onMount(async () => {
@@ -54,14 +53,12 @@
       if (result && !busy) {
         // Handle the result here
         busy = true;
-        console.log(result.getText());
         const parent2Id = result.getText();
         fetch("/api/plants/" + parent2Id).then(async (res) => {
           if (res.status == 200) {
             parent2 = await res.json();
             if (parent1 && parent2) {
               child = existingChild([parent1, parent2]);
-              console.log(child);
               if (child == null) {
                 candidateChild = await confirmBreed([parent1, parent2]);
               }
