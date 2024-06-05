@@ -9,7 +9,6 @@
     const generateQRCode = async (text: string) => {
         try {
             qrCodeUrl = await QRCode.toDataURL(text);
-            console.log(text);
         } catch (err) {
             console.error(err);
         }
@@ -17,7 +16,6 @@
 
     onMount(() => {
         generateQRCode(text);
-        console.log(text);
     });
 </script>
 
