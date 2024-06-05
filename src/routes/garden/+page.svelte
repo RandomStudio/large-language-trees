@@ -8,24 +8,34 @@
 
   let alt = "alt placeholder";
 
+  //distribution on screen and size of plants in database
   let rootScale = 2; //maths root not plant roots lol
   let minPlantHeight = Math.pow(0.1, 1 / rootScale); //0.1 squared is (about) 0.32
   let maxPlantHeight = Math.pow(30, 1 / rootScale); //30 squared is (about 5.5)
 
-  let minPlantHeightOutput = 100;
-  let maxPlantHeightOutput = 300;
+  //plant min and max size on screen
+  let minPlantHeightOutput = 75;
+  let maxPlantHeightOutput = 200;
   let animationLength = 8;
   let animationDegree = 5;
 
+  //display size and borders
   let monitorWidth = 1920;
   let monitorHeight = 1080;
   let frameSize = 50;
   let topBorder = 100;
 
+  //constants relating to remap function
   let low1 = minPlantHeight;
   let low2 = 0;
   let high1 = maxPlantHeight;
   let high2 = 1;
+
+  //constants relating to making plants not overlap
+  const plantIDs: string[] = [];
+  const plantPositionsX: number[] = [];
+  const plantPositionsY: number[] = [];
+  let crowdednessTolerance = 100;
 
   import { onMount } from "svelte";
   onMount(() => {
@@ -54,13 +64,6 @@
     return mapRange(value, lowIn, highIn, low2, high2);
   }
 
-  function placePlantOnXAxis(plant: GardenPlantEntryWithPlant) {
-    return (
-      Math.random() * (monitorWidth - (frameSize + maxPlantHeightOutput)) +
-      frameSize
-    );
-  }
-
   function placePlantOnYAxis(plant: GardenPlantEntryWithPlant) {
     return (
       frameSize +
@@ -71,9 +74,62 @@
             Math.log(rootScaleFromPlantHeight(plant)) + 1,
             Math.log(minPlantHeight) + 1,
             Math.log(maxPlantHeight) + 1,
-          )) + // one minus remapped value in order to make the plants go from small to big
-      (Math.random() - 0.5) * 10 // a bit of random ofset
+          )) // one minus remapped value in order to make the plants go from small to big
     );
+  }
+
+  function placePlantOnXAxis(plant: GardenPlantEntryWithPlant) {
+    let proposedPlantPositionX = 0;
+    let isSpaceOk = false;
+
+    while (!isSpaceOk) {
+      proposedPlantPositionX = findSpace(plant);
+      isSpaceOk = checkIfSpaceIsOk(plant, proposedPlantPositionX);
+    }
+
+    plantIDs.push(plant.plant.id);
+    plantPositionsX.push(proposedPlantPositionX);
+    plantPositionsY.push(placePlantOnYAxis(plant));
+    return proposedPlantPositionX;
+  }
+
+  function findSpace(plant: GardenPlantEntryWithPlant) {
+    return (
+      Math.random() * (monitorWidth - (frameSize + maxPlantHeightOutput)) +
+      frameSize
+    );
+  }
+
+  function checkIfSpaceIsOk(
+    plant: GardenPlantEntryWithPlant,
+    proposedPlantPositionX: number,
+  ) {
+    let distanceList = [];
+    for (let i = 0; i < plantIDs.length; i++) {
+      let distance = calculateDistance(
+        plant,
+        proposedPlantPositionX,
+        plantPositionsX[i],
+        plantPositionsY[i],
+      );
+      distanceList.push(distance);
+    }
+    return Math.min(...distanceList) >= crowdednessTolerance;
+  }
+
+  function calculateDistance(
+    plant: GardenPlantEntryWithPlant,
+    proposedPlantPositionX: number,
+    x: number,
+    y: number,
+  ): number {
+    let plantX = proposedPlantPositionX;
+    let plantY = placePlantOnYAxis(plant);
+
+    let deltaX = plantX - x;
+    let deltaY = plantY - y;
+
+    return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
   }
 
   function randomAnimationDelay(): number {
@@ -90,6 +146,9 @@
         src={plant.plant.imageUrl}
         {alt}
         class="fixed skew-animated"
+        on:click={() => {
+          console.log(plantIDs);
+        }}
         style:width={minPlantHeightOutput +
           remapPlantHeight(
             rootScaleFromPlantHeight(plant),
@@ -98,20 +157,11 @@
           ) *
             (maxPlantHeightOutput - minPlantHeightOutput) +
           "px"}
-        style:margin-left={placePlantOnXAxis(plant) + "px"}
         style:margin-top={placePlantOnYAxis(plant) + "px"}
+        style:margin-left={placePlantOnXAxis(plant) + "px"}
         style:animation-duration={animationLength + "s"}
         style:animation-delay={randomAnimationDelay() + "s"}
         style:z-index={3000 - plantHeight(plant) * 100}
-        on:click={() => {
-          console.log(
-            remapPlantHeight(
-              Math.log(rootScaleFromPlantHeight(plant)) + 1,
-              Math.log(minPlantHeight) + 1,
-              Math.log(maxPlantHeight) + 1,
-            ),
-          );
-        }}
       />
     {/each}
   </div>
@@ -120,15 +170,15 @@
 <style>
   @keyframes skew-animation {
     0% {
-      transform: skew(5deg);
+      transform: skew(4deg);
       left: -7px;
     }
     50% {
-      transform: skew(-5deg);
+      transform: skew(-4deg);
       left: 7px;
     }
     100% {
-      transform: skew(5deg);
+      transform: skew(4deg);
       left: -7px;
     }
   }
