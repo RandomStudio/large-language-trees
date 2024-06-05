@@ -77,7 +77,7 @@
 <main class="mx-14 mt-20">
   <br />
   <p class="text-roel_blue font-garamond text-3xl mb-6">
-    Scan another plant to pollinate
+    Find another gardener and point your camera to their QR code.
   </p>
   <div class="relative w-full md:aspect-square h-full object-cover">
     <video bind:this={videoElement} class="">

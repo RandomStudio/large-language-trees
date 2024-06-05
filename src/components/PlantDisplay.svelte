@@ -3,7 +3,7 @@
 
   export let plant: SelectPlant;
   export let applyFilters: boolean = false;
-  export let width: string = "w-9/12";
+  export let width: string = "w-full"; // Default width, can be overridden
 </script>
 
 <div class="flex flex-col items-center">
