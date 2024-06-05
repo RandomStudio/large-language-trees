@@ -6,7 +6,10 @@
   export let candidateChild: InsertPlant;
 
   export let onCancel: () => any;
-  export let onConfirm: (imageUrl: string | null) => Promise<void>;
+  export let onConfirm: (
+    imageUrl: string | null,
+    commonName: string
+  ) => Promise<void>;
 
   let textInput = candidateChild.commonName || "";
   let waitingForImage = false;
@@ -14,21 +17,12 @@
 
   async function handleAction() {
     try {
-      await onConfirm(candidateImageUrl); // Attendre que onConfirm soit terminé
+      await onConfirm(candidateImageUrl, textInput); // Attendre que onConfirm soit terminé
       goto("../gallery"); // Rediriger vers la page de la galerie après confirmation
     } catch (error) {
       console.error("Error during confirmation:", error);
       // Gérer l'erreur éventuelle ici, par exemple afficher un message à l'utilisateur
     }
-  }
-
-  function replaceWordInText(
-    text: string,
-    targetWord: string,
-    newWord: string,
-  ) {
-    const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
-    return text.replace(regex, newWord);
   }
 
   function handleSubmit() {
@@ -40,11 +34,6 @@
     console.log("Name given:", textInput);
 
     if (candidateChild.description && candidateChild.commonName) {
-      candidateChild.description = replaceWordInText(
-        candidateChild.description,
-        candidateChild.commonName,
-        textInput,
-      );
     }
     candidateChild.commonName = textInput;
   }
@@ -74,7 +63,7 @@
       "ConfirmBreedPopup replacing url",
       candidateImageUrl,
       "=>",
-      url,
+      url
     );
     candidateImageUrl = url;
   }

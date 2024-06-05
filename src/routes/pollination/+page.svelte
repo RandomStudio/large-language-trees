@@ -105,10 +105,11 @@
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={async (imageUrl) => {
+      onConfirm={async (imageUrl, commonName) => {
         if (candidateChild) {
           console.log({ candidateChildId: candidateChild.id, imageUrl });
           candidateChild.imageUrl = imageUrl;
+          candidateChild.commonName = commonName;
           await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
           candidateChild = null;
           busy = false;
