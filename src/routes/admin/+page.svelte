@@ -38,7 +38,7 @@
         {#if plant.imageUrl}
           <TransparencyMaker
             src={plant.imageUrl}
-            plantId={plant.id}
+            baseName={plant.id}
             useFloodFill={false}
             tolerance={8}
           />

@@ -64,3 +64,10 @@ export interface GardenViewData {
 export interface PlantProperties {
   [key: string]: number | string;
 }
+export interface GeneratedImageResult {
+  url: string;
+}
+
+export interface ImageUploadResult {
+  url: string;
+}

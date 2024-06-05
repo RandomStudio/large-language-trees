@@ -1,15 +1,16 @@
 <script lang="ts">
+  import type { ImageUploadResult } from "$lib/types";
   import { onMount } from "svelte";
 
   export let src: string;
-  export let plantId: string;
   export let tolerance = 15;
   export let useFloodFill = true;
 
+  export let onUploadComplete: (imageUrl: string) => any;
+
   let canvasElement: HTMLCanvasElement;
 
-  let finalImageData: Uint8ClampedArray | null = null;
-  let doUpload: boolean = false;
+  export let doUpload: boolean = false;
 
   onMount(async () => {
     // This nonsense is necessary because otherwise "window" is not defined
@@ -17,10 +18,8 @@
     const ff = await import("q-floodfill");
     const FloodFill = ff.default;
 
-    console.log(window.innerWidth);
     const img = new Image();
-    img.src = src;
-    const ctx = canvasElement.getContext("2d");
+
     img.onload = () => {
       if (ctx) {
         ctx.drawImage(img, 0, 0);
@@ -64,25 +63,30 @@
 
         ctx.putImageData(imageData, 0, 0);
 
-        canvasElement.toBlob((blob) => {
+        canvasElement.toBlob(async (blob) => {
           if (doUpload && blob) {
             console.log("look, a Blob:", blob);
             const formData = new FormData();
             formData.append("img", blob);
-            fetch(`/api/plants/replaceImage/${plantId}`, {
+
+            const res = await fetch(`/api/upload/image`, {
               method: "POST",
               body: formData,
-            })
-              .then((res) => {
-                console.log("Response to upload", res);
-              })
-              .catch((e) => {
-                console.error("error uploading:", e);
-              });
+            });
+            console.log("response to upload:", res);
+            const json = (await res.json()) as ImageUploadResult;
+            const { url } = json;
+            console.log("The URL for the new (transparent) image is", url);
+            onUploadComplete(url);
           }
         }, "image/png");
       }
     };
+
+    img.src = src;
+    // img.setAttribute("crossOrigin", "");
+    img.crossOrigin = "";
+    const ctx = canvasElement.getContext("2d");
   });
 
   function isWithinTolerance(
@@ -96,26 +100,13 @@
       Math.abs(pixelColor[2] - targetColor[2]) <= tolerance
     );
   }
-
-  function replaceImage(plantId: string, imageData: Uint8ClampedArray) {}
 </script>
 
-<div>
+<div class="">
   <canvas
     bind:this={canvasElement}
     width="1024"
     height="1024"
-    class="max-w-full"
+    class="w-full md:w-6/12"
   />
-
-  {#if finalImageData}
-    <button
-      class="bg-blue-500 text-white py-2 px-4 rounded"
-      on:click={() => {
-        if (plantId && finalImageData) {
-          replaceImage(plantId, finalImageData);
-        }
-      }}>Upload</button
-    >
-  {/if}
 </div>
