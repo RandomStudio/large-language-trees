@@ -28,7 +28,12 @@
           }}
           class="cursor-pointer"
         >
-          <PlantDisplay plant={plant.plant} width="70%" {index}></PlantDisplay>
+          <PlantDisplay
+            plant={plant.plant}
+            width="70%"
+            {index}
+            applyFilters={index !== 0}
+          />
         </div>
         <br />
         <br />
