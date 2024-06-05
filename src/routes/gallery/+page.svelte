@@ -15,7 +15,7 @@
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden font-oldstandard">
-  <div class="fixed left-0 right-0 bg-roel_green">
+  <div class="fixed left-0 right-0 bg-roel_green font-oldstandard">
     <div class="grid grid-rows-1 grid-cols-2 text-center mt-2 w-full">
       <div class="border-roel_blue border-2 text-roel_blue border-l-0">
         <a href="./gallery">Gallery</a>
