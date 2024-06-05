@@ -106,7 +106,6 @@
 
   {#if child}
     <PopupInfo
-      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
       plantDetails={child}
       closePopup={() => {
         child = null;
