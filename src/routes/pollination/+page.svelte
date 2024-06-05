@@ -74,6 +74,16 @@
   });
 </script>
 
+<div class="fixed left-0 right-0 bg-roel_green font-oldstandard">
+  <div class="grid grid-rows-1 grid-cols-2 text-center mt-2 w-full">
+    <div class="border-roel_blue border-2 border-l-0 text-neutral-500">
+      <a href="./gallery">Gallery</a>
+    </div>
+    <div class="border-roel_blue border-2 text-roel_blue border-l-0 border-r-0">
+      <a href="../pollination">Pollination</a>
+    </div>
+  </div>
+</div>
 <main class="mx-14 mt-20">
   <br />
   <p class="text-roel_blue font-garamond text-3xl mb-6">
