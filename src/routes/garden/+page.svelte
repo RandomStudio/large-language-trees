@@ -1,306 +1,139 @@
 <script lang="ts">
-  import UserLoginStatus from "../../components/UserLoginStatus.svelte";
-
-  import {
-    type GardenPlantEntry,
-    type GardenViewData,
-    type InsertPlant,
-    type SeedbankEntry,
-    type SelectPlant,
-  } from "../../lib/types"; // Assuming type import is correct
-
-  import PlantDisplay from "../../components/PlantDisplay.svelte";
+  import type {
+    GardenPlantEntryWithPlant,
+    GardenViewData,
+    PlantProperties,
+  } from "$lib/types";
   export let data: GardenViewData;
 
-  // import { pickMultiple } from "random-elements";
+  let alt = "alt placeholder";
 
-  import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
-  import PlantCell from "../../components/PlantCell.svelte";
+  let rootScale = 2; //maths root not plant roots lol
+  let minPlantHeight = Math.pow(0.1, 1 / rootScale); //0.1 squared is (about) 0.32
+  let maxPlantHeight = Math.pow(30, 1 / rootScale); //30 squared is (about 5.5)
 
-  import PopupInfo from "../../components/PopupInfo.svelte";
-  import { buildPrompt } from "../../lib/promptUtils";
+  let minPlantHeightOutput = 100;
+  let maxPlantHeightOutput = 300;
+  let animationLength = 8;
+  let animationDegree = 5;
 
-  import DefaultPromptConfig from "../../defaults/prompt-config";
-  import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
-  import FullScreenLoading from "../../components/FullScreenLoading.svelte";
-  import { invalidateAll } from "$app/navigation";
-  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
+  let monitorWidth = 1920;
+  let monitorHeight = 1080;
+  let frameSize = 50;
+  let topBorder = 100;
 
-  let candidateParents: [SelectPlant, SelectPlant] | null = null;
-  let candidateChild: InsertPlant | null = null;
+  let low1 = minPlantHeight;
+  let low2 = 0;
+  let high1 = maxPlantHeight;
+  let high2 = 1;
 
-  let timeout: NodeJS.Timeout | null = null;
+  import { onMount } from "svelte";
+  onMount(() => {
+    document.body.style.overflow = "hidden";
+  });
 
-  let selectedPlant: SelectPlant | null = null;
-
-  let waitingForGeneration = false;
-
-  interface GridCell {
-    plant?: SelectPlant;
-    highlighted: boolean;
-    column: number;
-    row: number;
+  function mapRange(value: any, low1: any, high1: any, low2: any, high2: any) {
+    return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
   }
 
-  let grid: GridCell[] = [];
-
-  function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
-    const plant1Cell = grid.find((c) => c.plant && c.plant.id === plant1.id);
-    const plant2Cell = grid.find((c) => c.plant && c.plant.id === plant2.id);
-
-    console.log("areClose", plant1.id, plant2.id);
-
-    if (plant1Cell && plant2Cell) {
-      return (
-        Math.abs(plant1Cell.row - plant2Cell.row) <= 1 &&
-        Math.abs(plant1Cell.column - plant2Cell.column) <= 1
-      );
-    } else {
-      // do not have two occupied cells to compare
-      return false;
-    }
+  function plantHeight(plant: GardenPlantEntryWithPlant): number {
+    return (plant.plant.properties as PlantProperties)["high(m)"] as number;
   }
 
-  function checkAnyCloseTo(cell: GridCell) {
-    console.log("checkAnyCloseTo cell at", cell.row, cell.column);
-    if (cell.plant) {
-      console.log("plant is", cell.plant);
-      const thisPlant = cell.plant;
-      for (const entry of data.garden.plantsInGarden) {
-        const otherPlant = entry.plant;
-        if (thisPlant.id !== otherPlant.id) {
-          // not self
-          const [plant1, plant2] = [thisPlant, otherPlant];
-          if (areClose(plant1, plant2)) {
-            candidateParents = [plant1, plant2];
-            timeout = setTimeout(() => {
-              console.log(
-                "ready for mixing : " +
-                  plant1.commonName +
-                  " and " +
-                  plant2.commonName +
-                  " !"
-              );
-              waitingForGeneration = true;
-              confirmBreed([plant1, plant2])
-                .then((newPlant) => {
-                  candidateChild = newPlant;
-                  waitingForGeneration = false;
-                })
-                .catch((e) => {
-                  console.error("Error from confirm/generate breed:", e);
-                  waitingForGeneration = false;
-                });
-            }, 4000);
-          }
-        }
-      }
-    } else {
-      // empty cell no need to check
-      return false;
-    }
-  }
-
-  const populateGrid = () => {
-    console.log(
-      "populateGrid with",
-      data.garden.plantsInGarden.length,
-      "plants"
+  function rootScaleFromPlantHeight(plant: GardenPlantEntryWithPlant): number {
+    return Math.min(
+      Math.pow(
+        (plant.plant.properties as PlantProperties)["high(m)"] as number,
+        1 / rootScale,
+      ),
+      30,
     );
-    grid = [];
-    for (let r = 0; r < GRID_HEIGHT; r++) {
-      for (let c = 0; c < GRID_WIDTH; c++) {
-        const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r
-        );
-        if (plant) {
-          const plantObject = plant.plant;
-          grid.push({
-            plant: plantObject,
-            row: r,
-            column: c,
-            highlighted: false,
-          });
-        } else {
-          grid.push({
-            row: r,
-            column: c,
-            plant: undefined,
-            highlighted: false,
-          });
-        }
-      }
-    }
-  };
-
-  function dragStart(event: CustomEvent<{ e: DragEvent; gridIndex: number }>) {
-    const { e, gridIndex } = event.detail;
-    console.log("dragStart from", gridIndex);
-    e.dataTransfer?.setData("text/plain", gridIndex.toString());
   }
 
-  function dragOver(e: DragEvent, index: number) {
-    e.preventDefault();
-    grid[index].highlighted = true;
-    console.log("dragOver");
+  function remapPlantHeight(value: any, lowIn: any, highIn: any) {
+    return mapRange(value, lowIn, highIn, low2, high2);
   }
 
-  function dragLeave(e: DragEvent, index: number) {
-    e.preventDefault();
-    grid[index].highlighted = false;
+  function placePlantOnXAxis(plant: GardenPlantEntryWithPlant) {
+    return (
+      Math.random() * (monitorWidth - (frameSize + maxPlantHeightOutput)) +
+      frameSize
+    );
   }
 
-  function drop(e: DragEvent, dstIndex: number) {
-    e.preventDefault();
-    if (timeout !== null) {
-      console.log("clearTimeout");
-      clearTimeout(timeout);
-    }
-    console.log("drop to grid index", dstIndex);
-    const cellDropData = e.dataTransfer?.getData("text/plain");
-    if (cellDropData) {
-      const srcIndex = parseInt(cellDropData);
-      console.log("transfer", srcIndex, "to", dstIndex);
-      const srcPlant = grid[srcIndex].plant;
-      if (srcPlant) {
-        grid[dstIndex].plant = srcPlant;
-        grid[srcIndex].plant = undefined; // clear original cell
-        grid[dstIndex].highlighted = false;
-
-        const dstCell = grid[dstIndex];
-
-        const gardenId = data.garden.id;
-        const plantId = srcPlant.id;
-        const colIndex = dstCell.column;
-        const rowIndex = dstCell.row;
-
-        const updated: GardenPlantEntry = {
-          gardenId,
-          plantId,
-          colIndex,
-          rowIndex,
-        };
-
-        fetch("/api/plantsInGarden/", {
-          method: "PATCH",
-          body: JSON.stringify(updated),
-        })
-          .then((res) => {
-            checkAnyCloseTo(dstCell);
-
-            if (res.status == 200) {
-              console.info("Updated plant position on backend OK:", res);
-              invalidateAll();
-            } else {
-              const { status, statusText } = res;
-              console.error("Error response from server:", {
-                status,
-                statusText,
-                srcPlant,
-                // updatedPlant,
-              });
-            }
-          })
-          .catch((fetchError) => {
-            console.error("Error updating plant on backend:", fetchError);
-          });
-      } else {
-        console.error("There was a problem moving the plant (in the frontend)");
-      }
-    }
+  function placePlantOnYAxis(plant: GardenPlantEntryWithPlant) {
+    return (
+      frameSize +
+      topBorder +
+      (monitorHeight - minPlantHeightOutput - frameSize * 2 - topBorder) *
+        (1 -
+          remapPlantHeight(
+            Math.log(rootScaleFromPlantHeight(plant)) + 1,
+            Math.log(minPlantHeight) + 1,
+            Math.log(maxPlantHeight) + 1,
+          )) + // one minus remapped value in order to make the plants go from small to big
+      (Math.random() - 0.5) * 10 // a bit of random ofset
+    );
   }
 
-  populateGrid();
+  function randomAnimationDelay(): number {
+    return (Math.random() * -animationLength) / 3;
+  }
 </script>
 
-<!-- <nav> -->
-<div>
-  <UserLoginStatus
-    isAdmin={data.user.isAdmin || false}
-    username={data.user.username}
-  ></UserLoginStatus>
-</div>
-<!-- </nav> -->
-
-<main class="container mx-auto overflow-visible">
-  <div class="grid grid-cols-6 gap-0 justify-stretch overflow-visible">
-    {#each grid as gridCell, gridIndex}
+<body>
+  <div class="fixed top-0 left-0 w-screen h-screen">
+    {#each data.garden.plantsInGarden as plant}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        class="relative bg-roel_green min-w-[100px] min-h-[100px] overflow-visible"
-        style="width: calc(100vw / 6); height: calc(100vw / 6);"
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <img
+        src={plant.plant.imageUrl}
+        {alt}
+        class="fixed skew-animated"
+        style:width={minPlantHeightOutput +
+          remapPlantHeight(
+            rootScaleFromPlantHeight(plant),
+            minPlantHeight,
+            maxPlantHeight,
+          ) *
+            (maxPlantHeightOutput - minPlantHeightOutput) +
+          "px"}
+        style:margin-left={placePlantOnXAxis(plant) + "px"}
+        style:margin-top={placePlantOnYAxis(plant) + "px"}
+        style:animation-duration={animationLength + "s"}
+        style:animation-delay={randomAnimationDelay() + "s"}
+        style:z-index={3000 - plantHeight(plant) * 100}
         on:click={() => {
-          console.log("click!");
-          if (gridCell.plant) {
-            selectedPlant = gridCell.plant;
-          } else {
-            console.error("not clickable!");
-          }
+          console.log(
+            remapPlantHeight(
+              Math.log(rootScaleFromPlantHeight(plant)) + 1,
+              Math.log(minPlantHeight) + 1,
+              Math.log(maxPlantHeight) + 1,
+            ),
+          );
         }}
-      >
-        {#if gridCell.plant}
-          <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] z-10">
-            <PlantDisplay plant={gridCell.plant} width="70%"></PlantDisplay>
-          </div>
-        {:else}
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            class:bg-roel_blue={gridCell.highlighted}
-            on:drop={(e) => {
-              drop(e, gridIndex);
-            }}
-            on:dragover={(e) => dragOver(e, gridIndex)}
-            on:dragleave={(e) => dragLeave(e, gridIndex)}
-          >
-            <!-- Optionally maintain a placeholder or remove content entirely -->
-          </div>
-        {/if}
-      </div>
+      />
     {/each}
   </div>
-
-  {#if selectedPlant}
-    <div
-      class="fixed inset-0 bg-roel_blue flex items-center justify-center z-50 p-4 overflow-auto"
-    >
-      <div
-        class="m-auto bg-white p-4 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto shadow-lg"
-      >
-        <PopupInfo
-          allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
-          plantDetails={selectedPlant}
-          closePopup={() => {
-            selectedPlant = null;
-          }}
-        />
-      </div>
-    </div>
-  {/if}
-
-  {#if candidateChild}
-    <ConfirmBreedPopup
-      {candidateChild}
-      onCancel={() => {
-        candidateChild = null;
-      }}
-      onConfirm={async () => {
-        if (candidateChild) {
-          addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
-          populateGrid();
-        }
-      }}
-    />
-  {/if}
-
-  {#if waitingForGeneration}
-    <FullScreenLoading />
-  {/if}
-</main>
-
-{#if waitingForGeneration}
-  <FullScreenLoading />
-{/if}
+</body>
 
 <style>
+  @keyframes skew-animation {
+    0% {
+      transform: skew(5deg);
+      left: -7px;
+    }
+    50% {
+      transform: skew(-5deg);
+      left: 7px;
+    }
+    100% {
+      transform: skew(5deg);
+      left: -7px;
+    }
+  }
+
+  .skew-animated {
+    animation: skew-animation infinite;
+  }
 </style>
