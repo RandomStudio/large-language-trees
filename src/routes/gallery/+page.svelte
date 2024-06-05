@@ -45,6 +45,17 @@
             applyFilters={index !== 0}
           />
         </div>
+        {#if index == 0}
+          <div class="mt-4 text-center">
+            <button
+              class="bg-transparent text-roel_blue py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+              style="width:250px;"
+              on:click={() => goto("/pollination")}
+            >
+              Start Pollinating
+            </button>
+          </div>
+        {/if}
         <br />
         <br />
       {/each}
@@ -58,15 +69,5 @@
         }}
       ></PopupInfo>
     {/if}
-
-    <div class="mt-4 text-center">
-      <button
-        class="bg-transparent text-roel_blue py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
-        style="width:250px;"
-        on:click={() => goto("/pollination")}
-      >
-        Start Pollinating
-      </button>
-    </div>
   </main>
 </div>
