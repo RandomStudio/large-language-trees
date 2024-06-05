@@ -10,8 +10,9 @@
 
   //distribution on screen and size of plants in database
   let rootScale = 2; //maths root not plant roots lol
-  let minPlantHeight = Math.pow(0.1, 1 / rootScale); //0.1 squared is (about) 0.32
-  let maxPlantHeight = Math.pow(30, 1 / rootScale); //30 squared is (about 5.5)
+  let minPlantHeight = Math.pow(0.1, 1 / rootScale);
+  let maxPlantHeight = Math.pow(30, 1 / rootScale);
+  let randomnessY = 20; // random displacement in y direction
 
   //plant min and max size on screen
   let minPlantHeightOutput = 75;
@@ -24,6 +25,7 @@
   let monitorHeight = 1080;
   let frameSize = 50;
   let topBorder = 100;
+  let bottomBorder = 100;
 
   //constants relating to remap function
   let low1 = minPlantHeight;
@@ -35,7 +37,8 @@
   const plantIDs: string[] = [];
   const plantPositionsX: number[] = [];
   const plantPositionsY: number[] = [];
-  let crowdednessTolerance = 100;
+  let crowdednessTolerance = 0; //dont change this use initial instead
+  let initialCrowdednessTolerance = 150;
 
   import { onMount } from "svelte";
   onMount(() => {
@@ -82,11 +85,15 @@
     let proposedPlantPositionX = 0;
     let isSpaceOk = false;
 
+    crowdednessTolerance = initialCrowdednessTolerance;
+
     while (!isSpaceOk) {
       proposedPlantPositionX = findSpace(plant);
       isSpaceOk = checkIfSpaceIsOk(plant, proposedPlantPositionX);
+      crowdednessTolerance -= 1;
     }
 
+    console.log(crowdednessTolerance);
     plantIDs.push(plant.plant.id);
     plantPositionsX.push(proposedPlantPositionX);
     plantPositionsY.push(placePlantOnYAxis(plant));
@@ -146,8 +153,8 @@
         src={plant.plant.imageUrl}
         {alt}
         class="fixed skew-animated"
-        on:click={() => {
-          console.log(plantIDs);
+        on:load={() => {
+          console.log();
         }}
         style:width={minPlantHeightOutput +
           remapPlantHeight(
@@ -157,7 +164,9 @@
           ) *
             (maxPlantHeightOutput - minPlantHeightOutput) +
           "px"}
-        style:margin-top={placePlantOnYAxis(plant) + "px"}
+        style:margin-top={placePlantOnYAxis(plant) +
+          (Math.random() - 0.5) * randomnessY +
+          "px"}
         style:margin-left={placePlantOnXAxis(plant) + "px"}
         style:animation-duration={animationLength + "s"}
         style:animation-delay={randomAnimationDelay() + "s"}
