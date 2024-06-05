@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import {
     type SeedbankEntryWithPlant,
@@ -24,9 +25,16 @@
       goto("./pollination"); // Navigate to the pollination route
     }
   }
+
+  onMount(() => {
+    document.body.classList.add("overflow-hidden");
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  });
 </script>
 
-<div>
+<div class="min-h-screen bg-roel_green">
   <main class="mx-14 mt-20">
     {#if showMessage}
       <p class="text-roel_blue font-garamond text-3xl">
