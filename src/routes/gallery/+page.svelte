@@ -15,10 +15,21 @@
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden font-oldstandard">
+  <div class="fixed left-0 right-0 bg-roel_green font-oldstandard">
+    <div class="grid grid-rows-1 grid-cols-2 text-center mt-2 w-full">
+      <div class="border-roel_blue border-2 text-roel_blue border-l-0">
+        <a href="./gallery">Gallery</a>
+      </div>
+      <div
+        class="border-roel_blue border-2 text-neutral-500 border-l-0 border-r-0"
+      >
+        <a href="../pollination">Pollination</a>
+      </div>
+    </div>
+  </div>
+
   <main class="mx-10 mt-20">
     <div class="text-center w-full">
-      <br />
-      <br />
       {#each seedBank as plant, index}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
