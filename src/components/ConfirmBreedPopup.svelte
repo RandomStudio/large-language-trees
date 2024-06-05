@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import type { GeneratedImageResult, InsertPlant } from "$lib/types";
-  import Spinner from "./Spinner.svelte";
   import TransparencyMaker from "./TransparencyMaker.svelte";
 
   export let candidateChild: InsertPlant;
@@ -12,10 +12,20 @@
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
 
+  async function handleAction() {
+    try {
+      await onConfirm(candidateImageUrl); // Attendre que onConfirm soit terminé
+      goto("../gallery"); // Rediriger vers la page de la galerie après confirmation
+    } catch (error) {
+      console.error("Error during confirmation:", error);
+      // Gérer l'erreur éventuelle ici, par exemple afficher un message à l'utilisateur
+    }
+  }
+
   function replaceWordInText(
     text: string,
     targetWord: string,
-    newWord: string
+    newWord: string,
   ) {
     const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
     return text.replace(regex, newWord);
@@ -33,7 +43,7 @@
       candidateChild.description = replaceWordInText(
         candidateChild.description,
         candidateChild.commonName,
-        textInput
+        textInput,
       );
     }
     candidateChild.commonName = textInput;
@@ -64,7 +74,7 @@
       "ConfirmBreedPopup replacing url",
       candidateImageUrl,
       "=>",
-      url
+      url,
     );
     candidateImageUrl = url;
   }
@@ -144,7 +154,7 @@
         class="flex gap-4 flex-nowrap h-12 bg-transparent text-roel_green mt-4"
       >
         <button
-          on:click={() => onConfirm(candidateImageUrl)}
+          on:click={() => handleAction()}
           class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
           >Add
         </button>
