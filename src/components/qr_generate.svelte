@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     // @ts-ignore
     import QRCode from "qrcode";
-    import { canvaWithoutBG } from "$lib/removeBG";
 
     export let text = "palm";
     let qrCodeUrl = "";
@@ -12,9 +11,6 @@
         try {
             qrCodeUrl = await QRCode.toDataURL(text);
             console.log(qrCodeUrl);
-
-            // Draw the QR code on the canvas and remove the background
-            canvaWithoutBG(canvasId, qrCodeUrl);
         } catch (err) {
             console.error(err);
         }
@@ -25,6 +21,9 @@
     });
 </script>
 
-<div>
-    <canvas id={canvasId} class="w-64 h-64"></canvas>
-</div>
+<!-- Utilisation de la balise img pour afficher le QR code -->
+{#if qrCodeUrl}
+    <div class="mt-6">
+        <img src={qrCodeUrl} alt="QR Code" class="size-full" />
+    </div>
+{/if}
