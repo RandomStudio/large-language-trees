@@ -17,7 +17,7 @@
 
   let parent1: SelectPlant | null =
     data.seedBank.plantsInSeedbank.find(
-      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null,
+      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
 
   let parent2: SelectPlant | null = null;
@@ -27,12 +27,12 @@
   let child: SelectPlant | null = null;
 
   $: existingChild = (
-    parents: [SelectPlant, SelectPlant],
+    parents: [SelectPlant, SelectPlant]
   ): SelectPlant | null =>
     data.seedBank.plantsInSeedbank.find(
       (plant) =>
         parents.find((p) => p.id == plant.plant.parent1) &&
-        parents.find((p) => p.id == plant.plant.parent2),
+        parents.find((p) => p.id == plant.plant.parent2)
     )?.plant || null;
   let videoElement: HTMLVideoElement;
 
@@ -105,10 +105,13 @@
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={async () => {
+      onConfirm={async (imageUrl) => {
         if (candidateChild) {
+          console.log({ candidateChildId: candidateChild.id, imageUrl });
+          candidateChild.imageUrl = imageUrl;
           await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
           candidateChild = null;
+          busy = false;
         }
       }}
     />
