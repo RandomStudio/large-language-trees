@@ -11,6 +11,7 @@
 
   let seedBank = data.seedBank.plantsInSeedbank;
   let allSeeds = data.garden.plantsInGarden;
+  let width: string;
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden font-oldstandard">
@@ -30,8 +31,7 @@
         >
           <PlantDisplay
             plant={plant.plant}
-            width="70%"
-            {index}
+            {width}
             applyFilters={index !== 0}
           />
         </div>

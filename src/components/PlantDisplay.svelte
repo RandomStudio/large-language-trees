@@ -2,7 +2,8 @@
   import type { SelectPlant } from "$lib/types";
 
   export let plant: SelectPlant;
-  export let applyFilters: boolean = false; // New prop to control filters
+  export let applyFilters: boolean = false;
+  export let width: string = "w-9/12";
 </script>
 
 <div class="flex flex-col items-center">
@@ -12,7 +13,7 @@
     src={plant.imageUrl}
     alt={plant.commonName}
     id={plant.commonName}
-    class="max-w-25"
+    class={width}
     class:filter={applyFilters}
     class:grayscale={applyFilters}
     class:opacity-50={applyFilters}
