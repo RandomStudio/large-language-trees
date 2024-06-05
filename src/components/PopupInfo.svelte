@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
 
-  export let allSeeds: SelectPlant[];
   export let plantDetails: SelectPlant;
 
   export let closePopup: () => any;
@@ -9,9 +8,6 @@
   function updatePlantDetails(plant: SelectPlant) {
     plantDetails = plant;
   }
-
-  let parent1 = allSeeds.find((plant) => plant.id === plantDetails.parent1);
-  let parent2 = allSeeds.find((plant) => plant.id === plantDetails.parent2);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
