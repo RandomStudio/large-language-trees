@@ -9,7 +9,7 @@
   export let onConfirm: (
     imageUrl: string | null,
     commonName: string,
-    description: string | null,
+    description: string | null
   ) => Promise<void>;
 
   let textInput = candidateChild.commonName || "";
@@ -20,7 +20,7 @@
   function replaceInParagraph(
     paragraph: string | null | undefined,
     target: string | null | undefined,
-    replacement: string | null,
+    replacement: string | null
   ) {
     if (paragraph && target && replacement) {
       return paragraph.split(target).join(replacement) || null;
@@ -34,7 +34,7 @@
       candidateDescription = replaceInParagraph(
         candidateChild.description,
         candidateChild.commonName,
-        textInput,
+        textInput
       );
       await onConfirm(candidateImageUrl, textInput, candidateDescription);
       goto("../gallery");
@@ -61,8 +61,8 @@
     const imageGenerationResponse = await fetch("/api/generate/image", {
       method: "POST",
       body: JSON.stringify({
-        description: candidateChild.description,
-      }),
+        description: candidateChild.description
+      })
     });
     waitingForImage = false;
     if (imageGenerationResponse.status == 200) {
@@ -81,7 +81,7 @@
       "ConfirmBreedPopup replacing url",
       candidateImageUrl,
       "=>",
-      url,
+      url
     );
     candidateImageUrl = url;
   }
@@ -92,7 +92,7 @@
     "DNA is being mixed up",
     "A new seed is created",
     "Watering the new plant",
-    "Flowers are budding",
+    "Flowers are budding"
   ];
   let currentIndex = 0;
 

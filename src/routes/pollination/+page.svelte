@@ -2,7 +2,7 @@
   import {
     type SelectPlant,
     type GardenViewData,
-    type InsertPlant,
+    type InsertPlant
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
@@ -17,7 +17,7 @@
 
   let parent1: SelectPlant | null =
     data.seedBank.plantsInSeedbank.find(
-      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null,
+      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
 
   let parent2: SelectPlant | null = null;
@@ -27,12 +27,12 @@
   let child: SelectPlant | null = null;
 
   $: existingChild = (
-    parents: [SelectPlant, SelectPlant],
+    parents: [SelectPlant, SelectPlant]
   ): SelectPlant | null =>
     data.seedBank.plantsInSeedbank.find(
       (plant) =>
         parents.find((p) => p.id == plant.plant.parent1) &&
-        parents.find((p) => p.id == plant.plant.parent2),
+        parents.find((p) => p.id == plant.plant.parent2)
     )?.plant || null;
   let videoElement: HTMLVideoElement;
 
@@ -40,7 +40,7 @@
     const codeReader = new BrowserMultiFormatReader();
 
     const constraints = {
-      video: {},
+      video: {}
     };
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
