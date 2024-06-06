@@ -26,6 +26,8 @@
 
   let child: SelectPlant | null = null;
 
+  let showAlreadyPollinatedPopup = false;
+
   $: existingChild = (
     parents: [SelectPlant, SelectPlant],
   ): SelectPlant | null =>
@@ -61,6 +63,8 @@
               child = existingChild([parent1, parent2]);
               if (child == null) {
                 candidateChild = await confirmBreed([parent1, parent2]);
+              } else {
+                showAlreadyPollinatedPopup = true;
               }
             }
           }
@@ -111,5 +115,34 @@
         child = null;
       }}
     />
+  {/if}
+
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  {#if showAlreadyPollinatedPopup}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div
+      class="fixed top-0 left-0 right-0"
+      on:click={() => {
+        showAlreadyPollinatedPopup = false;
+      }}
+    >
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div class="border bg-roel_blue m-8 p-4 rounded" on:click|stopPropagation>
+        <div class="flex justify-end items-center mb-4">
+          <button
+            type="button"
+            class="bg-transparent text-roel_green font-semibold"
+            on:click={() => {
+              showAlreadyPollinatedPopup = false;
+            }}
+            aria-label="Close popup">&times;</button
+          >
+        </div>
+        <p class="mt-4 text-center text-roel_green">
+          You already pollinated with this plant! Pollinate with new plants.
+        </p>
+      </div>
+    </div>
   {/if}
 </main>
