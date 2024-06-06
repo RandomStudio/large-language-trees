@@ -8,20 +8,36 @@
   export let onCancel: () => any;
   export let onConfirm: (
     imageUrl: string | null,
-    commonName: string
+    commonName: string,
+    description: string,
   ) => Promise<void>;
 
   let textInput = candidateChild.commonName || "";
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
+  let candidateDescription = candidateChild.description || "";
+
+  function replaceInParagraph(
+    paragraph: string,
+    target: string,
+    replacement: string,
+  ): string {
+    if (paragraph) {
+      return paragraph.split(target).join(replacement);
+    }
+  }
 
   async function handleAction() {
     try {
-      await onConfirm(candidateImageUrl, textInput); // Attendre que onConfirm soit terminé
-      goto("../gallery"); // Rediriger vers la page de la galerie après confirmation
+      candidateDescription = replaceInParagraph(
+        candidateChild.description,
+        candidateChild.commonName,
+        textInput,
+      );
+      await onConfirm(candidateImageUrl, textInput, candidateDescription);
+      goto("../gallery");
     } catch (error) {
       console.error("Error during confirmation:", error);
-      // Gérer l'erreur éventuelle ici, par exemple afficher un message à l'utilisateur
     }
   }
 
@@ -63,7 +79,7 @@
       "ConfirmBreedPopup replacing url",
       candidateImageUrl,
       "=>",
-      url
+      url,
     );
     candidateImageUrl = url;
   }
@@ -122,8 +138,6 @@
         </div>
       </div>
     {/if}
-
-    <p class="mt-4 text-center text-roel_green">{candidateChild.commonName}</p>
 
     <form on:submit|preventDefault={handleSubmit} class="mt-4">
       <div>
