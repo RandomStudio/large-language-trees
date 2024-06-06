@@ -7,9 +7,18 @@ import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 import { checkDefaultUsers } from "$lib/server/server";
+import { generateIdFromEntropySize } from "lucia";
+import { hash } from "@node-rs/argon2";
 
-export const load = async () => {
+export const load = async ({ locals }) => {
   await checkDefaultUsers();
+
+  const username = locals.user?.username;
+  const userId = locals.user?.id;
+  if (username) {
+    console.log("You are already logged in!");
+    redirect(302, "/gallery");
+  }
 };
 
 export const actions = {
@@ -45,41 +54,53 @@ export const actions = {
     });
 
     if (!existingUser) {
-      // NOTE:
-      // Returning immediately allows malicious actors to figure out valid usernames from response times,
-      // allowing them to only focus on guessing passwords in brute-force attacks.
-      // As a preventive measure, you may want to hash passwords even for invalid usernames.
-      // However, valid usernames can be already be revealed with the signup page among other methods.
-      // It will also be much more resource intensive.
-      // Since protecting against this is non-trivial,
-      // it is crucial your implementation is protected against brute-force attacks with login throttling etc.
-      // If usernames are public, you may outright tell the user that the username is invalid.
-      console.log("incorrect username/password");
-      return fail(400, {
-        message: "unknown username or password",
+      const userId = generateIdFromEntropySize(10); // 16 characters long
+      const passwordHash = await hash(password, {
+        // recommended minimum parameters
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1,
       });
-    }
 
-    const validPassword = await verify(existingUser.passwordHash, password, {
-      memoryCost: 19456,
-      timeCost: 2,
-      outputLen: 32,
-      parallelism: 1,
-    });
-    if (!validPassword) {
-      console.error("Validation failure");
-      return fail(400, {
-        message: "Incorrect username or password",
+      // TODO: check if username is already used
+      await db.insert(users).values({
+        id: userId,
+        username,
+        passwordHash,
       });
+
+      const session = await lucia.createSession(userId, {});
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      event.cookies.set(sessionCookie.name, sessionCookie.value, {
+        path: ".",
+        ...sessionCookie.attributes
+      });
+
+      redirect(302, "/startwindow");
+    } else {
+      const validPassword = await verify(existingUser.passwordHash, password, {
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1
+      });
+
+      if (!validPassword) {
+        console.error("Validation failure");
+        return fail(400, {
+          message: "Incorrect username or password",
+        });
+      }
+
+      const session = await lucia.createSession(existingUser.id, {});
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      event.cookies.set(sessionCookie.name, sessionCookie.value, {
+        path: ".",
+        ...sessionCookie.attributes,
+      });
+
+      redirect(302, "/gallery");
     }
-
-    const session = await lucia.createSession(existingUser.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    event.cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: ".",
-      ...sessionCookie.attributes,
-    });
-
-    redirect(302, "/startwindow");
   },
 } satisfies Actions;
