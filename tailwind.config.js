@@ -12,7 +12,8 @@ module.exports = {
       },
       fontFamily: {
         'garamond': ['Garamond', 'serif'],
-        'oldstandard': ['OldStandard', 'serif']
+        'oldstandard': ['OldStandard', 'serif'],
+        'inter': ['Inter','serif']
       },
     }
   },
