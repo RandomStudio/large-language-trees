@@ -18,7 +18,7 @@
     class:grayscale={applyFilters}
     class:opacity-50={applyFilters}
   />
-  <p class="text-roel_blue">
+  <p class="text-roel_blue font-inter text-xl">
     {plant.commonName}
   </p>
 </div>
