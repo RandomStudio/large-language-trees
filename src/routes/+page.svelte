@@ -37,28 +37,20 @@
         on:input={handleInput}
       /><br />
       <input
-        class="bg-roel_green text-roel_blue py-2 px-4 border border-roel_blue rounded-full placeholder-roel_blue focus:outline-none focus:border-roel_blue mt-2"
+        class="bg-roel_green text-roel_blue py-2 px-4 border border-roel_blue rounded-full placeholder-roel_blue focus:outline-none focus:border-roel_blue mt-2 hidden"
         type="password"
         id="password"
         name="password"
         placeholder="Password"
         style="width:250px"
+        value="123456"
       /><br />
       <button
         class="bg-roel_green text-roel_blue font-semibold py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
         style="width:250px;"
         type="submit"
       >
-        Continue
-      </button>
-      <button
-        class="bg-transparent text-roel_blue font-semibold py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
-        style="width:250px;"
-        on:click={() => {
-          goto("/signup");
-        }}
-      >
-        Register
+        Start
       </button>
     </form>
 
