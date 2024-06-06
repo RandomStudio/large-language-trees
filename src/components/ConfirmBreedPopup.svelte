@@ -5,17 +5,17 @@
 
   export let candidateChild: InsertPlant;
 
-  export let onCancel: () => any;
-  export let onConfirm: (
-    imageUrl: string | null,
-    commonName: string,
-    description: string | null
-  ) => Promise<void>;
+  /** A local copy of the incoming "candidateChild", which we update as necessary before
+   * returning to the parent component ready to add to the database.
+   */
+  let finalChildReadyToAdd: InsertPlant = { ...candidateChild };
 
-  let textInput = candidateChild.commonName || "";
+  export let onCancel: () => any;
+  export let onConfirm: (plantReadyToAdd: InsertPlant) => Promise<void>;
+
+  let textInput = finalChildReadyToAdd.commonName || "";
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
-  let candidateDescription = candidateChild.description || null;
 
   function replaceInParagraph(
     paragraph: string | null | undefined,
@@ -31,12 +31,13 @@
 
   async function handleAction() {
     try {
-      candidateDescription = replaceInParagraph(
-        candidateChild.description,
-        candidateChild.commonName,
+      finalChildReadyToAdd.commonName = textInput;
+      finalChildReadyToAdd.description = replaceInParagraph(
+        finalChildReadyToAdd.description,
+        finalChildReadyToAdd.commonName,
         textInput
       );
-      await onConfirm(candidateImageUrl, textInput, candidateDescription);
+      await onConfirm(finalChildReadyToAdd);
       goto("../gallery");
     } catch (error) {
       console.error("Error during confirmation:", error);
@@ -51,9 +52,9 @@
 
     console.log("Name given:", textInput);
 
-    if (candidateChild.description && candidateChild.commonName) {
+    if (finalChildReadyToAdd.description && finalChildReadyToAdd.commonName) {
     }
-    candidateChild.commonName = textInput;
+    finalChildReadyToAdd.commonName = textInput;
   }
 
   const generateImage = async () => {
@@ -152,7 +153,7 @@
       </div>
     </form>
     <p class=" text-roel_green mt-4">
-      {candidateChild.description}
+      {finalChildReadyToAdd.description}
     </p>
     {#if candidateImageUrl}
       <div
