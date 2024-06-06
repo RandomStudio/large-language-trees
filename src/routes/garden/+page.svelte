@@ -9,40 +9,43 @@
   let alt = "alt placeholder";
 
   //distribution on screen and size of plants in database
-  let rootScale = 2; //maths root not plant roots lol
-  let minPlantHeight = Math.pow(0.1, 1 / rootScale);
-  let maxPlantHeight = Math.pow(30, 1 / rootScale);
-  let randomnessY = 20; // random displacement in y direction
+  const rootScale = 2; //maths root not plant roots lol
+  const minPlantHeight = Math.pow(0.1, 1 / rootScale);
+  const maxPlantHeight = Math.pow(30, 1 / rootScale);
+  const randomnessY = 20; // random displacement in y direction
 
   //plant min and max size on screen
-  let minPlantHeightOutput = 75;
-  let maxPlantHeightOutput = 200;
-  let animationLength = 8;
-  let animationDegree = 5;
+  const minPlantHeightOutput = 75;
+  const maxPlantHeightOutput = 200;
+  const animationLength = 8;
+  const animationDegree = 5;
 
   //display size and borders
-  let monitorWidth = 1920;
-  let monitorHeight = 1080;
-  let frameSize = 50;
-  let topBorder = 100;
-  let bottomBorder = 100;
+  const monitorWidth = 1920;
+  const monitorHeight = 1080;
+  const frameSize = 100;
+  const topBorder = 100;
 
   //constants relating to remap function
-  let low1 = minPlantHeight;
-  let low2 = 0;
-  let high1 = maxPlantHeight;
-  let high2 = 1;
+  const low1 = minPlantHeight;
+  const low2 = 0;
+  const high1 = maxPlantHeight;
+  const high2 = 1;
 
   //constants relating to making plants not overlap
   const plantIDs: string[] = [];
   const plantPositionsX: number[] = [];
   const plantPositionsY: number[] = [];
   let crowdednessTolerance = 0; //dont change this use initial instead
-  let initialCrowdednessTolerance = 150;
+  const initialCrowdednessTolerance = 150;
+
+  //constants relating to adding new plants
+  const newPlantIDs: string[] = [];
+  const newPlantParent1: string[] = [];
 
   import { onMount } from "svelte";
   onMount(() => {
-    document.body.style.overflow = "hidden";
+    //importNewPlants();
   });
 
   function mapRange(value: any, low1: any, high1: any, low2: any, high2: any) {
@@ -88,19 +91,19 @@
     crowdednessTolerance = initialCrowdednessTolerance;
 
     while (!isSpaceOk) {
-      proposedPlantPositionX = findSpace(plant);
+      proposedPlantPositionX = findSpace();
       isSpaceOk = checkIfSpaceIsOk(plant, proposedPlantPositionX);
       crowdednessTolerance -= 1;
     }
 
-    console.log(crowdednessTolerance);
-    plantIDs.push(plant.plant.id);
+    // console.log(crowdednessTolerance); // use to check what crowdedness level each plant landed on
+    plantIDs.push(plant.plant.id); // make comment to check if importNewPlants() works
     plantPositionsX.push(proposedPlantPositionX);
     plantPositionsY.push(placePlantOnYAxis(plant));
     return proposedPlantPositionX;
   }
 
-  function findSpace(plant: GardenPlantEntryWithPlant) {
+  function findSpace() {
     return (
       Math.random() * (monitorWidth - (frameSize + maxPlantHeightOutput)) +
       frameSize
@@ -145,7 +148,7 @@
 </script>
 
 <body>
-  <div class="fixed top-0 left-0 w-screen h-screen">
+  <div id="container" class="fixed top-0 left-0 w-screen h-screen">
     {#each data.garden.plantsInGarden as plant}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
