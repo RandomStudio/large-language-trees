@@ -11,6 +11,7 @@
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
   import PopupInfo from "../../components/PopupInfo.svelte";
+  import { goto } from "$app/navigation";
 
   export let data: GardenViewData;
   let busy = false;
@@ -75,6 +76,22 @@
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden font-inter">
+  <button
+    class="fixed top-8 right-7 text-roel_blue flex items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
+    on:click={() => goto("/gallery")}
+  >
+    <svg
+      class="w-6 h-6 text-roel_blue"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
   <main class="mx-14 mt-3">
     <p class="text-roel_blue text-2xl mb-6">
       Point your camera to another gardener's Pollination QR
