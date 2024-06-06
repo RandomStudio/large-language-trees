@@ -2,7 +2,7 @@
   import {
     type SelectPlant,
     type GardenViewData,
-    type InsertPlant,
+    type InsertPlant
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
@@ -40,7 +40,7 @@
     const codeReader = new BrowserMultiFormatReader();
 
     const constraints = {
-      video: {},
+      video: {}
     };
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -74,56 +74,51 @@
   });
 </script>
 
-<div class="fixed left-0 right-0 bg-roel_green font-oldstandard">
-  <div class="grid grid-rows-1 grid-cols-2 text-center mt-2 w-full">
-    <div class="border-roel_blue border-2 border-l-0 text-neutral-500">
-      <a href="./gallery">Gallery</a>
-    </div>
-    <div class="border-roel_blue border-2 text-roel_blue border-l-0 border-r-0">
-      <a href="../pollination">Pollination</a>
-    </div>
-  </div>
-</div>
-<main class="mx-14 mt-20">
-  <br />
-  <p class="text-roel_blue font-garamond text-3xl mb-6">
-    Find another gardener and point your camera to their QR code.
-  </p>
-  <div class="relative w-full md:aspect-square h-full object-cover">
-    <video bind:this={videoElement} class="">
-      <track kind="captions" srclang="en" label="English captions" />
-    </video>
+<div class="min-h-screen bg-roel_green overflow-hidden font-inter">
+  <main class="mx-14 mt-3">
+    <p class="text-roel_blue text-2xl mb-6">
+      Point your camera to another gardener's Pollination QR
+    </p>
 
-    {#if parent1}
-      <QrGenerate text={parent1.id} />
-    {/if}
-  </div>
+    <div class="relative w-full md:aspect-square overflow-hidden">
+      <!-- La vidéo sera cropée pour être carrée -->
+      <video bind:this={videoElement} class="object-cover w-full h-full">
+        <!-- La vidéo remplit complètement le conteneur -->
+        <track kind="captions" srclang="en" label="English captions" />
+      </video>
+      {#if parent1}
+        <QrGenerate text={parent1.id} />
+      {/if}
+    </div>
 
-  {#if candidateChild}
-    <ConfirmBreedPopup
-      {candidateChild}
-      onCancel={() => {
-        candidateChild = null;
-      }}
-      onConfirm={async (imageUrl, commonName) => {
-        if (candidateChild) {
-          console.log({ candidateChildId: candidateChild.id, imageUrl });
-          candidateChild.imageUrl = imageUrl;
-          candidateChild.commonName = commonName;
-          await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+    <p class="text-roel_blue text-2xl mb-6 text-center">Your Pollination QR</p>
+
+    {#if candidateChild}
+      <ConfirmBreedPopup
+        {candidateChild}
+        onCancel={() => {
           candidateChild = null;
-          busy = false;
-        }
-      }}
-    />
-  {/if}
+        }}
+        onConfirm={async (imageUrl, commonName) => {
+          if (candidateChild) {
+            console.log({ candidateChildId: candidateChild.id, imageUrl });
+            candidateChild.imageUrl = imageUrl;
+            candidateChild.commonName = commonName;
+            await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+            candidateChild = null;
+            busy = false;
+          }
+        }}
+      />
+    {/if}
 
-  {#if child}
-    <PopupInfo
-      plantDetails={child}
-      closePopup={() => {
-        child = null;
-      }}
-    />
-  {/if}
-</main>
+    {#if child}
+      <PopupInfo
+        plantDetails={child}
+        closePopup={() => {
+          child = null;
+        }}
+      />
+    {/if}
+  </main>
+</div>
