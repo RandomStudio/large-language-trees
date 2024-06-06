@@ -2,7 +2,7 @@
   import {
     type SelectPlant,
     type GardenViewData,
-    type InsertPlant,
+    type InsertPlant
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
@@ -40,7 +40,7 @@
     const codeReader = new BrowserMultiFormatReader();
 
     const constraints = {
-      video: {},
+      video: {}
     };
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -105,11 +105,9 @@
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={async (imageUrl, commonName) => {
+      onConfirm={async (updatedPlant) => {
         if (candidateChild) {
-          console.log({ candidateChildId: candidateChild.id, imageUrl });
-          candidateChild.imageUrl = imageUrl;
-          candidateChild.commonName = commonName;
+          candidateChild = updatedPlant;
           await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
           candidateChild = null;
           busy = false;
