@@ -9,21 +9,23 @@
   export let onConfirm: (
     imageUrl: string | null,
     commonName: string,
-    description: string,
+    description: string | null,
   ) => Promise<void>;
 
   let textInput = candidateChild.commonName || "";
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
-  let candidateDescription = candidateChild.description || "";
+  let candidateDescription = candidateChild.description || null;
 
   function replaceInParagraph(
-    paragraph: string,
-    target: string,
-    replacement: string,
-  ): string {
-    if (paragraph) {
-      return paragraph.split(target).join(replacement);
+    paragraph: string | null | undefined,
+    target: string | null | undefined,
+    replacement: string | null,
+  ) {
+    if (paragraph && target && replacement) {
+      return paragraph.split(target).join(replacement) || null;
+    } else {
+      return null;
     }
   }
 
