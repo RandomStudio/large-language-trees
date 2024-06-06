@@ -74,21 +74,16 @@ export const actions = {
       const sessionCookie = lucia.createSessionCookie(session.id);
       event.cookies.set(sessionCookie.name, sessionCookie.value, {
         path: ".",
-        ...sessionCookie.attributes,
+        ...sessionCookie.attributes
       });
 
       redirect(302, "/startwindow");
-
-
-    }
-    else {
-
-
+    } else {
       const validPassword = await verify(existingUser.passwordHash, password, {
         memoryCost: 19456,
         timeCost: 2,
         outputLen: 32,
-        parallelism: 1,
+        parallelism: 1
       });
 
       if (!validPassword) {
@@ -107,5 +102,5 @@ export const actions = {
 
       redirect(302, "/gallery");
     }
-  }
+  },
 } satisfies Actions;
