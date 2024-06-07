@@ -3,7 +3,7 @@
   import {
     type SeedbankEntryWithPlant,
     type GardenViewData,
-    type MyGarden,
+    type MyGarden
   } from "../../lib/types";
   import PlantDisplay from "../../components/PlantDisplay.svelte";
   import QrGenerate from "../../components/qr_generate.svelte";
@@ -31,14 +31,14 @@
   }
 </script>
 
-<div>
-  <main class="mx-14 mt-20">
+<div class="font-inter">
+  <main class="mx-14 mt-10">
     {#if showMessage}
-      <p class="text-roel_blue font-garamond text-3xl">
-        Dear aspiring gardener, we have selected a plant for you!
+      <p class="text-roel_blue text-2xl">
+        Dear digital gardener,<br />Here is your first plant!
       </p>
     {/if}
-    <div class="text-left mb-8 font-oldstandard relative">
+    <div class="text-left mb-8 relative">
       {#if selectedPlant}
         <PlantDisplay plant={selectedPlant} width="w-96"></PlantDisplay>
         <!-- Set a larger width explicitly -->
@@ -58,8 +58,8 @@
     </div>
     <div class="mt-6 text-center">
       <button
-        class="bg-transparent text-roel_blue font-oldstandard py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent"
-        style="width:300px;"
+        class="bg-roel_green text-roel_blue py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+        style="width:250px;"
         on:click={handleButtonClick}
       >
         {buttonText}

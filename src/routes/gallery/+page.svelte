@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type GardenViewData, type SelectPlant } from "../../lib/types"; // Adjust the import paths as necessary
+  import { type GardenViewData, type SelectPlant } from "../../lib/types";
 
   export let data: GardenViewData;
 
@@ -15,20 +15,7 @@
 </script>
 
 <div class="min-h-screen bg-roel_green overflow-hidden font-oldstandard">
-  <div class="fixed left-0 right-0 bg-roel_green font-oldstandard">
-    <div class="grid grid-rows-1 grid-cols-2 text-center mt-2 w-full">
-      <div class="border-roel_blue border-2 text-roel_blue border-l-0">
-        <a href="./gallery">Gallery</a>
-      </div>
-      <div
-        class="border-roel_blue border-2 text-neutral-500 border-l-0 border-r-0"
-      >
-        <a href="../pollination">Pollination</a>
-      </div>
-    </div>
-  </div>
-
-  <main class="mx-10 mt-20">
+  <main class="mx-10 mt-0">
     <div class="text-center w-full">
       {#each seedBank as plant, index}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -49,7 +36,7 @@
         {#if index == 0}
           <div class="mt-4 text-center">
             <button
-              class="bg-transparent text-roel_blue py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+              class="bg-roel_green text-roel_blue font-inter py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
               style="width:250px;"
               on:click={() => goto("/pollination")}
             >
@@ -57,18 +44,18 @@
             </button>
           </div>
         {/if}
+        {#if selectedPlant}
+          <PopupInfo
+            plantDetails={selectedPlant}
+            closePopup={() => {
+              selectedPlant = null;
+            }}
+            isOriginalPlant={index == 0}
+          ></PopupInfo>
+        {/if}
         <br />
         <br />
       {/each}
     </div>
-
-    {#if selectedPlant}
-      <PopupInfo
-        plantDetails={selectedPlant}
-        closePopup={() => {
-          selectedPlant = null;
-        }}
-      ></PopupInfo>
-    {/if}
   </main>
 </div>

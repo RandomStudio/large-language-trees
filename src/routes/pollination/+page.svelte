@@ -11,6 +11,7 @@
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
   import PopupInfo from "../../components/PopupInfo.svelte";
+  import { goto } from "$app/navigation";
 
   export let data: GardenViewData;
   let busy = false;
@@ -74,54 +75,63 @@
   });
 </script>
 
-<div class="fixed left-0 right-0 bg-roel_green font-oldstandard">
-  <div class="grid grid-rows-1 grid-cols-2 text-center mt-2 w-full">
-    <div class="border-roel_blue border-2 border-l-0 text-neutral-500">
-      <a href="./gallery">Gallery</a>
-    </div>
-    <div class="border-roel_blue border-2 text-roel_blue border-l-0 border-r-0">
-      <a href="../pollination">Pollination</a>
-    </div>
-  </div>
-</div>
-<main class="mx-14 mt-20">
-  <br />
-  <p class="text-roel_blue font-garamond text-3xl mb-6">
-    Find another gardener and point your camera to their QR code.
-  </p>
-  <div class="relative w-full md:aspect-square h-full object-cover">
-    <video bind:this={videoElement} class="">
-      <track kind="captions" srclang="en" label="English captions" />
-    </video>
+<div class="min-h-screen bg-roel_green overflow-hidden font-inter">
+  <button
+    class="fixed top-8 right-7 text-roel_blue flex items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
+    on:click={() => goto("/gallery")}
+  >
+    <svg
+      class="w-6 h-6 text-roel_blue"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <main class="mx-14 mt-3">
+    <p class="text-roel_blue text-2xl mb-6">
+      Point your camera to another gardener's Pollination QR
+    </p>
 
-    {#if parent1}
-      <QrGenerate text={parent1.id} />
-    {/if}
-  </div>
+    <div class="relative w-full md:aspect-square overflow-hidden">
+      <video bind:this={videoElement} class="object-cover w-full h-full">
+        <track kind="captions" srclang="en" label="English captions" />
+      </video>
+      {#if parent1}
+        <QrGenerate text={parent1.id} />
+      {/if}
+    </div>
 
-  {#if candidateChild}
-    <ConfirmBreedPopup
-      {candidateChild}
-      onCancel={() => {
-        candidateChild = null;
-      }}
-      onConfirm={async (updatedPlant) => {
-        if (candidateChild) {
-          candidateChild = updatedPlant;
-          await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+    <p class="text-roel_blue text-2xl mb-6 text-center">Your Pollination QR</p>
+
+    {#if candidateChild}
+      <ConfirmBreedPopup
+        {candidateChild}
+        onCancel={() => {
           candidateChild = null;
-          busy = false;
-        }
-      }}
-    />
-  {/if}
+        }}
+        onConfirm={async (updatedPlant) => {
+          if (candidateChild) {
+            candidateChild = updatedPlant;
+            await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+            candidateChild = null;
+            busy = false;
+          }
+        }}
+      />
+    {/if}
 
-  {#if child}
-    <PopupInfo
-      plantDetails={child}
-      closePopup={() => {
-        child = null;
-      }}
-    />
-  {/if}
-</main>
+    {#if child}
+      <PopupInfo
+        plantDetails={child}
+        closePopup={() => {
+          child = null;
+        }}
+      />
+    {/if}
+  </main>
+</div>
