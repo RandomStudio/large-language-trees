@@ -28,14 +28,14 @@
       style="min-height: 100px;"
     >
       <input
-        class="bg-roel_green text-roel_blue py-2 px-4 border border-roel_blue rounded-full placeholder-roel_blue focus:outline-none focus:border-roel_blue"
+        class="bg-roel_green text-roel_blue py-2 px-4 border-2 border-roel_blue rounded-full placeholder-roel_blue focus:outline-none focus:border-roel_blue"
         type="text"
         id="username"
         name="username"
         placeholder="Fill in your name"
         style="width:250px"
         on:input={handleInput}
-      /><br />
+      />
       <input
         class="bg-roel_green text-roel_blue py-2 px-4 border border-roel_blue rounded-full placeholder-roel_blue focus:outline-none focus:border-roel_blue mt-2 hidden"
         type="password"
