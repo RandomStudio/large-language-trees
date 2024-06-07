@@ -43,8 +43,8 @@
     const imageGenerationResponse = await fetch("/api/generate/image", {
       method: "POST",
       body: JSON.stringify({
-        description: candidateChild.description,
-      }),
+        description: candidateChild.description
+      })
     });
     waitingForImage = false;
     if (imageGenerationResponse.status == 200) {
@@ -74,7 +74,7 @@
     "DNA is being mixed up",
     "A new seed is created",
     "Watering the new plant",
-    "Flowers are budding",
+    "Flowers are budding"
   ];
   let currentIndex = 0;
 
@@ -87,72 +87,56 @@
   generateImage();
 </script>
 
-<div class=" absolute top-0 left-0 right-0">
-  <div class="border bg-roel_blue m-8 p-4 rounded">
-    <div class="flex justify-end items-center mb-4">
-      <button
-        type="button"
-        class="bg-transparent text-roel_green font-semibold"
-        on:click={onCancel}
-        aria-label="Close popup">&times;</button
-      >
-    </div>
-    <p
-      class="text-roel_green font-garamond text-3xl mb-6 top-40 right-10 left-10"
+<div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
+  <div class="flex justify-center items-center h-full">
+    <div
+      class="m-2 p-2 rounded-lg max-w-lg overflow-y-auto"
+      style="max-height: calc(100% - 4rem);"
     >
-      Hooray you made a new plant. What would you like it to be named?
-    </p>
+      <p class="text-roel_blue text-xl mb-2">
+        Hooray you made a new plant. What would you like it to be named?
+      </p>
 
-    {#if candidateImageUrl}
-      <TransparencyMaker
-        src={candidateImageUrl}
-        useFloodFill={false}
-        tolerance={8}
-        doUpload={true}
-        onUploadComplete={replaceImage}
-      />
-    {/if}
-    {#if waitingForImage}
-      <div>
-        <div
-          id="message"
-          class="text-roel_green font-garamond text-2xl mt-32 text-center mb-32"
-        >
-          {messages[currentIndex]} ...
-        </div>
-      </div>
-    {/if}
-
-    <p class="mt-4 text-center text-roel_green">{candidateChild.commonName}</p>
-
-    <form on:submit|preventDefault={handleSubmit} class="mt-4">
-      <div>
-        <input
-          type="text"
-          bind:value={textInput}
-          class="border-2 h-12 bg-transparent border-roel_green text-roel_green rounded-full w-full placeholder:text-center placeholder:text-roel_green text-center"
-          placeholder="Name your flower"
+      {#if candidateImageUrl}
+        <TransparencyMaker
+          src={candidateImageUrl}
+          useFloodFill={false}
+          tolerance={8}
+          doUpload={true}
+          onUploadComplete={replaceImage}
         />
-      </div>
-    </form>
-    <p class=" text-roel_green mt-4">
-      {candidateChild.description}
-    </p>
-    {#if candidateImageUrl}
-      <div
-        class="flex gap-4 flex-nowrap h-12 bg-transparent text-roel_green mt-4"
-      >
-        <button
-          on:click={() => handleAction()}
-          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
-          >Add
-        </button>
-        <button
-          on:click={onCancel}
-          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
-          >Cancel</button
-        >
-      </div>
-    {/if}
+      {/if}
+      {#if waitingForImage}
+        <div>
+          <div
+            id="message"
+            class="text-roel_blue font-inter text-lg mt-2 text-center mb-2"
+          >
+            {messages[currentIndex]} ...
+          </div>
+        </div>
+      {/if}
+
+      <form on:submit|preventDefault={handleSubmit} class="mt-2">
+        <div>
+          <input
+            type="text"
+            bind:value={textInput}
+            class="border-2 h-10 bg-transparent border-roel_blue rounded-full w-full placeholder:text-center placeholder:text-roel_blue text-center text-roel_blue"
+            placeholder="Name your flower"
+          />
+        </div>
+      </form>
+      <p class="text-roel_blue mt-2">{candidateChild.description}</p>
+      {#if candidateImageUrl}
+        <div class="flex gap-2 flex-nowrap h-10 bg-transparent mt-2">
+          <button
+            on:click={() => handleAction()}
+            class="border-roel_blue border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full text-roel_blue"
+            >OK</button
+          >
+        </div>
+      {/if}
+    </div>
   </div>
 </div>
