@@ -2,7 +2,7 @@
   import type {
     GardenPlantEntryWithPlant,
     GardenViewData,
-    PlantProperties,
+    PlantProperties
   } from "$lib/types";
   export let data: GardenViewData;
 
@@ -60,9 +60,9 @@
     return Math.min(
       Math.pow(
         (plant.plant.properties as PlantProperties)["high(m)"] as number,
-        1 / rootScale,
+        1 / rootScale
       ),
-      30,
+      30
     );
   }
 
@@ -79,7 +79,7 @@
           remapPlantHeight(
             Math.log(rootScaleFromPlantHeight(plant)) + 1,
             Math.log(minPlantHeight) + 1,
-            Math.log(maxPlantHeight) + 1,
+            Math.log(maxPlantHeight) + 1
           )) // one minus remapped value in order to make the plants go from small to big
     );
   }
@@ -112,7 +112,7 @@
 
   function checkIfSpaceIsOk(
     plant: GardenPlantEntryWithPlant,
-    proposedPlantPositionX: number,
+    proposedPlantPositionX: number
   ) {
     let distanceList = [];
     for (let i = 0; i < plantIDs.length; i++) {
@@ -120,7 +120,7 @@
         plant,
         proposedPlantPositionX,
         plantPositionsX[i],
-        plantPositionsY[i],
+        plantPositionsY[i]
       );
       distanceList.push(distance);
     }
@@ -131,7 +131,7 @@
     plant: GardenPlantEntryWithPlant,
     proposedPlantPositionX: number,
     x: number,
-    y: number,
+    y: number
   ): number {
     let plantX = proposedPlantPositionX;
     let plantY = placePlantOnYAxis(plant);
@@ -163,7 +163,7 @@
           remapPlantHeight(
             rootScaleFromPlantHeight(plant),
             minPlantHeight,
-            maxPlantHeight,
+            maxPlantHeight
           ) *
             (maxPlantHeightOutput - minPlantHeightOutput) +
           "px"}
