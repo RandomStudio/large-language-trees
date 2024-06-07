@@ -44,18 +44,18 @@
             </button>
           </div>
         {/if}
+        {#if selectedPlant}
+          <PopupInfo
+            plantDetails={selectedPlant}
+            closePopup={() => {
+              selectedPlant = null;
+            }}
+            isOriginalPlant={index == 0}
+          ></PopupInfo>
+        {/if}
         <br />
         <br />
       {/each}
     </div>
-
-    {#if selectedPlant}
-      <PopupInfo
-        plantDetails={selectedPlant}
-        closePopup={() => {
-          selectedPlant = null;
-        }}
-      ></PopupInfo>
-    {/if}
   </main>
 </div>

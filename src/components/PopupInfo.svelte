@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
+
   import PlantDisplay from "./PlantDisplay.svelte";
 
   export let plantDetails: SelectPlant;
@@ -10,6 +12,7 @@
   }
 
   let width: string;
+  export let isOriginalPlant: boolean;
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -43,5 +46,16 @@
     >
       {plantDetails.description}
     </p>
+    {#if isOriginalPlant}
+      <div class="mt-4 text-center">
+        <button
+          class="bg-roel_green text-roel_blue font-inter py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+          style="width:250px;"
+          on:click={() => goto("/pollination")}
+        >
+          Start Pollinating
+        </button>
+      </div>
+    {/if}
   </div>
 </div>
