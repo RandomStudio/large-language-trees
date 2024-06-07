@@ -3,7 +3,7 @@
     GardenPlantEntryWithPlant,
     GardenViewData,
     PlantProperties,
-    SelectPlant,
+    SelectPlant
   } from "$lib/types";
   export let data: GardenViewData;
 
@@ -48,14 +48,14 @@
           const newPositionedPlant: PositionedPlant = {
             plant: entry.plant,
             x: parentX(entry.plant),
-            y: parentY(entry.plant),
+            y: parentY(entry.plant)
           };
           displayPlants.push(newPositionedPlant); // adds plant to list if its a parent
         } else {
           const newPositionedPlant: PositionedPlant = {
             plant: entry.plant,
             x: childX(entry.plant),
-            y: childY(entry.plant),
+            y: childY(entry.plant)
           };
           displayPlants.push(newPositionedPlant); // adds plant to list if its a child
         }
@@ -86,7 +86,7 @@
           remapPlantHeight(
             Math.log(rootScaleFromPlantHeight(plant)) + 1,
             Math.log(minPlantHeight) + 1,
-            Math.log(maxPlantHeight) + 1,
+            Math.log(maxPlantHeight) + 1
           ))
     );
   }
@@ -101,7 +101,7 @@
   function checkIfSpaceIsOk(
     plant: SelectPlant,
     proposedX: number,
-    tolerance: number,
+    tolerance: number
   ) {
     let distanceList = [];
     for (let i = 0; i < displayPlants.length; i++) {
@@ -114,7 +114,7 @@
   function calculateDistance(
     plant: SelectPlant,
     proposedX: number,
-    displayPlants: PositionedPlant,
+    displayPlants: PositionedPlant
   ): number {
     let plantX = proposedX;
     let plantY = parentY(plant);
@@ -132,7 +132,7 @@
       remapPlantHeight(
         rootScaleFromPlantHeight(plant),
         minPlantHeight,
-        maxPlantHeight,
+        maxPlantHeight
       ) *
         (maxPlantHeightOutput - minPlantHeightOutput)
     );
@@ -156,7 +156,7 @@
   function rootScaleFromPlantHeight(plant: SelectPlant): number {
     return Math.max(
       smallestPlant,
-      Math.min(Math.pow(plantHeight(plant), 1 / rootScale), tallestPlant),
+      Math.min(Math.pow(plantHeight(plant), 1 / rootScale), tallestPlant)
     );
   }
 

@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
 
-  export let allSeeds: SelectPlant[];
   export let plantDetails: SelectPlant;
 
   export let closePopup: () => any;
@@ -9,9 +8,6 @@
   function updatePlantDetails(plant: SelectPlant) {
     plantDetails = plant;
   }
-
-  let parent1 = allSeeds.find((plant) => plant.id === plantDetails.parent1);
-  let parent2 = allSeeds.find((plant) => plant.id === plantDetails.parent2);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -33,20 +29,6 @@
       src={plantDetails.imageUrl}
       alt="Drawing of a {plantDetails.commonName}"
     />
-    {#if parent1}
-      <div class="parent1">
-        <img src={parent1.imageUrl} alt="parent 1" />
-        <h1 class="text-center">{parent1.commonName}</h1>
-        <button on:click={() => updatePlantDetails(parent1)}>See</button>
-      </div>
-    {/if}
-    {#if parent2}
-      <div class="parent2">
-        <img src={parent2.imageUrl} alt="parent 2" />
-        <h2>{parent2.commonName}</h2>
-        <button on:click={() => updatePlantDetails(parent2)}>See</button>
-      </div>
-    {/if}
     <p class="mt-4 text-center text-roel_green">{plantDetails.commonName}</p>
     <p class="text-center text-roel_green">{plantDetails.description}</p>
   </div>

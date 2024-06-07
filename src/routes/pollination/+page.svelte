@@ -2,7 +2,7 @@
   import {
     type SelectPlant,
     type GardenViewData,
-    type InsertPlant,
+    type InsertPlant
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
@@ -26,22 +26,21 @@
 
   let child: SelectPlant | null = null;
 
-  const existingChild = (
+  $: existingChild = (
     parents: [SelectPlant, SelectPlant]
   ): SelectPlant | null =>
     data.seedBank.plantsInSeedbank.find(
       (plant) =>
-        parents.find((p) => p.id == plant.plant.parent1) ||
+        parents.find((p) => p.id == plant.plant.parent1) &&
         parents.find((p) => p.id == plant.plant.parent2)
     )?.plant || null;
-
   let videoElement: HTMLVideoElement;
 
   onMount(async () => {
     const codeReader = new BrowserMultiFormatReader();
 
     const constraints = {
-      video: {},
+      video: {}
     };
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -54,14 +53,12 @@
       if (result && !busy) {
         // Handle the result here
         busy = true;
-        console.log(result.getText());
         const parent2Id = result.getText();
         fetch("/api/plants/" + parent2Id).then(async (res) => {
           if (res.status == 200) {
             parent2 = await res.json();
             if (parent1 && parent2) {
               child = existingChild([parent1, parent2]);
-              console.log(child);
               if (child == null) {
                 candidateChild = await confirmBreed([parent1, parent2]);
               }
@@ -77,10 +74,20 @@
   });
 </script>
 
+<div class="fixed left-0 right-0 bg-roel_green font-oldstandard">
+  <div class="grid grid-rows-1 grid-cols-2 text-center mt-2 w-full">
+    <div class="border-roel_blue border-2 border-l-0 text-neutral-500">
+      <a href="./gallery">Gallery</a>
+    </div>
+    <div class="border-roel_blue border-2 text-roel_blue border-l-0 border-r-0">
+      <a href="../pollination">Pollination</a>
+    </div>
+  </div>
+</div>
 <main class="mx-14 mt-20">
   <br />
   <p class="text-roel_blue font-garamond text-3xl mb-6">
-    Scan another plant to pollinate
+    Find another gardener and point your camera to their QR code.
   </p>
   <div class="relative w-full md:aspect-square h-full object-cover">
     <video bind:this={videoElement} class="">
@@ -92,20 +99,18 @@
     {/if}
   </div>
 
-  {#if parent2}
-    <p>{parent2.id}</p>
-  {/if}
-
   {#if candidateChild}
     <ConfirmBreedPopup
       {candidateChild}
       onCancel={() => {
         candidateChild = null;
       }}
-      onConfirm={async () => {
+      onConfirm={async (updatedPlant) => {
         if (candidateChild) {
+          candidateChild = updatedPlant;
           await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
           candidateChild = null;
+          busy = false;
         }
       }}
     />
@@ -113,7 +118,6 @@
 
   {#if child}
     <PopupInfo
-      allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
       plantDetails={child}
       closePopup={() => {
         child = null;

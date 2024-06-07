@@ -1,24 +1,47 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import type { GeneratedImageResult, InsertPlant } from "$lib/types";
-  import Spinner from "./Spinner.svelte";
   import TransparencyMaker from "./TransparencyMaker.svelte";
 
   export let candidateChild: InsertPlant;
 
-  export let onCancel: () => any;
-  export let onConfirm: (imageUrl: string | null) => Promise<void>;
+  /** A local copy of the incoming "candidateChild", which we update as necessary before
+   * returning to the parent component ready to add to the database.
+   */
+  let finalChildReadyToAdd: InsertPlant = { ...candidateChild };
 
-  let textInput = candidateChild.commonName || "";
+  export let onCancel: () => any;
+  export let onConfirm: (plantReadyToAdd: InsertPlant) => Promise<void>;
+
+  let textInput = finalChildReadyToAdd.commonName || "";
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
 
-  function replaceWordInText(
-    text: string,
-    targetWord: string,
-    newWord: string
+  function replaceInParagraph(
+    paragraph: string | null | undefined,
+    target: string | null | undefined,
+    replacement: string | null
   ) {
-    const regex = new RegExp(`\\b${targetWord}\\b`, "gi");
-    return text.replace(regex, newWord);
+    if (paragraph && target && replacement) {
+      return paragraph.split(target).join(replacement) || null;
+    } else {
+      return null;
+    }
+  }
+
+  async function handleAction() {
+    try {
+      finalChildReadyToAdd.commonName = textInput;
+      finalChildReadyToAdd.description = replaceInParagraph(
+        finalChildReadyToAdd.description,
+        finalChildReadyToAdd.commonName,
+        textInput
+      );
+      await onConfirm(finalChildReadyToAdd);
+      goto("../gallery");
+    } catch (error) {
+      console.error("Error during confirmation:", error);
+    }
   }
 
   function handleSubmit() {
@@ -29,14 +52,9 @@
 
     console.log("Name given:", textInput);
 
-    if (candidateChild.description && candidateChild.commonName) {
-      candidateChild.description = replaceWordInText(
-        candidateChild.description,
-        candidateChild.commonName,
-        textInput
-      );
+    if (finalChildReadyToAdd.description && finalChildReadyToAdd.commonName) {
     }
-    candidateChild.commonName = textInput;
+    finalChildReadyToAdd.commonName = textInput;
   }
 
   const generateImage = async () => {
@@ -44,8 +62,8 @@
     const imageGenerationResponse = await fetch("/api/generate/image", {
       method: "POST",
       body: JSON.stringify({
-        description: candidateChild.description,
-      }),
+        description: candidateChild.description
+      })
     });
     waitingForImage = false;
     if (imageGenerationResponse.status == 200) {
@@ -54,6 +72,7 @@
       const { url } = json;
       console.log("got candidate image URL:", url);
       candidateImageUrl = url;
+      finalChildReadyToAdd.imageUrl = url;
     } else {
       console.error("Error fetching generated new image");
     }
@@ -67,6 +86,7 @@
       url
     );
     candidateImageUrl = url;
+    finalChildReadyToAdd.imageUrl = url;
   }
 
   const messages = [
@@ -75,7 +95,7 @@
     "DNA is being mixed up",
     "A new seed is created",
     "Watering the new plant",
-    "Flowers are budding",
+    "Flowers are budding"
   ];
   let currentIndex = 0;
 
@@ -124,8 +144,6 @@
       </div>
     {/if}
 
-    <p class="mt-4 text-center text-roel_green">{candidateChild.commonName}</p>
-
     <form on:submit|preventDefault={handleSubmit} class="mt-4">
       <div>
         <input
@@ -137,14 +155,14 @@
       </div>
     </form>
     <p class=" text-roel_green mt-4">
-      {candidateChild.description}
+      {finalChildReadyToAdd.description}
     </p>
     {#if candidateImageUrl}
       <div
         class="flex gap-4 flex-nowrap h-12 bg-transparent text-roel_green mt-4"
       >
         <button
-          on:click={() => onConfirm(candidateImageUrl)}
+          on:click={() => handleAction()}
           class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
           >Add
         </button>
