@@ -98,9 +98,7 @@
     </p>
 
     <div class="relative w-full md:aspect-square overflow-hidden">
-      <!-- La vidéo sera cropée pour être carrée -->
       <video bind:this={videoElement} class="object-cover w-full h-full">
-        <!-- La vidéo remplit complètement le conteneur -->
         <track kind="captions" srclang="en" label="English captions" />
       </video>
       {#if parent1}
@@ -116,11 +114,9 @@
         onCancel={() => {
           candidateChild = null;
         }}
-        onConfirm={async (imageUrl, commonName) => {
+        onConfirm={async (updatedPlant) => {
           if (candidateChild) {
-            console.log({ candidateChildId: candidateChild.id, imageUrl });
-            candidateChild.imageUrl = imageUrl;
-            candidateChild.commonName = commonName;
+            candidateChild = updatedPlant;
             await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
             candidateChild = null;
             busy = false;
