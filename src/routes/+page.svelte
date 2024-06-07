@@ -46,7 +46,7 @@
         value="123456"
       /><br />
       <button
-        class="bg-roel_green text-roel_blue font-semibold py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+        class="bg-roel_green text-roel_blue py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
         style="width:250px;"
         type="submit"
       >

@@ -36,7 +36,7 @@
         {#if index == 0}
           <div class="mt-4 text-center">
             <button
-              class="bg-roel_green text-roel_blue font-inter font-semibold py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
+              class="bg-roel_green text-roel_blue font-inter py-2 px-4 border-2 border-roel_blue rounded-full focus:outline-none focus:bg-transparent active:bg-transparent mt-2"
               style="width:250px;"
               on:click={() => goto("/pollination")}
             >
