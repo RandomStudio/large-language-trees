@@ -1,30 +1,27 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    // @ts-ignore
-    import QRCode from "qrcode";
-    import { canvaWithoutBG } from "$lib/removeBG";
+  import { onMount } from "svelte";
+  // @ts-ignore
+  import QRCode from "qrcode";
 
-    export let text: String = "palm";
-    let qrCodeUrl = "";
-    let canvasId = "canvas_qrCode";
+  export let text: string = "";
+  let qrCodeUrl = "";
 
-    const generateQRCode = async (text: String) => {
-        try {
-            qrCodeUrl = await QRCode.toDataURL(text);
-            console.log(qrCodeUrl);
+  const generateQRCode = async (text: string) => {
+    try {
+      qrCodeUrl = await QRCode.toDataURL(text);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-            // Draw the QR code on the canvas and remove the background
-            canvaWithoutBG(canvasId, qrCodeUrl);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    onMount(() => {
-        generateQRCode(text);
-    });
+  onMount(() => {
+    generateQRCode(text);
+  });
 </script>
 
-<div>
-    <canvas id={canvasId} class="w-64 h-64"></canvas>
-</div>
+<!-- Utilisation de la balise img pour afficher le QR code -->
+{#if qrCodeUrl}
+  <div class="mt-6">
+    <img src={qrCodeUrl} alt="QR Code" class="size-full" />
+  </div>
+{/if}

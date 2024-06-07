@@ -1,306 +1,208 @@
 <script lang="ts">
-  import UserLoginStatus from "../../components/UserLoginStatus.svelte";
-
-  import {
-    type GardenPlantEntry,
-    type GardenViewData,
-    type InsertPlant,
-    type SeedbankEntry,
-    type SelectPlant,
-  } from "../../lib/types"; // Assuming type import is correct
-
-  import PlantDisplay from "../../components/PlantDisplay.svelte";
+  import type {
+    GardenPlantEntryWithPlant,
+    GardenViewData,
+    PlantProperties,
+    SelectPlant
+  } from "$lib/types";
   export let data: GardenViewData;
 
-  // import { pickMultiple } from "random-elements";
+  //constants relating to making plants not overlap
+  const initialCrowdednessTolerance = 250;
 
-  import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
-  import PlantCell from "../../components/PlantCell.svelte";
+  //plant min and max size on screen
+  const minPlantHeightOutput = 75;
+  const maxPlantHeightOutput = 200;
+  const animationLength = 8;
 
-  import PopupInfo from "../../components/PopupInfo.svelte";
-  import { buildPrompt } from "../../lib/promptUtils";
+  //display size and borders
+  const monitorWidth = 1920;
+  const monitorHeight = 1080;
+  const frameSize = 150; //general border around all edges
+  const topBorder = 75; // extra border on top
 
-  import DefaultPromptConfig from "../../defaults/prompt-config";
-  import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
-  import FullScreenLoading from "../../components/FullScreenLoading.svelte";
-  import { invalidateAll } from "$app/navigation";
-  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
+  //distribution on screen and size of plants in database
+  const rootScale = 2;
+  const tallestPlant = 30;
+  const smallestPlant = 0.1;
+  const minPlantHeight = Math.pow(smallestPlant, 1 / rootScale);
+  const maxPlantHeight = Math.pow(tallestPlant, 1 / rootScale);
+  const randomnessY = 20; // random displacement in y direction
 
-  let candidateParents: [SelectPlant, SelectPlant] | null = null;
-  let candidateChild: InsertPlant | null = null;
+  //constants relating to remap function
+  const low2 = 0;
+  const high2 = 1;
 
-  let timeout: NodeJS.Timeout | null = null;
-
-  let selectedPlant: SelectPlant | null = null;
-
-  let waitingForGeneration = false;
-
-  interface GridCell {
-    plant?: SelectPlant;
-    highlighted: boolean;
-    column: number;
-    row: number;
+  interface PositionedPlant {
+    plant: SelectPlant;
+    x: number;
+    y: number;
   }
 
-  let grid: GridCell[] = [];
+  let displayPlants: PositionedPlant[] = [];
 
-  function areClose(plant1: SelectPlant, plant2: SelectPlant): boolean {
-    const plant1Cell = grid.find((c) => c.plant && c.plant.id === plant1.id);
-    const plant2Cell = grid.find((c) => c.plant && c.plant.id === plant2.id);
-
-    console.log("areClose", plant1.id, plant2.id);
-
-    if (plant1Cell && plant2Cell) {
-      return (
-        Math.abs(plant1Cell.row - plant2Cell.row) <= 1 &&
-        Math.abs(plant1Cell.column - plant2Cell.column) <= 1
-      );
-    } else {
-      // do not have two occupied cells to compare
-      return false;
-    }
-  }
-
-  function checkAnyCloseTo(cell: GridCell) {
-    console.log("checkAnyCloseTo cell at", cell.row, cell.column);
-    if (cell.plant) {
-      console.log("plant is", cell.plant);
-      const thisPlant = cell.plant;
-      for (const entry of data.garden.plantsInGarden) {
-        const otherPlant = entry.plant;
-        if (thisPlant.id !== otherPlant.id) {
-          // not self
-          const [plant1, plant2] = [thisPlant, otherPlant];
-          if (areClose(plant1, plant2)) {
-            candidateParents = [plant1, plant2];
-            timeout = setTimeout(() => {
-              console.log(
-                "ready for mixing : " +
-                  plant1.commonName +
-                  " and " +
-                  plant2.commonName +
-                  " !",
-              );
-              waitingForGeneration = true;
-              confirmBreed([plant1, plant2])
-                .then((newPlant) => {
-                  candidateChild = newPlant;
-                  waitingForGeneration = false;
-                })
-                .catch((e) => {
-                  console.error("Error from confirm/generate breed:", e);
-                  waitingForGeneration = false;
-                });
-            }, 4000);
-          }
-        }
-      }
-    } else {
-      // empty cell no need to check
-      return false;
-    }
-  }
-
-  const populateGrid = () => {
-    console.log(
-      "populateGrid with",
-      data.garden.plantsInGarden.length,
-      "plants",
-    );
-    grid = [];
-    for (let r = 0; r < GRID_HEIGHT; r++) {
-      for (let c = 0; c < GRID_WIDTH; c++) {
-        const plant = data.garden.plantsInGarden.find(
-          (p) => p.colIndex === c && p.rowIndex === r,
-        );
-        if (plant) {
-          const plantObject = plant.plant;
-          grid.push({
-            plant: plantObject,
-            row: r,
-            column: c,
-            highlighted: false,
-          });
+  if (data && data.garden && data.garden.plantsInGarden) {
+    data.garden.plantsInGarden.forEach((entry) => {
+      if (entry && entry.plant) {
+        if (entry.plant.parent1 === null) {
+          const newPositionedPlant: PositionedPlant = {
+            plant: entry.plant,
+            x: parentX(entry.plant),
+            y: parentY(entry.plant)
+          };
+          displayPlants.push(newPositionedPlant); // adds plant to list if its a parent
         } else {
-          grid.push({
-            row: r,
-            column: c,
-            plant: undefined,
-            highlighted: false,
-          });
+          const newPositionedPlant: PositionedPlant = {
+            plant: entry.plant,
+            x: childX(entry.plant),
+            y: childY(entry.plant)
+          };
+          displayPlants.push(newPositionedPlant); // adds plant to list if its a child
         }
       }
+    });
+  }
+  function parentX(plant: SelectPlant) {
+    let proposedX = 0;
+    let spaceOk = false;
+    let tolerance = initialCrowdednessTolerance;
+
+    while (!spaceOk) {
+      proposedX = frameSize + Math.random() * (monitorWidth - frameSize * 2);
+      spaceOk = checkIfSpaceIsOk(plant, proposedX, tolerance);
+      tolerance -= 1;
+      console.log(tolerance);
     }
-  };
-
-  function dragStart(event: CustomEvent<{ e: DragEvent; gridIndex: number }>) {
-    const { e, gridIndex } = event.detail;
-    console.log("dragStart from", gridIndex);
-    e.dataTransfer?.setData("text/plain", gridIndex.toString());
+    return proposedX;
   }
 
-  function dragOver(e: DragEvent, index: number) {
-    e.preventDefault();
-    grid[index].highlighted = true;
-    console.log("dragOver");
+  function parentY(plant: SelectPlant) {
+    return (
+      frameSize +
+      topBorder +
+      maxPlantHeightOutput +
+      (monitorHeight - minPlantHeightOutput * 2 - frameSize * 2 - topBorder) *
+        (1 - // one minus remapped value in order to make the plants go from small to big
+          remapPlantHeight(
+            Math.log(rootScaleFromPlantHeight(plant)) + 1,
+            Math.log(minPlantHeight) + 1,
+            Math.log(maxPlantHeight) + 1
+          ))
+    );
   }
 
-  function dragLeave(e: DragEvent, index: number) {
-    e.preventDefault();
-    grid[index].highlighted = false;
+  function childX(plant: SelectPlant) {
+    return 100;
+  }
+  function childY(plant: SelectPlant) {
+    return 100;
   }
 
-  function drop(e: DragEvent, dstIndex: number) {
-    e.preventDefault();
-    if (timeout !== null) {
-      console.log("clearTimeout");
-      clearTimeout(timeout);
+  function checkIfSpaceIsOk(
+    plant: SelectPlant,
+    proposedX: number,
+    tolerance: number
+  ) {
+    let distanceList = [];
+    for (let i = 0; i < displayPlants.length; i++) {
+      let distance = calculateDistance(plant, proposedX, displayPlants[i]);
+      distanceList.push(distance);
     }
-    console.log("drop to grid index", dstIndex);
-    const cellDropData = e.dataTransfer?.getData("text/plain");
-    if (cellDropData) {
-      const srcIndex = parseInt(cellDropData);
-      console.log("transfer", srcIndex, "to", dstIndex);
-      const srcPlant = grid[srcIndex].plant;
-      if (srcPlant) {
-        grid[dstIndex].plant = srcPlant;
-        grid[srcIndex].plant = undefined; // clear original cell
-        grid[dstIndex].highlighted = false;
-
-        const dstCell = grid[dstIndex];
-
-        const gardenId = data.garden.id;
-        const plantId = srcPlant.id;
-        const colIndex = dstCell.column;
-        const rowIndex = dstCell.row;
-
-        const updated: GardenPlantEntry = {
-          gardenId,
-          plantId,
-          colIndex,
-          rowIndex,
-        };
-
-        fetch("/api/plantsInGarden/", {
-          method: "PATCH",
-          body: JSON.stringify(updated),
-        })
-          .then((res) => {
-            checkAnyCloseTo(dstCell);
-
-            if (res.status == 200) {
-              console.info("Updated plant position on backend OK:", res);
-              invalidateAll();
-            } else {
-              const { status, statusText } = res;
-              console.error("Error response from server:", {
-                status,
-                statusText,
-                srcPlant,
-                // updatedPlant,
-              });
-            }
-          })
-          .catch((fetchError) => {
-            console.error("Error updating plant on backend:", fetchError);
-          });
-      } else {
-        console.error("There was a problem moving the plant (in the frontend)");
-      }
-    }
+    return Math.min(...distanceList) >= tolerance;
   }
 
-  populateGrid();
+  function calculateDistance(
+    plant: SelectPlant,
+    proposedX: number,
+    displayPlants: PositionedPlant
+  ): number {
+    let plantX = proposedX;
+    let plantY = parentY(plant);
+
+    let deltaX = plantX - displayPlants.x;
+    let deltaY = plantY - displayPlants.y;
+
+    return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  }
+
+  // function to scale plant by property height
+  function scaleFunction(plant: SelectPlant) {
+    return (
+      minPlantHeightOutput +
+      remapPlantHeight(
+        rootScaleFromPlantHeight(plant),
+        minPlantHeight,
+        maxPlantHeight
+      ) *
+        (maxPlantHeightOutput - minPlantHeightOutput)
+    );
+  }
+
+  // function to get property height from a plant, since it's reused
+  function plantHeight(plant: SelectPlant): number {
+    return (plant.properties as PlantProperties)["high(m)"] as number;
+  }
+
+  // function to give give plant z-index
+  function zIndexFunction(plant: SelectPlant) {
+    return 3000 - plantHeight(plant) * 100;
+  }
+
+  // remap plant height to 0 -> 1
+  function remapPlantHeight(value: any, lowIn: any, highIn: any) {
+    return low2 + ((high2 - low2) * (value - lowIn)) / (highIn - lowIn);
+  }
+
+  function rootScaleFromPlantHeight(plant: SelectPlant): number {
+    return Math.max(
+      smallestPlant,
+      Math.min(Math.pow(plantHeight(plant), 1 / rootScale), tallestPlant)
+    );
+  }
+
+  function randomAnimationDelay(): number {
+    return (Math.random() * -animationLength) / 3;
+  }
+  let alt = "alt placeholder";
 </script>
 
-<!-- <nav> -->
-<div>
-  <UserLoginStatus
-    isAdmin={data.user.isAdmin || false}
-    username={data.user.username}
-  ></UserLoginStatus>
-</div>
-<!-- </nav> -->
-
-<main class="container mx-auto overflow-visible">
-  <div class="grid grid-cols-6 gap-0 justify-stretch overflow-visible">
-    {#each grid as gridCell, gridIndex}
+<body>
+  <div id="container" class="fixed top-0 left-0 w-screen h-screen">
+    {#each displayPlants as plant}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        class="relative bg-roel_green min-w-[100px] min-h-[100px] overflow-visible"
-        style="width: calc(100vw / 6); height: calc(100vw / 6);"
-        on:click={() => {
-          console.log("click!");
-          if (gridCell.plant) {
-            selectedPlant = gridCell.plant;
-          } else {
-            console.error("not clickable!");
-          }
-        }}
-      >
-        {#if gridCell.plant}
-          <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] z-10">
-            <PlantDisplay plant={gridCell.plant} width="70%"></PlantDisplay>
-          </div>
-        {:else}
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            class:bg-roel_blue={gridCell.highlighted}
-            on:drop={(e) => {
-              drop(e, gridIndex);
-            }}
-            on:dragover={(e) => dragOver(e, gridIndex)}
-            on:dragleave={(e) => dragLeave(e, gridIndex)}
-          >
-            <!-- Optionally maintain a placeholder or remove content entirely -->
-          </div>
-        {/if}
-      </div>
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <img
+        src={plant.plant.imageUrl}
+        {alt}
+        class="fixed skew-animated"
+        style:margin-left={plant.x - scaleFunction(plant.plant) / 2 + "px"}
+        style:margin-top={plant.y - scaleFunction(plant.plant) + "px"}
+        style:width={scaleFunction(plant.plant) + "px"}
+        style:z-index={zIndexFunction(plant.plant)}
+        style:animation-duration={animationLength + "s"}
+        style:animation-delay={randomAnimationDelay() + "s"}
+      />
     {/each}
   </div>
-
-  {#if selectedPlant}
-    <div
-      class="fixed inset-0 bg-roel_blue flex items-center justify-center z-50 p-4 overflow-auto"
-    >
-      <div
-        class="m-auto bg-white p-4 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto shadow-lg"
-      >
-        <PopupInfo
-          allSeeds={data.seedBank.plantsInSeedbank.map((s) => s.plant)}
-          plantDetails={selectedPlant}
-          closePopup={() => {
-            selectedPlant = null;
-          }}
-        />
-      </div>
-    </div>
-  {/if}
-
-  {#if candidateChild}
-    <ConfirmBreedPopup
-      {candidateChild}
-      onCancel={() => {
-        candidateChild = null;
-      }}
-      onConfirm={async () => {
-        if (candidateChild) {
-          addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
-          populateGrid();
-        }
-      }}
-    />
-  {/if}
-
-  {#if waitingForGeneration}
-    <FullScreenLoading />
-  {/if}
-</main>
-
-{#if waitingForGeneration}
-  <FullScreenLoading />
-{/if}
+</body>
 
 <style>
+  @keyframes skew-animation {
+    0% {
+      transform: skew(4deg);
+      left: -7px;
+    }
+    50% {
+      transform: skew(-4deg);
+      left: 7px;
+    }
+    100% {
+      transform: skew(4deg);
+      left: -7px;
+    }
+  }
+
+  .skew-animated {
+    animation: skew-animation infinite;
+  }
 </style>

@@ -60,3 +60,14 @@ export interface GardenViewData {
   user: SelectUser;
   garden: MyGarden;
 }
+
+export interface PlantProperties {
+  [key: string]: number | string;
+}
+export interface GeneratedImageResult {
+  url: string;
+}
+
+export interface ImageUploadResult {
+  url: string;
+}
