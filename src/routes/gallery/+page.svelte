@@ -50,7 +50,7 @@
             closePopup={() => {
               selectedPlant = null;
             }}
-            isOriginalPlant={index == 0}
+            isOriginalPlant={selectedPlant.id == seedBank[0].plant.id}
           ></PopupInfo>
         {/if}
         <br />

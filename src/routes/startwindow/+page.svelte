@@ -37,7 +37,13 @@
       <p class="text-roel_blue text-2xl">
         Dear digital gardener,<br />Here is your first plant!
       </p>
+    {:else}
+      <p class="text-roel_blue text-2xl">
+        Now find a fellow gardener in the studio and scan their barcode to start
+        pollinating.
+      </p>
     {/if}
+
     <div class="text-left mb-8 relative">
       {#if selectedPlant}
         <PlantDisplay plant={selectedPlant} width="w-96"></PlantDisplay>
