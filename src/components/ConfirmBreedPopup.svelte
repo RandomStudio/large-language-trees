@@ -72,6 +72,7 @@
       const { url } = json;
       console.log("got candidate image URL:", url);
       candidateImageUrl = url;
+      finalChildReadyToAdd.imageUrl = url;
     } else {
       console.error("Error fetching generated new image");
     }
@@ -85,6 +86,7 @@
       url
     );
     candidateImageUrl = url;
+    finalChildReadyToAdd.imageUrl = url;
   }
 
   const messages = [
