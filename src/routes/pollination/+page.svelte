@@ -10,7 +10,7 @@
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
-  import PopupInfo from "../../components/PopupInfo.svelte";
+  import PopupDejaVu from "../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
 
   export let data: GardenViewData;
@@ -126,7 +126,7 @@
     {/if}
 
     {#if child}
-      <PopupInfo
+      <PopupDejaVu
         plantDetails={child}
         closePopup={() => {
           child = null;
