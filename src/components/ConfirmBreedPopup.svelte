@@ -114,11 +114,10 @@
       class="m-2 p-2 rounded-lg max-w-lg overflow-y-auto"
       style="max-height: calc(100% - 4rem);"
     >
-      <p class="text-roel_blue text-xl mb-2">
-        Hooray you made a new plant. What would you like it to be named?
-      </p>
-
       {#if candidateImageUrl}
+        <p class="text-roel_blue text-xl mb-2">
+          Hooray you made a new plant. What would you like it to be named?
+        </p>
         <TransparencyMaker
           src={candidateImageUrl}
           useFloodFill={false}
@@ -128,28 +127,39 @@
         />
       {/if}
       {#if waitingForImage}
-        <div>
-          <div
-            id="message"
-            class="text-roel_blue font-inter text-lg mt-2 text-center mb-2"
-          >
-            {messages[currentIndex]} ...
+        <div
+          class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center"
+        >
+          <div class="flex flex-col items-center">
+            <img
+              src="/spinnerPlant.png"
+              alt="Spinner"
+              class="w-40 relative animate-spin"
+              style="margin: auto;"
+            />
+            <div
+              id="message"
+              class="text-roel_blue font-inter text-lg mt-4 text-center mb-2"
+            >
+              {messages[currentIndex]} ...
+            </div>
           </div>
         </div>
       {/if}
 
-      <form on:submit|preventDefault={handleSubmit} class="mt-2">
-        <div>
-          <input
-            type="text"
-            bind:value={textInput}
-            class="border-2 h-10 bg-transparent border-roel_blue rounded-full w-full placeholder:text-center placeholder:text-roel_blue text-center text-roel_blue"
-            placeholder="Name your flower"
-          />
-        </div>
-      </form>
-      <p class="text-roel_blue mt-2">{candidateChild.description}</p>
       {#if candidateImageUrl}
+        <form on:submit|preventDefault={handleSubmit} class="mt-2">
+          <div>
+            <input
+              type="text"
+              bind:value={textInput}
+              class="border-2 h-10 bg-transparent border-roel_blue rounded-full w-full placeholder:text-center placeholder:text-roel_blue text-center text-roel_blue"
+              placeholder="Name your flower"
+            />
+          </div>
+        </form>
+        <p class="text-roel_blue mt-2">{candidateChild.description}</p>
+
         <div class="flex gap-2 flex-nowrap h-10 bg-transparent mt-2">
           <button
             on:click={() => handleAction()}

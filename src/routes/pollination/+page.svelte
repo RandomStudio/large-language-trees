@@ -109,18 +109,15 @@
     </div>
 
     <p class="text-roel_blue text-2xl mb-6 text-center">Your Pollination QR</p>
-
     {#if candidateChild}
       <ConfirmBreedPopup
         {candidateChild}
         onCancel={() => {
           candidateChild = null;
         }}
-        onConfirm={async (imageUrl, commonName) => {
+        onConfirm={async (updatedPlant) => {
           if (candidateChild) {
-            console.log({ candidateChildId: candidateChild.id, imageUrl });
-            candidateChild.imageUrl = imageUrl;
-            candidateChild.commonName = commonName;
+            candidateChild = updatedPlant;
             await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
             candidateChild = null;
             busy = false;
