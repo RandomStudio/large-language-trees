@@ -108,70 +108,71 @@
   generateImage();
 </script>
 
-<div class=" absolute top-0 left-0 right-0">
-  <div class="border bg-roel_blue m-8 p-4 rounded">
-    <div class="flex justify-end items-center mb-4">
-      <button
-        type="button"
-        class="bg-transparent text-roel_green font-semibold"
-        on:click={onCancel}
-        aria-label="Close popup">&times;</button
-      >
-    </div>
-    <p
-      class="text-roel_green font-garamond text-3xl mb-6 top-40 right-10 left-10"
+<div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
+  <div class="flex justify-center items-center h-full">
+    <div
+      class="m-2 p-2 rounded-lg max-w-lg overflow-y-auto"
+      style="max-height: calc(100% - 4rem);"
     >
-      Hooray you made a new plant. What would you like it to be named?
-    </p>
-
-    {#if candidateImageUrl}
-      <TransparencyMaker
-        src={candidateImageUrl}
-        useFloodFill={false}
-        tolerance={8}
-        doUpload={true}
-        onUploadComplete={replaceImage}
-      />
-    {/if}
-    {#if waitingForImage}
-      <div>
-        <div
-          id="message"
-          class="text-roel_green font-garamond text-2xl mt-32 text-center mb-32"
-        >
-          {messages[currentIndex]} ...
-        </div>
-      </div>
-    {/if}
-
-    <form on:submit|preventDefault={handleSubmit} class="mt-4">
-      <div>
-        <input
-          type="text"
-          bind:value={textInput}
-          class="border-2 h-12 bg-transparent border-roel_green text-roel_green rounded-full w-full placeholder:text-center placeholder:text-roel_green text-center"
-          placeholder="Name your flower"
+      {#if candidateImageUrl}
+        <p class="text-roel_blue text-xl mb-2">
+          Hooray you made a new plant. What would you like it to be named?
+        </p>
+        <TransparencyMaker
+          src={candidateImageUrl}
+          useFloodFill={false}
+          tolerance={8}
+          doUpload={true}
+          onUploadComplete={replaceImage}
         />
-      </div>
-    </form>
-    <p class=" text-roel_green mt-4">
-      {finalChildReadyToAdd.description}
-    </p>
-    {#if candidateImageUrl}
-      <div
-        class="flex gap-4 flex-nowrap h-12 bg-transparent text-roel_green mt-4"
-      >
-        <button
-          on:click={() => handleAction()}
-          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
-          >Add
-        </button>
+      {/if}
+      {#if waitingForImage}
+        <div
+          class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center"
+        >
+          <div class="flex flex-col items-center">
+            <img
+              src="/spinnerPlant.png"
+              alt="Spinner"
+              class="w-40 relative animate-spin"
+              style="margin: auto;"
+            />
+            <div
+              id="message"
+              class="text-roel_blue font-inter text-lg mt-4 text-center mb-2"
+            >
+              {messages[currentIndex]} ...
+            </div>
+          </div>
+        </div>
+      {/if}
+
+      {#if candidateImageUrl}
+        <form on:submit|preventDefault={handleSubmit} class="mt-2">
+          <div>
+            <input
+              type="text"
+              bind:value={textInput}
+              class="border-2 h-10 bg-transparent border-roel_blue rounded-full w-full placeholder:text-center placeholder:text-roel_blue text-center text-roel_blue"
+              placeholder="Name your flower"
+            />
+          </div>
+        </form>
+        <p class="text-roel_blue mt-2">{candidateChild.description}</p>
+
+        <div class="flex gap-2 flex-nowrap h-10 bg-transparent mt-2">
+          <button
+            on:click={() => handleAction()}
+            class="border-roel_blue border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full text-roel_blue"
+            >OK</button
+          >
+        </div>
         <button
           on:click={onCancel}
-          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
+          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
           >Cancel</button
         >
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 </div>

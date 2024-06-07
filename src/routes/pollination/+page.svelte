@@ -107,7 +107,6 @@
     </div>
 
     <p class="text-roel_blue text-2xl mb-6 text-center">Your Pollination QR</p>
-
     {#if candidateChild}
       <ConfirmBreedPopup
         {candidateChild}
