@@ -15,10 +15,12 @@ export const load = async ({ locals }) => {
 
   const username = locals.user?.username;
   const userId = locals.user?.id;
+  /*
   if (username) {
     console.log("You are already logged in!");
     redirect(302, "/gallery");
   }
+    */
 };
 
 export const actions = {
