@@ -42,6 +42,7 @@
 
     const constraints = {
       video: {}
+      video: {}
     };
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);

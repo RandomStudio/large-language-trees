@@ -8,6 +8,6 @@ export const defaultUsers: DefaultUserPlaintext[] = [
   {
     id: "default-admin-user",
     username: "admin",
-    password: "superadmin",
-  },
+    password: "123456"
+  }
 ];

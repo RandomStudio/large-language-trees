@@ -5,23 +5,42 @@
 
   export let candidateChild: InsertPlant;
 
-  export let onCancel: () => any;
-  export let onConfirm: (
-    imageUrl: string | null,
-    commonName: string
-  ) => Promise<void>;
+  /** A local copy of the incoming "candidateChild", which we update as necessary before
+   * returning to the parent component ready to add to the database.
+   */
+  let finalChildReadyToAdd: InsertPlant = { ...candidateChild };
 
-  let textInput = candidateChild.commonName || "";
+  export let onCancel: () => any;
+  export let onConfirm: (plantReadyToAdd: InsertPlant) => Promise<void>;
+
+  let textInput = finalChildReadyToAdd.commonName || "";
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
 
+  function replaceInParagraph(
+    paragraph: string | null | undefined,
+    target: string | null | undefined,
+    replacement: string | null
+  ) {
+    if (paragraph && target && replacement) {
+      return paragraph.split(target).join(replacement) || null;
+    } else {
+      return null;
+    }
+  }
+
   async function handleAction() {
     try {
-      await onConfirm(candidateImageUrl, textInput); // Attendre que onConfirm soit terminé
-      goto("../gallery"); // Rediriger vers la page de la galerie après confirmation
+      finalChildReadyToAdd.commonName = textInput;
+      finalChildReadyToAdd.description = replaceInParagraph(
+        finalChildReadyToAdd.description,
+        finalChildReadyToAdd.commonName,
+        textInput
+      );
+      await onConfirm(finalChildReadyToAdd);
+      goto("../gallery");
     } catch (error) {
       console.error("Error during confirmation:", error);
-      // Gérer l'erreur éventuelle ici, par exemple afficher un message à l'utilisateur
     }
   }
 
@@ -33,9 +52,9 @@
 
     console.log("Name given:", textInput);
 
-    if (candidateChild.description && candidateChild.commonName) {
+    if (finalChildReadyToAdd.description && finalChildReadyToAdd.commonName) {
     }
-    candidateChild.commonName = textInput;
+    finalChildReadyToAdd.commonName = textInput;
   }
 
   const generateImage = async () => {
@@ -53,6 +72,7 @@
       const { url } = json;
       console.log("got candidate image URL:", url);
       candidateImageUrl = url;
+      finalChildReadyToAdd.imageUrl = url;
     } else {
       console.error("Error fetching generated new image");
     }
@@ -66,6 +86,7 @@
       url
     );
     candidateImageUrl = url;
+    finalChildReadyToAdd.imageUrl = url;
   }
 
   const messages = [

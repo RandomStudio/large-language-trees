@@ -17,6 +17,7 @@ export const plants = pgTable("plants", {
   imageUrl: text("image_url"),
   parent1: text("parent1_id"),
   parent2: text("parent2_id"),
+  created: timestamp("created", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const users = pgTable("users", {
