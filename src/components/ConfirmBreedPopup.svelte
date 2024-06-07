@@ -167,6 +167,11 @@
             >OK</button
           >
         </div>
+        <button
+          on:click={onCancel}
+          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
+          >Cancel</button
+        >
       {/if}
     </div>
   </div>
