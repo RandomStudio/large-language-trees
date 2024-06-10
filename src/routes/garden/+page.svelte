@@ -22,6 +22,8 @@
   const monitorHeight = 1080;
   const frameSize = 150; //general border around all edges
   const topBorder = 75; // extra border on top
+  const yDistribution = 20; //size of patches in Y-dimension
+  const xDistribution = 10; //size of patches in X-dimension
 
   //distribution on screen and size of plants in database
   const rootScale = 2;
@@ -73,6 +75,7 @@
       displayPlants.push(newPositionedPlant); // adds plant to list if it's a parent
     } else {
       for (let i = 0; i < parentList.length; i++) {
+        const parent = findParent(plant, parentList[i]);
         increaseNumberOfChildren(plant, parentList[i]);
         const newPositionedPlant: PositionedPlant = {
           plant: plant,
@@ -115,12 +118,34 @@
   }
 
   function childX(plant: SelectPlant, parentName: string) {
-    return findParent(plant, parentName)?.x ?? defaultValue;
+    let parent = findParent(plant, parentName);
+    if (!parent) {
+      console.log(`Parent plant not found for ${parentName}`);
+      return defaultValue; // or another default value you prefer
+    }
+
+    // Calculate the X position relative to the parent plant
+    const parentX = parent.x;
+
+    // Calculate the X position based on the number of children and the width of the child plant
+    const xOffset = 20 + parent.numberOfChildren * xDistribution;
+
+    // Alternate sides for odd and even children to make them expand outwards
+    const sign = parent.numberOfChildren % 2 === 0 ? -1 : 1;
+
+    return parentX + sign * xOffset;
   }
   function childY(plant: SelectPlant, parentName: string) {
+    let parent = findParent(plant, parentName);
+    if (!parent) {
+      console.log(`Parent plant not found for ${parentName}`);
+      return defaultValue; // or another default value you prefer
+    }
     return (
-      (findParent(plant, parentName)?.y ?? defaultValue) -
-      (findParent(plant, parentName)?.numberOfChildren ?? defaultValue) * 30
+      (parent?.y ?? defaultValue) +
+      (rootScaleFromPlantHeight(parent.plant) -
+        rootScaleFromPlantHeight(plant)) *
+        yDistribution
     );
   }
 
@@ -216,8 +241,6 @@
       (item) => !existingPlantIds.includes(item.id), // isolate plants that are new by comparing ids
     );
 
-    console.log(confirmedNewPlants);
-
     confirmedNewPlants.forEach((entry) => {
       console.log("New plant found! " + JSON.stringify(entry));
       addPlants(entry);
@@ -275,14 +298,10 @@
   @keyframes birth-animation {
     0% {
       scale: 0;
-      filter: blur(9000);
-      filter: contrast(5);
     }
 
     100% {
       scale: 1;
-      filter: blur(0);
-      filter: contrast(1);
     }
   }
 
