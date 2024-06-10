@@ -40,14 +40,14 @@
   const low2 = 0;
   const high2 = 1;
 
+  let displayPlants: PositionedPlant[] = [];
+
   interface PositionedPlant {
     plant: SelectPlant;
     x: number;
     y: number;
     numberOfChildren: number;
   }
-
-  let displayPlants: PositionedPlant[] = [];
 
   if (data && data.garden && data.garden.plantsInGarden) {
     data.garden.plantsInGarden.sort((a, b) => {
@@ -83,6 +83,7 @@
         displayPlants.push(newPositionedPlant); // adds plant to list if it's a child
       }
     }
+    displayPlants = displayPlants;
   }
 
   function parentX(plant: SelectPlant) {
@@ -205,18 +206,26 @@
   async function importNewPlants() {
     const response = await fetch("http://localhost:5173/api/plants");
     const newPlants = (await response.json()) as SelectPlant[]; // get all plants info
-    let confirmedNewPlants = displayPlants.filter(
-      (item) => !displayPlants.includes(item), // isolate plants that are new
+
+    let existingPlants = displayPlants.map((p) => p.plant); // get the plant from each PositionedPlant
+
+    // Extract ids of existing plants for comparison
+    let existingPlantIds = existingPlants.map((p) => p.id);
+
+    let confirmedNewPlants = newPlants.filter(
+      (item) => !existingPlantIds.includes(item.id), // isolate plants that are new by comparing ids
     );
+
+    console.log(confirmedNewPlants);
+
     confirmedNewPlants.forEach((entry) => {
-      console.log("New plant found!" + entry);
-      addPlants(entry.plant);
+      console.log("New plant found! " + JSON.stringify(entry));
+      addPlants(entry);
     });
   }
 
   onMount(() => {
     const intervalId = setInterval(importNewPlants, 1000);
-
     return () => {
       clearInterval(intervalId);
     };
