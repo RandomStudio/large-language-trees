@@ -75,62 +75,60 @@
   });
 </script>
 
-<div class="min-h-screen bg-roel_green overflow-hidden font-inter">
-  <button
-    class="fixed top-8 right-7 text-roel_blue flex items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
-    on:click={() => goto("/gallery")}
+<button
+  class="fixed top-8 right-7 z-50 bg-roel_green text-roel_blue flex items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
+  on:click={() => goto("/gallery")}
+>
+  <svg
+    class="w-6 h-6 text-roel_blue"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
   >
-    <svg
-      class="w-6 h-6 text-roel_blue"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path d="M15 19l-7-7 7-7" />
-    </svg>
-  </button>
-  <main class="mx-14 mt-3">
-    <p class="text-roel_blue text-2xl mb-6">
-      Point your camera to another gardener's Pollination QR
-    </p>
+    <path d="M15 19l-7-7 7-7" />
+  </svg>
+</button>
 
-    <div class="relative w-full md:aspect-square overflow-hidden">
-      <video bind:this={videoElement} class="object-cover w-full h-full">
-        <track kind="captions" srclang="en" label="English captions" />
-      </video>
-      {#if parent1}
+<div class="mx-12 font-inter text-roel_blue text-left">
+  <p class=" text-xl">Point your camera to another gardener's Pollination QR</p>
+  <div class="mx-8">
+    <video bind:this={videoElement} class="object-cover aspect-square mt-6">
+      <track kind="captions" srclang="en" label="English captions" />
+    </video>
+
+    {#if parent1}
+      <div class="mt-6">
         <QrGenerate text={parent1.id} />
-      {/if}
-    </div>
-
-    <p class="text-roel_blue text-2xl mb-6 text-center">Your Pollination QR</p>
-    {#if candidateChild}
-      <ConfirmBreedPopup
-        {candidateChild}
-        onCancel={() => {
+      </div>
+    {/if}
+  </div>
+  <p class="text-xl text-center mt-3">Your Pollination QR</p>
+  {#if candidateChild}
+    <ConfirmBreedPopup
+      {candidateChild}
+      onCancel={() => {
+        candidateChild = null;
+      }}
+      onConfirm={async (updatedPlant) => {
+        if (candidateChild) {
+          candidateChild = updatedPlant;
+          await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
           candidateChild = null;
-        }}
-        onConfirm={async (updatedPlant) => {
-          if (candidateChild) {
-            candidateChild = updatedPlant;
-            await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
-            candidateChild = null;
-            busy = false;
-          }
-        }}
-      />
-    {/if}
+          busy = false;
+        }
+      }}
+    />
+  {/if}
 
-    {#if child}
-      <PopupDejaVu
-        plantDetails={child}
-        closePopup={() => {
-          child = null;
-        }}
-      />
-    {/if}
-  </main>
+  {#if child}
+    <PopupDejaVu
+      plantDetails={child}
+      closePopup={() => {
+        child = null;
+      }}
+    />
+  {/if}
 </div>
