@@ -23,7 +23,7 @@
   <!-- Ajustez le padding au lieu de la marge pour commencer le contenu en dessous de l'en-tête -->
   <div class="app">
     {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/"}
-      <div class="pt-12"></div>
+      <div class="pt-20"></div>
     {/if}
     <slot />
   </div>
