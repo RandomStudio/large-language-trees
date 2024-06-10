@@ -30,6 +30,7 @@
   const minPlantHeight = Math.pow(smallestPlant, 1 / rootScale);
   const maxPlantHeight = Math.pow(tallestPlant, 1 / rootScale);
   const defaultValue = 500; // default value in case child cant find parents
+  const defaultHeightValue = 10; // default value in case plant is generated without height attribute
   const randomnessY = 20; // random displacement in y direction
 
   // relating to double placement of children
@@ -47,6 +48,19 @@
   }
 
   let displayPlants: PositionedPlant[] = [];
+
+  if (data && data.garden && data.garden.plantsInGarden) {
+    data.garden.plantsInGarden.sort((a, b) => {
+      //sort based on time created so that children can find parents.
+      const dateA = new Date(a.plant.created).getTime();
+      const dateB = new Date(b.plant.created).getTime();
+      return dateA - dateB;
+    });
+
+    data.garden.plantsInGarden.forEach((entry) => {
+      addPlants(entry.plant);
+    });
+  }
 
   function addPlants(plant: SelectPlant) {
     if (plant.parent1 === null) {
@@ -69,16 +83,6 @@
         displayPlants.push(newPositionedPlant); // adds plant to list if it's a child
       }
     }
-  }
-
-  // reversed list because test child came first in list and couldnt find its parents because they werent added yet
-  if (data && data.garden && data.garden.plantsInGarden) {
-    data.garden.plantsInGarden
-      .slice()
-      .reverse()
-      .forEach((entry) => {
-        addPlants(entry.plant);
-      });
   }
 
   function parentX(plant: SelectPlant) {
@@ -178,7 +182,10 @@
 
   // function to get property height from a plant, since it's reused
   function plantHeight(plant: SelectPlant): number {
-    return (plant.properties as PlantProperties)["high(m)"] as number;
+    return (
+      ((plant.properties as PlantProperties)["high(m)"] as number) ??
+      defaultHeightValue
+    );
   }
 
   // remap plant height to 0 -> 1
@@ -192,22 +199,17 @@
       Math.min(Math.pow(plantHeight(plant), 1 / rootScale), tallestPlant),
     );
   }
-
-  function randomAnimationDelay(): number {
-    return (Math.random() * -animationLength) / 3;
-  }
   let alt = "alt placeholder";
 
   //continously add new plants
   async function importNewPlants() {
-    console.log("importing");
     const response = await fetch("http://localhost:5173/api/plants");
     const newPlants = (await response.json()) as SelectPlant[]; // get all plants info
     let confirmedNewPlants = displayPlants.filter(
       (item) => !displayPlants.includes(item), // isolate plants that are new
     );
     confirmedNewPlants.forEach((entry) => {
-      console.log("New plant found!");
+      console.log("New plant found!" + entry);
       addPlants(entry.plant);
     });
   }
@@ -228,7 +230,7 @@
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <img
         on:click={() => {
-          importNewPlants();
+          console.log(plant.plant.id);
         }}
         src={plant.plant.imageUrl}
         {alt}
