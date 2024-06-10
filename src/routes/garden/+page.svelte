@@ -9,43 +9,99 @@
   export let data: GardenViewData;
 
   let alt = "alt placeholder";
+  let currentWindSpeed: number | null = null;
+  let currentCloudCover: number | null = null;
 
-  //distribution on screen and size of plants in database
-  const rootScale = 2; //maths root not plant roots lol
+  const apiUrl =
+    "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m,cloudcover&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,cloudcover";
+
+  async function fetchWeatherData() {
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      currentWindSpeed = data.current.wind_speed_10m;
+      console.log(`Current wind speed: ${currentWindSpeed} m/s`); // Log the wind speed
+      updateSkewAnimation();
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+  }
+
+  function updateSkewAnimation() {
+    const baseSkewDegree = 4;
+    const additionalSkew = currentWindSpeed
+      ? Math.min(currentWindSpeed / 10, 1)
+      : 0;
+    const skewDegree = baseSkewDegree + additionalSkew;
+    console.log(`Skew degree based on wind speed: ${skewDegree}deg`); // Log the calculated skew degree
+
+    const styleSheet = document.styleSheets[0];
+    const keyframes = `
+    @keyframes skew-animation {
+      0% {
+        transform: skew(${skewDegree}deg);
+        left: -7px;
+      }
+      50% {
+        transform: skew(-${skewDegree}deg);
+        left: 7px;
+      }
+      100% {
+        transform: skew(${skewDegree}deg);
+        left: -7px;
+      }
+    }
+  `;
+
+    // Remove existing skew-animation keyframes if they exist
+    for (let i = styleSheet.cssRules.length - 1; i >= 0; i--) {
+      const rule = styleSheet.cssRules[i];
+      if (rule instanceof CSSKeyframesRule && rule.name === "skew-animation") {
+        styleSheet.deleteRule(i);
+      }
+    }
+
+    // Insert the new keyframes
+    styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
+  }
+
+  // Distribution on screen and size of plants in database
+  const rootScale = 2; // Maths root not plant roots lol
   const minPlantHeight = Math.pow(0.1, 1 / rootScale);
   const maxPlantHeight = Math.pow(30, 1 / rootScale);
-  const randomnessY = 20; // random displacement in y direction
+  const randomnessY = 20; // Random displacement in y direction
 
-  //plant min and max size on screen
+  // Plant min and max size on screen
   const minPlantHeightOutput = 75;
   const maxPlantHeightOutput = 200;
-  const animationLength = 8;
+  const animationLength = 5;
   const animationDegree = 5;
 
-  //display size and borders
+  // Display size and borders
   const monitorWidth = 1920;
   const monitorHeight = 1080;
   const frameSize = 100;
   const topBorder = 100;
 
-  //constants relating to remap function
+  // Constants relating to remap function
   const low1 = minPlantHeight;
   const low2 = 0;
   const high1 = maxPlantHeight;
   const high2 = 1;
 
-  //constants relating to making plants not overlap
+  // Constants relating to making plants not overlap
   const plantIDs: string[] = [];
   const plantPositionsX: number[] = [];
   const plantPositionsY: number[] = [];
-  let crowdednessTolerance = 0; //dont change this use initial instead
+  let crowdednessTolerance = 0; // Don't change this, use initial instead
   const initialCrowdednessTolerance = 150;
 
-  //constants relating to adding new plants
+  // Constants relating to adding new plants
   const newPlantIDs: string[] = [];
   const newPlantParent1: string[] = [];
 
   onMount(() => {
+    fetchWeatherData();
     initializeAnimation();
   });
 
@@ -91,7 +147,7 @@
             Math.log(rootScaleFromPlantHeight(plant)) + 1,
             Math.log(minPlantHeight) + 1,
             Math.log(maxPlantHeight) + 1,
-          )) // one minus remapped value in order to make the plants go from small to big
+          )) // One minus remapped value in order to make the plants go from small to big
     );
   }
 
@@ -175,6 +231,7 @@
       const color = `rgb(${255}, ${165 + Math.random() * 90}, 0)`;
       dot.setAttribute("fill", color);
       dot.setAttribute("class", "spray-dot moving-dot");
+      dot.style.animation = `fade-in-out ${animationLength}s ${Math.random() * 2}s linear`; // Set random delay for each dot
       dot.dataset.angle = (Math.random() * Math.PI * 2).toString(); // Store initial angle
       return dot;
     }
@@ -210,14 +267,16 @@
       const plantElement = document.getElementById(plant.plant.id);
       if (plantElement) {
         const rect = plantElement.getBoundingClientRect();
-        const centerY = rect.top + rect.height / 4; // Position dots more towards the top
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2; // Position dots around the center
 
         const dots: SVGCircleElement[] = [];
         for (let i = 0; i < 50; i++) {
-          const x = Math.random() * (rect.right - rect.left) + rect.left; // Randomize x position within the image bounds
-          const y = (Math.random() * rect.height) / 2 + rect.top; // Randomize y position within the top half of the image
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * 20;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
           const dot = createDot(x, y);
-          dot.style.animation = `fade-in-out 5s ${Math.random() * 2}s linear`; // Set random delay for each dot
           sprayArea.appendChild(dot);
           dots.push(dot);
         }
@@ -317,6 +376,8 @@
   }
 
   .moving-dot {
-    animation: float-move linear infinite;
+    animation:
+      float-move linear infinite,
+      fade-in-out 5s; /* Combine animations */
   }
 </style>
