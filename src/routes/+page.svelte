@@ -12,7 +12,7 @@
   }
 </script>
 
-<div class="mx-12 pt-32">
+<div class="mx-12 pt-32 font-inter">
   <img src="/titleimg.png" alt="logo" />
   <div class="text-center">
     <form method="post" use:enhance class="mt-0 text-center mx-auto max-w-md">
@@ -34,7 +34,7 @@
       />
 
       <button
-        class="bg-grey-dark text-roel_blue font-inter text-xl px-4 py-2 mt-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
+        class="text-roel_blue bg-roel_green font-inter text-xl px-4 py-2 mt-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
         type="submit"
       >
         Start
