@@ -8,7 +8,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div class="min-h-screen bg-roel_green relative">
   {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/"}
-    <div class="fixed w-full z-50 bg-roel_green pt-8 pl-8">
+    <div class="fixed w-full z-30 bg-roel_green pt-8 pl-8">
       <h1
         class="text-xl text-roel_blue cursor-pointer font-garamond"
         on:click={() => {

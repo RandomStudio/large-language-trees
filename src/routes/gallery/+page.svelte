@@ -35,14 +35,15 @@
         </button>
       </div>
     {/if}
-    {#if selectedPlant}
-      <PopupInfo
-        plantDetails={selectedPlant}
-        closePopup={() => {
-          selectedPlant = null;
-        }}
-        isOriginalPlant={selectedPlant.id == seedBank[0].plant.id}
-      ></PopupInfo>
-    {/if}
   {/each}
 </div>
+
+{#if selectedPlant}
+  <PopupInfo
+    plantDetails={selectedPlant}
+    closePopup={() => {
+      selectedPlant = null;
+    }}
+    isOriginalPlant={selectedPlant.id == seedBank[0].plant.id}
+  ></PopupInfo>
+{/if}

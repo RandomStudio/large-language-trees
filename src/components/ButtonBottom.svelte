@@ -3,13 +3,17 @@
 
   export let buttonText: string;
   export let functionClick;
-  export let pxSize: string = "px-0";
+  export let width: string = "w-11/12";
 </script>
 
-<div class="fixed bottom-8 left-0 right-0 text-center {pxSize}">
+<div
+  class="fixed left-0 right-0 bottom-8 flex items-center justify-center mx-12"
+>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <button
-    class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
-    on:click={functionClick()}
+    class=" {width} max-w-xs text-roel_blue bg-roel_green text-xl font-inter border-2 border-roel_blue rounded-full px-4 py-2"
+    on:click={functionClick}
   >
     {buttonText}
   </button>
