@@ -7,8 +7,6 @@
 </script>
 
 <div class="flex flex-col items-center">
-  <canvas id={"canvas_" + plant.commonName} style="display:none;"></canvas>
-  <!-- svelte-ignore a11y-img-redundant-alt -->
   <img
     src={plant.imageUrl}
     alt={plant.commonName}
