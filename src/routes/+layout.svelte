@@ -7,8 +7,8 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div class="min-h-screen bg-roel_green relative">
-  <div class="fixed top-5 left-5 p-2">
-    {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/"}
+  {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/"}
+    <div class="fixed w-full z-50 bg-roel_green pt-8 pl-8">
       <h1
         class="text-xl text-roel_blue cursor-pointer font-garamond"
         on:click={() => {
@@ -17,10 +17,14 @@
       >
         The Garden
       </h1>
-    {/if}
-  </div>
+    </div>
+  {/if}
 
-  <div class="app pt-20">
+  <!-- Ajustez le padding au lieu de la marge pour commencer le contenu en dessous de l'en-tête -->
+  <div class="app">
+    {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/"}
+      <div class="pt-12"></div>
+    {/if}
     <slot />
   </div>
 </div>
