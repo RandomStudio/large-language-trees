@@ -6,7 +6,7 @@
   export let width: string = "w-full"; // Default width, can be overridden
 </script>
 
-<div class="flex flex-col items-center">
+<div class="text-center">
   <img
     src={plant.imageUrl}
     alt={plant.commonName}
