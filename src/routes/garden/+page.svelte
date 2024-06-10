@@ -75,7 +75,6 @@
       displayPlants.push(newPositionedPlant); // adds plant to list if it's a parent
     } else {
       for (let i = 0; i < parentList.length; i++) {
-        const parent = findParent(plant, parentList[i]);
         increaseNumberOfChildren(plant, parentList[i]);
         const newPositionedPlant: PositionedPlant = {
           plant: plant,
@@ -274,6 +273,7 @@
         style:--skew-animation-delay={(Math.random() * -animationLength) / 3 +
           "s"}
         style:--skew-animation-length={animationLength + "s"}
+        style:--padding-top={scaleFunction(plant.plant) * 0.6 + "px"}
       />
     {/each}
   </div>
@@ -298,10 +298,12 @@
   @keyframes birth-animation {
     0% {
       scale: 0;
+      padding-top: var(--padding-top);
     }
 
     100% {
       scale: 1;
+      padding-top: 0px;
     }
   }
 
