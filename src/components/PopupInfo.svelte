@@ -17,7 +17,7 @@
 </script>
 
 <button
-  class="fixed top-8 right-7 z-50 text-roel_blue flex items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
+  class="fixed top-8 right-7 z-50 text-roel_blue flex bg-roel_green items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
   on:click={closePopup}
 >
   <svg
@@ -33,7 +33,7 @@
   </svg>
 </button>
 
-<div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
+<div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green overflow-auto">
   <div class="mx-12 font-inter text-roel_blue text-left mt-20">
     <PlantDisplay plant={plantDetails} applyFilters={false} />
     <p class="text-sm mt-4">
