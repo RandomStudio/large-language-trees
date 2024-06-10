@@ -21,7 +21,7 @@
         console.log("click!");
         selectedPlant = plant.plant;
       }}
-      class="cursor-pointer"
+      class="cursor-pointer mt-4"
     >
       <PlantDisplay plant={plant.plant} applyFilters={index !== 0} />
     </div>
