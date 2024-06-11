@@ -10,22 +10,28 @@
   import PopupInfo from "../../components/PopupInfo.svelte";
 
   let seedBank = data.seedBank.plantsInSeedbank;
+
+  let yourPlant: SelectPlant | null =
+    data.seedBank.plantsInSeedbank.find(
+      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
+    )?.plant || null;
 </script>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
   {#each seedBank as plant, index}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      on:click={() => {
-        console.log("click!");
-        selectedPlant = plant.plant;
-      }}
-      class="cursor-pointer mt-4"
-    >
-      <PlantDisplay plant={plant.plant} applyFilters={index !== 0} />
-    </div>
-    {#if index == 0}
+    {#if plant.plant == yourPlant}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        on:click={() => {
+          console.log("click!");
+          selectedPlant = plant.plant;
+        }}
+        class="cursor-pointer mt-4"
+      >
+        <PlantDisplay plant={plant.plant} applyFilters={false} />
+      </div>
+
       <div class="mt-4 text-center">
         <button
           class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
@@ -33,6 +39,21 @@
         >
           Start Pollinating
         </button>
+      </div>
+    {/if}
+  {/each}
+  {#each seedBank as plant, index}
+    {#if plant.plant != yourPlant}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        on:click={() => {
+          console.log("click!");
+          selectedPlant = plant.plant;
+        }}
+        class="cursor-pointer mt-4"
+      >
+        <PlantDisplay plant={plant.plant} applyFilters={true} />
       </div>
     {/if}
   {/each}
@@ -44,6 +65,6 @@
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant.id == seedBank[0].plant.id}
+    isOriginalPlant={selectedPlant.id == yourPlant?.id}
   ></PopupInfo>
 {/if}
