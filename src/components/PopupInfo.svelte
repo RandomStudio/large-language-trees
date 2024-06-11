@@ -13,7 +13,6 @@
     plantDetails = plant;
   }
 
-  let width: string;
   export let isOriginalPlant: boolean;
 </script>
 
