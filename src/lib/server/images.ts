@@ -1,8 +1,8 @@
 import {
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
+  AWS_ACCESS_KEY_ID_S3,
+  AWS_SECRET_ACCESS_KEY_S3,
   S3_BUCKET,
-  S3_REGION,
+  S3_REGION
 } from "$env/static/private";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
@@ -43,10 +43,10 @@ export async function streamToS3(
 ) {
   const s3 = new S3Client({
     credentials: {
-      accessKeyId: AWS_ACCESS_KEY_ID,
-      secretAccessKey: AWS_SECRET_ACCESS_KEY,
+      accessKeyId: AWS_ACCESS_KEY_ID_S3,
+      secretAccessKey: AWS_SECRET_ACCESS_KEY_S3
     },
-    region: S3_REGION,
+    region: S3_REGION
   });
   const upload = new Upload({
     client: s3,
@@ -54,8 +54,8 @@ export async function streamToS3(
       Bucket: S3_BUCKET,
       Key: `${baseName}.png`,
       Body: stream,
-      ContentType: "image/png",
-    },
+      ContentType: "image/png"
+    }
   });
   const output = await upload.done();
   console.log("Uploaded OK to S3:", output);

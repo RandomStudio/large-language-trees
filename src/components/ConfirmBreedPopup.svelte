@@ -1,8 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { GeneratedImageResult, InsertPlant } from "$lib/types";
+  import { TOLERANCE_SIMPLE } from "../defaults/constants";
   import TransparencyMaker from "./TransparencyMaker.svelte";
-
+  import ButtonBottom from "./ButtonBottom.svelte";
   export let candidateChild: InsertPlant;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
@@ -91,7 +92,7 @@
 
   const messages = [
     "Plants are being dug up",
-    "the roots are intertwining",
+    "The roots are intertwining",
     "DNA is being mixed up",
     "A new seed is created",
     "Watering the new plant",
@@ -108,70 +109,70 @@
   generateImage();
 </script>
 
-<div class=" absolute top-0 left-0 right-0">
-  <div class="border bg-roel_blue m-8 p-4 rounded">
-    <div class="flex justify-end items-center mb-4">
-      <button
-        type="button"
-        class="bg-transparent text-roel_green font-semibold"
-        on:click={onCancel}
-        aria-label="Close popup">&times;</button
-      >
-    </div>
-    <p
-      class="text-roel_green font-garamond text-3xl mb-6 top-40 right-10 left-10"
-    >
-      Hooray you made a new plant. What would you like it to be named?
-    </p>
-
-    {#if candidateImageUrl}
-      <TransparencyMaker
-        src={candidateImageUrl}
-        useFloodFill={false}
-        tolerance={8}
-        doUpload={true}
-        onUploadComplete={replaceImage}
+{#if waitingForImage}
+  <div
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
+  >
+    <div class="flex flex-col items-center">
+      <img
+        src="/spinnerPlant.png"
+        alt="Spinner"
+        class="w-40 relative animate-spin"
+        style="margin: auto;"
       />
-    {/if}
-    {#if waitingForImage}
-      <div>
-        <div
-          id="message"
-          class="text-roel_green font-garamond text-2xl mt-32 text-center mb-32"
-        >
-          {messages[currentIndex]} ...
-        </div>
-      </div>
-    {/if}
-
-    <form on:submit|preventDefault={handleSubmit} class="mt-4">
-      <div>
-        <input
-          type="text"
-          bind:value={textInput}
-          class="border-2 h-12 bg-transparent border-roel_green text-roel_green rounded-full w-full placeholder:text-center placeholder:text-roel_green text-center"
-          placeholder="Name your flower"
-        />
-      </div>
-    </form>
-    <p class=" text-roel_green mt-4">
-      {finalChildReadyToAdd.description}
-    </p>
-    {#if candidateImageUrl}
       <div
-        class="flex gap-4 flex-nowrap h-12 bg-transparent text-roel_green mt-4"
+        id="message"
+        class="text-roel_blue font-inter text-xl mt-4 text-center"
       >
-        <button
-          on:click={() => handleAction()}
-          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
-          >Add
-        </button>
-        <button
-          on:click={onCancel}
-          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full"
-          >Cancel</button
-        >
+        {messages[currentIndex]} ...
       </div>
-    {/if}
+    </div>
   </div>
-</div>
+{/if}
+
+{#if candidateImageUrl}
+  <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40">
+    <div class="overflow-y-auto" style="max-height: calc(100% - 4rem);">
+      <div class="mx-12 font-inter text-roel_blue text-left mt-10">
+        <p class="text-xl">
+          Hooray you made a new plant. What would you like it to be named?
+        </p>
+
+        <TransparencyMaker
+          src={candidateImageUrl}
+          useFloodFill={false}
+          tolerance={TOLERANCE_SIMPLE}
+          doUpload={true}
+          onUploadComplete={replaceImage}
+        />
+        <div class="text-center">
+          <form on:submit|preventDefault={handleSubmit} class="mt-2">
+            <input
+              type="text"
+              bind:value={textInput}
+              class="bg-light_grey border-2 px-4 py-2 border-mid_grey rounded-full font-inter text-dark_grey text-xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center"
+              placeholder="Name your flower"
+            />
+          </form>
+        </div>
+
+        <p class="mt-4 text-sm">{candidateChild.description}</p>
+
+        <br />
+        <br />
+      </div>
+    </div>
+  </div>
+
+  <ButtonBottom
+    buttonText="Ok"
+    functionClick={() => handleAction()}
+    width="w-7/12"
+  ></ButtonBottom>
+
+  <button
+    on:click={onCancel}
+    class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
+    >Cancel</button
+  >
+{/if}

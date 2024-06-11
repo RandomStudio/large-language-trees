@@ -3,10 +3,11 @@
   import {
     type SeedbankEntryWithPlant,
     type GardenViewData,
-    type MyGarden,
+    type MyGarden
   } from "../../lib/types";
   import PlantDisplay from "../../components/PlantDisplay.svelte";
   import QrGenerate from "../../components/qr_generate.svelte";
+  import ButtonBottom from "../../components/ButtonBottom.svelte";
 
   export let data: GardenViewData;
 
@@ -24,46 +25,42 @@
       showDescription = false; // Hide the plant description
       showNewParagraph = true; // Show the new paragraph
       showBarcode = true; // Show the barcode
-      buttonText = "Start Pollinating!";
+      buttonText = "Start Pollinating";
     } else {
       goto("./pollination"); // Navigate to the pollination route
     }
   }
 </script>
 
-<div>
-  <main class="mx-14 mt-20">
-    {#if showMessage}
-      <p class="text-roel_blue font-garamond text-3xl">
-        Dear aspiring gardener, we have selected a plant for you!
-      </p>
-    {/if}
-    <div class="text-left mb-8 font-oldstandard relative">
-      {#if selectedPlant}
-        <PlantDisplay plant={selectedPlant} width="w-96"></PlantDisplay>
-        <!-- Set a larger width explicitly -->
-        {#if showDescription}
-          <p class="text-roel_blue mt-4 mb-8">
-            {selectedPlant.description}
-          </p>
-        {/if}
-        {#if showBarcode}
-          <div class="absolute top-0 right-0 mt-2 mr-2">
-            <QrGenerate text={selectedPlant.id} />
-          </div>
-        {/if}
-      {:else}
-        <p class="text-roel_blue">No plants available</p>
+<div class="mx-12 font-inter text-roel_blue text-left">
+  {#if showMessage}
+    <p class="text-xl">Dear digital gardener, here is your first plant!</p>
+  {:else}
+    <p class="text-xl">
+      Now find a fellow gardener in the studio and scan their barcode to start
+      pollinating.
+    </p>
+  {/if}
+
+  <div>
+    {#if selectedPlant}
+      <PlantDisplay plant={selectedPlant}></PlantDisplay>
+
+      {#if showDescription}
+        <p class="text-sm mt-4">
+          {selectedPlant.description}
+        </p>
       {/if}
-    </div>
-    <div class="mt-6 text-center">
-      <button
-        class="bg-transparent text-roel_blue font-oldstandard py-2 px-4 border-2 border-blue-500 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent"
-        style="width:300px;"
-        on:click={handleButtonClick}
-      >
-        {buttonText}
-      </button>
-    </div>
-  </main>
+      {#if showBarcode}
+        <div class="absolute top-0 right-0 mt-2 mr-2 hidden">
+          <QrGenerate text={selectedPlant.id} />
+        </div>
+      {/if}
+    {:else}
+      <p>No plants available</p>
+    {/if}
+  </div>
+  <div class="mt-4">
+    <ButtonBottom {buttonText} functionClick={handleButtonClick}></ButtonBottom>
+  </div>
 </div>

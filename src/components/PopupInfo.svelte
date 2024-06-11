@@ -1,35 +1,35 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
+  import ButtonBottom from "./ButtonBottom.svelte";
+
+  import PlantDisplay from "./PlantDisplay.svelte";
+  import ReturnButton from "./ReturnButton.svelte";
 
   export let plantDetails: SelectPlant;
-
   export let closePopup: () => any;
 
   function updatePlantDetails(plant: SelectPlant) {
     plantDetails = plant;
   }
+
+  export let isOriginalPlant: boolean;
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="fixed top-0 left-0 right-0" on:click={closePopup}>
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div class="border bg-roel_blue m-8 p-4 rounded" on:click|stopPropagation>
-    <div class="flex justify-end items-center mb-4">
-      <button
-        type="button"
-        class="bg-transparent text-roel_green font-semibold"
-        on:click={closePopup}
-        aria-label="Close popup">&times;</button
-      >
-    </div>
-    <img
-      class="md:max-w-20"
-      src={plantDetails.imageUrl}
-      alt="Drawing of a {plantDetails.commonName}"
-    />
-    <p class="mt-4 text-center text-roel_green">{plantDetails.commonName}</p>
-    <p class="text-center text-roel_green">{plantDetails.description}</p>
+<ReturnButton functionReturn={closePopup}></ReturnButton>
+
+<div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green overflow-auto">
+  <div class="mx-12 font-inter text-roel_blue text-left mt-20">
+    <PlantDisplay plant={plantDetails} applyFilters={false} />
+    <p class="text-sm mt-4">
+      {plantDetails.description}
+    </p>
   </div>
 </div>
+
+{#if isOriginalPlant}
+  <ButtonBottom
+    buttonText="Start Pollinating"
+    functionClick={() => goto("/pollination")}
+  ></ButtonBottom>
+{/if}
