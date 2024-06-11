@@ -3,7 +3,7 @@
   import {
     type SeedbankEntryWithPlant,
     type GardenViewData,
-    type MyGarden
+    type MyGarden,
   } from "../../lib/types";
   import PlantDisplay from "../../components/PlantDisplay.svelte";
   import QrGenerate from "../../components/qr_generate.svelte";
