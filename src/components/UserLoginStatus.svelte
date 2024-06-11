@@ -6,7 +6,7 @@
 </script>
 
 <form method="post" action="?/logout" use:enhance>
-  <button class="text-roel_blue bg-transparent">Logout</button>
+  <button class="bg-red-500 text-white py-2 px-4 rounded">Logout</button>
 </form>
 
 <style>
