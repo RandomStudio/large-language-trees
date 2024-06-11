@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { stringify } from "postcss";
+  // import { stringify } from "postcss";
 
   export let buttonText: string;
   export let functionClick;
