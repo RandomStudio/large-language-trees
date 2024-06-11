@@ -13,7 +13,7 @@
   import PopupDejaVu from "../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
   import ReturnButton from "../../components/ReturnButton.svelte";
-
+  import WaitingSpinner from "../../components/WaitingSpinner.svelte";
   export let data: GardenViewData;
   let busy = false;
 
@@ -26,6 +26,7 @@
 
   let candidateChild: InsertPlant | null = null;
 
+  let waiting: boolean = false;
   let child: SelectPlant | null = null;
 
   $: existingChild = (
@@ -62,7 +63,9 @@
             if (parent1 && parent2) {
               child = existingChild([parent1, parent2]);
               if (child == null) {
+                waiting = true;
                 candidateChild = await confirmBreed([parent1, parent2]);
+                waiting = false;
               }
             }
           }
@@ -107,6 +110,14 @@
         }
       }}
     />
+  {/if}
+
+  {#if waiting}
+    <div
+      class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex flex-col items-center"
+    >
+      <WaitingSpinner></WaitingSpinner>
+    </div>
   {/if}
 
   {#if child}
