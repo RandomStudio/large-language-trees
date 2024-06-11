@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { GeneratedImageResult, InsertPlant } from "$lib/types";
+  import { TOLERANCE_SIMPLE } from "../defaults/constants";
   import TransparencyMaker from "./TransparencyMaker.svelte";
   import ButtonBottom from "./ButtonBottom.svelte";
   export let candidateChild: InsertPlant;
@@ -140,7 +141,7 @@
         <TransparencyMaker
           src={candidateImageUrl}
           useFloodFill={false}
-          tolerance={8}
+          tolerance={TOLERANCE_SIMPLE}
           doUpload={true}
           onUploadComplete={replaceImage}
         />

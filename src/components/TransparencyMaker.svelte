@@ -24,13 +24,15 @@
       if (ctx) {
         ctx.drawImage(img, 0, 0);
         const imageData = ctx.getImageData(
-          0,
-          0,
+          1,
+          1,
           canvasElement.width,
           canvasElement.height
         );
         const topLeftColor = ctx.getImageData(0, 0, 1, 1).data;
-        console.log({ topLeftColor });
+
+        const [r, g, b, a] = topLeftColor;
+        console.log({ topLeftColor, r, g, b, a });
 
         if (useFloodFill) {
           const floodFill = new FloodFill(imageData);
@@ -47,7 +49,7 @@
                 [
                   imageData.data[i],
                   imageData.data[i + 1],
-                  imageData.data[i + 2],
+                  imageData.data[i + 2]
                 ],
                 [topLeftColor[0], topLeftColor[1], topLeftColor[2]],
                 tolerance
@@ -71,7 +73,7 @@
 
             const res = await fetch(`/api/upload/image`, {
               method: "POST",
-              body: formData,
+              body: formData
             });
             console.log("response to upload:", res);
             const json = (await res.json()) as ImageUploadResult;
