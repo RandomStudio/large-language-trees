@@ -17,6 +17,7 @@
   let textInput = finalChildReadyToAdd.commonName || "";
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
+  let errorText: string = "";
 
   function replaceInParagraph(
     paragraph: string | null | undefined,
@@ -31,17 +32,21 @@
   }
 
   async function handleAction() {
-    try {
-      finalChildReadyToAdd.commonName = textInput;
-      finalChildReadyToAdd.description = replaceInParagraph(
-        finalChildReadyToAdd.description,
-        finalChildReadyToAdd.commonName,
-        textInput
-      );
-      await onConfirm(finalChildReadyToAdd);
-      goto("../gallery");
-    } catch (error) {
-      console.error("Error during confirmation:", error);
+    if (textInput.trim() === "") {
+      errorText = "Error : Please write something";
+    } else {
+      try {
+        finalChildReadyToAdd.commonName = textInput;
+        finalChildReadyToAdd.description = replaceInParagraph(
+          finalChildReadyToAdd.description,
+          finalChildReadyToAdd.commonName,
+          textInput
+        );
+        await onConfirm(finalChildReadyToAdd);
+        goto("../gallery");
+      } catch (error) {
+        console.error("Error during confirmation:", error);
+      }
     }
   }
 
@@ -155,7 +160,7 @@
             />
           </form>
         </div>
-
+        <p class="mt-4 text-sm">{errorText}</p>
         <p class="mt-4 text-sm">{candidateChild.description}</p>
 
         <br />
