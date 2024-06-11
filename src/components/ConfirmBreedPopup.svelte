@@ -3,7 +3,7 @@
   import type { GeneratedImageResult, InsertPlant } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "../defaults/constants";
   import TransparencyMaker from "./TransparencyMaker.svelte";
-
+  import ButtonBottom from "./ButtonBottom.svelte";
   export let candidateChild: InsertPlant;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
@@ -109,16 +109,35 @@
   generateImage();
 </script>
 
-<div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
-  <div class="flex justify-center items-center h-full">
-    <div
-      class="m-2 p-2 rounded-lg max-w-lg overflow-y-auto"
-      style="max-height: calc(100% - 4rem);"
-    >
-      {#if candidateImageUrl}
-        <p class="text-roel_blue text-xl mb-2">
+{#if waitingForImage}
+  <div
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
+  >
+    <div class="flex flex-col items-center">
+      <img
+        src="/spinnerPlant.png"
+        alt="Spinner"
+        class="w-40 relative animate-spin"
+        style="margin: auto;"
+      />
+      <div
+        id="message"
+        class="text-roel_blue font-inter text-xl mt-4 text-center"
+      >
+        {messages[currentIndex]} ...
+      </div>
+    </div>
+  </div>
+{/if}
+
+{#if candidateImageUrl}
+  <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40">
+    <div class="overflow-y-auto" style="max-height: calc(100% - 4rem);">
+      <div class="mx-12 font-inter text-roel_blue text-left mt-10">
+        <p class="text-xl">
           Hooray you made a new plant. What would you like it to be named?
         </p>
+
         <TransparencyMaker
           src={candidateImageUrl}
           useFloodFill={false}
@@ -126,54 +145,34 @@
           doUpload={true}
           onUploadComplete={replaceImage}
         />
-      {/if}
-      {#if waitingForImage}
-        <div
-          class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center"
-        >
-          <div class="flex flex-col items-center">
-            <img
-              src="/spinnerPlant.png"
-              alt="Spinner"
-              class="w-40 relative animate-spin"
-              style="margin: auto;"
-            />
-            <div
-              id="message"
-              class="text-roel_blue font-inter text-lg mt-4 text-center mb-2"
-            >
-              {messages[currentIndex]} ...
-            </div>
-          </div>
-        </div>
-      {/if}
-
-      {#if candidateImageUrl}
-        <form on:submit|preventDefault={handleSubmit} class="mt-2">
-          <div>
+        <div class="text-center">
+          <form on:submit|preventDefault={handleSubmit} class="mt-2">
             <input
               type="text"
               bind:value={textInput}
-              class="border-2 h-10 bg-transparent border-roel_blue rounded-full w-full placeholder:text-center placeholder:text-roel_blue text-center text-roel_blue"
+              class="bg-light_grey border-2 px-4 py-2 border-mid_grey rounded-full font-inter text-dark_grey text-xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center"
               placeholder="Name your flower"
             />
-          </div>
-        </form>
-        <p class="text-roel_blue mt-2">{candidateChild.description}</p>
-
-        <div class="flex gap-2 flex-nowrap h-10 bg-transparent mt-2">
-          <button
-            on:click={() => handleAction()}
-            class="border-roel_blue border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full text-roel_blue"
-            >OK</button
-          >
+          </form>
         </div>
-        <button
-          on:click={onCancel}
-          class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
-          >Cancel</button
-        >
-      {/if}
+
+        <p class="mt-4 text-sm">{candidateChild.description}</p>
+
+        <br />
+        <br />
+      </div>
     </div>
   </div>
-</div>
+
+  <ButtonBottom
+    buttonText="Ok"
+    functionClick={() => handleAction()}
+    width="w-7/12"
+  ></ButtonBottom>
+
+  <button
+    on:click={onCancel}
+    class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
+    >Cancel</button
+  >
+{/if}
