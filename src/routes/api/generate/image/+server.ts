@@ -1,11 +1,11 @@
 import {
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
+  AWS_ACCESS_KEY_ID_S3,
+  AWS_SECRET_ACCESS_KEY_S3,
   OPENAI_API_KEY,
   S3_BUCKET,
   S3_REGION,
   LOCAL_FILES,
-  PLACEHOLDER_IMAGES,
+  PLACEHOLDER_IMAGES
 } from "$env/static/private";
 import { error, json, type RequestHandler } from "@sveltejs/kit";
 import { Upload } from "@aws-sdk/lib-storage";
@@ -25,7 +25,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
   if (PLACEHOLDER_IMAGES === "true") {
     const jsonResponse: GeneratedImageResult = {
-      url: "/plants/placeholder.png",
+      url: "/plants/placeholder.png"
     };
     return json(jsonResponse, { status: 200 });
   }
@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ request }) => {
     model: "dall-e-3",
     prompt,
     n: 1,
-    size: "1024x1024",
+    size: "1024x1024"
   });
   console.log("Got image result:", response);
 
@@ -54,7 +54,7 @@ export const POST: RequestHandler = async ({ request }) => {
       try {
         await uploadLocal(fetchImage, baseName);
         const jsonResponse: GeneratedImageResult = {
-          url: `/uploads/${baseName}.png`,
+          url: `/uploads/${baseName}.png`
         };
         return json(jsonResponse, { status: 200 });
       } catch (e) {
@@ -65,7 +65,7 @@ export const POST: RequestHandler = async ({ request }) => {
       try {
         await uploadToS3(fetchImage, baseName);
         const jsonResponse: GeneratedImageResult = {
-          url: URL_PREFIX + "/" + baseName + ".png",
+          url: URL_PREFIX + "/" + baseName + ".png"
         };
 
         return json(jsonResponse, { status: 200 });

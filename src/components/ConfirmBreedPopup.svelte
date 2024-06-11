@@ -91,7 +91,7 @@
 
   const messages = [
     "Plants are being dug up",
-    "the roots are intertwining",
+    "The roots are intertwining",
     "DNA is being mixed up",
     "A new seed is created",
     "Watering the new plant",
