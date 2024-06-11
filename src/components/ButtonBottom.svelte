@@ -1,6 +1,4 @@
 <script lang="ts">
-  // import { stringify } from "postcss";
-
   export let buttonText: string;
   export let functionClick;
   export let width: string = "w-11/12";
