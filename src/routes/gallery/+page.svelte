@@ -27,11 +27,7 @@
           }}
           class="cursor-pointer"
         >
-          <PlantDisplay
-            plant={plant.plant}
-            {width}
-            applyFilters={index !== 0}
-          />
+          <PlantDisplay plant={plant.plant} {width} applyFilters={index != 0} />
         </div>
         {#if index == 0}
           <div class="mt-4 text-center">
