@@ -10,7 +10,7 @@
   import { onMount } from "svelte";
 
   //constants relating to making plants not overlap
-  const initialCrowdednessTolerance = 250;
+  const initialCrowdednessTolerance = 500;
 
   //plant min and max size on screen
   const minPlantHeightOutput = 75;
@@ -23,7 +23,7 @@
   const frameSize = 150; //general border around all edges
   const topBorder = 75; // extra border on top
   const yDistribution = 20; //size of patches in Y-dimension
-  const xDistribution = 10; //size of patches in X-dimension
+  const xDistribution = 15; //size of patches in X-dimension
 
   //distribution on screen and size of plants in database
   const rootScale = 2;
