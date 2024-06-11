@@ -22,7 +22,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const completion = await openai.chat.completions.create({
       messages: prompt,
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo"
     });
 
     console.log("response:", completion.choices);
@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
       const parsedPlant = await parseNewPlant(formattedContent, [
         parents[0].id,
-        parents[1].id,
+        parents[1].id
       ]);
       if (parsedPlant) {
         offspring = parsedPlant;
@@ -52,26 +52,29 @@ const parseNewPlant = async (
   text: string,
   parentIds: [string, string]
 ): Promise<InsertPlant> => {
-  const json = JSON.parse(
-    text
+  try {
+    const cleanText = text
       .trim()
       .replaceAll("```json", "")
-      .replaceAll("```", "")
-      .replaceAll('."\n', '.",')
-      .replaceAll("\n", "")
-  );
-  if (json["commonName"] && json["description"] && json["properties"]) {
-    console.log("JSON appears to have the valid fields");
-    return {
-      id: uuidv4(),
-      parent1: parentIds[0],
-      parent2: parentIds[1],
-      commonName: json["commonName"],
-      description: json["description"],
-      properties: { ...(await interpretColours(json["properties"])) },
-    };
-  } else {
-    throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
+      .replaceAll("```", "");
+
+    const json = JSON.parse(cleanText);
+
+    if (json["commonName"] && json["description"] && json["properties"]) {
+      console.log("JSON appears to have the valid fields");
+      return {
+        id: uuidv4(),
+        parent1: parentIds[0],
+        parent2: parentIds[1],
+        commonName: json["commonName"],
+        description: json["description"],
+        properties: { ...(await interpretColours(json["properties"])) }
+      };
+    } else {
+      throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
+    }
+  } catch (e) {
+    throw Error("Error parsing JSON: " + JSON.stringify({ e, text, json }));
   }
 };
 
@@ -103,10 +106,10 @@ const interpretColours = async (
             { role: "system", content: "You are a helpful assistant." },
             {
               role: "user",
-              content: `Give me the hex string value for the colour "${description}". No other text in your response, please, just the hex string`,
-            },
+              content: `Give me the hex string value for the colour "${description}". No other text in your response, please, just the hex string`
+            }
           ],
-          model: "gpt-3.5-turbo",
+          model: "gpt-3.5-turbo"
         });
 
         const response = completion.choices[0].message.content;
