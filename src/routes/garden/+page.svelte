@@ -3,7 +3,7 @@
     GardenPlantEntryWithPlant,
     GardenViewData,
     PlantProperties,
-    SelectPlant,
+    SelectPlant
   } from "$lib/types";
   export let data: GardenViewData;
 
@@ -70,7 +70,7 @@
         plant: plant,
         x: parentX(plant),
         y: parentY(plant),
-        numberOfChildren: 0,
+        numberOfChildren: 0
       };
       displayPlants.push(newPositionedPlant); // adds plant to list if it's a parent
     } else {
@@ -80,7 +80,7 @@
           plant: plant,
           x: childX(plant, parentList[i]),
           y: childY(plant, parentList[i]),
-          numberOfChildren: 0,
+          numberOfChildren: 0
         };
         displayPlants.push(newPositionedPlant); // adds plant to list if it's a child
       }
@@ -111,7 +111,7 @@
           remapPlantHeight(
             Math.log(rootScaleFromPlantHeight(plant)) + 1,
             Math.log(minPlantHeight) + 1,
-            Math.log(maxPlantHeight) + 1,
+            Math.log(maxPlantHeight) + 1
           ))
     );
   }
@@ -150,13 +150,13 @@
 
   function findParent(plant: SelectPlant, parentName: string) {
     return displayPlants.find(
-      (p) => p.plant.id === plant[parentName as keyof SelectPlant],
+      (p) => p.plant.id === plant[parentName as keyof SelectPlant]
     );
   }
 
   function increaseNumberOfChildren(plant: SelectPlant, parentName: string) {
     const parent = displayPlants.find(
-      (p) => p.plant.id === plant[parentName as keyof SelectPlant],
+      (p) => p.plant.id === plant[parentName as keyof SelectPlant]
     );
     if (parent) {
       parent.numberOfChildren++;
@@ -168,7 +168,7 @@
   function checkIfSpaceIsOk(
     plant: SelectPlant,
     proposedX: number,
-    tolerance: number,
+    tolerance: number
   ) {
     let distanceList = [];
     for (let i = 0; i < displayPlants.length; i++) {
@@ -181,7 +181,7 @@
   function calculateDistance(
     plant: SelectPlant,
     proposedX: number,
-    displayPlants: PositionedPlant,
+    displayPlants: PositionedPlant
   ): number {
     let plantX = proposedX;
     let plantY = parentY(plant);
@@ -199,7 +199,7 @@
       remapPlantHeight(
         rootScaleFromPlantHeight(plant),
         minPlantHeight,
-        maxPlantHeight,
+        maxPlantHeight
       ) *
         (maxPlantHeightOutput - minPlantHeightOutput)
     );
@@ -207,10 +207,12 @@
 
   // function to get property height from a plant, since it's reused
   function plantHeight(plant: SelectPlant): number {
-    return (
-      ((plant.properties as PlantProperties)["high(m)"] as number) ??
-      defaultHeightValue
-    );
+    const value = (plant.properties as PlantProperties)["high(m)"];
+    if (typeof value === "number") {
+      return (value as number) ?? defaultHeightValue;
+    } else {
+      return defaultHeightValue;
+    }
   }
 
   // remap plant height to 0 -> 1
@@ -221,7 +223,7 @@
   function rootScaleFromPlantHeight(plant: SelectPlant): number {
     return Math.max(
       smallestPlant,
-      Math.min(Math.pow(plantHeight(plant), 1 / rootScale), tallestPlant),
+      Math.min(Math.pow(plantHeight(plant), 1 / rootScale), tallestPlant)
     );
   }
   let alt = "alt placeholder";
@@ -237,7 +239,7 @@
     let existingPlantIds = existingPlants.map((p) => p.id);
 
     let confirmedNewPlants = newPlants.filter(
-      (item) => !existingPlantIds.includes(item.id), // isolate plants that are new by comparing ids
+      (item) => !existingPlantIds.includes(item.id) // isolate plants that are new by comparing ids
     );
 
     confirmedNewPlants.forEach((entry) => {
