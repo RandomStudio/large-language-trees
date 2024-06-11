@@ -4,9 +4,10 @@
   import { page } from "$app/stores";
 </script>
 
+<div class="bg-roel_green w-screen h-screen fixed"></div>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div class="min-h-screen bg-roel_green relative">
+<div class="min-h-screen bg-roel_green absolute">
   {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/"}
     <div class="fixed w-full z-30 bg-roel_green pt-8 pl-8">
       <h1
