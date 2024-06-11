@@ -3,7 +3,7 @@
 </script>
 
 <button
-  class="fixed top-8 right-7 z-50 text-roel_blue flex bg-roel_green items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
+  class="fixed top-8 right-7 z-30 text-roel_blue flex bg-roel_green items-center justify-center w-10 h-10 border-2 border-roel_blue rounded-full"
   on:click={functionReturn}
 >
   <svg

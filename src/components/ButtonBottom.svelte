@@ -7,7 +7,7 @@
 </script>
 
 <div
-  class="fixed left-0 right-0 bottom-8 flex items-center justify-center mx-12"
+  class="fixed left-0 right-0 bottom-8 flex items-center justify-center mx-12 z-50"
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
