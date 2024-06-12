@@ -44,6 +44,13 @@ export default async (req: Request) => {
     } else {
       console.error("Something went wrong:", addImageToDbRes);
     }
+  } else {
+    const { statusText, status } = aiRes;
+    console.error("Something went wrong in request to openAI API:", {
+      statusText,
+      status,
+      apiKey
+    });
   }
 
   console.log("...done");
