@@ -19,6 +19,7 @@ export default async (req: Request) => {
   console.log("Using body", jsonBody, "...");
 
   const aiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`
@@ -35,7 +36,8 @@ export default async (req: Request) => {
     console.log({ url });
 
     const addImageToDbRes = await fetch(
-      `/api/plants/${plantId}/candidateImage`
+      `/api/plants/${plantId}/candidateImage`,
+      { method: "POST", body: JSON.stringify({ url }) }
     );
     if (addImageToDbRes.status === 201) {
       console.log("Success!");
