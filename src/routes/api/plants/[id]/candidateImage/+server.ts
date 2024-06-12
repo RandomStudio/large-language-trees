@@ -2,6 +2,7 @@ import { db } from "$lib/server/db";
 import { generatedImages } from "$lib/server/schema";
 import { error, json, type RequestHandler } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
+import { v4 as uuidv4 } from "uuid";
 
 export const GET: RequestHandler = async ({ params }) => {
   const plantId = params["id"];
@@ -14,6 +15,29 @@ export const GET: RequestHandler = async ({ params }) => {
       return json(candidateImage, { status: 200 });
     } else {
       return json(undefined, { status: 404 });
+    }
+  } else {
+    return error(400, "plantId param required");
+  }
+};
+
+export const POST: RequestHandler = async ({ request, params }) => {
+  const plantId = params["id"];
+  const { url } = (await request.json()) as { url: string };
+  if (plantId) {
+    const res = await db
+      .insert(generatedImages)
+      .values({
+        id: uuidv4(),
+        plantId,
+        url
+      })
+      .returning();
+
+    if (res.length > 0) {
+      return json(res, { status: 201 });
+    } else {
+      return error(500, "Failed to insert new generated image URL");
     }
   } else {
     return error(400, "plantId param required");

@@ -13,13 +13,13 @@ import { error, json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3, uploadLocal } from "$lib/server/images";
-import type { GenerateImageRequest, GeneratedImageResult } from "$lib/types";
-import { URL_PREFIX } from "../../../../defaults/constants";
+import type { GeneratedImageResult } from "$lib/types";
+import { URL_PREFIX } from "../../../../../defaults/constants";
 
 export const POST: RequestHandler = async ({ request }) => {
   console.log({ PLACEHOLDER_IMAGES });
-  const jsonBody = (await request.json()) as GenerateImageRequest;
-  const { description, plantId } = jsonBody;
+  const jsonBody = await request.json();
+  const { description } = jsonBody;
 
   if (PLACEHOLDER_IMAGES === "true") {
     const jsonResponse: GeneratedImageResult = {
@@ -39,11 +39,7 @@ export const POST: RequestHandler = async ({ request }) => {
       "https://livinggarden.netlify.app/.netlify/functions/img-gen-background",
       {
         method: "POST",
-        body: JSON.stringify({
-          prompt,
-          backgroundSecret: BACKGROUND_FN_SECRET,
-          plantId
-        })
+        body: JSON.stringify({ prompt, backgroundSecret: BACKGROUND_FN_SECRET })
       }
     );
 

@@ -22,8 +22,8 @@ export const plants = pgTable("plants", {
 
 export const generatedImages = pgTable("generated_images", {
   id: text("id").primaryKey(),
-  plantId: text("plant_id"),
-  url: text("url")
+  plantId: text("plant_id").notNull(),
+  url: text("url").notNull()
 });
 
 export const users = pgTable("users", {

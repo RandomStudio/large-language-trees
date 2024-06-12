@@ -21,7 +21,7 @@ export type SeedbankEntry = typeof seedbanksToPlants.$inferInsert;
 
 export type Characteristics = { [key: string]: string | number };
 
-export type GeneratedImages = typeof generatedImages.$inferSelect;
+export type GeneratedImage = typeof generatedImages.$inferSelect;
 
 export interface PromptSection {
   label: string;
@@ -67,6 +67,11 @@ export interface GardenViewData {
 
 export interface PlantProperties {
   [key: string]: number | string;
+}
+
+export interface GenerateImageRequest {
+  description: string;
+  plantId: string;
 }
 export interface GeneratedImageResult {
   pleaseWait: boolean;
