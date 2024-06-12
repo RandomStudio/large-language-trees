@@ -1,7 +1,7 @@
 import type { PromptConfig } from "$lib/types";
 
 const DefaultPrompt: PromptConfig = {
-  model: "gpt-4-turbo",
+  model: "gpt-3.5-turbo",
   preamble: {
     label: "Preamble",
     description:
