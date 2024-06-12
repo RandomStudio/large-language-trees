@@ -18,7 +18,7 @@ export default async (req: Request) => {
 
   console.log("Using body", jsonBody, "...");
 
-  const aiRes = await fetch("api.openai.com/v1/chat/completions", {
+  const aiRes = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`
