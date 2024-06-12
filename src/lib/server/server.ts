@@ -187,7 +187,7 @@ export const generate = async (
 
     const completion = await openai.chat.completions.create({
       messages: prompt,
-      model: "gpt-3.5-turbo",
+      model: "gpt-4-turbo",
     });
 
     console.log("response:", completion.choices);
