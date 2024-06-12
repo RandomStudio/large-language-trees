@@ -22,9 +22,11 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 export const POST: RequestHandler = async ({ request, params }) => {
+  console.log("candidate image POST request");
   const plantId = params["id"];
   const { url } = (await request.json()) as { url: string };
   if (plantId) {
+    console.log({ url, plantId });
     const res = await db
       .insert(generatedImages)
       .values({
