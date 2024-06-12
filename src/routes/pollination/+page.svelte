@@ -15,12 +15,15 @@
   import ReturnButton from "../../components/ReturnButton.svelte";
 
   export let data: GardenViewData;
-  let busy = false;
+  import { getIndexValue } from "../gallery/shared.js";
+
+  const indexValue = getIndexValue();
+  console.log(indexValue);
 
   let parent1: SelectPlant | null =
-    data.seedBank.plantsInSeedbank.find(
-      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
-    )?.plant || null;
+    data.seedBank.plantsInSeedbank[indexValue].plant;
+
+  let busy = false;
 
   let parent2: SelectPlant | null = null;
 
@@ -91,7 +94,9 @@
       </div>
     {/if}
   </div>
-  <p class="text-xl text-center mt-3">Your Pollination QR</p>
+  <p class="text-xl text-center mt-3">
+    The ollination QR of {parent1.commonName}
+  </p>
   {#if candidateChild}
     <ConfirmBreedPopup
       {candidateChild}

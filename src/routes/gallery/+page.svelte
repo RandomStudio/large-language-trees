@@ -10,6 +10,13 @@
   import PopupInfo from "../../components/PopupInfo.svelte";
 
   let seedBank = data.seedBank.plantsInSeedbank;
+
+  import { setIndexValue } from "../gallery/shared.js";
+
+  function handleClick(index: number) {
+    setIndexValue(index);
+    goto(`/pollination`);
+  }
 </script>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
@@ -25,16 +32,15 @@
     >
       <PlantDisplay plant={plant.plant} applyFilters={index !== 0} />
     </div>
-    {#if index == 0}
-      <div class="mt-4 text-center">
-        <button
-          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
-          on:click={() => goto("/pollination")}
-        >
-          Start Pollinating
-        </button>
-      </div>
-    {/if}
+
+    <div class="mt-4 text-center">
+      <button
+        class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
+        on:click={() => handleClick(index)}
+      >
+        Start Pollinating
+      </button>
+    </div>
   {/each}
 </div>
 
