@@ -1,15 +1,36 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { type GardenViewData, type SelectPlant } from "../../lib/types";
 
   export let data: GardenViewData;
 
   import PlantDisplay from "../../components/PlantDisplay.svelte";
-  let selectedPlant: SelectPlant | null = null;
-
   import PopupInfo from "../../components/PopupInfo.svelte";
+  import PopupAfterCrossbreed from "../../components/PopupAfterCrossbreed.svelte";
 
-  let seedBank = data.seedBank.plantsInSeedbank;
+  let selectedPlant: SelectPlant | null = null;
+  let newItemAdded = false;
+  const seedBank = data.seedBank.plantsInSeedbank;
+
+  onMount(() => {
+    const interval = setInterval(() => {
+      console.log(newItemAdded);
+      console.log(data.seedBank.plantsInSeedbank.length);
+      console.log(seedBank.length);
+      if (data.seedBank.plantsInSeedbank != seedBank) {
+        newItemAdded = true;
+        console.log("New element in your seedbank");
+        /*
+      setTimeout(() => {
+        newItemAdded = false;
+      }, 2000);
+      */
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
 </script>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
@@ -46,4 +67,13 @@
     }}
     isOriginalPlant={selectedPlant.id == seedBank[0].plant.id}
   ></PopupInfo>
+{/if}
+
+{#if newItemAdded}
+  <PopupAfterCrossbreed
+    newPlant={data.seedBank.plantsInSeedbank[0].plant}
+    closePopup={() => {
+      newItemAdded = false;
+    }}
+  ></PopupAfterCrossbreed>
 {/if}

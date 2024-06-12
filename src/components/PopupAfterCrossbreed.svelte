@@ -6,7 +6,7 @@
   import PlantDisplay from "./PlantDisplay.svelte";
   import ReturnButton from "./ReturnButton.svelte";
 
-  export let plantDetails: SelectPlant;
+  export let newPlant: SelectPlant;
   export let closePopup: () => any;
 </script>
 
@@ -19,9 +19,9 @@
         Ta-da! Presenting the plant you and your pollination buddy brewed up!
       </p>
       <div class="mt-4">
-        <PlantDisplay plant={plantDetails} applyFilters={false} />
+        <PlantDisplay plant={newPlant} applyFilters={false} />
         <p class="text-sm mt-4">
-          {plantDetails.description}
+          {newPlant.description}
         </p>
         <br />
         <br />
