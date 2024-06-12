@@ -21,9 +21,11 @@
 
 <!-- Utilisation de la balise img pour afficher le QR code -->
 {#if qrCodeUrl}
-  <div class="content-center relative mix-blend-darken scale-75">
+  <div
+    class="content-center relative mix-blend-color-burn scale-75 contrast-200 brightness-150 opacity-75"
+  >
     <div
-      class="bg-blue-700 absolute inset-0 mix-blend-lighten"
+      class="bg-roel_blue absolute inset-0 mix-blend-lighten saturate-200 contrast-200"
       style="z-index: 1;"
     ></div>
     <img src={qrCodeUrl} alt="QR Code" class="size-full" style="z-index: 0;" />
