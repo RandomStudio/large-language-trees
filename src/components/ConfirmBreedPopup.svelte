@@ -86,7 +86,7 @@
           console.log("Checking for image...");
 
           const res = await fetch(
-            `/api/plant/${candidateChild.id}/checkCandidateImage`
+            `/api/plants/${candidateChild.id}/checkCandidateImage`
           );
           const generated = (await res.json()) as GeneratedImages | undefined;
 
