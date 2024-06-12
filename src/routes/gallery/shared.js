@@ -1,5 +1,8 @@
 let indexValue = 0;
 
+/**
+ * @param {number} newValue
+ */
 export function setIndexValue(newValue) {
     indexValue = newValue;
 }
