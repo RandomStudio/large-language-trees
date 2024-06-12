@@ -36,21 +36,51 @@
         parents.find((p) => p.id == plant.plant.parent1) &&
         parents.find((p) => p.id == plant.plant.parent2)
     )?.plant || null;
+
   let videoElement: HTMLVideoElement;
+
+  function isMobile() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+  }
 
   onMount(async () => {
     const codeReader = new BrowserMultiFormatReader();
 
-    const constraints = {
-      video: {}
+    let constraints = {
+      video: {
+        facingMode: isMobile() ? { exact: "environment" } : "user"
+      }
     };
 
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    try {
+      let stream = await navigator.mediaDevices.getUserMedia(constraints);
+      setupStream(stream);
+    } catch (err) {
+      if (isOverconstrainedError(err)) {
+        // Fallback constraints if the exact constraints are not met
+        constraints = {
+          video: {
+            facingMode: isMobile() ? "environment" : "user"
+          }
+        };
+        try {
+          let stream = await navigator.mediaDevices.getUserMedia(constraints);
+          setupStream(stream);
+        } catch (err) {
+          handleError(err);
+        }
+      } else {
+        handleError(err);
+      }
+    }
+  });
 
+  function setupStream(stream: MediaStream) {
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
     videoElement.play();
 
+    const codeReader = new BrowserMultiFormatReader();
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
       if (result && !busy) {
         // Handle the result here
@@ -73,7 +103,19 @@
         busy = false;
       }
     });
-  });
+  }
+
+  function isOverconstrainedError(err: unknown): err is OverconstrainedError {
+    return (err as OverconstrainedError).name === "OverconstrainedError";
+  }
+
+  function handleError(err: unknown) {
+    if (err instanceof Error) {
+      console.error("Error accessing camera: ", err.message);
+    } else {
+      console.error("Unknown error accessing camera: ", err);
+    }
+  }
 </script>
 
 <ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
