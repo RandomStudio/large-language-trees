@@ -17,6 +17,13 @@
     setIndexValue(index);
     goto(`/pollination`);
   }
+  const now = new Date();
+
+  function millisecondsToMinutes(duration: number) {
+    let minutes = duration / (1000 * 60);
+    minutes = Math.ceil(minutes);
+    return minutes;
+  }
 </script>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
@@ -32,16 +39,30 @@
     >
       <PlantDisplay plant={plant.plant} applyFilters={index !== 0} />
     </div>
-
-    <div class="mt-4 text-center">
-      <button
-        class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
-        on:click={() => handleClick(index)}
-      >
-        Start Pollinating
-      </button>
-    </div>
+    {#if Math.abs((now.getTime() - plant.plant.created.getTime()) / (1000 * 3600)) > 1}
+      <div class="mt-4 text-center">
+        <button
+          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
+          on:click={() => handleClick(index)}
+        >
+          Start Pollinating
+        </button>
+      </div>
+    {:else}
+      <div class="mt-4 text-center">
+        <button
+          class="text-center border-2 px-4 py-2 border-mid_grey rounded-full font-inter text-dark_grey text-xl w-11/12 max-w-x"
+        >
+          Wait for {60 -
+            millisecondsToMinutes(
+              Math.abs(now.getTime() - plant.plant.created.getTime())
+            )} minutes ...
+        </button>
+      </div>
+    {/if}
   {/each}
+  <br />
+  <br />
 </div>
 
 {#if selectedPlant}

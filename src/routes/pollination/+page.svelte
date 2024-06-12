@@ -95,7 +95,7 @@
     {/if}
   </div>
   <p class="text-xl text-center mt-3">
-    The ollination QR of {parent1.commonName}
+    The pollination QR of {parent1.commonName}
   </p>
   {#if candidateChild}
     <ConfirmBreedPopup
