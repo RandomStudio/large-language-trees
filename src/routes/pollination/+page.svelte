@@ -49,7 +49,7 @@
 
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
-    videoElement.play();
+    // videoElement.play();
 
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
       if (result && !busy) {

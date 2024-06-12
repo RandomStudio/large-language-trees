@@ -1,6 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import type { GeneratedImageResult, InsertPlant } from "$lib/types";
+  import type {
+    CheckImageRequest,
+    GeneratedImageResult,
+    GeneratedImages,
+    InsertPlant
+  } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "../defaults/constants";
   import TransparencyMaker from "./TransparencyMaker.svelte";
   import ButtonBottom from "./ButtonBottom.svelte";
@@ -60,7 +65,7 @@
 
   const generateImage = async () => {
     waitingForImage = true;
-    const imageGenerationResponse = await fetch("/api/generate/image", {
+    const imageGenerationResponse = await fetch("/api/images/generate", {
       method: "POST",
       body: JSON.stringify({
         description: candidateChild.description
@@ -70,10 +75,48 @@
     if (imageGenerationResponse.status == 200) {
       const json =
         (await imageGenerationResponse.json()) as GeneratedImageResult;
-      const { url } = json;
-      console.log("got candidate image URL:", url);
-      candidateImageUrl = url;
-      finalChildReadyToAdd.imageUrl = url;
+      const { url, pleaseWait } = json;
+      if (pleaseWait === false) {
+        console.log("got candidate image URL (ready):", url);
+        candidateImageUrl = url;
+        finalChildReadyToAdd.imageUrl = url;
+      } else {
+        console.log("Request for image has been sent; poll for response");
+        let polling: NodeJS.Timeout | null = setInterval(async () => {
+          console.log("Checking for image...");
+
+          const res = await fetch(
+            `/api/plant/${candidateChild.id}/checkCandidateImage`
+          );
+          const generated = (await res.json()) as GeneratedImages | undefined;
+
+          if (generated) {
+            const { plantId, url } = generated;
+            console.log("Yes, a generated image exists for this plant!", {
+              ...generated
+            });
+            const res2 = await fetch("/api/images/attach", {
+              method: "POST",
+              body: JSON.stringify({ plantId, url })
+            });
+            if (res2.status === 200) {
+              console.log("Image updated on backend OK!");
+              candidateImageUrl = url;
+              finalChildReadyToAdd.imageUrl = url;
+            } else {
+              console.error(
+                "Failed to update image on backend:",
+                await res2.json()
+              );
+            }
+            if (polling) {
+              console.log("clear polling interval!");
+              clearInterval(polling);
+              polling = null;
+            }
+          }
+        }, 2000);
+      }
     } else {
       console.error("Error fetching generated new image");
     }

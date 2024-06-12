@@ -6,7 +6,7 @@ import {
   pgTable,
   primaryKey,
   text,
-  timestamp,
+  timestamp
 } from "drizzle-orm/pg-core";
 
 export const plants = pgTable("plants", {
@@ -17,25 +17,31 @@ export const plants = pgTable("plants", {
   imageUrl: text("image_url"),
   parent1: text("parent1_id"),
   parent2: text("parent2_id"),
-  created: timestamp("created", { withTimezone: true }).notNull().defaultNow(),
+  created: timestamp("created", { withTimezone: true }).notNull().defaultNow()
+});
+
+export const generatedImages = pgTable("generated_images", {
+  id: text("id").primaryKey(),
+  plantId: text("plant_id"),
+  url: text("url")
 });
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   username: text("username").unique().notNull(),
   passwordHash: text("password_hash").notNull(),
-  isAdmin: boolean("is_admin").default(false),
+  isAdmin: boolean("is_admin").default(false)
 });
 
 export const usersRelations = relations(users, ({ one }) => ({
   myGarden: one(gardens, {
     fields: [users.id],
-    references: [gardens.userId],
+    references: [gardens.userId]
   }),
   mySeedbank: one(seedbanks, {
     fields: [users.id],
-    references: [seedbanks.userId],
-  }),
+    references: [seedbanks.userId]
+  })
 }));
 
 export const sessions = pgTable("sessions", {
@@ -45,14 +51,14 @@ export const sessions = pgTable("sessions", {
     .references(() => users.id),
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
-    mode: "date",
-  }).notNull(),
+    mode: "date"
+  }).notNull()
 });
 
 export const gardens = pgTable("gardens", {
   id: text("id").primaryKey(),
   userId: text("user_id").references(() => users.id),
-  name: text("name"),
+  name: text("name")
 });
 
 export const gardensToPlants = pgTable(
@@ -65,10 +71,10 @@ export const gardensToPlants = pgTable(
       .notNull()
       .references(() => plants.id),
     rowIndex: integer("rowIndex").notNull(),
-    colIndex: integer("colIndex").notNull(),
+    colIndex: integer("colIndex").notNull()
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.gardenId, t.plantId] }),
+    pk: primaryKey({ columns: [t.gardenId, t.plantId] })
   })
 );
 
@@ -77,22 +83,22 @@ export const gardensToPlantsRelations = relations(
   ({ one }) => ({
     garden: one(gardens, {
       fields: [gardensToPlants.gardenId],
-      references: [gardens.id],
+      references: [gardens.id]
     }),
     plant: one(plants, {
       fields: [gardensToPlants.plantId],
-      references: [plants.id],
-    }),
+      references: [plants.id]
+    })
   })
 );
 
 export const gardensRelations = relations(gardens, ({ many }) => ({
-  plantsInGarden: many(gardensToPlants),
+  plantsInGarden: many(gardensToPlants)
 }));
 
 export const seedbanks = pgTable("seedbanks", {
   id: text("id").primaryKey(),
-  userId: text("user_id").references(() => users.id),
+  userId: text("user_id").references(() => users.id)
 });
 
 export const seedbanksToPlants = pgTable(
@@ -103,10 +109,10 @@ export const seedbanksToPlants = pgTable(
       .references(() => seedbanks.id),
     plantId: text("plant_id")
       .notNull()
-      .references(() => plants.id),
+      .references(() => plants.id)
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.seedbankId, t.plantId] }),
+    pk: primaryKey({ columns: [t.seedbankId, t.plantId] })
   })
 );
 
@@ -115,18 +121,18 @@ export const seedbanksToPlantsRelations = relations(
   ({ one }) => ({
     seedbank: one(seedbanks, {
       fields: [seedbanksToPlants.seedbankId],
-      references: [seedbanks.id],
+      references: [seedbanks.id]
     }),
     plant: one(plants, {
       fields: [seedbanksToPlants.plantId],
-      references: [plants.id],
-    }),
+      references: [plants.id]
+    })
   })
 );
 export const seedbanksRelations = relations(seedbanks, ({ many }) => ({
-  plantsInSeedbank: many(seedbanksToPlants),
+  plantsInSeedbank: many(seedbanksToPlants)
 }));
 
 export const plantsRelations = relations(plants, ({ many }) => ({
-  inSeedbanks: many(seedbanksToPlants),
+  inSeedbanks: many(seedbanksToPlants)
 }));

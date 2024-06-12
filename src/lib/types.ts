@@ -1,10 +1,11 @@
 import type {
   gardens,
   gardensToPlants,
+  generatedImages,
   plants,
   seedbanks,
   seedbanksToPlants,
-  users,
+  users
 } from "$lib/server/schema";
 
 export type SelectPlant = typeof plants.$inferSelect;
@@ -20,6 +21,8 @@ export type SeedbankEntry = typeof seedbanksToPlants.$inferInsert;
 
 export type Characteristics = { [key: string]: string | number };
 
+export type GeneratedImages = typeof generatedImages.$inferSelect;
+
 export interface PromptSection {
   label: string;
   description: string;
@@ -27,6 +30,7 @@ export interface PromptSection {
 }
 
 export interface PromptConfig {
+  model: "gpt-3.5-turbo" | "gpt-4-turbo";
   preamble: PromptSection;
   explanation: PromptSection;
   instructions: PromptSection;
@@ -65,9 +69,15 @@ export interface PlantProperties {
   [key: string]: number | string;
 }
 export interface GeneratedImageResult {
-  url: string;
+  pleaseWait: boolean;
+  url: string | null;
 }
 
 export interface ImageUploadResult {
+  url: string;
+}
+
+export interface AttachImageRequest {
+  plantId: string;
   url: string;
 }
