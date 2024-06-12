@@ -257,6 +257,12 @@
 </script>
 
 <body>
+  <div
+    class="bg-repeat h-screen fixed"
+    style="background-image: url('grassTexture2.png')"
+    style:width={"100vw"}
+    style:margin-top={"-0px"}
+  ></div>
   <div id="container" class="fixed top-0 left-0 w-screen h-screen">
     {#each displayPlants as plant}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -276,6 +282,7 @@
           "s"}
         style:--skew-animation-length={animationLength + "s"}
         style:--padding-top={scaleFunction(plant.plant) * 0.6 + "px"}
+        style:--skew-offset={scaleFunction(plant.plant) * -0.08 + "px"}
       />
     {/each}
   </div>
@@ -285,15 +292,15 @@
   @keyframes skew-animation {
     0% {
       transform: skew(4deg);
-      left: -7px;
+      left: var(--skew-offset);
     }
     50% {
       transform: skew(-4deg);
-      left: 7px;
+      left: 0;
     }
     100% {
       transform: skew(4deg);
-      left: -7px;
+      left: var(--skew-offset);
     }
   }
 
