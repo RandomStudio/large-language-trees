@@ -1,4 +1,7 @@
+[build]
+command = "npm run build"
+publish = "build"
+
 [functions]
 node_bundler = "esbuild"
 directory = "netlify/functions"
-external_node_modules = ["@node-rs/argon2"]
