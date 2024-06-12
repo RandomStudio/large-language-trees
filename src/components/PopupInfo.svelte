@@ -14,6 +14,8 @@
   }
 
   export let isOriginalPlant: boolean;
+
+  console.log(plantDetails.created.getMinutes());
 </script>
 
 <ReturnButton functionReturn={closePopup}></ReturnButton>
@@ -21,6 +23,12 @@
 <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green overflow-auto">
   <div class="mx-12 font-inter text-roel_blue text-left mt-20">
     <PlantDisplay plant={plantDetails} applyFilters={false} />
+    {#if !isOriginalPlant}
+      <p class="text-sm mt-4 text-center">
+        Date of discovery : {plantDetails.created.getDate()}/{plantDetails.created.getUTCMonth() +
+          1}/{plantDetails.created.getFullYear()} at {plantDetails.created.getHours()}:{plantDetails.created.getMinutes()}
+      </p>
+    {/if}
     <p class="text-sm mt-4">
       {plantDetails.description}
     </p>
