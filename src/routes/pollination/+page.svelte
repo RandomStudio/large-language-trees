@@ -85,7 +85,10 @@
 <div class="mx-12 font-inter text-roel_blue text-left">
   <p class=" text-xl">Point your camera to another gardener's Pollination QR</p>
   <div class="mx-8">
-    <video bind:this={videoElement} class="object-cover aspect-square mt-6">
+    <video
+      bind:this={videoElement}
+      class="object-cover aspect-square mt-12 overflow-hidden rounded-full"
+    >
       <track kind="captions" srclang="en" label="English captions" />
     </video>
 
