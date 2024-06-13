@@ -41,6 +41,7 @@
         on:click={() => {
           console.log("click!");
           selectedPlant = plant.plant;
+          setIndexValue(index);
         }}
         class="cursor-pointer mt-4"
       >
@@ -54,6 +55,17 @@
           Start Pollinating
         </button>
       </div>
+
+      {#if selectedPlant}
+        <PopupInfo
+          plantDetails={selectedPlant}
+          closePopup={() => {
+            selectedPlant = null;
+          }}
+          isOriginalPlant={plant.plant == yourPlant}
+          isPollinatingPlant={true}
+        ></PopupInfo>
+      {/if}
     {:else}
       <div
         on:click={() => {
@@ -74,18 +86,18 @@
             )} minutes
         </button>
       </div>
+      {#if selectedPlant}
+        <PopupInfo
+          plantDetails={selectedPlant}
+          closePopup={() => {
+            selectedPlant = null;
+          }}
+          isOriginalPlant={false}
+          isPollinatingPlant={false}
+        ></PopupInfo>
+      {/if}
     {/if}
   {/each}
   <br />
   <br />
 </div>
-
-{#if selectedPlant}
-  <PopupInfo
-    plantDetails={selectedPlant}
-    closePopup={() => {
-      selectedPlant = null;
-    }}
-    isOriginalPlant={selectedPlant.id == yourPlant?.id}
-  ></PopupInfo>
-{/if}

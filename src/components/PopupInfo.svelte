@@ -14,6 +14,7 @@
   }
 
   export let isOriginalPlant: boolean;
+  export let isPollinatingPlant: boolean;
 </script>
 
 <ReturnButton functionReturn={closePopup}></ReturnButton>
@@ -33,7 +34,7 @@
   </div>
 </div>
 
-{#if isOriginalPlant}
+{#if isPollinatingPlant}
   <ButtonBottom
     buttonText="Start Pollinating"
     functionClick={() => goto("/pollination")}
