@@ -28,7 +28,7 @@
     {#if index == 0}
       <div class="mt-4 text-center">
         <button
-          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
+          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
           on:click={() => goto("/pollination")}
         >
           Start Pollinating
