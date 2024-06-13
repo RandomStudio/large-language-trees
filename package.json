@@ -20,6 +20,7 @@
   "devDependencies": {
     "@dotenvx/dotenvx": "^0.26.0",
     "@sveltejs/adapter-auto": "^3.0.0",
+    "@sveltejs/adapter-netlify": "^4.2.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@types/multer": "^1.4.11",

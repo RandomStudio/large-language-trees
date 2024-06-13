@@ -13,7 +13,7 @@
   import PopupDejaVu from "../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
   import ReturnButton from "../../components/ReturnButton.svelte";
-
+  import WaitingSpinner from "../../components/WaitingSpinner.svelte";
   export let data: GardenViewData;
   import { getIndexValue } from "../gallery/shared.js";
 
@@ -29,6 +29,7 @@
 
   let candidateChild: InsertPlant | null = null;
 
+  let waiting: boolean = false;
   let child: SelectPlant | null = null;
 
   $: existingChild = (
@@ -52,7 +53,6 @@
 
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
-    videoElement.play();
 
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
       if (result && !busy) {
@@ -65,7 +65,13 @@
             if (parent1 && parent2) {
               child = existingChild([parent1, parent2]);
               if (child == null) {
+                waiting = true;
                 candidateChild = await confirmBreed([parent1, parent2]);
+                if (candidateChild) {
+                  console.log("Got candidate child OK:", candidateChild);
+                  busy = false;
+                }
+                waiting = false;
               }
             }
           }
@@ -86,7 +92,10 @@
     Point your camera to another gardeners Pollination QR to start crossbreeding {parent1.commonName}
   </p>
   <div class="mx-8">
-    <video bind:this={videoElement} class="object-cover aspect-square mt-6">
+    <video
+      bind:this={videoElement}
+      class="object-cover aspect-square mt-12 overflow-hidden rounded-full"
+    >
       <track kind="captions" srclang="en" label="English captions" />
     </video>
 
@@ -113,6 +122,14 @@
       }
     }}
   />
+{/if}
+
+{#if waiting}
+  <div
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex flex-col items-center"
+  >
+    <WaitingSpinner></WaitingSpinner>
+  </div>
 {/if}
 
 {#if child}

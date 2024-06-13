@@ -5,34 +5,63 @@ import {
   S3_BUCKET,
   S3_REGION,
   LOCAL_FILES,
-  PLACEHOLDER_IMAGES
+  PLACEHOLDER_IMAGES,
+  USE_NETLIFY_BACKGROUND_FN,
+  BACKGROUND_FN_SECRET
 } from "$env/static/private";
 import { error, json, type RequestHandler } from "@sveltejs/kit";
-import { Upload } from "@aws-sdk/lib-storage";
-import { S3Client } from "@aws-sdk/client-s3";
 import OpenAI from "openai";
-import path from "path";
-import fs from "fs/promises";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3, uploadLocal } from "$lib/server/images";
-import type { GeneratedImageResult } from "$lib/types";
+import type { GenerateImageRequest, GeneratedImageResult } from "$lib/types";
 import { URL_PREFIX } from "../../../../defaults/constants";
 
 export const POST: RequestHandler = async ({ request }) => {
   console.log({ PLACEHOLDER_IMAGES });
-  const jsonBody = await request.json();
-  const { description } = jsonBody;
+  const jsonBody = (await request.json()) as GenerateImageRequest;
+  const { description, plantId } = jsonBody;
 
   if (PLACEHOLDER_IMAGES === "true") {
     const jsonResponse: GeneratedImageResult = {
+      pleaseWait: false,
       url: "/plants/placeholder.png"
     };
     return json(jsonResponse, { status: 200 });
   }
 
   const prompt = buildImagePrompt(description);
-  console.log(`Fetch image with prompt "${prompt}" ...`);
 
+  if (USE_NETLIFY_BACKGROUND_FN === "true") {
+    console.log(
+      `Will initiate (background) request for image generation with prompt "${prompt}" ...`
+    );
+    await fetch(
+      "https://livinggarden.netlify.app/.netlify/functions/img-gen-background",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          prompt,
+          backgroundSecret: BACKGROUND_FN_SECRET,
+          plantId
+        })
+      }
+    );
+
+    const jsonResponse: GeneratedImageResult = { pleaseWait: true, url: null };
+    return json(jsonResponse, { status: 200 });
+  } else {
+    console.warn(
+      "USE_NETLIFY_BACKGROUND_FN is disabled; will do request from this NodeJS server"
+    );
+    return await doRequestLocally(prompt);
+  }
+};
+
+const buildImagePrompt = (description: string): string =>
+  `I want you to generate a pixelart style image, with a white background, based on the description that follows:\n\n` +
+  description;
+
+const doRequestLocally = async (prompt: string) => {
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
   const response = await openai.images.generate({
@@ -54,31 +83,29 @@ export const POST: RequestHandler = async ({ request }) => {
       try {
         await uploadLocal(fetchImage, baseName);
         const jsonResponse: GeneratedImageResult = {
-          url: `/uploads/${baseName}.png`
+          url: `/uploads/${baseName}.png`,
+          pleaseWait: false
         };
         return json(jsonResponse, { status: 200 });
       } catch (e) {
         console.error("Failed to upload to local filesystem:", e);
-        return error(500);
+        return error(500, "error uploading to local filesystem");
       }
     } else {
       try {
         await uploadToS3(fetchImage, baseName);
         const jsonResponse: GeneratedImageResult = {
-          url: URL_PREFIX + "/" + baseName + ".png"
+          url: URL_PREFIX + "/" + baseName + ".png",
+          pleaseWait: false
         };
 
         return json(jsonResponse, { status: 200 });
       } catch (e) {
         console.error("Error uploading to S3:", e);
-        return error(500);
+        return error(500, "error uploading to S3");
       }
     }
+  } else {
+    return error(500, "No generated URL returned");
   }
-
-  return error(500);
 };
-
-const buildImagePrompt = (description: string): string =>
-  `I want you to generate a pixelart style image, with a white background, based on the description that follows:\n\n` +
-  description;
