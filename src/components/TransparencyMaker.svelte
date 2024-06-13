@@ -71,7 +71,7 @@
             const formData = new FormData();
             formData.append("img", blob);
 
-            const res = await fetch(`/api/upload/image`, {
+            const res = await fetch(`/api/images/upload`, {
               method: "POST",
               body: formData
             });
