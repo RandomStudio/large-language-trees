@@ -36,7 +36,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
 
-    {#if Math.abs((now.getTime() - plant.plant.created.getTime()) / (1000 * 3600)) > 1 || plant.plant == yourPlant}
+    {#if Math.abs((now.getTime() - plant.plant.created.getTime()) / (1000 * 60)) > 5 || plant.plant == yourPlant}
       <div
         on:click={() => {
           console.log("click!");
@@ -68,7 +68,7 @@
         <button
           class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full text-opacity-50 border-opacity-50"
         >
-          Fertile in {60 -
+          Fertile in {5 -
             millisecondsToMinutes(
               Math.abs(now.getTime() - plant.plant.created.getTime())
             )} minutes
