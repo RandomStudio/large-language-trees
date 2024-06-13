@@ -4,7 +4,8 @@
     GeneratedImageResult,
     GeneratedImage,
     InsertPlant,
-    GenerateImageRequest
+    GenerateImageRequest,
+    AttachImageResponse
   } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "../defaults/constants";
   import TransparencyMaker from "./TransparencyMaker.svelte";
@@ -103,7 +104,8 @@
                 body: JSON.stringify({ plantId, url })
               });
               if (res2.status === 200) {
-                console.log("Image updated on backend OK!");
+                const { url } = (await res2.json()) as AttachImageResponse;
+                console.log("Image updated on backend OK, new S3 URL is:", url);
                 candidateImageUrl = url;
                 finalChildReadyToAdd.imageUrl = url;
               } else {

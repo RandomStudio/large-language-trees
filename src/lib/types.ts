@@ -86,3 +86,8 @@ export interface AttachImageRequest {
   plantId: string;
   url: string;
 }
+
+export interface AttachImageResponse {
+  plantId: string;
+  url: string;
+}
