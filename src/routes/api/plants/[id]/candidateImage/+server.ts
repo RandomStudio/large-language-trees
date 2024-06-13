@@ -25,6 +25,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
   console.log("candidate image POST request");
   const plantId = params["id"];
   const { url } = (await request.json()) as { url: string };
+  console.log("got", { url, plantId });
   if (plantId) {
     console.log({ url, plantId });
     const res = await db

@@ -47,6 +47,7 @@ export default async (req: Request) => {
         statusText,
         status
       });
+      console.error(JSON.stringify(addImageToDbRes));
     }
   } else {
     const { statusText, status } = aiRes;
