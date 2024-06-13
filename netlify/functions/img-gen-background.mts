@@ -42,10 +42,11 @@ export default async (req: Request) => {
     if (addImageToDbRes.status === 201) {
       console.log("Success!");
     } else {
-      console.error(
-        "Something went wrong when POSTing to our API endpoint:",
-        addImageToDbRes
-      );
+      const { statusText, status } = addImageToDbRes;
+      console.error("Something went wrong when POSTing to our API endpoint:", {
+        statusText,
+        status
+      });
     }
   } else {
     const { statusText, status } = aiRes;
