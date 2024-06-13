@@ -82,7 +82,9 @@
 <ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
-  <p class=" text-xl">Point your camera to another gardener's Pollination QR</p>
+  <p class=" text-xl">
+    Point your camera to another gardeners Pollination QR to start crossbreeding {parent1.commonName}
+  </p>
   <div class="mx-8">
     <video bind:this={videoElement} class="object-cover aspect-square mt-6">
       <track kind="captions" srclang="en" label="English captions" />
@@ -94,32 +96,30 @@
       </div>
     {/if}
   </div>
-  <p class="text-xl text-center mt-3">
-    The pollination QR of {parent1.commonName}
-  </p>
-  {#if candidateChild}
-    <ConfirmBreedPopup
-      {candidateChild}
-      onCancel={() => {
-        candidateChild = null;
-      }}
-      onConfirm={async (updatedPlant) => {
-        if (candidateChild) {
-          candidateChild = updatedPlant;
-          await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
-          candidateChild = null;
-          busy = false;
-        }
-      }}
-    />
-  {/if}
-
-  {#if child}
-    <PopupDejaVu
-      plantDetails={child}
-      closePopup={() => {
-        child = null;
-      }}
-    />
-  {/if}
 </div>
+
+{#if candidateChild}
+  <ConfirmBreedPopup
+    {candidateChild}
+    onCancel={() => {
+      candidateChild = null;
+    }}
+    onConfirm={async (updatedPlant) => {
+      if (candidateChild) {
+        candidateChild = updatedPlant;
+        await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+        candidateChild = null;
+        busy = false;
+      }
+    }}
+  />
+{/if}
+
+{#if child}
+  <PopupDejaVu
+    plantDetails={child}
+    closePopup={() => {
+      child = null;
+    }}
+  />
+{/if}

@@ -56,12 +56,12 @@
     {:else}
       <div class="mt-4 text-center">
         <button
-          class="text-center border-2 px-4 py-2 border-mid_grey rounded-full font-inter text-dark_grey text-xl w-11/12 max-w-x"
+          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full text-opacity-50 border-opacity-50"
         >
-          Wait for {60 -
+          Fertile in {60 -
             millisecondsToMinutes(
               Math.abs(now.getTime() - plant.plant.created.getTime())
-            )} minutes ...
+            )} minutes
         </button>
       </div>
     {/if}
