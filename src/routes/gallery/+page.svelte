@@ -24,6 +24,11 @@
     minutes = Math.ceil(minutes);
     return minutes;
   }
+
+  let yourPlant: SelectPlant | null =
+    data.seedBank.plantsInSeedbank.find(
+      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
+    )?.plant || null;
 </script>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
@@ -37,9 +42,9 @@
       }}
       class="cursor-pointer mt-4"
     >
-      <PlantDisplay plant={plant.plant} applyFilters={index !== 0} />
+      <PlantDisplay plant={plant.plant} applyFilters={false} />
     </div>
-    {#if Math.abs((now.getTime() - plant.plant.created.getTime()) / (1000 * 3600)) > 1}
+    {#if Math.abs((now.getTime() - plant.plant.created.getTime()) / (1000 * 3600)) > 1 || plant.plant == yourPlant}
       <div class="mt-4 text-center">
         <button
           class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
@@ -71,6 +76,6 @@
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant.id == seedBank[0].plant.id}
+    isOriginalPlant={selectedPlant.id == yourPlant?.id}
   ></PopupInfo>
 {/if}
