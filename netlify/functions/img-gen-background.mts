@@ -37,7 +37,14 @@ export default async (req: Request) => {
 
     const addImageToDbRes = await fetch(
       `https://livinggarden.netlify.app/api/plants/${plantId}/candidateImage`,
-      { method: "POST", mode: "cors", body: JSON.stringify({ url }) }
+      {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify({ url }),
+        headers: {
+          origin: "https://livinggarden.netlify.app"
+        }
+      }
     );
     if (addImageToDbRes.status === 201) {
       console.log("Success!");
