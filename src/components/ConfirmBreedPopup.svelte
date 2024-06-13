@@ -66,65 +66,22 @@
 
   const generateImage = async () => {
     waitingForImage = true;
-    if (candidateChild.description) {
-      const jsonBody: GenerateImageRequest = {
-        description: candidateChild.description,
-        plantId: candidateChild.id
-      };
-      const imageGenerationResponse = await fetch("/api/images/generate", {
-        method: "POST",
-        body: JSON.stringify(jsonBody)
-      });
-      waitingForImage = false;
-      if (imageGenerationResponse.status == 200) {
-        const json =
-          (await imageGenerationResponse.json()) as GeneratedImageResult;
-        const { url, pleaseWait } = json;
-        if (pleaseWait === false) {
-          console.log("got candidate image URL (ready):", url);
-          candidateImageUrl = url;
-          finalChildReadyToAdd.imageUrl = url;
-        } else {
-          console.log("Request for image has been sent; poll for response");
-          let polling: NodeJS.Timeout | null = setInterval(async () => {
-            console.log("Checking for image...");
-
-            const res = await fetch(
-              `/api/plants/${candidateChild.id}/candidateImage`
-            );
-
-            if (res.status === 200) {
-              const generated = (await res.json()) as GeneratedImage;
-              const { plantId, url } = generated;
-              console.log("Yes, a generated image exists for this plant!", {
-                ...generated
-              });
-              const res2 = await fetch("/api/images/attach", {
-                method: "POST",
-                body: JSON.stringify({ plantId, url })
-              });
-              if (res2.status === 200) {
-                const { url } = (await res2.json()) as AttachImageResponse;
-                console.log("Image updated on backend OK, new S3 URL is:", url);
-                candidateImageUrl = url;
-                finalChildReadyToAdd.imageUrl = url;
-              } else {
-                console.error(
-                  "Failed to update image on backend:",
-                  await res2.json()
-                );
-              }
-              if (polling) {
-                console.log("clear polling interval!");
-                clearInterval(polling);
-                polling = null;
-              }
-            }
-          }, 2000);
-        }
-      } else {
-        console.error("Error fetching generated new image");
-      }
+    const imageGenerationResponse = await fetch("/api/generate/image", {
+      method: "POST",
+      body: JSON.stringify({
+        description: candidateChild.description
+      })
+    });
+    waitingForImage = false;
+    if (imageGenerationResponse.status == 200) {
+      const json =
+        (await imageGenerationResponse.json()) as GeneratedImageResult;
+      const { url } = json;
+      console.log("got candidate image URL:", url);
+      candidateImageUrl = url;
+      finalChildReadyToAdd.imageUrl = url;
+    } else {
+      console.error("Error fetching generated new image");
     }
   };
 
@@ -221,7 +178,7 @@
 
   <button
     on:click={onCancel}
-    class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
+    class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-roel_blue active:text-roel_green w-full hidden"
     >Cancel</button
   >
 {/if}

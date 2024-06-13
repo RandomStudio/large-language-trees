@@ -53,10 +53,6 @@ export const POST: RequestHandler = async ({ request }) => {
   }
 };
 
-const buildImagePrompt = (description: string): string =>
-  `I want you to generate a pixelart style image, with a white background, based on the description that follows:\n\n` +
-  description;
-
 const doRequestLocally = async (prompt: string) => {
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
@@ -105,3 +101,7 @@ const doRequestLocally = async (prompt: string) => {
     return error(500, "No generated URL returned");
   }
 };
+
+const buildImagePrompt = (description: string): string =>
+  `I want you to create a pixel art png icon on a soley white background in the art style of Stardew Valley, based on the description that follows. Every time I request this, the image should have the same style so I can create a series of them. Here is the description: \n\n` +
+  description;
