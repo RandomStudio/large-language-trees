@@ -8,7 +8,7 @@
 
   const generateQRCode = (text: string) => {
     QRCode.toCanvas(canvasElement, text, {
-      width: canvasElement.offsetWidth, // Utilise la largeur actuelle du canvas
+      width: canvasElement.offsetWidth,
       color: {
         dark: "#0038FF", // roel_blue
         light: "#9EE093" // roel_green
