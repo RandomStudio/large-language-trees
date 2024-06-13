@@ -4,6 +4,7 @@ import { OPENAI_API_KEY } from "$env/static/private";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import type { Characteristics, InsertPlant, SelectPlant } from "$lib/types";
 import { v4 as uuidv4 } from "uuid";
+import DefaultPrompt from "../../../../defaults/prompt-config";
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as {
@@ -22,7 +23,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const completion = await openai.chat.completions.create({
       messages: prompt,
-      model: "gpt-3.5-turbo"
+      model: DefaultPrompt.model
     });
 
     console.log("response:", completion.choices);
