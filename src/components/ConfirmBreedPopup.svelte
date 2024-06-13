@@ -21,7 +21,7 @@
   function replaceInParagraph(
     paragraph: string | null | undefined,
     target: string | null | undefined,
-    replacement: string | null
+    replacement: string | null,
   ) {
     if (paragraph && target && replacement) {
       return paragraph.split(target).join(replacement) || null;
@@ -36,7 +36,7 @@
       finalChildReadyToAdd.description = replaceInParagraph(
         finalChildReadyToAdd.description,
         finalChildReadyToAdd.commonName,
-        textInput
+        textInput,
       );
       await onConfirm(finalChildReadyToAdd);
       goto("../gallery");
@@ -63,8 +63,8 @@
     const imageGenerationResponse = await fetch("/api/generate/image", {
       method: "POST",
       body: JSON.stringify({
-        description: candidateChild.description
-      })
+        description: candidateChild.description,
+      }),
     });
     waitingForImage = false;
     if (imageGenerationResponse.status == 200) {
@@ -84,7 +84,7 @@
       "ConfirmBreedPopup replacing url",
       candidateImageUrl,
       "=>",
-      url
+      url,
     );
     candidateImageUrl = url;
     finalChildReadyToAdd.imageUrl = url;
@@ -96,7 +96,7 @@
     "DNA is being mixed up",
     "A new seed is created",
     "Watering the new plant",
-    "Flowers are budding"
+    "Flowers are budding",
   ];
   let currentIndex = 0;
 
@@ -172,7 +172,7 @@
 
   <button
     on:click={onCancel}
-    class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
+    class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-roel_blue active:text-roel_green w-full hidden"
     >Cancel</button
   >
 {/if}
