@@ -1,9 +1,17 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import type { GeneratedImageResult, InsertPlant } from "$lib/types";
+  import type {
+    GeneratedImageResult,
+    GeneratedImage,
+    InsertPlant,
+    GenerateImageRequest,
+    AttachImageResponse
+  } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "../defaults/constants";
   import TransparencyMaker from "./TransparencyMaker.svelte";
   import ButtonBottom from "./ButtonBottom.svelte";
+  import WaitingSpinner from "./WaitingSpinner.svelte";
+
   export let candidateChild: InsertPlant;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
@@ -17,6 +25,7 @@
   let textInput = finalChildReadyToAdd.commonName || "";
   let waitingForImage = false;
   let candidateImageUrl: string | null = null;
+  let errorText: string = "";
 
   function replaceInParagraph(
     paragraph: string | null | undefined,
@@ -31,17 +40,21 @@
   }
 
   async function handleAction() {
-    try {
-      finalChildReadyToAdd.commonName = textInput;
-      finalChildReadyToAdd.description = replaceInParagraph(
-        finalChildReadyToAdd.description,
-        finalChildReadyToAdd.commonName,
-        textInput
-      );
-      await onConfirm(finalChildReadyToAdd);
-      goto("../gallery");
-    } catch (error) {
-      console.error("Error during confirmation:", error);
+    if (textInput.trim() === "") {
+      errorText = "Error : Please write something";
+    } else {
+      try {
+        finalChildReadyToAdd.commonName = textInput;
+        finalChildReadyToAdd.description = replaceInParagraph(
+          finalChildReadyToAdd.description,
+          finalChildReadyToAdd.commonName,
+          textInput
+        );
+        await onConfirm(finalChildReadyToAdd);
+        goto("../gallery");
+      } catch (error) {
+        console.error("Error during confirmation:", error);
+      }
     }
   }
 
@@ -60,22 +73,63 @@
 
   const generateImage = async () => {
     waitingForImage = true;
-    const imageGenerationResponse = await fetch("/api/generate/image", {
-      method: "POST",
-      body: JSON.stringify({
-        description: candidateChild.description
-      })
-    });
-    waitingForImage = false;
-    if (imageGenerationResponse.status == 200) {
-      const json =
-        (await imageGenerationResponse.json()) as GeneratedImageResult;
-      const { url } = json;
-      console.log("got candidate image URL:", url);
-      candidateImageUrl = url;
-      finalChildReadyToAdd.imageUrl = url;
-    } else {
-      console.error("Error fetching generated new image");
+    if (candidateChild.description) {
+      const jsonBody: GenerateImageRequest = {
+        description: candidateChild.description,
+        plantId: candidateChild.id
+      };
+      const imageGenerationResponse = await fetch("/api/images/generate", {
+        method: "POST",
+        body: JSON.stringify(jsonBody)
+      });
+      waitingForImage = false;
+      if (imageGenerationResponse.status == 200) {
+        const json =
+          (await imageGenerationResponse.json()) as GeneratedImageResult;
+        const { url, pleaseWait } = json;
+        if (pleaseWait === false && url) {
+          console.log("got candidate image URL (ready):", url);
+          replaceImage(url);
+        } else {
+          console.log("Request for image has been sent; poll for response");
+          let polling: NodeJS.Timeout | null = setInterval(async () => {
+            console.log("Checking for image...");
+
+            const res = await fetch(
+              `/api/plants/${candidateChild.id}/candidateImage`
+            );
+
+            if (res.status === 200) {
+              const generated = (await res.json()) as GeneratedImage;
+              const { plantId, url } = generated;
+              console.log("Yes, a generated image exists for this plant!", {
+                ...generated
+              });
+              const res2 = await fetch("/api/images/attach", {
+                method: "POST",
+                body: JSON.stringify({ plantId, url })
+              });
+              if (res2.status === 200) {
+                const { url } = (await res2.json()) as AttachImageResponse;
+                console.log("Image updated on backend OK, new S3 URL is:", url);
+                replaceImage(url);
+              } else {
+                console.error(
+                  "Failed to update image on backend:",
+                  await res2.json()
+                );
+              }
+              if (polling) {
+                console.log("clear polling interval!");
+                clearInterval(polling);
+                polling = null;
+              }
+            }
+          }, 2000);
+        }
+      } else {
+        console.error("Error fetching generated new image");
+      }
     }
   };
 
@@ -114,12 +168,7 @@
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
   >
     <div class="flex flex-col items-center">
-      <img
-        src="/spinnerPlant.png"
-        alt="Spinner"
-        class="w-40 relative animate-spin"
-        style="margin: auto;"
-      />
+      <WaitingSpinner></WaitingSpinner>
       <div
         id="message"
         class="text-roel_blue font-inter text-xl mt-4 text-center"
@@ -155,7 +204,7 @@
             />
           </form>
         </div>
-
+        <p class="mt-4 text-sm">{errorText}</p>
         <p class="mt-4 text-sm">{candidateChild.description}</p>
 
         <br />
