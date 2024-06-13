@@ -14,8 +14,6 @@
   }
 
   export let isOriginalPlant: boolean;
-
-  console.log(plantDetails.created.getMinutes());
 </script>
 
 <ReturnButton functionReturn={closePopup}></ReturnButton>
