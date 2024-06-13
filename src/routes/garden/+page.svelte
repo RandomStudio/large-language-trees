@@ -16,6 +16,7 @@
   const minPlantHeightOutput = 75;
   const maxPlantHeightOutput = 200;
   const animationLength = 8;
+  const skewDegrees = 4.5;
 
   //display size and borders
   const monitorWidth = 1920;
@@ -244,6 +245,8 @@
 
     confirmedNewPlants.forEach((entry) => {
       console.log("New plant found! " + JSON.stringify(entry));
+      const audio = new Audio("594400__elandre01__rustling-leaves.wav");
+      audio.play();
       addPlants(entry);
     });
   }
@@ -282,7 +285,9 @@
           "s"}
         style:--skew-animation-length={animationLength + "s"}
         style:--padding-top={scaleFunction(plant.plant) * 0.6 + "px"}
-        style:--skew-offset={scaleFunction(plant.plant) * -0.08 + "px"}
+        style:--skew-offset={scaleFunction(plant.plant) * -0.05 + "px"}
+        style:--skew-degrees={skewDegrees + "deg"}
+        style:--negative-skew-degrees={"-" + skewDegrees + "deg"}
       />
     {/each}
   </div>
@@ -291,15 +296,15 @@
 <style>
   @keyframes skew-animation {
     0% {
-      transform: skew(4deg);
+      transform: skew(var(--skew-degrees));
       left: var(--skew-offset);
     }
     50% {
-      transform: skew(-4deg);
+      transform: skew(var(--negative-skew-degrees));
       left: 0;
     }
     100% {
-      transform: skew(4deg);
+      transform: skew(var(--skew-degrees));
       left: var(--skew-offset);
     }
   }
