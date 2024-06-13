@@ -55,17 +55,6 @@
           Start Pollinating
         </button>
       </div>
-
-      {#if selectedPlant}
-        <PopupInfo
-          plantDetails={selectedPlant}
-          closePopup={() => {
-            selectedPlant = null;
-          }}
-          isOriginalPlant={plant.plant == yourPlant}
-          isPollinatingPlant={true}
-        ></PopupInfo>
-      {/if}
     {:else}
       <div
         on:click={() => {
@@ -86,18 +75,21 @@
             )} minutes
         </button>
       </div>
-      {#if selectedPlant}
-        <PopupInfo
-          plantDetails={selectedPlant}
-          closePopup={() => {
-            selectedPlant = null;
-          }}
-          isOriginalPlant={false}
-          isPollinatingPlant={false}
-        ></PopupInfo>
-      {/if}
     {/if}
   {/each}
   <br />
   <br />
 </div>
+
+{#if selectedPlant}
+  <PopupInfo
+    plantDetails={selectedPlant}
+    closePopup={() => {
+      selectedPlant = null;
+    }}
+    isOriginalPlant={selectedPlant == yourPlant}
+    isPollinatingPlant={Math.abs(
+      (now.getTime() - selectedPlant.created.getTime()) / (1000 * 60)
+    ) > 5}
+  ></PopupInfo>
+{/if}
