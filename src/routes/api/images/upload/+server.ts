@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     await streamToS3(baseName, stream);
     const jsonResponse: ImageUploadResult = {
-      url: URL_PREFIX + "/" + baseName + ".png",
+      url: URL_PREFIX + "/" + baseName + ".png"
     };
     return json(jsonResponse, { status: 201 });
   } else {

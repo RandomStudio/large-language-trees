@@ -49,7 +49,7 @@
 
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
-    videoElement.play();
+    // videoElement.play();
 
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
       if (result && !busy) {
@@ -63,6 +63,10 @@
               child = existingChild([parent1, parent2]);
               if (child == null) {
                 candidateChild = await confirmBreed([parent1, parent2]);
+                if (candidateChild) {
+                  console.log("Got candidate child OK:", candidateChild);
+                  busy = false;
+                }
               }
             }
           }

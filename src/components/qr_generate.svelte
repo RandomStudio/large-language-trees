@@ -4,14 +4,16 @@
   import QRCode from "qrcode";
 
   export let text: string = "";
-  let qrCodeUrl = "";
+  let canvasElement: HTMLCanvasElement;
 
-  const generateQRCode = async (text: string) => {
-    try {
-      qrCodeUrl = await QRCode.toDataURL(text);
-    } catch (err) {
-      console.error(err);
-    }
+  const generateQRCode = (text: string) => {
+    QRCode.toCanvas(canvasElement, text, {
+      width: canvasElement.offsetWidth,
+      color: {
+        dark: "#0038FF", // roel_blue
+        light: "#9EE093" // roel_green
+      }
+    });
   };
 
   onMount(() => {
@@ -19,15 +21,11 @@
   });
 </script>
 
-<!-- Utilisation de la balise img pour afficher le QR code -->
-{#if qrCodeUrl}
-  <div
-    class="content-center relative mix-blend-color-burn scale-75 contrast-200 brightness-150 opacity-75"
-  >
-    <div
-      class="bg-roel_blue absolute inset-0 mix-blend-lighten saturate-200 contrast-200"
-      style="z-index: 1;"
-    ></div>
-    <img src={qrCodeUrl} alt="QR Code" class="size-full" style="z-index: 0;" />
+{#if text}
+  <div class="flex items-center justify-center">
+    <canvas
+      bind:this={canvasElement}
+      style="width:80%; height: auto; aspect-ratio: 1;"
+    ></canvas>
   </div>
 {/if}
