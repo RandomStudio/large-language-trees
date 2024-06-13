@@ -34,7 +34,7 @@
   </div>
 </div>
 
-{#if isPollinatingPlant}
+{#if isPollinatingPlant || isOriginalPlant}
   <ButtonBottom
     buttonText="Start Pollinating"
     functionClick={() => goto("/pollination")}
