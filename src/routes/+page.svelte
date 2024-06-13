@@ -50,10 +50,11 @@
 
   <div class="text-left mt-4 text-sm text-roel_blue">
     <p>
-      Welcome to the common garden of Lucullus. This Digital Common Garden is
-      about connection and cross-pollination.<br /><br />
-      Find other Gardeners to start cross-breeding and witness the offspring flourish
-      in the common garden of Lucullus.
+      Welcome to Random's synergistic Lusthof, where digital abundance is
+      sprouting.
+      <br />
+      <br /> Find other Gardeners in the studio to start cross-pollinating and witness
+      your sprouts flourish in our communal garden.
     </p>
     <br />
     <div>
