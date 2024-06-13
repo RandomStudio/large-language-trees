@@ -25,7 +25,7 @@ export const POST: RequestHandler = async ({ request }) => {
     const s3Url = URL_PREFIX + "/" + baseName + ".png";
     await db.update(plants).set({ imageUrl: s3Url }).returning();
 
-    const finalResponse: AttachImageResponse = { plantId, url };
+    const finalResponse: AttachImageResponse = { plantId, url: s3Url };
     return json(finalResponse, { status: 200 });
   } else {
     console.error(
