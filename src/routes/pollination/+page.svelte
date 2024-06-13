@@ -15,12 +15,15 @@
   import ReturnButton from "../../components/ReturnButton.svelte";
   import WaitingSpinner from "../../components/WaitingSpinner.svelte";
   export let data: GardenViewData;
-  let busy = false;
+  import { getIndexValue } from "../gallery/shared.js";
+
+  const indexValue = getIndexValue();
+  console.log(indexValue);
 
   let parent1: SelectPlant | null =
-    data.seedBank.plantsInSeedbank.find(
-      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
-    )?.plant || null;
+    data.seedBank.plantsInSeedbank[indexValue].plant;
+
+  let busy = false;
 
   let parent2: SelectPlant | null = null;
 
@@ -85,7 +88,9 @@
 <ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
-  <p class=" text-xl">Point your camera to another gardener's Pollination QR</p>
+  <p class=" text-xl">
+    Point your camera to another gardeners Pollination QR to start crossbreeding {parent1.commonName}
+  </p>
   <div class="mx-8">
     <video
       bind:this={videoElement}
@@ -100,38 +105,38 @@
       </div>
     {/if}
   </div>
-  <p class="text-xl text-center mt-3">Your Pollination QR</p>
-  {#if candidateChild}
-    <ConfirmBreedPopup
-      {candidateChild}
-      onCancel={() => {
-        candidateChild = null;
-      }}
-      onConfirm={async (updatedPlant) => {
-        if (candidateChild) {
-          candidateChild = updatedPlant;
-          await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
-          candidateChild = null;
-          busy = false;
-        }
-      }}
-    />
-  {/if}
-
-  {#if waiting}
-    <div
-      class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex flex-col items-center"
-    >
-      <WaitingSpinner></WaitingSpinner>
-    </div>
-  {/if}
-
-  {#if child}
-    <PopupDejaVu
-      plantDetails={child}
-      closePopup={() => {
-        child = null;
-      }}
-    />
-  {/if}
 </div>
+
+{#if candidateChild}
+  <ConfirmBreedPopup
+    {candidateChild}
+    onCancel={() => {
+      candidateChild = null;
+    }}
+    onConfirm={async (updatedPlant) => {
+      if (candidateChild) {
+        candidateChild = updatedPlant;
+        await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+        candidateChild = null;
+        busy = false;
+      }
+    }}
+  />
+{/if}
+
+{#if waiting}
+  <div
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex flex-col items-center"
+  >
+    <WaitingSpinner></WaitingSpinner>
+  </div>
+{/if}
+
+{#if child}
+  <PopupDejaVu
+    plantDetails={child}
+    closePopup={() => {
+      child = null;
+    }}
+  />
+{/if}
