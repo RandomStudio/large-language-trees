@@ -7,12 +7,12 @@ export async function confirmBreed(
   parents: [SelectPlant, SelectPlant]
 ): Promise<InsertPlant> {
   console.log("confirmBreed...");
-  const res = await fetch("/api/generate/plant", {
+  const res = await fetch("/api/plants/generate", {
     method: "POST",
     body: JSON.stringify({
       prompt: buildPrompt(DefaultPromptConfig, parents[0], parents[1]),
-      parents,
-    }),
+      parents
+    })
   });
   if (res.status === 200) {
     console.log("Created new candidate plant OK:", res);
@@ -38,7 +38,7 @@ export async function addNewPlant(
   );
   const res = await fetch("/api/plants", {
     method: "POST",
-    body: JSON.stringify(candidateChild),
+    body: JSON.stringify(candidateChild)
   });
   const { status, statusText, body } = res;
   if (status === 201) {
@@ -52,22 +52,22 @@ export async function addNewPlant(
       plantId,
       gardenId,
       rowIndex,
-      colIndex,
+      colIndex
     };
     const placementRes = await fetch("/api/plantsInGarden", {
       method: "POST",
-      body: JSON.stringify(updated),
+      body: JSON.stringify(updated)
     });
     console.log("Placed in garden?", placementRes);
 
     // Also place in user seedbank...
     const entry: SeedbankEntry = {
       plantId,
-      seedbankId,
+      seedbankId
     };
     const seedbankRes = await fetch("/api/plantsInSeedbank", {
       method: "POST",
-      body: JSON.stringify(entry),
+      body: JSON.stringify(entry)
     });
     if (seedbankRes.status === 201) {
       console.log("successsfully added to Seedbank");

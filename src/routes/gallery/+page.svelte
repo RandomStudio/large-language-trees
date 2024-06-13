@@ -10,32 +10,75 @@
   import PopupInfo from "../../components/PopupInfo.svelte";
 
   let seedBank = data.seedBank.plantsInSeedbank;
+
+  import { setIndexValue } from "../gallery/shared.js";
+
+  function handleClick(index: number) {
+    setIndexValue(index);
+    goto(`/pollination`);
+  }
+  const now = new Date();
+
+  function millisecondsToMinutes(duration: number) {
+    let minutes = duration / (1000 * 60);
+    minutes = Math.ceil(minutes);
+    return minutes;
+  }
+
+  let yourPlant: SelectPlant | null =
+    data.seedBank.plantsInSeedbank.find(
+      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
+    )?.plant || null;
 </script>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
   {#each seedBank as plant, index}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      on:click={() => {
-        console.log("click!");
-        selectedPlant = plant.plant;
-      }}
-      class="cursor-pointer mt-4"
-    >
-      <PlantDisplay plant={plant.plant} applyFilters={index !== 0} />
-    </div>
-    {#if index == 0}
+
+    {#if Math.abs((now.getTime() - plant.plant.created.getTime()) / (1000 * 60)) > 5 || plant.plant == yourPlant}
+      <div
+        on:click={() => {
+          console.log("click!");
+          selectedPlant = plant.plant;
+          setIndexValue(index);
+        }}
+        class="cursor-pointer mt-4"
+      >
+        <PlantDisplay plant={plant.plant} applyFilters={false} />
+      </div>
       <div class="mt-4 text-center">
         <button
-          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
-          on:click={() => goto("/pollination")}
+          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
+          on:click={() => handleClick(index)}
         >
           Start Pollinating
         </button>
       </div>
+    {:else}
+      <div
+        on:click={() => {
+          console.log("click!");
+          selectedPlant = plant.plant;
+        }}
+        class="cursor-pointer mt-4"
+      >
+        <PlantDisplay plant={plant.plant} applyFilters={true} />
+      </div>
+      <div class="mt-4 text-center">
+        <button
+          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full text-opacity-50 border-opacity-50"
+        >
+          Fertile in {5 -
+            millisecondsToMinutes(
+              Math.abs(now.getTime() - plant.plant.created.getTime())
+            )} minutes
+        </button>
+      </div>
     {/if}
   {/each}
+  <br />
+  <br />
 </div>
 
 {#if selectedPlant}
@@ -44,6 +87,9 @@
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant.id == seedBank[0].plant.id}
+    isOriginalPlant={selectedPlant == yourPlant}
+    isPollinatingPlant={Math.abs(
+      (now.getTime() - selectedPlant.created.getTime()) / (1000 * 60)
+    ) > 5}
   ></PopupInfo>
 {/if}
