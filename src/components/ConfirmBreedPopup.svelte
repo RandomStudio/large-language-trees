@@ -10,6 +10,8 @@
   import { TOLERANCE_SIMPLE } from "../defaults/constants";
   import TransparencyMaker from "./TransparencyMaker.svelte";
   import ButtonBottom from "./ButtonBottom.svelte";
+  import WaitingSpinner from "./WaitingSpinner.svelte";
+
   export let candidateChild: InsertPlant;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
@@ -166,12 +168,7 @@
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
   >
     <div class="flex flex-col items-center">
-      <img
-        src="/spinnerPlant.png"
-        alt="Spinner"
-        class="w-40 relative animate-spin"
-        style="margin: auto;"
-      />
+      <WaitingSpinner></WaitingSpinner>
       <div
         id="message"
         class="text-roel_blue font-inter text-xl mt-4 text-center"
