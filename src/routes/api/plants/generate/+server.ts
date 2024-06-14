@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const completion = await openai.chat.completions.create({
       messages: prompt,
-      model: DefaultPrompt.model
+      model: DefaultPrompt.text.model
     });
 
     console.log("response:", completion.choices);
@@ -70,7 +70,7 @@ const parseNewPlant = async (
         parent2: parentIds[1],
         commonName: json["commonName"],
         description: json["description"],
-        properties: { ...(await interpretColours(json["properties"])) }
+        properties: { ...json["properties"] }
       };
     } else {
       throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
@@ -80,51 +80,51 @@ const parseNewPlant = async (
   }
 };
 
-const interpretColours = async (
-  originals: Characteristics
-): Promise<Characteristics> => {
-  const colourDescriptionKeys = Object.keys(originals).filter(
-    (k) =>
-      k.toLowerCase().includes("colour") || k.toLowerCase().includes("color")
-  );
-  console.log(
-    colourDescriptionKeys.length,
-    "colours to interpet...",
-    colourDescriptionKeys,
-    "from keys",
-    Object.keys(originals)
-  );
-  if (colourDescriptionKeys.length == 0) {
-    return originals;
-  } else {
-    let newObject = { ...originals };
-    await Promise.all(
-      colourDescriptionKeys.map(async (descriptionKey) => {
-        const description = originals[descriptionKey] as string;
-        const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+// const interpretColours = async (
+//   originals: Characteristics
+// ): Promise<Characteristics> => {
+//   const colourDescriptionKeys = Object.keys(originals).filter(
+//     (k) =>
+//       k.toLowerCase().includes("colour") || k.toLowerCase().includes("color")
+//   );
+//   console.log(
+//     colourDescriptionKeys.length,
+//     "colours to interpet...",
+//     colourDescriptionKeys,
+//     "from keys",
+//     Object.keys(originals)
+//   );
+//   if (colourDescriptionKeys.length == 0) {
+//     return originals;
+//   } else {
+//     let newObject = { ...originals };
+//     await Promise.all(
+//       colourDescriptionKeys.map(async (descriptionKey) => {
+//         const description = originals[descriptionKey] as string;
+//         const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
-        const completion = await openai.chat.completions.create({
-          messages: [
-            { role: "system", content: "You are a helpful assistant." },
-            {
-              role: "user",
-              content: `Give me the hex string value for the colour "${description}". No other text in your response, please, just the hex string`
-            }
-          ],
-          model: "gpt-3.5-turbo"
-        });
+//         const completion = await openai.chat.completions.create({
+//           messages: [
+//             { role: "system", content: "You are a helpful assistant." },
+//             {
+//               role: "user",
+//               content: `Give me the hex string value for the colour "${description}". No other text in your response, please, just the hex string`
+//             }
+//           ],
+//           model: "gpt-3.5-turbo"
+//         });
 
-        const response = completion.choices[0].message.content;
-        if (response) {
-          console.log(`interpreted colour "${description}" as ${response}`);
-          if (response.includes("#") && response.length == 7) {
-            newObject[descriptionKey + "RGB"] = response;
-          } else {
-            console.error("Does not look like a hex string value");
-          }
-        }
-      })
-    );
-    return newObject;
-  }
-};
+//         const response = completion.choices[0].message.content;
+//         if (response) {
+//           console.log(`interpreted colour "${description}" as ${response}`);
+//           if (response.includes("#") && response.length == 7) {
+//             newObject[descriptionKey + "RGB"] = response;
+//           } else {
+//             console.error("Does not look like a hex string value");
+//           }
+//         }
+//       })
+//     );
+//     return newObject;
+//   }
+// };
