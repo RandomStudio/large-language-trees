@@ -59,7 +59,13 @@ export const actions = {
         parallelism: 1
       });
 
-      // TODO: check if username is already used
+      const alreadyExists = await db
+        .select()
+        .from(users)
+        .where(eq(users.username, username));
+      if (alreadyExists.length > 0) {
+        return fail(400, { message: "That username already exists" });
+      }
       await db.insert(users).values({
         id: userId,
         username,

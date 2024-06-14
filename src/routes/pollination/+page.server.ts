@@ -10,12 +10,12 @@ import { users } from "$lib/server/schema";
 export const load: PageServerLoad = async ({
   locals
 }): Promise<GardenViewData> => {
-  const username = locals.user?.username;
+  // const username = locals.user?.username;
   const userId = locals.user?.id;
-  if (!username) {
-    console.log("Not logged in!");
-    redirect(302, "/login");
-  }
+  // if (!username) {
+  //   console.log("Not logged in!");
+  //   redirect(302, "/login");
+  // }
 
   console.log("******** (re)load page data");
   if (userId) {
