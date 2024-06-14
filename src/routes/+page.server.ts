@@ -6,15 +6,11 @@ import type { Actions } from "./$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
-import { checkDefaultUsers } from "$lib/server/server";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 
 export const load = async ({ locals }) => {
-  await checkDefaultUsers();
-
   const username = locals.user?.username;
-  const userId = locals.user?.id;
   if (username) {
     console.log("You are already logged in!");
     redirect(302, "/gallery");
@@ -35,7 +31,7 @@ export const actions = {
     ) {
       console.error("invalid username");
       return fail(400, {
-        message: "Invalid username",
+        message: "Invalid username"
       });
     }
     if (
@@ -45,12 +41,12 @@ export const actions = {
     ) {
       console.error("invalid password");
       return fail(400, {
-        message: "Invalid password",
+        message: "Invalid password"
       });
     }
 
     const existingUser = await db.query.users.findFirst({
-      where: eq(users.username, username.toLowerCase()),
+      where: eq(users.username, username.toLowerCase())
     });
 
     if (!existingUser) {
@@ -60,14 +56,14 @@ export const actions = {
         memoryCost: 19456,
         timeCost: 2,
         outputLen: 32,
-        parallelism: 1,
+        parallelism: 1
       });
 
       // TODO: check if username is already used
       await db.insert(users).values({
         id: userId,
         username,
-        passwordHash,
+        passwordHash
       });
 
       const session = await lucia.createSession(userId, {});
@@ -89,7 +85,7 @@ export const actions = {
       if (!validPassword) {
         console.error("Validation failure");
         return fail(400, {
-          message: "Incorrect username or password",
+          message: "Incorrect username or password"
         });
       }
 
@@ -97,10 +93,10 @@ export const actions = {
       const sessionCookie = lucia.createSessionCookie(session.id);
       event.cookies.set(sessionCookie.name, sessionCookie.value, {
         path: ".",
-        ...sessionCookie.attributes,
+        ...sessionCookie.attributes
       });
 
       redirect(302, "/gallery");
     }
-  },
+  }
 } satisfies Actions;

@@ -126,7 +126,7 @@
 
 {#if waiting}
   <div
-    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex flex-col items-center"
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
   >
     <WaitingSpinner></WaitingSpinner>
   </div>

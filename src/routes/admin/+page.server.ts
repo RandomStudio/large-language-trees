@@ -9,7 +9,7 @@ import {
   checkPlantsExist,
   cleanUp,
   getUserGarden,
-  getUserSeeds,
+  getUserSeeds
 } from "$lib/server/server";
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -21,14 +21,10 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   if (userId) {
-    await checkPlantsExist();
-    await checkDefaultUsers();
-    // const garden = await getUserGarden(userId);
-    // const seeds = await getUserSeeds(userId);
     const allPlants = await db.select().from(plants);
 
     const thisUser = await db.query.users.findFirst({
-      where: eq(users.id, userId),
+      where: eq(users.id, userId)
     });
     if (thisUser?.isAdmin === true) {
       console.log("Admin user authorised");
@@ -51,7 +47,7 @@ export const actions: Actions = {
     const sessionCookie = lucia.createBlankSessionCookie();
     event.cookies.set(sessionCookie.name, sessionCookie.value, {
       path: ".",
-      ...sessionCookie.attributes,
+      ...sessionCookie.attributes
     });
     redirect(302, "/");
   },
@@ -59,5 +55,5 @@ export const actions: Actions = {
     console.warn("Full reset happening!");
     await cleanUp();
     redirect(302, "/");
-  },
+  }
 };
