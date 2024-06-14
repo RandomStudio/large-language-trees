@@ -38,9 +38,9 @@
         {#if plant.imageUrl}
           <TransparencyMaker
             src={plant.imageUrl}
-            baseName={plant.id}
             useFloodFill={false}
             tolerance={8}
+            onUploadComplete={() => {}}
           />
         {/if}
       {/each}
