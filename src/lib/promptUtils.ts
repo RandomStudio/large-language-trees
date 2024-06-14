@@ -1,6 +1,5 @@
 import type OpenAI from "openai";
 import type { Characteristics, PromptConfig, SelectPlant } from "./types";
-import ConfirmBreedPopup from "../components/ConfirmBreedPopup.svelte";
 
 export const buildPrompt = (
   config: PromptConfig,
@@ -11,11 +10,11 @@ export const buildPrompt = (
   return [
     {
       role: "system",
-      content: preamble.text,
+      content: preamble.text
     },
     {
       role: "user",
-      content: explanation.text,
+      content: explanation.text
     },
     {
       role: "user",
@@ -28,7 +27,7 @@ export const buildPrompt = (
             description: plant1.description,
             properties: filterCharacteristicsForPrompt(
               plant1.properties as Characteristics
-            ),
+            )
           },
           null,
           2
@@ -43,15 +42,15 @@ export const buildPrompt = (
             description: plant2.description,
             properties: filterCharacteristicsForPrompt(
               plant2.properties as Characteristics
-            ),
+            )
           },
           null,
           2
         ) +
         "\n```" +
         "\n\n" +
-        instructions.text,
-    },
+        instructions.text
+    }
   ];
 };
 
