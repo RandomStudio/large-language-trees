@@ -54,9 +54,6 @@
         goto("../gallery");
       } catch (error) {
         console.error("Error during confirmation:", error);
-        if (isFetchError(error) && error.response?.status === 500) {
-          goto("../pollination");
-        }
       }
     }
   }
@@ -72,15 +69,6 @@
     if (finalChildReadyToAdd.description && finalChildReadyToAdd.commonName) {
     }
     finalChildReadyToAdd.commonName = textInput;
-  }
-
-  function isFetchError(error: unknown): error is { response: Response } {
-    return (
-      typeof error === "object" &&
-      error !== null &&
-      "response" in error &&
-      error.response instanceof Response
-    );
   }
 
   const generateImage = async () => {
@@ -141,22 +129,12 @@
                   "Failed to update image on backend:",
                   await res2.json()
                 );
-                if (res2.status === 500) {
-                  goto("../pollination");
-                } else {
-                  goto("../pollination");
-                }
               }
             }
           }, 2000);
         }
       } else {
         console.error("Error fetching generated new image");
-        if (imageGenerationResponse.status === 500) {
-          goto("../pollination");
-        } else {
-          goto("../pollination");
-        }
       }
     }
   };
@@ -235,6 +213,9 @@
         </div>
         <p class="mt-4 text-sm">{errorText}</p>
         <p class="mt-4 text-sm">{candidateChild.description}</p>
+
+        <br />
+        <br />
       </div>
     </div>
   </div>

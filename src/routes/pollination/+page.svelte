@@ -66,12 +66,16 @@
               child = existingChild([parent1, parent2]);
               if (child == null) {
                 waiting = true;
-                candidateChild = await confirmBreed([parent1, parent2]);
-                if (candidateChild) {
-                  console.log("Got candidate child OK:", candidateChild);
-                  busy = false;
+                try {
+                  candidateChild = await confirmBreed([parent1, parent2]);
+                  if (candidateChild) {
+                    console.log("Got candidate child OK:", candidateChild);
+                    busy = false;
+                  }
+                  waiting = false;
+                } catch (e) {
+                  goto("/gallery");
                 }
-                waiting = false;
               }
             }
           }

@@ -1,4 +1,4 @@
-import { json, type RequestHandler } from "@sveltejs/kit";
+import { error, json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import DefaultPrompt from "../../../../defaults/prompt-config";
 
 export const POST: RequestHandler = async ({ request }) => {
+  //return error(500)
   const data = (await request.json()) as {
     prompt: ChatCompletionMessageParam[];
     parents: [SelectPlant, SelectPlant];
