@@ -8,18 +8,18 @@
 
 <ReturnButton functionReturn={goBack}></ReturnButton>
 
-<div class="mx-12 pt-32 font-inter text-justify text-roel_blue text-sm">
+<div class="mx-12 pt-32 font-inter text-left text-roel_blue text-sm">
   <img src="/titleimg.png" alt="logo" />
   <p class="mt-4">
     What is this project about?
     <br />
-    <br /> The Lusthof app seeks to invert the typical narrative of digital
+    <br /> The Garden app seeks to invert the typical narrative of digital
     technology as a force of isolation and detachment. Instead of pulling us
     deeper into the virtual world, Lusthof leverages technology to foster
     real-world connections and appreciation for the natural world. This approach
     envisions technology not as an isolating force, but as a catalyst for
     tangible, meaningful interactions.
-    <br /><br />In Lusthof, each user begins with a single seed, representing
+    <br /><br />In The Garden, each user begins with a single seed, representing
     the potential for growth and connection. To enrich the communal garden and
     diversify their seed collection, users must engage with other gardeners. The
     combination of the Large Language Model (LLM) Chat-GPT and the text-to-image
