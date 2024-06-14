@@ -43,16 +43,12 @@
 
   let videoElement: HTMLVideoElement;
 
-  function isMobile() {
-    return /Mobi|Android/i.test(navigator.userAgent);
-  }
-
   onMount(async () => {
     const codeReader = new BrowserMultiFormatReader();
 
     let constraints = {
       video: {
-        facingMode: isMobile() ? { exact: "environment" } : "user"
+        facingMode: "environment"
       }
     };
 
@@ -64,7 +60,7 @@
         // Fallback constraints if the exact constraints are not met
         constraints = {
           video: {
-            facingMode: isMobile() ? "environment" : "user"
+            facingMode: "user"
           }
         };
         try {
