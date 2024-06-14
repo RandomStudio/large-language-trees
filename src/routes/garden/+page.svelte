@@ -263,7 +263,7 @@
 <body>
   <div
     class="bg-repeat h-screen fixed"
-    style="background-image: url('grassTexture2.png')"
+    style="background-image: url('grassTexture_New.png')"
     style:width={"100vw"}
     style:margin-top={"-0px"}
   ></div>
