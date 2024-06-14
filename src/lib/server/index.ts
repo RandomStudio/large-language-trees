@@ -50,10 +50,14 @@ export const populateDefaultPlants = async () => {
   );
 };
 
-export const getUserByUsername = async (username: string) =>
+export const getUserByUsername = async (
+  username: string
+): Promise<SelectUser | undefined> =>
   db.query.users.findFirst({ where: eq(users.username, username) });
 
-export const getUserById = async (userId: string) =>
+export const getUserById = async (
+  userId: string
+): Promise<SelectUser | undefined> =>
   db.query.users.findFirst({ where: eq(users.id, userId) });
 
 export const checkPlantsExist = async () => {
@@ -327,7 +331,7 @@ async function addDefaultSeedsToNewGarden(userId: string, newGarden: MyGarden) {
   const user = await getUserById(userId);
   seeds.plantsInSeedbank.forEach(async (seed) => {
     console.log(
-      "Add plant",
+      "addDefaultSeedsToNewGarden: Add plant",
       seed.plant.id,
       "to garden",
       newGarden.id,
@@ -338,11 +342,11 @@ async function addDefaultSeedsToNewGarden(userId: string, newGarden: MyGarden) {
 
     const adminUser = await getUserByUsername("admin");
 
-    if (
-      adminUser &&
-      adminUser.id !== userId &&
-      ADMIN_GARDEN_SHARED === "true"
-    ) {
+    if (userId === adminUser.id) {
+      console.log("We are the admin user; no need to add seed to our garden");
+    }
+
+    if (ADMIN_GARDEN_SHARED === "true") {
       console.warn("Also add this plant to the Admin user's garden");
       if (adminUser) {
         const adminUserGarden = await getUserGarden(adminUser.id);
