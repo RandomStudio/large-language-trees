@@ -2,15 +2,17 @@
   import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
   import ButtonBottom from "./ButtonBottom.svelte";
-
   import PlantDisplay from "./PlantDisplay.svelte";
   import ReturnButton from "./ReturnButton.svelte";
 
   export let plantDetails: SelectPlant;
-  export let closePopup: () => any;
+
+  function handleClose() {
+    goto("../gallery");
+  }
 </script>
 
-<ReturnButton functionReturn={closePopup}></ReturnButton>
+<ReturnButton functionReturn={handleClose}></ReturnButton>
 
 <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
   <div class="overflow-y-auto" style="max-height: calc(100% - 4rem);">
@@ -28,5 +30,5 @@
   </div>
 </div>
 
-<ButtonBottom buttonText="Back" functionClick={closePopup} width="w-7/12"
+<ButtonBottom buttonText="Back" functionClick={handleClose} width="w-7/12"
 ></ButtonBottom>
