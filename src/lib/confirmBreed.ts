@@ -14,6 +14,7 @@ export async function confirmBreed(
       parents
     })
   });
+  console.log("Got response on /api/plants/generate", res);
   if (res.status === 200) {
     console.log("Created new candidate plant OK:", res);
     return (await res.json()) as InsertPlant;

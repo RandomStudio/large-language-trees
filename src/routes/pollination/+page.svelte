@@ -100,6 +100,7 @@
                   }
                   waiting = false;
                 } catch (e) {
+                  console.error("Error getting candidate child", e);
                   goto("/gallery");
                 }
               }
