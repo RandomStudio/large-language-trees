@@ -347,7 +347,7 @@ async function addDefaultSeedsToNewGarden(userId: string, newGarden: MyGarden) {
     }
 
     if (userId === adminUser.id) {
-      console.log("We are the admin user; no need to add seed to our garden");
+      console.warn("We are the admin user; no need to add seed to our garden");
     }
 
     if (ADMIN_GARDEN_SHARED === "true") {
