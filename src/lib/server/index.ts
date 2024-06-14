@@ -2,7 +2,7 @@ import { db } from "./db";
 import DefaultSeeds from "../../defaults/seeds.json";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import OpenAI from "openai";
-import { OPENAI_API_KEY } from "$env/static/private";
+import { ADMIN_GARDEN_SHARED, OPENAI_API_KEY } from "$env/static/private";
 import {
   gardens,
   gardensToPlants,
@@ -15,9 +15,11 @@ import {
 import { eq, isNull, not } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
+  GardenPlantEntry,
   InsertPlant,
   MyGarden,
   MySeeds,
+  SeedbankEntry,
   SeedbankEntryWithPlant,
   SelectGarden,
   SelectPlant,
@@ -48,6 +50,12 @@ export const populateDefaultPlants = async () => {
   );
 };
 
+export const getUserByUsername = async (username: string) =>
+  db.query.users.findFirst({ where: eq(users.username, username) });
+
+export const getUserById = async (userId: string) =>
+  db.query.users.findFirst({ where: eq(users.id, userId) });
+
 export const checkPlantsExist = async () => {
   const existingPlants = await db.query.plants.findMany();
   if (existingPlants.length === 0) {
@@ -67,31 +75,68 @@ export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
     console.log(JSON.stringify({ seedBank }));
     return seedBank;
   } else {
-    console.log("No seedbank! Will have to create one and populate it");
-    const result = await db
-      .insert(seedbanks)
-      .values({
-        id: uuidv4(),
-        userId
-      })
-      .returning();
-    const newSeedbank = result[0];
-    const plant = await db
-      .select()
-      .from(plants)
-      .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
-      .where(isNull(seedbanksToPlants));
-    // console.log("plant with inSeedBanks:", plant);
+    const user = await getUserById(userId);
+    console.log(
+      "No seedbank for user",
+      user?.username,
+      "; Will have to create one and populate it"
+    );
+    await createNewSeedbank(userId);
+    return await getUserSeeds(userId);
+  }
+};
 
-    if (plant) {
-      await db.insert(seedbanksToPlants).values({
-        seedbankId: newSeedbank.id,
-        plantId: plant[0].plants.id
-      });
-      return await getUserSeeds(userId);
-    } else {
-      throw Error("suitable plant not found");
+export const createNewSeedbank = async (userId: string) => {
+  const result = await db
+    .insert(seedbanks)
+    .values({
+      id: uuidv4(),
+      userId
+    })
+    .returning();
+  const newSeedbank = result[0];
+
+  const adminUser = await getUserByUsername("admin");
+  if (!adminUser) {
+    throw Error("Admin user not found; something is wrong!");
+  }
+  if (userId === adminUser.id) {
+    console.log(
+      "This is the admin user. No need to add initial plants to this seedbank"
+    );
+    return;
+  }
+
+  // We look for plants that have not been assigned to any seedbank (yet)
+  // This is safe for now, because we don't expect the number of users (and thus seedbanks)
+  // to exceed the number of available plants.
+  const plant = await db
+    .select()
+    .from(plants)
+    .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
+    .where(isNull(seedbanksToPlants));
+
+  if (plant) {
+    // await db.insert(seedbanksToPlants).values({
+    //   seedbankId: newSeedbank.id,
+    //   plantId: plant[0].plants.id
+    // });
+    const thePlant = plant[0].plants;
+    await addPlantToSeedbank(thePlant.id, newSeedbank.id);
+    if (ADMIN_GARDEN_SHARED === "true") {
+      console.warn(
+        "ADMIN_GARDEN_SHARED enabled, so we will also add this plant to the admin user's seedbank..."
+      );
+      const adminSeedbank = await getUserSeeds(adminUser.id);
+      if (adminUser && adminSeedbank) {
+        addPlantToSeedbank(thePlant.id, adminSeedbank.id);
+      } else {
+        throw Error("admin user not found or admin seedbank not found");
+      }
     }
+  } else {
+    // TODO: we could, instead, pick a random new plant, or even generate one
+    throw Error("suitable plant not found to assign to user on first login");
   }
 };
 
@@ -103,24 +148,18 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
     }
   });
   if (user) {
-    // console.log("full result:", JSON.stringify(user, null, 2));
     if (user.myGarden === null) {
-      console.log("User has no garden (yet)");
-      const id = uuidv4();
-      const newGardenResult = await db
-        .insert(gardens)
-        .values({
-          id,
-          name: `${user.username}'s Garden`,
-          userId: user.id
-        })
-        .returning();
+      // Create a new garden for the user...
+      console.warn("No garden for this user! We need to create one");
+      const newGarden = await createNewGarden(user.id, user.username);
 
-      if (newGardenResult.length == 1) {
-        return await getUserGarden(userId);
-      } else {
-        throw Error("Something went wrong adding the new user garden");
+      // Also add their first seed(s) to the garden (and this is not the admin user!)...
+
+      if (user.username !== "admin") {
+        await addDefaultSeedsToNewGarden(userId, newGarden);
       }
+
+      return newGarden;
     } else {
       console.log("user has garden named", user.myGarden.name);
       return user.myGarden;
@@ -130,7 +169,29 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
   }
 };
 
-export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
+export const getUserSeedbank = async (userId: string) =>
+  await db.query.seedbanks.findFirst({ where: eq(seedbanks.userId, userId) });
+
+export const createNewGarden = async (userId: string, username: string) => {
+  console.log("User has no garden (yet)");
+  const id = uuidv4();
+  const newGardenResult = await db
+    .insert(gardens)
+    .values({
+      id,
+      name: `${username}'s Garden`,
+      userId: userId
+    })
+    .returning();
+
+  if (newGardenResult.length == 1) {
+    return await getUserGarden(userId);
+  } else {
+    throw Error("Something went wrong adding the new user garden");
+  }
+};
+
+export const addNewPlant = async (plant: InsertPlant): Promise<InsertPlant> => {
   console.log("creating new plant", plant);
   if (typeof plant === "string") {
     throw Error("Plant is not an object");
@@ -143,7 +204,7 @@ export const addNew = async (plant: InsertPlant): Promise<InsertPlant> => {
 export const generate = async (
   prompt: ChatCompletionMessageParam[],
   parents: [SelectPlant, SelectPlant]
-) => {
+): Promise<InsertPlant | null> => {
   let offspring: InsertPlant | null = null;
 
   if (prompt && parents) {
@@ -260,3 +321,86 @@ export const cleanUp = async () => {
   await db.delete(plants);
   console.log("...cleanup complete!");
 };
+
+async function addDefaultSeedsToNewGarden(userId: string, newGarden: MyGarden) {
+  const seeds = await getUserSeeds(userId);
+  const user = await getUserById(userId);
+  seeds.plantsInSeedbank.forEach(async (seed) => {
+    console.log(
+      "Add plant",
+      seed.plant.id,
+      "to garden",
+      newGarden.id,
+      "for user",
+      user?.username
+    );
+    await addPlantToGarden(seed.plant.id, newGarden.id);
+
+    const adminUser = await getUserByUsername("admin");
+
+    if (
+      adminUser &&
+      adminUser.id !== userId &&
+      ADMIN_GARDEN_SHARED === "true"
+    ) {
+      console.warn("Also add this plant to the Admin user's garden");
+      if (adminUser) {
+        const adminUserGarden = await getUserGarden(adminUser.id);
+        if (adminUserGarden) {
+          await addPlantToGarden(seed.plant.id, adminUserGarden.id);
+        }
+      }
+    }
+  });
+}
+
+export async function addPlantToGarden(plantId: string, gardenId: string) {
+  const otherPlants = await db.query.gardensToPlants.findMany({
+    where: eq(gardensToPlants.gardenId, gardenId)
+  });
+
+  const { col, row } = findEmpty(otherPlants, { row: 0, col: 0 });
+
+  console.log("Found empty spot:", { col, row });
+
+  const result = await db
+    .insert(gardensToPlants)
+    .values({ gardenId, plantId, rowIndex: row, colIndex: col })
+    .returning();
+
+  if (result.length === 0) {
+    throw Error("error adding plant to garden");
+  }
+}
+
+const findEmpty = (
+  otherPlants: GardenPlantEntry[],
+  closeTo: { row: number; col: number }
+) => {
+  let col = closeTo.col;
+  let row = closeTo.row;
+
+  while (
+    otherPlants.find(
+      (entry) => entry.colIndex === col && entry.rowIndex === row
+    )
+  ) {
+    col = Math.floor(Math.random() * GRID_WIDTH);
+    row = Math.floor(Math.random() * GRID_HEIGHT);
+  }
+
+  return { col, row };
+};
+
+export async function addPlantToSeedbank(plantId: string, seedbankId: string) {
+  const entry: SeedbankEntry = {
+    plantId,
+    seedbankId
+  };
+
+  const result = await db.insert(seedbanksToPlants).values(entry).returning();
+
+  if (result.length === 0) {
+    throw Error("error adding plant to seedbank/gallery");
+  }
+}

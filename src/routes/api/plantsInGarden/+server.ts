@@ -1,82 +1,39 @@
 import { db } from "$lib/server/db";
-import { gardens, gardensToPlants } from "$lib/server/schema";
+import { gardens, gardensToPlants, users } from "$lib/server/schema";
 import type { GardenPlantEntry } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
-import { pickRandomIndex } from "random-elements";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../../defaults/constants";
-import { SHARED_GARDEN_USERID } from "$env/static/private";
-
-const findEmpty = (
-  otherPlants: GardenPlantEntry[],
-  closeTo: { row: number; col: number }
-) => {
-  let col = closeTo.col;
-  let row = closeTo.row;
-
-  while (
-    otherPlants.find(
-      (entry) => entry.colIndex === col && entry.rowIndex === row
-    )
-  ) {
-    col = Math.floor(Math.random() * GRID_WIDTH);
-    row = Math.floor(Math.random() * GRID_HEIGHT);
-  }
-
-  return { col, row };
-};
+import {
+  addPlantToGarden,
+  getUserByUsername,
+  getUserGarden
+} from "$lib/server";
+import { ADMIN_GARDEN_SHARED } from "$env/static/private";
 
 export const POST: RequestHandler = async ({ request }) => {
-  const data = (await request.json()) as GardenPlantEntry;
-  const { gardenId, colIndex, rowIndex } = data;
+  const data = (await request.json()) as { plantId: string; gardenId: string };
+  const { gardenId, plantId } = data;
 
   console.log("POST plantsInGarden", data);
 
-  // First, check that the requested colIndex and rowIndex is
-  // currently empty. Otherwise, find another spot.
+  await addPlantToGarden(plantId, gardenId);
 
-  // Random for now, will use something like random walk in future...
-  const otherPlants = await db.query.gardensToPlants.findMany({
-    where: eq(gardensToPlants.gardenId, gardenId)
-  });
-
-  const { col, row } = findEmpty(otherPlants, { row: rowIndex, col: colIndex });
-
-  console.log("Found empty spot:", { col, row });
-
-  const result = await db
-    .insert(gardensToPlants)
-    .values({ ...data, rowIndex: row, colIndex: col })
-    .returning();
-
-  if (SHARED_GARDEN_USERID) {
+  if (ADMIN_GARDEN_SHARED === "true") {
     console.warn(
-      "SHARED_GARDEN_USERID env variable is active; will also add this plant to default garden"
+      "ADMIN_GARDEN_SHARED enabled; also add this plant to admin garden"
     );
-    const { col, row } = findEmpty(otherPlants, {
-      row: rowIndex,
-      col: colIndex
-    });
-    const defaultGarden = await db.query.gardens.findFirst({
-      where: eq(gardens.userId, SHARED_GARDEN_USERID)
-    });
-    if (defaultGarden) {
-      const result2 = await db
-        .insert(gardensToPlants)
-        .values({
-          ...data,
-          rowIndex: row,
-          colIndex: col,
-          gardenId: defaultGarden.id
-        })
-        .returning();
-      console.log("Added to default garden as entry", result2);
-    } else {
-      console.error("Where is the default user's garden?");
+    const adminUser = await getUserByUsername("admin");
+    if (adminUser) {
+      const adminGarden = await getUserGarden(adminUser.id);
+      if (adminGarden) {
+        await addPlantToGarden(plantId, adminGarden.id);
+        console.log("...added to admin user garden OK");
+      }
     }
   }
 
-  return json(result[0], { status: 201 });
+  return json(data, { status: 201 });
 };
 
 export const PATCH: RequestHandler = async ({ request }) => {

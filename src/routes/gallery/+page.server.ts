@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getUserGarden, getUserSeeds } from "$lib/server/server";
+import { getUserGarden, getUserSeeds } from "$lib/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 import type { GardenViewData } from "$lib/types";

@@ -6,7 +6,7 @@
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
-  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
+  import { addConfirmedPlant, confirmBreed } from "$lib/confirmBreed";
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
@@ -116,7 +116,11 @@
     onConfirm={async (updatedPlant) => {
       if (candidateChild) {
         candidateChild = updatedPlant;
-        await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+        await addConfirmedPlant(
+          candidateChild,
+          data.garden.id,
+          data.seedBank.id
+        );
         candidateChild = null;
         busy = false;
       }

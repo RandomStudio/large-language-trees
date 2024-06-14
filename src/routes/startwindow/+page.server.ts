@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getUserGarden, getUserSeeds } from "$lib/server/server";
+import { getUserGarden, getUserSeeds } from "$lib/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 import type { GardenViewData } from "$lib/types";
@@ -19,8 +19,8 @@ export const load: PageServerLoad = async ({
 
   console.log("******** (re)load page data");
   if (userId) {
-    const garden = await getUserGarden(userId);
     const seedBank = await getUserSeeds(userId);
+    const garden = await getUserGarden(userId);
     console.log("...ready to render");
     const thisUser = await db.query.users.findFirst({
       where: eq(users.id, userId),

@@ -123,11 +123,11 @@
     let parent = findParent(plant, parentName);
     if (!parent) {
       console.log(`Parent plant not found for ${parentName}`);
-      return defaultValue; // or another default value you prefer
+      return parentX(plant); // or another default value you prefer
     }
 
     // Calculate the X position relative to the parent plant
-    const parentX = parent.x;
+    const x = parent.x;
 
     // Calculate the X position based on the number of children and the width of the child plant
     const xOffset = 20 + parent.numberOfChildren * xDistribution;
@@ -135,13 +135,13 @@
     // Alternate sides for odd and even children to make them expand outwards
     const sign = parent.numberOfChildren % 2 === 0 ? -1 : 1;
 
-    return parentX + sign * xOffset;
+    return x + sign * xOffset;
   }
   function childY(plant: SelectPlant, parentName: string) {
     let parent = findParent(plant, parentName);
     if (!parent) {
       console.log(`Parent plant not found for ${parentName}`);
-      return defaultValue; // or another default value you prefer
+      return parentY(plant); // or another default value you prefer
     }
     return (
       (parent?.y ?? defaultValue) +
@@ -237,7 +237,15 @@
       `http://localhost:5173/api/users/${data.user.id}/garden`
     );
     const myGarden = (await response.json()) as MyGarden; // get all plants info
+
     const newPlants = myGarden.plantsInGarden;
+
+    console.log(
+      newPlants.length,
+      "plants in my garden vs",
+      data.garden.plantsInGarden.length,
+      "known"
+    );
 
     let existingPlants = displayPlants.map((p) => p.plant); // get the plant from each PositionedPlant
 
