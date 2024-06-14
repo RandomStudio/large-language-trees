@@ -4,13 +4,7 @@ import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
 import { plants, users } from "$lib/server/schema";
 import { lucia } from "$lib/server/auth";
-import {
-  checkDefaultUsers,
-  checkPlantsExist,
-  cleanUp,
-  getUserGarden,
-  getUserSeeds
-} from "$lib/server/server";
+import { cleanUp, populateDefaultPlants } from "$lib/server/server";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const username = locals.user?.username;
@@ -51,9 +45,13 @@ export const actions: Actions = {
     });
     redirect(302, "/");
   },
-  reset: async (event) => {
+  reset: async (_event) => {
     console.warn("Full reset happening!");
     await cleanUp();
     redirect(302, "/");
+  },
+  initplants: async (_event) => {
+    console.warn("Plants initialisation...");
+    await populateDefaultPlants();
   }
 };

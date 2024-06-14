@@ -2,6 +2,7 @@
   import type {
     GardenPlantEntryWithPlant,
     GardenViewData,
+    MyGarden,
     PlantProperties,
     SelectPlant
   } from "$lib/types";
@@ -232,8 +233,11 @@
 
   //continously add new plants
   async function importNewPlants() {
-    const response = await fetch("http://localhost:5173/api/plants");
-    const newPlants = (await response.json()) as SelectPlant[]; // get all plants info
+    const response = await fetch(
+      `http://localhost:5173/api/users/${data.user.id}/garden`
+    );
+    const myGarden = (await response.json()) as MyGarden; // get all plants info
+    const newPlants = myGarden.plantsInGarden;
 
     let existingPlants = displayPlants.map((p) => p.plant); // get the plant from each PositionedPlant
 
@@ -241,14 +245,14 @@
     let existingPlantIds = existingPlants.map((p) => p.id);
 
     let confirmedNewPlants = newPlants.filter(
-      (item) => !existingPlantIds.includes(item.id) // isolate plants that are new by comparing ids
+      (item) => !existingPlantIds.includes(item.plant.id) // isolate plants that are new by comparing ids
     );
 
     confirmedNewPlants.forEach((entry) => {
       console.log("New plant found! " + JSON.stringify(entry));
       const audio = new Audio("594400__elandre01__rustling-leaves.wav");
       audio.play();
-      addPlants(entry);
+      addPlants(entry.plant);
     });
   }
 

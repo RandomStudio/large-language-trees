@@ -50,6 +50,8 @@ export const actions = {
     });
 
     if (!existingUser) {
+      // This is NOT an existing user, so attempt to auto-register new user
+
       const userId = generateIdFromEntropySize(10); // 16 characters long
       const passwordHash = await hash(password, {
         // recommended minimum parameters
@@ -66,11 +68,20 @@ export const actions = {
       if (alreadyExists.length > 0) {
         return fail(400, { message: "That username already exists" });
       }
-      await db.insert(users).values({
+
+      const isAdmin = username === "admin";
+      const newUser = {
         id: userId,
         username,
-        passwordHash
-      });
+        passwordHash,
+        isAdmin
+      };
+      console.log(
+        "Auto register; create new user",
+        { userId, username, isAdmin },
+        "..."
+      );
+      await db.insert(users).values(newUser);
 
       const session = await lucia.createSession(userId, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
@@ -79,8 +90,13 @@ export const actions = {
         ...sessionCookie.attributes
       });
 
-      redirect(302, "/startwindow");
+      if (username === "admin") {
+        redirect(302, "/admin");
+      } else {
+        redirect(302, "/startwindow");
+      }
     } else {
+      // This is an existing user, so try to log in
       const validPassword = await verify(existingUser.passwordHash, password, {
         memoryCost: 19456,
         timeCost: 2,
@@ -102,7 +118,11 @@ export const actions = {
         ...sessionCookie.attributes
       });
 
-      redirect(302, "/gallery");
+      if (username === "admin") {
+        redirect(302, "/garden");
+      } else {
+        redirect(302, "/gallery");
+      }
     }
   }
 } satisfies Actions;

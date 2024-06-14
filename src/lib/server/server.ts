@@ -10,7 +10,7 @@ import {
   seedbanks,
   seedbanksToPlants,
   sessions,
-  users,
+  users
 } from "./schema";
 import { eq, isNull, not } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
@@ -23,7 +23,7 @@ import type {
   SelectPlant,
   SelectUser,
   UserWithGarden,
-  UserWithSeedbank,
+  UserWithSeedbank
 } from "$lib/types";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
@@ -31,11 +31,8 @@ import { v4 as uuidv4 } from "uuid";
 import { pickMultipleRandomElements, pickRandomIndexes } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 
-const populateDefaultPlants = async () => {
+export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
-
-  // const rows = getRandomIndices(GRID_HEIGHT, newPlants.length);
-  // const columns = getRandomIndices(GRID_WIDTH, newPlants.length);
 
   await Promise.all(
     newPlants.map((p) => {
@@ -45,7 +42,7 @@ const populateDefaultPlants = async () => {
         commonName,
         description,
         properties,
-        imageUrl,
+        imageUrl
       });
     })
   );
@@ -64,7 +61,7 @@ export const checkPlantsExist = async () => {
 export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
   const seedBank = await db.query.seedbanks.findFirst({
     where: eq(seedbanks.userId, userId),
-    with: { plantsInSeedbank: { with: { plant: true } } },
+    with: { plantsInSeedbank: { with: { plant: true } } }
   });
   if (seedBank) {
     console.log(JSON.stringify({ seedBank }));
@@ -75,7 +72,7 @@ export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
       .insert(seedbanks)
       .values({
         id: uuidv4(),
-        userId,
+        userId
       })
       .returning();
     const newSeedbank = result[0];
@@ -84,12 +81,12 @@ export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
       .from(plants)
       .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
       .where(isNull(seedbanksToPlants));
-    console.log("plant with inSeedBanks:", plant);
+    // console.log("plant with inSeedBanks:", plant);
 
     if (plant) {
       await db.insert(seedbanksToPlants).values({
         seedbankId: newSeedbank.id,
-        plantId: plant[0].plants.id,
+        plantId: plant[0].plants.id
       });
       return await getUserSeeds(userId);
     } else {
@@ -102,8 +99,8 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
   const user: UserWithGarden | undefined = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      myGarden: { with: { plantsInGarden: { with: { plant: true } } } },
-    },
+      myGarden: { with: { plantsInGarden: { with: { plant: true } } } }
+    }
   });
   if (user) {
     // console.log("full result:", JSON.stringify(user, null, 2));
@@ -115,48 +112,17 @@ export const getUserGarden = async (userId: string): Promise<MyGarden> => {
         .values({
           id,
           name: `${user.username}'s Garden`,
-          userId: user.id,
+          userId: user.id
         })
         .returning();
-      const newGarden = newGardenResult[0];
 
-      // Also add default plants into this garden
-      const defaultPlants = DefaultSeeds;
-
-      let rowIndex = 0;
-      let colIndex = 0;
-
-      await Promise.all(
-        defaultPlants.map(async (plant) => {
-          colIndex += 2;
-          if (colIndex >= GRID_WIDTH - 1) {
-            rowIndex += 2;
-            colIndex = 0;
-          }
-          console.log(
-            `Adding plant ${plant.commonName} at position [${colIndex},${rowIndex}]...`
-          );
-          const plantId = plant.id;
-          const gardenId = newGarden.id;
-          console.log("keys:", { plantId, gardenId });
-          await db.insert(gardensToPlants).values({
-            plantId,
-            gardenId,
-            colIndex,
-            rowIndex,
-          });
-        })
-      );
-
-      return await getUserGarden(userId);
-
-      // return { id: 0, name: "bla", userId: user.id };
+      if (newGardenResult.length == 1) {
+        return await getUserGarden(userId);
+      } else {
+        throw Error("Something went wrong adding the new user garden");
+      }
     } else {
       console.log("user has garden named", user.myGarden.name);
-      // const gardenWithPlants = await db.query.gardens.findMany({
-      //   with: { gardensToPlants: true },
-      // });
-      // console.log(JSON.stringify(gardenWithPlants, null, 2));
       return user.myGarden;
     }
   } else {
@@ -187,7 +153,7 @@ export const generate = async (
 
     const completion = await openai.chat.completions.create({
       messages: prompt,
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo"
     });
 
     console.log("response:", completion.choices);
@@ -217,7 +183,7 @@ const parseNewPlant = (text: string): InsertPlant | null => {
       id,
       commonName: json["commonName"],
       description: json["description"],
-      properties: { ...json["properties"] },
+      properties: { ...json["properties"] }
     };
   } else {
     throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
@@ -266,13 +232,13 @@ export const checkDefaultUsers = async () => {
           memoryCost: 19456,
           timeCost: 2,
           outputLen: 32,
-          parallelism: 1,
+          parallelism: 1
         });
         await db.insert(users).values({
           id: u.id,
           username: u.username,
           passwordHash,
-          isAdmin: true,
+          isAdmin: true
         });
       })
     );

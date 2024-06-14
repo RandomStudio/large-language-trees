@@ -37,7 +37,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
   // Random for now, will use something like random walk in future...
   const otherPlants = await db.query.gardensToPlants.findMany({
-    where: eq(gardensToPlants.gardenId, gardenId),
+    where: eq(gardensToPlants.gardenId, gardenId)
   });
 
   const { col, row } = findEmpty(otherPlants, { row: rowIndex, col: colIndex });
@@ -55,10 +55,10 @@ export const POST: RequestHandler = async ({ request }) => {
     );
     const { col, row } = findEmpty(otherPlants, {
       row: rowIndex,
-      col: colIndex,
+      col: colIndex
     });
     const defaultGarden = await db.query.gardens.findFirst({
-      where: eq(gardens.userId, SHARED_GARDEN_USERID),
+      where: eq(gardens.userId, SHARED_GARDEN_USERID)
     });
     if (defaultGarden) {
       const result2 = await db
@@ -67,7 +67,7 @@ export const POST: RequestHandler = async ({ request }) => {
           ...data,
           rowIndex: row,
           colIndex: col,
-          gardenId: defaultGarden.id,
+          gardenId: defaultGarden.id
         })
         .returning();
       console.log("Added to default garden as entry", result2);
