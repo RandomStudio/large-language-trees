@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ params }) => {
     });
 
     if (candidateImage) {
-      return json(candidateImage, { status: 201 });
+      return json(candidateImage, { status: 200 });
     } else {
       return json(undefined, { status: 404 });
     }
