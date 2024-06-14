@@ -103,8 +103,12 @@
                   console.error("Error getting candidate child", e);
                   goto("/gallery");
                 }
+              } else {
+                throw Error("failed to fetch plant details");
               }
             }
+          } else {
+            console.log();
           }
         });
       }

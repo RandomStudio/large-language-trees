@@ -35,7 +35,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
   if (USE_NETLIFY_BACKGROUND_FN === "true") {
     console.log(
-      a`Will initiate (background) request for image generation with prompt "${prompt}" ...`
+      `Will initiate (background) request for image generation with prompt "${prompt}" ...`
     );
     await fetch(
       "https://livinggarden.netlify.app/.netlify/functions/img-gen-background",
