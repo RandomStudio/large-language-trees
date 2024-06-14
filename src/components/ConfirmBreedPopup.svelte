@@ -82,16 +82,21 @@
         method: "POST",
         body: JSON.stringify(jsonBody)
       });
-      waitingForImage = false;
+      // waitingForImage = false;
       if (imageGenerationResponse.status == 200) {
         const json =
           (await imageGenerationResponse.json()) as GeneratedImageResult;
         const { url, pleaseWait } = json;
         if (pleaseWait === false && url) {
-          console.log("got candidate image URL (ready):", url);
+          console.log(
+            "No need to wait, here's the URL: got candidate image URL (ready):",
+            url
+          );
           replaceImage(url);
         } else {
-          console.log("Request for image has been sent; poll for response");
+          console.log(
+            "Request for image has been sent; poll for response (need to wait)"
+          );
           let polling: NodeJS.Timeout | null = setInterval(async () => {
             console.log("Checking for image...");
 
@@ -100,6 +105,12 @@
             );
 
             if (res.status === 200) {
+              if (polling) {
+                console.log("clear polling interval!");
+                clearInterval(polling);
+                polling = null;
+              }
+
               const generated = (await res.json()) as GeneratedImage;
               const { plantId, url } = generated;
               console.log("Yes, a generated image exists for this plant!", {
@@ -119,11 +130,6 @@
                   await res2.json()
                 );
               }
-              if (polling) {
-                console.log("clear polling interval!");
-                clearInterval(polling);
-                polling = null;
-              }
             }
           }, 2000);
         }
@@ -142,6 +148,7 @@
     );
     candidateImageUrl = url;
     finalChildReadyToAdd.imageUrl = url;
+    waitingForImage = false;
   }
 
   const messages = [
