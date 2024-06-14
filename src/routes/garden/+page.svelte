@@ -8,6 +8,7 @@
   export let data: GardenViewData;
 
   import { onMount } from "svelte";
+  import { HEIGHT_PROPERTY_KEY } from "../../defaults/constants";
 
   //constants relating to making plants not overlap
   const initialCrowdednessTolerance = 500;
@@ -208,7 +209,7 @@
 
   // function to get property height from a plant, since it's reused
   function plantHeight(plant: SelectPlant): number {
-    const value = (plant.properties as PlantProperties)["high(m)"];
+    const value = (plant.properties as PlantProperties)[HEIGHT_PROPERTY_KEY];
     if (typeof value === "number") {
       return (value as number) ?? defaultHeightValue;
     } else {
