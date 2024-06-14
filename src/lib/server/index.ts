@@ -342,17 +342,21 @@ async function addDefaultSeedsToNewGarden(userId: string, newGarden: MyGarden) {
 
     const adminUser = await getUserByUsername("admin");
 
+    if (!adminUser) {
+      throw Error("Admin user not found!");
+    }
+
     if (userId === adminUser.id) {
       console.log("We are the admin user; no need to add seed to our garden");
     }
 
     if (ADMIN_GARDEN_SHARED === "true") {
       console.warn("Also add this plant to the Admin user's garden");
-      if (adminUser) {
-        const adminUserGarden = await getUserGarden(adminUser.id);
-        if (adminUserGarden) {
-          await addPlantToGarden(seed.plant.id, adminUserGarden.id);
-        }
+      const adminUserGarden = await getUserGarden(adminUser.id);
+      if (adminUserGarden) {
+        await addPlantToGarden(seed.plant.id, adminUserGarden.id);
+      } else {
+        throw Error("no admin user garden!");
       }
     }
   });
