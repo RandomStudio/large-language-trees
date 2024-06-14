@@ -2,6 +2,7 @@
   import type {
     GardenPlantEntryWithPlant,
     GardenViewData,
+    MyGarden,
     PlantProperties,
     SelectPlant
   } from "$lib/types";
@@ -122,11 +123,11 @@
     let parent = findParent(plant, parentName);
     if (!parent) {
       console.log(`Parent plant not found for ${parentName}`);
-      return defaultValue; // or another default value you prefer
+      return parentX(plant); // or another default value you prefer
     }
 
     // Calculate the X position relative to the parent plant
-    const parentX = parent.x;
+    const x = parent.x;
 
     // Calculate the X position based on the number of children and the width of the child plant
     const xOffset = 20 + parent.numberOfChildren * xDistribution;
@@ -134,13 +135,13 @@
     // Alternate sides for odd and even children to make them expand outwards
     const sign = parent.numberOfChildren % 2 === 0 ? -1 : 1;
 
-    return parentX + sign * xOffset;
+    return x + sign * xOffset;
   }
   function childY(plant: SelectPlant, parentName: string) {
     let parent = findParent(plant, parentName);
     if (!parent) {
       console.log(`Parent plant not found for ${parentName}`);
-      return defaultValue; // or another default value you prefer
+      return parentY(plant); // or another default value you prefer
     }
     return (
       (parent?.y ?? defaultValue) +
@@ -232,8 +233,17 @@
 
   //continously add new plants
   async function importNewPlants() {
-    const response = await fetch("http://localhost:5173/api/plants");
-    const newPlants = (await response.json()) as SelectPlant[]; // get all plants info
+    const response = await fetch(`/api/users/${data.user.id}/garden`);
+    const myGarden = (await response.json()) as MyGarden; // get all plants info
+
+    const newPlants = myGarden.plantsInGarden;
+
+    console.log(
+      newPlants.length,
+      "plants in my garden vs",
+      data.garden.plantsInGarden.length,
+      "known"
+    );
 
     let existingPlants = displayPlants.map((p) => p.plant); // get the plant from each PositionedPlant
 
@@ -241,14 +251,14 @@
     let existingPlantIds = existingPlants.map((p) => p.id);
 
     let confirmedNewPlants = newPlants.filter(
-      (item) => !existingPlantIds.includes(item.id) // isolate plants that are new by comparing ids
+      (item) => !existingPlantIds.includes(item.plant.id) // isolate plants that are new by comparing ids
     );
 
     confirmedNewPlants.forEach((entry) => {
       console.log("New plant found! " + JSON.stringify(entry));
       const audio = new Audio("594400__elandre01__rustling-leaves.wav");
       audio.play();
-      addPlants(entry);
+      addPlants(entry.plant);
     });
   }
 

@@ -18,8 +18,8 @@ const DefaultPrompt: PromptConfig = {
     label: "Final Instructions",
     description:
       "Remind the AI what you are looking for (combining the two plants) and, if necessary, remind them of the fields (keys) that you expect to see. Definitely state that you only want pure JSON in the response, no other text. The maximum word count should be 200.",
-    text: 'Describe the new plant that would result from the combination of these two. Do not mention the two plant names anymore. The new common name should not just be a simple combination of the two parent plant names - try to come up with a strange sounding name. Please give the result in the same JSON format, i.e. with a field "commonName\'" for the common name and a set of key-value pairs for the new "properties". Also add a "description" field with a short paragraph (about three sentences) with interesting plant characteristics of the properties of the parents, but feel free to invent some details if you like. Mention a news fun fact about it. Elements you could mention would be the plants usage, if it is edible or the name of the fruit like in the original plants. Do not include any text besides the JSON in your response.',
-  },
+    text: 'Describe the new plant that would result from the combination of these two. The new common name should not just be a simple combination of the two parent plant names - try to come up with a strange sounding name. Please give the result in the same JSON format, i.e. with a field "commonName\'" for the common name and a set of key-value pairs for the new "properties". Also add a "description" field with a short paragraph (about three sentences) that describes the new plant referencing the characteristics you came up with, but feel free to invent some details if you like. Elements you could mention would be the plants usage, if it is edible, the name of the fruit or a fun fact like in the original plants. Do not include any text besides the JSON in your response.'
+  }
 };
 
 export default DefaultPrompt;

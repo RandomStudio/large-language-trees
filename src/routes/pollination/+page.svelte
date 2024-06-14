@@ -6,7 +6,7 @@
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
-  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
+  import { addConfirmedPlant, confirmBreed } from "$lib/confirmBreed";
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
@@ -40,20 +40,46 @@
         parents.find((p) => p.id == plant.plant.parent1) &&
         parents.find((p) => p.id == plant.plant.parent2)
     )?.plant || null;
+
   let videoElement: HTMLVideoElement;
 
   onMount(async () => {
     const codeReader = new BrowserMultiFormatReader();
 
-    const constraints = {
-      video: {}
+    let constraints = {
+      video: {
+        facingMode: "environment"
+      }
     };
 
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    try {
+      let stream = await navigator.mediaDevices.getUserMedia(constraints);
+      setupStream(stream);
+    } catch (err) {
+      if (isOverconstrainedError(err)) {
+        // Fallback constraints if the exact constraints are not met
+        constraints = {
+          video: {
+            facingMode: "user"
+          }
+        };
+        try {
+          let stream = await navigator.mediaDevices.getUserMedia(constraints);
+          setupStream(stream);
+        } catch (err) {
+          handleError(err);
+        }
+      } else {
+        handleError(err);
+      }
+    }
+  });
 
+  function setupStream(stream: MediaStream) {
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
 
+    const codeReader = new BrowserMultiFormatReader();
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
       if (result && !busy) {
         // Handle the result here
@@ -86,7 +112,19 @@
         busy = false;
       }
     });
-  });
+  }
+
+  function isOverconstrainedError(err: unknown): err is OverconstrainedError {
+    return (err as OverconstrainedError).name === "OverconstrainedError";
+  }
+
+  function handleError(err: unknown) {
+    if (err instanceof Error) {
+      console.error("Error accessing camera: ", err.message);
+    } else {
+      console.error("Unknown error accessing camera: ", err);
+    }
+  }
 </script>
 
 <ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
@@ -120,7 +158,11 @@
     onConfirm={async (updatedPlant) => {
       if (candidateChild) {
         candidateChild = updatedPlant;
-        await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+        await addConfirmedPlant(
+          candidateChild,
+          data.garden.id,
+          data.seedBank.id
+        );
         candidateChild = null;
         busy = false;
       }
@@ -130,7 +172,7 @@
 
 {#if waiting}
   <div
-    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex flex-col items-center"
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
   >
     <WaitingSpinner></WaitingSpinner>
   </div>

@@ -1,9 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import {
-  checkPlantsExist,
-  getUserGarden,
-  getUserSeeds,
-} from "$lib/server/server";
+import { checkPlantsExist, getUserGarden, getUserSeeds } from "$lib/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 
@@ -36,8 +32,8 @@ export const actions: Actions = {
     const sessionCookie = lucia.createBlankSessionCookie();
     event.cookies.set(sessionCookie.name, sessionCookie.value, {
       path: ".",
-      ...sessionCookie.attributes,
+      ...sessionCookie.attributes
     });
     redirect(302, "/");
-  },
+  }
 };
