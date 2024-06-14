@@ -34,7 +34,7 @@
       />
 
       <button
-        class="text-roel_blue bg-roel_green font-inter text-xl px-4 py-2 mt-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full"
+        class="text-roel_blue bg-roel_green font-inter text-xl px-4 py-2 mt-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
         type="submit"
       >
         Start
@@ -50,10 +50,11 @@
 
   <div class="text-left mt-4 text-sm text-roel_blue">
     <p>
-      Welcome to the common garden of Lucullus. This Digital Common Garden is
-      about connection and cross-pollination.<br /><br />
-      Find other Gardeners to start cross-breeding and witness the offspring flourish
-      in the common garden of Lucullus.
+      Welcome to Random's synergistic Lusthof, where digital abundance is
+      sprouting.
+      <br />
+      <br /> Find other Gardeners in the studio to start cross-pollinating and witness
+      your sprouts flourish in our communal garden.
     </p>
     <br />
     <div>

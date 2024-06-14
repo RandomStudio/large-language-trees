@@ -6,26 +6,30 @@
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
-  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
+  import { addConfirmedPlant, confirmBreed } from "$lib/confirmBreed";
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
   import PopupDejaVu from "../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
   import ReturnButton from "../../components/ReturnButton.svelte";
-
+  import WaitingSpinner from "../../components/WaitingSpinner.svelte";
   export let data: GardenViewData;
-  let busy = false;
+  import { getIndexValue } from "../gallery/shared.js";
+
+  const indexValue = getIndexValue();
+  console.log(indexValue);
 
   let parent1: SelectPlant | null =
-    data.seedBank.plantsInSeedbank.find(
-      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
-    )?.plant || null;
+    data.seedBank.plantsInSeedbank[indexValue].plant;
+
+  let busy = false;
 
   let parent2: SelectPlant | null = null;
 
   let candidateChild: InsertPlant | null = null;
 
+  let waiting: boolean = false;
   let child: SelectPlant | null = null;
 
   $: existingChild = (
@@ -78,7 +82,6 @@
   function setupStream(stream: MediaStream) {
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
-    videoElement.play();
 
     const codeReader = new BrowserMultiFormatReader();
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
@@ -92,7 +95,13 @@
             if (parent1 && parent2) {
               child = existingChild([parent1, parent2]);
               if (child == null) {
+                waiting = true;
                 candidateChild = await confirmBreed([parent1, parent2]);
+                if (candidateChild) {
+                  console.log("Got candidate child OK:", candidateChild);
+                  busy = false;
+                }
+                waiting = false;
               }
             }
           }
@@ -121,9 +130,14 @@
 <ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
-  <p class=" text-xl">Point your camera to another gardener's Pollination QR</p>
+  <p class=" text-xl">
+    Point your camera to another gardeners Pollination QR to start crossbreeding {parent1.commonName}
+  </p>
   <div class="mx-8">
-    <video bind:this={videoElement} class="object-cover aspect-square mt-6">
+    <video
+      bind:this={videoElement}
+      class="object-cover aspect-square mt-12 overflow-hidden rounded-full"
+    >
       <track kind="captions" srclang="en" label="English captions" />
     </video>
 
@@ -133,30 +147,42 @@
       </div>
     {/if}
   </div>
-  <p class="text-xl text-center mt-3">Your Pollination QR</p>
-  {#if candidateChild}
-    <ConfirmBreedPopup
-      {candidateChild}
-      onCancel={() => {
-        candidateChild = null;
-      }}
-      onConfirm={async (updatedPlant) => {
-        if (candidateChild) {
-          candidateChild = updatedPlant;
-          await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
-          candidateChild = null;
-          busy = false;
-        }
-      }}
-    />
-  {/if}
-
-  {#if child}
-    <PopupDejaVu
-      plantDetails={child}
-      closePopup={() => {
-        child = null;
-      }}
-    />
-  {/if}
 </div>
+
+{#if candidateChild}
+  <ConfirmBreedPopup
+    {candidateChild}
+    onCancel={() => {
+      candidateChild = null;
+    }}
+    onConfirm={async (updatedPlant) => {
+      if (candidateChild) {
+        candidateChild = updatedPlant;
+        await addConfirmedPlant(
+          candidateChild,
+          data.garden.id,
+          data.seedBank.id
+        );
+        candidateChild = null;
+        busy = false;
+      }
+    }}
+  />
+{/if}
+
+{#if waiting}
+  <div
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
+  >
+    <WaitingSpinner></WaitingSpinner>
+  </div>
+{/if}
+
+{#if child}
+  <PopupDejaVu
+    plantDetails={child}
+    closePopup={() => {
+      child = null;
+    }}
+  />
+{/if}

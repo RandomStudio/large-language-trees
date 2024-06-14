@@ -1,10 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import {
-  checkDefaultUsers,
-  checkPlantsExist,
-  getUserGarden,
-  getUserSeeds,
-} from "$lib/server/server";
+import { getUserGarden, getUserSeeds } from "$lib/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 import type { GardenViewData } from "$lib/types";
@@ -13,33 +8,30 @@ import { eq } from "drizzle-orm";
 import { users } from "$lib/server/schema";
 
 export const load: PageServerLoad = async ({
-  locals,
+  locals
 }): Promise<GardenViewData> => {
-  const username = locals.user?.username;
+  // const username = locals.user?.username;
   const userId = locals.user?.id;
-  if (!username) {
-    console.log("Not logged in!");
-    redirect(302, "/login");
-  }
+  // if (!username) {
+  //   console.log("Not logged in!");
+  //   redirect(302, "/login");
+  // }
 
   console.log("******** (re)load page data");
   if (userId) {
-    console.log("running checks, loading data after authorisation...");
-    await checkPlantsExist();
-    await checkDefaultUsers();
     const garden = await getUserGarden(userId);
     const seedBank = await getUserSeeds(userId);
     console.log("...ready to render");
     const thisUser = await db.query.users.findFirst({
       where: eq(users.id, userId),
-      with: { mySeedbank: true },
+      with: { mySeedbank: true }
     });
     if (thisUser) {
       return {
         // TODO: just load the user seedbank (including its seeds, not seeds + seedbankId separately)
         user: thisUser,
         seedBank,
-        garden,
+        garden
       };
     } else {
       throw Error("could not find user when querying");
@@ -58,8 +50,8 @@ export const actions: Actions = {
     const sessionCookie = lucia.createBlankSessionCookie();
     event.cookies.set(sessionCookie.name, sessionCookie.value, {
       path: ".",
-      ...sessionCookie.attributes,
+      ...sessionCookie.attributes
     });
     redirect(302, "/");
-  },
+  }
 };
