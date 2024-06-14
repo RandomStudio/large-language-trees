@@ -1,5 +1,6 @@
 import type OpenAI from "openai";
 import type { Characteristics, PromptConfig, SelectPlant } from "./types";
+import ConfirmBreedPopup from "../components/ConfirmBreedPopup.svelte";
 
 export const buildPrompt = (
   config: PromptConfig,
