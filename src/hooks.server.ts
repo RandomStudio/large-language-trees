@@ -2,6 +2,11 @@ import { lucia } from "$lib/server/auth";
 import { redirect, type Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
+  if (event.url.pathname.includes("/api/plants")) {
+    console.warn("Unauthenticated access to", event.url.pathname, "allowed");
+    return resolve(event);
+  }
+
   const sessionId = event.cookies.get(lucia.sessionCookieName);
   if (!sessionId) {
     console.log("clear session info");

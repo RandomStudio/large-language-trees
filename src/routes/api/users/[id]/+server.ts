@@ -8,7 +8,8 @@ export const GET: RequestHandler = async ({ params }) => {
   if (id) {
     const user = await db.query.users.findFirst({ where: eq(users.id, id) });
     if (user) {
-      return json(user, { status: 200 });
+      const { username, id } = user;
+      return json({ username, id }, { status: 200 });
     } else {
       throw Error("user not found");
     }
