@@ -18,10 +18,9 @@
   <h1 class="text-xl">Admin Page</h1>
 
   <div class="m-4">
-    <form method="POST">
-      <button
-        class="bg-red-500 text-white py-2 px-4 rounded"
-        formaction="?/reset">Clear/reset everything</button
+    <form method="POST" action="?/reset">
+      <button class="bg-red-500 text-white py-2 px-4 rounded"
+        >Clear/reset everything</button
       >
     </form>
   </div>
