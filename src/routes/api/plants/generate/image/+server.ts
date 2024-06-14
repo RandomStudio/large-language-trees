@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import { uploadToS3, uploadLocal } from "$lib/server/images";
 import type { GeneratedImageResult } from "$lib/types";
 import { URL_PREFIX } from "../../../../../defaults/constants";
+import DefaultPrompt from "../../../../../defaults/prompt-config";
 
 export const POST: RequestHandler = async ({ request }) => {
   console.log({ PLACEHOLDER_IMAGES });
@@ -29,11 +30,12 @@ export const POST: RequestHandler = async ({ request }) => {
     return json(jsonResponse, { status: 200 });
   }
 
-  const prompt = buildImagePrompt(description);
+  const { instructions } = DefaultPrompt.image;
+  const prompt = buildImagePrompt(instructions, description);
 
   if (USE_NETLIFY_BACKGROUND_FN === "true") {
     console.log(
-      `Will initiate (background) request for image generation with prompt "${prompt}" ...`
+      a`Will initiate (background) request for image generation with prompt "${prompt}" ...`
     );
     await fetch(
       "https://livinggarden.netlify.app/.netlify/functions/img-gen-background",
@@ -56,8 +58,10 @@ export const POST: RequestHandler = async ({ request }) => {
 const doRequestLocally = async (prompt: string) => {
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
+  const { model } = DefaultPrompt.image;
+
   const response = await openai.images.generate({
-    model: "dall-e-3",
+    model,
     prompt,
     n: 1,
     size: "1024x1024"
@@ -102,6 +106,5 @@ const doRequestLocally = async (prompt: string) => {
   }
 };
 
-const buildImagePrompt = (description: string): string =>
-  `I want you to create a pixel art png icon on a soley white background in the art style of Stardew Valley, based on the description that follows. Every time I request this, the image should have the same style so I can create a series of them. Here is the description: \n\n` +
-  description;
+const buildImagePrompt = (instructions: string, description: string): string =>
+  instructions + "\n\n" + description;
