@@ -53,12 +53,12 @@ export const populateDefaultPlants = async () => {
 export const getUserByUsername = async (
   username: string
 ): Promise<SelectUser | undefined> =>
-  db.query.users.findFirst({ where: eq(users.username, username) });
+  await db.query.users.findFirst({ where: eq(users.username, username) });
 
 export const getUserById = async (
   userId: string
 ): Promise<SelectUser | undefined> =>
-  db.query.users.findFirst({ where: eq(users.id, userId) });
+  await db.query.users.findFirst({ where: eq(users.id, userId) });
 
 export const checkPlantsExist = async () => {
   const existingPlants = await db.query.plants.findMany();
@@ -380,6 +380,8 @@ export async function addPlantToGarden(plantId: string, gardenId: string) {
     .insert(gardensToPlants)
     .values({ gardenId, plantId, rowIndex: row, colIndex: col })
     .returning();
+
+  console.log("Added plant", result, "to garden");
 
   if (result.length === 0) {
     throw Error("error adding plant to garden");
