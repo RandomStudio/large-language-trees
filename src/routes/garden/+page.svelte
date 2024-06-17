@@ -45,6 +45,15 @@
   const low2 = 0;
   const high2 = 1;
 
+  const soundFiles = [
+    "sound1.mp3",
+    "sound2.mp3",
+    "sound3.mp3",
+    "sound4.mp3",
+    "sound5.mp3",
+    "sound6.mp3"
+  ];
+
   let displayPlants: PositionedPlant[] = [];
 
   interface PositionedPlant {
@@ -254,9 +263,14 @@
       (item) => !existingPlantIds.includes(item.plant.id) // isolate plants that are new by comparing ids
     );
 
+    function getRandomSoundFile() {
+      const randomIndex = Math.floor(Math.random() * soundFiles.length);
+      return soundFiles[randomIndex];
+    }
+
     confirmedNewPlants.forEach((entry) => {
       console.log("New plant found! " + JSON.stringify(entry));
-      const audio = new Audio("594400__elandre01__rustling-leaves.wav");
+      const audio = new Audio(getRandomSoundFile());
       audio.play();
       addPlants(entry.plant);
     });
@@ -273,7 +287,7 @@
 <body>
   <div
     class="bg-repeat h-screen fixed"
-    style="background-image: url('grassTexture2.png')"
+    style="background-image: url('grassTexture_New.png')"
     style:width={"100vw"}
     style:margin-top={"-0px"}
   ></div>
