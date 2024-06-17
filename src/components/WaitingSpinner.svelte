@@ -1,8 +1,8 @@
 <img
   src="/spinnerPlant.png"
   alt="Spinner"
-  class="w-40 relative slow-reverse-spin"
-  style="margin: auto;"
+  class="w-40 relative flipped-spin"
+  style="margin: auto; transform: scaleX(-1);"
 />
 
 <style>
@@ -15,7 +15,7 @@
     }
   }
 
-  .slow-reverse-spin {
-    animation: spin 4s linear infinite reverse; /* 4 seconds for slower spin and reverse direction */
+  .flipped-spin {
+    animation: spin 4s linear infinite; /* 4 seconds for slower spin */
   }
 </style>

@@ -1,20 +1,21 @@
 import type OpenAI from "openai";
-import type { Characteristics, PromptConfig, SelectPlant } from "./types";
+import type { Characteristics, SelectPlant } from "./types";
+import type { PromptConfig } from "../defaults/prompt-config";
 
 export const buildPrompt = (
   config: PromptConfig,
   plant1: SelectPlant,
   plant2: SelectPlant
 ): OpenAI.Chat.Completions.ChatCompletionMessageParam[] => {
-  const { preamble, explanation, instructions } = config;
+  const { preamble, explanation, instructions } = config.text;
   return [
     {
       role: "system",
-      content: preamble.text,
+      content: preamble.text
     },
     {
       role: "user",
-      content: explanation.text,
+      content: explanation.text
     },
     {
       role: "user",
@@ -27,7 +28,7 @@ export const buildPrompt = (
             description: plant1.description,
             properties: filterCharacteristicsForPrompt(
               plant1.properties as Characteristics
-            ),
+            )
           },
           null,
           2
@@ -42,15 +43,15 @@ export const buildPrompt = (
             description: plant2.description,
             properties: filterCharacteristicsForPrompt(
               plant2.properties as Characteristics
-            ),
+            )
           },
           null,
           2
         ) +
         "\n```" +
         "\n\n" +
-        instructions.text,
-    },
+        instructions.text
+    }
   ];
 };
 

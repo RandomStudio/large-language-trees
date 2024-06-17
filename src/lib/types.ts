@@ -23,19 +23,6 @@ export type Characteristics = { [key: string]: string | number };
 
 export type GeneratedImage = typeof generatedImages.$inferSelect;
 
-export interface PromptSection {
-  label: string;
-  description: string;
-  text: string;
-}
-
-export interface PromptConfig {
-  model: "gpt-3.5-turbo" | "gpt-4-turbo";
-  preamble: PromptSection;
-  explanation: PromptSection;
-  instructions: PromptSection;
-}
-
 export interface GardenPlantEntryWithPlant extends GardenPlantEntry {
   plant: SelectPlant;
 }

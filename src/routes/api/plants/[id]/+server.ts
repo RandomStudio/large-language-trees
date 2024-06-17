@@ -1,17 +1,13 @@
 import { db } from "$lib/server/db";
 import { plants } from "$lib/server/schema";
-import {
-  addNew,
-  attachImageToPlant,
-  updateWholePlant,
-} from "$lib/server/server";
+import { addNewPlant, attachImageToPlant, updateWholePlant } from "$lib/server";
 import type { SelectPlant } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 
 export const POST: RequestHandler = async ({ request }) => {
   const plant = await request.json();
-  await addNew(plant);
+  await addNewPlant(plant);
   return new Response(plant);
 };
 

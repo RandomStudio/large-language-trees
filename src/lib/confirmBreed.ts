@@ -14,6 +14,7 @@ export async function confirmBreed(
       parents
     })
   });
+  console.log("Got response on /api/plants/generate", res);
   if (res.status === 200) {
     console.log("Created new candidate plant OK:", res);
     return (await res.json()) as InsertPlant;
@@ -24,7 +25,7 @@ export async function confirmBreed(
   }
 }
 
-export async function addNewPlant(
+export async function addConfirmedPlant(
   candidateChild: InsertPlant,
   gardenId: string,
   seedbankId: string
@@ -40,38 +41,19 @@ export async function addNewPlant(
     method: "POST",
     body: JSON.stringify(candidateChild)
   });
-  const { status, statusText, body } = res;
+  const { status } = res;
   if (status === 201) {
     console.log("Sucessfully added!");
 
-    // Also place in garden...
-    const plantId = candidateChild.id;
-    const rowIndex = 0;
-    const colIndex = 0;
-    const updated = {
-      plantId,
-      gardenId,
-      rowIndex,
-      colIndex
-    };
-    const placementRes = await fetch("/api/plantsInGarden", {
+    await fetch("/api/plantsInGarden", {
       method: "POST",
-      body: JSON.stringify(updated)
+      body: JSON.stringify({ plantId: candidateChild.id, gardenId })
     });
-    console.log("Placed in garden?", placementRes);
 
-    // Also place in user seedbank...
-    const entry: SeedbankEntry = {
-      plantId,
-      seedbankId
-    };
-    const seedbankRes = await fetch("/api/plantsInSeedbank", {
+    await fetch("/api/plantsInSeedbank", {
       method: "POST",
-      body: JSON.stringify(entry)
+      body: JSON.stringify({ plantId: candidateChild.id, seedbankId })
     });
-    if (seedbankRes.status === 201) {
-      console.log("successsfully added to Seedbank");
-    }
 
     // Reload data for page
     console.log("Reloading page data...");

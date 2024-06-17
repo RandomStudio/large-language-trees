@@ -6,7 +6,7 @@
   } from "../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../components/qr_generate.svelte";
-  import { addNewPlant, confirmBreed } from "$lib/confirmBreed";
+  import { addConfirmedPlant, confirmBreed } from "$lib/confirmBreed";
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
@@ -40,20 +40,47 @@
         parents.find((p) => p.id == plant.plant.parent1) &&
         parents.find((p) => p.id == plant.plant.parent2)
     )?.plant || null;
+
   let videoElement: HTMLVideoElement;
+  let stream: MediaStream;
 
   onMount(async () => {
     const codeReader = new BrowserMultiFormatReader();
 
-    const constraints = {
-      video: {}
+    let constraints = {
+      video: {
+        facingMode: "environment"
+      }
     };
 
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    try {
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      setupStream(stream);
+    } catch (err) {
+      if (isOverconstrainedError(err)) {
+        // Fallback constraints if the exact constraints are not met
+        constraints = {
+          video: {
+            facingMode: "user"
+          }
+        };
+        try {
+          stream = await navigator.mediaDevices.getUserMedia(constraints);
+          setupStream(stream);
+        } catch (err) {
+          handleError(err);
+        }
+      } else {
+        handleError(err);
+      }
+    }
+  });
 
+  function setupStream(stream: MediaStream) {
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
 
+    const codeReader = new BrowserMultiFormatReader();
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
       if (result && !busy) {
         // Handle the result here
@@ -66,14 +93,23 @@
               child = existingChild([parent1, parent2]);
               if (child == null) {
                 waiting = true;
-                candidateChild = await confirmBreed([parent1, parent2]);
-                if (candidateChild) {
-                  console.log("Got candidate child OK:", candidateChild);
-                  busy = false;
+                try {
+                  candidateChild = await confirmBreed([parent1, parent2]);
+                  if (candidateChild) {
+                    console.log("Got candidate child OK:", candidateChild);
+                    busy = false;
+                  }
+                  waiting = false;
+                } catch (e) {
+                  console.error("Error getting candidate child", e);
+                  goto("/gallery");
                 }
-                waiting = false;
+              } else {
+                throw Error("failed to fetch plant details");
               }
             }
+          } else {
+            console.log();
           }
         });
       }
@@ -82,7 +118,25 @@
         busy = false;
       }
     });
-  });
+  }
+
+  function stopStream() {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+  }
+
+  function isOverconstrainedError(err: unknown): err is OverconstrainedError {
+    return (err as OverconstrainedError).name === "OverconstrainedError";
+  }
+
+  function handleError(err: unknown) {
+    if (err instanceof Error) {
+      console.error("Error accessing camera: ", err.message);
+    } else {
+      console.error("Unknown error accessing camera: ", err);
+    }
+  }
 </script>
 
 <ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
@@ -108,15 +162,28 @@
 </div>
 
 {#if candidateChild}
+  {stopStream()}
   <ConfirmBreedPopup
     {candidateChild}
     onCancel={() => {
       candidateChild = null;
+      busy = false; // Allow scanning again if the process is cancelled
+      // Restart the camera stream
+      onMount(async () => {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" }
+        });
+        setupStream(stream);
+      });
     }}
     onConfirm={async (updatedPlant) => {
       if (candidateChild) {
         candidateChild = updatedPlant;
-        await addNewPlant(candidateChild, data.garden.id, data.seedBank.id);
+        await addConfirmedPlant(
+          candidateChild,
+          data.garden.id,
+          data.seedBank.id
+        );
         candidateChild = null;
         busy = false;
       }
@@ -126,7 +193,7 @@
 
 {#if waiting}
   <div
-    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex flex-col items-center"
+    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
   >
     <WaitingSpinner></WaitingSpinner>
   </div>

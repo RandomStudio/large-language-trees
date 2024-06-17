@@ -1,10 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import {
-    type SeedbankEntryWithPlant,
-    type GardenViewData,
-    type MyGarden,
-  } from "../../lib/types";
+  import { type GardenViewData } from "../../lib/types";
   import PlantDisplay from "../../components/PlantDisplay.svelte";
   import QrGenerate from "../../components/qr_generate.svelte";
   import ButtonBottom from "../../components/ButtonBottom.svelte";

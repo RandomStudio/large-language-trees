@@ -2,6 +2,7 @@
   import type {
     GardenPlantEntryWithPlant,
     GardenViewData,
+    MyGarden,
     PlantProperties,
     SelectPlant
   } from "$lib/types";
@@ -43,6 +44,15 @@
   //constants relating to remap function
   const low2 = 0;
   const high2 = 1;
+
+  const soundFiles = [
+    "sound1.mp3",
+    "sound2.mp3",
+    "sound3.mp3",
+    "sound4.mp3",
+    "sound5.mp3",
+    "sound6.mp3"
+  ];
 
   let displayPlants: PositionedPlant[] = [];
 
@@ -247,8 +257,17 @@
 
   //continously add new plants
   async function importNewPlants() {
-    const response = await fetch("http://localhost:5173/api/plants");
-    const newPlants = (await response.json()) as SelectPlant[]; // get all plants info
+    const response = await fetch(`/api/users/${data.user.id}/garden`);
+    const myGarden = (await response.json()) as MyGarden; // get all plants info
+
+    const newPlants = myGarden.plantsInGarden;
+
+    console.log(
+      newPlants.length,
+      "plants in my garden vs",
+      data.garden.plantsInGarden.length,
+      "known"
+    );
 
     let existingPlants = displayPlants.map((p) => p.plant); // get the plant from each PositionedPlant
 
@@ -256,14 +275,19 @@
     let existingPlantIds = existingPlants.map((p) => p.id);
 
     let confirmedNewPlants = newPlants.filter(
-      (item) => !existingPlantIds.includes(item.id) // isolate plants that are new by comparing ids
+      (item) => !existingPlantIds.includes(item.plant.id) // isolate plants that are new by comparing ids
     );
 
+    function getRandomSoundFile() {
+      const randomIndex = Math.floor(Math.random() * soundFiles.length);
+      return soundFiles[randomIndex];
+    }
+
     confirmedNewPlants.forEach((entry) => {
-      console.log("New plant found! " + JSON.stringify(entry.commonName));
-      const audio = new Audio("594400__elandre01__rustling-leaves.wav");
+      console.log("New plant found! " + JSON.stringify(entry));
+      const audio = new Audio(getRandomSoundFile());
       audio.play();
-      addPlants(entry);
+      addPlants(entry.plant);
     });
   }
 
