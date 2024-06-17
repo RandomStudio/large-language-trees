@@ -24,8 +24,8 @@
   const monitorHeight = 1080;
   const frameSize = 150; //general border around all edges
   const topBorder = 0; // extra border on top
-  const yDistribution = 10; //size of patches in Y-dimension
-  const xDistribution = 10; //size of patches in X-dimension
+  const yDistribution = 20; //size of patches in Y-dimension
+  const xDistribution = 20; //size of patches in X-dimension
 
   //distribution on screen and size of plants in database
   const rootScale = 2;
@@ -66,6 +66,10 @@
     });
   }
 
+  function toRadians(angle: number) {
+    return angle * (Math.PI / 180);
+  }
+
   function addPlants(plant: SelectPlant) {
     if (plant.parent1 === null) {
       const newPositionedPlant: PositionedPlant = {
@@ -77,11 +81,12 @@
       displayPlants.push(newPositionedPlant); // adds plant to list if it's a parent
     } else {
       for (let i = 0; i < parentList.length; i++) {
+        let angle: number = Math.random() * 90;
         increaseNumberOfChildren(plant, parentList[i]);
         const newPositionedPlant: PositionedPlant = {
           plant: plant,
-          x: childX(plant, parentList[i]),
-          y: childY(plant, parentList[i]),
+          x: childX(plant, parentList[i], angle),
+          y: childY(plant, parentList[i], angle),
           numberOfChildren: 0
         };
         displayPlants.push(newPositionedPlant); // adds plant to list if it's a child
@@ -118,37 +123,44 @@
     );
   }
 
-  function childX(plant: SelectPlant, parentName: string) {
+  function childX(plant: SelectPlant, parentName: string, angle: number) {
     let parent = findParent(plant, parentName);
     if (!parent) {
       console.log(`Parent plant not found for ${parentName}`);
-      return defaultValue; // or another default value you prefer
+      return parentX(plant);
     }
+    const parentXvalue = parent.x;
 
-    // Calculate the X position relative to the parent plant
-    const parentX = parent.x;
-
-    // Calculate the X position based on the number of children and the width of the child plant
-    const xOffset = 20 + parent.numberOfChildren * xDistribution;
-
-    // Alternate sides for odd and even children to make them expand outwards
     const sign = parent.numberOfChildren % 2 === 0 ? -1 : 1;
-
-    return parentX + sign * xOffset;
+    return (
+      parentXvalue +
+      sign *
+        Math.cos(toRadians(angle)) *
+        (3 * Math.log(parent.numberOfChildren) + 1) *
+        xDistribution
+    );
   }
-  function childY(plant: SelectPlant, parentName: string) {
+
+  function childY(plant: SelectPlant, parentName: string, angle: number) {
     let parent = findParent(plant, parentName);
     if (!parent) {
       console.log(`Parent plant not found for ${parentName}`);
-      return defaultValue; // or another default value you prefer
+      return parentY(plant);
     }
+    const parentYvalue = parent.y;
     if (plantHeight(parent.plant) >= plantHeight(plant)) {
       return (
-        (parent?.y ?? defaultValue) + parent.numberOfChildren * yDistribution
+        parentYvalue +
+        Math.sin(toRadians(angle)) *
+          (3 * Math.log(parent.numberOfChildren) + 1) *
+          yDistribution
       );
     } else {
       return (
-        (parent?.y ?? defaultValue) - parent.numberOfChildren * yDistribution
+        parentYvalue -
+        Math.sin(toRadians(angle)) *
+          (3 * Math.log(parent.numberOfChildren) + 1) *
+          yDistribution
       );
     }
   }
@@ -248,7 +260,7 @@
     );
 
     confirmedNewPlants.forEach((entry) => {
-      console.log("New plant found! " + JSON.stringify(entry));
+      console.log("New plant found! " + JSON.stringify(entry.commonName));
       const audio = new Audio("594400__elandre01__rustling-leaves.wav");
       audio.play();
       addPlants(entry);
