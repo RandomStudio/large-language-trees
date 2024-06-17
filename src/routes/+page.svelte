@@ -48,7 +48,7 @@
     </div>
   {/if}
 
-  <div class="text-left mt-4 text-sm text-roel_blue">
+  <div class="text-left mt-4 text-sm text-roel_blue mb-20">
     <p>
       Welcome to Random's synergistic Lusthof, where digital abundance is
       sprouting.
