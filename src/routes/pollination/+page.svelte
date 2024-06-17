@@ -42,6 +42,7 @@
     )?.plant || null;
 
   let videoElement: HTMLVideoElement;
+  let stream: MediaStream;
 
   onMount(async () => {
     const codeReader = new BrowserMultiFormatReader();
@@ -53,7 +54,7 @@
     };
 
     try {
-      let stream = await navigator.mediaDevices.getUserMedia(constraints);
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
       setupStream(stream);
     } catch (err) {
       if (isOverconstrainedError(err)) {
@@ -64,7 +65,7 @@
           }
         };
         try {
-          let stream = await navigator.mediaDevices.getUserMedia(constraints);
+          stream = await navigator.mediaDevices.getUserMedia(constraints);
           setupStream(stream);
         } catch (err) {
           handleError(err);
@@ -119,6 +120,12 @@
     });
   }
 
+  function stopStream() {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+  }
+
   function isOverconstrainedError(err: unknown): err is OverconstrainedError {
     return (err as OverconstrainedError).name === "OverconstrainedError";
   }
@@ -155,10 +162,19 @@
 </div>
 
 {#if candidateChild}
+  {stopStream()}
   <ConfirmBreedPopup
     {candidateChild}
     onCancel={() => {
       candidateChild = null;
+      busy = false; // Allow scanning again if the process is cancelled
+      // Restart the camera stream
+      onMount(async () => {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" }
+        });
+        setupStream(stream);
+      });
     }}
     onConfirm={async (updatedPlant) => {
       if (candidateChild) {
