@@ -14,7 +14,8 @@
     class={width}
     class:filter={applyFilters}
     class:grayscale={applyFilters}
-    class:opacity-50={applyFilters}
+    class:opacity-70={applyFilters}
+    class:mix-blend-multiply={applyFilters}
   />
   <p class="text-roel_blue font-inter text-xl">
     {plant.commonName}
