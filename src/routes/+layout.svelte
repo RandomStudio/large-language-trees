@@ -10,18 +10,21 @@
 <div class="min-h-screen bg-roel_green absolute">
   {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/" && $page.url.pathname !== "/garden"}
     <div class="fixed w-full z-30 bg-roel_green pt-8 pl-8">
-      <h1
-        class="text-xl text-roel_blue cursor-pointer font-garamond"
-        on:click={() => {
-          goto("/info");
-        }}
-      >
-        The Garden
+      <h1 class="text-xl text-roel_blue font-garamond">
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <span
+          class="cursor-pointer"
+          on:click={() => {
+            goto("/info");
+          }}
+        >
+          The Garden
+        </span>
       </h1>
     </div>
   {/if}
 
-  <!-- Ajustez le padding au lieu de la marge pour commencer le contenu en dessous de l'en-tête -->
+  <!-- Adjust padding instead of margin to start content below the header -->
   <div class="app">
     {#if $page.url.pathname !== "/info" && $page.url.pathname !== "/" && $page.url.pathname !== "/garden"}
       <div class="pt-20"></div>
