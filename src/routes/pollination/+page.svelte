@@ -86,32 +86,38 @@
         // Handle the result here
         busy = true;
         const parent2Id = result.getText();
-        fetch("/api/plants/" + parent2Id).then(async (res) => {
-          if (res.status == 200) {
-            parent2 = await res.json();
-            if (parent1 && parent2) {
-              child = existingChild([parent1, parent2]);
-              if (child == null) {
-                waiting = true;
-                try {
-                  candidateChild = await confirmBreed([parent1, parent2]);
-                  if (candidateChild) {
-                    console.log("Got candidate child OK:", candidateChild);
-                    busy = false;
+        fetch("/api/plants/" + parent2Id)
+          .then(async (res) => {
+            if (res.status == 200) {
+              parent2 = await res.json();
+              if (parent1 && parent2) {
+                child = existingChild([parent1, parent2]);
+                if (child == null) {
+                  waiting = true;
+                  try {
+                    candidateChild = await confirmBreed([parent1, parent2]);
+                    if (candidateChild) {
+                      console.log("Got candidate child OK:", candidateChild);
+                      busy = false;
+                    }
+                    waiting = false;
+                  } catch (e) {
+                    console.error("Error getting candidate child", e);
+                    handleError(e);
                   }
-                  waiting = false;
-                } catch (e) {
-                  console.error("Error getting candidate child", e);
-                  goto("/gallery");
+                } else {
+                  handleError(new Error("failed to fetch plant details"));
                 }
-              } else {
-                throw Error("failed to fetch plant details");
               }
+            } else {
+              handleError(
+                new Error(`Failed to fetch plant with id ${parent2Id}`)
+              );
             }
-          } else {
-            console.log();
-          }
-        });
+          })
+          .catch((err) => {
+            handleError(err);
+          });
       }
       if (err && !(err instanceof NotFoundException)) {
         console.error(err);
@@ -132,10 +138,11 @@
 
   function handleError(err: unknown) {
     if (err instanceof Error) {
-      console.error("Error accessing camera: ", err.message);
+      console.error("Error: ", err.message);
     } else {
-      console.error("Unknown error accessing camera: ", err);
+      console.error("Unknown error: ", err);
     }
+    goto("/gallery");
   }
 </script>
 
