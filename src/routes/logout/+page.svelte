@@ -1,18 +1,17 @@
 <script lang="ts">
-    import type { SelectPlant } from "$lib/types";
-    import TransparencyMaker from "../../components/TransparencyMaker.svelte";
-    import UserLoginStatus from "../../components/UserLoginStatus.svelte";
+  import type { SelectPlant } from "$lib/types";
+  import UserLoginStatus from "../../components/UserLoginStatus.svelte";
 
-    interface AdminViewData {
-        username: string;
-        isAdmin: boolean;
-        allPlants: SelectPlant[];
-    }
+  interface AdminViewData {
+    username: string;
+    isAdmin: boolean;
+    allPlants: SelectPlant[];
+  }
 
-    export let data: AdminViewData;
+  export let data: AdminViewData;
 </script>
 
 <main class="container mx-auto">
-    <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
-    ></UserLoginStatus>
+  <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
+  ></UserLoginStatus>
 </main>

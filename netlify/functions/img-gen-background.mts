@@ -46,7 +46,7 @@ export default async (req: Request) => {
         }
       }
     );
-    if (addImageToDbRes.status === 201) {
+    if (addImageToDbRes.status === 200 || addImageToDbRes.status === 201) {
       console.log("Success!");
     } else {
       const { statusText, status } = addImageToDbRes;

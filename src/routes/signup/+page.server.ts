@@ -6,12 +6,9 @@ import { hash } from "@node-rs/argon2";
 import type { Actions } from "./$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
-import { checkDefaultUsers } from "$lib/server/server";
 
 export const actions: Actions = {
   default: async (event) => {
-    await checkDefaultUsers();
-
     const formData = await event.request.formData();
     const username = formData.get("username");
     const password = formData.get("password");
@@ -24,7 +21,7 @@ export const actions: Actions = {
       !/^[a-z0-9_-]+$/.test(username)
     ) {
       return fail(400, {
-        message: "Invalid username",
+        message: "Invalid username"
       });
     }
     if (
@@ -33,7 +30,7 @@ export const actions: Actions = {
       password.length > 255
     ) {
       return fail(400, {
-        message: "Invalid password",
+        message: "Invalid password"
       });
     }
 
@@ -43,23 +40,23 @@ export const actions: Actions = {
       memoryCost: 19456,
       timeCost: 2,
       outputLen: 32,
-      parallelism: 1,
+      parallelism: 1
     });
 
     // TODO: check if username is already used
     await db.insert(users).values({
       id: userId,
       username,
-      passwordHash,
+      passwordHash
     });
 
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
     event.cookies.set(sessionCookie.name, sessionCookie.value, {
       path: ".",
-      ...sessionCookie.attributes,
+      ...sessionCookie.attributes
     });
 
     redirect(302, "/garden");
-  },
+  }
 };
