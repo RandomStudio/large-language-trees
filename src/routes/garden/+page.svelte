@@ -23,9 +23,9 @@
   const monitorWidth = 1920;
   const monitorHeight = 1080;
   const frameSize = 150; //general border around all edges
-  const topBorder = 75; // extra border on top
-  const yDistribution = 20; //size of patches in Y-dimension
-  const xDistribution = 15; //size of patches in X-dimension
+  const topBorder = 0; // extra border on top
+  const yDistribution = 10; //size of patches in Y-dimension
+  const xDistribution = 10; //size of patches in X-dimension
 
   //distribution on screen and size of plants in database
   const rootScale = 2;
@@ -142,12 +142,15 @@
       console.log(`Parent plant not found for ${parentName}`);
       return defaultValue; // or another default value you prefer
     }
-    return (
-      (parent?.y ?? defaultValue) +
-      (rootScaleFromPlantHeight(parent.plant) -
-        rootScaleFromPlantHeight(plant)) *
-        yDistribution
-    );
+    if (plantHeight(parent.plant) >= plantHeight(plant)) {
+      return (
+        (parent?.y ?? defaultValue) + parent.numberOfChildren * yDistribution
+      );
+    } else {
+      return (
+        (parent?.y ?? defaultValue) - parent.numberOfChildren * yDistribution
+      );
+    }
   }
 
   function findParent(plant: SelectPlant, parentName: string) {
