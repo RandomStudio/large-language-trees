@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import { uploadToS3, uploadLocal } from "$lib/server/images";
 import type { GenerateImageRequest, GeneratedImageResult } from "$lib/types";
 import { URL_PREFIX } from "../../../../defaults/constants";
+import DefaultPrompt from "../../../../defaults/prompt-config";
 
 export const POST: RequestHandler = async ({ request }) => {
   console.log({ PLACEHOLDER_IMAGES });
@@ -29,7 +30,7 @@ export const POST: RequestHandler = async ({ request }) => {
     return json(jsonResponse, { status: 200 });
   }
 
-  const prompt = buildImagePrompt(description);
+  const prompt = buildImagePrompt(DefaultPrompt.image.instructions, description);
 
   if (USE_NETLIFY_BACKGROUND_FN === "true") {
     console.log(
@@ -57,9 +58,8 @@ export const POST: RequestHandler = async ({ request }) => {
   }
 };
 
-const buildImagePrompt = (description: string): string =>
-  `I want you to generate a pixelart style image, with a white background, based on the description that follows:\n\n` +
-  description;
+const buildImagePrompt = (instructions: string, description: string): string =>
+  instructions + "\n\n" + description;
 
 const doRequestLocally = async (prompt: string) => {
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
