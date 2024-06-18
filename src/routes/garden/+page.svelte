@@ -26,7 +26,7 @@
   const frameSize = 150; //general border around all edges
   const topBorder = 0; // extra border on top
   const yDistribution = 40; //size of patches in Y-dimension
-  const xDistribution = 30; //size of patches in X-dimension
+  const xDistribution = 50; //size of patches in X-dimension
 
   //distribution on screen and size of plants in database
   const rootScale = 2;
