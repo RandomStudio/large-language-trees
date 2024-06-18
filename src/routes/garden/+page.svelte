@@ -25,8 +25,8 @@
   const monitorHeight = 1080;
   const frameSize = 150; //general border around all edges
   const topBorder = 0; // extra border on top
-  const yDistribution = 20; //size of patches in Y-dimension
-  const xDistribution = 20; //size of patches in X-dimension
+  const yDistribution = 40; //size of patches in Y-dimension
+  const xDistribution = 30; //size of patches in X-dimension
 
   //distribution on screen and size of plants in database
   const rootScale = 2;
@@ -146,7 +146,7 @@
       parentXvalue +
       sign *
         Math.cos(toRadians(angle)) *
-        (3 * Math.log(parent.numberOfChildren) + 1) *
+        (3 * Math.log(parent.numberOfChildren + 1) + 1) *
         xDistribution
     );
   }
@@ -162,14 +162,14 @@
       return (
         parentYvalue +
         Math.sin(toRadians(angle)) *
-          (3 * Math.log(parent.numberOfChildren) + 1) *
+          (3 * Math.log(parent.numberOfChildren + 1) + 1) *
           yDistribution
       );
     } else {
       return (
         parentYvalue -
         Math.sin(toRadians(angle)) *
-          (3 * Math.log(parent.numberOfChildren) + 1) *
+          (3 * Math.log(parent.numberOfChildren + 1) + 1) *
           yDistribution
       );
     }
