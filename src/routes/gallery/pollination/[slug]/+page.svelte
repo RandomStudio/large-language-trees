@@ -103,8 +103,6 @@
                     console.error("Error getting candidate child", e);
                     handleError(e);
                   }
-                } else {
-                  handleError(new Error("failed to fetch plant details"));
                 }
               }
             } else {
