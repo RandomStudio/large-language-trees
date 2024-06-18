@@ -51,7 +51,7 @@
           textInput
         );
         await onConfirm(finalChildReadyToAdd);
-        goto("../gallery");
+        goto("../");
       } catch (error) {
         console.error("Error during confirmation:", error);
       }
