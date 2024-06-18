@@ -44,14 +44,15 @@
       errorText = "Error : Please write something";
     } else {
       try {
+        const previousCommonName = finalChildReadyToAdd.commonName;
         finalChildReadyToAdd.commonName = textInput;
         finalChildReadyToAdd.description = replaceInParagraph(
           finalChildReadyToAdd.description,
-          finalChildReadyToAdd.commonName,
+          previousCommonName,
           textInput
         );
         await onConfirm(finalChildReadyToAdd);
-        goto("../gallery");
+        goto("../");
       } catch (error) {
         console.error("Error during confirmation:", error);
       }
@@ -135,6 +136,7 @@
         }
       } else {
         console.error("Error fetching generated new image");
+        goto("/gallery");
       }
     }
   };

@@ -8,7 +8,7 @@
   export let plantDetails: SelectPlant;
 
   function handleClose() {
-    goto("../gallery");
+    goto("../");
   }
 </script>
 

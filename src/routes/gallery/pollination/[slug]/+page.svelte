@@ -1,27 +1,25 @@
 <script lang="ts">
   import {
     type SelectPlant,
-    type GardenViewData,
+    type EnhancedGardenViewData,
     type InsertPlant
-  } from "../../lib/types"; // Assuming type import is correct
+  } from "../../../../lib/types"; // Assuming type import is correct
 
-  import QrGenerate from "../../components/qr_generate.svelte";
+  import QrGenerate from "../../../../components/qr_generate.svelte";
   import { addConfirmedPlant, confirmBreed } from "$lib/confirmBreed";
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
-  import ConfirmBreedPopup from "../../components/ConfirmBreedPopup.svelte";
-  import PopupDejaVu from "../../components/popupDejaVu.svelte";
+  import ConfirmBreedPopup from "../../../../components/ConfirmBreedPopup.svelte";
+  import PopupDejaVu from "../../../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
-  import ReturnButton from "../../components/ReturnButton.svelte";
-  import WaitingSpinner from "../../components/WaitingSpinner.svelte";
-  export let data: GardenViewData;
-  import { getIndexValue } from "../gallery/shared.js";
+  import ReturnButton from "../../../../components/ReturnButton.svelte";
+  import WaitingSpinner from "../../../../components/WaitingSpinner.svelte";
 
-  const indexValue = getIndexValue();
-  console.log(indexValue);
+  export let data: EnhancedGardenViewData;
 
-  let parent1: SelectPlant | null =
-    data.seedBank.plantsInSeedbank[indexValue].plant;
+  let parent1 =
+    data.seedBank.plantsInSeedbank.find((plant) => plant.plantId === data.id)
+      ?.plant || undefined;
 
   let busy = false;
 
@@ -86,32 +84,36 @@
         // Handle the result here
         busy = true;
         const parent2Id = result.getText();
-        fetch("/api/plants/" + parent2Id).then(async (res) => {
-          if (res.status == 200) {
-            parent2 = await res.json();
-            if (parent1 && parent2) {
-              child = existingChild([parent1, parent2]);
-              if (child == null) {
-                waiting = true;
-                try {
-                  candidateChild = await confirmBreed([parent1, parent2]);
-                  if (candidateChild) {
-                    console.log("Got candidate child OK:", candidateChild);
-                    busy = false;
+        fetch("/api/plants/" + parent2Id)
+          .then(async (res) => {
+            if (res.status == 200) {
+              parent2 = await res.json();
+              if (parent1 && parent2) {
+                child = existingChild([parent1, parent2]);
+                if (child == null) {
+                  waiting = true;
+                  try {
+                    candidateChild = await confirmBreed([parent1, parent2]);
+                    if (candidateChild) {
+                      console.log("Got candidate child OK:", candidateChild);
+                      busy = false;
+                    }
+                    waiting = false;
+                  } catch (e) {
+                    console.error("Error getting candidate child", e);
+                    handleError(e);
                   }
-                  waiting = false;
-                } catch (e) {
-                  console.error("Error getting candidate child", e);
-                  goto("/gallery");
                 }
-              } else {
-                throw Error("failed to fetch plant details");
               }
+            } else {
+              handleError(
+                new Error(`Failed to fetch plant with id ${parent2Id}`)
+              );
             }
-          } else {
-            console.log();
-          }
-        });
+          })
+          .catch((err) => {
+            handleError(err);
+          });
       }
       if (err && !(err instanceof NotFoundException)) {
         console.error(err);
@@ -132,33 +134,35 @@
 
   function handleError(err: unknown) {
     if (err instanceof Error) {
-      console.error("Error accessing camera: ", err.message);
+      console.error("Error: ", err.message);
     } else {
-      console.error("Unknown error accessing camera: ", err);
+      console.error("Unknown error: ", err);
     }
+    goto("/gallery");
   }
 </script>
 
 <ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
-  <p class=" text-xl">
-    Point your camera to another gardeners Pollination QR to start crossbreeding {parent1.commonName}
-  </p>
-  <div class="mx-8">
-    <video
-      bind:this={videoElement}
-      class="object-cover aspect-square mt-12 overflow-hidden rounded-full"
-    >
-      <track kind="captions" srclang="en" label="English captions" />
-    </video>
+  {#if parent1}
+    <p class=" text-xl">
+      Point your camera to another gardeners Pollination QR to start
+      crossbreeding {parent1.commonName}
+    </p>
+    <div class="mx-8">
+      <video
+        bind:this={videoElement}
+        class="object-cover aspect-square mt-12 overflow-hidden rounded-full"
+      >
+        <track kind="captions" srclang="en" label="English captions" />
+      </video>
 
-    {#if parent1}
       <div class="mt-6">
         <QrGenerate text={parent1.id} />
       </div>
-    {/if}
-  </div>
+    </div>
+  {/if}
 </div>
 
 {#if candidateChild}
@@ -200,10 +204,5 @@
 {/if}
 
 {#if child}
-  <PopupDejaVu
-    plantDetails={child}
-    closePopup={() => {
-      child = null;
-    }}
-  />
+  <PopupDejaVu plantDetails={child} />
 {/if}

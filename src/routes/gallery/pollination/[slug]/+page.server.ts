@@ -2,14 +2,14 @@ import type { PageServerLoad } from "./$types";
 import { getUserGarden, getUserSeeds } from "$lib/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
-import type { GardenViewData } from "$lib/types";
+import type { EnhancedGardenViewData } from "$lib/types";
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
 import { users } from "$lib/server/schema";
 
 export const load: PageServerLoad = async ({
-  locals
-}): Promise<GardenViewData> => {
+  locals,params
+}): Promise<EnhancedGardenViewData> => {
   // const username = locals.user?.username;
   const userId = locals.user?.id;
   // if (!username) {
@@ -31,7 +31,8 @@ export const load: PageServerLoad = async ({
         // TODO: just load the user seedbank (including its seeds, not seeds + seedbankId separately)
         user: thisUser,
         seedBank,
-        garden
+        garden,
+        id:params.slug
       };
     } else {
       throw Error("could not find user when querying");

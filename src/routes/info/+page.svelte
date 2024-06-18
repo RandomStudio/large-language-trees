@@ -8,7 +8,7 @@
 
 <ReturnButton functionReturn={goBack}></ReturnButton>
 
-<div class="mx-12 pt-32 font-inter text-left text-roel_blue text-sm">
+<div class="mx-12 pt-32 font-inter text-left text-roel_blue text-sm mb-20">
   <img src="/titleimg.png" alt="logo" />
   <p class="mt-4">
     What is this project about?
@@ -38,6 +38,5 @@
     blending digital innovation with real-world interactions, Lusthof invites
     users to consider the balance between technological control and the vitality
     of the natural world.
-    <br /><br /> <br /><br />
   </p>
 </div>
