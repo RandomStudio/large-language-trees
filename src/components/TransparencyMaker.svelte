@@ -33,7 +33,8 @@
         let listCorners = [
           [0, 0],
           [0.5, 0],
-          [0.03, 0.03]
+          [0.03, 0.03],
+          [1, 1]
         ];
 
         for (let i = 0; i < listCorners.length; i++) {
@@ -94,7 +95,7 @@
 
         removeDisconnectedPixels(imageData, ctx);
 
-        removeWhitePixels(imageData, ctx, 10);
+        removeWhitePixels(imageData, ctx, 20);
 
         ctx.putImageData(imageData, 0, 0);
 
@@ -210,28 +211,20 @@
   ) {
     const width = imageData.width;
     const height = imageData.height;
-
     const mask = new Uint32Array(imageData.data.length / 4);
     let regionId = 0;
     let regionSizes = [];
-
-    function floodFill(x: number, y: number, id: number): number {
-      const stack: Array<[number, number]> = [[x, y]];
+    // Helper function to perform a flood fill using a stack
+    function floodFill(x: number, y: number, id: number) {
+      const stack = [[x, y]];
       let size = 0;
-
-      while (stack.length > 0) {
-        const popped = stack.pop();
-        if (popped === undefined) {
-          continue; // Skip this iteration if popped is undefined
-        }
-
-        const [cx, cy] = popped;
+      while (stack.length) {
+        const [cx, cy] = stack.pop();
         const index = (cy * width + cx) * 4;
         if (mask[cx + cy * width] === 0 && imageData.data[index + 3] !== 0) {
           // Check if not already visited and pixel is visible
           mask[cx + cy * width] = id;
           size++;
-
           // Check neighbors
           if (cx > 0 && mask[cx - 1 + cy * width] === 0)
             stack.push([cx - 1, cy]);
@@ -245,7 +238,6 @@
       }
       return size;
     }
-
     // Discover all regions and their sizes
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
@@ -259,11 +251,24 @@
         }
       }
     }
-
-    // Additional logic would go here to handle region sizes, etc.
+    // Determine the largest region
+    let largestRegionId = 0;
+    let maxRegionSize = 0;
+    for (let i = 0; i < regionSizes.length; i++) {
+      if (regionSizes[i] > maxRegionSize) {
+        maxRegionSize = regionSizes[i];
+        largestRegionId = i + 1;
+      }
+    }
+    // Clear pixels not in the largest region
+    for (let i = 0; i < mask.length; i++) {
+      if (mask[i] !== largestRegionId) {
+        imageData.data[i * 4 + 3] = 0; // Set alpha to 0, making the pixel transparent
+      }
+    }
+    // Update the canvas
     ctx.putImageData(imageData, 0, 0);
   }
-
   function removeWhitePixels(
     imageData: ImageData,
     ctx: CanvasRenderingContext2D,

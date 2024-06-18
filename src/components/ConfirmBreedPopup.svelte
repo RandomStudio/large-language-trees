@@ -136,6 +136,7 @@
         }
       } else {
         console.error("Error fetching generated new image");
+        goto("/gallery");
       }
     }
   };
