@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
 
   export let src: string;
-  export let tolerance = 2.5; // Further decreased tolerance for less aggressive flood fill
+  export let tolerance = 2.8;
   export let useFloodFill = true;
 
   export let onUploadComplete: (imageUrl: string) => any;
@@ -19,31 +19,90 @@
 
     img.onload = () => {
       console.log("Image URL before transformation:", img.src);
-      const ctx = canvasElement.getContext("2d");
+      const ctx = canvasElement.getContext("2d", { willReadFrequently: true });
       if (ctx) {
         ctx.drawImage(img, 0, 0);
-        const imageData = ctx.getImageData(
+
+        let imageData = ctx.getImageData(
           0,
           0,
           canvasElement.width,
           canvasElement.height
         );
 
-        // First replacement: edge pixel (0, 0)
-        replaceColor(0, 0, imageData, ctx, tolerance, useFloodFill, FloodFill);
+        if (
+          !processRound(
+            imageData,
+            ctx,
+            tolerance,
+            useFloodFill,
+            FloodFill,
+            0,
+            0
+          )
+        ) {
+          console.log("First round failed. Exiting.");
+          return;
+        }
 
-        // Second replacement: pixel at 6% away from both x and y axes
-        const x = Math.floor(canvasElement.width * 0.06);
-        const y = Math.floor(canvasElement.height * 0.06);
-        replaceColor(x, y, imageData, ctx, tolerance, useFloodFill, FloodFill);
+        imageData = ctx.getImageData(
+          0,
+          0,
+          canvasElement.width,
+          canvasElement.height
+        );
+        const x1 = Math.floor(canvasElement.width * 0.06);
+        const y1 = Math.floor(canvasElement.height * 0.06);
+        if (
+          !processRound(
+            imageData,
+            ctx,
+            tolerance,
+            useFloodFill,
+            FloodFill,
+            x1,
+            y1
+          )
+        ) {
+          console.log("Second round failed. Exiting.");
+          return;
+        }
 
-        // Remove white pixels
-        removeWhitePixels(imageData, ctx, 12); // Adjusted tolerance to a smaller range
+        imageData = ctx.getImageData(
+          0,
+          0,
+          canvasElement.width,
+          canvasElement.height
+        );
+        const x2 = Math.floor(canvasElement.width * 0.94);
+        const y2 = Math.floor(canvasElement.height * 0.94);
+        if (!processRound(imageData, ctx, tolerance, false, null, x2, y2)) {
+          console.log("Third round failed. Exiting.");
+          return;
+        }
 
-        // Remove disconnected pixels
-        removeDisconnectedPixels(imageData, ctx, FloodFill);
+        removeWhitePixels(imageData, ctx, 12);
+        removeDisconnectedPixels(imageData, ctx, FloodFill, tolerance);
 
-        // Convert canvas to data URL and log it
+        if (isCanvasTransparent(imageData)) {
+          console.log(
+            "Canvas is transparent after processing. Retrying with less aggressive settings."
+          );
+          imageData = ctx.getImageData(
+            0,
+            0,
+            canvasElement.width,
+            canvasElement.height
+          );
+          if (
+            !processRound(imageData, ctx, tolerance - 0.5, false, null, 0, 0)
+          ) {
+            console.log("Retry failed. Exiting.");
+            return;
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
         const transformedImageUrl = canvasElement.toDataURL("image/png");
         console.log("Image URL after transformation:", transformedImageUrl);
 
@@ -71,6 +130,28 @@
     img.crossOrigin = "anonymous";
   });
 
+  function processRound(
+    imageData: ImageData,
+    ctx: CanvasRenderingContext2D,
+    tolerance: number,
+    useFloodFill: boolean,
+    FloodFill: any,
+    x: number,
+    y: number
+  ): boolean {
+    replaceColor(x, y, imageData, ctx, tolerance, useFloodFill, FloodFill);
+
+    if (isCanvasTransparent(imageData)) {
+      console.log(
+        `Canvas became transparent after processing round at (${x}, ${y}).`
+      );
+      return false;
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return true;
+  }
+
   function replaceColor(
     x: number,
     y: number,
@@ -84,7 +165,7 @@
     const [r, g, b, a] = pixelColor;
     console.log(`Selected pixel color at (${x}, ${y}):`, { r, g, b, a });
 
-    if (useFloodFill) {
+    if (useFloodFill && FloodFill) {
       const floodFill = new FloodFill(imageData);
       floodFill.fill("rgba(0,0,0,0)", x, y, tolerance, [r, g, b, a]);
 
@@ -101,7 +182,7 @@
           )
         ) {
           count++;
-          imageData.data[i + 3] = 0; // Set alpha to 0, making the pixel transparent.
+          imageData.data[i + 3] = 0;
         }
       }
       console.log("Altered", count, "pixels using simple replace");
@@ -132,7 +213,7 @@
       if (
         isWhiteWithinTolerance([data[i], data[i + 1], data[i + 2]], tolerance)
       ) {
-        data[i + 3] = 0; // Make the pixel fully transparent
+        data[i + 3] = 0;
       }
     }
     ctx.putImageData(imageData, 0, 0);
@@ -152,26 +233,21 @@
   function removeDisconnectedPixels(
     imageData: ImageData,
     ctx: CanvasRenderingContext2D,
-    FloodFill: any
+    FloodFill: any,
+    tolerance: number
   ) {
     const width = canvasElement.width;
     const height = canvasElement.height;
     const centralX = Math.floor(width / 2);
     const centralY = Math.floor(height / 2);
 
-    // Create a mask for connected components
     const mask = new Uint8Array(imageData.data.length / 4);
-
-    // Flood fill from the center
     const stack = [[centralX, centralY]];
 
     while (stack.length) {
       const [x, y] = stack.pop()!;
       const index = (y * width + x) * 4;
-      if (
-        imageData.data[index + 3] !== 0 && // Ensure the pixel is not already transparent
-        mask[index / 4] === 0
-      ) {
+      if (imageData.data[index + 3] !== 0 && mask[index / 4] === 0) {
         mask[index / 4] = 1;
         if (x > 0) stack.push([x - 1, y]);
         if (x < width - 1) stack.push([x + 1, y]);
@@ -180,14 +256,23 @@
       }
     }
 
-    // Set all pixels not in the connected component to transparent
     for (let i = 0; i < imageData.data.length; i += 4) {
       if (mask[i / 4] === 0) {
-        imageData.data[i + 3] = 0; // Make the pixel fully transparent
+        imageData.data[i + 3] = 0;
       }
     }
 
     ctx.putImageData(imageData, 0, 0);
+  }
+
+  function isCanvasTransparent(imageData: ImageData) {
+    const data = imageData.data;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] !== 0) {
+        return false;
+      }
+    }
+    return true;
   }
 </script>
 
