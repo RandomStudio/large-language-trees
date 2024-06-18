@@ -44,10 +44,11 @@
       errorText = "Error : Please write something";
     } else {
       try {
+        const previousCommonName = finalChildReadyToAdd.commonName;
         finalChildReadyToAdd.commonName = textInput;
         finalChildReadyToAdd.description = replaceInParagraph(
           finalChildReadyToAdd.description,
-          finalChildReadyToAdd.commonName,
+          previousCommonName,
           textInput
         );
         await onConfirm(finalChildReadyToAdd);
