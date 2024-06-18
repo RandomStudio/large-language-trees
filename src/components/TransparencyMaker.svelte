@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { ImageUploadResult } from "$lib/types";
+  import { ConsoleLogWriter } from "drizzle-orm";
   import { onMount } from "svelte";
 
   export let src: string;
-  export let tolerance = 2.8;
+  export let tolerance = 40;
   export let useFloodFill = true;
 
   export let onUploadComplete: (imageUrl: string) => any;
@@ -30,19 +31,38 @@
           canvasElement.height
         );
 
-        if (
-          !processRound(
-            imageData,
-            ctx,
-            tolerance,
-            useFloodFill,
-            FloodFill,
-            0,
-            0
-          )
-        ) {
-          console.log("First round failed. Exiting.");
-          return;
+        let listCorners = [
+          [0, 0],
+          [0.5, 0],
+          [0.03, 0.03]
+        ];
+
+        for (let i = 0; i < listCorners.length; i++) {
+          console.log("round " + i);
+          let corner = listCorners[i];
+          if (corner.length >= 2) {
+            let x = Math.floor(canvasElement.width * corner[corner.length - 2]);
+            let y = Math.floor(
+              canvasElement.height * corner[corner.length - 1]
+            );
+
+            console.log(`Processing corner (${x}, ${y})`);
+            if (
+              !processRound(
+                imageData,
+                ctx,
+                tolerance,
+                useFloodFill,
+                FloodFill,
+                x,
+                y
+              )
+            ) {
+              console.log(`Processing failed at corner (${x}, ${y}).`);
+            }
+          } else {
+            console.log(`Insufficient data for corner index ${i}.`);
+          }
         }
 
         imageData = ctx.getImageData(
@@ -51,39 +71,10 @@
           canvasElement.width,
           canvasElement.height
         );
-        const x1 = Math.floor(canvasElement.width * 0.06);
-        const y1 = Math.floor(canvasElement.height * 0.06);
-        if (
-          !processRound(
-            imageData,
-            ctx,
-            tolerance,
-            useFloodFill,
-            FloodFill,
-            x1,
-            y1
-          )
-        ) {
-          console.log("Second round failed. Exiting.");
-          return;
-        }
 
-        imageData = ctx.getImageData(
-          0,
-          0,
-          canvasElement.width,
-          canvasElement.height
-        );
-        const x2 = Math.floor(canvasElement.width * 0.94);
-        const y2 = Math.floor(canvasElement.height * 0.94);
-        if (!processRound(imageData, ctx, tolerance, false, null, x2, y2)) {
-          console.log("Third round failed. Exiting.");
-          return;
-        }
+        console.log(imageData);
 
-        removeWhitePixels(imageData, ctx, 12);
-        removeDisconnectedPixels(imageData, ctx, FloodFill, tolerance);
-
+        //Checking round
         if (isCanvasTransparent(imageData)) {
           console.log(
             "Canvas is transparent after processing. Retrying with less aggressive settings."
@@ -102,7 +93,12 @@
           }
         }
 
+        removeDisconnectedPixels(imageData, ctx);
+
+        removeWhitePixels(imageData, ctx, 10);
+
         ctx.putImageData(imageData, 0, 0);
+
         const transformedImageUrl = canvasElement.toDataURL("image/png");
         console.log("Image URL after transformation:", transformedImageUrl);
 
@@ -176,10 +172,16 @@
       for (let i = 0; i < imageData.data.length; i += 4) {
         if (
           isWithinTolerance(
-            [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2]],
+            [
+              imageData.data[i],
+              imageData.data[i + 1],
+              imageData.data[i + 2],
+              imageData.data[i + 3]
+            ],
             [r, g, b],
             tolerance
-          )
+          ) &&
+          a != 0
         ) {
           count++;
           imageData.data[i + 3] = 0;
@@ -203,64 +205,100 @@
     );
   }
 
+  function removeDisconnectedPixels(
+    imageData: ImageData,
+    ctx: CanvasRenderingContext2D
+  ) {
+    const width = imageData.width;
+    const height = imageData.height;
+
+    const mask = new Uint32Array(imageData.data.length / 4);
+    let regionId = 0;
+    let regionSizes = [];
+
+    // Helper function to perform a flood fill using a stack
+    function floodFill(x, y, id) {
+      const stack = [[x, y]];
+      let size = 0;
+
+      while (stack.length) {
+        const [cx, cy] = stack.pop();
+        const index = (cy * width + cx) * 4;
+        if (mask[cx + cy * width] === 0 && imageData.data[index + 3] !== 0) {
+          // Check if not already visited and pixel is visible
+          mask[cx + cy * width] = id;
+          size++;
+
+          // Check neighbors
+          if (cx > 0 && mask[cx - 1 + cy * width] === 0)
+            stack.push([cx - 1, cy]);
+          if (cx < width - 1 && mask[cx + 1 + cy * width] === 0)
+            stack.push([cx + 1, cy]);
+          if (cy > 0 && mask[cx + (cy - 1) * width] === 0)
+            stack.push([cx, cy - 1]);
+          if (cy < height - 1 && mask[cx + (cy + 1) * width] === 0)
+            stack.push([cx, cy + 1]);
+        }
+      }
+      return size;
+    }
+
+    // Discover all regions and their sizes
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        if (
+          mask[x + y * width] === 0 &&
+          imageData.data[(y * width + x) * 4 + 3] !== 0
+        ) {
+          regionId++;
+          const size = floodFill(x, y, regionId);
+          regionSizes.push(size);
+        }
+      }
+    }
+
+    // Determine the largest region
+    let largestRegionId = 0;
+    let maxRegionSize = 0;
+    for (let i = 0; i < regionSizes.length; i++) {
+      if (regionSizes[i] > maxRegionSize) {
+        maxRegionSize = regionSizes[i];
+        largestRegionId = i + 1;
+      }
+    }
+
+    // Clear pixels not in the largest region
+    for (let i = 0; i < mask.length; i++) {
+      if (mask[i] !== largestRegionId) {
+        imageData.data[i * 4 + 3] = 0; // Set alpha to 0, making the pixel transparent
+      }
+    }
+
+    // Update the canvas
+    ctx.putImageData(imageData, 0, 0);
+  }
+
   function removeWhitePixels(
     imageData: ImageData,
     ctx: CanvasRenderingContext2D,
     tolerance: number
   ) {
-    const data = imageData.data;
-    for (let i = 0; i < data.length; i += 4) {
-      if (
-        isWhiteWithinTolerance([data[i], data[i + 1], data[i + 2]], tolerance)
-      ) {
-        data[i + 3] = 0;
-      }
-    }
-    ctx.putImageData(imageData, 0, 0);
-  }
-
-  function isWhiteWithinTolerance(
-    pixelColor: Array<number>,
-    tolerance: number
-  ) {
-    return (
-      Math.abs(255 - pixelColor[0]) <= tolerance &&
-      Math.abs(255 - pixelColor[1]) <= tolerance &&
-      Math.abs(255 - pixelColor[2]) <= tolerance
-    );
-  }
-
-  function removeDisconnectedPixels(
-    imageData: ImageData,
-    ctx: CanvasRenderingContext2D,
-    FloodFill: any,
-    tolerance: number
-  ) {
-    const width = canvasElement.width;
-    const height = canvasElement.height;
-    const centralX = Math.floor(width / 2);
-    const centralY = Math.floor(height / 2);
-
-    const mask = new Uint8Array(imageData.data.length / 4);
-    const stack = [[centralX, centralY]];
-
-    while (stack.length) {
-      const [x, y] = stack.pop()!;
-      const index = (y * width + x) * 4;
-      if (imageData.data[index + 3] !== 0 && mask[index / 4] === 0) {
-        mask[index / 4] = 1;
-        if (x > 0) stack.push([x - 1, y]);
-        if (x < width - 1) stack.push([x + 1, y]);
-        if (y > 0) stack.push([x, y - 1]);
-        if (y < height - 1) stack.push([x, y + 1]);
-      }
-    }
-
+    const targetColor = [255, 255, 255, 255];
+    let count = 0;
     for (let i = 0; i < imageData.data.length; i += 4) {
-      if (mask[i / 4] === 0) {
+      const pixelColor = [
+        imageData.data[i], // R
+        imageData.data[i + 1], // G
+        imageData.data[i + 2], // B
+        imageData.data[i + 3] // A
+      ];
+
+      if (isWithinTolerance(pixelColor, targetColor, tolerance)) {
         imageData.data[i + 3] = 0;
+        count++;
       }
     }
+    console.log("Altered", count, "white pixels to transparent");
 
     ctx.putImageData(imageData, 0, 0);
   }
