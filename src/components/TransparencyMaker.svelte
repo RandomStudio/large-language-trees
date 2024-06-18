@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { ImageUploadResult } from "$lib/types";
-  import { ConsoleLogWriter } from "drizzle-orm";
   import { onMount } from "svelte";
 
   export let src: string;
@@ -216,8 +215,7 @@
     let regionId = 0;
     let regionSizes = [];
 
-    // Helper function to perform a flood fill using a stack
-    function floodFill(x, y, id) {
+    function floodFill(x: number, y: number, id: number) {
       const stack = [[x, y]];
       let size = 0;
 
