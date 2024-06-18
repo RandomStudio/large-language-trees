@@ -33,7 +33,8 @@
         let listCorners = [
           [0, 0],
           [0.5, 0],
-          [0.03, 0.03]
+          [0.03, 0.03],
+          [1, 1]
         ];
 
         for (let i = 0; i < listCorners.length; i++) {
@@ -94,7 +95,7 @@
 
         removeDisconnectedPixels(imageData, ctx);
 
-        removeWhitePixels(imageData, ctx, 10);
+        removeWhitePixels(imageData, ctx, 20);
 
         ctx.putImageData(imageData, 0, 0);
 
