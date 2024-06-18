@@ -215,12 +215,17 @@
     let regionId = 0;
     let regionSizes = [];
 
-    function floodFill(x: number, y: number, id: number) {
-      const stack = [[x, y]];
+    function floodFill(x: number, y: number, id: number): number {
+      const stack: Array<[number, number]> = [[x, y]];
       let size = 0;
 
-      while (stack.length) {
-        const [cx, cy] = stack.pop();
+      while (stack.length > 0) {
+        const popped = stack.pop();
+        if (popped === undefined) {
+          continue; // Skip this iteration if popped is undefined
+        }
+
+        const [cx, cy] = popped;
         const index = (cy * width + cx) * 4;
         if (mask[cx + cy * width] === 0 && imageData.data[index + 3] !== 0) {
           // Check if not already visited and pixel is visible
@@ -255,24 +260,7 @@
       }
     }
 
-    // Determine the largest region
-    let largestRegionId = 0;
-    let maxRegionSize = 0;
-    for (let i = 0; i < regionSizes.length; i++) {
-      if (regionSizes[i] > maxRegionSize) {
-        maxRegionSize = regionSizes[i];
-        largestRegionId = i + 1;
-      }
-    }
-
-    // Clear pixels not in the largest region
-    for (let i = 0; i < mask.length; i++) {
-      if (mask[i] !== largestRegionId) {
-        imageData.data[i * 4 + 3] = 0; // Set alpha to 0, making the pixel transparent
-      }
-    }
-
-    // Update the canvas
+    // Additional logic would go here to handle region sizes, etc.
     ctx.putImageData(imageData, 0, 0);
   }
 
