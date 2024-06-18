@@ -29,12 +29,6 @@
     const seconds = Math.round((decimalMinutes - minutes) * 60);
     return `${minutes} min ${seconds} sec`;
   }
-
-  // Exemple d'utilisation
-  const decimalMinutes = 125.75;
-  const formattedTime = convertMinutesToMinutesAndSeconds(decimalMinutes);
-  console.log(formattedTime); // Affiche: "125 min 45 sec"
-
   let yourPlant: SelectPlant | null =
     data.seedBank.plantsInSeedbank.find(
       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
