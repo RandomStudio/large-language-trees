@@ -37,6 +37,6 @@
 {#if isPollinatingPlant || isOriginalPlant}
   <ButtonBottom
     buttonText="Start Pollinating"
-    functionClick={() => goto("/pollination")}
+    functionClick={() => goto("/gallery/pollination/" + plantDetails.id)}
   ></ButtonBottom>
 {/if}

@@ -23,7 +23,7 @@
       showBarcode = true; // Show the barcode
       buttonText = "Start Pollinating";
     } else {
-      goto("./pollination"); // Navigate to the pollination route
+      goto("./gallery/pollination/" + selectedPlant.id); // Navigate to the pollination route
     }
   }
 </script>
