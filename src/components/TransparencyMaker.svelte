@@ -93,9 +93,9 @@
           }
         }
 
-        removeDisconnectedPixels(imageData, ctx);
-
         removeWhitePixels(imageData, ctx, 20);
+
+        removeDisconnectedPixels(imageData, ctx);
 
         ctx.putImageData(imageData, 0, 0);
 
