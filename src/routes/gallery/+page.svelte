@@ -24,7 +24,11 @@
   function convertMinutesToMinutesAndSeconds(decimalMinutes: number) {
     const minutes = Math.floor(decimalMinutes);
     const seconds = Math.round((decimalMinutes - minutes) * 60);
-    return `${minutes} min ${seconds} sec`;
+    if (minutes != 0) {
+      return `${minutes} min ${seconds} sec`;
+    } else {
+      return `${seconds} sec`;
+    }
   }
 
   let yourPlant: SelectPlant | null =
