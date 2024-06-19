@@ -151,20 +151,26 @@
       crossbreeding {parent1.commonName}
     </p>
     <div class="mx-8">
-      <video
-        bind:this={videoElement}
-        class="object-cover aspect-square mt-12 overflow-hidden rounded-full"
-      >
-        <track kind="captions" srclang="en" label="English captions" />
-      </video>
-
+      <div class="relative mt-12">
+        <video
+          bind:this={videoElement}
+          class="object-cover aspect-square overflow-hidden rounded-full"
+        >
+          <track kind="captions" srclang="en" label="English captions" />
+        </video>
+        <!-- svelte-ignore a11y-img-redundant-alt -->
+        <img
+          src={parent1.imageUrl}
+          alt="Small Image"
+          class="absolute bottom-0 right-0 w-12 h-12"
+        />
+      </div>
       <div class="mt-6">
         <QrGenerate text={parent1.id} />
       </div>
     </div>
   {/if}
 </div>
-
 {#if candidateChild}
   {stopStream()}
   <ConfirmBreedPopup
