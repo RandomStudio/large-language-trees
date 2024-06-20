@@ -162,7 +162,7 @@
         <img
           src={parent1.imageUrl}
           alt="Small Image"
-          class="absolute bottom-0 right-0 w-12 h-12"
+          class="absolute bottom-0 right-0 -mb-1 w-20 h-20"
         />
       </div>
       <div class="mt-6">
