@@ -64,3 +64,14 @@ export async function addConfirmedPlant(
     console.error("failed to add plant");
   }
 }
+
+export async function addConfirmedPlantToOtherUser(
+  candidateChild: InsertPlant,
+  seedbankId: string
+) {
+
+  await fetch("/api/plantsInSeedbank", {
+    method: "POST",
+    body: JSON.stringify({ plantId: candidateChild.id, seedbankId })
+  });
+}
