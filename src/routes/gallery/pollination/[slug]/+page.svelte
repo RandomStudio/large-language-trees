@@ -6,11 +6,7 @@
   } from "../../../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../../../components/qr_generate.svelte";
-  import {
-    addConfirmedPlant,
-    addConfirmedPlantToOtherUser,
-    confirmBreed
-  } from "$lib/confirmBreed";
+  import { addConfirmedPlant, confirmBreed } from "$lib/confirmBreed";
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../../../components/ConfirmBreedPopup.svelte";
@@ -30,7 +26,6 @@
   let parent2: SelectPlant | null = null;
 
   let candidateChild: InsertPlant | null = null;
-  let otherUserSeedbankId: string;
 
   let waiting: boolean = false;
   let child: SelectPlant | null = null;
@@ -88,9 +83,7 @@
       if (result && !busy) {
         // Handle the result here
         busy = true;
-        const readText = result.getText();
-        const parent2Id = readText.split("&")[0];
-        otherUserSeedbankId = readText.split("&")[1];
+        const parent2Id = result.getText();
         fetch("/api/plants/" + parent2Id)
           .then(async (res) => {
             if (res.status == 200) {
@@ -173,7 +166,7 @@
         />
       </div>
       <div class="mt-6">
-        <QrGenerate text={parent1.id + "&" + data.seedBank.id} />
+        <QrGenerate text={parent1.id} />
       </div>
     </div>
   {/if}
@@ -201,7 +194,6 @@
           data.garden.id,
           data.seedBank.id
         );
-        await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
         candidateChild = null;
         busy = false;
       }
