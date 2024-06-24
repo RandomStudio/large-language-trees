@@ -317,6 +317,7 @@
       style:width={"120px"}
       style:margin-top={"50px"}
       style:margin-left={"50px"}
+      style:background-color={"#9EE093"}
     />
     <h1 class="fixed" style:margin-top={"175px"} style:margin-left={"50px"}>
       Join the garden!
