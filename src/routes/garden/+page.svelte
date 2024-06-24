@@ -306,7 +306,21 @@
     style:width={"100vw"}
     style:margin-top={"-0px"}
   ></div>
-  <div id="container" class="fixed top-0 left-0 w-screen h-screen">
+  <div
+    id="container"
+    class="fixed top-0 left-0 w-screen h-screen text-roel_blue"
+  >
+    <img
+      src="livinggarden_QR.png"
+      {alt}
+      class="fixed"
+      style:width={"120px"}
+      style:margin-top={"50px"}
+      style:margin-left={"50px"}
+    />
+    <h1 class="fixed" style:margin-top={"175px"} style:margin-left={"50px"}>
+      Join the garden!
+    </h1>
     {#each displayPlants as plant}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
