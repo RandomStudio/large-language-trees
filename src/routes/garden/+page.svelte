@@ -25,8 +25,8 @@
   const monitorHeight = 1080;
   const frameSize = 150; //general border around all edges
   const topBorder = 0; // extra border on top
-  const yDistribution = 22; //size of patches in Y-dimension
-  const xDistribution = 32; //size of patches in X-dimension
+  const yDistribution = 40; //size of patches in Y-dimension
+  const xDistribution = 50; //size of patches in X-dimension
 
   //distribution on screen and size of plants in database
   const rootScale = 2;
@@ -34,7 +34,9 @@
   const smallestPlant = 0.1;
   const minPlantHeight = Math.pow(smallestPlant, 1 / rootScale);
   const maxPlantHeight = Math.pow(tallestPlant, 1 / rootScale);
+  const defaultValue = 500; // default value in case child cant find parents
   const defaultHeightValue = 10; // default value in case plant is generated without height attribute
+  const randomnessY = 20; // random displacement in y direction
 
   // relating to double placement of children
   const parentList = ["parent1", "parent2"];

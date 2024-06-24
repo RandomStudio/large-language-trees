@@ -34,8 +34,7 @@
           [0, 0],
           [0.5, 0],
           [0.03, 0.03],
-          [0, 0.4],
-          [0.99, 0.99]
+          [1, 1]
         ];
 
         for (let i = 0; i < listCorners.length; i++) {
@@ -94,9 +93,9 @@
           }
         }
 
-        removeWhitePixels(imageData, ctx, 20);
-
         removeDisconnectedPixels(imageData, ctx);
+
+        removeWhitePixels(imageData, ctx, 20);
 
         ctx.putImageData(imageData, 0, 0);
 
