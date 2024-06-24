@@ -94,7 +94,7 @@
           .then(async (res) => {
             if (res.status == 200) {
               parent2 = await res.json();
-              if (parent1 && parent2) {
+              if (parent1 && parent2 && parent1.id != parent2.id) {
                 child = existingChild([parent1, parent2]);
                 if (child == null) {
                   waiting = true;
@@ -110,6 +110,8 @@
                     handleError(e);
                   }
                 }
+              } else {
+                child = parent1 || null;
               }
             } else {
               handleError(
