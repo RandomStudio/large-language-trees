@@ -11,13 +11,14 @@
     addConfirmedPlantToOtherUser,
     confirmBreed
   } from "$lib/confirmBreed";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../../../components/ConfirmBreedPopup.svelte";
   import PopupDejaVu from "../../../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
   import ReturnButton from "../../../../components/ReturnButton.svelte";
   import WaitingSpinner from "../../../../components/WaitingSpinner.svelte";
+  import { page } from "$app/stores";
 
   export let data: EnhancedGardenViewData;
 
@@ -48,8 +49,6 @@
   let stream: MediaStream;
 
   onMount(async () => {
-    const codeReader = new BrowserMultiFormatReader();
-
     let constraints = {
       video: {
         facingMode: "environment"
@@ -95,7 +94,7 @@
           .then(async (res) => {
             if (res.status == 200) {
               parent2 = await res.json();
-              if (parent1 && parent2) {
+              if (parent1 && parent2 && parent1.id != parent2.id) {
                 child = existingChild([parent1, parent2]);
                 if (child == null) {
                   waiting = true;
@@ -111,6 +110,8 @@
                     handleError(e);
                   }
                 }
+              } else {
+                child = parent1 || null;
               }
             } else {
               handleError(
@@ -131,7 +132,8 @@
 
   function stopStream() {
     if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
     }
   }
 
@@ -145,11 +147,21 @@
     } else {
       console.error("Unknown error: ", err);
     }
+    stopStream();
     goto("/gallery");
   }
+
+  function handleReturn() {
+    stopStream();
+    goto("/gallery");
+  }
+
+  onDestroy(() => {
+    stopStream();
+  });
 </script>
 
-<ReturnButton functionReturn={() => goto("/gallery")}></ReturnButton>
+<ReturnButton functionReturn={handleReturn}></ReturnButton>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
   {#if parent1}
@@ -178,6 +190,7 @@
     </div>
   {/if}
 </div>
+
 {#if candidateChild}
   {stopStream()}
   <ConfirmBreedPopup
@@ -210,6 +223,7 @@
 {/if}
 
 {#if waiting}
+  {stopStream()}
   <div
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
   >
@@ -218,5 +232,6 @@
 {/if}
 
 {#if child}
+  {stopStream()}
   <PopupDejaVu plantDetails={child} />
 {/if}
