@@ -11,8 +11,11 @@
   import TransparencyMaker from "./TransparencyMaker.svelte";
   import ButtonBottom from "./ButtonBottom.svelte";
   import WaitingSpinner from "./WaitingSpinner.svelte";
+  import PopupError from "./PopupError.svelte";
 
   export let candidateChild: InsertPlant;
+
+  let error: boolean = false;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
    * returning to the parent component ready to add to the database.
@@ -83,7 +86,7 @@
         method: "POST",
         body: JSON.stringify(jsonBody)
       });
-      // waitingForImage = false;
+      waitingForImage = false;
       if (imageGenerationResponse.status == 200) {
         const json =
           (await imageGenerationResponse.json()) as GeneratedImageResult;
@@ -126,17 +129,14 @@
                 console.log("Image updated on backend OK, new S3 URL is:", url);
                 replaceImage(url);
               } else {
-                console.error(
-                  "Failed to update image on backend:",
-                  await res2.json()
-                );
+                console.error("   update image on backend:", await res2.json());
               }
             }
           }, 2000);
         }
       } else {
         console.error("Error fetching generated new image");
-        goto("/gallery");
+        error = true;
       }
     }
   };
@@ -233,4 +233,8 @@
     class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
     >Cancel</button
   >
+{/if}
+
+{#if error}
+  <PopupError {candidateChild} {onCancel} {onConfirm}></PopupError>
 {/if}

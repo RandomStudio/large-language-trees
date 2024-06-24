@@ -6,7 +6,11 @@
   } from "../../../../lib/types"; // Assuming type import is correct
 
   import QrGenerate from "../../../../components/qr_generate.svelte";
-  import { addConfirmedPlant, confirmBreed } from "$lib/confirmBreed";
+  import {
+    addConfirmedPlant,
+    addConfirmedPlantToOtherUser,
+    confirmBreed
+  } from "$lib/confirmBreed";
   import { onMount } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "../../../../components/ConfirmBreedPopup.svelte";
@@ -26,6 +30,7 @@
   let parent2: SelectPlant | null = null;
 
   let candidateChild: InsertPlant | null = null;
+  let otherUserSeedbankId: string;
 
   let waiting: boolean = false;
   let child: SelectPlant | null = null;
@@ -83,7 +88,9 @@
       if (result && !busy) {
         // Handle the result here
         busy = true;
-        const parent2Id = result.getText();
+        const readText = result.getText();
+        const parent2Id = readText.split("&")[0];
+        otherUserSeedbankId = readText.split("&")[1];
         fetch("/api/plants/" + parent2Id)
           .then(async (res) => {
             if (res.status == 200) {
@@ -151,20 +158,26 @@
       crossbreeding {parent1.commonName}
     </p>
     <div class="mx-8">
-      <video
-        bind:this={videoElement}
-        class="object-cover aspect-square mt-12 overflow-hidden rounded-full"
-      >
-        <track kind="captions" srclang="en" label="English captions" />
-      </video>
-
+      <div class="relative mt-12">
+        <video
+          bind:this={videoElement}
+          class="object-cover aspect-square overflow-hidden rounded-full"
+        >
+          <track kind="captions" srclang="en" label="English captions" />
+        </video>
+        <!-- svelte-ignore a11y-img-redundant-alt -->
+        <img
+          src={parent1.imageUrl}
+          alt="Small Image"
+          class="absolute bottom-0 right-0 -mb-1 w-20 h-20"
+        />
+      </div>
       <div class="mt-6">
-        <QrGenerate text={parent1.id} />
+        <QrGenerate text={parent1.id + "&" + data.seedBank.id} />
       </div>
     </div>
   {/if}
 </div>
-
 {#if candidateChild}
   {stopStream()}
   <ConfirmBreedPopup
@@ -188,6 +201,7 @@
           data.garden.id,
           data.seedBank.id
         );
+        await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
         candidateChild = null;
         busy = false;
       }
