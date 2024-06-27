@@ -99,7 +99,6 @@ export const createNewSeedbank = async (userId: string) => {
     })
     .returning();
   const newSeedbank = result[0];
-
   const adminUser = await getUserByUsername("admin");
   if (!adminUser) {
     throw Error("Admin user not found; something is wrong!");
