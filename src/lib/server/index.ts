@@ -30,7 +30,7 @@ import type {
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
-import { pickMultipleRandomElements, pickRandomIndexes } from "random-elements";
+import { pickMultipleRandomElements, pickRandomElement, pickRandomIndexes } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 
 export const populateDefaultPlants = async () => {
@@ -99,7 +99,6 @@ export const createNewSeedbank = async (userId: string) => {
     })
     .returning();
   const newSeedbank = result[0];
-
   const adminUser = await getUserByUsername("admin");
   if (!adminUser) {
     throw Error("Admin user not found; something is wrong!");
@@ -111,22 +110,8 @@ export const createNewSeedbank = async (userId: string) => {
     return;
   }
 
-  // We look for plants that have not been assigned to any seedbank (yet)
-  // This is safe for now, because we don't expect the number of users (and thus seedbanks)
-  // to exceed the number of available plants.
-  const plant = await db
-    .select()
-    .from(plants)
-    .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
-    .where(isNull(seedbanksToPlants));
-
-  if (plant) {
-    // await db.insert(seedbanksToPlants).values({
-    //   seedbankId: newSeedbank.id,
-    //   plantId: plant[0].plants.id
-    // });
-    const thePlant = plant[0].plants;
-    await addPlantToSeedbank(thePlant.id, newSeedbank.id);
+  const thePlant = await getNewPlantForUser();
+  await addPlantToSeedbank(thePlant.id, newSeedbank.id);
     if (ADMIN_GARDEN_SHARED === "true") {
       console.warn(
         "ADMIN_GARDEN_SHARED enabled, so we will also add this plant to the admin user's seedbank..."
@@ -138,11 +123,40 @@ export const createNewSeedbank = async (userId: string) => {
         throw Error("admin user not found or admin seedbank not found");
       }
     }
-  } else {
-    // TODO: we could, instead, pick a random new plant, or even generate one
+
     throw Error("suitable plant not found to assign to user on first login");
   }
-};
+
+
+async function getNewPlantForUser(){
+  // We look for plants that have not been assigned to any seedbank (yet)
+  // This is safe for now, because we don't expect the number of users (and thus seedbanks)
+  // to exceed the number of available plants.
+  const plantsToAdd = await db
+    .select()
+    .from(plants)
+    .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
+    .where(isNull(seedbanksToPlants));
+
+  if (plantsToAdd.length>0) {
+    // await db.insert(seedbanksToPlants).values({
+    //   seedbankId: newSeedbank.id,
+    //   plantId: plant[0].plants.id
+    // });
+    const thePlant = plantsToAdd[0].plants;
+    return thePlant
+  } else {
+    // TODO: we could, instead, pick a random new plant, or even generate one
+    const randomPlants = await db.query.plants.findMany({where:isNull(plants.parent1)});
+    if (randomPlants.length ==0){
+      throw Error("No original plants");
+    }
+   
+    const randomPlant = pickRandomElement(randomPlants);
+
+    return randomPlant
+  }
+}
 
 export const getUserGarden = async (userId: string): Promise<MyGarden> => {
   const user: UserWithGarden | undefined = await db.query.users.findFirst({
