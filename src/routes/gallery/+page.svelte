@@ -49,6 +49,10 @@
   async function fetchdata() {
     invalidateAll();
     console.log(data.seedBank.plantsInSeedbank);
+    yourPlant =
+      data.seedBank.plantsInSeedbank.find(
+        (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
+      )?.plant || null;
   }
 
   onMount(() => {
@@ -66,7 +70,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
 
-    {#if dates[index] > 5 || plant.plant.parent1 == null}
+    {#if dates[index] > 5 || plant.plant == yourPlant}
       <div
         on:click={() => {
           console.log("click!");
