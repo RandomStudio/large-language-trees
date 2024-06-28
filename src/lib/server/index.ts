@@ -139,7 +139,6 @@ async function getNewPlantForUser(){
     .from(plants)
     .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
     .where(isNull(seedbanksToPlants));
-
   if (plantsToAdd.length>0) {
     // await db.insert(seedbanksToPlants).values({
     //   seedbankId: newSeedbank.id,
