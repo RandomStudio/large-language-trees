@@ -23,7 +23,6 @@
     const minutes = Math.floor(decimalMinutes);
     const seconds = Math.round((decimalMinutes - minutes) * 60);
     return minutes != 0 ? `${minutes} min ${seconds} sec` : `${seconds} sec`;
-
   }
 
   let yourPlant: SelectPlant | null =
@@ -67,7 +66,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
 
-    {#if dates[index] > 5 || plant.plant == yourPlant}
+    {#if dates[index] > 5 || plant.plant.parent1 == null}
       <div
         on:click={() => {
           console.log("click!");
