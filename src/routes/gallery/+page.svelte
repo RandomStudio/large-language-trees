@@ -1,30 +1,29 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type GardenViewData, type SelectPlant } from "../../lib/types";
+  import {
+    type GardenViewData,
+    type SelectPlant,
+    type UserWithSeedbank
+  } from "../../lib/types";
   import { onMount } from "svelte";
   export let data: GardenViewData;
-
   import PlantDisplay from "../../components/PlantDisplay.svelte";
-  let selectedPlant: SelectPlant | null = null;
-
   import PopupInfo from "../../components/PopupInfo.svelte";
 
-  let seedBank = data.seedBank.plantsInSeedbank;
+  import { invalidateAll } from "$app/navigation";
+  import moment from "moment";
+
+  let selectedPlant: SelectPlant | null = null;
 
   function handleClick(id: string) {
     goto(`/gallery/pollination/` + id);
-  }
-  const now = new Date();
-
-  function millisecondsToMinutes(duration: number) {
-    let minutes = duration / (1000 * 60);
-    return minutes;
   }
 
   function convertMinutesToMinutesAndSeconds(decimalMinutes: number) {
     const minutes = Math.floor(decimalMinutes);
     const seconds = Math.round((decimalMinutes - minutes) * 60);
-    return `${minutes} min ${seconds} sec`;
+    return minutes != 0 ? `${minutes} min ${seconds} sec` : `${seconds} sec`;
+
   }
 
   let yourPlant: SelectPlant | null =
@@ -35,28 +34,36 @@
   let dates: number[] = [];
 
   async function updateDates() {
-    const now = new Date();
+    const now = moment();
     const newDates = [];
     let index = 0;
     for (const [key, plant] of Object.entries(data.seedBank.plantsInSeedbank)) {
-      //for each plant
-      const createdDate = new Date(plant.plant.created);
-      newDates[index] = millisecondsToMinutes(
-        Math.abs(now.getTime() - createdDate.getTime())
-      );
+      const createdDate = moment(plant.plant.created);
+      const duration = moment.duration(now.diff(createdDate));
+      const minutes = duration.asMinutes();
+      newDates[index] = minutes;
       index++;
     }
-    dates = newDates; // Updating the date
+    dates = newDates;
+  }
+
+  async function fetchdata() {
+    invalidateAll();
+    console.log(data.seedBank.plantsInSeedbank);
   }
 
   onMount(() => {
-    const intervalId = setInterval(updateDates, 1000);
-    return () => clearInterval(intervalId);
+    const datesInterval = setInterval(updateDates, 1000);
+    const databaseInterval = setInterval(fetchdata, 1000);
+    return () => {
+      clearInterval(datesInterval);
+      clearInterval(databaseInterval);
+    };
   });
 </script>
 
 <div class="mx-12 font-inter text-roel_blue text-left">
-  {#each seedBank as plant, index}
+  {#each data.seedBank.plantsInSeedbank as plant, index}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
 
@@ -109,7 +116,7 @@
     }}
     isOriginalPlant={selectedPlant == yourPlant}
     isPollinatingPlant={Math.abs(
-      (now.getTime() - selectedPlant.created.getTime()) / (1000 * 60)
+      moment().diff(moment(selectedPlant.created), "minutes")
     ) > 5}
   ></PopupInfo>
 {/if}

@@ -111,7 +111,9 @@ export const createNewSeedbank = async (userId: string) => {
   }
 
   const thePlant = await getNewPlantForUser();
+
   await addPlantToSeedbank(thePlant.id, newSeedbank.id);
+  
     if (ADMIN_GARDEN_SHARED === "true") {
       console.warn(
         "ADMIN_GARDEN_SHARED enabled, so we will also add this plant to the admin user's seedbank..."
@@ -124,8 +126,8 @@ export const createNewSeedbank = async (userId: string) => {
       }
     }
 
-    throw Error("suitable plant not found to assign to user on first login");
-  }
+
+}
 
 
 async function getNewPlantForUser(){
@@ -137,7 +139,6 @@ async function getNewPlantForUser(){
     .from(plants)
     .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
     .where(isNull(seedbanksToPlants));
-
   if (plantsToAdd.length>0) {
     // await db.insert(seedbanksToPlants).values({
     //   seedbankId: newSeedbank.id,
