@@ -66,7 +66,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
 
-    {#if dates[index] > 0 || plant.plant == yourPlant}
+    {#if dates[index] > 5 || plant.plant == yourPlant}
       <div
         on:click={() => {
           console.log("click!");
