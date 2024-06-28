@@ -86,7 +86,6 @@
         method: "POST",
         body: JSON.stringify(jsonBody)
       });
-      waitingForImage = false;
       if (imageGenerationResponse.status == 200) {
         const json =
           (await imageGenerationResponse.json()) as GeneratedImageResult;
