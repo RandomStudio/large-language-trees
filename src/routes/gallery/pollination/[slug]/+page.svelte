@@ -173,7 +173,7 @@
       <div class="relative mt-12">
         <video
           bind:this={videoElement}
-          class="object-cover aspect-square overflow-hidden rounded-full z-1"
+          class="object-cover aspect-square overflow-hidden rounded-full z-0"
         >
           <track kind="captions" srclang="en" label="English captions" />
         </video>
@@ -181,7 +181,7 @@
         <img
           src={parent1.imageUrl}
           alt="Small Image"
-          class="absolute bottom-0 right-0 -mb-1 w-20 h-20 z-2"
+          class="absolute bottom-0 right-0 -mb-1 w-20 h-20 z-10"
         />
       </div>
       <div class="mt-6">
