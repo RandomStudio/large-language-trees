@@ -80,5 +80,5 @@ export interface AttachImageResponse {
 }
 
 export interface EnhancedGardenViewData extends GardenViewData {
-  id: string; // Ajoutez d'autres champs si nécessaire
+  plantId: string; // Ajoutez d'autres champs si nécessaire
 }

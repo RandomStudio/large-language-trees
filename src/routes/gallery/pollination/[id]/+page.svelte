@@ -23,8 +23,9 @@
   export let data: EnhancedGardenViewData;
 
   let parent1 =
-    data.seedBank.plantsInSeedbank.find((plant) => plant.plantId === data.id)
-      ?.plant || undefined;
+    data.seedBank.plantsInSeedbank.find(
+      (plant) => plant.plantId === data.plantId
+    )?.plant || undefined;
 
   let busy = false;
 
