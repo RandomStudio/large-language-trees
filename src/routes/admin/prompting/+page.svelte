@@ -85,9 +85,18 @@
 
   {#if selectedTab === Tabs.TEXT}
     <h2 class="font-bold mt-4">Edit Text Prompts</h2>
-    <PromptConfigSection sectionData={data.text.preamble} />
-    <PromptConfigSection sectionData={data.text.explanation} />
-    <PromptConfigSection sectionData={data.text.instructions} />
+    <PromptConfigSection
+      sectionData={data.text.preamble}
+      onChange={() => preparePrompt()}
+    />
+    <PromptConfigSection
+      sectionData={data.text.explanation}
+      onChange={() => preparePrompt()}
+    />
+    <PromptConfigSection
+      sectionData={data.text.instructions}
+      onChange={() => preparePrompt()}
+    />
     <label class="block">
       Model
       <select class="">

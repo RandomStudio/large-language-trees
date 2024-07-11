@@ -2,6 +2,7 @@
   import type { PromptSection } from "../defaults/prompt-config";
 
   export let sectionData: PromptSection;
+  export let onChange: () => void;
 
   let showInfo = false;
 </script>
@@ -19,6 +20,7 @@
     class="w-full"
     rows={10}
     name="textExplanation"
-    value={sectionData.text}
+    bind:value={sectionData.text}
+    on:input={onChange}
   />
 </label>
