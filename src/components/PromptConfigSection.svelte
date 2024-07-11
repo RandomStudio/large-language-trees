@@ -2,6 +2,7 @@
   import type { PromptSection } from "../defaults/prompt-config";
 
   export let sectionData: PromptSection;
+  export let name: string;
   export let onChange: () => void;
 
   let showInfo = false;
@@ -19,7 +20,7 @@
   <textarea
     class="w-full"
     rows={10}
-    name="textExplanation"
+    {name}
     bind:value={sectionData.text}
     on:input={onChange}
   />

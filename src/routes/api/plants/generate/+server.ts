@@ -8,6 +8,7 @@ import DefaultPrompt from "../../../../defaults/prompt-config";
 
 export interface GeneratePlantRequestBody {
   prompt: ChatCompletionMessageParam[];
+  model: string;
   parents: [SelectPlant, SelectPlant];
 }
 
@@ -15,18 +16,18 @@ export const POST: RequestHandler = async ({ request }) => {
   //return error(500)
   const data = (await request.json()) as GeneratePlantRequestBody;
 
-  const { prompt, parents } = data;
+  const { prompt, parents, model } = data;
 
   let offspring: InsertPlant | null = null;
 
   if (prompt && parents) {
-    console.log("Using prompt: ******** \n", prompt);
+    console.log("Using prompt: ******** \n", prompt, "with model", model);
 
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
     const completion = await openai.chat.completions.create({
       messages: prompt,
-      model: DefaultPrompt.text.model
+      model
     });
 
     console.log("response:", completion.choices);

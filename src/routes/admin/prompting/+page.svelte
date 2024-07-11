@@ -8,11 +8,15 @@
   import type { GeneratePlantRequestBody } from "../../api/plants/generate/+server";
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
   import Spinner from "../../../components/Spinner.svelte";
+  import DefaultPrompt from "../../../defaults/prompt-config";
+  import { invalidateAll } from "$app/navigation";
 
   enum Tabs {
     TEXT,
     IMAGE
   }
+
+  export let data: PromptConfig;
 
   let selectedTab = Tabs.TEXT;
 
@@ -23,6 +27,11 @@
 
   let parent1: SelectPlant | null = null;
   let parent2: SelectPlant | null = null;
+
+  const backToDefaults = () => {
+    console.log("Back to defaults!", DefaultPrompt);
+    data = { ...DefaultPrompt };
+  };
 
   const pickRandomPlants = async () => {
     const allPlants = (await (
@@ -48,7 +57,8 @@
     if (parent1 && parent2) {
       const bodyData: GeneratePlantRequestBody = {
         prompt: finalPrompt,
-        parents: [parent1, parent2]
+        parents: [parent1, parent2],
+        model: data.text.model
       };
       const offspring = (await (
         await fetch("/api/plants/generate", {
@@ -59,12 +69,13 @@
       resultPlantText = offspring;
     }
   };
-
-  export let data: PromptConfig;
 </script>
 
 <main class="container p-4 w-screen">
   <h1 class="text-xl">Prompt Editor</h1>
+  <div>
+    <a href="/admin" class="text-xs italic">← Back to admin</a>
+  </div>
 
   <button
     class={(selectedTab === Tabs.TEXT
@@ -85,57 +96,70 @@
 
   {#if selectedTab === Tabs.TEXT}
     <h2 class="font-bold mt-4">Edit Text Prompts</h2>
-    <PromptConfigSection
-      sectionData={data.text.preamble}
-      onChange={() => preparePrompt()}
-    />
-    <PromptConfigSection
-      sectionData={data.text.explanation}
-      onChange={() => preparePrompt()}
-    />
-    <PromptConfigSection
-      sectionData={data.text.instructions}
-      onChange={() => preparePrompt()}
-    />
-    <label class="block">
-      Model
-      <select class="">
-        <option>Chat-GPT 3.5-turbo</option>
-        <option>Chat-GPT 4-turbo</option>
-      </select>
-    </label>
-    <div class="mt-8">
-      <button class="bg-green-500 text-white py-2 px-4 rounded">Save</button>
-      <button
-        class="bg-green-500 text-white py-2 px-4 rounded"
-        on:click={() => {
-          pickRandomPlants();
-          preparePrompt();
-        }}>Pick random plants</button
-      >
-      <button
-        class="bg-green-500 text-white py-2 px-4 rounded"
-        on:click={async () => {
-          busy = true;
-          preparePrompt();
-          await testGenerateText();
-          busy = false;
-        }}>Test</button
-      >
-    </div>
+    <form method="post" action="/admin/prompting">
+      <PromptConfigSection
+        name="textPreamble"
+        sectionData={data.text.preamble}
+        onChange={() => preparePrompt()}
+      />
+      <PromptConfigSection
+        name="textExplanation"
+        sectionData={data.text.explanation}
+        onChange={() => preparePrompt()}
+      />
+      <PromptConfigSection
+        name="textInstructions"
+        sectionData={data.text.instructions}
+        onChange={() => preparePrompt()}
+      />
+      <label class="block">
+        Model
+        <select bind:value={data.text.model} name="textModel">
+          <option value={"gpt-3.5-turbo"}>Chat-GPT 3.5-turbo</option>
+          <option value={"gpt-4-turbo"}>Chat-GPT 4-turbo</option>
+        </select>
+      </label>
+      <div class="mt-8">
+        <button
+          class="bg-orange-500 text-white py-2 px-4 rounded"
+          type="button"
+          on:click={() => backToDefaults()}>Reset</button
+        >
 
-    {#if parent1 && parent2}
-      <div>
-        <h2>
-          Test combining {parent1.commonName} + {parent2.commonName}
-        </h2>
+        <button class="bg-green-500 text-white py-2 px-4 rounded">Save</button>
+        <button
+          type="button"
+          class="bg-green-500 text-white py-2 px-4 rounded"
+          on:click={() => {
+            pickRandomPlants();
+            preparePrompt();
+          }}>Pick random plants</button
+        >
+        <button
+          type="button"
+          class="bg-green-500 text-white py-2 px-4 rounded"
+          on:click={async () => {
+            busy = true;
+            preparePrompt();
+            await testGenerateText();
+            busy = false;
+          }}>Test</button
+        >
       </div>
-      <pre class="w-full text-wrap text-xs">{JSON.stringify(
-          finalPrompt,
-          null,
-          2
-        )}</pre>
-    {/if}
+
+      {#if parent1 && parent2}
+        <div>
+          <h2>
+            Test combining {parent1.commonName} + {parent2.commonName}
+          </h2>
+        </div>
+        <pre class="w-full text-wrap text-xs p-4">{JSON.stringify(
+            finalPrompt,
+            null,
+            2
+          )}</pre>
+      {/if}
+    </form>
   {/if}
 
   {#if resultPlantText}

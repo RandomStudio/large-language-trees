@@ -62,7 +62,7 @@ export const populateDefaultPromptSettings = async () => {
     id: uuidv4(),
     textModel: defaultPromptSettings.text.model,
     textPreamble: defaultPromptSettings.text.preamble.text,
-    textExplanations: defaultPromptSettings.text.explanation.text,
+    textExplanation: defaultPromptSettings.text.explanation.text,
     textInstructions: defaultPromptSettings.text.instructions.text,
     imageModel: defaultPromptSettings.image.model,
     imageInstructions: defaultPromptSettings.image.instructions
