@@ -6,12 +6,14 @@ import type { Characteristics, InsertPlant, SelectPlant } from "$lib/types";
 import { v4 as uuidv4 } from "uuid";
 import DefaultPrompt from "../../../../defaults/prompt-config";
 
+export interface GeneratePlantRequestBody {
+  prompt: ChatCompletionMessageParam[];
+  parents: [SelectPlant, SelectPlant];
+}
+
 export const POST: RequestHandler = async ({ request }) => {
   //return error(500)
-  const data = (await request.json()) as {
-    prompt: ChatCompletionMessageParam[];
-    parents: [SelectPlant, SelectPlant];
-  };
+  const data = (await request.json()) as GeneratePlantRequestBody;
 
   const { prompt, parents } = data;
 
