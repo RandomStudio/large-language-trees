@@ -60,8 +60,10 @@ export interface PlantProperties {
 }
 
 export interface GenerateImageRequest {
+  instructions: string;
   description: string;
   plantId: string;
+  model: string;
 }
 export interface GeneratedImageResult {
   pleaseWait: boolean;

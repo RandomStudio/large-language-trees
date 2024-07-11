@@ -76,6 +76,7 @@
         data.image.instructions,
         plantForImage.description || ""
       );
+      console.log("Updated final image plant", finalImagePrompt);
     }
   };
 
@@ -97,10 +98,12 @@
   };
 
   const runImageGeneration = async () => {
-    if (plantForImage) {
+    if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
+        instructions: finalImagePrompt,
         description: plantForImage.description || "",
-        plantId: "test-only"
+        plantId: "test-only",
+        model: data.image.model
       };
       const res = await fetch("/api/images/generate", {
         method: "POST",
@@ -231,7 +234,15 @@
           name="imageInstructions"
           rows={10}
           bind:value={data.image.instructions}
+          on:input={() => preparePrompts()}
         />
+      </label>
+      <label class="block">
+        Model
+        <select bind:value={data.image.model} name="imageModel">
+          <option>dall-e-2</option>
+          <option>dall-e-3</option>
+        </select>
       </label>
       <button
         type="button"
