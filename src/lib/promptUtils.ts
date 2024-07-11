@@ -67,3 +67,8 @@ const filterCharacteristicsForPrompt = (
   });
   return o;
 };
+
+export const buildImagePrompt = (
+  instructions: string,
+  description: string
+): string => instructions + "\n\n" + description;
