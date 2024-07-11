@@ -171,7 +171,7 @@
           on:click={() => backToDefaults()}>Reset</button
         >
 
-        <button class="bg-green-500 text-white py-2 px-4 rounded">Save</button>
+        <button class="bg-red-500 text-white py-2 px-4 rounded">Save</button>
         <button
           type="button"
           class="bg-green-500 text-white py-2 px-4 rounded"
@@ -244,22 +244,31 @@
           <option>dall-e-3</option>
         </select>
       </label>
-      <button
-        type="button"
-        class="bg-green-500 text-white py-2 px-4 rounded"
-        on:click={async () => {
-          await pickRandomPlantForImage();
-        }}>Pick Random Plant</button
-      >
-      <button
-        type="button"
-        class="bg-green-500 text-white py-2 px-4 rounded"
-        on:click={async () => {
-          busy = true;
-          await runImageGeneration();
-          busy = false;
-        }}>Test</button
-      >
+      <div>
+        <button
+          class="bg-orange-500 text-white py-2 px-4 rounded"
+          type="button"
+          on:click={() => backToDefaults()}>Reset</button
+        >
+        <button class="bg-red-500 text-white py-2 px-4 rounded">Save</button>
+
+        <button
+          type="button"
+          class="bg-green-500 text-white py-2 px-4 rounded"
+          on:click={async () => {
+            await pickRandomPlantForImage();
+          }}>Pick Random Plant</button
+        >
+        <button
+          type="button"
+          class="bg-green-500 text-white py-2 px-4 rounded"
+          on:click={async () => {
+            busy = true;
+            await runImageGeneration();
+            busy = false;
+          }}>Test</button
+        >
+      </div>
     </form>
 
     {#if plantForImage}
