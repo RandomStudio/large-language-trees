@@ -136,3 +136,13 @@ export const seedbanksRelations = relations(seedbanks, ({ many }) => ({
 export const plantsRelations = relations(plants, ({ many }) => ({
   inSeedbanks: many(seedbanksToPlants)
 }));
+
+export const promptSettingsTable = pgTable("prompt_settings", {
+  id: text("id").primaryKey(),
+  textModel: text("text_model").notNull(),
+  textPreamble: text("text_preamble").notNull(),
+  textExplanation: text("text_explanation").notNull(),
+  textInstructions: text("text_instructions").notNull(),
+  imageModel: text("image_model").notNull(),
+  imageInstructions: text("image_instructions").notNull()
+});

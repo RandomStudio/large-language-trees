@@ -3,15 +3,18 @@ export interface PromptSection {
   description: string;
   text: string;
 }
+
+export type TextModelNames = "gpt-3.5-turbo" | "gpt-4-turbo";
+export type ImageModelNames = "dall-e-3" | "dall-e-2";
 export interface PromptConfig {
   text: {
-    model: "gpt-3.5-turbo" | "gpt-4-turbo";
+    model: TextModelNames;
     preamble: PromptSection;
     explanation: PromptSection;
     instructions: PromptSection;
   };
   image: {
-    model: "dall-e-3";
+    model: ImageModelNames;
     instructions: string;
   };
 }
