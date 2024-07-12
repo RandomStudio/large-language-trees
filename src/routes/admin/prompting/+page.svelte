@@ -41,7 +41,7 @@
   let plantForImage: SelectPlant | null = null;
 
   const backToDefaults = () => {
-    console.log("Back to defaults!", DefaultPrompt);
+    // console.log("Back to defaults!", DefaultPrompt);
     data = { ...DefaultPrompt };
   };
 
@@ -76,7 +76,7 @@
         data.image.instructions,
         plantForImage.description || ""
       );
-      console.log("Updated final image plant", finalImagePrompt);
+      // console.log("Updated final image plant", finalImagePrompt);
     }
   };
 

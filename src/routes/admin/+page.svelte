@@ -41,7 +41,8 @@
     <h2 class="font-bold">Prompt engineering</h2>
     <ul>
       <li>
-        <a href="/admin/prompting" class="underline">Test image generation...</a
+        <a href="/admin/prompting" class="underline"
+          >Test text/image generation...</a
         >
       </li>
     </ul>
