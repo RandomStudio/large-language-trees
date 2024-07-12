@@ -59,12 +59,6 @@ export interface PlantProperties {
   [key: string]: number | string;
 }
 
-export interface GenerateImageRequest {
-  instructions: string;
-  description: string;
-  plantId: string;
-  model: string;
-}
 export interface GeneratedImageResult {
   pleaseWait: boolean;
   url: string | null;
@@ -86,4 +80,25 @@ export interface AttachImageResponse {
 
 export interface EnhancedGardenViewData extends GardenViewData {
   plantId: string; // Ajoutez d'autres champs si nécessaire
+}
+
+export interface PromptSection {
+  label: string;
+  description: string;
+  text: string;
+}
+
+export type TextModelNames = "gpt-3.5-turbo" | "gpt-4-turbo";
+export type ImageModelNames = "dall-e-3" | "dall-e-2";
+export interface PromptConfig {
+  text: {
+    model: TextModelNames;
+    preamble: PromptSection;
+    explanation: PromptSection;
+    instructions: PromptSection;
+  };
+  image: {
+    model: ImageModelNames;
+    instructions: string;
+  };
 }

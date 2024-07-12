@@ -1,7 +1,5 @@
-import { buildPrompt } from "./promptUtils";
-import type { InsertPlant, SeedbankEntry, SelectPlant } from "./types";
-import DefaultPromptConfig from "../defaults/prompt-config";
 import { invalidateAll } from "$app/navigation";
+import type { InsertPlant, SelectPlant } from "$lib/types";
 
 export async function confirmBreed(
   parents: [SelectPlant, SelectPlant]
@@ -10,7 +8,6 @@ export async function confirmBreed(
   const res = await fetch("/api/plants/generate", {
     method: "POST",
     body: JSON.stringify({
-      prompt: buildPrompt(DefaultPromptConfig, parents[0], parents[1]),
       parents
     })
   });
@@ -69,7 +66,6 @@ export async function addConfirmedPlantToOtherUser(
   candidateChild: InsertPlant,
   seedbankId: string
 ) {
-
   await fetch("/api/plantsInSeedbank", {
     method: "POST",
     body: JSON.stringify({ plantId: candidateChild.id, seedbankId })

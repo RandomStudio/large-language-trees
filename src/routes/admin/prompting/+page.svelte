@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { buildImagePrompt, buildPrompt } from "$lib/promptUtils";
+  import { buildImagePrompt, buildTextPrompt } from "$lib/promptUtils";
   import type {
     GeneratedImageResult,
-    GenerateImageRequest,
     InsertPlant,
+    PromptConfig,
     SelectPlant
   } from "$lib/types";
   import {
@@ -11,13 +11,12 @@
     pickRandomElement
   } from "random-elements";
   import PromptConfigSection from "../../../components/PromptConfigSection.svelte";
-  import type { PromptConfig } from "../../../defaults/prompt-config";
   import { onMount } from "svelte";
-  import type { GeneratePlantRequestBody } from "../../api/plants/generate/+server";
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
   import Spinner from "../../../components/Spinner.svelte";
   import DefaultPrompt from "../../../defaults/prompt-config";
-  import { invalidateAll } from "$app/navigation";
+  import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
+  import { GenerateImageRequest } from "../../api/images/generate/types";
 
   enum Tabs {
     TEXT,
@@ -69,7 +68,7 @@
 
   const preparePrompts = () => {
     if (parent1 && parent2) {
-      finalTextPrompt = buildPrompt(data, parent1, parent2);
+      finalTextPrompt = buildTextPrompt(data, parent1, parent2);
     }
     if (plantForImage) {
       finalImagePrompt = buildImagePrompt(
