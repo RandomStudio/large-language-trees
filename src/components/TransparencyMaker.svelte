@@ -2,6 +2,8 @@
   import type { ImageUploadResult } from "$lib/types";
   import { onMount } from "svelte";
 
+  import ColorThief from "colorthief";
+
   export let src: string;
   export let tolerance = 40;
   export let useFloodFill = true;
@@ -90,6 +92,142 @@
 
         //Pixelate
         pixelateImage(imageData, ctx);
+
+        //Colors of the palette
+        const colorThief = new ColorThief();
+        const palette = colorThief.getPalette(img, 5);
+        console.log(palette);
+
+        function generate256ColorPalette() {
+          const palette = [];
+
+          for (let r = 0; r <= 255; r += 51) {
+            for (let g = 0; g <= 255; g += 51) {
+              for (let b = 0; b <= 255; b += 51) {
+                palette.push([r, g, b]);
+              }
+            }
+          }
+
+          return palette;
+        }
+        const funkyColorPalette = [
+          [255, 0, 0], // Red
+          [255, 165, 0], // Orange
+          [255, 255, 0], // Yellow
+          [0, 128, 0], // Green
+          [0, 0, 255], // Blue
+          [75, 0, 130], // Indigo
+          [238, 130, 238], // Violet
+          [255, 20, 147], // Deep Pink
+          [255, 69, 0], // Red-Orange
+          [255, 215, 0], // Gold
+          [50, 205, 50], // Lime Green
+          [0, 191, 255], // Deep Sky Blue
+          [255, 105, 180], // Hot Pink
+          [127, 255, 0], // Chartreuse
+          [0, 255, 255], // Cyan / Aqua
+          [138, 43, 226], // Blue-Violet
+          [255, 0, 255], // Magenta / Fuchsia
+          [255, 140, 0], // Dark Orange
+          [0, 255, 0], // Lime
+          [173, 216, 230], // Light Blue
+          [255, 182, 193], // Light Pink
+          [30, 144, 255], // Dodger Blue
+          [255, 255, 0], // Yellow (another shade)
+          [255, 69, 0], // Red-Orange (another shade)
+          [0, 255, 127], // Spring Green
+          [255, 192, 203], // Pink
+          [0, 255, 127], // Spring Green
+          [255, 192, 203]
+        ];
+
+        const glowyElegantPalette = [
+          [255, 215, 0], // Gold
+          [255, 160, 122], // Light Salmon
+          [255, 99, 71], // Tomato
+          [255, 69, 0], // Red-Orange
+          [255, 105, 180], // Hot Pink
+          [255, 182, 193], // Light Pink
+          [255, 192, 203], // Pink
+          [255, 140, 0], // Dark Orange
+          [255, 69, 0], // Red-Orange (another shade)
+          [255, 20, 147], // Deep Pink
+          [255, 0, 255], // Magenta / Fuchsia
+          [238, 130, 238], // Violet
+          [173, 216, 230], // Light Blue
+          [127, 255, 212], // Aquamarine
+          [0, 255, 255], // Cyan / Aqua
+          [30, 144, 255], // Dodger Blue
+          [0, 191, 255], // Deep Sky Blue
+          [0, 255, 127], // Spring Green
+          [50, 205, 50], // Lime Green
+          [154, 205, 50], // Yellow Green
+          [255, 215, 0], // Gold (another shade)
+          [255, 255, 0], // Yellow
+          [255, 255, 224], // Light Yellow
+          [240, 230, 140], // Khaki
+          [255, 250, 205], // Lemon Chiffon
+          [255, 228, 181], // Moccasin
+          [255, 250, 240], // Floral White
+          [255, 255, 255], // White
+          [245, 245, 220], // Beige
+          [255, 240, 245], // Lavender Blush
+          [255, 192, 203], // Pink (another shade)
+          [255, 182, 193], // Light Pink (another shade)
+          [255, 160, 122], // Light Salmon (another shade)
+          [240, 230, 140], // Khaki (another shade)
+          [255, 250, 205], // Lemon Chiffon (another shade)
+          [255, 228, 181], // Moccasin (another shade)
+          [255, 250, 240], // Floral White (another shade)
+          [255, 255, 255], // White (another shade)
+          [245, 245, 220], // Beige (another shade)
+          [255, 240, 245] // Lavender Blush (another shade)
+        ];
+
+        const colorfulPixelPalette = [
+          [0, 0, 0], // Black
+          [255, 255, 255], // White
+          [255, 0, 0], // Red
+          [0, 255, 0], // Lime
+          [0, 0, 255], // Blue
+          [255, 255, 0], // Yellow
+          [0, 255, 255], // Cyan
+          [255, 0, 255], // Magenta
+          [255, 165, 0], // Orange
+          [128, 0, 128], // Purple
+          [255, 192, 203], // Pink
+          [255, 20, 147], // Deep Pink
+          [255, 105, 180], // Hot Pink
+          [255, 140, 0], // Dark Orange
+          [255, 69, 0], // Red-Orange
+          [255, 0, 255], // Magenta (another shade)
+          [238, 130, 238], // Violet
+          [173, 216, 230], // Light Blue
+          [127, 255, 212], // Aquamarine
+          [0, 255, 255], // Cyan (another shade)
+          [30, 144, 255], // Dodger Blue
+          [0, 191, 255], // Deep Sky Blue
+          [0, 255, 127], // Spring Green
+          [50, 205, 50], // Lime Green
+          [154, 205, 50], // Yellow Green
+          [0, 128, 0], // Green
+          [128, 128, 0], // Olive
+          [128, 0, 0], // Maroon
+          [128, 0, 128], // Purple (another shade)
+          [165, 42, 42], // Brown
+          [210, 105, 30], // Chocolate
+          [0, 0, 128], // Navy
+          [0, 128, 128], // Teal
+          [128, 128, 128], // Gray
+          [192, 192, 192], // Silver
+          [128, 0, 0], // Maroon (another shade)
+          [0, 128, 0], // Green (another shade)
+          [128, 128, 0], // Olive (another shade)
+          [0, 0, 128] // Navy (another shade)
+        ];
+
+        replaceImageColorsWithPalette(palette, imageData, ctx);
 
         //add borders in dark blue
         //addBorders(imageData, ctx);
@@ -524,6 +662,45 @@
 
     // Update the canvas
     ctx.putImageData(imageData, 0, 0);
+  }
+
+  function replaceImageColorsWithPalette(
+    palette: number[][],
+    imageData: ImageData,
+    ctx: CanvasRenderingContext2D
+  ) {
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const pixelColor = [data[i], data[i + 1], data[i + 2]];
+
+      let minDistance = Number.MAX_VALUE;
+      let nearestColorIndex = 0;
+
+      for (let j = 0; j < palette.length; j++) {
+        const paletteColor = palette[j];
+        const distance = colorDistance(pixelColor, paletteColor);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestColorIndex = j;
+        }
+      }
+
+      const nearestColor = palette[nearestColorIndex];
+      data[i] = nearestColor[0]; // Red
+      data[i + 1] = nearestColor[1]; // Green
+      data[i + 2] = nearestColor[2]; // Blue
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  function colorDistance(color1: number[], color2: number[]): number {
+    const rDiff = color1[0] - color2[0];
+    const gDiff = color1[1] - color2[1];
+    const bDiff = color1[2] - color2[2];
+    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
   }
 
   function addBorders(
