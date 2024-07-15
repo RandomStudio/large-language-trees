@@ -1,8 +1,8 @@
 import { db } from "$lib/server/db";
-import type { Actions, PageServerLoad } from "./$types";
-import type { PromptConfig } from "../../../defaults/prompt-config";
 import { promptSettingsTable } from "$lib/server/schema";
 import { promptRowToConfig } from "$lib/promptUtils";
+import type { PromptConfig } from "$lib/types";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async (): Promise<PromptConfig> => {
   console.log("loading page");
