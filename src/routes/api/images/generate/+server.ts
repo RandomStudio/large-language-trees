@@ -113,6 +113,9 @@ const tryGenerate = async (
   model: string,
   prompt: string
 ): Promise<string> => {
+  console.log(
+    `tryGenerate with model "${model}" and prompt:\n"${prompt}"\n ...`
+  );
   const response = await openai.images.generate({
     model,
     prompt,

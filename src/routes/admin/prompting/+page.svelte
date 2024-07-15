@@ -103,7 +103,7 @@
     errorMessages = null;
     if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
-        instructions: finalImagePrompt,
+        instructions: data.image.instructions,
         description: plantForImage.description || "",
         plantId: "test-only",
         model: data.image.model
