@@ -4,6 +4,8 @@
   import { page } from "$app/stores";
 </script>
 
+<script defer src="https://cloud.umami.is/script.js" data-website-id="1aa1e332-894f-4504-9e6c-f3f88265ffe3"></script>
+
 <div class="bg-roel_green w-screen h-screen fixed"></div>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
