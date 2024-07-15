@@ -16,7 +16,7 @@
   import Spinner from "../../../components/Spinner.svelte";
   import DefaultPrompt from "../../../defaults/prompt-config";
   import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
-  import { GenerateImageRequest } from "../../api/images/generate/types";
+  import type { GenerateImageRequest } from "../../api/images/generate/types";
 
   enum Tabs {
     TEXT,
@@ -32,7 +32,7 @@
   let busy = false;
 
   let finalTextPrompt: ChatCompletionMessageParam[] = [];
-  let finalImagePrompt: string | null = null;
+  let finalImageInstructionPrompt: string | null = null;
 
   let parent1: SelectPlant | null = null;
   let parent2: SelectPlant | null = null;
@@ -71,10 +71,7 @@
       finalTextPrompt = buildTextPrompt(data, parent1, parent2);
     }
     if (plantForImage) {
-      finalImagePrompt = buildImagePrompt(
-        data.image.instructions,
-        plantForImage.description || ""
-      );
+      finalImageInstructionPrompt = data.image.instructions;
       // console.log("Updated final image plant", finalImagePrompt);
     }
   };
@@ -97,13 +94,15 @@
   };
 
   const runImageGeneration = async () => {
-    if (plantForImage && finalImagePrompt) {
+    if (plantForImage && finalImageInstructionPrompt) {
       const bodyData: GenerateImageRequest = {
-        instructions: finalImagePrompt,
+        instructions: finalImageInstructionPrompt,
         description: plantForImage.description || "",
         plantId: "test-only",
         model: data.image.model
       };
+      console.log("Instructions : " + bodyData.instructions);
+      console.log("description : " + bodyData.description);
       const res = await fetch("/api/images/generate", {
         method: "POST",
         body: JSON.stringify(bodyData)
@@ -282,7 +281,7 @@
         <p>{JSON.stringify(plantForImage.properties)}</p>
       </div>
       <pre class="w-full text-wrap text-xs p-4">{JSON.stringify(
-          finalImagePrompt,
+          finalImageInstructionPrompt,
           null,
           2
         )}</pre>
