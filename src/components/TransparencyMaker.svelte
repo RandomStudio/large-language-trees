@@ -3,7 +3,6 @@
   import { onMount } from "svelte";
 
   import ColorThief from "colorthief";
-  import { generate } from "$lib/server";
 
   export let src: string;
   export let tolerance = 40;
