@@ -104,8 +104,6 @@
         plantId: "test-only",
         model: data.image.model
       };
-      console.log("Instructions : " + bodyData.instructions);
-      console.log("description : " + bodyData.description);
       const res = await fetch("/api/images/generate", {
         method: "POST",
         body: JSON.stringify(bodyData)
