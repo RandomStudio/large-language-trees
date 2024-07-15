@@ -1,10 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import {
-    type GardenViewData,
-    type SelectPlant,
-    type UserWithSeedbank
-  } from "../../lib/types";
+  import { type GardenViewData, type SelectPlant } from "../../lib/types";
   import { onMount } from "svelte";
   export let data: GardenViewData;
   import PlantDisplay from "../../components/PlantDisplay.svelte";

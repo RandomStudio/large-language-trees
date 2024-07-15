@@ -1,6 +1,5 @@
 <script lang="ts">
   import type {
-    GardenPlantEntryWithPlant,
     GardenViewData,
     MyGarden,
     PlantProperties,

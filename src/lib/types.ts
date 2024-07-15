@@ -3,6 +3,7 @@ import type {
   gardensToPlants,
   generatedImages,
   plants,
+  promptSettingsTable,
   seedbanks,
   seedbanksToPlants,
   users
@@ -22,6 +23,8 @@ export type SeedbankEntry = typeof seedbanksToPlants.$inferInsert;
 export type Characteristics = { [key: string]: string | number };
 
 export type GeneratedImage = typeof generatedImages.$inferSelect;
+
+export type SelectPromptSettings = typeof promptSettingsTable.$inferInsert;
 
 export interface GardenPlantEntryWithPlant extends GardenPlantEntry {
   plant: SelectPlant;
@@ -56,10 +59,6 @@ export interface PlantProperties {
   [key: string]: number | string;
 }
 
-export interface GenerateImageRequest {
-  description: string;
-  plantId: string;
-}
 export interface GeneratedImageResult {
   pleaseWait: boolean;
   url: string | null;
@@ -81,4 +80,25 @@ export interface AttachImageResponse {
 
 export interface EnhancedGardenViewData extends GardenViewData {
   plantId: string; // Ajoutez d'autres champs si nécessaire
+}
+
+export interface PromptSection {
+  label: string;
+  description: string;
+  text: string;
+}
+
+export type TextModelNames = "gpt-3.5-turbo" | "gpt-4-turbo";
+export type ImageModelNames = "dall-e-3" | "dall-e-2";
+export interface PromptConfig {
+  text: {
+    model: TextModelNames;
+    preamble: PromptSection;
+    explanation: PromptSection;
+    instructions: PromptSection;
+  };
+  image: {
+    model: ImageModelNames;
+    instructions: string;
+  };
 }
