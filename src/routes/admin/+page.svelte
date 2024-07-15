@@ -22,8 +22,9 @@
       {/if}
     </div>
     <form method="POST" action="?/initData">
-      <button class="bg-green-500 text-white py-2 px-4 rounded"
-        >Initialise data</button
+      <button
+        class="bg-green-500 text-white py-2 px-4 rounded"
+        data-umami-event="Admin: Initialise Data Button">Initialise data</button
       >
     </form>
   </div>
@@ -31,7 +32,9 @@
   <div class="border-2">
     <h2 class="font-bold">Reset plants and users</h2>
     <form method="POST" action="?/reset">
-      <button class="bg-red-500 text-white py-2 px-4 rounded"
+      <button
+        data-umami-event="Admin: Reset Everything Button"
+        class="bg-red-500 text-white py-2 px-4 rounded"
         >Clear/reset everything</button
       >
     </form>
