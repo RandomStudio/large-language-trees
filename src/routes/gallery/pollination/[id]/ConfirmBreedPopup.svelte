@@ -73,6 +73,9 @@
     if (finalChildReadyToAdd.description && finalChildReadyToAdd.commonName) {
     }
     finalChildReadyToAdd.commonName = textInput;
+
+    //@ts-ignore
+    umami.track("Named Plant");
   }
 
   const generateImage = async () => {
@@ -228,6 +231,7 @@
   ></ButtonBottom>
 
   <button
+    data-umami-event="Cancel Pollination Button"
     on:click={onCancel}
     class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
     >Cancel</button

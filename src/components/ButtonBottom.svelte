@@ -10,6 +10,7 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <button
+    data-umami-event={buttonText + " Button"}
     class=" {width} max-w-xs text-roel_blue bg-roel_green text-xl font-inter border-2 border-roel_blue rounded-full px-4 py-2 active:bg-roel_blue active:text-roel_green"
     on:click={functionClick}
   >
