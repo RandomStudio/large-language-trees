@@ -24,10 +24,12 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const completion = await openai.chat.completions.create({
     messages: prompt || buildTextPrompt(promptSettings, plant1, plant2),
-    model: model || promptSettings.text.model
+    model: model || promptSettings.text.model,
+    response_format: { type: "json_object" }
   });
 
   console.log("response:", completion.choices);
+  console.log("usage data", completion.usage);
 
   for (const res of completion.choices) {
     console.log(JSON.stringify(res));
