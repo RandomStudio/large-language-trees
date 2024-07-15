@@ -15,7 +15,7 @@
       "heightInMetres": 0.2,
       "funFact": "Echeveria, a genus of succulents valued as ornamental plants, faces challenges in classification due to the shortage of specimens and molecular studies."
     },
-    "description": "Echeveria is a charming succulent known for its rosette shape and vibrant pink blooms, typically growing to about 20 centimeters in height. It adds a touch of delicacy to any setting."
+    "description": "Echeveria is noted for its pink star-shaped flowers and typically exhibits 6-8 petals. The leaves are green and obovate, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 0.2 meters."
   },
   {
     "id": "baobab",
@@ -33,7 +33,7 @@
       "heightInMetres": 25,
       "funFact": "The baobab tree, known as the Tree of Life, can store hundreds of gallons of water in its trunk, making it a vital resource for both animals and humans during droughts."
     },
-    "description": "The Baobab tree is an iconic symbol of the African savannah, known for its white bell-shaped flowers and impressive height of up to 25 meters. The baobab tree, known as the Tree of Life, can store hundreds of gallons of water in its trunk."
+    "description": "Baobab is noted for its white bell-shaped flowers and typically exhibits 5 petals. The leaves are green and palmate, with a lobed margin, contributing to its distinctive appearance. It reaches an average height of about 25 meters."
   },
   {
     "id": "palm",
@@ -51,7 +51,7 @@
       "heightInMetres": 15,
       "funFact": "The palm tree, often referred to as the prince of the vegetable kingdom, produces a variety of useful products including coconuts, palm oil, and dates."
     },
-    "description": "Palm trees are tropical beauties with yellow cup-shaped flowers and green pinnate leaves, typically growing to 15 meters. The palm tree produces a variety of useful products including coconuts, palm oil, and dates."
+    "description": "Palm is noted for its yellow cup-shaped flowers and typically exhibits 3-5 petals. The leaves are green and pinnate, with a smooth margin, contributing to its distinctive appearance. It reaches an average height of about 15 meters."
   },
   {
     "id": "bonsai",
@@ -69,7 +69,7 @@
       "heightInMetres": 0.5,
       "funFact": "Bonsai trees, with their miniature stature and intricate designs, are a captivating blend of art and horticulture, embodying centuries of Japanese tradition and patience."
     },
-    "description": "Bonsai trees are miniature masterpieces of horticulture with varied flower colors and green elliptical leaves, growing to around 50 centimeters. Bonsai trees embody centuries of Japanese tradition and patience."
+    "description": "Bonsai is noted for its varied rounded-shaped flowers and typically exhibits 5 petals. The leaves are green and elliptical, with a serrated margin, contributing to its distinctive appearance. It reaches an average height of about 0.5 meters."
   },
   {
     "id": "prunus-serrulata",
@@ -87,7 +87,7 @@
       "heightInMetres": 8,
       "funFact": "Prunus serrulata, commonly known as the Japanese cherry blossom or sakura, paints landscapes with ethereal beauty during springtime, symbolizing renewal, fleeting beauty, and the transient nature of life in Japanese culture."
     },
-    "description": "Prunus Serrulata, known as Japanese cherry, is famous for its beautiful pink blossoms and green lanceolate leaves, reaching a height of 8 meters. Prunus serrulata, or sakura, symbolizes renewal and the transient nature of life in Japanese culture."
+    "description": "Prunus serrulata is noted for its pink rosette-shaped flowers and typically exhibits 5 petals. The leaves are green and lanceolate, with a serrated margin, contributing to its distinctive appearance. It reaches an average height of about 8 meters."
   },
   {
     "id": "rose",
@@ -105,7 +105,7 @@
       "heightInMetres": 1.5,
       "funFact": "Renowned gardener Tom Carruth, through his work as a hybridizer, inadvertently found himself creating a plethora of celebrity roses, like Barbra Streisand's fragrant pink bloom and Marilyn Monroe's platinum blond variety, by combining different rose breeds. This process, spanning over a decade from cross-breeding to final introduction, often led to collaborations with stars, honoring their legacies and leveraging their names for marketing purposes within the floral industry, highlighting a unique convergence of Hollywood glamour and horticultural innovation."
     },
-    "description": "Roses are classic symbols of love and beauty with vibrant red blooms and green oval leaves, growing up to 1.5 meters. Renowned gardener Tom Carruth created celebrity roses by combining different rose breeds, honoring stars like Barbra Streisand."
+    "description": "Rose is noted for its red rounded-shaped flowers and typically exhibits 30-50 petals. The leaves are green and oval, with a serrated margin, contributing to its distinctive appearance. It reaches an average height of about 1.5 meters."
   },
   {
     "id": "fir-tree",
@@ -123,7 +123,7 @@
       "heightInMetres": 30,
       "funFact": "The annual Rockefeller Center Christmas tree tradition, which began in 1931 amidst the Great Depression, features a majestic fir tree standing between West 48th and 51st street on Rockefeller Plaza, symbolizing hope and attracting millions of visitors each year, including a patriotic display post-9/11."
     },
-    "description": "Fir trees are towering evergreens known for their needle-like leaves and lack of flowers, reaching heights of up to 30 meters. The Rockefeller Center Christmas tree tradition features a majestic fir tree, symbolizing hope each year."
+    "description": "Fir tree is noted for its none none-shaped flowers and typically exhibits 0 petals. The leaves are green and needle, with a smooth margin, contributing to its distinctive appearance. It reaches an average height of about 30 meters."
   },
   {
     "id": "fern",
@@ -141,7 +141,7 @@
       "heightInMetres": 1,
       "funFact": "Ferns, cherished for hundreds of millions of years, were a dietary staple for towering dinosaurs like the Diplodocus due to their abundance, nutritional value, and easy accessibility."
     },
-    "description": "Ferns are ancient plants known for their lush green fronds and lack of flowers, typically growing to about 1 meter in height. Ferns were a dietary staple for dinosaurs like the Diplodocus."
+    "description": "Fern is noted for its none none-shaped flowers and typically exhibits 0 petals. The leaves are green and frond, with a lobed margin, contributing to its distinctive appearance. It reaches an average height of about 1 meters."
   },
   {
     "id": "liatris",
@@ -159,7 +159,7 @@
       "heightInMetres": 1.2,
       "funFact": "Liatris, revered by Native Americans for centuries, holds a special place in traditional medicine, with various tribes using it to treat ailments ranging from respiratory issues to sore throats, showcasing its time-honored role as a healing herb in indigenous cultures."
     },
-    "description": "Liatris, also known as blazing star, is a striking perennial with purple tubular flowers and green linear leaves, growing up to 1.2 meters. Liatris has been used in traditional medicine by Native Americans."
+    "description": "Liatris is noted for its purple tubular-shaped flowers and typically exhibits Numerous petals. The leaves are green and linear, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 1.2 meters."
   },
   {
     "id": "dandelion",
@@ -177,7 +177,7 @@
       "heightInMetres": 0.3,
       "funFact": "Dandelions, once deemed pesky weeds, are now being cultivated for their rubber-producing properties by researchers like Katrina Cornish at Ohio State University. Their efforts, alongside companies like Bridgestone experimenting with plants like guayule, aim to offer a sustainable alternative to traditional sources of rubber, potentially revolutionizing the agricultural landscape and contributing to a more environmentally friendly future."
     },
-    "description": "Dandelions are hardy plants with bright yellow ligulate flowers and green runcinate leaves, growing up to 30 centimeters. Dandelions are being cultivated for their rubber-producing properties by researchers."
+    "description": "Dandelion is noted for its yellow ligulate-shaped flowers and typically exhibits Numerous petals. The leaves are green and runcinate, with a dentate margin, contributing to its distinctive appearance. It reaches an average height of about 0.3 meters."
   },
   {
     "id": "water-lily",
@@ -195,7 +195,7 @@
       "heightInMetres": 0.5,
       "funFact": "Did you know that Claude Monet, the iconic Impressionist artist, created a staggering 250 different paintings of water lilies throughout his career? These paintings, ranging from small canvases to monumental murals, showcase Monet's enduring fascination with capturing the ethereal beauty of these aquatic blooms. His obsession with water lilies not only transformed his artistic style but also left an indelible mark on the art world, inspiring generations of artists to explore the natural world through their own unique lenses."
     },
-    "description": "Water lilies are aquatic plants with beautiful white elliptical flowers and green orbicular leaves, typically floating on the surface of ponds. Claude Monet created 250 paintings of water lilies throughout his career."
+    "description": "Water lily is noted for its white elliptical-shaped flowers and typically exhibits 20-40 petals. The leaves are green and orbicular, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 0.5 meters."
   },
   {
     "id": "aloe-vera",
@@ -211,9 +211,9 @@
       "leafShape": "Lanceolate",
       "leafMarginDescription": "Spiny",
       "heightInMetres": 0.6,
-      "funFact": "Scientists have discovered that aloe vera plants have the remarkable ability to be transformed into supercapacitors, which are devices that store energy and discharge it rapidly, much like batteries. Researchers at the Beijing Institute of Technology in China have developed these supercapacitors using various parts of the aloe vera plant, with just a single gold wire as an additional material. These living supercapacitors can be integrated into plants themselves, allowing them to power lights or charge low-power devices—an innovative fusion of biology and technology!"
+      "funFact": "Scientists have discovered that aloe vera plants have the remarkable ability to be transformed into supercapacitors, which are devices that store energy and discharge it rapidly, much like batteries. Researchers at the Beijing Institute of Technology in China have developed these supercapacitors using various parts of the aloe vera plant, with just a single gold wire as an additional material. These living supercapacitors can be integrated into plants themselves, allowing them to power lights or charge low-power devices\u2014an innovative fusion of biology and technology!"
     },
-    "description": "Aloe Vera is a succulent plant known for its medicinal properties, featuring yellow tubular flowers and green lanceolate leaves with spiny margins, growing to about 0.6 meters. Aloe Vera plants have the remarkable ability to be transformed into supercapacitors for energy storage."
+    "description": "Aloe vera is noted for its yellow tubular-shaped flowers and typically exhibits 6-12 petals. The leaves are green and lanceolate, with a spiny margin, contributing to its distinctive appearance. It reaches an average height of about 0.6 meters."
   },
   {
     "id": "mangrove",
@@ -231,7 +231,7 @@
       "heightInMetres": 3,
       "funFact": "Half of the world's mangrove forests, including those in southern India, Sri Lanka, and the Maldives, are at risk due to human activities, according to the International Union for Conservation of Nature (IUCN). Angela Andrade, chair of the IUCN commission on ecosystem management, emphasizes the critical role these ecosystems play in carbon storage and biodiversity."
     },
-    "description": "Mangroves are vital coastal plants that thrive in salty conditions, featuring white star-shaped flowers and green elliptical leaves, growing up to 3 meters. Half of the world's mangrove forests are at risk due to human activities."
+    "description": "Mangrove is noted for its white star-shaped flowers and typically exhibits 4-6 petals. The leaves are green and elliptical, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 3 meters."
   },
   {
     "id": "sunflower",
@@ -249,7 +249,7 @@
       "heightInMetres": 2,
       "funFact": "The sunflower, a symbol of solidarity with Ukraine, adorns figures like US First Lady Jill Biden and actress Caitriona Balfe. Biden wears sunflowers on her attire, Balfe carries one at events. This emblem, Ukraine's national flower, gained traction after a viral video urging Russian soldiers to carry sunflower seeds, symbolizing resistance."
     },
-    "description": "Sunflowers are known for their large, bright yellow ligulate flowers and green heart-shaped leaves, growing up to 2 meters in height. The sunflower is a symbol of solidarity with Ukraine."
+    "description": "Sunflower is noted for its yellow ligulate-shaped flowers and typically exhibits Numerous petals. The leaves are green and heart, with a serrated margin, contributing to its distinctive appearance. It reaches an average height of about 2 meters."
   },
   {
     "id": "passion-flower",
@@ -267,7 +267,7 @@
       "heightInMetres": 3,
       "funFact": "According to folklore, passionflower got its name because its corona resembles the crown of thorns worn by Jesus during the crucifixion. "
     },
-    "description": "Passionflowers are exotic climbers known for their intricate purple radial flowers and green palmate leaves, growing up to 3 meters. Passionflower's corona resembles the crown of thorns worn by Jesus during the crucifixion."
+    "description": "Passion flower is noted for its purple radial-shaped flowers and typically exhibits 5-10 petals. The leaves are green and palmate, with a lobed margin, contributing to its distinctive appearance. It reaches an average height of about 3 meters."
   },
   {
     "id": "violette",
@@ -285,7 +285,7 @@
       "heightInMetres": 0.1,
       "funFact": "A chance discovery by bushwalker Juliette Gaynor-Brown in Tasmania's Ben Lomond National Park revealed the presence of a rare native violet previously unrecorded in the state. Identified as the dwarf violet, Viola improcera, experts confirmed its endangered status and extended range. The find underscores the importance of citizen science in conservation efforts."
     },
-    "description": "Violettes are delicate flowers with violet-colored heart-shaped petals and green cordate leaves, growing up to 10 centimeters. A rare native violet was discovered by bushwalker Juliette Gaynor-Brown in Tasmania."
+    "description": "Violette is noted for its violet heart-shaped flowers and typically exhibits 5 petals. The leaves are green and cordate, with a crenate margin, contributing to its distinctive appearance. It reaches an average height of about 0.1 meters."
   },
   {
     "id": "pansy",
@@ -303,7 +303,7 @@
       "heightInMetres": 0.2,
       "funFact": "In Paris, the field pansy, Viola arvensis, has shown signs of rapid evolution, producing less nectar and smaller flowers, possibly due to decreasing insect pollinators. Evidence suggests it's self-pollinating, challenging conventional plant-insect pollination dynamics. This phenomenon underscores the complex impacts of environmental changes on plant-pollinator interactions and urges further study."
     },
-    "description": "Pansies are cheerful flowers known for their multicolored blooms with five rounded petals and green oblong leaves, growing up to 20 centimeters. The field pansy in Paris has shown signs of rapid evolution, producing less nectar."
+    "description": "Pansy is noted for its multicolor rounded-shaped flowers and typically exhibits 5 petals. The leaves are green and oblong, with a crenate margin, contributing to its distinctive appearance. It reaches an average height of about 0.2 meters."
   },
   {
     "id": "hibiscus",
@@ -321,7 +321,7 @@
       "heightInMetres": 2.5,
       "funFact": "Hibiscus Island, nestled in the vibrant waters of Miami Beach, derives its name from the enchanting hibiscus flower. Completed in 1922 through dredging by the Army Corps of Engineers, this island has a rich history tied to the development of Miami Beach. It became a seasonal winter home for celebrities like Al Capone in the 1930s and later hosted the renowned Latin Quarter Nightclub in the 1940s and 50s, attracting stars like Frank Sinatra and Sammy Davis Jr."
     },
-    "description": "Hibiscus plants are known for their large, red trumpet-shaped flowers and green elliptical leaves, growing up to 2.5 meters. Hibiscus Island in Miami Beach is named after this enchanting flower."
+    "description": "Hibiscus is noted for its red trumpet-shaped flowers and typically exhibits 5 petals. The leaves are green and elliptical, with a serrated margin, contributing to its distinctive appearance. It reaches an average height of about 2.5 meters."
   },
   {
     "id": "morning-glory",
@@ -337,9 +337,9 @@
       "leafShape": "Heart",
       "leafMarginDescription": "Entire",
       "heightInMetres": 3,
-      "funFact": "The term morning glory has blossomed into various meanings since the 1800s. Initially describing a flower that blooms in the morning, it later referred to underperforming athletes, drug users, and even described morning erections. In the 1990s, Oasis's album (What’s the Story) Morning Glory? and a 2010 film starring Rachel McAdams renewed interest in the term. In 2018, a men's health startup released an erection-tracking app named Morning Glory, garnering media attention."
+      "funFact": "The term morning glory has blossomed into various meanings since the 1800s. Initially describing a flower that blooms in the morning, it later referred to underperforming athletes, drug users, and even described morning erections. In the 1990s, Oasis's album (What\u2019s the Story) Morning Glory? and a 2010 film starring Rachel McAdams renewed interest in the term. In 2018, a men's health startup released an erection-tracking app named Morning Glory, garnering media attention."
     },
-    "description": "Morning Glory vines have beautiful blue trumpet-shaped flowers and green heart-shaped leaves, growing up to 3 meters. The term 'morning glory' has been used to describe various phenomena, from flowers to underperforming athletes."
+    "description": "Morning glory is noted for its blue trumpet-shaped flowers and typically exhibits 5 petals. The leaves are green and heart, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 3 meters."
   },
   {
     "id": "oak",
@@ -355,9 +355,9 @@
       "leafShape": "Lobed",
       "leafMarginDescription": "Lobed",
       "heightInMetres": 30,
-      "funFact": "The iconic spire of Notre Dame Cathedral in Paris, destroyed in a fire in 2019, is set to be rebuilt using oak trees sourced from the historic Forest of Bercé in France. These majestic oaks, aged over two hundred years old, will undergo precise measurements before becoming part of the cathedral's reconstruction, a process described as a historic moment by those involved."
+      "funFact": "The iconic spire of Notre Dame Cathedral in Paris, destroyed in a fire in 2019, is set to be rebuilt using oak trees sourced from the historic Forest of Berc\u00e9 in France. These majestic oaks, aged over two hundred years old, will undergo precise measurements before becoming part of the cathedral's reconstruction, a process described as a historic moment by those involved."
     },
-    "description": "Oak trees are majestic giants with lobed green leaves and lack of showy flowers, reaching up to 30 meters. The spire of Notre Dame Cathedral will be rebuilt using oak trees from the Forest of Bercé."
+    "description": "Oak is noted for its none none-shaped flowers and typically exhibits 0 petals. The leaves are green and lobed, with a lobed margin, contributing to its distinctive appearance. It reaches an average height of about 30 meters."
   },
   {
     "id": "euphorbia-obesa",
@@ -375,7 +375,7 @@
       "heightInMetres": 0.3,
       "funFact": "The Euphorbia obesa, also known as the baseball plant due to its striking resemblance to a baseball, is a rare and unique succulent native to South Africa. Despite its appearance, this plant is not actually a cactus but belongs to the Euphorbiaceae family. Its spherical shape and intriguing patterns make it a favorite among succulent enthusiasts worldwide."
     },
-    "description": "Euphorbia Obesa, known as the baseball plant, features small yellow star-shaped flowers and grows up to 30 centimeters. This rare succulent is native to South Africa and resembles a baseball."
+    "description": "Euphorbia obesa is noted for its yellow star-shaped flowers and typically exhibits Small petals. The leaves are green and none, with a none margin, contributing to its distinctive appearance. It reaches an average height of about 0.3 meters."
   },
   {
     "id": "calliandra-haematocephala",
@@ -393,7 +393,7 @@
       "heightInMetres": 3,
       "funFact": "Calliandra haematocephala, also known as the Common Powder Puff plant, is a versatile addition to permaculture gardens. This fast-growing legume serves multiple purposes, including providing valuable mulch, shade, and fodder for livestock. It is also utilized in land rehabilitation efforts and supports honey production by attracting pollinators. With its hardy nature and numerous benefits, Calliandra haematocephala is a valuable asset in sustainable gardening practices."
     },
-    "description": "Calliandra Haematocephala, or the powderpuff tree, is known for its red brush-like flowers and green bipinnate leaves, growing up to 3 meters. This plant is a versatile addition to permaculture gardens."
+    "description": "Calliandra haematocephala is noted for its red brush-shaped flowers and typically exhibits Numerous petals. The leaves are green and bipinnate, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 3 meters."
   },
   {
     "id": "garrya-elliptica",
@@ -411,7 +411,7 @@
       "heightInMetres": 4,
       "funFact": "Garrya elliptica, also known as the Silk Tassel Bush, not only adds aesthetic charm to gardens with its distinctive catkins but also provides essential habitat and food for wildlife, making it a valuable asset to ecosystems."
     },
-    "description": "Garrya Elliptica, also known as the silk tassel bush, has small gray catkin-like flowers and green elliptical leaves, growing up to 4 meters. It provides essential habitat and food for wildlife."
+    "description": "Garrya elliptica is noted for its gray catkin-shaped flowers and typically exhibits Small petals. The leaves are green and elliptical, with a wavy margin, contributing to its distinctive appearance. It reaches an average height of about 4 meters."
   },
   {
     "id": "tulipe",
@@ -429,7 +429,7 @@
       "heightInMetres": 0.6,
       "funFact": "The Semper Augustus tulip bulb, which fetched a staggering 10,000 guilders in January 1637, was valued at the price of the finest house on Amsterdam's most fashionable canal, making it the most expensive tulip bulb in history."
     },
-    "description": "Tulips are beloved spring flowers with vibrant cup-shaped blooms and green lanceolate leaves, growing up to 60 centimeters. The Semper Augustus tulip bulb was once valued at the price of a house in Amsterdam."
+    "description": "Tulipe is noted for its various cup-shaped flowers and typically exhibits 6 petals. The leaves are green and lanceolate, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 0.6 meters."
   },
   {
     "id": "moss",
@@ -447,7 +447,7 @@
       "heightInMetres": 0.05,
       "funFact": "Moss has inspired a wellness trend called girl mossing, where people unwind in nature, embracing the slow pace and tranquility it offers."
     },
-    "description": "Moss, often overlooked in ecosystems, plays a crucial role in regulating soil moisture and providing habitat for small organisms. Moss has inspired a wellness trend called girl mossing, where people unwind in nature."
+    "description": "Moss is noted for its none none-shaped flowers and typically exhibits None petals. The leaves are green and none, with a none margin, contributing to its distinctive appearance. It reaches an average height of about 0.05 meters."
   },
   {
     "id": "thistle",
@@ -465,7 +465,7 @@
       "heightInMetres": 1,
       "funFact": "The thistle Carlina corymbosa, found in the Sierra de Cazorla mountain range in southern Spain, exhibits a fascinating ability to remain cooler than the surrounding air, making its flowers a refreshing touch on scorching summer days, as reported in Ecology by ecologist Carlos Herrera."
     },
-    "description": "Thistles are known for their spiny purple flowers and green oblong leaves, growing up to 1 meter. The thistle Carlina corymbosa remains cooler than the surrounding air, a fascinating adaptation."
+    "description": "Thistle is noted for its purple spiny-shaped flowers and typically exhibits Numerous petals. The leaves are green and oblong, with a spiny margin, contributing to its distinctive appearance. It reaches an average height of about 1 meters."
   },
   {
     "id": "cypresstree",
@@ -483,7 +483,7 @@
       "heightInMetres": 20,
       "funFact": "The Cypress of Abarkuh in Iran holds the title of the oldest living cypress tree in the world, boasting over 4,000 years of history."
     },
-    "description": "Cypress trees are evergreens with scale-like green leaves and no flowers, reaching up to 20 meters. The Cypress of Abarkuh in Iran is the oldest living cypress tree, over 4,000 years old."
+    "description": "Cypress tree is noted for its none none-shaped flowers and typically exhibits 0 petals. The leaves are green and scale-like, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 20 meters."
   },
   {
     "id": "fly-agaric",
@@ -501,7 +501,7 @@
       "heightInMetres": 0.2,
       "funFact": "In the fantasy novel Alice in Wonderland, there is a magic mushroom that can make Alice change in size, its magical properties said to have been inspired by the hallucinogenic effect of the fly agaric mushroom."
     },
-    "description": "Fly Agaric is a well-known mushroom with a red cap and white spots, growing up to 20 centimeters tall. It is known for its toxic properties and is often depicted in fairy tales."
+    "description": "Fly agaric is noted for its red none-shaped flowers and typically exhibits None petals. The leaves are none and none, with a none margin, contributing to its distinctive appearance. It reaches an average height of about 0.2 meters."
   },
   {
     "id": "olive-tree",
@@ -519,7 +519,7 @@
       "heightInMetres": 6,
       "funFact": "The olive tree stands as a symbol of Palestinian identity and resilience, with its cultivation forming a vital aspect of the Palestinian economy, despite being targeted in the ongoing Israeli-Palestinian conflict."
     },
-    "description": "Olive trees are known for their small white star-shaped flowers and elliptical green leaves, reaching up to 6 meters. The olive tree is a symbol of Palestinian identity and resilience."
+    "description": "Olive tree is noted for its white star-shaped flowers and typically exhibits 4 petals. The leaves are green and elliptical, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 6 meters."
   },
   {
     "id": "lily-of-the-valley",
@@ -537,7 +537,7 @@
       "heightInMetres": 0.3,
       "funFact": "In France, lily of the valley flowers, known as 'muguet', are traditionally exchanged on May 1st to symbolize luck and good wishes, dating back to a tradition initiated by King Charles IX in 1561."
     },
-    "description": "Lily of the Valley is a charming plant with delicate white bell-shaped flowers and green elliptical leaves, growing up to 30 centimeters. In France, these flowers are exchanged on May 1st for good luck."
+    "description": "Lily of the valley is noted for its white bell-shaped flowers and typically exhibits 6 petals. The leaves are green and elliptical, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 0.3 meters."
   },
   {
     "id": "bamboo",
@@ -553,9 +553,9 @@
       "leafShape": "Lanceolate",
       "leafMarginDescription": "Entire",
       "heightInMetres": 10,
-      "funFact": "In the UK, certain varieties of bamboo, once planted as ornamental novelties, are now causing significant damage to homes and gardens, with some homeowners facing bills exceeding £100,000 for removal and repairs."
+      "funFact": "In the UK, certain varieties of bamboo, once planted as ornamental novelties, are now causing significant damage to homes and gardens, with some homeowners facing bills exceeding \u00a3100,000 for removal and repairs."
     },
-    "description": "Bamboo is a fast-growing grass with strong green lanceolate leaves, reaching up to 10 meters. In the UK, some varieties of bamboo cause significant damage to homes and gardens."
+    "description": "Bamboo is noted for its rare none-shaped flowers and typically exhibits Unknown petals. The leaves are green and lanceolate, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 10 meters."
   },
   {
     "id": "monstera-deliciosa",
@@ -573,7 +573,7 @@
       "heightInMetres": 3,
       "funFact": "Karlie Kloss is among the celebrities who adore the Monstera deliciosa, known for its large tropical leaves and ability to grow up to 10 feet tall in optimal conditions, adding a lush jungle vibe to any room with its bright, indirect light and consistent watering requirements."
     },
-    "description": "Monstera Deliciosa is a tropical plant with large fenestrated green leaves and unique white spathe flowers, growing up to 3 meters. Karlie Kloss is among the celebrities who adore this plant for its lush jungle vibe."
+    "description": "Monstera deliciosa is noted for its white spathe-shaped flowers and typically exhibits 1-2 petals. The leaves are green and fenestrated, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 3 meters."
   },
   {
     "id": "acacia",
@@ -591,7 +591,7 @@
       "heightInMetres": 8,
       "funFact": "The rapid expansion of acacia plantations in Central Vietnam, driven by the demand for wood pellets, has led to severe environmental consequences, including deforestation, biodiversity loss, and the heightened risk of landslides, underscoring the complex trade-offs between economic development and environmental sustainability."
     },
-    "description": "Acacia trees have bright yellow round flowers and green bipinnate leaves, reaching up to 8 meters. The rapid expansion of acacia plantations in Vietnam has led to severe environmental consequences."
+    "description": "Acacia is noted for its yellow round-shaped flowers and typically exhibits 5 petals. The leaves are green and bipinnate, with a entire margin, contributing to its distinctive appearance. It reaches an average height of about 8 meters."
   },
   {
     "id": "venus-flytrap",
@@ -609,7 +609,7 @@
       "heightInMetres": 0.15,
       "funFact": "In a groundbreaking study published in Current Biology, scientists utilized CRISPR-Cas9 technology for the first time in a carnivorous plant, the Venus flytrap, to demonstrate the crucial role of two ion channels in triggering the closure of the trap when prey brushes against its trigger hairs, shedding light on the long-standing mystery of how this plant captures its prey."
     },
-    "description": "The Venus Flytrap is a carnivorous plant with distinctive trapping mechanisms, white star-shaped flowers, and green obovate leaves, growing up to 15 centimeters. Scientists used CRISPR-Cas9 to study the ion channels in its traps."
+    "description": "Venus flytrap is noted for its white star-shaped flowers and typically exhibits 5-6 petals. The leaves are green and obovate, with a ciliate margin, contributing to its distinctive appearance. It reaches an average height of about 0.15 meters."
   },
   {
     "id": "prickly-pear",
@@ -627,6 +627,6 @@
       "heightInMetres": 1.5,
       "funFact": "Prickly pear, once considered one of the greatest biological invasions in Australia, infesting millions of hectares of rural land, was conquered thanks to the introduction of the Cactoblastis cactorum moth from South America, which caused the collapse of most of the thick stands of prickly pear within a few years, leading to the revitalization of stagnant townships and the restoration of previously infested land for agricultural use."
     },
-    "description": "The Prickly Pear is a cactus with vibrant yellow flowers and spiny green pads, growing up to 1.5 meters. It was conquered in Australia by the introduction of the Cactoblastis cactorum moth."
+    "description": "Prickly pear is noted for its yellow rounded-shaped flowers and typically exhibits 8-10 petals. The leaves are green and oblong, with a spiny margin, contributing to its distinctive appearance. It reaches an average height of about 1.5 meters."
   }
 ]
