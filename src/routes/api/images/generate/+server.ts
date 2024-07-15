@@ -62,70 +62,95 @@ export const POST: RequestHandler = async ({ request }) => {
   }
 };
 
+interface ResponseError {
+  status: any;
+  data: any;
+}
+interface OpenAIError {
+  response?: ResponseError;
+  message?: string;
+}
+
 const doRequestLocally = async (prompt: string, model: string) => {
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
-
-  console.log("Generating using model", model, "and prompt", prompt);
-
-  const startTime = Date.now();
+  const baseName = uuidv4();
 
   try {
-    const { data, response: raw } = await openai.images
-      .generate({
-        model,
-        prompt,
-        n: 1,
-        size: "1024x1024"
-      })
-      .withResponse();
-    const elapsed = Date.now() - startTime;
-    console.log(
-      `After ${(elapsed / 1000).toFixed(
-        1
-      )}s, got image result "${JSON.stringify(raw)}"`
-    );
+    const generatedUrl1 = await tryGenerate(openai, model, prompt);
+    const finalUrl1 = await doUpload(generatedUrl1, baseName);
 
-    const generatedUrl = data.data[0].url;
-    console.log("headers", raw.headers);
-    const remaining = raw.headers.get("x-ratelimit-remaining-tokens");
-    console.log({ remaining });
-
-    if (generatedUrl) {
-      const fetchImage = await fetch(generatedUrl);
-
-      const baseName = uuidv4();
-
-      if (LOCAL_FILES === "true") {
-        try {
-          await uploadLocal(fetchImage, baseName);
-          const jsonResponse: GeneratedImageResult = {
-            url: `/uploads/${baseName}.png`,
-            pleaseWait: false
-          };
-          return json(jsonResponse, { status: 200 });
-        } catch (e) {
-          console.error("Failed to upload to local filesystem:", e);
-          return error(500, "error uploading to local filesystem");
-        }
-      } else {
-        try {
-          await uploadToS3(fetchImage, baseName);
-          const jsonResponse: GeneratedImageResult = {
-            url: URL_PREFIX + "/" + baseName + ".png",
-            pleaseWait: false
-          };
-
-          return json(jsonResponse, { status: 200 });
-        } catch (e) {
-          console.error("Error uploading to S3:", e);
-          return error(500, "error uploading to S3");
-        }
+    const jsonResponse: GeneratedImageResult = {
+      url: finalUrl1,
+      pleaseWait: false
+    };
+    return json(jsonResponse, { status: 200 });
+  } catch (attempt1Error) {
+    console.error("OpenAI generation error!", JSON.stringify(attempt1Error));
+    const e = attempt1Error as OpenAIError;
+    if (e.message && e.message.includes("Rate limit exceeded")) {
+      console.warn("Detected: Rate limited exceeded; will try with dall-e-2");
+      try {
+        const generatedUrl2 = await tryGenerate(openai, "dall-e-2", prompt);
+        const finalUrl2 = await doUpload(generatedUrl2, baseName);
+        const jsonResponse: GeneratedImageResult = {
+          url: finalUrl2,
+          pleaseWait: false
+        };
+        return json(jsonResponse, { status: 200 });
+      } catch (attempt2Error) {
+        console.error("Attempt 2 also failed: " + attempt2Error);
+        return error(500);
       }
     } else {
-      return error(500, "No generated URL returned");
+      console.error("Some other error!", e);
+      return error(500);
     }
-  } catch (generateError) {
-    console.error("OpenAI generation error!" + generateError);
-    return error(500, "OpenAI generation error: " + generateError);
+  }
+};
+
+const tryGenerate = async (
+  openai: OpenAI,
+  model: string,
+  prompt: string
+): Promise<string> => {
+  const response = await openai.images.generate({
+    model,
+    prompt,
+    n: 1,
+    size: "1024x1024"
+  });
+
+  const generatedUrl = response.data[0].url;
+
+  if (generatedUrl) {
+    return generatedUrl;
+  } else {
+    throw Error("No url retrieved");
+  }
+};
+
+const doUpload = async (
+  generatedUrl: string,
+  baseName: string
+): Promise<string> => {
+  const fetchImage = await fetch(generatedUrl);
+
+  if (LOCAL_FILES === "true") {
+    try {
+      await uploadLocal(fetchImage, baseName);
+      return `/uploads/${baseName}.png`;
+    } catch (e) {
+      console.error("Failed to upload to local filesystem:", e);
+      throw Error("error uploading to local filesystem");
+    }
+  } else {
+    try {
+      await uploadToS3(fetchImage, baseName);
+
+      return URL_PREFIX + "/" + baseName + ".png";
+    } catch (e) {
+      console.error("Error uploading to S3:", e);
+      throw Error("error uploading to S3");
+    }
   }
 };
