@@ -41,7 +41,7 @@ const DefaultPrompt: PromptConfig = {
   image: {
     model: "dall-e-3",
     instructions:
-      "Create a pixel art 8-bit image based on the following description. The background is pure white, with no text, no stars and the plant is standing alone in the middle like an icon. Here is the description:"
+      "Create a precise pixel art 8-bit image based on the following description. The background is pure white, with no text, no stars and the plant is standing alone in the middle. Here is the description:"
   }
 };  
 
