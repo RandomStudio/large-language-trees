@@ -27,6 +27,8 @@
 
   let selectedTab = Tabs.TEXT;
 
+  let errorMessages: string | null = null;
+
   let resultPlantText: InsertPlant | null = null;
   let resultPlantImageUrl: string | null = null;
   let busy = false;
@@ -80,6 +82,7 @@
   };
 
   const runTextGeneration = async () => {
+    errorMessages = null;
     if (parent1 && parent2) {
       const bodyData: GeneratePlantRequestBody = {
         prompt: finalTextPrompt,
@@ -97,6 +100,7 @@
   };
 
   const runImageGeneration = async () => {
+    errorMessages = null;
     if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
         instructions: finalImagePrompt,
@@ -104,13 +108,22 @@
         plantId: "test-only",
         model: data.image.model
       };
-      const res = await fetch("/api/images/generate", {
-        method: "POST",
-        body: JSON.stringify(bodyData)
-      });
-      const imageResult = (await res.json()) as GeneratedImageResult;
-      const { url } = imageResult;
-      resultPlantImageUrl = url;
+      try {
+        const res = await fetch("/api/images/generate", {
+          method: "POST",
+          body: JSON.stringify(bodyData)
+        });
+        if (res.status >= 500) {
+          console.log("Error in generation");
+          errorMessages = `ERROR in generation`;
+        }
+        const imageResult = (await res.json()) as GeneratedImageResult;
+        const { url } = imageResult;
+        resultPlantImageUrl = url;
+      } catch (e) {
+        console.log("Error in generation:", e);
+        errorMessages = `ERROR ${JSON.stringify(e)}`;
+      }
     }
   };
 </script>
@@ -137,6 +150,11 @@
       selectedTab = Tabs.IMAGE;
     }}>Images</button
   >
+
+  {#if errorMessages !== null}
+    <h4>Error messages</h4>
+    <p class="bg-red-500 font-bold">{errorMessages}</p>
+  {/if}
 
   {#if selectedTab === Tabs.TEXT}
     <h2 class="font-bold mt-4">Edit Text Prompts</h2>

@@ -69,53 +69,63 @@ const doRequestLocally = async (prompt: string, model: string) => {
 
   const startTime = Date.now();
 
-  const response = await openai.images.generate({
-    model,
-    prompt,
-    n: 1,
-    size: "1024x1024"
-  });
-  const elapsed = Date.now() - startTime;
-  console.log(
-    `After ${(elapsed / 1000).toFixed(1)}s, got image result "${JSON.stringify(
-      response
-    )}"`
-  );
+  try {
+    const { data, response: raw } = await openai.images
+      .generate({
+        model,
+        prompt,
+        n: 1,
+        size: "1024x1024"
+      })
+      .withResponse();
+    const elapsed = Date.now() - startTime;
+    console.log(
+      `After ${(elapsed / 1000).toFixed(
+        1
+      )}s, got image result "${JSON.stringify(raw)}"`
+    );
 
-  const generatedUrl = response.data[0].url;
+    const generatedUrl = data.data[0].url;
+    console.log("headers", raw.headers);
+    const remaining = raw.headers.get("x-ratelimit-remaining-tokens");
+    console.log({ remaining });
 
-  if (generatedUrl) {
-    const fetchImage = await fetch(generatedUrl);
+    if (generatedUrl) {
+      const fetchImage = await fetch(generatedUrl);
 
-    const baseName = uuidv4();
+      const baseName = uuidv4();
 
-    if (LOCAL_FILES === "true") {
-      try {
-        await uploadLocal(fetchImage, baseName);
-        const jsonResponse: GeneratedImageResult = {
-          url: `/uploads/${baseName}.png`,
-          pleaseWait: false
-        };
-        return json(jsonResponse, { status: 200 });
-      } catch (e) {
-        console.error("Failed to upload to local filesystem:", e);
-        return error(500, "error uploading to local filesystem");
+      if (LOCAL_FILES === "true") {
+        try {
+          await uploadLocal(fetchImage, baseName);
+          const jsonResponse: GeneratedImageResult = {
+            url: `/uploads/${baseName}.png`,
+            pleaseWait: false
+          };
+          return json(jsonResponse, { status: 200 });
+        } catch (e) {
+          console.error("Failed to upload to local filesystem:", e);
+          return error(500, "error uploading to local filesystem");
+        }
+      } else {
+        try {
+          await uploadToS3(fetchImage, baseName);
+          const jsonResponse: GeneratedImageResult = {
+            url: URL_PREFIX + "/" + baseName + ".png",
+            pleaseWait: false
+          };
+
+          return json(jsonResponse, { status: 200 });
+        } catch (e) {
+          console.error("Error uploading to S3:", e);
+          return error(500, "error uploading to S3");
+        }
       }
     } else {
-      try {
-        await uploadToS3(fetchImage, baseName);
-        const jsonResponse: GeneratedImageResult = {
-          url: URL_PREFIX + "/" + baseName + ".png",
-          pleaseWait: false
-        };
-
-        return json(jsonResponse, { status: 200 });
-      } catch (e) {
-        console.error("Error uploading to S3:", e);
-        return error(500, "error uploading to S3");
-      }
+      return error(500, "No generated URL returned");
     }
-  } else {
-    return error(500, "No generated URL returned");
+  } catch (generateError) {
+    console.error("OpenAI generation error!" + generateError);
+    return error(500, "OpenAI generation error: " + generateError);
   }
 };

@@ -29,7 +29,15 @@ export const POST: RequestHandler = async ({ request }) => {
   });
 
   console.log("response:", completion.choices);
-  console.log("usage data", completion.usage);
+
+  if (completion.usage) {
+    const { prompt_tokens, completion_tokens, total_tokens } = completion.usage;
+    console.log("Usage stats", {
+      prompt_tokens,
+      completion_tokens,
+      total_tokens
+    });
+  }
 
   for (const res of completion.choices) {
     console.log(JSON.stringify(res));
@@ -56,10 +64,7 @@ const parseNewPlant = async (
   parentIds: [string, string]
 ): Promise<InsertPlant> => {
   try {
-    const cleanText = text
-      .trim()
-      .replaceAll("```json", "")
-      .replaceAll("```", "");
+    const cleanText = text.trim().replaceAll("\n", "");
 
     const json = JSON.parse(cleanText);
 
