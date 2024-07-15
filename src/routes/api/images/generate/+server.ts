@@ -15,7 +15,15 @@ import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import type { GenerateImageRequest } from "./types";
 
-export const POST: RequestHandler = async ({ request }) => {
+interface BackroundGenerateImageRequest {
+  plantId: string;
+  fullPrompt: string;
+  model: string;
+  backgroundSecret: string;
+}
+
+export const POST: RequestHandler = async (event) => {
+  const { request, fetch } = event;
   console.log({ PLACEHOLDER_IMAGES });
   const jsonBody = (await request.json()) as GenerateImageRequest;
   const { description, plantId, model, instructions } = jsonBody;
@@ -39,18 +47,17 @@ export const POST: RequestHandler = async ({ request }) => {
     console.log(
       `Will initiate (background) request for image generation with prompt "${prompt}" ...`
     );
-    await fetch(
-      "https://livinggarden.netlify.app/.netlify/functions/img-gen-background",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          prompt,
-          backgroundSecret: BACKGROUND_FN_SECRET,
-          plantId,
-          model: model || promptSettings.image.model
-        })
-      }
-    );
+    const bodyJson: BackroundGenerateImageRequest = {
+      fullPrompt: prompt,
+      backgroundSecret: BACKGROUND_FN_SECRET,
+      plantId,
+      model: model || promptSettings.image.model
+    };
+    console.log({ bodyJson });
+    await fetch("/.netlify/functions/img-gen-background", {
+      method: "POST",
+      body: JSON.stringify(bodyJson)
+    });
 
     const jsonResponse: GeneratedImageResult = { pleaseWait: true, url: null };
     return json(jsonResponse, { status: 200 });

@@ -1,8 +1,17 @@
+interface BackgroundGenerateImageRequest {
+  plantId: string;
+  fullPrompt: string;
+  model: string;
+  backgroundSecret: string;
+}
+
 export default async (req: Request) => {
-  const { prompt, backgroundSecret, plantId } = await req.json();
+  const requestBody = (await req.json()) as BackgroundGenerateImageRequest;
+  const { fullPrompt, backgroundSecret, plantId, model } = requestBody;
 
   const apiKey = process.env.OPENAI_API_KEY;
   const realSecret = process.env.BACKGROUND_FN_SECRET;
+  const useLocalApi = process.env.BACKGROUND_FN_USES_LOCAL_API;
 
   if (backgroundSecret !== realSecret) {
     console.error("Secrets do not match:", { backgroundSecret, realSecret });
@@ -10,8 +19,8 @@ export default async (req: Request) => {
   }
 
   const jsonBody = {
-    model: "dall-e-3",
-    prompt,
+    model,
+    prompt: fullPrompt,
     n: 1,
     size: "1024x1024"
   };
@@ -35,14 +44,17 @@ export default async (req: Request) => {
     const url = jsonResponse.data[0].url as string;
     console.log({ url });
 
+    const origin = useLocalApi || "https://livinggarden.netlify.app";
+    console.log("POST to", origin);
+
     const addImageToDbRes = await fetch(
-      `https://livinggarden.netlify.app/api/plants/${plantId}/candidateImage`,
+      `${origin}/api/plants/${plantId}/candidateImage`,
       {
         method: "POST",
         mode: "cors",
         body: JSON.stringify({ url }),
         headers: {
-          origin: "https://livinggarden.netlify.app"
+          origin
         }
       }
     );

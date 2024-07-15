@@ -18,8 +18,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
   let offspring: InsertPlant | null = null;
 
-  console.log("Using prompt: ******** \n", prompt, "with model", model);
-
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
   const completion = await openai.chat.completions.create({
