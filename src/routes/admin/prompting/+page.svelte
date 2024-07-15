@@ -32,7 +32,7 @@
   let busy = false;
 
   let finalTextPrompt: ChatCompletionMessageParam[] = [];
-  let finalImageInstructionPrompt: string | null = null;
+  let finalImagePrompt: string | null = null;
 
   let parent1: SelectPlant | null = null;
   let parent2: SelectPlant | null = null;
@@ -71,7 +71,10 @@
       finalTextPrompt = buildTextPrompt(data, parent1, parent2);
     }
     if (plantForImage) {
-      finalImageInstructionPrompt = data.image.instructions;
+      finalImagePrompt = buildImagePrompt(
+        data.image.instructions,
+        plantForImage.description || ""
+      );
       // console.log("Updated final image plant", finalImagePrompt);
     }
   };
@@ -94,9 +97,9 @@
   };
 
   const runImageGeneration = async () => {
-    if (plantForImage && finalImageInstructionPrompt) {
+    if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
-        instructions: finalImageInstructionPrompt,
+        instructions: data.image.instructions,
         description: plantForImage.description || "",
         plantId: "test-only",
         model: data.image.model
@@ -281,7 +284,7 @@
         <p>{JSON.stringify(plantForImage.properties)}</p>
       </div>
       <pre class="w-full text-wrap text-xs p-4">{JSON.stringify(
-          finalImageInstructionPrompt,
+          finalImagePrompt,
           null,
           2
         )}</pre>
