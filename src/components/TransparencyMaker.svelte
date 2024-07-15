@@ -46,71 +46,62 @@
         ];
 
         //Removing the color of all the points in the listCorners
-        for (let i = 0; i < listCorners.length; i++) {
-          console.log("round " + i);
-          let corner = listCorners[i];
-          if (corner.length >= 2) {
-            let x = Math.floor(canvasElement.width * corner[0]);
-            let y = Math.floor(canvasElement.height * corner[1]);
-            console.log(`Processing corner (${x}, ${y})`);
-            if (
-              !processRound(
-                imageData,
-                ctx,
-                tolerance,
-                useFloodFill,
-                FloodFill,
-                x,
-                y
-              )
-            ) {
-              console.log(`Processing failed at corner (${x}, ${y}).`);
+        function removeBackgroundWithPoints() {
+          for (let i = 0; i < listCorners.length; i++) {
+            console.log("round " + i);
+            let corner = listCorners[i];
+            if (corner.length >= 2) {
+              let x = Math.floor(canvasElement.width * corner[0]);
+              let y = Math.floor(canvasElement.height * corner[1]);
+              console.log(`Processing corner (${x}, ${y})`);
+              if (
+                !processRound(
+                  imageData,
+                  ctx,
+                  tolerance,
+                  useFloodFill,
+                  FloodFill,
+                  x,
+                  y
+                )
+              ) {
+                console.log(`Processing failed at corner (${x}, ${y}).`);
+              }
+            } else {
+              console.log(`Insufficient data for corner index ${i}.`);
             }
-          } else {
-            console.log(`Insufficient data for corner index ${i}.`);
           }
+          imageData = ctx.getImageData(
+            0,
+            0,
+            canvasElement.width,
+            canvasElement.height
+          );
         }
-
-        imageData = ctx.getImageData(
-          0,
-          0,
-          canvasElement.width,
-          canvasElement.height
-        );
-
-        //removing all the disconected pixels
-        removeDisconnectedPixels(imageData, ctx);
-
-        //Remove the outside white pixels
-        removeBorderConnectedLightPixels(imageData, ctx, 50);
-
-        //removing all the disconected pixels
-        removeDisconnectedPixels(imageData, ctx);
-
-        //filling the holes with white (with a limit of contrast)
-        fillHolesInImage(imageData, ctx, 70);
-
-        //Pixelate
-        pixelateImage(imageData, ctx);
 
         //Colors of the palette
         const colorThief = new ColorThief();
-        const palette = colorThief.getPalette(img, 10);
+        const palette = colorThief.getPalette(img, 20);
         console.log(palette);
 
-        function generate256ColorPalette() {
-          const palette = [];
+        function generate8BitColorPalette() {
+          let palette = [];
 
-          for (let r = 0; r <= 255; r += 51) {
-            for (let g = 0; g <= 255; g += 51) {
-              for (let b = 0; b <= 255; b += 51) {
-                palette.push([r, g, b]);
+          for (let r = 0; r <= 7; r++) {
+            for (let g = 0; g <= 7; g++) {
+              for (let b = 0; b <= 3; b++) {
+                // Convertir r, g, b en vraies valeurs de composantes couleurs
+                let realR = r * 36;
+                let realG = g * 36;
+                let realB = b * 85;
+                palette.push([realR, realG, realB]);
               }
             }
           }
 
           return palette;
         }
+
         const funkyColorPalette = [
           [255, 0, 0], // Red
           [255, 165, 0], // Orange
@@ -227,11 +218,29 @@
           [0, 0, 128] // Navy (another shade)
         ];
 
-        replaceImageColorsWithPalette(
-          generate256ColorPalette(),
-          imageData,
-          ctx
-        );
+        //remove the bakcground
+        removeBackgroundWithPoints();
+
+        //removing all the disconected pixels
+        removeDisconnectedPixels(imageData, ctx);
+
+        //Remove the outside white pixels
+        removeBorderConnectedLightPixels(imageData, ctx, 50);
+
+        //removing all the disconected pixels
+        removeDisconnectedPixels(imageData, ctx);
+
+        //filling the holes with white (with a limit of contrast)
+        fillHolesInImage(imageData, ctx, 80);
+
+        //Pixelate
+        pixelateImage(imageData, ctx);
+
+        // Get the new colors
+        replaceImageColorsWithPalette(colorfulPixelPalette, imageData, ctx);
+
+        //Adding a black background
+        //addBlackBackground(imageData, ctx);
 
         //add borders in dark blue
         //addBorders(imageData, ctx);
@@ -239,7 +248,7 @@
         ctx.putImageData(imageData, 0, 0);
         const transformedImageUrl = canvasElement.toDataURL("image/png");
         console.log("Image URL after transformation:", transformedImageUrl);
-
+        /*
         canvasElement.toBlob(async (blob) => {
           if (doUpload && blob) {
             console.log("look, a Blob:", blob);
@@ -256,7 +265,7 @@
             console.log("The URL for the new (transparent) image is", url);
             onUploadComplete(url);
           }
-        }, "image/png");
+        }, "image/png");*/
       }
     };
 
@@ -457,9 +466,6 @@
           }
         }
       }
-      console.log(
-        "The color difference of the hole is" + totalDifference / count
-      );
       return count > 0 ? totalDifference / count : 0;
     }
 
@@ -493,6 +499,7 @@
 
       if (isHole) {
         const avgDifference = averageBorderDifference(holePixels);
+        console.log(avgDifference);
         if (avgDifference <= difference) {
           // Fill the hole with white color if the average difference is low
           for (const [hx, hy] of holePixels) {
@@ -791,27 +798,22 @@
     ctx.putImageData(imageData, 0, 0);
   }
 
-  function removeWhitePixels(
+  function addBlackBackground(
     imageData: ImageData,
-    ctx: CanvasRenderingContext2D,
-    tolerance: number
+    ctx: CanvasRenderingContext2D
   ) {
     const targetColor = [255, 255, 255, 255];
     let count = 0;
     for (let i = 0; i < imageData.data.length; i += 4) {
-      const pixelColor = [
-        imageData.data[i], // R
-        imageData.data[i + 1], // G
-        imageData.data[i + 2], // B
-        imageData.data[i + 3] // A
-      ];
-
-      if (isWithinTolerance(pixelColor, targetColor, tolerance)) {
-        imageData.data[i + 3] = 0;
+      const pixelTransparency = imageData.data[i + 3];
+      if (pixelTransparency == 0) {
+        imageData.data[i] = 0;
+        imageData.data[i + 1] = 0;
+        imageData.data[i + 2] = 0;
+        imageData.data[i + 3] = 255;
         count++;
       }
     }
-    console.log("Altered", count, "white pixels to transparent");
 
     ctx.putImageData(imageData, 0, 0);
   }
