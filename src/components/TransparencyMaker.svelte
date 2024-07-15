@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
 
   import ColorThief from "colorthief";
+  import { generate } from "$lib/server";
 
   export let src: string;
   export let tolerance = 40;
@@ -84,18 +85,18 @@
         //Remove the outside white pixels
         removeBorderConnectedLightPixels(imageData, ctx, 50);
 
-        //filling the holes with white
-        fillHolesInImage(imageData, ctx, 60);
-
         //removing all the disconected pixels
         removeDisconnectedPixels(imageData, ctx);
+
+        //filling the holes with white (with a limit of contrast)
+        fillHolesInImage(imageData, ctx, 70);
 
         //Pixelate
         pixelateImage(imageData, ctx);
 
         //Colors of the palette
         const colorThief = new ColorThief();
-        const palette = colorThief.getPalette(img, 5);
+        const palette = colorThief.getPalette(img, 10);
         console.log(palette);
 
         function generate256ColorPalette() {
@@ -227,7 +228,11 @@
           [0, 0, 128] // Navy (another shade)
         ];
 
-        replaceImageColorsWithPalette(palette, imageData, ctx);
+        replaceImageColorsWithPalette(
+          generate256ColorPalette(),
+          imageData,
+          ctx
+        );
 
         //add borders in dark blue
         //addBorders(imageData, ctx);
