@@ -149,7 +149,6 @@
     );
     candidateImageUrl = url;
     finalChildReadyToAdd.imageUrl = url;
-    waitingForImage = false;
   }
 
   const messages = [
@@ -200,7 +199,10 @@
           useFloodFill={false}
           tolerance={TOLERANCE_SIMPLE}
           doUpload={true}
-          onUploadComplete={replaceImage}
+          onUploadComplete={(url) => {
+            replaceImage(url);
+            waitingForImage = false;
+          }}
         />
         <div class="text-center">
           <form on:submit|preventDefault={handleSubmit} class="mt-2">
