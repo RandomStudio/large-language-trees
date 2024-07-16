@@ -234,7 +234,7 @@
         removeDisconnectedPixels(imageData, ctx);
 
         //filling the holes with white (with a limit of contrast)
-        fillHolesInImage(imageData, ctx, 120);
+        fillHolesInImage(imageData, ctx, 100);
 
         //Pixelate
         pixelateImage(imageData, ctx);
