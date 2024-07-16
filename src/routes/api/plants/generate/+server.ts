@@ -18,16 +18,24 @@ export const POST: RequestHandler = async ({ request }) => {
 
   let offspring: InsertPlant | null = null;
 
-  console.log("Using prompt: ******** \n", prompt, "with model", model);
-
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
   const completion = await openai.chat.completions.create({
     messages: prompt || buildTextPrompt(promptSettings, plant1, plant2),
-    model: model || promptSettings.text.model
+    model: model || promptSettings.text.model,
+    response_format: { type: "json_object" }
   });
 
   console.log("response:", completion.choices);
+
+  if (completion.usage) {
+    const { prompt_tokens, completion_tokens, total_tokens } = completion.usage;
+    console.log("Usage stats", {
+      prompt_tokens,
+      completion_tokens,
+      total_tokens
+    });
+  }
 
   for (const res of completion.choices) {
     console.log(JSON.stringify(res));
@@ -54,10 +62,7 @@ const parseNewPlant = async (
   parentIds: [string, string]
 ): Promise<InsertPlant> => {
   try {
-    const cleanText = text
-      .trim()
-      .replaceAll("```json", "")
-      .replaceAll("```", "");
+    const cleanText = text.trim().replaceAll("\n", "");
 
     const json = JSON.parse(cleanText);
 
