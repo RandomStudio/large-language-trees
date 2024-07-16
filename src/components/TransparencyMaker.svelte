@@ -6,7 +6,7 @@
 
   export let src: string;
   export let tolerance = 40;
-  export let useFloodFill = true;
+  export let useFloodFill = false;
 
   export let onUploadComplete: (imageUrl: string) => any;
 
@@ -228,13 +228,13 @@
         removeDisconnectedPixels(imageData, ctx);
 
         //Remove the outside white pixels
-        removeBorderConnectedLightPixels(imageData, ctx, 50);
+        removeBorderConnectedLightPixels(imageData, ctx, 60);
 
         //removing all the disconected pixels
         removeDisconnectedPixels(imageData, ctx);
 
         //filling the holes with white (with a limit of contrast)
-        fillHolesInImage(imageData, ctx, 80);
+        fillHolesInImage(imageData, ctx, 120);
 
         //Pixelate
         pixelateImage(imageData, ctx);
@@ -538,72 +538,74 @@
   ) {
     const width = imageData.width;
     const height = imageData.height;
-    const mask = new Uint32Array(imageData.data.length / 4);
-    const targetColor = [255, 255, 255]; // Black color
+    let changesMade = true;
 
-    // Helper function to check if a pixel color is within the tolerance of the target color
-    function isWithinTolerance(
-      pixelColor: number[],
-      targetColor: number[],
-      tolerance: number
-    ) {
-      return (
-        Math.abs(pixelColor[0] - targetColor[0]) <= tolerance &&
-        Math.abs(pixelColor[1] - targetColor[1]) <= tolerance &&
-        Math.abs(pixelColor[2] - targetColor[2]) <= tolerance
-      );
-    }
+    while (changesMade) {
+      changesMade = false; // Réinitialisez à chaque nouveau tour
+      const mask = new Uint32Array(imageData.data.length / 4);
+      const targetColor = [255, 255, 255]; // Black color
 
-    // Helper function to perform a flood fill to remove dark pixels connected to object borders
-    function floodFill(x: number, y: number) {
-      const stack: [number, number][] = [[x, y]];
-      while (stack.length) {
-        const [cx, cy] = stack.pop()!;
-        const index = (cy * width + cx) * 4;
+      function isWithinTolerance(
+        pixelColor: number[],
+        targetColor: number[],
+        tolerance: number
+      ) {
+        return (
+          Math.abs(pixelColor[0] - targetColor[0]) <= tolerance &&
+          Math.abs(pixelColor[1] - targetColor[1]) <= tolerance &&
+          Math.abs(pixelColor[2] - targetColor[2]) <= tolerance
+        );
+      }
 
-        if (cx < 0 || cx >= width || cy < 0 || cy >= height) {
-          continue;
-        }
+      function floodFill(x: number, y: number) {
+        const stack: [number, number][] = [[x, y]];
+        while (stack.length) {
+          const [cx, cy] = stack.pop()!;
+          const index = (cy * width + cx) * 4;
 
-        const pixelColor = [
-          imageData.data[index],
-          imageData.data[index + 1],
-          imageData.data[index + 2]
-        ];
+          if (cx < 0 || cx >= width || cy < 0 || cy >= height) {
+            continue;
+          }
 
-        if (
-          mask[cx + cy * width] === 0 &&
-          isWithinTolerance(pixelColor, targetColor, tolerance) &&
-          imageData.data[index + 3] === 255
-        ) {
-          // Mark the pixel as visited and set it to transparent
-          mask[cx + cy * width] = 1;
-          imageData.data[index + 3] = 0; // Set alpha to 0, making the pixel transparent
+          const pixelColor = [
+            imageData.data[index],
+            imageData.data[index + 1],
+            imageData.data[index + 2]
+          ];
 
-          // Check neighbors
-          stack.push([cx - 1, cy]);
-          stack.push([cx + 1, cy]);
-          stack.push([cx, cy - 1]);
-          stack.push([cx, cy + 1]);
+          if (
+            mask[cx + cy * width] === 0 &&
+            isWithinTolerance(pixelColor, targetColor, tolerance) &&
+            imageData.data[index + 3] === 255
+          ) {
+            mask[cx + cy * width] = 1;
+            imageData.data[index + 3] = 0; // Set alpha to 0, making the pixel transparent
+            changesMade = true; // Marquez qu'une modification a été effectuée
+
+            // Check neighbors
+            stack.push([cx - 1, cy]);
+            stack.push([cx + 1, cy]);
+            stack.push([cx, cy - 1]);
+            stack.push([cx, cy + 1]);
+          }
         }
       }
-    }
 
-    // Identify the borders of the non-transparent object
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
-        const index = (y * width + x) * 4;
-        if (imageData.data[index + 3] === 255) {
-          // Non-transparent pixel
-          if (
-            (x > 0 && imageData.data[(y * width + (x - 1)) * 4 + 3] === 0) || // Left neighbor transparent
-            (x < width - 1 &&
-              imageData.data[(y * width + (x + 1)) * 4 + 3] === 0) || // Right neighbor transparent
-            (y > 0 && imageData.data[((y - 1) * width + x) * 4 + 3] === 0) || // Top neighbor transparent
-            (y < height - 1 &&
-              imageData.data[((y + 1) * width + x) * 4 + 3] === 0) // Bottom neighbor transparent
-          ) {
-            floodFill(x, y);
+      // Detect object borders and apply floodFill
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const index = (y * width + x) * 4;
+          if (imageData.data[index + 3] === 255) {
+            if (
+              (x > 0 && imageData.data[(y * width + (x - 1)) * 4 + 3] === 0) ||
+              (x < width - 1 &&
+                imageData.data[(y * width + (x + 1)) * 4 + 3] === 0) ||
+              (y > 0 && imageData.data[((y - 1) * width + x) * 4 + 3] === 0) ||
+              (y < height - 1 &&
+                imageData.data[((y + 1) * width + x) * 4 + 3] === 0)
+            ) {
+              floodFill(x, y);
+            }
           }
         }
       }
