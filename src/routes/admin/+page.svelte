@@ -1,13 +1,6 @@
 <script lang="ts">
-  import type { SelectPlant } from "$lib/types";
-  import TransparencyMaker from "../../components/TransparencyMaker.svelte";
   import UserLoginStatus from "../../components/UserLoginStatus.svelte";
-
-  interface AdminViewData {
-    username: string;
-    isAdmin: boolean;
-    allPlants: SelectPlant[];
-  }
+  import type { AdminViewData } from "./+page.server";
 
   export let data: AdminViewData;
 </script>
@@ -16,24 +9,46 @@
   <h1 class="text-xl">Admin Page</h1>
 
   <div class="border-2">
-    <h2>Initialise default data</h2>
+    <h2 class="font-bold">Initialise default data</h2>
     <div>
-      There are currently {data.allPlants.length} plants in the database
+      Currently {data.allPlants.length} plants in the database
     </div>
-    <form method="POST" action="?/initplants">
-      <button class="bg-green-500 text-white py-2 px-4 rounded"
-        >Initialise plants</button
+    <div>
+      Prompt settings:
+      {#if data.promptSettings}
+        <span>loaded ✅</span>
+      {:else}
+        <span>not loaded ❌</span>
+      {/if}
+    </div>
+    <form method="POST" action="?/initData">
+      <button
+        class="bg-green-500 text-white py-2 px-4 rounded"
+        data-umami-event="Admin: Initialise Data Button">Initialise data</button
       >
     </form>
   </div>
 
   <div class="border-2">
-    <h2>Reset plants and users</h2>
+    <h2 class="font-bold">Reset plants and users</h2>
     <form method="POST" action="?/reset">
-      <button class="bg-red-500 text-white py-2 px-4 rounded"
+      <button
+        data-umami-event="Admin: Reset Everything Button"
+        class="bg-red-500 text-white py-2 px-4 rounded"
         >Clear/reset everything</button
       >
     </form>
+  </div>
+
+  <div class="border-2">
+    <h2 class="font-bold">Prompt engineering</h2>
+    <ul>
+      <li>
+        <a href="/admin/prompting" class="underline"
+          >Test text/image generation...</a
+        >
+      </li>
+    </ul>
   </div>
 
   <div class="m-4">

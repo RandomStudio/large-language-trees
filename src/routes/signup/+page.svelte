@@ -19,6 +19,7 @@
     </div>
     <div>
       <button
+        data-umami-event="Signup Button"
         class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded active:bg-roel_blue active:text-roel_green"
         >Continue</button
       >

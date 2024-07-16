@@ -1,8 +1,16 @@
 import type OpenAI from "openai";
-import type { Characteristics, SelectPlant } from "./types";
-import type { PromptConfig } from "../defaults/prompt-config";
 
-export const buildPrompt = (
+import DefaultPrompt from "../defaults/prompt-config";
+import type {
+  Characteristics,
+  ImageModelNames,
+  PromptConfig,
+  SelectPlant,
+  SelectPromptSettings,
+  TextModelNames
+} from "./types";
+
+export const buildTextPrompt = (
   config: PromptConfig,
   plant1: SelectPlant,
   plant2: SelectPlant
@@ -66,4 +74,60 @@ const filterCharacteristicsForPrompt = (
     }
   });
   return o;
+};
+
+export const buildImagePrompt = (
+  instructions: string,
+  description: string
+): string => instructions + "\n\n" + description;
+
+/** Given the settings for prompts as loaded from the DB, return
+ *  a full PromptConfig object, substituting defaults only where
+ *  necessary.
+ */
+export const promptRowToConfig = (
+  rowFromTable: SelectPromptSettings
+): PromptConfig => {
+  const defaults = DefaultPrompt;
+  return {
+    text: {
+      model: rowFromTable.textModel as TextModelNames,
+      preamble: {
+        label: defaults.text.preamble.label,
+        description: defaults.text.preamble.description,
+        text: rowFromTable.textPreamble
+      },
+      explanation: {
+        label: defaults.text.explanation.label,
+        description: defaults.text.explanation.description,
+        text: rowFromTable.textExplanation
+      },
+      instructions: {
+        label: defaults.text.instructions.label,
+        description: defaults.text.instructions.description,
+        text: rowFromTable.textInstructions
+      }
+    },
+    image: {
+      model: rowFromTable.imageModel as ImageModelNames,
+      instructions: rowFromTable.imageInstructions
+    }
+  };
+};
+
+/** The opposite of `promptRowToConfig`: given a complete
+ *  PromptConfig object, return an entry as per the DB row
+ *  for these settings, minus the ID
+ */
+export const promptConfigToRow = (
+  config: PromptConfig
+): Partial<SelectPromptSettings> => {
+  return {
+    textModel: config.text.model,
+    textPreamble: config.text.preamble.text,
+    textExplanation: config.text.preamble.text,
+    textInstructions: config.text.instructions.text,
+    imageModel: config.image.model,
+    imageInstructions: config.image.instructions
+  };
 };

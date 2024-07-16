@@ -1,4 +1,6 @@
-<div class="spinner">🌼</div>
+<div class="fixed top-16 left-o w-screen h-screen text-center">
+  <div class="spinner centre">🌼</div>
+</div>
 
 <style>
   .spinner {

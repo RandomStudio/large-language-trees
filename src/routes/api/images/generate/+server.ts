@@ -1,9 +1,5 @@
 import {
-  AWS_ACCESS_KEY_ID_S3,
-  AWS_SECRET_ACCESS_KEY_S3,
   OPENAI_API_KEY,
-  S3_BUCKET,
-  S3_REGION,
   LOCAL_FILES,
   PLACEHOLDER_IMAGES,
   USE_NETLIFY_BACKGROUND_FN,
@@ -13,14 +9,16 @@ import { error, json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3, uploadLocal } from "$lib/server/images";
-import type { GenerateImageRequest, GeneratedImageResult } from "$lib/types";
+import type { GeneratedImageResult, PromptConfig } from "$lib/types";
 import { URL_PREFIX } from "../../../../defaults/constants";
-import DefaultPrompt from "../../../../defaults/prompt-config";
+import { buildImagePrompt } from "$lib/promptUtils";
+import { getPromptSettings } from "$lib/server/promptSettings";
+import type { GenerateImageRequest } from "./types";
 
 export const POST: RequestHandler = async ({ request }) => {
   console.log({ PLACEHOLDER_IMAGES });
   const jsonBody = (await request.json()) as GenerateImageRequest;
-  const { description, plantId } = jsonBody;
+  const { description, plantId, model, instructions } = jsonBody;
 
   if (PLACEHOLDER_IMAGES === "true") {
     const jsonResponse: GeneratedImageResult = {
@@ -30,7 +28,12 @@ export const POST: RequestHandler = async ({ request }) => {
     return json(jsonResponse, { status: 200 });
   }
 
-  const prompt = buildImagePrompt(DefaultPrompt.image.instructions, description);
+  const promptSettings: PromptConfig = await getPromptSettings();
+
+  const prompt = buildImagePrompt(
+    instructions || promptSettings.image.instructions,
+    description
+  );
 
   if (USE_NETLIFY_BACKGROUND_FN === "true") {
     console.log(
@@ -43,7 +46,8 @@ export const POST: RequestHandler = async ({ request }) => {
         body: JSON.stringify({
           prompt,
           backgroundSecret: BACKGROUND_FN_SECRET,
-          plantId
+          plantId,
+          model: model || promptSettings.image.model
         })
       }
     );
@@ -54,23 +58,29 @@ export const POST: RequestHandler = async ({ request }) => {
     console.warn(
       "USE_NETLIFY_BACKGROUND_FN is disabled; will do request from this NodeJS server"
     );
-    return await doRequestLocally(prompt);
+    return await doRequestLocally(prompt, model || promptSettings.image.model);
   }
 };
 
-const buildImagePrompt = (instructions: string, description: string): string =>
-  instructions + "\n\n" + description;
-
-const doRequestLocally = async (prompt: string) => {
+const doRequestLocally = async (prompt: string, model: string) => {
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
+  console.log("Generating using model", model, "and prompt", prompt);
+
+  const startTime = Date.now();
+
   const response = await openai.images.generate({
-    model: "dall-e-3",
+    model,
     prompt,
     n: 1,
     size: "1024x1024"
   });
-  console.log("Got image result:", response);
+  const elapsed = Date.now() - startTime;
+  console.log(
+    `After ${(elapsed / 1000).toFixed(1)}s, got image result "${JSON.stringify(
+      response
+    )}"`
+  );
 
   const generatedUrl = response.data[0].url;
 

@@ -1,30 +1,30 @@
 <script lang="ts">
-  import {
-    type SelectPlant,
-    type EnhancedGardenViewData,
-    type InsertPlant
-  } from "../../../../lib/types"; // Assuming type import is correct
-
   import QrGenerate from "../../../../components/qr_generate.svelte";
-  import {
-    addConfirmedPlant,
-    addConfirmedPlantToOtherUser,
-    confirmBreed
-  } from "$lib/confirmBreed";
   import { onMount, onDestroy } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
-  import ConfirmBreedPopup from "../../../../components/ConfirmBreedPopup.svelte";
+  import ConfirmBreedPopup from "./ConfirmBreedPopup.svelte";
   import PopupDejaVu from "../../../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
   import ReturnButton from "../../../../components/ReturnButton.svelte";
   import WaitingSpinner from "../../../../components/WaitingSpinner.svelte";
-  import { page } from "$app/stores";
+
+  import {
+    addConfirmedPlant,
+    addConfirmedPlantToOtherUser,
+    confirmBreed
+  } from "./confirmBreed";
+  import type {
+    EnhancedGardenViewData,
+    InsertPlant,
+    SelectPlant
+  } from "$lib/types";
 
   export let data: EnhancedGardenViewData;
 
   let parent1 =
-    data.seedBank.plantsInSeedbank.find((plant) => plant.plantId === data.id)
-      ?.plant || undefined;
+    data.seedBank.plantsInSeedbank.find(
+      (plant) => plant.plantId === data.plantId
+    )?.plant || undefined;
 
   let busy = false;
 
