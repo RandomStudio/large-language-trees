@@ -248,7 +248,7 @@
         ctx.putImageData(imageData, 0, 0);
         const transformedImageUrl = canvasElement.toDataURL("image/png");
         console.log("Image URL after transformation:", transformedImageUrl);
-        /*
+
         canvasElement.toBlob(async (blob) => {
           if (doUpload && blob) {
             console.log("look, a Blob:", blob);
@@ -265,7 +265,7 @@
             console.log("The URL for the new (transparent) image is", url);
             onUploadComplete(url);
           }
-        }, "image/png");*/
+        }, "image/png");
       }
     };
 
