@@ -17,6 +17,7 @@
   import DefaultPrompt from "../../../defaults/prompt-config";
   import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
   import { type GenerateImageRequest } from "../../api/images/generate/types";
+  import TransparencyMaker from "../../../components/TransparencyMaker.svelte";
 
   enum Tabs {
     TEXT,
@@ -290,7 +291,7 @@
 
     {#if resultPlantImageUrl}
       <div
-        class="m-8 p-4 rounded-sm shadow-2xl bg-slate-50 text-sm fixed top-16 border-2 border-slate-500"
+        class="m-8 p-4 rounded-sm shadow-2xl bg-black text-sm fixed top-16 border-2 border-slate-500 w-1/4"
       >
         <button
           class="bg-orange-500 text-white py-2 px-4 rounded"
@@ -298,7 +299,11 @@
             resultPlantImageUrl = null;
           }}>Close ⓧ</button
         >
-        <img src={resultPlantImageUrl} alt="Result from the prompt test" />
+        <TransparencyMaker
+          src={resultPlantImageUrl}
+          onUploadComplete={() => {}}
+          doUpload={false}
+        ></TransparencyMaker>
       </div>
     {/if}
   {/if}
