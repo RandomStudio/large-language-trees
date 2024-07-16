@@ -6,6 +6,7 @@ import { ADMIN_GARDEN_SHARED, OPENAI_API_KEY } from "$env/static/private";
 import {
   gardens,
   gardensToPlants,
+  generatedImages,
   plants,
   promptSettingsTable,
   seedbanks,
@@ -357,6 +358,7 @@ export const cleanUp = async () => {
   await db.delete(users);
   await db.delete(plants);
   await db.delete(promptSettingsTable);
+  await db.delete(generatedImages);
   console.log("...cleanup complete!");
 };
 
