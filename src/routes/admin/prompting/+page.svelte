@@ -1,6 +1,7 @@
 <script lang="ts">
   import { buildImagePrompt, buildTextPrompt } from "$lib/promptUtils";
   import type {
+    GeneratedImage,
     GeneratedImageResult,
     InsertPlant,
     PromptConfig,
@@ -17,6 +18,7 @@
   import DefaultPrompt from "../../../defaults/prompt-config";
   import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
   import { type GenerateImageRequest } from "../../api/images/generate/types";
+  import { v4 as uuidv4 } from "uuid";
 
   enum Tabs {
     TEXT,
@@ -40,6 +42,8 @@
   let parent2: SelectPlant | null = null;
 
   let plantForImage: SelectPlant | null = null;
+
+  let candidateImagePoll: NodeJS.Timeout | null = null;
 
   const backToDefaults = () => {
     // console.log("Back to defaults!", DefaultPrompt);
@@ -101,11 +105,12 @@
 
   const runImageGeneration = async () => {
     errorMessages = null;
+    const plantId = "test-only-" + uuidv4();
     if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
         instructions: data.image.instructions,
         description: plantForImage.description || "",
-        plantId: "test-only",
+        plantId,
         model: data.image.model
       };
       try {
@@ -117,9 +122,29 @@
           console.log("Error in generation");
           errorMessages = `ERROR in generation`;
         }
-        const imageResult = (await res.json()) as GeneratedImageResult;
-        const { url } = imageResult;
-        resultPlantImageUrl = url;
+        // Do not expect immediate result; poll for candidate image
+        if (candidateImagePoll) {
+          clearInterval(candidateImagePoll);
+        }
+        candidateImagePoll = setInterval(async () => {
+          console.log("Polling for candidate image...");
+          const res = await fetch(`/api/plants/${plantId}/candidateImage`, {
+            method: "GET"
+          });
+          if (res.status === 200) {
+            console.log("...Image ready!");
+            if (candidateImagePoll) {
+              clearInterval(candidateImagePoll);
+            }
+            const generated = (await res.json()) as GeneratedImage;
+            resultPlantImageUrl = generated.url;
+            busy = false;
+          }
+        }, 2000);
+
+        // const imageResult = (await res.json()) as GeneratedImageResult;
+        // const { url } = imageResult;
+        // resultPlantImageUrl = url;
       } catch (e) {
         console.log("Error in generation:", e);
         errorMessages = `ERROR ${JSON.stringify(e)}`;
@@ -282,7 +307,7 @@
           on:click={async () => {
             busy = true;
             await runImageGeneration();
-            busy = false;
+            // busy = false;
           }}>Test</button
         >
       </div>

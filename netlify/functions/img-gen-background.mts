@@ -87,7 +87,7 @@ const tryGenerate = async (
   } else {
     const { status, statusText } = aiRes;
     console.error("Request failed with error:", { status, statusText });
-    if (statusText.includes("Limit exceeded")) {
+    if (status === 429) {
       console.warn("Rate limit detected; will try again");
       return {
         shouldRetry: true
