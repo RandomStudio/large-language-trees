@@ -1,15 +1,6 @@
-import {
-  OPENAI_API_KEY,
-  LOCAL_FILES,
-  PLACEHOLDER_IMAGES,
-  BACKGROUND_FN_SECRET
-} from "$env/static/private";
-import { error, json, type RequestHandler } from "@sveltejs/kit";
-import OpenAI from "openai";
-import { v4 as uuidv4 } from "uuid";
-import { uploadToS3, uploadLocal } from "$lib/server/images";
+import { PLACEHOLDER_IMAGES, BACKGROUND_FN_SECRET } from "$env/static/private";
+import { json, type RequestHandler } from "@sveltejs/kit";
 import type { GeneratedImageResult, PromptConfig } from "$lib/types";
-import { URL_PREFIX } from "../../../../defaults/constants";
 import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import type { GenerateImageRequest } from "./types";

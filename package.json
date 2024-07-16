@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "dev": "vite dev",
+    "dev": "npx netlify dev",
     "dev:aws": "npx dotenvx run --env-file=.env -- npm run dev",
     "build": "vite build",
     "preview": "vite preview",
