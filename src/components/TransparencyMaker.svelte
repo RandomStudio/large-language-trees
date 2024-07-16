@@ -47,6 +47,9 @@
 
         //Removing the color of all the points in the listCorners
         function removeBackgroundWithPoints() {
+          if (ctx == null) {
+            throw Error;
+          }
           for (let i = 0; i < listCorners.length; i++) {
             console.log("round " + i);
             let corner = listCorners[i];
@@ -366,7 +369,7 @@
       const stack = [[x, y]];
       let size = 0;
       while (stack.length) {
-        const [cx, cy] = stack.pop();
+        const [cx, cy] = stack.pop() || [];
         const index = (cy * width + cx) * 4;
         if (mask[cx + cy * width] === 0 && imageData.data[index + 3] !== 0) {
           // Check if not already visited and pixel is visible
