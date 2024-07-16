@@ -14,7 +14,8 @@ export const GET: RequestHandler = async ({ params }) => {
     if (candidateImage) {
       return json(candidateImage, { status: 200 });
     } else {
-      return json(undefined, { status: 404 });
+      console.log("Candidate image not found; this is OK");
+      return json({}, { status: 202 });
     }
   } else {
     return error(400, "plantId param required");

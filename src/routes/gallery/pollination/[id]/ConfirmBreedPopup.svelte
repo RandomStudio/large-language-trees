@@ -107,7 +107,10 @@
             console.log("Checking for image...");
 
             const res = await fetch(
-              `/api/plants/${candidateChild.id}/candidateImage`
+              `/api/plants/${candidateChild.id}/candidateImage`,
+              {
+                method: "GET"
+              }
             );
 
             if (res.status === 200) {
@@ -133,6 +136,8 @@
               } else {
                 console.error("   update image on backend:", await res2.json());
               }
+            } else {
+              console.log("Got status code", res.status, "; try again...");
             }
           }, 2000);
         }
