@@ -16,7 +16,7 @@
   import Spinner from "../../../components/Spinner.svelte";
   import DefaultPrompt from "../../../defaults/prompt-config";
   import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
-  import type { GenerateImageRequest } from "../../api/images/generate/types";
+  import { type GenerateImageRequest } from "../../api/images/generate/types";
 
   enum Tabs {
     TEXT,

@@ -73,6 +73,9 @@
     if (finalChildReadyToAdd.description && finalChildReadyToAdd.commonName) {
     }
     finalChildReadyToAdd.commonName = textInput;
+
+    //@ts-ignore
+    umami.track("Named Plant");
   }
 
   const generateImage = async () => {
@@ -149,7 +152,6 @@
     );
     candidateImageUrl = url;
     finalChildReadyToAdd.imageUrl = url;
-    waitingForImage = false;
   }
 
   const messages = [
@@ -200,7 +202,10 @@
           useFloodFill={false}
           tolerance={TOLERANCE_SIMPLE}
           doUpload={true}
-          onUploadComplete={replaceImage}
+          onUploadComplete={(url) => {
+            replaceImage(url);
+            waitingForImage = false;
+          }}
         />
         <div class="text-center">
           <form on:submit|preventDefault={handleSubmit} class="mt-2">
@@ -228,6 +233,7 @@
   ></ButtonBottom>
 
   <button
+    data-umami-event="Cancel Pollination Button"
     on:click={onCancel}
     class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
     >Cancel</button
