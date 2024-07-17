@@ -291,7 +291,7 @@
 
     {#if resultPlantImageUrl}
       <div
-        class="m-8 p-4 rounded-sm shadow-2xl bg-sky-400 text-sm fixed top-16 border-2 border-slate-500 w-1/4"
+        class="m-8 p-4 rounded-sm shadow-2xl bg-sky-400 text-sm fixed top-16 border-2 border-slate-500 w-3/4"
       >
         <button
           class="bg-orange-500 text-white py-2 px-4 rounded"

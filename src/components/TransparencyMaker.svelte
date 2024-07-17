@@ -84,7 +84,7 @@
 
         //Colors of the palette
         const colorThief = new ColorThief();
-        const palette = colorThief.getPalette(img, 20);
+        const palette = colorThief.getPalette(img, 4);
         console.log(palette);
 
         function generate8BitColorPalette() {
@@ -236,11 +236,11 @@
         //filling the holes with white (with a limit of contrast)
         fillHolesInImage(imageData, ctx, 100);
 
+        // // Get the new colors
+        replaceImageColorsWithPalette(funkyColorPalette, imageData, ctx);
+
         //Pixelate
         pixelateImage(imageData, ctx);
-
-        // Get the new colors
-        replaceImageColorsWithPalette(colorfulPixelPalette, imageData, ctx);
 
         //Adding a black background
         //addBlackBackground(imageData, ctx);
@@ -248,6 +248,7 @@
         //add borders in dark blue
         //addBorders(imageData, ctx);
 
+        /*
         ctx.putImageData(imageData, 0, 0);
         const transformedImageUrl = canvasElement.toDataURL("image/png");
         console.log("Image URL after transformation:", transformedImageUrl);
@@ -268,7 +269,7 @@
             console.log("The URL for the new (transparent) image is", url);
             onUploadComplete(url);
           }
-        }, "image/png");
+        }, "image/png");*/
       }
     };
 
@@ -615,52 +616,74 @@
     ctx.putImageData(imageData, 0, 0);
   }
 
-  function pixelateImage(imageData: ImageData, ctx: CanvasRenderingContext2D) {
-    const width = imageData.width;
-    const height = imageData.height;
-    const pixelSize = 8; // 1024 / 128 = 8
+  function pixelateImage(
+    originalImageData: ImageData,
+    ctx: CanvasRenderingContext2D
+  ) {
+    const width = originalImageData.width;
+    const height = originalImageData.height;
+    const pixelSize = 8; // Assuming a similar downscaling as your previous example
+
+    // Create a copy of the image data to avoid modifying it during read operations
+    const imageData = ctx.createImageData(width, height);
+    imageData.data.set(originalImageData.data);
 
     for (let y = 0; y < height; y += pixelSize) {
       for (let x = 0; x < width; x += pixelSize) {
-        // Get the middle pixel of the current block
-        const midX = x + Math.floor(pixelSize / 2);
-        const midY = y + Math.floor(pixelSize / 2);
-        const midIndex = (midY * width + midX) * 4;
+        let totalR = 0,
+          totalG = 0,
+          totalB = 0,
+          count = 0;
+        let anyTransparent = false;
 
-        // Get the color of the middle pixel
-        let r = imageData.data[midIndex];
-        let g = imageData.data[midIndex + 1];
-        let b = imageData.data[midIndex + 2];
-        let a = imageData.data[midIndex + 3];
+        // Check pixels inside the block and on its edges from the original image
+        for (let py = -1; py <= pixelSize; py++) {
+          for (let px = -1; px <= pixelSize; px++) {
+            let currentX = x + px;
+            let currentY = y + py;
 
-        if (a === 0) {
-          // Middle pixel is transparent
-          let allTransparent = true;
-          let foundNonTransparent = false;
-
-          // Check all pixels within the block
-          for (let py = 0; py < pixelSize && !foundNonTransparent; py++) {
-            for (let px = 0; px < pixelSize && !foundNonTransparent; px++) {
-              const index = ((y + py) * width + (x + px)) * 4;
-              if (imageData.data[index + 3] !== 0) {
-                // Found a non-transparent pixel
-                r = imageData.data[index];
-                g = imageData.data[index + 1];
-                b = imageData.data[index + 2];
-                a = imageData.data[index + 3];
-                foundNonTransparent = true;
-                allTransparent = false;
+            // Ensure we do not exceed the image boundaries
+            if (
+              currentX >= 0 &&
+              currentX < width &&
+              currentY >= 0 &&
+              currentY < height
+            ) {
+              const index = (currentY * width + currentX) * 4;
+              const alpha = originalImageData.data[index + 3];
+              if (alpha !== 0) {
+                // Non-transparent pixel
+                totalR += originalImageData.data[index];
+                totalG += originalImageData.data[index + 1];
+                totalB += originalImageData.data[index + 2];
+                count++;
+              } else {
+                anyTransparent = true;
               }
             }
           }
+        }
 
-          if (allTransparent) {
-            // All pixels within the block are transparent
-            r = 0;
-            g = 0;
-            b = 0;
-            a = 0;
-          }
+        // Determine the block's color
+        let r, g, b, a;
+        if (count === 0) {
+          // All pixels are transparent
+          r = g = b = a = 0;
+        } else if (anyTransparent) {
+          // Average the colors of non-transparent pixels
+          r = Math.round(totalR / count);
+          g = Math.round(totalG / count);
+          b = Math.round(totalB / count);
+          a = 255; // Non-transparent
+        } else {
+          // Use the color of the middle pixel
+          const midX = x + Math.floor(pixelSize / 2);
+          const midY = y + Math.floor(pixelSize / 2);
+          const midIndex = (midY * width + midX) * 4;
+          r = originalImageData.data[midIndex];
+          g = originalImageData.data[midIndex + 1];
+          b = originalImageData.data[midIndex + 2];
+          a = originalImageData.data[midIndex + 3];
         }
 
         // Apply the determined color to the entire block
@@ -676,7 +699,7 @@
       }
     }
 
-    // Update the canvas
+    // Update the canvas with the modified image data
     ctx.putImageData(imageData, 0, 0);
   }
 
