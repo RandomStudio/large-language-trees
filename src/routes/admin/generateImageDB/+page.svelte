@@ -36,6 +36,8 @@
 
   let allPlants: SelectPlant[] = [];
 
+  let candidateImagePoll: NodeJS.Timeout | null = null;
+
   let index: number = 0;
 
   const pickPlantsForImage = async () => {
@@ -46,16 +48,6 @@
     await pickPlantsForImage();
   });
 
-  const preparePrompts = () => {
-    if (plantForImage) {
-      return buildImagePrompt(
-        data.image.instructions,
-        plantForImage.description || ""
-      );
-    }
-    return null;
-  };
-
   const backToDefaults = () => {
     // console.log("Back to defaults!", DefaultPrompt);
     data = { ...DefaultPrompt };
@@ -65,42 +57,49 @@
     errorMessages = null;
     const plantId = "test-only-" + uuidv4();
     plantForImage = allPlants[index];
-
-    if (plantForImage) {
+    const finalImagePrompt = buildImagePrompt(
+      data.image.instructions,
+      plantForImage.description || ""
+    );
+    if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
         instructions: data.image.instructions,
         description: plantForImage.description || "",
         plantId,
-        model: "dall-e-3" // Use dall-e-3 model
+        model: data.image.model
       };
-
       try {
         const res = await fetch("/api/images/generate", {
           method: "POST",
           body: JSON.stringify(bodyData)
         });
-
         if (res.status >= 500) {
           console.log("Error in generation");
           errorMessages = `ERROR in generation`;
-          return;
         }
-
-        // Poll for candidate image
-        const candidateImagePoll = setInterval(async () => {
+        // Do not expect immediate result; poll for candidate image
+        if (candidateImagePoll) {
+          clearInterval(candidateImagePoll);
+        }
+        candidateImagePoll = setInterval(async () => {
           console.log("Polling for candidate image...");
           const res = await fetch(`/api/plants/${plantId}/candidateImage`, {
             method: "GET"
           });
-
           if (res.status === 200) {
             console.log("...Image ready!");
-            clearInterval(candidateImagePoll);
+            if (candidateImagePoll) {
+              clearInterval(candidateImagePoll);
+            }
             const generated = (await res.json()) as GeneratedImage;
             resultPlantImageUrl = generated.url;
             busy = false;
           }
         }, 2000);
+
+        // const imageResult = (await res.json()) as GeneratedImageResult;
+        // const { url } = imageResult;
+        // resultPlantImageUrl = url;
       } catch (e) {
         console.log("Error in generation:", e);
         errorMessages = `ERROR ${JSON.stringify(e)}`;
@@ -111,7 +110,6 @@
   const closeImage = () => {
     resultPlantImageUrl = null;
     index = index + 1;
-    runImageGeneration();
   };
 </script>
 
