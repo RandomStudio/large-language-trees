@@ -101,11 +101,11 @@
         ctx.putImageData(imageData, 0, 0);
 
         const transformedImageUrl = canvasElement.toDataURL("image/png");
-        console.log("Image URL after transformation:", transformedImageUrl);
+        // console.log("Image URL after transformation:", transformedImageUrl);
 
         canvasElement.toBlob(async (blob) => {
           if (doUpload && blob) {
-            console.log("look, a Blob:", blob);
+            // console.log("look, a Blob:", blob);
             const formData = new FormData();
             formData.append("img", blob);
 
@@ -220,7 +220,7 @@
       const stack = [[x, y]];
       let size = 0;
       while (stack.length) {
-        const [cx, cy] = stack.pop();
+        const [cx, cy] = stack.pop() || [];
         const index = (cy * width + cx) * 4;
         if (mask[cx + cy * width] === 0 && imageData.data[index + 3] !== 0) {
           // Check if not already visited and pixel is visible
