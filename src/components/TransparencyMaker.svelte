@@ -250,11 +250,11 @@
 
         ctx.putImageData(imageData, 0, 0);
         const transformedImageUrl = canvasElement.toDataURL("image/png");
-        console.log("Image URL after transformation:", transformedImageUrl);
+        // console.log("Image URL after transformation:", transformedImageUrl);
 
         canvasElement.toBlob(async (blob) => {
           if (doUpload && blob) {
-            console.log("look, a Blob:", blob);
+            // console.log("look, a Blob:", blob);
             const formData = new FormData();
             formData.append("img", blob);
 

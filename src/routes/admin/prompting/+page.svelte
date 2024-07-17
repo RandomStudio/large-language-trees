@@ -1,6 +1,7 @@
 <script lang="ts">
   import { buildImagePrompt, buildTextPrompt } from "$lib/promptUtils";
   import type {
+    GeneratedImage,
     GeneratedImageResult,
     InsertPlant,
     PromptConfig,
@@ -18,6 +19,7 @@
   import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
   import { type GenerateImageRequest } from "../../api/images/generate/types";
   import TransparencyMaker from "../../../components/TransparencyMaker.svelte";
+  import { v4 as uuidv4 } from "uuid";
 
   enum Tabs {
     TEXT,
@@ -27,6 +29,8 @@
   export let data: PromptConfig;
 
   let selectedTab = Tabs.TEXT;
+
+  let errorMessages: string | null = null;
 
   let resultPlantText: InsertPlant | null = null;
   let resultPlantImageUrl: string | null = null;
@@ -39,6 +43,8 @@
   let parent2: SelectPlant | null = null;
 
   let plantForImage: SelectPlant | null = null;
+
+  let candidateImagePoll: NodeJS.Timeout | null = null;
 
   const backToDefaults = () => {
     // console.log("Back to defaults!", DefaultPrompt);
@@ -81,6 +87,7 @@
   };
 
   const runTextGeneration = async () => {
+    errorMessages = null;
     if (parent1 && parent2) {
       const bodyData: GeneratePlantRequestBody = {
         prompt: finalTextPrompt,
@@ -98,20 +105,51 @@
   };
 
   const runImageGeneration = async () => {
+    errorMessages = null;
+    const plantId = "test-only-" + uuidv4();
     if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
         instructions: data.image.instructions,
         description: plantForImage.description || "",
-        plantId: "test-only",
+        plantId,
         model: data.image.model
       };
-      const res = await fetch("/api/images/generate", {
-        method: "POST",
-        body: JSON.stringify(bodyData)
-      });
-      const imageResult = (await res.json()) as GeneratedImageResult;
-      const { url } = imageResult;
-      resultPlantImageUrl = url;
+      try {
+        const res = await fetch("/api/images/generate", {
+          method: "POST",
+          body: JSON.stringify(bodyData)
+        });
+        if (res.status >= 500) {
+          console.log("Error in generation");
+          errorMessages = `ERROR in generation`;
+        }
+        // Do not expect immediate result; poll for candidate image
+        if (candidateImagePoll) {
+          clearInterval(candidateImagePoll);
+        }
+        candidateImagePoll = setInterval(async () => {
+          console.log("Polling for candidate image...");
+          const res = await fetch(`/api/plants/${plantId}/candidateImage`, {
+            method: "GET"
+          });
+          if (res.status === 200) {
+            console.log("...Image ready!");
+            if (candidateImagePoll) {
+              clearInterval(candidateImagePoll);
+            }
+            const generated = (await res.json()) as GeneratedImage;
+            resultPlantImageUrl = generated.url;
+            busy = false;
+          }
+        }, 2000);
+
+        // const imageResult = (await res.json()) as GeneratedImageResult;
+        // const { url } = imageResult;
+        // resultPlantImageUrl = url;
+      } catch (e) {
+        console.log("Error in generation:", e);
+        errorMessages = `ERROR ${JSON.stringify(e)}`;
+      }
     }
   };
 </script>
@@ -138,6 +176,11 @@
       selectedTab = Tabs.IMAGE;
     }}>Images</button
   >
+
+  {#if errorMessages !== null}
+    <h4>Error messages</h4>
+    <p class="bg-red-500 font-bold">{errorMessages}</p>
+  {/if}
 
   {#if selectedTab === Tabs.TEXT}
     <h2 class="font-bold mt-4">Edit Text Prompts</h2>
@@ -265,7 +308,7 @@
           on:click={async () => {
             busy = true;
             await runImageGeneration();
-            busy = false;
+            // busy = false;
           }}>Test</button
         >
       </div>

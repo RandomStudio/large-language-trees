@@ -17,15 +17,23 @@ The keys for the live database (on AWS) and OpenAI (ChatGPT/Dall-E) are delibera
 - Add the following lines:
 
 ```
-OPENAI_API_KEY=*****************************
-DB_CONNECTION_STRING=**********************
+OPENAI_API_KEY=*******************************
+DB_CONNECTION_STRING=*******************************
+PLACEHOLDER_IMAGES=false
+AWS_ACCESS_KEY_ID_S3=*******************************
+AWS_SECRET_ACCESS_KEY_S3==*******************************
+BACKGROUND_FN_SECRET==doesnotmatter
+BACKGROUND_FN_USES_LOCAL_API=http://localhost:8888
+ADMIN_GARDEN_SHARED=true
+S3_REGION=eu-north-1
+S3_BUCKET=random-the-garden
 ```
 
 ... where `****` must be replaced with the correct keys or URL strings. Ask for these if you don't have them!
 
-## Using local database and local file storage
+## Using local database and local netlify background functions
 
-The `npm run dev` script will assume you want to use the local database (instead of AWS-hosted DB) and local filesystem storage (instead of AWS S3) by default.
+The `npm run dev` script will assume you want to use a local database (instead of AWS-hosted DB) and run a local "Netlify CLI" server so that background functions will run on your machine.
 
 ### DB
 
@@ -51,20 +59,6 @@ Create a `.env.development` file with identical contents to `.env` _except_ for 
 
 ```
 DB_CONNECTION_STRING=postgresql://postgres:mysecretpassword@localhost:5432
-```
-
-### File storage
-
-In the same `.env.development` file as above, ensure that you have a line:
-
-```
-LOCAL_FILES=true
-```
-
-In addition, you can also skip image generation via OpenAI altogether. This helps to make testing faster and won't cost anything - a placeholder image will be returned instead.
-
-```
-PLACEHOLDER_IMAGES=true
 ```
 
 ## Using Drizzle Studio
