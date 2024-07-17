@@ -32,22 +32,11 @@
   let resultPlantImageUrl: string | null = null;
   let busy = false;
 
-  let finalTextPrompt: ChatCompletionMessageParam[] = [];
-  let finalImagePrompt: string | null = null;
-
-  let parent1: SelectPlant | null = null;
-  let parent2: SelectPlant | null = null;
-
   let plantForImage: SelectPlant | null = null;
-
-  let candidateImagePoll: NodeJS.Timeout | null = null;
 
   let allPlants: SelectPlant[] = [];
 
-  const backToDefaults = () => {
-    // console.log("Back to defaults!", DefaultPrompt);
-    data = { ...DefaultPrompt };
-  };
+  let index: number = 0;
 
   const pickPlantsForImage = async () => {
     allPlants = await (await fetch("/api/plants")).json();
@@ -55,72 +44,74 @@
 
   onMount(async () => {
     await pickPlantsForImage();
-    preparePrompts();
   });
 
   const preparePrompts = () => {
     if (plantForImage) {
-      finalImagePrompt = buildImagePrompt(
+      return buildImagePrompt(
         data.image.instructions,
         plantForImage.description || ""
       );
     }
+    return null;
+  };
+
+  const backToDefaults = () => {
+    // console.log("Back to defaults!", DefaultPrompt);
+    data = { ...DefaultPrompt };
   };
 
   const runImageGeneration = async () => {
     errorMessages = null;
     const plantId = "test-only-" + uuidv4();
-    for (const plant of allPlants) {
-      plantForImage = plant;
-      finalImagePrompt = buildImagePrompt(
-        data.image.instructions,
-        plantForImage.description || ""
-      );
-      if (plantForImage && finalImagePrompt) {
-        const bodyData: GenerateImageRequest = {
-          instructions: data.image.instructions,
-          description: plantForImage.description || "",
-          plantId,
-          model: data.image.model
-        };
-        try {
-          const res = await fetch("/api/images/generate", {
-            method: "POST",
-            body: JSON.stringify(bodyData)
-          });
-          if (res.status >= 500) {
-            console.log("Error in generation");
-            errorMessages = `ERROR in generation`;
-          }
-          // Do not expect immediate result; poll for candidate image
-          if (candidateImagePoll) {
-            clearInterval(candidateImagePoll);
-          }
-          candidateImagePoll = setInterval(async () => {
-            console.log("Polling for candidate image...");
-            const res = await fetch(`/api/plants/${plantId}/candidateImage`, {
-              method: "GET"
-            });
-            if (res.status === 200) {
-              console.log("...Image ready!");
-              if (candidateImagePoll) {
-                clearInterval(candidateImagePoll);
-              }
-              const generated = (await res.json()) as GeneratedImage;
-              resultPlantImageUrl = generated.url;
-              busy = false;
-            }
-          }, 2000);
+    plantForImage = allPlants[index];
 
-          // const imageResult = (await res.json()) as GeneratedImageResult;
-          // const { url } = imageResult;
-          // resultPlantImageUrl = url;
-        } catch (e) {
-          console.log("Error in generation:", e);
-          errorMessages = `ERROR ${JSON.stringify(e)}`;
+    if (plantForImage) {
+      const bodyData: GenerateImageRequest = {
+        instructions: data.image.instructions,
+        description: plantForImage.description || "",
+        plantId,
+        model: "dall-e-3" // Use dall-e-3 model
+      };
+
+      try {
+        const res = await fetch("/api/images/generate", {
+          method: "POST",
+          body: JSON.stringify(bodyData)
+        });
+
+        if (res.status >= 500) {
+          console.log("Error in generation");
+          errorMessages = `ERROR in generation`;
+          return;
         }
+
+        // Poll for candidate image
+        const candidateImagePoll = setInterval(async () => {
+          console.log("Polling for candidate image...");
+          const res = await fetch(`/api/plants/${plantId}/candidateImage`, {
+            method: "GET"
+          });
+
+          if (res.status === 200) {
+            console.log("...Image ready!");
+            clearInterval(candidateImagePoll);
+            const generated = (await res.json()) as GeneratedImage;
+            resultPlantImageUrl = generated.url;
+            busy = false;
+          }
+        }, 2000);
+      } catch (e) {
+        console.log("Error in generation:", e);
+        errorMessages = `ERROR ${JSON.stringify(e)}`;
       }
     }
+  };
+
+  const closeImage = () => {
+    resultPlantImageUrl = null;
+    index = index + 1;
+    runImageGeneration();
   };
 </script>
 
@@ -155,7 +146,6 @@
         name="imageInstructions"
         rows={10}
         bind:value={data.image.instructions}
-        on:input={() => preparePrompts()}
       />
     </label>
     <label class="block">
@@ -170,7 +160,7 @@
       <button
         class="bg-orange-500 text-white py-2 px-4 rounded"
         type="button"
-        on:click={() => backToDefaults()}>Reset</button
+        on:click={backToDefaults}>Reset</button
       >
       <button class="bg-red-500 text-white py-2 px-4 rounded">Save</button>
 
@@ -180,23 +170,24 @@
         on:click={async () => {
           busy = true;
           await runImageGeneration();
-          // busy = false;
-        }}>Generate the {allPlants.length} images in the static folder</button
+        }}>Generate the next image</button
       >
     </div>
   </form>
 
   {#if resultPlantImageUrl}
     <div
-      class="m-8 p-4 rounded-sm shadow-2xl bg-slate-50 text-sm fixed top-16 border-2 border-slate-500"
+      class="flex justify-center items-center fixed inset-0 bg-gray-900 bg-opacity-75 z-50"
     >
-      <button
-        class="bg-orange-500 text-white py-2 px-4 rounded"
-        on:click={() => {
-          resultPlantImageUrl = null;
-        }}>Close ⓧ</button
+      <div
+        class="m-8 p-4 rounded-sm shadow-2xl bg-slate-50 text-sm border-2 border-slate-500 relative"
       >
-      <img src={resultPlantImageUrl} alt="Result from the prompt test" />
+        <button
+          class="absolute top-0 right-0 bg-orange-500 text-white py-2 px-4 rounded"
+          on:click={closeImage}>Close ⓧ</button
+        >
+        <img src={resultPlantImageUrl} alt="Result from the prompt test" />
+      </div>
     </div>
   {/if}
 
