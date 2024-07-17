@@ -51,6 +51,17 @@
     </ul>
   </div>
 
+  <div class="border-2">
+    <h2 class="font-bold">Prompt engineering</h2>
+    <ul>
+      <li>
+        <a href="/admin/generateImageDB" class="underline"
+          >Generate the DB for the images</a
+        >
+      </li>
+    </ul>
+  </div>
+
   <div class="m-4">
     <p>
       When you're ready, you can proceed to the admin user's <a
