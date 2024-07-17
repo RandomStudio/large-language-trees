@@ -248,7 +248,6 @@
         //add borders in dark blue
         //addBorders(imageData, ctx);
 
-        /*
         ctx.putImageData(imageData, 0, 0);
         const transformedImageUrl = canvasElement.toDataURL("image/png");
         console.log("Image URL after transformation:", transformedImageUrl);
@@ -269,7 +268,7 @@
             console.log("The URL for the new (transparent) image is", url);
             onUploadComplete(url);
           }
-        }, "image/png");*/
+        }, "image/png");
       }
     };
 
