@@ -31,14 +31,14 @@
   let errorText: string = "";
 
   function replaceInParagraph(
-    paragraph: string | null | undefined,
-    target: string | null | undefined,
-    replacement: string | null
+    paragraph: string,
+    target: string,
+    replacement: string
   ) {
     if (paragraph && target && replacement) {
-      return paragraph.split(target).join(replacement) || null;
+      return paragraph.split(target).join(replacement) || paragraph;
     } else {
-      return null;
+      return paragraph;
     }
   }
 

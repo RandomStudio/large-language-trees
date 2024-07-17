@@ -1,4 +1,4 @@
-import { relations, type InferSelectModel } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -11,13 +11,15 @@ import {
 
 export const plants = pgTable("plants", {
   id: text("id").primaryKey(),
-  commonName: text("common_name"),
-  description: text("description"),
-  properties: json("properties"), // TODO: could be separate table, later
+  commonName: text("common_name").notNull(),
+  description: text("description").notNull(),
+  properties: json("properties").notNull(),
   imageUrl: text("image_url"),
   parent1: text("parent1_id"),
   parent2: text("parent2_id"),
-  created: timestamp("created", { withTimezone: true }).notNull().defaultNow()
+  created: timestamp("created", { withTimezone: true }).notNull().defaultNow(),
+  authorTop: text("author_top"),
+  authorBottom: text("author_bottom")
 });
 
 export const generatedImages = pgTable("generated_images", {
