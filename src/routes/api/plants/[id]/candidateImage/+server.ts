@@ -4,6 +4,8 @@ import { error, json, type RequestHandler } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import type { CandidateImageBody } from "./types";
+import { uploadToS3 } from "$lib/server/images";
+import { URL_PREFIX } from "../../../../../defaults/constants";
 
 export const GET: RequestHandler = async ({ params }) => {
   const plantId = params["id"];
@@ -30,21 +32,32 @@ export const POST: RequestHandler = async ({ request, params }) => {
   console.log("got", { url, plantId });
   if (plantId) {
     console.log({ url, errorMessage, plantId });
-    const res = await db
-      .insert(generatedImages)
-      .values({
-        id: uuidv4(),
-        plantId,
-        url,
-        errorMessage
-      })
-      .returning();
 
-    if (res.length > 0) {
-      return json(res, { status: 201 });
-    } else {
-      return error(500, "Failed to insert new generated image URL");
+    if (url) {
+      console.log("Uploading to our storage first...");
+      const resImageFromOpenAI = await fetch(url);
+      const baseName = uuidv4();
+      await uploadToS3(resImageFromOpenAI, baseName);
+      const s3Url = URL_PREFIX + "/" + baseName + ".png";
+      console.log("...Uploaded, now available at", s3Url);
+      const res = await db
+        .insert(generatedImages)
+        .values({
+          id: uuidv4(),
+          plantId,
+          url: s3Url,
+          errorMessage
+        })
+        .returning();
+
+      if (res.length > 0) {
+        return json(res, { status: 201 });
+      } else {
+        return error(500, "Failed to insert new generated image URL");
+      }
     }
+    // The response is "OK" but we had no URL
+    return json({ url, errorMessage, plantId }, { status: 200 });
   } else {
     return error(400, "plantId param required");
   }

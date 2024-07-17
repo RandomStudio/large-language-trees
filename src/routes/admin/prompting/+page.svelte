@@ -334,7 +334,7 @@
 
     {#if resultPlantImageUrl}
       <div
-        class="m-8 p-4 rounded-sm shadow-2xl bg-sky-400 text-sm fixed top-16 border-2 border-slate-500 w-3/4"
+        class="m-8 p-4 rounded-sm shadow-2xl bg-sky-400 text-sm fixed top-16 border-2 border-slate-500 w-screen"
       >
         <button
           class="bg-orange-500 text-white py-2 px-4 rounded"
@@ -342,11 +342,16 @@
             resultPlantImageUrl = null;
           }}>Close ⓧ</button
         >
-        <TransparencyMaker
-          src={resultPlantImageUrl}
-          onUploadComplete={() => {}}
-          doUpload={false}
-        ></TransparencyMaker>
+        <div class="w-9/12">
+          <TransparencyMaker
+            src={resultPlantImageUrl}
+            onUploadComplete={(url) => {
+              console.log("Replace image URL after upload:", url);
+              resultPlantImageUrl = url;
+            }}
+            doUpload={true}
+          />
+        </div>
       </div>
     {/if}
   {/if}
