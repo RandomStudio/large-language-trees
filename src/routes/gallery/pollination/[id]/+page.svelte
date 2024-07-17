@@ -209,6 +209,9 @@
     onConfirm={async (updatedPlant) => {
       if (candidateChild) {
         candidateChild = updatedPlant;
+        candidateChild.authorTop = data.user.id;
+        // TODO: find authorBottom, possibly via otherUserSeedbankId, which
+        // we got from the QR code?
         await addConfirmedPlant(
           candidateChild,
           data.garden.id,
