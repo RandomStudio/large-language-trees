@@ -1,7 +1,19 @@
-export default async (req: Request) => {
-  const { prompt, backgroundSecret, plantId } = await req.json();
+interface BackgroundGenerateImageRequest {
+  plantId: string;
+  fullPrompt: string;
+  model: string;
+  backgroundSecret: string;
+}
 
-  const apiKey = process.env.OPENAI_API_KEY;
+interface GenerateResult {
+  url?: string;
+  shouldRetry: boolean;
+}
+
+export default async (req: Request) => {
+  const requestBody = (await req.json()) as BackgroundGenerateImageRequest;
+  const { fullPrompt, backgroundSecret, plantId, model } = requestBody;
+
   const realSecret = process.env.BACKGROUND_FN_SECRET;
 
   if (backgroundSecret !== realSecret) {
@@ -9,14 +21,50 @@ export default async (req: Request) => {
     throw Error("Hey, that's not the correct super secret key!");
   }
 
+  const generateAttempt1 = await tryGenerate(model, fullPrompt);
+  if (generateAttempt1.url) {
+    console.log("Success from generate attempt #1, url", generateAttempt1.url);
+    await notifyCandidateImageReady(generateAttempt1.url, plantId);
+  } else {
+    if (generateAttempt1.shouldRetry) {
+      console.warn(
+        "Generate attempt #1 indicated shouldRetry==true; fallback to dall-e-2 generation..."
+      );
+      const generateAttempt2 = await tryGenerate("dall-e-2", fullPrompt);
+      if (generateAttempt2.url) {
+        console.log(
+          "Success from generate attempt #2, url",
+          generateAttempt2.url
+        );
+        await notifyCandidateImageReady(generateAttempt2.url, plantId);
+      } else {
+        console.error("Generate attempt #2 failed to return a URL!");
+        throw Error("Generate attempt #2 failed");
+      }
+    } else {
+      throw Error(
+        "Generate attempt indicated shouldRetry==false; complete failure"
+      );
+    }
+  }
+};
+
+const tryGenerate = async (
+  model: string,
+  prompt: string
+): Promise<GenerateResult> => {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  console.log(
+    `Using model "${model}" to generate image with prompt\n"${prompt}"...`
+  );
+
   const jsonBody = {
-    model: "dall-e-3",
+    model,
     prompt,
     n: 1,
     size: "1024x1024"
   };
-
-  console.log("Using body", jsonBody, "...");
 
   const aiRes = await fetch("https://api.openai.com/v1/images/generations", {
     method: "POST",
@@ -31,39 +79,51 @@ export default async (req: Request) => {
 
   if (aiRes.status === 200) {
     const jsonResponse = await aiRes.json();
-    console.log({ jsonResponse });
     const url = jsonResponse.data[0].url as string;
-    console.log({ url });
-
-    const addImageToDbRes = await fetch(
-      `https://livinggarden.netlify.app/api/plants/${plantId}/candidateImage`,
-      {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify({ url }),
-        headers: {
-          origin: "https://livinggarden.netlify.app"
-        }
-      }
-    );
-    if (addImageToDbRes.status === 200 || addImageToDbRes.status === 201) {
-      console.log("Success!");
-    } else {
-      const { statusText, status } = addImageToDbRes;
-      console.error("Something went wrong when POSTing to our API endpoint:", {
-        statusText,
-        status
-      });
-      console.error(addImageToDbRes);
-    }
+    return {
+      url,
+      shouldRetry: false
+    };
   } else {
-    const { statusText, status } = aiRes;
-    console.error("Something went wrong in request to openAI API:", {
-      statusText,
-      status,
-      apiKey
-    });
+    const { status, statusText } = aiRes;
+    console.error("Request failed with error:", { status, statusText });
+    if (status === 429) {
+      console.warn("Rate limit detected; will try again");
+      return {
+        shouldRetry: true
+      };
+    }
+    return {
+      shouldRetry: false
+    };
   }
+};
 
-  console.log("...done");
+const notifyCandidateImageReady = async (url: string, plantId: string) => {
+  const useLocalApi = process.env.BACKGROUND_FN_USES_LOCAL_API;
+
+  const origin = useLocalApi || "https://livinggarden.netlify.app";
+  console.log("POST to", origin);
+
+  const addImageToDbRes = await fetch(
+    `${origin}/api/plants/${plantId}/candidateImage`,
+    {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify({ url }),
+      headers: {
+        origin
+      }
+    }
+  );
+  if (addImageToDbRes.status === 200 || addImageToDbRes.status === 201) {
+    console.log("Success!");
+  } else {
+    const { statusText, status } = addImageToDbRes;
+    console.error("Something went wrong when POSTing to our API endpoint:", {
+      statusText,
+      status
+    });
+    console.error(addImageToDbRes);
+  }
 };

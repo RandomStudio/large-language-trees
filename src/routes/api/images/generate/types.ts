@@ -3,4 +3,5 @@ export interface GenerateImageRequest {
   description: string;
   instructions?: string;
   model?: string;
+  backgroundSecret?: string;
 }
