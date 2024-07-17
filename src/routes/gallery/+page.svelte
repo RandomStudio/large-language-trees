@@ -44,7 +44,7 @@
 
   async function fetchdata() {
     invalidateAll();
-    console.log(data.seedBank.plantsInSeedbank);
+    // console.log(data.seedBank.plantsInSeedbank);
     yourPlant =
       data.seedBank.plantsInSeedbank.find(
         (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null

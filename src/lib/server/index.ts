@@ -96,7 +96,7 @@ export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
     with: { plantsInSeedbank: { with: { plant: true } } }
   });
   if (seedBank) {
-    console.log(JSON.stringify({ seedBank }));
+    // console.log(JSON.stringify({ seedBank }));
     return seedBank;
   } else {
     const user = await getUserById(userId);

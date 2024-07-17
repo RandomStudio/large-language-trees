@@ -121,7 +121,11 @@
               }
 
               const generated = (await res.json()) as GeneratedImage;
-              const { plantId, url } = generated;
+              const { plantId, url, errorMessage } = generated;
+              if (errorMessage || url === null) {
+                console.error("Image generation error:", errorMessage);
+                throw Error("Something went wrong with the image generation");
+              }
               console.log("Yes, a generated image exists for this plant!", {
                 ...generated
               });
@@ -134,7 +138,7 @@
                 console.log("Image updated on backend OK, new S3 URL is:", url);
                 replaceImage(url);
               } else {
-                console.error("   update image on backend:", await res2.json());
+                console.error("error updating image on backend:");
               }
             } else {
               console.log("Got status code", res.status, "; try again...");
