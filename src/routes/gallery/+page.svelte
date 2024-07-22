@@ -6,6 +6,7 @@
   import PlantDisplay from "../../components/PlantDisplay.svelte";
   import PopupInfo from "../../components/PopupInfo.svelte";
 
+  import NewGardener from "../../components/NewGardener.svelte";
   import { invalidateAll } from "$app/navigation";
   import moment from "moment";
 
@@ -109,14 +110,10 @@
 </div>
 
 {#if selectedPlant}
-  <PopupInfo
+  <NewGardener
     plantDetails={selectedPlant}
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant == yourPlant}
-    isPollinatingPlant={Math.abs(
-      moment().diff(moment(selectedPlant.created), "minutes")
-    ) > 5}
-  ></PopupInfo>
+  ></NewGardener>
 {/if}
