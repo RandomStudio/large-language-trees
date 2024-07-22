@@ -121,7 +121,7 @@ export const actions = {
       });
 
       if (username === "admin") {
-        redirect(302, "/presentation/garden");
+        redirect(302, "/app/admin");
       } else {
         redirect(302, "/app/gallery");
       }

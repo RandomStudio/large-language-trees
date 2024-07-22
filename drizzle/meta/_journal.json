@@ -64,6 +64,20 @@
       "when": 1721217217764,
       "tag": "0008_familiar_brood",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1721658496550,
+      "tag": "0009_lazy_giant_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1721658707229,
+      "tag": "0010_brave_goblin_queen",
+      "breakpoints": true
     }
   ]
 }

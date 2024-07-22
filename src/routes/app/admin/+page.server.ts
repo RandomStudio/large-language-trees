@@ -9,10 +9,10 @@ import {
   createNewGarden,
   getUserByUsername,
   populateDefaultPlants,
+  populateDefaultPresentationState,
   populateDefaultPromptSettings
 } from "$lib/server";
 import type { SelectPlant, SelectPromptSettings } from "$lib/types";
-import DefaultPrompt from "../../../defaults/prompt-config";
 
 export interface AdminViewData {
   username: string;
@@ -79,5 +79,8 @@ export const actions: Actions = {
 
     console.warn("Prompt settings initialisation...");
     await populateDefaultPromptSettings();
+
+    console.warn("Presentation state layout initialisation...");
+    await populateDefaultPresentationState();
   }
 };

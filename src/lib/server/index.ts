@@ -1,20 +1,19 @@
 import { db } from "./db";
+import { ADMIN_GARDEN_SHARED } from "$env/static/private";
 import DefaultSeeds from "../../defaults/seeds.json";
-import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
-import OpenAI from "openai";
-import { ADMIN_GARDEN_SHARED, OPENAI_API_KEY } from "$env/static/private";
 import {
   gardens,
   gardensToPlants,
   generatedImages,
   plants,
+  presentationState,
   promptSettingsTable,
   seedbanks,
   seedbanksToPlants,
   sessions,
   users
 } from "./schema";
-import { eq, isNull, not } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   GardenPlantEntry,
@@ -22,24 +21,17 @@ import type {
   MyGarden,
   MySeeds,
   SeedbankEntry,
-  SeedbankEntryWithPlant,
-  SelectGarden,
   SelectPlant,
   SelectUser,
-  UserWithGarden,
-  UserWithSeedbank
+  UserWithGarden
 } from "$lib/types";
-import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
-import {
-  pickMultipleRandomElements,
-  pickRandomElement,
-  pickRandomIndexes
-} from "random-elements";
+import { pickRandomElement } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 import DefaultPrompt from "../../defaults/prompt-config";
 import { publishEvent } from "./realtime";
+import { PresentationDisplayStartDefaults } from "../../defaults/presentationDisplays";
 
 export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -69,6 +61,11 @@ export const populateDefaultPromptSettings = async () => {
     imageModel: defaultPromptSettings.image.model,
     imageInstructions: defaultPromptSettings.image.instructions
   });
+};
+
+export const populateDefaultPresentationState = async () => {
+  const defaultPresentationSettings = PresentationDisplayStartDefaults;
+  await db.insert(presentationState).values(defaultPresentationSettings);
 };
 
 export const getUserByUsername = async (
@@ -244,56 +241,6 @@ export const addNewPlant = async (plant: InsertPlant): Promise<InsertPlant> => {
   return insertedPlant[0];
 };
 
-export const generate = async (
-  prompt: ChatCompletionMessageParam[],
-  parents: [SelectPlant, SelectPlant]
-): Promise<InsertPlant | null> => {
-  let offspring: InsertPlant | null = null;
-
-  if (prompt && parents) {
-    console.log("Using prompt: ******** \n", prompt);
-
-    const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
-
-    const completion = await openai.chat.completions.create({
-      messages: prompt,
-      model: "gpt-3.5-turbo"
-    });
-
-    console.log("response:", completion.choices);
-
-    for (const res of completion.choices) {
-      console.log(JSON.stringify(res));
-      const formattedContent = res.message.content || "{}";
-
-      offspring = parseNewPlant(formattedContent);
-      if (offspring) {
-        console.log("Offspring:", offspring);
-      } else {
-        throw Error("Oops, couldn't parse the offspring text");
-      }
-    }
-  }
-
-  return offspring;
-};
-
-const parseNewPlant = (text: string): InsertPlant | null => {
-  const json = JSON.parse(text);
-  if (json["commonName"] && json["description"] && json["properties"]) {
-    const id = uuidv4();
-    console.log("JSON appears to have the valid fields");
-    return {
-      id,
-      commonName: json["commonName"],
-      description: json["description"],
-      properties: { ...json["properties"] }
-    };
-  } else {
-    throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
-  }
-};
-
 export const attachImageToPlant = async (id: string, imageUrl: string) => {
   const res = await db
     .update(plants)
@@ -364,6 +311,7 @@ export const cleanUp = async () => {
   await db.delete(plants);
   await db.delete(promptSettingsTable);
   await db.delete(generatedImages);
+  await db.delete(presentationState);
   console.log("...cleanup complete!");
 };
 

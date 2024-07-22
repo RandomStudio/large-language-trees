@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { PresentationDisplayState } from "$lib/types";
   import { onDestroy, onMount } from "svelte";
   import {
     BROKER_DEFAULTS,
@@ -11,6 +12,8 @@
   let messages: string[] = [];
 
   let agent: TetherAgent | null = null;
+
+  export let data: { displays: PresentationDisplayState[] };
 
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
@@ -42,7 +45,7 @@
   });
 </script>
 
-<h1>This is the debug mode for Presentation views</h1>
+<h1>Presentation Views: Debug</h1>
 <div>
   Tether: {connected ? "✅ connected" : "❌ not connected"}
 </div>
@@ -54,3 +57,14 @@
     <li>{m}</li>
   {/each}
 </ul>
+
+{#if data}
+  <h2>Presentation State</h2>
+  <ul>
+    {#each data.displays as display}
+      <li>
+        #{display.id}: "{display.name}"
+      </li>
+    {/each}
+  </ul>
+{/if}
