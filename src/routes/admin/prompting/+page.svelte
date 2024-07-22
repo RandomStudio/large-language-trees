@@ -18,6 +18,7 @@
   import DefaultPrompt from "../../../defaults/prompt-config";
   import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
   import { type GenerateImageRequest } from "../../api/images/generate/types";
+  import TransparencyMaker from "../../../components/TransparencyMaker.svelte";
   import { v4 as uuidv4 } from "uuid";
 
   enum Tabs {
@@ -333,7 +334,7 @@
 
     {#if resultPlantImageUrl}
       <div
-        class="m-8 p-4 rounded-sm shadow-2xl bg-slate-50 text-sm fixed top-16 border-2 border-slate-500"
+        class="m-8 p-4 rounded-sm shadow-2xl bg-sky-400 text-sm fixed top-16 border-2 border-slate-500 w-screen"
       >
         <button
           class="bg-orange-500 text-white py-2 px-4 rounded"
@@ -341,7 +342,16 @@
             resultPlantImageUrl = null;
           }}>Close ⓧ</button
         >
-        <img src={resultPlantImageUrl} alt="Result from the prompt test" />
+        <div class="w-9/12">
+          <TransparencyMaker
+            src={resultPlantImageUrl}
+            onUploadComplete={(url) => {
+              console.log("Replace image URL after upload:", url);
+              resultPlantImageUrl = url;
+            }}
+            doUpload={true}
+          />
+        </div>
       </div>
     {/if}
   {/if}

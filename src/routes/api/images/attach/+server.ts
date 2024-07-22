@@ -12,32 +12,12 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const { plantId, url } = (await request.json()) as AttachImageRequest;
 
-  const resImageFromOpenAI = await fetch(url);
+  await db
+    .update(plants)
+    .set({ imageUrl: url })
+    .where(eq(plants.id, plantId))
+    .returning();
 
-  const baseName = uuidv4();
-
-  // console.log({ resImageFromOpenAI });
-
-  if (resImageFromOpenAI.status === 200) {
-    console.log("Can fetch image OK; stream to S3...");
-    await uploadToS3(resImageFromOpenAI, baseName);
-
-    console.log("Now update plant entry with S3 URL...");
-    const s3Url = URL_PREFIX + "/" + baseName + ".png";
-    await db
-      .update(plants)
-      .set({ imageUrl: s3Url })
-      .where(eq(plants.id, plantId))
-      .returning();
-
-    const finalResponse: AttachImageResponse = { plantId, url: s3Url };
-    return json(finalResponse, { status: 200 });
-  } else {
-    console.error(
-      "Error requesting image from openAI URL:",
-      resImageFromOpenAI.status
-    );
-    console.error(resImageFromOpenAI);
-    return error(500, resImageFromOpenAI.statusText);
-  }
+  const finalResponse: AttachImageResponse = { plantId, url };
+  return json(finalResponse, { status: 200 });
 };

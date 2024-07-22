@@ -15,8 +15,10 @@
   } from "./confirmBreed";
   import type {
     EnhancedGardenViewData,
+    EventBody,
     InsertPlant,
-    SelectPlant
+    SelectPlant,
+    SelectSeedbank
   } from "$lib/types";
 
   export let data: EnhancedGardenViewData;
@@ -31,7 +33,7 @@
   let parent2: SelectPlant | null = null;
 
   let candidateChild: InsertPlant | null = null;
-  let otherUserSeedbankId: string;
+  let otherUserSeedbankId: string | null = null;
 
   let waiting: boolean = false;
   let child: SelectPlant | null = null;
@@ -88,8 +90,10 @@
         // Handle the result here
         busy = true;
         const readText = result.getText();
-        const parent2Id = readText.split("&")[0];
-        otherUserSeedbankId = readText.split("&")[1];
+        const [part1, part2] = readText.split("&");
+        console.log("scan text:", { part1, part2 });
+        const parent2Id = part1;
+        otherUserSeedbankId = part2;
         fetch("/api/plants/" + parent2Id)
           .then(async (res) => {
             if (res.status == 200) {
@@ -159,6 +163,35 @@
   onDestroy(() => {
     stopStream();
   });
+
+  async function insertNewPlant(updatedPlant: InsertPlant) {
+    if (candidateChild && otherUserSeedbankId) {
+      candidateChild = updatedPlant;
+      candidateChild.authorTop = data.user.id;
+      const seedbankRes = await fetch(`/api/seedbanks/${otherUserSeedbankId}`);
+      const otherSeedbank = (await seedbankRes.json()) as SelectSeedbank;
+      candidateChild.authorBottom = otherSeedbank.id;
+      await addConfirmedPlant(candidateChild, data.garden.id, data.seedBank.id);
+      await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
+
+      const event: EventBody = {
+        name: "newPlantPollination",
+        payload: {
+          ...candidateChild
+        }
+      };
+      const eventRes = await fetch("/api/events", {
+        method: "POST",
+        body: JSON.stringify(event)
+      });
+      console.log("event response:", eventRes.status, eventRes.statusText);
+
+      candidateChild = null;
+      busy = false;
+    } else {
+      console.error("Missing data", { candidateChild, otherUserSeedbankId });
+    }
+  }
 </script>
 
 <ReturnButton functionReturn={handleReturn}></ReturnButton>
@@ -206,19 +239,7 @@
         setupStream(stream);
       });
     }}
-    onConfirm={async (updatedPlant) => {
-      if (candidateChild) {
-        candidateChild = updatedPlant;
-        await addConfirmedPlant(
-          candidateChild,
-          data.garden.id,
-          data.seedBank.id
-        );
-        await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
-        candidateChild = null;
-        busy = false;
-      }
-    }}
+    onConfirm={insertNewPlant}
   />
 {/if}
 

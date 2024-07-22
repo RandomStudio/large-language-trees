@@ -6,6 +6,7 @@ import { ADMIN_GARDEN_SHARED, OPENAI_API_KEY } from "$env/static/private";
 import {
   gardens,
   gardensToPlants,
+  generatedImages,
   plants,
   promptSettingsTable,
   seedbanks,
@@ -38,6 +39,7 @@ import {
 } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 import DefaultPrompt from "../../defaults/prompt-config";
+import { publishEvent } from "./realtime";
 
 export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -95,7 +97,7 @@ export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
     with: { plantsInSeedbank: { with: { plant: true } } }
   });
   if (seedBank) {
-    console.log(JSON.stringify({ seedBank }));
+    // console.log(JSON.stringify({ seedBank }));
     return seedBank;
   } else {
     const user = await getUserById(userId);
@@ -130,6 +132,10 @@ export const createNewSeedbank = async (userId: string) => {
   }
 
   const thePlant = await getNewPlantForUser();
+
+  if (thePlant) {
+    await publishEvent({ name: "newUserFirstPlant", payload: { ...thePlant } });
+  }
 
   await addPlantToSeedbank(thePlant.id, newSeedbank.id);
 
@@ -357,6 +363,7 @@ export const cleanUp = async () => {
   await db.delete(users);
   await db.delete(plants);
   await db.delete(promptSettingsTable);
+  await db.delete(generatedImages);
   console.log("...cleanup complete!");
 };
 
