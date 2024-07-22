@@ -11,12 +11,7 @@ export const load: PageServerLoad = async ({
   locals,
   params
 }): Promise<EnhancedGardenViewData> => {
-  // const username = locals.user?.username;
   const userId = locals.user?.id;
-  // if (!username) {
-  //   console.log("Not logged in!");
-  //   redirect(302, "/login");
-  // }
 
   console.log("******** (re)load page data");
   if (userId) {
