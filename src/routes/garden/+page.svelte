@@ -361,6 +361,11 @@
       }
     }
   }
+  let showDescriptionBox: number | null = null;
+
+  function displayDescriptionBox(plantId: number) {
+    showDescriptionBox = showDescriptionBox === plantId ? null : plantId;
+  }
 
   $: displayPlants, calculateExtraGrassImages(displayPlants);
 
@@ -372,36 +377,35 @@
   });
 </script>
 
-<body>
-  <div
-    class="bg-repeat h-screen fixed"
-    style="background-color: darkblue; width: 100vw; margin-top: -0px;"
-  ></div>
-  <div
-    id="container"
-    class="fixed top-0 left-0 w-screen h-screen text-roel_blue"
+<div
+  class="h-screen fixed bg-roel_purple font-primer"
+  style=" width: 100vw; margin-top: -0px;"
+></div>
+<div id="container" class="fixed top-0 left-0 w-screen h-screen">
+  <img
+    src="livinggarden_QR.png"
+    alt=""
+    class="fixed"
+    style="width: 120px; margin-top: 50px; margin-left: 50px; background-color: #9EE093;"
+  />
+  <h1
+    class="fixed text-roel_green"
+    style="margin-top: 175px; margin-left: 50px; font-size:20px;"
   >
+    Join the Garden!
+  </h1>
+  {#each displayPlants as plant}
+    <!-- Plant images and grass below -->
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <img
-      src="livinggarden_QR.png"
+      on:click={() => {
+        console.log(plant.plant.id);
+      }}
+      src={plant.plant.imageUrl}
       alt=""
-      class="fixed"
-      style="width: 120px; margin-top: 50px; margin-left: 50px; background-color: #9EE093;"
-    />
-    <h1 class="fixed" style="margin-top: 175px; margin-left: 50px;">
-      Join the garden!
-    </h1>
-    {#each displayPlants as plant}
-      <!-- Plant images and grass below -->
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-      <img
-        on:click={() => {
-          console.log(plant.plant.id);
-        }}
-        src={plant.plant.imageUrl}
-        alt=""
-        class="fixed skew-animated"
-        style="
+      class="fixed skew-animated"
+      style="
           margin-left: {plant.proposedX - scaleFunction(plant.plant) / 2}px;
           margin-top: {plant.proposedY - scaleFunction(plant.plant)}px;
           width: {scaleFunction(plant.plant)}px;
@@ -413,68 +417,128 @@
           --skew-degrees: {skewDegrees}deg;
           --negative-skew-degrees: -{skewDegrees}deg;
         "
-      />
-      <img
-        src="grassjess.png"
-        alt=""
-        class="fixed"
-        style="
+    />
+    <img
+      src="grassjess.png"
+      alt=""
+      class="fixed"
+      style="
           margin-left: {grassbehindmain(plant).x}px;
           margin-top: {grassbehindmain(plant).y}px;
           width: {grassbehindmain(plant).size}px;
           z-index: {Math.round(plant.proposedY) - 1};
           transform: {grassbehindmain(plant).flipped
-          ? 'scaleX(-1)'
-          : 'scaleX(1)'};
+        ? 'scaleX(-1)'
+        : 'scaleX(1)'};
         "
-      />
-      <img
-        src="grassjess.png"
-        alt=""
-        class="fixed"
-        style="
+    />
+    <img
+      src="grassjess.png"
+      alt=""
+      class="fixed"
+      style="
           margin-left: {grassfrontmain(plant).x}px;
           margin-top: {grassfrontmain(plant).y}px;
           width: {grassfrontmain(plant).size}px;
           z-index: {Math.round(plant.proposedY) + 1};
           transform: {grassfrontmain(plant).flipped
-          ? 'scaleX(-1)'
-          : 'scaleX(1)'};
+        ? 'scaleX(-1)'
+        : 'scaleX(1)'};
         "
-      />
-      {#each randomextragrass(plant) as grass}
-        <img
-          src="grassjess.png"
-          alt=""
-          class="fixed grass-outline"
-          style="
+    />
+    {#each randomextragrass(plant) as grass}
+      <img
+        src="grassjess.png"
+        alt=""
+        class="fixed grass-outline"
+        style="
             margin-left: {grass.x}px;
             margin-top: {grass.y}px;
             width: {grass.size}px;
             z-index: {Math.round(plant.proposedY) - 1};
             transform: {grass.flipped ? 'scaleX(-1)' : 'scaleX(1)'};
           "
-        />
-      {/each}
+      />
     {/each}
-    {#each extraGrassImages as grass}
-      <img
-        src="grassjess.png"
-        alt=""
-        class="fixed"
-        style="
+    <svg
+      width="120"
+      height="50"
+      xmlns="http://www.w3.org/2000/svg"
+      style="
+    position: absolute;
+    margin-left: {plant.proposedX - 60}px;
+    margin-top: {plant.proposedY + scaleFunction(plant.plant) - 80}px;
+    z-index: {Math.round(plant.proposedY) + 2};
+  "
+    >
+      <rect width="120" height="50" fill="#C8F58F" />
+      <text
+        x="50%"
+        y="50%"
+        dominant-baseline="middle"
+        text-anchor="middle"
+        fill="#6d28d9"
+        font-size="20px"
+      >
+        Description
+      </text>
+    </svg>
+  {/each}
+  {#each extraGrassImages as grass}
+    <img
+      src="grassjess.png"
+      alt=""
+      class="fixed"
+      style="
           margin-left: {grass.x}px;
           margin-top: {grass.y}px;
           width: {grass.size}px;
           z-index: 0;
           transform: {grass.flipped ? 'scaleX(-1)' : 'scaleX(1)'};
         "
-      />
-    {/each}
-  </div>
-</body>
+    />
+  {/each}
+</div>
 
 <style>
+  @keyframes skew-animation {
+    0% {
+      transform: skew(var(--skew-degrees));
+      left: var(--skew-offset);
+    }
+    50% {
+      transform: skew(var(--negative-skew-degrees));
+      left: 0;
+    }
+    100% {
+      transform: skew(var(--skew-degrees));
+      left: var(--skew-offset);
+    }
+  }
+
+  @keyframes birth-animation {
+    0% {
+      scale: 0;
+      padding-top: var(--padding-top);
+    }
+
+    100% {
+      scale: 1;
+      padding-top: 0px;
+    }
+  }
+
+  .skew-animated {
+    animation:
+      skew-animation var(--skew-animation-length) infinite
+        var(--skew-animation-delay),
+      birth-animation 2s ease-out;
+  }
+
+  .grass-outline {
+    filter: drop-shadow(0 0 3px black) drop-shadow(0 0 3px black);
+  }
+
   .body {
     background-color: blue;
   }
