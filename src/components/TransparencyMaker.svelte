@@ -240,7 +240,7 @@
         replaceImageColorsWithPalette(funkyColorPalette, imageData, ctx);
 
         //Pixelate
-        pixelateImage(imageData, ctx);
+        //pixelateImage(imageData, ctx);
 
         //Adding a black background
         //addBlackBackground(imageData, ctx);
