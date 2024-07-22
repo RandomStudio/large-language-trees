@@ -102,3 +102,8 @@ export interface PromptConfig {
     instructions: string;
   };
 }
+
+export interface EventBody {
+  name: string;
+  payload: any;
+}
