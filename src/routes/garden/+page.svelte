@@ -378,8 +378,8 @@
 </script>
 
 <div
-  class="h-screen fixed bg-roel_purple font-primer"
-  style=" width: 100vw; margin-top: -0px;"
+  class="h-screen fixed bg-roel_purple"
+  style=" width: 100vw; margin-top: -0px; font-primer;"
 ></div>
 <div id="container" class="fixed top-0 left-0 w-screen h-screen">
   <img
@@ -389,8 +389,8 @@
     style="width: 120px; margin-top: 50px; margin-left: 50px; background-color: #9EE093;"
   />
   <h1
-    class="fixed text-roel_green"
-    style="margin-top: 175px; margin-left: 50px; font-size:20px;"
+    class="fixed text-roel_green font-primer; text-3xl"
+    style="margin-top: 175px; margin-left: 50px;"
   >
     Join the Garden!
   </h1>
@@ -409,7 +409,7 @@
           margin-left: {plant.proposedX - scaleFunction(plant.plant) / 2}px;
           margin-top: {plant.proposedY - scaleFunction(plant.plant)}px;
           width: {scaleFunction(plant.plant)}px;
-          z-index: {Math.round(plant.proposedY)};
+          z-index: z-index: {Math.round(plant.proposedY) + 3};
           --skew-animation-delay: {(Math.random() * -animationLength) / 3}s;
           --skew-animation-length: {animationLength}s;
           --padding-top: {scaleFunction(plant.plant) * 0.6}px;
@@ -423,10 +423,11 @@
       alt=""
       class="fixed"
       style="
+      position: absolute;
           margin-left: {grassbehindmain(plant).x}px;
           margin-top: {grassbehindmain(plant).y}px;
           width: {grassbehindmain(plant).size}px;
-          z-index: {Math.round(plant.proposedY) - 1};
+          z-index: {Math.round(plant.proposedY)};;
           transform: {grassbehindmain(plant).flipped
         ? 'scaleX(-1)'
         : 'scaleX(1)'};
@@ -437,10 +438,11 @@
       alt=""
       class="fixed"
       style="
+      position:absolute;
           margin-left: {grassfrontmain(plant).x}px;
           margin-top: {grassfrontmain(plant).y}px;
           width: {grassfrontmain(plant).size}px;
-          z-index: {Math.round(plant.proposedY) + 1};
+          z-index: {Math.round(plant.proposedY) + 2};
           transform: {grassfrontmain(plant).flipped
         ? 'scaleX(-1)'
         : 'scaleX(1)'};
@@ -455,34 +457,27 @@
             margin-left: {grass.x}px;
             margin-top: {grass.y}px;
             width: {grass.size}px;
-            z-index: {Math.round(plant.proposedY) - 1};
+            z-index: {Math.round(plant.proposedY) + 3};
             transform: {grass.flipped ? 'scaleX(-1)' : 'scaleX(1)'};
           "
       />
     {/each}
-    <svg
-      width="120"
-      height="50"
-      xmlns="http://www.w3.org/2000/svg"
-      style="
-    position: absolute;
-    margin-left: {plant.proposedX - 60}px;
-    margin-top: {plant.proposedY + scaleFunction(plant.plant) - 80}px;
-    z-index: {Math.round(plant.proposedY) + 2};
-  "
-    >
-      <rect width="120" height="50" fill="#C8F58F" />
-      <text
-        x="50%"
-        y="50%"
-        dominant-baseline="middle"
-        text-anchor="middle"
-        fill="#6d28d9"
-        font-size="20px"
+    {#if plant.plant.parent1 === null}
+      <div
+        class="inline-block px-2 py-1 bg-roel_green text-roel_purple font-primer text-3xl"
+        style="
+        position: absolute;
+        margin-left: {plant.proposedX}px;
+        margin-top: {plant.proposedY -
+          scaleFunction(plant.plant) +
+          60}px; <!-- Adjust based on desired placement -->
+        z-index: {Math.round(plant.proposedY) + 4};
+      "
       >
         Description
-      </text>
-    </svg>
+        <!-- ... -->
+      </div>
+    {/if}
   {/each}
   {#each extraGrassImages as grass}
     <img
@@ -490,6 +485,7 @@
       alt=""
       class="fixed"
       style="
+      position: absolute;
           margin-left: {grass.x}px;
           margin-top: {grass.y}px;
           width: {grass.size}px;
@@ -535,10 +531,6 @@
       birth-animation 2s ease-out;
   }
 
-  .grass-outline {
-    filter: drop-shadow(0 0 3px black) drop-shadow(0 0 3px black);
-  }
-
   .body {
     background-color: blue;
   }
@@ -575,9 +567,5 @@
       skew-animation var(--skew-animation-length) infinite
         var(--skew-animation-delay),
       birth-animation 2s ease-out;
-  }
-
-  .grass-outline {
-    filter: drop-shadow(0 0 3px black) drop-shadow(0 0 3px black);
   }
 </style>

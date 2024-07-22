@@ -164,7 +164,7 @@
 
 <ReturnButton functionReturn={handleReturn}></ReturnButton>
 
-<div class="mx-12 font-inter text-roel_blue text-left">
+<div class="mx-12 font-primer text-roel_blue text-left">
   {#if parent1}
     <p class=" text-xl">
       Point your camera to another gardeners Pollination QR to start
