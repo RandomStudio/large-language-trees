@@ -15,6 +15,7 @@
   } from "./confirmBreed";
   import type {
     EnhancedGardenViewData,
+    EventBody,
     InsertPlant,
     SelectPlant,
     SelectSeedbank
@@ -172,6 +173,19 @@
       candidateChild.authorBottom = otherSeedbank.id;
       await addConfirmedPlant(candidateChild, data.garden.id, data.seedBank.id);
       await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
+
+      const event: EventBody = {
+        name: "newPlantPollination",
+        payload: {
+          ...candidateChild
+        }
+      };
+      const eventRes = await fetch("/api/events", {
+        method: "POST",
+        body: JSON.stringify(event)
+      });
+      console.log("event response:", eventRes.status, eventRes.statusText);
+
       candidateChild = null;
       busy = false;
     } else {
