@@ -220,6 +220,29 @@
           [128, 128, 0], // Olive (another shade)
           [0, 0, 128] // Navy (another shade)
         ];
+        const finalColors = [
+          [43, 128, 26], // 2B801A
+          [59, 143, 148], // 3B8F94
+          [59, 255, 87], // 3BFF57
+          [61, 173, 39], // 3DAD27
+          [75, 0, 130], // 4B0082
+          [83, 201, 207], // 53C9CF
+          [123, 0, 214], // 7B00D6
+          [125, 249, 255], // 7DF9FF
+          [149, 0, 255], // 9500FF
+          [255, 0, 0], // FF0000
+          [255, 0, 128], // FF0080
+          [255, 91, 91], // FF5B5B
+          [255, 100, 177], // FF64B1
+          [255, 106, 0], // FF6A00
+          [255, 141, 59], // FF8D3B
+          [255, 158, 207], // FF9ECF
+          [255, 175, 118], // FFAF76
+          [255, 185, 185], // FFB9B9
+          [255, 225, 0], // FFE100
+          [255, 233, 68], // FFE944
+          [255, 238, 112] // FFEE70
+        ];
 
         //remove the bakcground
         removeBackgroundWithPoints();
@@ -237,7 +260,7 @@
         fillHolesInImage(imageData, ctx, 100);
 
         // // Get the new colors
-        replaceImageColorsWithPalette(funkyColorPalette, imageData, ctx);
+        replaceImageColorsWithPalette(finalColors, imageData, ctx);
 
         //Pixelate
         //pixelateImage(imageData, ctx);
