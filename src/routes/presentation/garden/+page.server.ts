@@ -14,10 +14,10 @@ export const load: PageServerLoad = async ({
   const userId = locals.user?.id;
   if (!username) {
     console.log("Not logged in!");
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 
-  console.log("gallery ******** (re)load page data");
+  console.log("******** (re)load page data");
   if (userId) {
     const garden = await getUserGarden(userId);
     const seedBank = await getUserSeeds(userId);
@@ -38,20 +38,5 @@ export const load: PageServerLoad = async ({
     }
   } else {
     throw Error("userId missing");
-  }
-};
-
-export const actions: Actions = {
-  logout: async (event) => {
-    if (!event.locals.session) {
-      return fail(401);
-    }
-    await lucia.invalidateSession(event.locals.session.id);
-    const sessionCookie = lucia.createBlankSessionCookie();
-    event.cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: ".",
-      ...sessionCookie.attributes
-    });
-    redirect(302, "/");
   }
 };

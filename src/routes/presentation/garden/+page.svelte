@@ -8,7 +8,7 @@
   export let data: GardenViewData;
 
   import { onMount } from "svelte";
-  import { HEIGHT_PROPERTY_KEY } from "../../defaults/constants";
+  import { HEIGHT_PROPERTY_KEY } from "../../../defaults/constants";
 
   //constants relating to making plants not overlap
   const initialCrowdednessTolerance = 500;

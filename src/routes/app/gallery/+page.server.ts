@@ -14,10 +14,10 @@ export const load: PageServerLoad = async ({
   const userId = locals.user?.id;
   if (!username) {
     console.log("Not logged in!");
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 
-  console.log("******** (re)load page data");
+  console.log("gallery ******** (re)load page data");
   if (userId) {
     const garden = await getUserGarden(userId);
     const seedBank = await getUserSeeds(userId);
@@ -52,6 +52,6 @@ export const actions: Actions = {
       path: ".",
       ...sessionCookie.attributes
     });
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 };

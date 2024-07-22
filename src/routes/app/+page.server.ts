@@ -14,7 +14,7 @@ export const load = async ({ locals }) => {
   const username = locals.user?.username;
   if (username) {
     console.log("You are already logged in!");
-    redirect(302, "/gallery");
+    redirect(302, "/app/gallery");
   }
 };
 
@@ -92,10 +92,10 @@ export const actions = {
       });
 
       if (username === "admin") {
-        redirect(302, "/admin");
+        redirect(302, "/app/admin");
       } else {
         await publishEvent({ name: "newUser", payload: { userId, username } });
-        redirect(302, "/startwindow");
+        redirect(302, "/app/startwindow");
       }
     } else {
       // This is an existing user, so try to log in
@@ -121,9 +121,9 @@ export const actions = {
       });
 
       if (username === "admin") {
-        redirect(302, "/garden");
+        redirect(302, "/presentation/garden");
       } else {
-        redirect(302, "/gallery");
+        redirect(302, "/app/gallery");
       }
     }
   }

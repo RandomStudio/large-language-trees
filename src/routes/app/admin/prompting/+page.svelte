@@ -11,14 +11,14 @@
     pickMultipleRandomElements,
     pickRandomElement
   } from "random-elements";
-  import PromptConfigSection from "../../../components/PromptConfigSection.svelte";
+  import PromptConfigSection from "../../../../components/PromptConfigSection.svelte";
   import { onMount } from "svelte";
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-  import Spinner from "../../../components/Spinner.svelte";
-  import DefaultPrompt from "../../../defaults/prompt-config";
-  import type { GeneratePlantRequestBody } from "../../api/plants/generate/types";
-  import { type GenerateImageRequest } from "../../api/images/generate/types";
-  import TransparencyMaker from "../../../components/TransparencyMaker.svelte";
+  import Spinner from "../../../../components/Spinner.svelte";
+  import DefaultPrompt from "../../../../defaults/prompt-config";
+  import type { GeneratePlantRequestBody } from "../../../api/plants/generate/types";
+  import { type GenerateImageRequest } from "../../../api/images/generate/types";
+  import TransparencyMaker from "../../../../components/TransparencyMaker.svelte";
   import { v4 as uuidv4 } from "uuid";
 
   enum Tabs {
@@ -157,7 +157,7 @@
 <main class="container p-4 w-screen">
   <h1 class="text-xl">Prompt Editor</h1>
   <div>
-    <a href="/admin" class="text-xs italic">← Back to admin</a>
+    <a href="/app/admin" class="text-xs italic">← Back to admin</a>
   </div>
 
   <button

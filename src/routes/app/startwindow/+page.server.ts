@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({
   const userId = locals.user?.id;
   if (!username) {
     console.log("Not logged in!");
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 
   console.log("******** (re)load page data");

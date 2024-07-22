@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type GardenViewData } from "../../lib/types";
-  import PlantDisplay from "../../components/PlantDisplay.svelte";
-  import QrGenerate from "../../components/qr_generate.svelte";
-  import ButtonBottom from "../../components/ButtonBottom.svelte";
+  import { type GardenViewData } from "../../../lib/types";
+  import PlantDisplay from "../../../components/PlantDisplay.svelte";
+  import QrGenerate from "../../../components/qr_generate.svelte";
+  import ButtonBottom from "../../../components/ButtonBottom.svelte";
 
   export let data: GardenViewData;
 

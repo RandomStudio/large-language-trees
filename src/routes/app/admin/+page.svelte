@@ -1,5 +1,5 @@
 <script lang="ts">
-  import UserLoginStatus from "../../components/UserLoginStatus.svelte";
+  import UserLoginStatus from "../../../components/UserLoginStatus.svelte";
   import type { AdminViewData } from "./+page.server";
 
   export let data: AdminViewData;
@@ -44,7 +44,7 @@
     <h2 class="font-bold">Prompt engineering</h2>
     <ul>
       <li>
-        <a href="/admin/prompting" class="underline"
+        <a href="./admin/prompting" class="underline"
           >Test text/image generation...</a
         >
       </li>
@@ -55,7 +55,7 @@
     <p>
       When you're ready, you can proceed to the admin user's <a
         class="underline font-bold"
-        href="/garden">garden...</a
+        href="/app/garden">garden...</a
       >
     </p>
   </div>

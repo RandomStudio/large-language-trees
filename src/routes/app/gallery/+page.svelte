@@ -1,10 +1,10 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type GardenViewData, type SelectPlant } from "../../lib/types";
+  import { type GardenViewData, type SelectPlant } from "../../../lib/types";
   import { onMount } from "svelte";
   export let data: GardenViewData;
-  import PlantDisplay from "../../components/PlantDisplay.svelte";
-  import PopupInfo from "../../components/PopupInfo.svelte";
+  import PlantDisplay from "../../../components/PlantDisplay.svelte";
+  import PopupInfo from "../../../components/PopupInfo.svelte";
 
   import { invalidateAll } from "$app/navigation";
   import moment from "moment";

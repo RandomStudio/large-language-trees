@@ -2,7 +2,7 @@ import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
-import { plants, promptSettingsTable, users } from "$lib/server/schema";
+import { plants, users } from "$lib/server/schema";
 import { lucia } from "$lib/server/auth";
 import {
   cleanUp,
@@ -12,7 +12,7 @@ import {
   populateDefaultPromptSettings
 } from "$lib/server";
 import type { SelectPlant, SelectPromptSettings } from "$lib/types";
-import DefaultPrompt from "../../defaults/prompt-config";
+import DefaultPrompt from "../../../defaults/prompt-config";
 
 export interface AdminViewData {
   username: string;
@@ -26,7 +26,7 @@ export const load: PageServerLoad<AdminViewData> = async ({ locals }) => {
   const userId = locals.user?.id;
   if (!username) {
     console.log("Not logged in!");
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 
   if (userId) {
@@ -41,7 +41,7 @@ export const load: PageServerLoad<AdminViewData> = async ({ locals }) => {
       return { username, isAdmin: true, allPlants, promptSettings };
     } else {
       console.error(`User ${userId} is not an admin; not authorised`);
-      redirect(302, "/logout");
+      redirect(302, "/app/logout");
     }
   } else {
     throw Error("userId missing");
@@ -59,12 +59,12 @@ export const actions: Actions = {
       path: ".",
       ...sessionCookie.attributes
     });
-    redirect(302, "/");
+    redirect(302, "/app");
   },
   reset: async (_event) => {
     console.warn("Full reset happening!");
     await cleanUp();
-    redirect(302, "/");
+    redirect(302, "/app");
   },
   initData: async (_event) => {
     console.warn("Plants initialisation...");

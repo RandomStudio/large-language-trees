@@ -1,12 +1,12 @@
 <script lang="ts">
-  import QrGenerate from "../../../../components/qr_generate.svelte";
+  import QrGenerate from "../../../../../components/qr_generate.svelte";
   import { onMount, onDestroy } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "./ConfirmBreedPopup.svelte";
-  import PopupDejaVu from "../../../../components/popupDejaVu.svelte";
+  import PopupDejaVu from "../../../../../components/popupDejaVu.svelte";
   import { goto } from "$app/navigation";
-  import ReturnButton from "../../../../components/ReturnButton.svelte";
-  import WaitingSpinner from "../../../../components/WaitingSpinner.svelte";
+  import ReturnButton from "../../../../../components/ReturnButton.svelte";
+  import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
 
   import {
     addConfirmedPlant,
@@ -152,12 +152,12 @@
       console.error("Unknown error: ", err);
     }
     stopStream();
-    goto("/gallery");
+    goto("/app/gallery");
   }
 
   function handleReturn() {
     stopStream();
-    goto("/gallery");
+    goto("/app/gallery");
   }
 
   onDestroy(() => {

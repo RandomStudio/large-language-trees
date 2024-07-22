@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   const userId = locals.user?.id;
   if (!username) {
     console.log("Not logged in!");
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 
   console.log("******** (re)load page data");
@@ -19,21 +19,5 @@ export const load: PageServerLoad = async ({ locals }) => {
     return { seeds, newSeed: null, username, garden };
   } else {
     throw Error("userId missing");
-  }
-};
-
-export const actions: Actions = {
-  // This is for logout
-  default: async (event) => {
-    if (!event.locals.session) {
-      return fail(401);
-    }
-    await lucia.invalidateSession(event.locals.session.id);
-    const sessionCookie = lucia.createBlankSessionCookie();
-    event.cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: ".",
-      ...sessionCookie.attributes
-    });
-    redirect(302, "/");
   }
 };

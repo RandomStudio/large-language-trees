@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   const userId = locals.user?.id;
   if (!username) {
     console.log("Not logged in!");
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 
   if (userId) {
@@ -28,6 +28,6 @@ export const actions: Actions = {
       path: ".",
       ...sessionCookie.attributes
     });
-    redirect(302, "/");
+    redirect(302, "/app");
   }
 };
