@@ -149,7 +149,7 @@ export const createNewSeedbank = async (userId: string) => {
   }
 };
 
-async function getNewPlantForUser() {
+async function getNewPlantForUser(): Promise<InsertPlant> {
   // We look for plants that have not been assigned to any seedbank (yet)
   // This is safe for now, because we don't expect the number of users (and thus seedbanks)
   // to exceed the number of available plants.

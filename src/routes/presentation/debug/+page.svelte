@@ -63,7 +63,19 @@
   <ul>
     {#each data.displays as display}
       <li>
-        #{display.id}: "{display.name}"
+        <h3>
+          #{display.id}: "{display.name}"
+        </h3>
+        <p>
+          Contents: {display.contents === null
+            ? "empty"
+            : JSON.stringify(display.contents)}
+        </p>
+        <p>
+          Last updated: {display.lastUpdated === null
+            ? "unknown"
+            : display.lastUpdated}
+        </p>
       </li>
     {/each}
   </ul>

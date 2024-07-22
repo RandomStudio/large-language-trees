@@ -110,3 +110,23 @@ export interface EventBody {
   name: string;
   payload: any;
 }
+
+export interface EventNewUser extends EventBody {
+  name: "newUser";
+  payload: {
+    userId: string;
+    username: string;
+  };
+}
+
+export interface EventFirstPlant extends EventBody {
+  name: "newUserFirstPlant";
+  payload: InsertPlant;
+}
+
+export interface EventNewPollination extends EventBody {
+  name: "newPlantPollination";
+  payload: InsertPlant;
+}
+
+export type EventTypes = EventNewUser | EventFirstPlant | EventNewPollination;
