@@ -7,6 +7,7 @@
     TetherAgent
   } from "tether-agent";
 
+  let connected = false;
   let messages: string[] = [];
 
   let agent: TetherAgent | null = null;
@@ -22,6 +23,8 @@
       }
     });
 
+    connected = true;
+
     const incoming = await InputPlug.create(agent, "events");
     incoming.on("message", (payload, topic) => {
       console.log("received message on", topic);
@@ -34,11 +37,15 @@
   });
 
   onDestroy(async () => {
+    connected = false;
     agent?.disconnect();
   });
 </script>
 
 <h1>This is the debug mode for Presentation views</h1>
+<div>
+  Tether: {connected ? "✅ connected" : "❌ not connected"}
+</div>
 
 <h2>Incoming Events</h2>
 <h3>Received {messages.length} events</h3>
