@@ -9,7 +9,7 @@
   export let plantDetails: SelectPlant;
   export let closePopup: () => any;
 
-  let imageUrl: string = plantDetails.imageUrl;
+  let imageUrl: string | null = plantDetails.imageUrl;
   let backgroundColor = "rgb(156, 163, 175)";
   let circleColor = "rgb(129, 140, 153)";
   let imgWidth = 0;
