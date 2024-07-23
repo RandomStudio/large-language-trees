@@ -114,7 +114,7 @@
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant == yourPlant}
+    isOriginalPlant={selectedPlant.id == yourPlant.id}
     isPollinatingPlant={Math.abs(
       moment().diff(moment(selectedPlant.created), "minutes")
     ) > 5}
