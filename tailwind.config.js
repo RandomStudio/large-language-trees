@@ -12,7 +12,7 @@ module.exports = {
         'roel_purple': '#4B0082'
       },
       scale: {
-        '125': '1.25',
+        125: "1.25"
       },
       fontFamily: {
         'garamond': ['Garamond', 'serif'],
@@ -22,5 +22,5 @@ module.exports = {
       },
     }
   },
-  plugins: [],
-}
+  plugins: [require("@tailwindcss/forms")]
+};

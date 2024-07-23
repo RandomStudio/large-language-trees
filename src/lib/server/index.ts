@@ -6,7 +6,9 @@ import { ADMIN_GARDEN_SHARED, OPENAI_API_KEY } from "$env/static/private";
 import {
   gardens,
   gardensToPlants,
+  generatedImages,
   plants,
+  promptSettingsTable,
   seedbanks,
   seedbanksToPlants,
   sessions,
@@ -30,8 +32,14 @@ import type {
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
-import { pickMultipleRandomElements, pickRandomElement, pickRandomIndexes } from "random-elements";
+import {
+  pickMultipleRandomElements,
+  pickRandomElement,
+  pickRandomIndexes
+} from "random-elements";
 import { defaultUsers } from "../../defaults/users";
+import DefaultPrompt from "../../defaults/prompt-config";
+import { publishEvent } from "./realtime";
 
 export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -48,6 +56,19 @@ export const populateDefaultPlants = async () => {
       });
     })
   );
+};
+
+export const populateDefaultPromptSettings = async () => {
+  const defaultPromptSettings = DefaultPrompt;
+  await db.insert(promptSettingsTable).values({
+    id: uuidv4(),
+    textModel: defaultPromptSettings.text.model,
+    textPreamble: defaultPromptSettings.text.preamble.text,
+    textExplanation: defaultPromptSettings.text.explanation.text,
+    textInstructions: defaultPromptSettings.text.instructions.text,
+    imageModel: defaultPromptSettings.image.model,
+    imageInstructions: defaultPromptSettings.image.instructions
+  });
 };
 
 export const getUserByUsername = async (
@@ -76,7 +97,7 @@ export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
     with: { plantsInSeedbank: { with: { plant: true } } }
   });
   if (seedBank) {
-    console.log(JSON.stringify({ seedBank }));
+    // console.log(JSON.stringify({ seedBank }));
     return seedBank;
   } else {
     const user = await getUserById(userId);
@@ -112,25 +133,26 @@ export const createNewSeedbank = async (userId: string) => {
 
   const thePlant = await getNewPlantForUser();
 
+  if (thePlant) {
+    await publishEvent({ name: "newUserFirstPlant", payload: { ...thePlant } });
+  }
+
   await addPlantToSeedbank(thePlant.id, newSeedbank.id);
-  
-    if (ADMIN_GARDEN_SHARED === "true") {
-      console.warn(
-        "ADMIN_GARDEN_SHARED enabled, so we will also add this plant to the admin user's seedbank..."
-      );
-      const adminSeedbank = await getUserSeeds(adminUser.id);
-      if (adminUser && adminSeedbank) {
-        addPlantToSeedbank(thePlant.id, adminSeedbank.id);
-      } else {
-        throw Error("admin user not found or admin seedbank not found");
-      }
+
+  if (ADMIN_GARDEN_SHARED === "true") {
+    console.warn(
+      "ADMIN_GARDEN_SHARED enabled, so we will also add this plant to the admin user's seedbank..."
+    );
+    const adminSeedbank = await getUserSeeds(adminUser.id);
+    if (adminUser && adminSeedbank) {
+      addPlantToSeedbank(thePlant.id, adminSeedbank.id);
+    } else {
+      throw Error("admin user not found or admin seedbank not found");
     }
+  }
+};
 
-
-}
-
-
-async function getNewPlantForUser(){
+async function getNewPlantForUser() {
   // We look for plants that have not been assigned to any seedbank (yet)
   // This is safe for now, because we don't expect the number of users (and thus seedbanks)
   // to exceed the number of available plants.
@@ -139,23 +161,25 @@ async function getNewPlantForUser(){
     .from(plants)
     .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
     .where(isNull(seedbanksToPlants));
-  if (plantsToAdd.length>0) {
+  if (plantsToAdd.length > 0) {
     // await db.insert(seedbanksToPlants).values({
     //   seedbankId: newSeedbank.id,
     //   plantId: plant[0].plants.id
     // });
     const thePlant = plantsToAdd[0].plants;
-    return thePlant
+    return thePlant;
   } else {
     // TODO: we could, instead, pick a random new plant, or even generate one
-    const randomPlants = await db.query.plants.findMany({where:isNull(plants.parent1)});
-    if (randomPlants.length ==0){
+    const randomPlants = await db.query.plants.findMany({
+      where: isNull(plants.parent1)
+    });
+    if (randomPlants.length == 0) {
       throw Error("No original plants");
     }
-   
+
     const randomPlant = pickRandomElement(randomPlants);
 
-    return randomPlant
+    return randomPlant;
   }
 }
 
@@ -338,6 +362,8 @@ export const cleanUp = async () => {
   await db.delete(sessions);
   await db.delete(users);
   await db.delete(plants);
+  await db.delete(promptSettingsTable);
+  await db.delete(generatedImages);
   console.log("...cleanup complete!");
 };
 

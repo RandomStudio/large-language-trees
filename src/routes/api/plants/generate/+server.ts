@@ -1,49 +1,56 @@
-import { error, json, type RequestHandler } from "@sveltejs/kit";
+import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import type { Characteristics, InsertPlant, SelectPlant } from "$lib/types";
+import type { InsertPlant, SelectPlant } from "$lib/types";
 import { v4 as uuidv4 } from "uuid";
-import DefaultPrompt from "../../../../defaults/prompt-config";
+import { getPromptSettings } from "$lib/server/promptSettings";
+import { buildTextPrompt } from "$lib/promptUtils";
+import type { GeneratePlantRequestBody } from "./types";
 
 export const POST: RequestHandler = async ({ request }) => {
   //return error(500)
-  const data = (await request.json()) as {
-    prompt: ChatCompletionMessageParam[];
-    parents: [SelectPlant, SelectPlant];
-  };
+  const data = (await request.json()) as GeneratePlantRequestBody;
 
-  const { prompt, parents } = data;
+  const { prompt, parents, model } = data;
+  const [plant1, plant2] = parents;
+  const promptSettings = await getPromptSettings();
 
   let offspring: InsertPlant | null = null;
 
-  if (prompt && parents) {
-    console.log("Using prompt: ******** \n", prompt);
+  const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
-    const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+  const completion = await openai.chat.completions.create({
+    messages: prompt || buildTextPrompt(promptSettings, plant1, plant2),
+    model: model || promptSettings.text.model,
+    response_format: { type: "json_object" }
+  });
 
-    const completion = await openai.chat.completions.create({
-      messages: prompt,
-      model: DefaultPrompt.text.model
+  console.log("response:", completion.choices);
+
+  if (completion.usage) {
+    const { prompt_tokens, completion_tokens, total_tokens } = completion.usage;
+    console.log("Usage stats", {
+      prompt_tokens,
+      completion_tokens,
+      total_tokens
     });
+  }
 
-    console.log("response:", completion.choices);
+  for (const res of completion.choices) {
+    console.log(JSON.stringify(res));
+    const formattedContent = res.message.content || "{}";
 
-    for (const res of completion.choices) {
-      console.log(JSON.stringify(res));
-      const formattedContent = res.message.content || "{}";
-
-      const parsedPlant = await parseNewPlant(formattedContent, [
-        parents[0].id,
-        parents[1].id
-      ]);
-      if (parsedPlant) {
-        offspring = parsedPlant;
-        console.log("Offspring:", offspring);
-      } else {
-        // offpsring will stay "null"
-        console.error("Oops, couldn't parse the offspring text");
-      }
+    const parsedPlant = await parseNewPlant(formattedContent, [
+      parents[0].id,
+      parents[1].id
+    ]);
+    if (parsedPlant) {
+      offspring = parsedPlant;
+      console.log("Offspring:", offspring);
+    } else {
+      // offpsring will stay "null"
+      console.error("Oops, couldn't parse the offspring text");
     }
   }
 
@@ -55,10 +62,7 @@ const parseNewPlant = async (
   parentIds: [string, string]
 ): Promise<InsertPlant> => {
   try {
-    const cleanText = text
-      .trim()
-      .replaceAll("```json", "")
-      .replaceAll("```", "");
+    const cleanText = text.trim().replaceAll("\n", "");
 
     const json = JSON.parse(cleanText);
 

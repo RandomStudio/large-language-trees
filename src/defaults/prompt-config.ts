@@ -1,24 +1,8 @@
-export interface PromptSection {
-  label: string;
-  description: string;
-  text: string;
-}
-export interface PromptConfig {
-  text: {
-    model: "gpt-3.5-turbo" | "gpt-4-turbo";
-    preamble: PromptSection;
-    explanation: PromptSection;
-    instructions: PromptSection;
-  };
-  image: {
-    model: "dall-e-3";
-    instructions: string;
-  };
-}
+import type { PromptConfig } from "$lib/types";
 
 const DefaultPrompt: PromptConfig = {
   text: {
-    model: "gpt-3.5-turbo",
+    model: "gpt-4-turbo",
     preamble: {
       label: "Preamble",
       description:
@@ -41,7 +25,7 @@ const DefaultPrompt: PromptConfig = {
   image: {
     model: "dall-e-3",
     instructions:
-      "You are a botanist with a love for pixel art. Create an 8 bit pixel art image for a botanical game on a solely white background in the art style of Stardew Valley, based on the description that follows. Make sure there is no texts the image. Just the plant in the middle of the image. The plant is a result of a crossbreeding between two plants. Make sure the names of the parent plants are reflected in the created image. Don't forget the background color of the image should be #FFFFFF pure white. Here is the description:"
+    "You are a botanist. Create an image of a plant from the following description. The plant is in the centre, standing alone on a pure white background. Make sure there is no text in the image. There is only the plant in the middle of the picture. Here is the description:"
   }
 };
 
