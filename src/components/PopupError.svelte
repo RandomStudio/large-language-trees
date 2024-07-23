@@ -2,7 +2,7 @@
   import type { InsertPlant } from "$lib/types";
 
   import ButtonBottom from "./ButtonBottom.svelte";
-  import ConfirmBreedPopup from "../routes/gallery/pollination/[id]/ConfirmBreedPopup.svelte";
+  import ConfirmBreedPopup from "../routes/app/gallery/pollination/[id]/ConfirmBreedPopup.svelte";
 
   export let candidateChild: InsertPlant;
 
