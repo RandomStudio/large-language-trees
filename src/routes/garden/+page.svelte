@@ -386,11 +386,10 @@
     src="livinggarden_QR.png"
     alt=""
     class="fixed"
-    style="width: 120px; margin-top: 50px; margin-left: 50px; background-color: #9EE093;"
+    style="width: 168px; margin-top: 50px; margin-left: 50px; background-color: #9EE093;"
   />
   <h1
-    class="fixed text-roel_green font-primer; text-3xl"
-    style="margin-top: 175px; margin-left: 50px;"
+    class="join-the-garden font-primer fixed top-16 left-0 mt-40 ml-12 text-roel_green text-2xl"
   >
     Join the Garden!
   </h1>
