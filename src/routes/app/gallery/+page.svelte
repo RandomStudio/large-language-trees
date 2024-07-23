@@ -6,7 +6,7 @@
   import PlantDisplay from "../../../components/PlantDisplay.svelte";
   import PopupInfo from "../../../components/PopupInfo.svelte";
 
-  import NewGardener from "../../components/NewGardener.svelte";
+  import NewGardener from "../../../components/NewGardener.svelte";
   import { invalidateAll } from "$app/navigation";
   import moment from "moment";
 
