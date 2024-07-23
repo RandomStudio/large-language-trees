@@ -13,7 +13,7 @@
   let selectedPlant: SelectPlant | null = null;
 
   function handleClick(id: string) {
-    goto(`/gallery/pollination/` + id);
+    goto(`gallery/pollination/` + id);
   }
 
   function convertMinutesToMinutesAndSeconds(decimalMinutes: number) {
