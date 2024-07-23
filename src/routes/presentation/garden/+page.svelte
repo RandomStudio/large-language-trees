@@ -5,7 +5,6 @@
     PlantProperties,
     SelectPlant
   } from "$lib/types";
-  import { Application, Assets, Sprite } from "pixi.js";
   export let data: GardenViewData;
 
   import { onMount } from "svelte";
