@@ -244,6 +244,54 @@
           [255, 238, 112] // FFEE70
         ];
 
+        const jonatanColors = [
+          [0, 112, 174], // 0070AE
+          [21, 163, 95], // 15A35F
+          [39, 163, 234], // 27A3EA
+          [58, 238, 152], // 3AEE98
+          [105, 160, 35], // 69A023
+          [117, 0, 147], // 750093
+          [139, 238, 13], // 8BEE0D
+          [151, 2, 29], // 97021D
+          [156, 151, 36], // 9C9724
+          [191, 244, 218], // BFF4DA
+          [196, 136, 19], // C48813
+          [200, 245, 143], // C8F58F
+          [205, 50, 244], // CD32F4
+          [210, 236, 250], // D2ECFA
+          [221, 11, 49], // DD0B31
+          [239, 229, 0], // EFE500
+          [240, 180, 255], // F0B4FF
+          [245, 242, 167], // F5F2A7
+          [254, 222, 161], // FEDEA1
+          [255, 174, 17], // FFAE11
+          [255, 185, 198] // FFB9C6
+        ];
+
+        const mixedColors = [
+          [0, 112, 174], // 0070AE
+          [21, 163, 95], // 15A35F
+          [39, 163, 234], // 27A3EA
+          [58, 238, 152], // 3AEE98
+          [103, 0, 147], // 670093
+          [103, 184, 0], // 67B800
+          [139, 238, 13], // 8BEE0D
+          [174, 62, 222], // AE3EDE
+          [191, 244, 218], // BFF4DA
+          [196, 136, 19], // C48813
+          [200, 245, 143], // C8F58F
+          [202, 195, 31], // CAC31F
+          [210, 236, 250], // D2ECFA
+          [239, 229, 0], // EFE500
+          [240, 180, 255], // F0B4FF
+          [243, 28, 28], // F31C1C
+          [245, 242, 167], // F5F2A7
+          [251, 89, 89], // FB5959
+          [254, 222, 161], // FEDEA1
+          [255, 178, 28], // FFB21C
+          [255, 185, 198] // FFB9C6
+        ];
+
         //remove the bakcground
         removeBackgroundWithPoints();
 
@@ -260,7 +308,7 @@
         fillHolesInImage(imageData, ctx, 100);
 
         // // Get the new colors
-        replaceImageColorsWithPalette(finalColors, imageData, ctx);
+        replaceImageColorsWithPalette(mixedColors, imageData, ctx);
 
         //Pixelate
         //pixelateImage(imageData, ctx);
