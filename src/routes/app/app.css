@@ -30,3 +30,10 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "Primer";
+  src: url("/Primer.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
