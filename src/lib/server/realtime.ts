@@ -44,7 +44,7 @@ const publishDisplayUpdate = async (
     publishOptions: { qos: 2, retain: true }
   });
 
-  console.log("Publishing screen conten update", { name, contents }, "...");
+  console.log("Publishing screen content update", { contents }, "...");
 
   await plug.publish(encode(contents));
 
@@ -56,7 +56,7 @@ const updatePresentationDisplays = async (latestEvent: EventTypes) => {
     case "newUser": {
       const { userId, username } = latestEvent.payload;
       const targetScreen = await findScreenFor(1);
-      await updateScreen(
+      await updateScreenData(
         targetScreen.id,
         {
           title: "New user joined",
@@ -107,11 +107,13 @@ const findScreenFor = async (priority: number) => {
   return targetScreen;
 };
 
-const updateScreen = async (
+/** Publish updates on channel, persist to database */
+const updateScreenData = async (
   targetId: string,
   contents: object,
   priority: number
 ) => {
+  await publishDisplayUpdate(targetId, contents);
   await db
     .update(presentationState)
     .set({ contents, priority })

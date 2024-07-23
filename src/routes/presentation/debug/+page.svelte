@@ -5,6 +5,7 @@
     BROKER_DEFAULTS,
     decode,
     InputPlug,
+    parseAgentIdOrGroup,
     TetherAgent
   } from "tether-agent";
 
@@ -28,14 +29,37 @@
 
     connected = true;
 
-    const incoming = await InputPlug.create(agent, "events");
-    incoming.on("message", (payload, topic) => {
+    const eventPlug = await InputPlug.create(agent, "events");
+
+    eventPlug.on("message", (payload, topic) => {
       console.log("received message on", topic);
       const decoded = decode(payload);
       console.log(JSON.stringify(decoded));
       // messages.push(JSON.stringify(decoded));
       messages = [...messages, JSON.stringify(decoded)];
       console.log(messages.length);
+    });
+
+    const displayPlug = await InputPlug.create(agent, "displayUpdates");
+
+    displayPlug.on("message", (payload, topic) => {
+      const decoded = decode(payload) as object;
+      console.log(JSON.stringify(payload));
+
+      const screenId = parseAgentIdOrGroup(topic);
+
+      const targetDisplay = data.displays.find((s) => s.id === screenId);
+      if (targetDisplay) {
+        targetDisplay.contents = decoded;
+      } else {
+        console.error(
+          "Could not match target screen ID",
+          screenId,
+          "with displays in",
+          JSON.stringify(data.displays.map((d) => d.id))
+        );
+        throw Error("Could not match target display");
+      }
     });
   });
 
