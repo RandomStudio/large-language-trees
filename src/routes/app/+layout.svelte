@@ -15,7 +15,7 @@
         <span
           class="cursor-pointer"
           on:click={() => {
-            goto("/info");
+            goto("info");
           }}
         >
           The Garden
