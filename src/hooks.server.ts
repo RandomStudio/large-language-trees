@@ -7,15 +7,20 @@ export const handle: Handle = async ({ event, resolve }) => {
     return resolve(event);
   }
 
+  if (event.url.pathname.includes("/presentation")) {
+    console.warn("Unauthenticated access to", event.url.pathname, "allowed");
+    return resolve(event);
+  }
+
   const sessionId = event.cookies.get(lucia.sessionCookieName);
   if (!sessionId) {
     console.log("clear session info");
     event.locals.user = null;
     event.locals.session = null;
     console.log("path", event.url.pathname);
-    if (event.url.pathname != "/") {
+    if (event.url.pathname != "/app") {
       // Every path other than root should redirect if user not logged in
-      redirect(302, "/");
+      redirect(302, "/app");
     } else {
       return resolve(event);
     }

@@ -39,6 +39,7 @@ import {
 } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 import DefaultPrompt from "../../defaults/prompt-config";
+import { publishEvent } from "./realtime";
 
 export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -131,6 +132,10 @@ export const createNewSeedbank = async (userId: string) => {
   }
 
   const thePlant = await getNewPlantForUser();
+
+  if (thePlant) {
+    await publishEvent({ name: "newUserFirstPlant", payload: { ...thePlant } });
+  }
 
   await addPlantToSeedbank(thePlant.id, newSeedbank.id);
 
