@@ -15,11 +15,11 @@
   } from "./confirmBreed";
   import type {
     EnhancedGardenViewData,
-    EventBody,
     InsertPlant,
     SelectPlant,
     SelectSeedbank
   } from "$lib/types";
+  import type { EventType } from "$lib/events.types";
 
   export let data: EnhancedGardenViewData;
 
@@ -170,11 +170,11 @@
       candidateChild.authorTop = data.user.id;
       const seedbankRes = await fetch(`/api/seedbanks/${otherUserSeedbankId}`);
       const otherSeedbank = (await seedbankRes.json()) as SelectSeedbank;
-      candidateChild.authorBottom = otherSeedbank.id;
+      candidateChild.authorBottom = otherSeedbank.userId;
       await addConfirmedPlant(candidateChild, data.garden.id, data.seedBank.id);
       await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
 
-      const event: EventBody = {
+      const event: EventType = {
         name: "newPlantPollination",
         payload: {
           ...candidateChild

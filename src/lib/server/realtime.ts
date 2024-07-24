@@ -157,11 +157,13 @@ const findScreenFor = async (priority: number): Promise<string | null> => {
     s.priority === null ? true : s.priority < priority
   );
 
-  if (!availableScreens) {
+  if (availableScreens.length === 0) {
     console.warn("All screens occupied with same or higher priority");
   }
 
-  return availableScreens ? pickRandomElement(availableScreens).id : null;
+  return availableScreens.length > 0
+    ? pickRandomElement(availableScreens).id
+    : null;
 };
 
 /** Publish updates on channel, persist to database */

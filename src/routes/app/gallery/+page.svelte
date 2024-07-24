@@ -42,21 +42,21 @@
     dates = newDates;
   }
 
-  async function fetchdata() {
-    invalidateAll();
-    // console.log(data.seedBank.plantsInSeedbank);
-    yourPlant =
-      data.seedBank.plantsInSeedbank.find(
-        (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
-      )?.plant || null;
-  }
+  // async function fetchdata() {
+  //   invalidateAll();
+  //   // console.log(data.seedBank.plantsInSeedbank);
+  //   yourPlant =
+  //     data.seedBank.plantsInSeedbank.find(
+  //       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
+  //     )?.plant || null;
+  // }
 
   onMount(() => {
     const datesInterval = setInterval(updateDates, 1000);
-    const databaseInterval = setInterval(fetchdata, 1000);
+    // const databaseInterval = setInterval(fetchdata, 1000);
     return () => {
       clearInterval(datesInterval);
-      clearInterval(databaseInterval);
+      // clearInterval(databaseInterval);
     };
   });
 </script>
