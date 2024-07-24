@@ -5,7 +5,7 @@
     ROELSCOOTER'S <br /> LAVENDER
   </div>
 
-  <div class="fill-current absolute top-1/2 w-[540px] h-auto">
+  <div class="fill-roel_purple absolute top-1/2 w-[540px] h-auto">
     <svg
       viewBox="0 0 1000 801"
       width="540"
