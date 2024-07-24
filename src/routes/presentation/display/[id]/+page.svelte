@@ -1,5 +1,5 @@
 <script lang="ts">
-  import BreakingNews from "./BreakingNews.svelte";
+  import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
   import PollinationEvent from "./PollinationEvent.svelte";
 
@@ -82,10 +82,22 @@
 <main>
   <h1>
     Display #{JSON.stringify(data.contents?.name)}
-    {console.log("Name of the event" + JSON.stringify(data.contents))}
+    {console.log("Name of the event" + JSON.stringify(data))}
   </h1>
 
   {#if data.contents?.name == "newUserFirstPlant"}
-    <BreakingNews imageUrl={data.contents?.payload?.imageUrl}></BreakingNews>
+    <NewUserFirstPlant
+      imageUrl={data.contents?.payload?.imageUrl}
+      plantName={data.contents?.payload?.commonName}
+      gardenerName="PlaceHolder"
+    ></NewUserFirstPlant>
+  {/if}
+
+  {#if data.contents?.name == "newPlantPollination"}
+    <PollinationResult
+      imageUrl={data.contents?.payload?.imageUrl}
+      plantName={data.contents?.payload?.commonName}
+      gardenerName="PlaceHolder"
+    ></PollinationResult>
   {/if}
 </main>

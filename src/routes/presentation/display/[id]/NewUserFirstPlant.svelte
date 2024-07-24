@@ -1,12 +1,15 @@
 <script lang="ts">
   export let imageUrl: string;
+  export let plantName: string;
+  export let gardenerName: string;
 </script>
 
-<body class="bg-roel_rose">
+<body class="bg-roel_rose z-10">
   <div
     class="w-full h-[250px] flex text-center items-center justify-center text-roel_rose text-6xl font-jeanb bg-roel_purple"
   >
-    ROELSCOOTER'S <br /> LAVENDER
+    {plantName.toUpperCase()}'S <br />
+    {plantName.toUpperCase()}
   </div>
 
   <div class="fill-roel_purple absolute top-1/2 w-full h-auto">
