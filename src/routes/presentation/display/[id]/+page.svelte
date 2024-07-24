@@ -80,13 +80,12 @@
 </script>
 
 <main>
-  <PollinationResult />
-
   <h1>
-    Display #{data.id}
+    Display #{JSON.stringify(data.contents?.name)}
+    {console.log("Name of the event" + JSON.stringify(data.contents))}
   </h1>
 
-  <div>
-    {JSON.stringify(data.contents)}
-  </div>
+  {#if data.contents?.name == "newUserFirstPlant"}
+    <BreakingNews imageUrl={data.contents?.payload?.imageUrl}></BreakingNews>
+  {/if}
 </main>
