@@ -39,6 +39,13 @@
 }
 
 @font-face {
+  font-family: "PrimerB";
+  src: url("/PrimerB.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "JeanB";
   src: url("/JeanB.ttf") format("truetype");
   font-weight: normal;
