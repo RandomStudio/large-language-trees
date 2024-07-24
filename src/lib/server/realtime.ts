@@ -1,10 +1,12 @@
-import type { EventBody, EventTypes } from "$lib/types";
 import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
 import { db } from "./db";
 import { presentationState } from "./schema";
 import { eq } from "drizzle-orm";
+import type { DisplayUpdateMessage, EventType } from "$lib/events.types";
+import { pickRandomElement } from "random-elements";
+import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/types";
 
-export const publishEvent = async (event: EventBody) => {
+export const publishEvent = async (event: EventType) => {
   const agent = await TetherAgent.create("server", {
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
@@ -23,12 +25,13 @@ export const publishEvent = async (event: EventBody) => {
 
   await agent.disconnect();
 
-  await updatePresentationDisplays(event as EventTypes);
+  await updatePresentationDisplays(event);
 };
 
-const publishDisplayUpdate = async (
-  targetScreenId: string,
-  contents: object
+const publishDisplayInstructions = async (
+  targetDisplayId: string,
+  contents: EventType,
+  timeout: number | null
 ) => {
   const agent = await TetherAgent.create("server", {
     brokerOptions: {
@@ -39,40 +42,100 @@ const publishDisplayUpdate = async (
     }
   });
 
-  const plug = new OutputPlug(agent, "displayUpdates", {
-    id: targetScreenId,
-    publishOptions: { qos: 2, retain: true }
+  const plug = new OutputPlug(agent, "serverInstructDisplays", {
+    id: targetDisplayId,
+    publishOptions: { qos: 2 }
   });
 
-  console.log("Publishing screen content update", { contents }, "...");
+  console.log("Publishing screen content update", { contents, timeout }, "...");
 
-  await plug.publish(encode(contents));
+  const message: DisplayUpdateMessage = {
+    targetDisplayId,
+    contents,
+    timeout
+  };
+
+  await plug.publish(encode(message));
 
   await agent.disconnect();
 };
 
-const updatePresentationDisplays = async (latestEvent: EventTypes) => {
+export const handleDisplayNotification = async (
+  message: DisplayNotifyServer
+) => {
+  const { displayId, event } = message;
+
+  if (event === "init") {
+  }
+  // A display came online (or reloaded)
+  const exists = await db.query.presentationState.findFirst({
+    where: eq(presentationState.id, displayId)
+  });
+  if (!exists) {
+    // We didn't know about this display before; add with some
+    // defeaults
+    await db.insert(presentationState).values({
+      id: displayId,
+      contents: null,
+      priority: null
+    });
+  }
+
+  // Whether this was a new display, or one that timed out,
+  // either way we need to update with an idle state
+
+  // TODO: randomly (?)pick one of the idle/ambient/b-roll content selections
+
+  const idleState: EventType = {
+    name: "idle",
+    payload: null
+  };
+
+  await updateScreenStateAndPublish(displayId, idleState, null, null);
+};
+
+export const updatePresentationDisplays = async (latestEvent: EventType) => {
   switch (latestEvent.name) {
     case "newUser": {
-      const { userId, username } = latestEvent.payload;
-      const targetScreen = await findScreenFor(1);
-      await updateScreenData(
-        targetScreen.id,
-        {
-          title: "New user joined",
-          username,
-          userId
-        },
-        1
-      );
+      const PRIORITY = 1;
+      const TIMEOUT = 3000;
+      const targetScreen = await findScreenFor(PRIORITY);
+      if (targetScreen) {
+        await updateScreenStateAndPublish(
+          targetScreen,
+          latestEvent,
+          PRIORITY,
+          TIMEOUT
+        );
+      }
       break;
     }
     case "newUserFirstPlant": {
-      const plant = latestEvent.payload;
+      const PRIORITY = 1;
+      const TIMEOUT = 5000;
+      const targetScreen = await findScreenFor(PRIORITY);
+      if (targetScreen) {
+        await updateScreenStateAndPublish(
+          targetScreen,
+          latestEvent,
+          PRIORITY,
+          TIMEOUT
+        );
+      }
       break;
     }
     case "newPlantPollination": {
-      const plant = latestEvent.payload;
+      const PRIORITY = 1;
+      const TIMEOUT = 8000;
+      const targetScreen = await findScreenFor(PRIORITY);
+      if (targetScreen) {
+        await updateScreenStateAndPublish(
+          targetScreen,
+          latestEvent,
+          PRIORITY,
+          TIMEOUT
+        );
+      }
       break;
     }
     default: {
@@ -82,40 +145,35 @@ const updatePresentationDisplays = async (latestEvent: EventTypes) => {
 };
 
 /** Find a screen that is available to display a view with a given priority level.
- * In the case where no suitable screens are available, the one updated last (least
- * recent update) will be returned instead.
+ * In the case where no suitable screens are available, return null.
  */
-const findScreenFor = async (priority: number) => {
+const findScreenFor = async (priority: number): Promise<string | null> => {
   // Ordered by last updated ASC, i.e. oldest (last-updated) screen first
   const screens = await db
-    .select()
-    .from(presentationState)
-    .orderBy(presentationState.lastUpdated);
+    .select({ id: presentationState.id, priority: presentationState.priority })
+    .from(presentationState);
 
-  const screenWithLowerPriority = screens.find((s) =>
+  const availableScreens = screens.filter((s) =>
     s.priority === null ? true : s.priority < priority
   );
 
-  if (!screenWithLowerPriority) {
-    console.warn(
-      `All screens occupied with same or higher priority; will use "oldest" instead`
-    );
+  if (!availableScreens) {
+    console.warn("All screens occupied with same or higher priority");
   }
 
-  let targetScreen = screenWithLowerPriority || screens[0];
-
-  return targetScreen;
+  return availableScreens ? pickRandomElement(availableScreens).id : null;
 };
 
 /** Publish updates on channel, persist to database */
-const updateScreenData = async (
+const updateScreenStateAndPublish = async (
   targetId: string,
-  contents: object,
-  priority: number
+  contents: EventType,
+  priority: number | null,
+  timeout: number | null
 ) => {
-  await publishDisplayUpdate(targetId, contents);
   await db
     .update(presentationState)
     .set({ contents, priority })
     .where(eq(presentationState.id, targetId));
+  await publishDisplayInstructions(targetId, contents, timeout);
 };

@@ -5,7 +5,6 @@ import {
   json,
   pgTable,
   primaryKey,
-  serial,
   text,
   timestamp
 } from "drizzle-orm/pg-core";
@@ -153,8 +152,6 @@ export const promptSettingsTable = pgTable("prompt_settings", {
 
 export const presentationState = pgTable("presentation_state", {
   id: text("screen_id").primaryKey(),
-  name: text("name").notNull(),
   priority: integer("priority_level"),
-  lastUpdated: timestamp("last_updated"),
   contents: json("contents")
 });

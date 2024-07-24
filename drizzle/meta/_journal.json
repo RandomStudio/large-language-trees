@@ -78,6 +78,13 @@
       "when": 1721658707229,
       "tag": "0010_brave_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1721814995170,
+      "tag": "0011_smooth_red_skull",
+      "breakpoints": true
     }
   ]
 }

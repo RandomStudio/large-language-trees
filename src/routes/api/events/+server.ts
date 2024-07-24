@@ -1,9 +1,9 @@
+import type { EventType } from "$lib/events.types";
 import { publishEvent } from "$lib/server/realtime";
-import type { EventBody } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ request }) => {
-  const event = (await request.json()) as EventBody;
+  const event = (await request.json()) as EventType;
 
   console.log("relay event from /api/events", { event });
 

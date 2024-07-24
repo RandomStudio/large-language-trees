@@ -31,7 +31,6 @@ import { pickRandomElement } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 import DefaultPrompt from "../../defaults/prompt-config";
 import { publishEvent } from "./realtime";
-import { PresentationDisplayStartDefaults } from "../../defaults/presentationDisplays";
 
 export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -61,11 +60,6 @@ export const populateDefaultPromptSettings = async () => {
     imageModel: defaultPromptSettings.image.model,
     imageInstructions: defaultPromptSettings.image.instructions
   });
-};
-
-export const populateDefaultPresentationState = async () => {
-  const defaultPresentationSettings = PresentationDisplayStartDefaults;
-  await db.insert(presentationState).values(defaultPresentationSettings);
 };
 
 export const getUserByUsername = async (

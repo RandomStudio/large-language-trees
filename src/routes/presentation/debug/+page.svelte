@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { PresentationDisplayState } from "$lib/types";
+  import { invalidateAll } from "$app/navigation";
+  import type { DisplayUpdateMessage } from "$lib/events.types.js";
   import { onDestroy, onMount } from "svelte";
   import {
     BROKER_DEFAULTS,
@@ -14,7 +15,7 @@
 
   let agent: TetherAgent | null = null;
 
-  export let data: { displays: PresentationDisplayState[] };
+  export let data;
 
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
@@ -40,26 +41,34 @@
       console.log(messages.length);
     });
 
-    const displayPlug = await InputPlug.create(agent, "displayUpdates");
+    const displayInstructionsPlug = await InputPlug.create(
+      agent,
+      "serverInstructDisplays"
+    );
 
-    displayPlug.on("message", (payload, topic) => {
-      const decoded = decode(payload) as object;
-      console.log(JSON.stringify(payload));
+    displayInstructionsPlug.on("message", (payload, topic) => {
+      invalidateAll();
 
-      const screenId = parseAgentIdOrGroup(topic);
+      //   const screenId = parseAgentIdOrGroup(topic);
 
-      const targetDisplay = data.displays.find((s) => s.id === screenId);
-      if (targetDisplay) {
-        targetDisplay.contents = decoded;
-      } else {
-        console.error(
-          "Could not match target screen ID",
-          screenId,
-          "with displays in",
-          JSON.stringify(data.displays.map((d) => d.id))
-        );
-        throw Error("Could not match target display");
-      }
+      //   const targetDisplay = data.displays.find((s) => s.id === screenId);
+      //   if (targetDisplay) {
+      //     console.log(
+      //       "change targetDisplay",
+      //       targetDisplay,
+      //       "to content",
+      //       decoded.contents
+      //     );
+
+      //   } else {
+      //     console.error(
+      //       "Could not match target screen ID",
+      //       screenId,
+      //       "with displays in",
+      //       JSON.stringify(data.displays.map((d) => d.id))
+      //     );
+      //     throw Error("Could not match target display");
+      //   }
     });
   });
 
@@ -74,33 +83,28 @@
   Tether: {connected ? "✅ connected" : "❌ not connected"}
 </div>
 
-<h2>Incoming Events</h2>
-<h3>Received {messages.length} events</h3>
-<ul>
-  {#each messages as m}
-    <li>{m}</li>
-  {/each}
-</ul>
-
 {#if data}
   <h2>Presentation State</h2>
   <ul>
     {#each data.displays as display}
       <li>
         <h3>
-          #{display.id}: "{display.name}"
+          Display "{display.id}"
         </h3>
         <p>
           Contents: {display.contents === null
             ? "empty"
             : JSON.stringify(display.contents)}
         </p>
-        <p>
-          Last updated: {display.lastUpdated === null
-            ? "unknown"
-            : display.lastUpdated}
-        </p>
       </li>
     {/each}
   </ul>
 {/if}
+
+<h2>Incoming Events</h2>
+<h3>Received {messages.length} events</h3>
+<div>
+  {#each messages as m}
+    <div>{m}</div>
+  {/each}
+</div>

@@ -9,7 +9,6 @@ import {
   createNewGarden,
   getUserByUsername,
   populateDefaultPlants,
-  populateDefaultPresentationState,
   populateDefaultPromptSettings
 } from "$lib/server";
 import type { SelectPlant, SelectPromptSettings } from "$lib/types";
@@ -79,8 +78,5 @@ export const actions: Actions = {
 
     console.warn("Prompt settings initialisation...");
     await populateDefaultPromptSettings();
-
-    console.warn("Presentation state layout initialisation...");
-    await populateDefaultPresentationState();
   }
 };
