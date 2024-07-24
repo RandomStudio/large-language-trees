@@ -9,7 +9,9 @@ module.exports = {
         'dark_grey': '#302F2F',
         'mid_grey': '#898989',
         'light_grey': '#D9D9D9',
-        'roel_purple': '#4B0082'
+        'roel_purple': '#4B0082',
+        'roel_rose': '#FFB6C1',
+        'roel_red': '#97021D',
       },
       scale: {
         125: "1.25"
@@ -18,7 +20,10 @@ module.exports = {
         'garamond': ['Garamond', 'serif'],
         'oldstandard': ['OldStandard', 'serif'],
         'inter': ['Inter', 'serif'],
-        'primer': ['Primer', 'serif']
+        'primer': ['Primer', 'serif'],
+        'primerb': ['PrimerB', 'serif'],
+        'jeanb': ['JeanB', 'serif'],
+        'jeant': ['JeanT', 'serif'],
       },
     }
   },
