@@ -1,6 +1,6 @@
 <body class="bg-roel_rose">
   <div
-    class="w-full h-[350px] flex text-center items-center justify-center text-roel_rose text-6xl font-jeanb bg-roel_purple"
+    class="w-full h-[250px] flex text-center items-center justify-center text-roel_rose text-6xl font-jeanb bg-roel_purple"
   >
     ROELSCOOTER'S <br /> LAVENDER
   </div>
@@ -18,7 +18,7 @@
   </div>
 
   <div
-    class="w-full h-[350px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-6xl font-jeanb bg-roel_rose"
+    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-6xl font-jeanb bg-roel_rose"
   >
     JUST SPROUTED <br /> IN THE GARDEN!
   </div>
