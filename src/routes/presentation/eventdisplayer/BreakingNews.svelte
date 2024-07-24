@@ -1,18 +1,21 @@
 <body class="bg-roel_rose">
   <div
-    class="w-full h-[350px] flex text-center items-center justify-center text-roel_rose text-6xl font-jeanb bg-roel_purple"
+    class="w-[540px] h-[350px] flex text-center items-center justify-center text-roel_rose text-6xl font-jeanb bg-roel_purple"
   >
     ROELSCOOTER'S <br /> LAVENDER
   </div>
 
-  <div class="fill-current absolute top-1/2">
+  <div class="fill-current absolute top-1/2 w-[540px] h-auto">
     <svg
+      viewBox="0 0 1000 801"
       width="540"
-      height="320"
+      height="432"
       xmlns="http://www.w3.org/2000/svg"
       class="text-roel_purple"
     >
-      <path d="M10 10 H580 V200 A290 145 0 0 1 10 200 Z" />
+      <path
+        d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
+      />
     </svg>
   </div>
 
