@@ -1,13 +1,16 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { type GardenViewData, type SelectPlant } from "../../../lib/types";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   export let data: GardenViewData;
   import PlantDisplay from "../../../components/PlantDisplay.svelte";
   import PopupInfo from "../../../components/PopupInfo.svelte";
 
   import { invalidateAll } from "$app/navigation";
   import moment from "moment";
+  import { decode, InputPlug, TetherAgent } from "tether-agent";
+  import { BROWSER_CONNECTION } from "../../../defaults/tether";
+  import type { EventType } from "$lib/events.types";
 
   let selectedPlant: SelectPlant | null = null;
 
@@ -51,13 +54,32 @@
   //     )?.plant || null;
   // }
 
-  onMount(() => {
-    const datesInterval = setInterval(updateDates, 1000);
+  let agent: TetherAgent | null;
+
+  let datesInterval: NodeJS.Timeout | null = null;
+
+  onMount(async () => {
+    datesInterval = setInterval(updateDates, 1000);
     // const databaseInterval = setInterval(fetchdata, 1000);
-    return () => {
+
+    agent = await TetherAgent.create("app", {
+      brokerOptions: BROWSER_CONNECTION
+    });
+
+    const eventsPlug = await InputPlug.create(agent, "events");
+    eventsPlug.on("message", (payload) => {
+      const m = decode(payload) as EventType;
+      if (m.name === "newPlantPollination") {
+        // For any "newPlantPollination" event, reload page data just in case
+        invalidateAll();
+      }
+    });
+  });
+
+  onDestroy(() => {
+    if (datesInterval) {
       clearInterval(datesInterval);
-      // clearInterval(databaseInterval);
-    };
+    }
   });
 </script>
 
