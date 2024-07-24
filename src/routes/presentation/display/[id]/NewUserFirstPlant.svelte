@@ -4,7 +4,7 @@
   export let gardenerName: string;
 </script>
 
-<body class="bg-roel_rose z-10">
+<div class="bg-roel_rose min-h-screen">
   <div
     class="w-full h-[250px] flex text-center items-center justify-center text-roel_rose text-6xl font-jeanb bg-roel_purple"
   >
@@ -29,4 +29,4 @@
   >
     JUST SPROUTED <br /> IN THE GARDEN!
   </div>
-</body>
+</div>

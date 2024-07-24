@@ -3,7 +3,7 @@
   export let plantName: string;
 </script>
 
-<body class="bg-roel_purple">
+<div class="bg-roel_purple min-h-screen">
   <div
     class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-6xl font-jeanb bg-roel_purple"
   >
@@ -32,4 +32,4 @@
     THE <br />
     {plantName}
   </div>
-</body>
+</div>
