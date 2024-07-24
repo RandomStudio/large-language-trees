@@ -1,4 +1,8 @@
 <script lang="ts">
+  import BreakingNews from "./BreakingNews.svelte";
+  import PollinationResult from "./PollinationResult.svelte";
+  import PollinationEvent from "./PollinationEvent.svelte";
+
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
   import type { DisplayNotifyServer } from "../../../api/displayNotifyServer/types";
@@ -75,10 +79,14 @@
   });
 </script>
 
-<h1>
-  Display #{data.id}
-</h1>
+<main>
+  <PollinationResult />
 
-<div>
-  {JSON.stringify(data.contents)}
-</div>
+  <h1>
+    Display #{data.id}
+  </h1>
+
+  <div>
+    {JSON.stringify(data.contents)}
+  </div>
+</main>
