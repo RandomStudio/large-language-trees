@@ -97,7 +97,6 @@
     <PollinationResult
       imageUrl={data.contents?.payload?.imageUrl}
       plantName={data.contents?.payload?.commonName}
-      gardenerName="PlaceHolder"
     ></PollinationResult>
   {/if}
 </main>

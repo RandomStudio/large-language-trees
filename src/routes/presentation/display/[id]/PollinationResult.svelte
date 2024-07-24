@@ -1,3 +1,8 @@
+<script lang="ts">
+  export let imageUrl: string;
+  export let plantName: string;
+</script>
+
 <body class="bg-roel_purple">
   <div
     class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-6xl font-jeanb bg-roel_purple"
@@ -18,12 +23,13 @@
   </div>
 
   <div class="fixed inset-0 flex items-center justify-center">
-    <img src="/59.png" alt="Lavender" />
+    <img src={imageUrl} alt="Lavender" />
   </div>
 
   <div
     class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-6xl font-jeanb bg-roel_green"
   >
-    THE <br /> LAVENDOSE
+    THE <br />
+    {plantName}
   </div>
 </body>
