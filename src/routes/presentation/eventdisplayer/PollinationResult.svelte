@@ -1,39 +1,29 @@
-<body class="bg-roel_green">
+<body class="bg-roel_purple">
   <div
     class="w-full h-[350px] flex text-center items-center justify-center text-roel_green text-6xl font-jeanb bg-roel_purple"
   >
-    THE
-    <br /> LAVENDOSE
+    RESULTING <br /> IN...
   </div>
 
-  <div class="absolute top-1/2">
+  <div class="fixed inset-x-0 bottom-1/2 w-full h-auto fill-roel_green">
     <svg
-      width="540"
-      height="320"
-      fill="None"
-      viewBox="0 0 540 300"
+      viewBox="0 0 1000 801"
       xmlns="http://www.w3.org/2000/svg"
+      class="rotate-180 mx-auto"
     >
       <path
         d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
-        fill="#4B0082"
       />
     </svg>
   </div>
 
-  <div class="absolute">
-    <!-- svelte-ignore a11y-img-redundant-alt -->
-    <img
-      src="/59.png"
-      alt="Lavender Image"
-      class="place-content-center h-auto"
-    />
+  <div class="fixed inset-0 flex items-center justify-center">
+    <img src="/59.png" alt="Lavender" />
   </div>
 
   <div
-    class="w-full h-[350px] flex text-center items-center justify-center absolute bottom-0 text-roel_green text-6xl font-jeanb bg-roel_purple"
+    class="w-full h-[350px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-6xl font-jeanb bg-roel_green"
   >
-    RESULTING
-    <br />IN...
+    THE <br /> LAVENDOSE
   </div>
 </body>
