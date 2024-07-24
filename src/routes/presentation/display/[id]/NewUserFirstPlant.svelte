@@ -8,7 +8,7 @@
   <div
     class="w-full h-[250px] flex text-center items-center justify-center text-roel_rose text-6xl font-jeanb bg-roel_purple"
   >
-    {plantName.toUpperCase()}'S <br />
+    {gardenerName.toUpperCase()}'S <br />
     {plantName.toUpperCase()}
   </div>
 
