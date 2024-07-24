@@ -3,6 +3,7 @@ import type {
   gardensToPlants,
   generatedImages,
   plants,
+  presentationState,
   promptSettingsTable,
   seedbanks,
   seedbanksToPlants,
@@ -25,6 +26,8 @@ export type Characteristics = { [key: string]: string | number };
 export type GeneratedImage = typeof generatedImages.$inferSelect;
 
 export type SelectPromptSettings = typeof promptSettingsTable.$inferInsert;
+
+export type PresentationDisplayState = typeof presentationState.$inferInsert;
 
 export interface GardenPlantEntryWithPlant extends GardenPlantEntry {
   plant: SelectPlant;
@@ -101,9 +104,4 @@ export interface PromptConfig {
     model: ImageModelNames;
     instructions: string;
   };
-}
-
-export interface EventBody {
-  name: string;
-  payload: any;
 }

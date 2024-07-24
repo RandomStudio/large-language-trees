@@ -1,7 +1,6 @@
 import { lucia } from "$lib/server/auth";
 import { fail, redirect } from "@sveltejs/kit";
 import { verify } from "@node-rs/argon2";
-
 import type { Actions } from "./$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
@@ -121,7 +120,7 @@ export const actions = {
       });
 
       if (username === "admin") {
-        redirect(302, "/presentation/garden");
+        redirect(302, "/app/admin");
       } else {
         redirect(302, "/app/gallery");
       }

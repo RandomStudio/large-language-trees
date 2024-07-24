@@ -1,13 +1,14 @@
 import { lucia } from "$lib/server/auth";
 import { redirect, type Handle } from "@sveltejs/kit";
 
-export const handle: Handle = async ({ event, resolve }) => {
-  if (event.url.pathname.includes("/api/plants")) {
-    console.warn("Unauthenticated access to", event.url.pathname, "allowed");
-    return resolve(event);
-  }
+const publicAccessAllowed = (pathname: string) =>
+  pathname.includes("/api/plants") ||
+  pathname.includes("/presentation") ||
+  pathname.includes("/api/events") ||
+  pathname.includes("/api/displayNotifyServer");
 
-  if (event.url.pathname.includes("/presentation")) {
+export const handle: Handle = async ({ event, resolve }) => {
+  if (publicAccessAllowed(event.url.pathname)) {
     console.warn("Unauthenticated access to", event.url.pathname, "allowed");
     return resolve(event);
   }

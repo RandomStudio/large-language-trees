@@ -149,3 +149,9 @@ export const promptSettingsTable = pgTable("prompt_settings", {
   imageModel: text("image_model").notNull(),
   imageInstructions: text("image_instructions").notNull()
 });
+
+export const presentationState = pgTable("presentation_state", {
+  id: text("screen_id").primaryKey(),
+  priority: integer("priority_level"),
+  contents: json("contents")
+});

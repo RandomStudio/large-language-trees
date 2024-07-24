@@ -12,7 +12,6 @@ import {
   populateDefaultPromptSettings
 } from "$lib/server";
 import type { SelectPlant, SelectPromptSettings } from "$lib/types";
-import DefaultPrompt from "../../../defaults/prompt-config";
 
 export interface AdminViewData {
   username: string;
