@@ -13,7 +13,14 @@ import type {
 export type SelectPlant = typeof plants.$inferSelect;
 export type InsertPlant = typeof plants.$inferInsert;
 
+/** WARNING: this type includes password hashes! */
 export type SelectUser = typeof users.$inferSelect;
+
+/** Use this when you need safe (public) access to basic user details */
+export interface PublicUserInfo {
+  id: string;
+  username: string;
+}
 
 export type SelectGarden = typeof gardens.$inferSelect;
 export type GardenPlantEntry = typeof gardensToPlants.$inferInsert;

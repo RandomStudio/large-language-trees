@@ -1,12 +1,10 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
-  import type { DisplayUpdateMessage } from "$lib/events.types.js";
   import { onDestroy, onMount } from "svelte";
   import {
     BROKER_DEFAULTS,
     decode,
     InputPlug,
-    parseAgentIdOrGroup,
     TetherAgent
   } from "tether-agent";
 
@@ -37,7 +35,7 @@
       const decoded = decode(payload);
       console.log(JSON.stringify(decoded));
       // messages.push(JSON.stringify(decoded));
-      messages = [...messages, JSON.stringify(decoded)];
+      messages = [...messages, JSON.stringify(decoded, null, 2)];
       console.log(messages.length);
     });
 
@@ -83,28 +81,28 @@
   Tether: {connected ? "✅ connected" : "❌ not connected"}
 </div>
 
-{#if data}
-  <h2>Presentation State</h2>
-  <ul>
-    {#each data.displays as display}
-      <li>
-        <h3>
-          Display "{display.id}"
-        </h3>
-        <p>
-          Contents: {display.contents === null
-            ? "empty"
-            : JSON.stringify(display.contents)}
-        </p>
-      </li>
-    {/each}
-  </ul>
-{/if}
+<h2 class="font-bold text-xl">Presentation State</h2>
+<ul>
+  {#each data.displays as display}
+    <div class="border-solid border-2 border-slate-300 m-2 p-2">
+      <h3 class="font-bold">
+        Display "{display.id}"
+      </h3>
+      <div>
+        Contents: <pre><code
+            >{display.contents === null
+              ? "empty"
+              : JSON.stringify(display.contents, null, 2)}</code
+          ></pre>
+      </div>
+    </div>
+  {/each}
+</ul>
 
-<h2>Incoming Events</h2>
-<h3>Received {messages.length} events</h3>
+<h2 class="font-bold text-xl">Incoming Events</h2>
+<h3 class="font-bold">Received {messages.length} events</h3>
 <div>
   {#each messages as m}
-    <div>{m}</div>
+    <div class="w-screen"><pre><code>{m}</code></pre></div>
   {/each}
 </div>

@@ -6,13 +6,9 @@
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
   import type { DisplayNotifyServer } from "../../../api/displayNotifyServer/types";
-  import {
-    BROKER_DEFAULTS,
-    decode,
-    InputPlug,
-    TetherAgent
-  } from "tether-agent";
+  import { decode, InputPlug, TetherAgent } from "tether-agent";
   import type { DisplayUpdateMessage } from "$lib/events.types";
+  import { BROWSER_CONNECTION } from "../../../../defaults/tether";
 
   export let data: PageData;
 
@@ -23,13 +19,7 @@
   onMount(async () => {
     // Subscribe to instructions channel
     agent = await TetherAgent.create("presentation", {
-      brokerOptions: {
-        ...BROKER_DEFAULTS.browser,
-        host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
-        port: 8884,
-        protocol: "wss",
-        path: "/mqtt"
-      },
+      brokerOptions: BROWSER_CONNECTION,
       id: data.id
     });
     const instructionsPlug = await InputPlug.create(

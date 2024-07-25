@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { publishEvent } from "$lib/server/realtime";
+import type { EventNewUser } from "$lib/events.types";
 
 export const load = async ({ locals }) => {
   const username = locals.user?.username;
@@ -93,7 +94,11 @@ export const actions = {
       if (username === "admin") {
         redirect(302, "/app/admin");
       } else {
-        await publishEvent({ name: "newUser", payload: { userId, username } });
+        const e: EventNewUser = {
+          name: "newUser",
+          payload: { userId, username }
+        };
+        await publishEvent(e);
         redirect(302, "/app/startwindow");
       }
     } else {
