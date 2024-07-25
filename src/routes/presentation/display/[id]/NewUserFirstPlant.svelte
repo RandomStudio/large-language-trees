@@ -8,8 +8,8 @@
 
   type RGBColor = [number, number, number];
 
-  let brightColor = "rgb(156, 163, 175)";
-  let darkColor = "rgb(129, 140, 153)";
+  let brightColor = "rgb(255, 185, 198)";
+  let darkColor = "rgb(117, 0, 147)";
 
   function calculateBrightness([r, g, b]: RGBColor): number {
     return 0.299 * r + 0.587 * g + 0.114 * b;
