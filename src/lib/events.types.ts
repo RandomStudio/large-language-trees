@@ -1,11 +1,11 @@
-import type { InsertPlant } from "./types";
+import type { InsertPlant, PublicUserInfo } from "./types";
 
-export interface EventBody {
+export interface SimpleEventBody {
   name: string;
   payload: any;
 }
 
-export interface EventNewUser extends EventBody {
+export interface EventNewUser extends SimpleEventBody {
   name: "newUser";
   payload: {
     userId: string;
@@ -13,26 +13,52 @@ export interface EventNewUser extends EventBody {
   };
 }
 
-export interface EventFirstPlant extends EventBody {
+export interface EventFirstPlant extends SimpleEventBody {
   name: "newUserFirstPlant";
-  payload: InsertPlant;
+  payload: {
+    plant: InsertPlant;
+    user: PublicUserInfo;
+  };
 }
 
-export interface EventNewPollination extends EventBody {
+export interface EventNewPollination extends SimpleEventBody {
   name: "newPlantPollination";
   payload: InsertPlant;
 }
 
-export interface IdleEvent extends EventBody {
-  name: "idle";
-  payload: null;
+export type SimpleEvent = EventNewUser | EventFirstPlant | EventNewPollination;
+
+interface DisplayUpdateEvent {
+  name: string;
+  contents: any;
 }
 
-export type EventType =
-  | EventNewUser
-  | EventFirstPlant
-  | EventNewPollination
-  | IdleEvent;
+export interface DisplayFirstPlant extends DisplayUpdateEvent {
+  name: "newUserFirstPlant";
+  contents: {
+    plant: InsertPlant;
+    user: PublicUserInfo;
+  };
+}
+
+export interface DisplayPollination extends DisplayUpdateEvent {
+  name: "newPlantPollination";
+  contents: {
+    plant: InsertPlant;
+    authorTop: PublicUserInfo;
+    authorBottom: PublicUserInfo;
+  };
+}
+
+export interface DisplayIdle extends DisplayUpdateEvent {
+  name: "idle";
+  contents: null;
+}
+
+export type DisplayEventContents =
+  | DisplayFirstPlant
+  | DisplayPollination
+  | DisplayIdle;
 
 /** Interface for "serverInstructDisplays" messages.
  *
@@ -45,7 +71,7 @@ export interface DisplayUpdateMessage {
    */
   targetDisplayId: string;
   /** What content needs to be displayed, i.e. a `name` and `payload` */
-  contents: EventType;
+  payload: DisplayEventContents;
   /** How long, in ms, before the display should notify the server that
    * it is ready for new content. If omitted, the content will stay
    * on that display until further instructions received.
