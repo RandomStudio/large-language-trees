@@ -60,7 +60,9 @@ export const sessions = pgTable("sessions", {
 
 export const gardens = pgTable("gardens", {
   id: text("id").primaryKey(),
-  userId: text("user_id").references(() => users.id),
+  userId: text("user_id")
+    .references(() => users.id)
+    .notNull(),
   name: text("name")
 });
 
@@ -95,8 +97,12 @@ export const gardensToPlantsRelations = relations(
   })
 );
 
-export const gardensRelations = relations(gardens, ({ many }) => ({
-  plantsInGarden: many(gardensToPlants)
+export const gardensRelations = relations(gardens, ({ many, one }) => ({
+  plantsInGarden: many(gardensToPlants),
+  myOwner: one(users, {
+    fields: [gardens.userId],
+    references: [users.id]
+  })
 }));
 
 export const seedbanks = pgTable("seedbanks", {

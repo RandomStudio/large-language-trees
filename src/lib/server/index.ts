@@ -18,7 +18,7 @@ import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   GardenPlantEntry,
   InsertPlant,
-  MyGarden,
+  GardenWithPlants,
   MySeeds,
   SeedbankEntry,
   SelectPlant,
@@ -184,7 +184,9 @@ async function getNewPlantForUser(): Promise<InsertPlant> {
   }
 }
 
-export const getUserGarden = async (userId: string): Promise<MyGarden> => {
+export const getUserGarden = async (
+  userId: string
+): Promise<GardenWithPlants> => {
   const user: UserWithGarden | undefined = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
@@ -319,7 +321,10 @@ export const cleanUp = async () => {
   console.log("...cleanup complete!");
 };
 
-async function addDefaultSeedsToNewGarden(userId: string, newGarden: MyGarden) {
+async function addDefaultSeedsToNewGarden(
+  userId: string,
+  newGarden: GardenWithPlants
+) {
   const seeds = await getUserSeeds(userId);
   const user = await getUserById(userId);
   seeds.plantsInSeedbank.forEach(async (seed) => {

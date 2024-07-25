@@ -40,11 +40,11 @@ export interface GardenPlantEntryWithPlant extends GardenPlantEntry {
   plant: SelectPlant;
 }
 
-export interface MyGarden extends SelectGarden {
+export interface GardenWithPlants extends SelectGarden {
   plantsInGarden: GardenPlantEntryWithPlant[];
 }
 export interface UserWithGarden extends SelectUser {
-  myGarden: MyGarden;
+  myGarden: GardenWithPlants;
 }
 
 export interface SeedbankEntryWithPlant extends SeedbankEntry {
@@ -62,7 +62,7 @@ export interface UserWithSeedbank extends SelectUser {
 export interface GardenViewData {
   seedBank: MySeeds;
   user: SelectUser;
-  garden: MyGarden;
+  garden: GardenWithPlants;
 }
 
 export interface PlantProperties {

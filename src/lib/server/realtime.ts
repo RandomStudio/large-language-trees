@@ -1,18 +1,30 @@
 import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
 import { db } from "./db";
-import { presentationState, users } from "./schema";
-import { eq } from "drizzle-orm";
-import type {
-  DisplayEventContents,
-  DisplayFirstPlant,
-  DisplayIdle,
-  DisplayPollination,
-  DisplayUpdateMessage,
-  SimpleEvent
+import { gardens, plants, presentationState, seedbanks, users } from "./schema";
+import { count, eq, not } from "drizzle-orm";
+import {
+  bRollNaming,
+  type DisplayEventContents,
+  type DisplayFeaturedGarden,
+  type DisplayFeaturedPlant,
+  type DisplayFirstPlant,
+  type DisplayIdle,
+  type DisplayLeaderboard,
+  type DisplayMultipleGardens,
+  type DisplayPlantCount,
+  type DisplayPlantGrowingTime,
+  type DisplayPollination,
+  type DisplayStatusFeed,
+  type DisplayUpdateMessage,
+  type SimpleEvent
 } from "$lib/events.types";
-import { pickRandomElement } from "random-elements";
+import { pickMultipleRandomElements, pickRandomElement } from "random-elements";
 import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/types";
 import { stripUserInfo } from "$lib/security";
+import {
+  LIMIT_LEADERBOARD,
+  NUM_GARDENS_MULTI
+} from "../../defaults/presentation";
 
 export const publishEvent = async (event: SimpleEvent) => {
   const agent = await TetherAgent.create("server", {
@@ -74,32 +86,221 @@ export const handleDisplayNotification = async (
   const { displayId, event } = message;
 
   if (event === "init") {
-  }
-  // A display came online (or reloaded)
-  const exists = await db.query.presentationState.findFirst({
-    where: eq(presentationState.id, displayId)
-  });
-  if (!exists) {
-    // We didn't know about this display before; add with some
-    // defeaults
-    await db.insert(presentationState).values({
-      id: displayId,
-      contents: null,
-      priority: null
+    console.log("A display came online (or reloaded)");
+    const exists = await db.query.presentationState.findFirst({
+      where: eq(presentationState.id, displayId)
     });
+    if (!exists) {
+      // We didn't know about this display before; add with some
+      // defaults
+      await db.insert(presentationState).values({
+        id: displayId,
+        contents: null,
+        priority: null
+      });
+
+      // Add an idle state with a short timeout, so that the new
+      // display will be assigned a "B-roll" state soon...
+      const idleState: DisplayIdle = {
+        name: "idle",
+        contents: null
+      };
+      await updateScreenStateAndPublish(displayId, idleState, null, 2000);
+    }
   }
 
-  // Whether this was a new display, or one that timed out,
-  // either way we need to update with an idle state
+  if (event === "timeout") {
+    console.log(
+      "A display timed out its current animation, pick something new"
+    );
+    type keyType = keyof typeof bRollNaming;
+    const keys = Object.keys(bRollNaming) as keyType[];
 
-  // TODO: randomly (?)pick one of the idle/ambient/b-roll content selections
+    const pickDisplayType = pickRandomElement(keys);
 
-  const idleState: DisplayIdle = {
-    name: "idle",
-    contents: null
-  };
+    try {
+      const contents = await randomAmbientDisplay(pickDisplayType);
 
-  await updateScreenStateAndPublish(displayId, idleState, null, null);
+      await publishDisplayInstructions(displayId, contents, 15000);
+    } catch (e) {
+      console.error(
+        "Something went wrong getting a random Display layout: " + e
+      );
+    }
+  }
+};
+
+const randomAmbientDisplay = async (
+  pickDisplayType: keyof typeof bRollNaming
+): Promise<DisplayEventContents> => {
+  switch (pickDisplayType) {
+    case "DETAIL": {
+      const allNormalUsers = await db.query.users.findMany({
+        where: eq(users.isAdmin, false),
+        with: { myGarden: true }
+      });
+      if (allNormalUsers.length == 0) {
+        throw Error("no users to choose from!");
+      }
+      const pickRandomUser = pickRandomElement(allNormalUsers);
+
+      const userGarden = pickRandomUser.myGarden;
+      const plantsInGarden = await db.query.gardens.findMany({
+        where: eq(gardens.id, userGarden.id),
+        with: { plantsInGarden: true }
+      });
+      if (plantsInGarden.length === 0) {
+        throw Error("no plants in user garden!");
+      }
+      const pickRandomPlant = pickRandomElement(plantsInGarden);
+      const thePlant = await db.query.plants.findFirst({
+        where: eq(plants.id, pickRandomPlant.id)
+      });
+
+      if (thePlant === undefined) {
+        throw Error("failed to find plant " + pickRandomPlant.id);
+      }
+      const contents: DisplayFeaturedPlant = {
+        name: bRollNaming.DETAIL,
+        contents: {
+          user: stripUserInfo(pickRandomUser),
+          plant: thePlant
+        }
+      };
+      return contents;
+    }
+    case "STATUS_FEED": {
+      // TODO: build up a list of recent events. Do we need to write these to a table,
+      // perhaps based on incoming SimpleEvents?
+      const contents: DisplayStatusFeed = {
+        name: bRollNaming.STATUS_FEED,
+        contents: [
+          [
+            {
+              text: "Testing..."
+            },
+            {
+              text: "Highlighted text!",
+              highlight: true
+            },
+            {
+              text: "...and more."
+            }
+          ]
+        ]
+      };
+      return contents;
+    }
+    case "ROLL_PAN": {
+      // TODO: exclude admin gardens
+      const allGardens = await db.query.gardens.findMany({
+        with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+      });
+      if (allGardens.length < 5) {
+        throw Error("Not enough gardens to display count=" + NUM_GARDENS_MULTI);
+      }
+      const pickGardens = pickMultipleRandomElements(
+        allGardens,
+        NUM_GARDENS_MULTI
+      );
+
+      const contents: DisplayMultipleGardens = {
+        name: bRollNaming.ROLL_PAN,
+        contents: pickGardens.map((garden) => ({
+          garden,
+          user: stripUserInfo(garden.myOwner)
+        }))
+      };
+      return contents;
+    }
+    case "ZOOM_OUT": {
+      const allGardens = await db.query.gardens.findMany({
+        with: { myOwner: true, plantsInGarden: true }
+      });
+      const pickGarden = pickRandomElement(allGardens);
+      const plantsInGarden = await db.query.gardensToPlants.findMany({
+        with: { plant: true }
+      });
+      const contents: DisplayFeaturedGarden = {
+        name: bRollNaming.ZOOM_OUT,
+        contents: {
+          garden: {
+            ...pickGarden,
+            plantsInGarden
+          },
+          user: stripUserInfo(pickGarden.myOwner)
+        }
+      };
+      return contents;
+    }
+    case "TOP_LIST": {
+      // TODO: This is probably not a slow query, but certainly a very big payload,
+      // potentially: it is ALL gardens with ALL plant details for EVERY plant in
+      // each garden, plus all user details.
+      // An orderBy + LIMIT would probably help, but this would require a join.
+      const allGardens = await db.query.gardens.findMany({
+        with: { myOwner: true, plantsInGarden: true }
+      });
+
+      if (allGardens.length < LIMIT_LEADERBOARD) {
+        throw Error("Not enough gardens for leaderboard");
+      }
+
+      const orderedByPlantCount = allGardens
+        .sort((a, b) => {
+          return a.plantsInGarden.length - b.plantsInGarden.length;
+        })
+        .slice(0, LIMIT_LEADERBOARD);
+
+      const contents: DisplayLeaderboard = {
+        name: bRollNaming.TOP_LIST,
+        contents: orderedByPlantCount.map((garden) => ({
+          username: garden.myOwner.username,
+          count: garden.plantsInGarden.length
+        }))
+      };
+      return contents;
+    }
+    case "STATISTICS_1": {
+      const allPlants = await db.select().from(plants);
+      const pickPlant = pickRandomElement(allPlants);
+
+      const contents: DisplayPlantGrowingTime = {
+        name: bRollNaming.STATISTICS_1,
+        contents: pickPlant
+      };
+      return contents;
+    }
+    case "STATISTICS_2": {
+      const [result] = await db.select({ count: count() }).from(plants);
+      const allGardens = await db.query.gardens.findMany({
+        with: {
+          plantsInGarden: { with: { plant: true } },
+          myOwner: true
+        }
+      });
+
+      const pickGardens = pickMultipleRandomElements(
+        allGardens,
+        NUM_GARDENS_MULTI
+      );
+
+      const contents: DisplayPlantCount = {
+        name: bRollNaming.STATISTICS_2,
+        contents: {
+          gardens: pickGardens.map((garden) => ({
+            garden,
+            user: stripUserInfo(garden.myOwner)
+          })),
+          count: result.count
+        }
+      };
+      return contents;
+    }
+    default: {
+      throw Error("unknown pickDisplayType");
+    }
+  }
 };
 
 export const updatePresentationDisplaysOnEvent = async (
