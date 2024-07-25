@@ -60,7 +60,9 @@ export const sessions = pgTable("sessions", {
 
 export const gardens = pgTable("gardens", {
   id: text("id").primaryKey(),
-  userId: text("user_id").references(() => users.id),
+  userId: text("user_id")
+    .references(() => users.id)
+    .notNull(),
   name: text("name")
 });
 
