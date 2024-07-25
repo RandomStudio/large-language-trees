@@ -1,7 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { getUserGarden, getUserSeeds } from "$lib/server";
-import { fail, redirect, type Actions } from "@sveltejs/kit";
-import { lucia } from "$lib/server/auth";
+import { redirect } from "@sveltejs/kit";
 import type { GardenViewData } from "$lib/types";
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";

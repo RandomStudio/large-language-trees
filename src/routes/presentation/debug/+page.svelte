@@ -1,9 +1,12 @@
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation";
+  import type { DisplayUpdateMessage } from "$lib/events.types.js";
   import { onDestroy, onMount } from "svelte";
   import {
     BROKER_DEFAULTS,
     decode,
     InputPlug,
+    parseAgentIdOrGroup,
     TetherAgent
   } from "tether-agent";
 
@@ -11,6 +14,8 @@
   let messages: string[] = [];
 
   let agent: TetherAgent | null = null;
+
+  export let data;
 
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
@@ -25,14 +30,45 @@
 
     connected = true;
 
-    const incoming = await InputPlug.create(agent, "events");
-    incoming.on("message", (payload, topic) => {
+    const eventPlug = await InputPlug.create(agent, "events");
+
+    eventPlug.on("message", (payload, topic) => {
       console.log("received message on", topic);
       const decoded = decode(payload);
       console.log(JSON.stringify(decoded));
       // messages.push(JSON.stringify(decoded));
       messages = [...messages, JSON.stringify(decoded)];
       console.log(messages.length);
+    });
+
+    const displayInstructionsPlug = await InputPlug.create(
+      agent,
+      "serverInstructDisplays"
+    );
+
+    displayInstructionsPlug.on("message", (payload, topic) => {
+      invalidateAll();
+
+      //   const screenId = parseAgentIdOrGroup(topic);
+
+      //   const targetDisplay = data.displays.find((s) => s.id === screenId);
+      //   if (targetDisplay) {
+      //     console.log(
+      //       "change targetDisplay",
+      //       targetDisplay,
+      //       "to content",
+      //       decoded.contents
+      //     );
+
+      //   } else {
+      //     console.error(
+      //       "Could not match target screen ID",
+      //       screenId,
+      //       "with displays in",
+      //       JSON.stringify(data.displays.map((d) => d.id))
+      //     );
+      //     throw Error("Could not match target display");
+      //   }
     });
   });
 
@@ -42,15 +78,33 @@
   });
 </script>
 
-<h1>This is the debug mode for Presentation views</h1>
+<h1>Presentation Views: Debug</h1>
 <div>
   Tether: {connected ? "✅ connected" : "❌ not connected"}
 </div>
 
+{#if data}
+  <h2>Presentation State</h2>
+  <ul>
+    {#each data.displays as display}
+      <li>
+        <h3>
+          Display "{display.id}"
+        </h3>
+        <p>
+          Contents: {display.contents === null
+            ? "empty"
+            : JSON.stringify(display.contents)}
+        </p>
+      </li>
+    {/each}
+  </ul>
+{/if}
+
 <h2>Incoming Events</h2>
 <h3>Received {messages.length} events</h3>
-<ul>
+<div>
   {#each messages as m}
-    <li>{m}</li>
+    <div>{m}</div>
   {/each}
-</ul>
+</div>
