@@ -9,6 +9,7 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import type { DisplayUpdateMessage } from "$lib/events.types";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
+  import StatusFeed from "./StatusFeed.svelte";
 
   export let data: PageData;
 
@@ -70,7 +71,7 @@
 </script>
 
 <main>
-  <PollinationResult />
+  <StatusFeed />
 
   <h1>
     Display #{data.id}
