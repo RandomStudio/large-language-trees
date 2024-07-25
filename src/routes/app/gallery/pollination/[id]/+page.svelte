@@ -19,7 +19,7 @@
     SelectPlant,
     SelectSeedbank
   } from "$lib/types";
-  import type { EventType } from "$lib/events.types";
+  import type { EventNewPollination } from "$lib/events.types";
 
   export let data: EnhancedGardenViewData;
 
@@ -174,11 +174,9 @@
       await addConfirmedPlant(candidateChild, data.garden.id, data.seedBank.id);
       await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
 
-      const event: EventType = {
+      const event: EventNewPollination = {
         name: "newPlantPollination",
-        payload: {
-          ...candidateChild
-        }
+        payload: candidateChild
       };
       const eventRes = await fetch("/api/events", {
         method: "POST",

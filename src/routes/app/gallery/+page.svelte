@@ -10,7 +10,7 @@
   import moment from "moment";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
-  import type { EventType } from "$lib/events.types";
+  import type { SimpleEvent } from "$lib/events.types";
 
   let selectedPlant: SelectPlant | null = null;
 
@@ -68,7 +68,7 @@
 
     const eventsPlug = await InputPlug.create(agent, "events");
     eventsPlug.on("message", (payload) => {
-      const m = decode(payload) as EventType;
+      const m = decode(payload) as SimpleEvent;
       if (m.name === "newPlantPollination") {
         // For any "newPlantPollination" event, reload page data just in case
         invalidateAll();
