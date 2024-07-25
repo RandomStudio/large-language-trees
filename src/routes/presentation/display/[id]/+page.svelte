@@ -10,6 +10,7 @@
   import type { DisplayUpdateMessage } from "$lib/events.types";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatusFeed from "./StatusFeed.svelte";
+  import BRollDetail from "./BRollDetail.svelte";
 
   export let data: PageData;
 
@@ -71,7 +72,7 @@
 </script>
 
 <main>
-  <StatusFeed />
+  <BRollDetail />
 
   <h1>
     Display #{data.id}
