@@ -1,6 +1,5 @@
-import type { PresentationDisplayState } from "$lib/types";
-
-export interface PresentationDisplayFrontendState
-  extends PresentationDisplayState {
-  timeout: NodeJS.Timeout | null;
+import type { DisplayEventContents } from "$lib/events.types";
+export interface PresentationDisplayFrontendState{
+  id : string ;
+  contents : DisplayEventContents ; 
 }
