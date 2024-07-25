@@ -33,9 +33,9 @@
     eventPlug.on("message", (payload, topic) => {
       console.log("received message on", topic);
       const decoded = decode(payload);
-      console.log(JSON.stringify(decoded, null, 2));
+      console.log(JSON.stringify(decoded));
       // messages.push(JSON.stringify(decoded));
-      messages = [...messages, JSON.stringify(decoded)];
+      messages = [...messages, JSON.stringify(decoded, null, 2)];
       console.log(messages.length);
     });
 
@@ -103,6 +103,6 @@
 <h3 class="font-bold">Received {messages.length} events</h3>
 <div>
   {#each messages as m}
-    <div><pre><code>{m}</code></pre></div>
+    <div class="w-screen"><pre><code>{m}</code></pre></div>
   {/each}
 </div>

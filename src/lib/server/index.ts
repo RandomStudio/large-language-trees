@@ -131,7 +131,7 @@ export const createNewSeedbank = async (userId: string) => {
   if (thePlant && theUser) {
     await publishEvent({
       name: "newUserFirstPlant",
-      payload: { plant: thePlant, user: theUser }
+      payload: { plant: thePlant, user: { ...theUser, passwordHash: "hidden" } }
     });
   }
 
