@@ -97,8 +97,12 @@ export const gardensToPlantsRelations = relations(
   })
 );
 
-export const gardensRelations = relations(gardens, ({ many }) => ({
-  plantsInGarden: many(gardensToPlants)
+export const gardensRelations = relations(gardens, ({ many, one }) => ({
+  plantsInGarden: many(gardensToPlants),
+  myOwner: one(users, {
+    fields: [gardens.userId],
+    references: [users.id]
+  })
 }));
 
 export const seedbanks = pgTable("seedbanks", {

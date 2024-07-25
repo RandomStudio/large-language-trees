@@ -1,5 +1,6 @@
 import type {
   GardenViewData,
+  GardenWithPlants,
   InsertPlant,
   PublicUserInfo,
   SelectGarden,
@@ -89,7 +90,7 @@ export interface DisplayFeaturedPlant extends DisplayUpdateEvent {
 export interface DisplayFeaturedGarden extends DisplayUpdateEvent {
   name: bRollNaming.ZOOM_OUT;
   contents: {
-    garden: SelectGarden;
+    garden: GardenWithPlants;
     user: PublicUserInfo;
   };
 }
@@ -97,7 +98,7 @@ export interface DisplayFeaturedGarden extends DisplayUpdateEvent {
 export interface DisplayMultipleGardens extends DisplayUpdateEvent {
   name: bRollNaming.ROLL_PAN;
   contents: {
-    garden: SelectGarden;
+    garden: GardenWithPlants;
     user: PublicUserInfo;
   }[];
 }
@@ -119,7 +120,7 @@ export interface DisplayPlantCount extends DisplayUpdateEvent {
   name: bRollNaming.STATISTICS_2;
   contents: {
     gardens: {
-      garden: SelectGarden;
+      garden: GardenWithPlants;
       user: PublicUserInfo;
     }[];
     count: number;

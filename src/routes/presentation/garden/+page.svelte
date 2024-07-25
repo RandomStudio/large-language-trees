@@ -1,7 +1,7 @@
 <script lang="ts">
   import type {
     GardenViewData,
-    MyGarden,
+    GardenWithPlants,
     PlantProperties,
     SelectPlant
   } from "$lib/types";
@@ -255,7 +255,7 @@
   //continously add new plants
   async function importNewPlants() {
     const response = await fetch(`/api/users/${data.user.id}/garden`);
-    const myGarden = (await response.json()) as MyGarden; // get all plants info
+    const myGarden = (await response.json()) as GardenWithPlants; // get all plants info
 
     const newPlants = myGarden.plantsInGarden;
 

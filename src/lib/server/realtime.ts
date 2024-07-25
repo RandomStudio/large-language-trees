@@ -1,7 +1,7 @@
 import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
 import { db } from "./db";
 import { gardens, plants, presentationState, seedbanks, users } from "./schema";
-import { eq, not } from "drizzle-orm";
+import { count, eq, not } from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
@@ -11,14 +11,20 @@ import {
   type DisplayIdle,
   type DisplayLeaderboard,
   type DisplayMultipleGardens,
+  type DisplayPlantCount,
+  type DisplayPlantGrowingTime,
   type DisplayPollination,
   type DisplayStatusFeed,
   type DisplayUpdateMessage,
   type SimpleEvent
 } from "$lib/events.types";
-import { pickRandomElement } from "random-elements";
+import { pickMultipleRandomElements, pickRandomElement } from "random-elements";
 import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/types";
 import { stripUserInfo } from "$lib/security";
+import {
+  LIMIT_LEADERBOARD,
+  NUM_GARDENS_MULTI
+} from "../../defaults/presentation";
 
 export const publishEvent = async (event: SimpleEvent) => {
   const agent = await TetherAgent.create("server", {
@@ -187,16 +193,107 @@ const randomAmbientDisplay = async (
     }
     case "ROLL_PAN": {
       // TODO: exclude admin gardens
-      const allGardens = await db.select().from(gardens);
-      const pickGarden = pickRandomElement(allGardens);
-      const theUser = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, pickGarden.userId));
+      const allGardens = await db.query.gardens.findMany({
+        with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+      });
+      if (allGardens.length < 5) {
+        throw Error("Not enough gardens to display count=" + NUM_GARDENS_MULTI);
+      }
+      const pickGardens = pickMultipleRandomElements(
+        allGardens,
+        NUM_GARDENS_MULTI
+      );
 
       const contents: DisplayMultipleGardens = {
         name: bRollNaming.ROLL_PAN,
-        contents: []
+        contents: pickGardens.map((garden) => ({
+          garden,
+          user: stripUserInfo(garden.myOwner)
+        }))
+      };
+      return contents;
+    }
+    case "ZOOM_OUT": {
+      const allGardens = await db.query.gardens.findMany({
+        with: { myOwner: true, plantsInGarden: true }
+      });
+      const pickGarden = pickRandomElement(allGardens);
+      const plantsInGarden = await db.query.gardensToPlants.findMany({
+        with: { plant: true }
+      });
+      const contents: DisplayFeaturedGarden = {
+        name: bRollNaming.ZOOM_OUT,
+        contents: {
+          garden: {
+            ...pickGarden,
+            plantsInGarden
+          },
+          user: stripUserInfo(pickGarden.myOwner)
+        }
+      };
+      return contents;
+    }
+    case "TOP_LIST": {
+      // TODO: This is probably not a slow query, but certainly a very big payload,
+      // potentially: it is ALL gardens with ALL plant details for EVERY plant in
+      // each garden, plus all user details.
+      // An orderBy + LIMIT would probably help, but this would require a join.
+      const allGardens = await db.query.gardens.findMany({
+        with: { myOwner: true, plantsInGarden: true }
+      });
+
+      if (allGardens.length < LIMIT_LEADERBOARD) {
+        throw Error("Not enough gardens for leaderboard");
+      }
+
+      const orderedByPlantCount = allGardens
+        .sort((a, b) => {
+          return a.plantsInGarden.length - b.plantsInGarden.length;
+        })
+        .slice(0, LIMIT_LEADERBOARD);
+
+      const contents: DisplayLeaderboard = {
+        name: bRollNaming.TOP_LIST,
+        contents: orderedByPlantCount.map((garden) => ({
+          username: garden.myOwner.username,
+          count: garden.plantsInGarden.length
+        }))
+      };
+      return contents;
+    }
+    case "STATISTICS_1": {
+      const allPlants = await db.select().from(plants);
+      const pickPlant = pickRandomElement(allPlants);
+
+      const contents: DisplayPlantGrowingTime = {
+        name: bRollNaming.STATISTICS_1,
+        contents: pickPlant
+      };
+      return contents;
+    }
+    case "STATISTICS_2": {
+      const [result] = await db.select({ count: count() }).from(plants);
+      const allGardens = await db.query.gardens.findMany({
+        with: {
+          plantsInGarden: { with: { plant: true } },
+          myOwner: true
+        }
+      });
+
+      const pickGardens = pickMultipleRandomElements(
+        allGardens,
+        NUM_GARDENS_MULTI
+      );
+
+      const contents: DisplayPlantCount = {
+        name: bRollNaming.STATISTICS_2,
+        contents: {
+          gardens: pickGardens.map((garden) => ({
+            garden,
+            user: stripUserInfo(garden.myOwner)
+          })),
+          count: result.count
+        }
       };
       return contents;
     }
