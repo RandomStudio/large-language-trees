@@ -85,6 +85,13 @@
       "when": 1721814995170,
       "tag": "0011_smooth_red_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1721829938420,
+      "tag": "0012_spotty_exodus",
+      "breakpoints": true
     }
   ]
 }

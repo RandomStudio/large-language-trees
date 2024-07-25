@@ -31,6 +31,8 @@ import { pickRandomElement } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 import DefaultPrompt from "../../defaults/prompt-config";
 import { publishEvent } from "./realtime";
+import type { EventFirstPlant } from "$lib/events.types";
+import { stripUserInfo } from "$lib/security";
 
 export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -122,10 +124,18 @@ export const createNewSeedbank = async (userId: string) => {
     return;
   }
 
+  const theUser = await db.query.users.findFirst({
+    where: eq(users.id, userId)
+  });
+
   const thePlant = await getNewPlantForUser();
 
-  if (thePlant) {
-    await publishEvent({ name: "newUserFirstPlant", payload: { ...thePlant } });
+  if (thePlant && theUser) {
+    const e: EventFirstPlant = {
+      name: "newUserFirstPlant",
+      payload: { plant: thePlant, user: stripUserInfo(theUser) }
+    };
+    await publishEvent(e);
   }
 
   await addPlantToSeedbank(thePlant.id, newSeedbank.id);

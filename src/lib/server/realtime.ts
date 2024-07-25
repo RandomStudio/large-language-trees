@@ -1,12 +1,20 @@
 import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
 import { db } from "./db";
-import { presentationState } from "./schema";
+import { presentationState, users } from "./schema";
 import { eq } from "drizzle-orm";
-import type { DisplayUpdateMessage, EventType } from "$lib/events.types";
+import type {
+  DisplayEventContents,
+  DisplayFirstPlant,
+  DisplayIdle,
+  DisplayPollination,
+  DisplayUpdateMessage,
+  SimpleEvent
+} from "$lib/events.types";
 import { pickRandomElement } from "random-elements";
 import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/types";
+import { stripUserInfo } from "$lib/security";
 
-export const publishEvent = async (event: EventType) => {
+export const publishEvent = async (event: SimpleEvent) => {
   const agent = await TetherAgent.create("server", {
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
@@ -25,12 +33,12 @@ export const publishEvent = async (event: EventType) => {
 
   await agent.disconnect();
 
-  await updatePresentationDisplays(event);
+  await updatePresentationDisplaysOnEvent(event);
 };
 
 const publishDisplayInstructions = async (
   targetDisplayId: string,
-  contents: EventType,
+  contents: DisplayEventContents,
   timeout: number | null
 ) => {
   const agent = await TetherAgent.create("server", {
@@ -51,7 +59,7 @@ const publishDisplayInstructions = async (
 
   const message: DisplayUpdateMessage = {
     targetDisplayId,
-    contents,
+    payload: contents,
     timeout
   };
 
@@ -86,28 +94,20 @@ export const handleDisplayNotification = async (
 
   // TODO: randomly (?)pick one of the idle/ambient/b-roll content selections
 
-  const idleState: EventType = {
+  const idleState: DisplayIdle = {
     name: "idle",
-    payload: null
+    contents: null
   };
 
   await updateScreenStateAndPublish(displayId, idleState, null, null);
 };
 
-export const updatePresentationDisplays = async (latestEvent: EventType) => {
+export const updatePresentationDisplaysOnEvent = async (
+  latestEvent: SimpleEvent
+) => {
   switch (latestEvent.name) {
     case "newUser": {
-      const PRIORITY = 1;
-      const TIMEOUT = 3000;
-      const targetScreen = await findScreenFor(PRIORITY);
-      if (targetScreen) {
-        await updateScreenStateAndPublish(
-          targetScreen,
-          latestEvent,
-          PRIORITY,
-          TIMEOUT
-        );
-      }
+      // Ignore new user events for now
       break;
     }
     case "newUserFirstPlant": {
@@ -115,12 +115,15 @@ export const updatePresentationDisplays = async (latestEvent: EventType) => {
       const TIMEOUT = 5000;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
-        await updateScreenStateAndPublish(
-          targetScreen,
-          latestEvent,
-          PRIORITY,
-          TIMEOUT
-        );
+        const { user, plant } = latestEvent.payload;
+        const e: DisplayFirstPlant = {
+          name: "newUserFirstPlant",
+          contents: {
+            plant,
+            user
+          }
+        };
+        await updateScreenStateAndPublish(targetScreen, e, PRIORITY, TIMEOUT);
       }
       break;
     }
@@ -129,12 +132,39 @@ export const updatePresentationDisplays = async (latestEvent: EventType) => {
       const TIMEOUT = 8000;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
-        await updateScreenStateAndPublish(
-          targetScreen,
-          latestEvent,
-          PRIORITY,
-          TIMEOUT
-        );
+        const plant = latestEvent.payload;
+        if (plant.authorTop && plant.authorBottom) {
+          const authorTop = await db.query.users.findFirst({
+            where: eq(users.id, plant.authorTop)
+          });
+          const authorBottom = await db.query.users.findFirst({
+            where: eq(users.id, plant.authorBottom)
+          });
+          if (authorTop && authorBottom) {
+            const e: DisplayPollination = {
+              name: "newPlantPollination",
+              contents: {
+                plant,
+                authorTop: stripUserInfo(authorTop),
+                authorBottom: stripUserInfo(authorBottom)
+              }
+            };
+            await updateScreenStateAndPublish(
+              targetScreen,
+              e,
+              PRIORITY,
+              TIMEOUT
+            );
+          } else {
+            console.error(
+              "author(s) not found in DB:",
+              plant.authorTop,
+              plant.authorBottom
+            );
+          }
+        } else {
+          console.error("author(s) missing from", { plant });
+        }
       }
       break;
     }
@@ -157,17 +187,19 @@ const findScreenFor = async (priority: number): Promise<string | null> => {
     s.priority === null ? true : s.priority < priority
   );
 
-  if (!availableScreens) {
+  if (availableScreens.length === 0) {
     console.warn("All screens occupied with same or higher priority");
   }
 
-  return availableScreens ? pickRandomElement(availableScreens).id : null;
+  return availableScreens.length > 0
+    ? pickRandomElement(availableScreens).id
+    : null;
 };
 
 /** Publish updates on channel, persist to database */
 const updateScreenStateAndPublish = async (
   targetId: string,
-  contents: EventType,
+  contents: DisplayEventContents,
   priority: number | null,
   timeout: number | null
 ) => {

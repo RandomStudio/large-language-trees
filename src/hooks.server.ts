@@ -8,6 +8,10 @@ const publicAccessAllowed = (pathname: string) =>
   pathname.includes("/api/displayNotifyServer");
 
 export const handle: Handle = async ({ event, resolve }) => {
+  if (event.url.pathname === "/") {
+    redirect(302, "/app");
+  }
+
   if (publicAccessAllowed(event.url.pathname)) {
     console.warn("Unauthenticated access to", event.url.pathname, "allowed");
     return resolve(event);
