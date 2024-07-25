@@ -122,10 +122,17 @@ export const createNewSeedbank = async (userId: string) => {
     return;
   }
 
+  const theUser = await db.query.users.findFirst({
+    where: eq(users.id, userId)
+  });
+
   const thePlant = await getNewPlantForUser();
 
-  if (thePlant) {
-    await publishEvent({ name: "newUserFirstPlant", payload: { ...thePlant } });
+  if (thePlant && theUser) {
+    await publishEvent({
+      name: "newUserFirstPlant",
+      payload: { plant: thePlant, user: theUser }
+    });
   }
 
   await addPlantToSeedbank(thePlant.id, newSeedbank.id);

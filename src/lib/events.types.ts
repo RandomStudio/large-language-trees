@@ -1,4 +1,4 @@
-import type { InsertPlant } from "./types";
+import type { InsertPlant, SelectUser } from "./types";
 
 export interface EventBody {
   name: string;
@@ -15,7 +15,7 @@ export interface EventNewUser extends EventBody {
 
 export interface EventFirstPlant extends EventBody {
   name: "newUserFirstPlant";
-  payload: InsertPlant;
+  payload: { plant: InsertPlant; user: SelectUser };
 }
 
 export interface EventNewPollination extends EventBody {
