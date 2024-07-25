@@ -1,9 +1,7 @@
 import type {
-  GardenViewData,
   GardenWithPlants,
   InsertPlant,
   PublicUserInfo,
-  SelectGarden,
   SelectPlant
 } from "./types";
 
