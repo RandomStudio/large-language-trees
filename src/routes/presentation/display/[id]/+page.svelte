@@ -1,5 +1,5 @@
 <script lang="ts">
-  import BreakingNews from "./BreakingNews.svelte";
+  import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
   import PollinationEvent from "./PollinationEvent.svelte";
 
@@ -27,10 +27,10 @@
       "serverInstructDisplays",
       { id: data.id }
     );
-    instructionsPlug.on("message", (payload) => {
-      const m = decode(payload) as DisplayUpdateMessage;
+    instructionsPlug.on("message", (p) => {
+      const m = decode(p) as DisplayUpdateMessage;
       console.log("ReceivedserverInstructDisplays message:", m);
-      const { contents, timeout } = m;
+      const { payload, timeout } = m;
       if (timeout) {
         timer = setTimeout(async () => {
           console.log("Display Timeout reached!");
@@ -47,7 +47,7 @@
           }
         }, timeout);
       }
-      data.contents = contents;
+      data.contents = payload;
     });
 
     // Notify server that this display is online / reloaded
@@ -70,13 +70,23 @@
 </script>
 
 <main>
-  <PollinationResult />
-
   <h1>
-    Display #{data.id}
+    Display #{JSON.stringify(data.contents?.name)}
+    {console.log("Data of the event" + JSON.stringify(data))}
   </h1>
 
-  <div>
-    {JSON.stringify(data.contents)}
-  </div>
+  {#if data.contents?.name == "newUserFirstPlant"}
+    <NewUserFirstPlant
+      imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+      plantName={data.contents?.contents.plant.commonName}
+      gardenerName={data.contents?.contents.user.username}
+    ></NewUserFirstPlant>
+  {/if}
+
+  {#if data.contents?.name == "newPlantPollination"}
+    <PollinationResult
+      imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+      plantName={data.contents?.contents.plant.commonName}
+    ></PollinationResult>
+  {/if}
 </main>

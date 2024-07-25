@@ -311,11 +311,11 @@ export const cleanUp = async () => {
   await db.delete(seedbanks);
   await db.delete(gardens);
   await db.delete(sessions);
-  await db.delete(users);
   await db.delete(plants);
   await db.delete(promptSettingsTable);
   await db.delete(generatedImages);
   await db.delete(presentationState);
+  await db.delete(users);
   console.log("...cleanup complete!");
 };
 
