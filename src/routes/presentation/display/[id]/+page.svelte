@@ -1,7 +1,6 @@
 <script lang="ts">
   import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
-  import PollinationEvent from "./PollinationEvent.svelte";
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -32,19 +31,24 @@
       console.log("ReceivedserverInstructDisplays message:", m);
       const { payload, timeout } = m;
       if (timeout) {
-        timer = setTimeout(async () => {
-          console.log("Display Timeout reached!");
+        if (timer) {
+          console.log("clear active timer");
+          clearTimeout(timer);
+          timer = null;
+        }
+        console.log("Set new timeout", timeout, "ms...");
+        timer = setTimeout(() => {
+          console.log("...Display Timeout reached!");
           const message: DisplayNotifyServer = {
             displayId: data.id,
             event: "timeout"
           };
-          await fetch("/api/displayNotifyServer", {
+          fetch("/api/displayNotifyServer", {
             method: "POST",
             body: JSON.stringify(message)
+          }).then(() => {
+            timer = null;
           });
-          if (timer) {
-            clearTimeout(timer);
-          }
         }, timeout);
       }
       data.contents = payload;
@@ -72,9 +76,14 @@
 <main>
   <h1>
     Display #{data.id}
-    {JSON.stringify(data.contents?.name)}
-    {console.log("Data of the event" + JSON.stringify(data))}
   </h1>
+  <div>
+    <pre>
+      <code>
+        {JSON.stringify(data.contents, null, 2)}
+      </code>
+    </pre>
+  </div>
 
   {#if data.contents?.name == "newUserFirstPlant"}
     <NewUserFirstPlant

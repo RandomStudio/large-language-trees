@@ -100,6 +100,11 @@ export const handleDisplayNotification = async (
 ) => {
   const { displayId, event } = message;
 
+  const idleState: DisplayIdle = {
+    name: "idle",
+    contents: null
+  };
+
   if (event === "init") {
     console.log("A display came online (or reloaded)");
     const exists = await db.query.presentationState.findFirst({
@@ -113,15 +118,10 @@ export const handleDisplayNotification = async (
         contents: null,
         priority: null
       });
-
-      // Add an idle state with a short timeout, so that the new
-      // display will be assigned a "B-roll" state soon...
-      const idleState: DisplayIdle = {
-        name: "idle",
-        contents: null
-      };
-      await updateScreenStateAndPublish(displayId, idleState, null, 2000);
     }
+    // Add an idle state with a short timeout, so that the new
+    // display will be assigned a "B-roll" state soon...
+    await updateScreenStateAndPublish(displayId, idleState, null, 2000);
   }
 
   if (event === "timeout") {
@@ -141,6 +141,7 @@ export const handleDisplayNotification = async (
       console.error(
         "Something went wrong getting a random Display layout: " + e
       );
+      await updateScreenStateAndPublish(displayId, idleState, null, 2000);
     }
   }
 };
@@ -428,6 +429,11 @@ const updateScreenStateAndPublish = async (
   priority: number | null,
   timeout: number | null
 ) => {
+  console.log(
+    "updateScreenStateAndPublish:",
+    { targetId, name: contents.name, priority, timeout },
+    "..."
+  );
   await db
     .update(presentationState)
     .set({ contents, priority })
