@@ -1,10 +1,8 @@
 <script>
   // @ts-nocheck
-
   import { onMount } from "svelte";
 
   let container;
-  let textOverlay;
   let originX, originY;
   let scaleStart,
     scaleEnd,
@@ -20,44 +18,6 @@
   function isNonTransparentPixel(x, y, context) {
     const imageData = context.getImageData(x, y, 1, 1).data;
     return imageData[3] !== 0; // Alpha value 0 indicates transparent
-  }
-
-  function placeDescriptiononImage() {
-    const img = container.querySelector("img");
-    const description = container.querySelector(".description");
-
-    const imgWidth = img.naturalWidth;
-    const imgHeight = img.naturalHeight;
-
-    // Create a canvas to analyze image transparency
-    const canvas = document.createElement("canvas");
-    canvas.width = imgWidth;
-    canvas.height = imgHeight;
-    const context = canvas.getContext("2d");
-
-    // Draw the image onto the canvas
-    context.drawImage(img, 0, 0, imgWidth, imgHeight);
-
-    let placed = false;
-    while (!placed) {
-      const randomMarginWidth = getRandom(imgWidth * 0.2, imgWidth * 0.3);
-      const randomMarginHeight = getRandom(imgHeight * 0.2, imgHeight * 0.3);
-
-      const positionHorizontal =
-        Math.random() < 0.5 ? randomMarginWidth : imgWidth - randomMarginWidth;
-      const positionVertical =
-        Math.random() < 0.5
-          ? randomMarginHeight
-          : imgHeight - randomMarginHeight;
-
-      if (
-        isNonTransparentPixel(positionHorizontal, positionVertical, context)
-      ) {
-        description.style.left = `${positionHorizontal}px`;
-        description.style.top = `${positionVertical}px`;
-        placed = true;
-      }
-    }
   }
 
   function setInitialPosition() {
@@ -116,11 +76,13 @@
   });
 </script>
 
-<div class="bg-roel_rose">
-  <div class="text-roel_purple text-3xl absolute right-36 top-5 font-primer">
+<div class="bg-roel_rose relative">
+  <div
+    class="text-roel_purple text-3xl absolute right-36 top-5 font-primer z-10"
+  >
     Join the Garden!
   </div>
-  <div class="absolute right-5 w-28 h-auto top-5">
+  <div class="absolute right-5 w-28 h-auto top-5 z-10">
     <!-- svelte-ignore a11y-img-redundant-alt -->
     <img
       src="/livinggarden_QR_purple.png"
@@ -130,12 +92,12 @@
   </div>
   <div
     bind:this={container}
-    class="absolute right-5 w-[2000px] h-auto top-5 camera-animation"
+    class="absolute right-5 w-[2000px] h-auto top-5 camera-animation z-0"
     style="--scaleStart: {scaleStart}; --scaleEnd: {scaleEnd}; --translateXStart: {translateXStart}px; --translateYStart: {translateYStart}px; --translateXEnd: {translateXEnd}px; --translateYEnd: {translateYEnd}px; transform-origin: {originX}% {originY}%;"
   >
     <!-- Container for the image and text -->
     <img src="/46.png" alt="Plant" class="place-content-center h-auto" />
-    <div class="description bg-roel_purple text-roel_rose absolute">
+    <div class="description bg-roel_purple text-roel_rose absolute p-2">
       JessieK's
       <br />Fern
     </div>
@@ -156,15 +118,5 @@
       transform: scale(var(--scaleEnd))
         translate(var(--translateXEnd), var(--translateYEnd));
     }
-  }
-  .description {
-    position: absolute;
-    padding: 5px;
-  }
-  .bg-roel_purple {
-    background-color: purple; /* Replace with actual color */
-  }
-  .text-roel_rose {
-    color: #e91e63; /* Replace with actual color */
   }
 </style>
