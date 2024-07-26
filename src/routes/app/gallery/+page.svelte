@@ -10,7 +10,8 @@
   import moment from "moment";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
-  import type { SimpleEvent } from "$lib/events.types";
+  import { type SimpleEvent } from "$lib/events.types";
+  import { PLUG_NAMES } from "../../../defaults/constants";
 
   let selectedPlant: SelectPlant | null = null;
 
@@ -66,7 +67,7 @@
       brokerOptions: BROWSER_CONNECTION
     });
 
-    const eventsPlug = await InputPlug.create(agent, "events");
+    const eventsPlug = await InputPlug.create(agent, PLUG_NAMES.simpleEvents);
     eventsPlug.on("message", (payload) => {
       const m = decode(payload) as SimpleEvent;
       if (m.name === "newPlantPollination") {

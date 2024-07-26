@@ -1,5 +1,5 @@
 import type { SimpleEvent } from "$lib/events.types";
-import { publishEvent } from "$lib/server/realtime";
+import { logSimpleEvents, publishEvent } from "$lib/server/realtime";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -8,6 +8,7 @@ export const POST: RequestHandler = async ({ request }) => {
   console.log("relay event from /api/events", { event });
 
   await publishEvent(event);
+  await logSimpleEvents(event);
 
   return json({}, { status: 200 });
 };

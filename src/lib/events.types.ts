@@ -49,18 +49,20 @@ export interface DisplayFirstPlant extends DisplayUpdateEvent {
 export interface DisplayPollination extends DisplayUpdateEvent {
   name: "newPlantPollination";
   contents: {
-    plant: InsertPlant;
+    newPlant: InsertPlant;
     authorTop: PublicUserInfo;
     authorBottom: PublicUserInfo;
+    plantTop: SelectPlant;
+    plantBottom: SelectPlant;
   };
 }
 
-interface FeedTextPart {
+export interface FeedTextPart {
   text: string;
   highlight?: boolean;
 }
 
-type FeedTextLine = FeedTextPart[];
+export type FeedTextEntry = FeedTextPart[];
 
 export enum bRollNaming {
   STATUS_FEED = "showStatusFeed",
@@ -74,7 +76,7 @@ export enum bRollNaming {
 
 export interface DisplayStatusFeed extends DisplayUpdateEvent {
   name: bRollNaming.STATUS_FEED;
-  contents: FeedTextLine[];
+  contents: FeedTextEntry[];
 }
 
 export interface DisplayFeaturedPlant extends DisplayUpdateEvent {

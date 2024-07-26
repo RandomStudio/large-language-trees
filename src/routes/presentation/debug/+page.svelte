@@ -7,6 +7,7 @@
     InputPlug,
     TetherAgent
   } from "tether-agent";
+  import { PLUG_NAMES } from "../../../defaults/constants.js";
 
   let connected = false;
   let messages: string[] = [];
@@ -28,7 +29,7 @@
 
     connected = true;
 
-    const eventPlug = await InputPlug.create(agent, "events");
+    const eventPlug = await InputPlug.create(agent, PLUG_NAMES.simpleEvents);
 
     eventPlug.on("message", (payload, topic) => {
       console.log("received message on", topic);
@@ -41,7 +42,7 @@
 
     const displayInstructionsPlug = await InputPlug.create(
       agent,
-      "serverInstructDisplays"
+      PLUG_NAMES.displayInstructions
     );
 
     displayInstructionsPlug.on("message", (payload, topic) => {

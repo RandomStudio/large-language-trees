@@ -86,8 +86,8 @@
 
   {#if data.contents?.name == "newPlantPollination"}
     <PollinationResult
-      imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
-      plantName={data.contents?.contents.plant.commonName}
+      imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
+      plantName={data.contents?.contents.newPlant.commonName}
     ></PollinationResult>
   {/if}
 </main>
