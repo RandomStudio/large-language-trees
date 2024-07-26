@@ -90,7 +90,7 @@
         Display "{display.id}"
       </h3>
       <div>
-        Contents: <pre><code
+        Contents: <pre class="text-xs"><code
             >{display.contents === null
               ? "empty"
               : JSON.stringify(display.contents, null, 2)}</code
@@ -104,6 +104,6 @@
 <h3 class="font-bold">Received {messages.length} events</h3>
 <div>
   {#each messages as m}
-    <div class="w-screen"><pre><code>{m}</code></pre></div>
+    <div class="w-screen text-xs"><pre><code>{m}</code></pre></div>
   {/each}
 </div>

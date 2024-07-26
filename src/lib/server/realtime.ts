@@ -60,6 +60,8 @@ export const publishEvent = async (event: SimpleEvent) => {
 
   await agent.disconnect();
 
+  await logSimpleEvents(event);
+
   await updatePresentationDisplaysOnEvent(event);
 };
 
@@ -451,7 +453,6 @@ const updateScreenStateAndPublish = async (
  */
 export const logSimpleEvents = async (event: SimpleEvent) => {
   const contents = await eventToLog(event);
-
   await db.insert(eventLogs).values({ id: uuidv4(), contents });
 };
 
@@ -492,14 +493,14 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       });
       return [
         {
-          text: `${event.payload.authorTop}'s ${plantTop}`,
+          text: `${event.payload.authorTop}'s ${plantTop?.commonName}`,
           highlight: true
         },
         {
           text: "just pollinated"
         },
         {
-          text: `${event.payload.authorBottom}'s ${plantBottom}`
+          text: `${event.payload.authorBottom}'s ${plantBottom?.commonName}`
         }
       ];
     }
