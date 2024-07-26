@@ -8,6 +8,7 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import type { DisplayUpdateMessage } from "$lib/events.types";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
+  import StatsGrowingTime from "./StatsGrowingTime.svelte";
 
   export let data: PageData;
 
@@ -74,17 +75,6 @@
 </script>
 
 <main>
-  <h1>
-    Display #{data.id}
-  </h1>
-  <div>
-    <pre>
-      <code>
-        {JSON.stringify(data.contents, null, 2)}
-      </code>
-    </pre>
-  </div>
-
   {#if data.contents?.name == "newUserFirstPlant"}
     <NewUserFirstPlant
       imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
@@ -99,4 +89,25 @@
       plantName={data.contents?.contents.newPlant.commonName}
     ></PollinationResult>
   {/if}
+
+  {#if data.contents?.name == "showStatusFeed"}{/if}
+
+  {#if data.contents?.name == "showFeaturedPlant"}{/if}
+
+  {#if data.contents?.name == "showFeaturedGarden"}{/if}
+
+  {#if data.contents?.name == "showMultipleGardens"}{/if}
+
+  {#if data.contents?.name == "showLeaderboard"}{/if}
+
+  {#if data.contents?.name == "showPlantGrowingTime"}
+    <StatsGrowingTime
+      imageUrl={data.contents.contents.imageUrl || "/59.png"}
+      plantName={data.contents?.contents.commonName}
+      gardenerName="PlaceHolder"
+      date={data.contents?.contents.created}
+    ></StatsGrowingTime>
+  {/if}
+
+  {#if data.contents?.name == "showPlantCount"}{/if}
 </main>
