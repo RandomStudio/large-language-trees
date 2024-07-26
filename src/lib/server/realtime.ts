@@ -260,8 +260,9 @@ const randomAmbientDisplay = async (
       }
 
       const orderedByPlantCount = allGardens
+        .filter((g) => g.myOwner.isAdmin === false)
         .sort((a, b) => {
-          return a.plantsInGarden.length - b.plantsInGarden.length;
+          return b.plantsInGarden.length - a.plantsInGarden.length;
         })
         .slice(0, LIMIT_LEADERBOARD);
 
