@@ -2,15 +2,8 @@ import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
 import { v4 as uuidv4 } from "uuid";
 
 import { db } from "./db";
-import {
-  eventLogs,
-  gardens,
-  plants,
-  presentationState,
-  seedbanks,
-  users
-} from "./schema";
-import { count, desc, eq, not } from "drizzle-orm";
+import { eventLogs, gardens, plants, presentationState, users } from "./schema";
+import { count, desc, eq } from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
