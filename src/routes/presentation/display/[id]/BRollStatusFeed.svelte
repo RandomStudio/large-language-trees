@@ -46,73 +46,21 @@
   </div>
 
   <div class="absolute left-3 bottom-3 space-y-2 z-20">
-    <div class="flex items-center space-x-2 opacity-50">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        SteveB's Rose
+    {#each contents as sentence, index}
+      <div
+        class="flex items-center space-x-2"
+        style="opacity: {0.5 + index * 0.1}"
+      >
+        {#each sentence as info}
+          {#if info.highlight == true}
+            <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
+              {info.text}
+            </div>
+          {:else}
+            <div class="text-xl font-primer text-roel_rose">{info.text}</div>
+          {/if}
+        {/each}
       </div>
-      <div class="text-xl font-primer text-roel_rose">
-        just sprouted in the Garden
-      </div>
-    </div>
-    <div class="flex items-center space-x-2 opacity-60">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        RoelScooter's Lavender
-      </div>
-      <div class="text-xl font-primer text-roel_rose">just pollinated</div>
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        SteveB's Rose
-      </div>
-    </div>
-    <div class="flex items-center space-x-2 opacity-70">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        JessicaK's Fir
-      </div>
-      <div class="text-xl font-primer text-roel_rose">
-        just sprouted in the Garden
-      </div>
-    </div>
-    <div class="flex items-center space-x-2 opacity-80">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        Jompy5's Sunflower
-      </div>
-      <div class="text-xl font-primer text-roel_rose">just pollinated</div>
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        JessicaK's Fir
-      </div>
-    </div>
-    <div class="flex items-center space-x-2 opacity-90">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        RoelScooter's Lavender
-      </div>
-      <div class="text-xl font-primer text-roel_rose">
-        just became top pollinator
-      </div>
-    </div>
-    <div class="flex items-center space-x-2 opacity-95">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        OuiOuiBaguette's Lily of the Valley
-      </div>
-      <div class="text-xl font-primer text-roel_rose">just pollinated</div>
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        RoelScooter's Lavender
-      </div>
-    </div>
-    <div class="flex items-center space-x-2 opacity-100">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        SteveB's Rose
-      </div>
-      <div class="text-xl font-primer text-roel_rose">
-        just sprouted in the Garden
-      </div>
-    </div>
-    <div class="flex items-center space-x-2 opacity-100">
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        RoelScooter's Lavender
-      </div>
-      <div class="text-xl font-primer text-roel_rose">just pollinated</div>
-      <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
-        SteveB's Rose
-      </div>
-    </div>
+    {/each}
   </div>
 </body>
