@@ -8,7 +8,6 @@ export const POST: RequestHandler = async ({ request }) => {
   console.log("relay event from /api/events", { event });
 
   await publishEvent(event);
-  await logSimpleEvents(event);
 
   return json({}, { status: 200 });
 };
