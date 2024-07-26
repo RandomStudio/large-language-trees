@@ -11,6 +11,7 @@
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
+  import StatsCount from "./StatsCount.svelte";
 
   export let data: PageData;
 
@@ -126,5 +127,7 @@
     ></StatsGrowingTime>
   {/if}
 
-  {#if data.contents?.name == "showPlantCount"}{/if}
+  {#if data.contents?.name == "showPlantCount"}
+    <StatsCount count={data.contents?.contents.count}></StatsCount>
+  {/if}
 </main>
