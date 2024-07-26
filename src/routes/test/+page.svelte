@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../app/app.css";
-  import { fade } from "svelte/transition";
+  import { fade, fly, slide, blur } from "svelte/transition";
+  import { quintOut, expoInOut } from "svelte/easing";
 
   let toggle = false;
 
@@ -21,7 +22,16 @@
 
 <h2 class="font-semibold text-sm">The List</h2>
 {#each aList as item}
-  <div transition:fade={{ duration: 500 }}>{item}</div>
+  <div
+    transition:fly={{
+      delay: 250,
+      duration: 300,
+      x: 100,
+      easing: quintOut
+    }}
+  >
+    {item}
+  </div>
 {/each}
 
 <button
@@ -32,9 +42,11 @@
 {#if toggle}
   <div
     in:fade={{ duration: 1000 }}
-    out:fade={{ duration: 100 }}
-    class="border-2 border-solid border-slate-400 m-4 p-4"
+    out:blur={{ duration: 2000, axis: "x" }}
+    class="h-20 border-2 border-solid border-slate-400 m-4 p-4"
   >
-    DYNAMIC TOGGLE
+    <span transition:fade={{ duration: 50, easing: expoInOut }}>
+      DYNAMIC TOGGLE
+    </span>
   </div>
 {/if}
