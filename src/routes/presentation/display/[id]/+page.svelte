@@ -10,6 +10,7 @@
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
+  import BRollLeaderboard from "./BRollLeaderboard.svelte";
 
   export let data: PageData;
 
@@ -112,7 +113,9 @@
 
   {#if data.contents?.name == "showMultipleGardens"}{/if}
 
-  {#if data.contents?.name == "showLeaderboard"}{/if}
+  {#if data.contents?.name == "showLeaderboard"}
+    <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
+  {/if}
 
   {#if data.contents?.name == "showPlantGrowingTime"}
     <StatsGrowingTime
