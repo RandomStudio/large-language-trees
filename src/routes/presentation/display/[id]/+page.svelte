@@ -75,6 +75,17 @@
 </script>
 
 <main>
+  <h1>
+    Display #{data.id}
+  </h1>
+  <div>
+    <pre>
+      <code>
+        {JSON.stringify(data.contents, null, 2)}
+      </code>
+    </pre>
+  </div>
+
   {#if data.contents?.name == "newUserFirstPlant"}
     <NewUserFirstPlant
       imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
