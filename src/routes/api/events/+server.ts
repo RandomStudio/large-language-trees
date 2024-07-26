@@ -1,5 +1,5 @@
 import type { SimpleEvent } from "$lib/events.types";
-import { publishEvent } from "$lib/server/realtime";
+import { logSimpleEvents, publishEvent } from "$lib/server/realtime";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ request }) => {

@@ -161,3 +161,14 @@ export const presentationState = pgTable("presentation_state", {
   priority: integer("priority_level"),
   contents: json("contents")
 });
+
+/**
+ * We need to keep a persistent copy of incoming (Simple)Events so that
+ * the serverless system can read and write these without having to be
+ * permanently subscribed to the "events"
+ */
+export const eventLogs = pgTable("event_logs", {
+  id: text("id").primaryKey(),
+  contents: json("contents").notNull(),
+  timestamp: timestamp("added", { withTimezone: true }).notNull().defaultNow()
+});

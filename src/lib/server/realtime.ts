@@ -1,7 +1,16 @@
 import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
+import { v4 as uuidv4 } from "uuid";
+
 import { db } from "./db";
-import { gardens, plants, presentationState, seedbanks, users } from "./schema";
-import { count, eq, not } from "drizzle-orm";
+import {
+  eventLogs,
+  gardens,
+  plants,
+  presentationState,
+  seedbanks,
+  users
+} from "./schema";
+import { count, desc, eq, not } from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
@@ -16,6 +25,7 @@ import {
   type DisplayPollination,
   type DisplayStatusFeed,
   type DisplayUpdateMessage,
+  type FeedTextEntry,
   type SimpleEvent
 } from "$lib/events.types";
 import { pickMultipleRandomElements, pickRandomElement } from "random-elements";
@@ -23,8 +33,11 @@ import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/t
 import { stripUserInfo } from "$lib/security";
 import {
   LIMIT_LEADERBOARD,
+  LIMIT_STATUS_FEED,
+  MIN_STATUS_FEED,
   NUM_GARDENS_MULTI
 } from "../../defaults/presentation";
+import { PLUG_NAMES } from "../../defaults/constants";
 
 export const publishEvent = async (event: SimpleEvent) => {
   const agent = await TetherAgent.create("server", {
@@ -36,7 +49,9 @@ export const publishEvent = async (event: SimpleEvent) => {
     }
   });
 
-  const plug = new OutputPlug(agent, "events", { publishOptions: { qos: 2 } });
+  const plug = new OutputPlug(agent, PLUG_NAMES.simpleEvents, {
+    publishOptions: { qos: 2 }
+  });
 
   const { name, payload } = event;
   console.log("Publishing event", { name, payload }, "...");
@@ -44,6 +59,8 @@ export const publishEvent = async (event: SimpleEvent) => {
   await plug.publish(encode({ name, payload }));
 
   await agent.disconnect();
+
+  await logSimpleEvents(event);
 
   await updatePresentationDisplaysOnEvent(event);
 };
@@ -62,7 +79,7 @@ const publishDisplayInstructions = async (
     }
   });
 
-  const plug = new OutputPlug(agent, "serverInstructDisplays", {
+  const plug = new OutputPlug(agent, PLUG_NAMES.displayInstructions, {
     id: targetDisplayId,
     publishOptions: { qos: 2 }
   });
@@ -85,6 +102,11 @@ export const handleDisplayNotification = async (
 ) => {
   const { displayId, event } = message;
 
+  const idleState: DisplayIdle = {
+    name: "idle",
+    contents: null
+  };
+
   if (event === "init") {
     console.log("A display came online (or reloaded)");
     const exists = await db.query.presentationState.findFirst({
@@ -98,15 +120,10 @@ export const handleDisplayNotification = async (
         contents: null,
         priority: null
       });
-
-      // Add an idle state with a short timeout, so that the new
-      // display will be assigned a "B-roll" state soon...
-      const idleState: DisplayIdle = {
-        name: "idle",
-        contents: null
-      };
-      await updateScreenStateAndPublish(displayId, idleState, null, 2000);
     }
+    // Add an idle state with a short timeout, so that the new
+    // display will be assigned a "B-roll" state soon...
+    await updateScreenStateAndPublish(displayId, idleState, null, 2000);
   }
 
   if (event === "timeout") {
@@ -121,12 +138,12 @@ export const handleDisplayNotification = async (
     try {
       const contents = await randomAmbientDisplay(pickDisplayType);
 
-      // await publishDisplayInstructions(displayId, contents, 15000);
       await updateScreenStateAndPublish(displayId, contents, 0, 15000);
     } catch (e) {
       console.error(
         "Something went wrong getting a random Display layout: " + e
       );
+      await updateScreenStateAndPublish(displayId, idleState, null, 2000);
     }
   }
 };
@@ -171,24 +188,19 @@ const randomAmbientDisplay = async (
       return contents;
     }
     case "STATUS_FEED": {
-      // TODO: build up a list of recent events. Do we need to write these to a table,
-      // perhaps based on incoming SimpleEvents?
+      const latestEvents = await db
+        .select()
+        .from(eventLogs)
+        .orderBy(desc(eventLogs.timestamp))
+        .limit(LIMIT_STATUS_FEED);
+      if (latestEvents.length < MIN_STATUS_FEED) {
+        throw Error(
+          `Not enough event logs (${latestEvents.length} < ${MIN_STATUS_FEED}) to show this view`
+        );
+      }
       const contents: DisplayStatusFeed = {
         name: bRollNaming.STATUS_FEED,
-        contents: [
-          [
-            {
-              text: "Testing..."
-            },
-            {
-              text: "Highlighted text!",
-              highlight: true
-            },
-            {
-              text: "...and more."
-            }
-          ]
-        ]
+        contents: latestEvents.map((entry) => entry.contents as FeedTextEntry)
       };
       return contents;
     }
@@ -248,8 +260,9 @@ const randomAmbientDisplay = async (
       }
 
       const orderedByPlantCount = allGardens
+        .filter((g) => g.myOwner.isAdmin === false)
         .sort((a, b) => {
-          return a.plantsInGarden.length - b.plantsInGarden.length;
+          return b.plantsInGarden.length - a.plantsInGarden.length;
         })
         .slice(0, LIMIT_LEADERBOARD);
 
@@ -342,13 +355,27 @@ export const updatePresentationDisplaysOnEvent = async (
           const authorBottom = await db.query.users.findFirst({
             where: eq(users.id, plant.authorBottom)
           });
-          if (authorTop && authorBottom) {
+          if (!authorTop || !authorBottom) {
+            throw Error("where are the author users?");
+          }
+          if (!plant.parent1 || !plant.parent2) {
+            throw Error("where are the parent plants?");
+          }
+          const plantTop = await db.query.plants.findFirst({
+            where: eq(plants.id, plant.parent1)
+          });
+          const plantBottom = await db.query.plants.findFirst({
+            where: eq(plants.id, plant.parent2)
+          });
+          if (authorTop && authorBottom && plantTop && plantBottom) {
             const e: DisplayPollination = {
               name: "newPlantPollination",
               contents: {
-                plant,
+                newPlant: plant,
                 authorTop: stripUserInfo(authorTop),
-                authorBottom: stripUserInfo(authorBottom)
+                authorBottom: stripUserInfo(authorBottom),
+                plantTop,
+                plantBottom
               }
             };
             await updateScreenStateAndPublish(
@@ -405,9 +432,89 @@ const updateScreenStateAndPublish = async (
   priority: number | null,
   timeout: number | null
 ) => {
+  console.log(
+    "updateScreenStateAndPublish:",
+    { targetId, name: contents.name, priority, timeout },
+    "..."
+  );
   await db
     .update(presentationState)
     .set({ contents, priority })
     .where(eq(presentationState.id, targetId));
   await publishDisplayInstructions(targetId, contents, timeout);
+};
+
+/** Because of our serverless architecture, we cannot listen using TCP
+ * socket "constantly" to incoming events on the server side. Therefore,
+ * we append logs to a DB table in order to have a persistent list
+ * we can read from when required (e.g. for "status feed").
+ *
+ * TODO: Some basic log management is possible here; if the table has more than EVENT_LOG_MAX
+ * entries, we should delete older entries.
+ */
+export const logSimpleEvents = async (event: SimpleEvent) => {
+  const contents = await eventToLog(event);
+  await db.insert(eventLogs).values({ id: uuidv4(), contents });
+};
+
+const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
+  switch (event.name) {
+    case "newUser": {
+      return [
+        {
+          text: event.payload.username,
+          highlight: true
+        },
+        {
+          text: "just joined"
+        }
+      ];
+    }
+    case "newUserFirstPlant": {
+      return [
+        {
+          text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
+          highlight: true
+        },
+        {
+          text: "just sprouted in the Garden"
+        }
+      ];
+    }
+    case "newPlantPollination": {
+      const { parent1, parent2 } = event.payload;
+      if (!parent1 || !parent2) {
+        throw Error("");
+      }
+      const plantTop = await db.query.plants.findFirst({
+        where: eq(plants.id, parent1)
+      });
+      const plantBottom = await db.query.plants.findFirst({
+        where: eq(plants.id, parent2)
+      });
+      return [
+        {
+          text: `${event.payload.authorTop}'s ${plantTop?.commonName}`,
+          highlight: true
+        },
+        {
+          text: "just pollinated"
+        },
+        {
+          text: `${event.payload.authorBottom}'s ${plantBottom?.commonName}`
+        }
+      ];
+    }
+    case "newTopPollinator": {
+      return [
+        {
+          text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
+          highlight: true
+        },
+        {
+          text: "just became top pollinator"
+        }
+      ];
+    }
+  }
 };
