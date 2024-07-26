@@ -121,7 +121,8 @@ export const handleDisplayNotification = async (
     try {
       const contents = await randomAmbientDisplay(pickDisplayType);
 
-      await publishDisplayInstructions(displayId, contents, 15000);
+      // await publishDisplayInstructions(displayId, contents, 15000);
+      await updateScreenStateAndPublish(displayId, contents, 0, 15000);
     } catch (e) {
       console.error(
         "Something went wrong getting a random Display layout: " + e
