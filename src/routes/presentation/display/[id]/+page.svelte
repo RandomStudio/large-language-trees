@@ -71,7 +71,8 @@
 
 <main>
   <h1>
-    Display #{JSON.stringify(data.contents?.name)}
+    Display #{data.id}
+    {JSON.stringify(data.contents?.name)}
     {console.log("Data of the event" + JSON.stringify(data))}
   </h1>
 

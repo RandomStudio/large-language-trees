@@ -1,4 +1,9 @@
-import type { InsertPlant, PublicUserInfo } from "./types";
+import type {
+  GardenWithPlants,
+  InsertPlant,
+  PublicUserInfo,
+  SelectPlant
+} from "./types";
 
 export interface SimpleEventBody {
   name: string;
@@ -50,6 +55,75 @@ export interface DisplayPollination extends DisplayUpdateEvent {
   };
 }
 
+interface FeedTextPart {
+  text: string;
+  highlight?: boolean;
+}
+
+type FeedTextLine = FeedTextPart[];
+
+export enum bRollNaming {
+  STATUS_FEED = "showStatusFeed",
+  DETAIL = "showFeaturedPlant",
+  ZOOM_OUT = "showFeaturedGarden",
+  ROLL_PAN = "showMultipleGardens",
+  TOP_LIST = "showLeaderboard",
+  STATISTICS_1 = "showPlantGrowingTime",
+  STATISTICS_2 = "showPlantCount"
+}
+
+export interface DisplayStatusFeed extends DisplayUpdateEvent {
+  name: bRollNaming.STATUS_FEED;
+  contents: FeedTextLine[];
+}
+
+export interface DisplayFeaturedPlant extends DisplayUpdateEvent {
+  name: bRollNaming.DETAIL;
+  contents: {
+    plant: SelectPlant;
+    user: PublicUserInfo;
+  };
+}
+
+export interface DisplayFeaturedGarden extends DisplayUpdateEvent {
+  name: bRollNaming.ZOOM_OUT;
+  contents: {
+    garden: GardenWithPlants;
+    user: PublicUserInfo;
+  };
+}
+
+export interface DisplayMultipleGardens extends DisplayUpdateEvent {
+  name: bRollNaming.ROLL_PAN;
+  contents: {
+    garden: GardenWithPlants;
+    user: PublicUserInfo;
+  }[];
+}
+
+export interface DisplayLeaderboard extends DisplayUpdateEvent {
+  name: bRollNaming.TOP_LIST;
+  contents: {
+    username: string;
+    count: number;
+  }[];
+}
+
+export interface DisplayPlantGrowingTime extends DisplayUpdateEvent {
+  name: bRollNaming.STATISTICS_1;
+  contents: SelectPlant;
+}
+
+export interface DisplayPlantCount extends DisplayUpdateEvent {
+  name: bRollNaming.STATISTICS_2;
+  contents: {
+    gardens: {
+      garden: GardenWithPlants;
+      user: PublicUserInfo;
+    }[];
+    count: number;
+  };
+}
 export interface DisplayIdle extends DisplayUpdateEvent {
   name: "idle";
   contents: null;
@@ -58,6 +132,13 @@ export interface DisplayIdle extends DisplayUpdateEvent {
 export type DisplayEventContents =
   | DisplayFirstPlant
   | DisplayPollination
+  | DisplayStatusFeed
+  | DisplayFeaturedPlant
+  | DisplayFeaturedGarden
+  | DisplayMultipleGardens
+  | DisplayLeaderboard
+  | DisplayPlantGrowingTime
+  | DisplayPlantCount
   | DisplayIdle;
 
 /** Interface for "serverInstructDisplays" messages.
