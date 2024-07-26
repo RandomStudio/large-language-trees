@@ -1,3 +1,7 @@
+<script lang="ts">
+  export let contents;
+</script>
+
 <body class="bg-roel_rose">
   <div>
     <div class="fill-roel_purple absolute bottom-0 w-full h-auto">
@@ -7,6 +11,7 @@
         />
       </svg>
     </div>
+
     <div class="relative">
       <div class="absolute">
         <!-- svelte-ignore a11y-img-redundant-alt -->

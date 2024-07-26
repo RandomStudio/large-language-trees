@@ -9,6 +9,7 @@
   import type { DisplayUpdateMessage } from "$lib/events.types";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
+  import BRollStatusFeed from "./BRollStatusFeed.svelte";
 
   export let data: PageData;
 
@@ -101,7 +102,9 @@
     ></PollinationResult>
   {/if}
 
-  {#if data.contents?.name == "showStatusFeed"}{/if}
+  {#if data.contents?.name == "showStatusFeed"}
+    <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
+  {/if}
 
   {#if data.contents?.name == "showFeaturedPlant"}{/if}
 
