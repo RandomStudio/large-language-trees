@@ -31,7 +31,19 @@ export interface EventNewPollination extends SimpleEventBody {
   payload: InsertPlant;
 }
 
-export type SimpleEvent = EventNewUser | EventFirstPlant | EventNewPollination;
+export interface EventNewTopPlant extends SimpleEventBody {
+  name: "newTopPollinator";
+  payload: {
+    plant: SelectPlant;
+    user: PublicUserInfo;
+  };
+}
+
+export type SimpleEvent =
+  | EventNewUser
+  | EventFirstPlant
+  | EventNewPollination
+  | EventNewTopPlant;
 
 interface DisplayUpdateEvent {
   name: string;

@@ -440,7 +440,8 @@ const updateScreenStateAndPublish = async (
  * we append logs to a DB table in order to have a persistent list
  * we can read from when required (e.g. for "status feed").
  *
- * Some basic log management is done here; if the table has
+ * TODO: Some basic log management is possible here; if the table has more than EVENT_LOG_MAX
+ * entries, we should delete older entries.
  */
 export const logSimpleEvents = async (event: SimpleEvent) => {
   const contents = await eventToLog(event);
@@ -493,6 +494,17 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
         },
         {
           text: `${event.payload.authorBottom}'s ${plantBottom}`
+        }
+      ];
+    }
+    case "newTopPollinator": {
+      return [
+        {
+          text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
+          highlight: true
+        },
+        {
+          text: "just became top pollinator"
         }
       ];
     }
