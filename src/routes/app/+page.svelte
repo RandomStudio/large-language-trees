@@ -12,7 +12,7 @@
 </script>
 
 <img src="FlowerDuo.png" class="absolute -z-10 opacity-100" alt="FlowerDuo" />
-<div class="mx-10 pt-32 font-primer text-6xl text-roel_blue">
+<div class="mx-10 pt-[15vh] font-primer text-6xl text-roel_blue">
   <p class="font-jeanluc text-center">LET'S<br />POLLINATE</p>
   <div class="text-center">
     <form method="post" use:enhance class="mt-4 text-center max-w-md">

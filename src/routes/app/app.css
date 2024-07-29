@@ -32,22 +32,35 @@
 }
 
 @font-face {
-  font-family: "Primer";
-  src: url("/Primer.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+  font-family: "JeanLucWeb-Bold";
+  src: url("/jeanlucweb-bold.eot");
+  src: local("☺"), url("/jeanlucweb-bold.woff") format("woff"),
+    url("/jeanlucweb-bold.otf") format("opentype"),
+    url("/jeanlucweb-bold#webfontup15foyj") format("svg");
 }
 
 @font-face {
-  font-family: "JeanB";
-  src: url("/JeanB.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+  font-family: "JeanLucWeb-Thin";
+  src: url("/jeanlucweb-bold.eot");
+  src: local("☺"), url("/jeanlucweb-thin.woff") format("woff"),
+    url("/jeanlucweb-thin.otf") format("opentype"),
+    url("/jeanlucweb-thin#webfontdsa4toug") format("svg");
 }
 
 @font-face {
-  font-family: "JeanT";
-  src: url("/JeanT.ttf") format("truetype");
-  font-weight: normal;
+  font-family: "MD Primer";
+  src: url("/MDPrimer-Medium.woff2") format("woff2"),
+    url("/MDPrimer-Medium.woff") format("woff");
+  font-weight: 500;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MD Primer";
+  src: url("/MDPrimer-Bold.woff2") format("woff2"),
+    url("/MDPrimer-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
