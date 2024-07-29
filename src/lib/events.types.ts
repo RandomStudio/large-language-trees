@@ -83,7 +83,8 @@ export enum bRollNaming {
   ROLL_PAN = "showMultipleGardens",
   TOP_LIST = "showLeaderboard",
   STATISTICS_1 = "showPlantGrowingTime",
-  STATISTICS_2 = "showPlantCount"
+  STATISTICS_2 = "showPlantCount",
+  STATISTICS_3 = "showHighPollinator",
 }
 
 export interface DisplayStatusFeed extends DisplayUpdateEvent {
@@ -138,6 +139,15 @@ export interface DisplayPlantCount extends DisplayUpdateEvent {
     count: number;
   };
 }
+
+export interface DisplayPlantCount extends DisplayUpdateEvent {
+  name: bRollNaming.STATISTICS_3;
+  contents: {
+    plant: SelectPlant;
+    user: PublicUserInfo;
+  };
+}
+
 export interface DisplayIdle extends DisplayUpdateEvent {
   name: "idle";
   contents: null;

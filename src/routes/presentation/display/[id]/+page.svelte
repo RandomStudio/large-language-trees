@@ -14,6 +14,7 @@
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
   import StatsCount from "./StatsCount.svelte";
   import BRollDetail from "./BRollDetail.svelte";
+  import HighPollinator from "./HighPollinator.svelte";
 
   import { bRollNaming } from "$lib/events.types";
 
@@ -152,6 +153,13 @@
 
     {#if data.contents?.name == bRollNaming.STATISTICS_2}
       <StatsCount count={data.contents?.contents.count}></StatsCount>
+    {/if}
+
+    {#if data.contents.name == bRollNaming.STATISTICS_3}
+      <HighPollinator
+        imageUrl={data.contents?.contents.plant.imageUrl || ""}
+        plantName={data.contents?.contents.plant.commonName}
+      ></HighPollinator>
     {/if}
   {/if}
 </main>
