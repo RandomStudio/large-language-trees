@@ -1,6 +1,7 @@
 <script lang="ts">
   import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
+  import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -79,6 +80,7 @@
   });
 </script>
 
++page.svelte
 <main>
   <h1>
     Display #{data.id}
@@ -119,8 +121,10 @@
       ></BRollDetail>
     {/if}
 
-    <!-- svelte-ignore empty-block -->
-    {#if data.contents.name == bRollNaming.ZOOM_OUT}{/if}
+    {#if data.contents.name == bRollNaming.ZOOM_OUT}
+      <BRollZoomOut userName={data.contents.contents.user.username}
+      ></BRollZoomOut>
+    {/if}
 
     <!-- svelte-ignore empty-block -->
     {#if data.contents.name == bRollNaming.ROLL_PAN}{/if}
