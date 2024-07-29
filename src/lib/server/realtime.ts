@@ -2,7 +2,14 @@ import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
 import { v4 as uuidv4 } from "uuid";
 
 import { db } from "./db";
-import { eventLogs, gardens, plants, presentationState, users } from "./schema";
+import {
+  eventLogs,
+  gardens,
+  gardensToPlants,
+  plants,
+  presentationState,
+  users
+} from "./schema";
 import { count, desc, eq, not } from "drizzle-orm";
 import {
   bRollNaming,
@@ -273,12 +280,27 @@ const randomAmbientDisplay = async (
       return contents;
     }
     case "STATISTICS_1": {
-      const allPlants = await db.select().from(plants);
-      const pickPlant = pickRandomElement(allPlants);
-
+      const allGardens = await db
+        .select({ id: gardens.id, userId: gardens.userId })
+        .from(gardens);
+      const pickGarden = pickRandomElement(allGardens);
+      const plantsInGarden = await db.query.gardensToPlants.findMany({
+        with: { plant: true },
+        where: eq(gardensToPlants.gardenId, pickGarden.id)
+      });
+      const pickPlant = pickRandomElement(plantsInGarden);
+      const user = await db.query.users.findFirst({
+        where: eq(users.id, pickGarden.userId)
+      });
+      if (!user || !pickPlant) {
+        throw Error("user/plant info missing");
+      }
       const contents: DisplayPlantGrowingTime = {
         name: bRollNaming.STATISTICS_1,
-        contents: pickPlant
+        contents: {
+          plant: pickPlant.plant,
+          user: stripUserInfo(user)
+        }
       };
       return contents;
     }
