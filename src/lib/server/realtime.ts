@@ -64,7 +64,7 @@ export const publishEvent = async (event: SimpleEvent) => {
 
   await logSimpleEvents(event);
 
-  await updatePresentationDisplaysOnEvent(event);
+  await showMainEvent(event);
 };
 
 const publishDisplayInstructions = async (
@@ -140,7 +140,7 @@ export const handleDisplayNotification = async (
     const pickDisplayType = pickRandomElement(keys);
 
     try {
-      const contents = await randomAmbientDisplay(pickDisplayType);
+      const contents = await getDataForAmbientDisplay(pickDisplayType);
 
       await updateScreenStateAndPublish(displayId, contents, 0, 15000);
     } catch (e) {
@@ -152,7 +152,7 @@ export const handleDisplayNotification = async (
   }
 };
 
-const randomAmbientDisplay = async (
+export const getDataForAmbientDisplay = async (
   pickDisplayType: keyof typeof bRollNaming
 ): Promise<DisplayEventContents> => {
   switch (pickDisplayType) {
@@ -167,20 +167,22 @@ const randomAmbientDisplay = async (
       const pickRandomUser = pickRandomElement(allNormalUsers);
 
       const userGarden = pickRandomUser.myGarden;
-      const plantsInGarden = await db.query.gardens.findMany({
+      const gardenWithPlants = await db.query.gardens.findFirst({
         where: eq(gardens.id, userGarden.id),
         with: { plantsInGarden: true }
       });
-      if (plantsInGarden.length === 0) {
-        throw Error("no plants in user garden!");
+      if (!gardenWithPlants) {
+        throw Error("no plants in user garden");
       }
-      const pickRandomPlant = pickRandomElement(plantsInGarden);
-      const thePlant = await db.query.plants.findFirst({
-        where: eq(plants.id, pickRandomPlant.id)
-      });
 
+      const pickRandomPlant = pickRandomElement(
+        gardenWithPlants.plantsInGarden
+      );
+      const thePlant = await db.query.plants.findFirst({
+        where: eq(plants.id, pickRandomPlant.plantId)
+      });
       if (thePlant === undefined) {
-        throw Error("failed to find plant " + pickRandomPlant.id);
+        throw Error("failed to find plant " + pickRandomPlant);
       }
       const contents: DisplayFeaturedPlant = {
         name: bRollNaming.DETAIL,
@@ -336,9 +338,7 @@ const randomAmbientDisplay = async (
   }
 };
 
-export const updatePresentationDisplaysOnEvent = async (
-  latestEvent: SimpleEvent
-) => {
+export const showMainEvent = async (latestEvent: SimpleEvent) => {
   switch (latestEvent.name) {
     case "newUser": {
       // Ignore new user events for now
@@ -444,8 +444,11 @@ const findScreenFor = async (priority: number): Promise<string | null> => {
     : null;
 };
 
+export const getAllScreens = async () =>
+  await db.select().from(presentationState);
+
 /** Publish updates on channel, persist to database */
-const updateScreenStateAndPublish = async (
+export const updateScreenStateAndPublish = async (
   targetId: string,
   contents: DisplayEventContents,
   priority: number | null,
