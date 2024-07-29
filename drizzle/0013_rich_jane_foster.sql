@@ -1,0 +1,1 @@
+ALTER TABLE "gardens" ALTER COLUMN "user_id" SET NOT NULL;

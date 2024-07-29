@@ -64,6 +64,48 @@
       "when": 1721217217764,
       "tag": "0008_familiar_brood",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1721658496550,
+      "tag": "0009_lazy_giant_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1721658707229,
+      "tag": "0010_brave_goblin_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1721814995170,
+      "tag": "0011_smooth_red_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1721829938420,
+      "tag": "0012_spotty_exodus",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1721909296667,
+      "tag": "0013_rich_jane_foster",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1721985038184,
+      "tag": "0014_large_the_spike",
+      "breakpoints": true
     }
   ]
 }

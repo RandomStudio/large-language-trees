@@ -3,6 +3,7 @@ import type {
   gardensToPlants,
   generatedImages,
   plants,
+  presentationState,
   promptSettingsTable,
   seedbanks,
   seedbanksToPlants,
@@ -12,7 +13,14 @@ import type {
 export type SelectPlant = typeof plants.$inferSelect;
 export type InsertPlant = typeof plants.$inferInsert;
 
+/** WARNING: this type includes password hashes! */
 export type SelectUser = typeof users.$inferSelect;
+
+/** Use this when you need safe (public) access to basic user details */
+export interface PublicUserInfo {
+  id: string;
+  username: string;
+}
 
 export type SelectGarden = typeof gardens.$inferSelect;
 export type GardenPlantEntry = typeof gardensToPlants.$inferInsert;
@@ -26,15 +34,17 @@ export type GeneratedImage = typeof generatedImages.$inferSelect;
 
 export type SelectPromptSettings = typeof promptSettingsTable.$inferInsert;
 
+export type PresentationDisplayState = typeof presentationState.$inferInsert;
+
 export interface GardenPlantEntryWithPlant extends GardenPlantEntry {
   plant: SelectPlant;
 }
 
-export interface MyGarden extends SelectGarden {
+export interface GardenWithPlants extends SelectGarden {
   plantsInGarden: GardenPlantEntryWithPlant[];
 }
 export interface UserWithGarden extends SelectUser {
-  myGarden: MyGarden;
+  myGarden: GardenWithPlants;
 }
 
 export interface SeedbankEntryWithPlant extends SeedbankEntry {
@@ -52,7 +62,7 @@ export interface UserWithSeedbank extends SelectUser {
 export interface GardenViewData {
   seedBank: MySeeds;
   user: SelectUser;
-  garden: MyGarden;
+  garden: GardenWithPlants;
 }
 
 export interface PlantProperties {

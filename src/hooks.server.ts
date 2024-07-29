@@ -1,8 +1,18 @@
 import { lucia } from "$lib/server/auth";
 import { redirect, type Handle } from "@sveltejs/kit";
 
+const publicAccessAllowed = (pathname: string) =>
+  pathname.includes("/api/plants") ||
+  pathname.includes("/presentation") ||
+  pathname.includes("/api/events") ||
+  pathname.includes("/api/displayNotifyServer");
+
 export const handle: Handle = async ({ event, resolve }) => {
-  if (event.url.pathname.includes("/api/plants")) {
+  if (event.url.pathname === "/") {
+    redirect(302, "/app");
+  }
+
+  if (publicAccessAllowed(event.url.pathname)) {
     console.warn("Unauthenticated access to", event.url.pathname, "allowed");
     return resolve(event);
   }
@@ -13,9 +23,9 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.user = null;
     event.locals.session = null;
     console.log("path", event.url.pathname);
-    if (event.url.pathname != "/") {
+    if (event.url.pathname != "/app") {
       // Every path other than root should redirect if user not logged in
-      redirect(302, "/");
+      redirect(302, "/app");
     } else {
       return resolve(event);
     }

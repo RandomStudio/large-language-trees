@@ -25,7 +25,7 @@ const DefaultPrompt: PromptConfig = {
   image: {
     model: "dall-e-3",
     instructions:
-    "You are a botanist. Create an image of a plant from the following description. The plant is in the centre, standing alone on a pure white background. Make sure there is no text in the image. There is only the plant in the middle of the picture. Here is the description:"
+    "You are a botanist. Create a 2D image of a plant from the following description. The plant is in the centre, standing alone on a pure white background. Make sure there is no text in the image. There is only the plant in the middle of the picture. Here is the description:"
   }
 };
 

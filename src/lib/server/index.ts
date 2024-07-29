@@ -1,44 +1,39 @@
 import { db } from "./db";
+import { ADMIN_GARDEN_SHARED } from "$env/static/private";
 import DefaultSeeds from "../../defaults/seeds.json";
-import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
-import OpenAI from "openai";
-import { ADMIN_GARDEN_SHARED, OPENAI_API_KEY } from "$env/static/private";
 import {
+  eventLogs,
   gardens,
   gardensToPlants,
   generatedImages,
   plants,
+  presentationState,
   promptSettingsTable,
   seedbanks,
   seedbanksToPlants,
   sessions,
   users
 } from "./schema";
-import { eq, isNull, not } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
 import type {
   GardenPlantEntry,
   InsertPlant,
-  MyGarden,
+  GardenWithPlants,
   MySeeds,
   SeedbankEntry,
-  SeedbankEntryWithPlant,
-  SelectGarden,
   SelectPlant,
   SelectUser,
-  UserWithGarden,
-  UserWithSeedbank
+  UserWithGarden
 } from "$lib/types";
-import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
-import {
-  pickMultipleRandomElements,
-  pickRandomElement,
-  pickRandomIndexes
-} from "random-elements";
+import { pickRandomElement } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 import DefaultPrompt from "../../defaults/prompt-config";
+import { publishEvent } from "./realtime";
+import type { EventFirstPlant } from "$lib/events.types";
+import { stripUserInfo } from "$lib/security";
 
 export const populateDefaultPlants = async () => {
   const newPlants: InsertPlant[] = DefaultSeeds;
@@ -130,7 +125,19 @@ export const createNewSeedbank = async (userId: string) => {
     return;
   }
 
+  const theUser = await db.query.users.findFirst({
+    where: eq(users.id, userId)
+  });
+
   const thePlant = await getNewPlantForUser();
+
+  if (thePlant && theUser) {
+    const e: EventFirstPlant = {
+      name: "newUserFirstPlant",
+      payload: { plant: thePlant, user: stripUserInfo(theUser) }
+    };
+    await publishEvent(e);
+  }
 
   await addPlantToSeedbank(thePlant.id, newSeedbank.id);
 
@@ -147,7 +154,7 @@ export const createNewSeedbank = async (userId: string) => {
   }
 };
 
-async function getNewPlantForUser() {
+async function getNewPlantForUser(): Promise<InsertPlant> {
   // We look for plants that have not been assigned to any seedbank (yet)
   // This is safe for now, because we don't expect the number of users (and thus seedbanks)
   // to exceed the number of available plants.
@@ -178,7 +185,9 @@ async function getNewPlantForUser() {
   }
 }
 
-export const getUserGarden = async (userId: string): Promise<MyGarden> => {
+export const getUserGarden = async (
+  userId: string
+): Promise<GardenWithPlants> => {
   const user: UserWithGarden | undefined = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
@@ -237,56 +246,6 @@ export const addNewPlant = async (plant: InsertPlant): Promise<InsertPlant> => {
   const insertedPlant = await db.insert(plants).values(plant).returning();
 
   return insertedPlant[0];
-};
-
-export const generate = async (
-  prompt: ChatCompletionMessageParam[],
-  parents: [SelectPlant, SelectPlant]
-): Promise<InsertPlant | null> => {
-  let offspring: InsertPlant | null = null;
-
-  if (prompt && parents) {
-    console.log("Using prompt: ******** \n", prompt);
-
-    const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
-
-    const completion = await openai.chat.completions.create({
-      messages: prompt,
-      model: "gpt-3.5-turbo"
-    });
-
-    console.log("response:", completion.choices);
-
-    for (const res of completion.choices) {
-      console.log(JSON.stringify(res));
-      const formattedContent = res.message.content || "{}";
-
-      offspring = parseNewPlant(formattedContent);
-      if (offspring) {
-        console.log("Offspring:", offspring);
-      } else {
-        throw Error("Oops, couldn't parse the offspring text");
-      }
-    }
-  }
-
-  return offspring;
-};
-
-const parseNewPlant = (text: string): InsertPlant | null => {
-  const json = JSON.parse(text);
-  if (json["commonName"] && json["description"] && json["properties"]) {
-    const id = uuidv4();
-    console.log("JSON appears to have the valid fields");
-    return {
-      id,
-      commonName: json["commonName"],
-      description: json["description"],
-      properties: { ...json["properties"] }
-    };
-  } else {
-    throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
-  }
 };
 
 export const attachImageToPlant = async (id: string, imageUrl: string) => {
@@ -350,19 +309,24 @@ export const checkDefaultUsers = async () => {
  */
 export const cleanUp = async () => {
   console.warn("Starting cleanup...");
+  await db.delete(eventLogs);
   await db.delete(seedbanksToPlants);
   await db.delete(gardensToPlants);
   await db.delete(seedbanks);
   await db.delete(gardens);
   await db.delete(sessions);
-  await db.delete(users);
   await db.delete(plants);
   await db.delete(promptSettingsTable);
   await db.delete(generatedImages);
+  await db.delete(presentationState);
+  await db.delete(users);
   console.log("...cleanup complete!");
 };
 
-async function addDefaultSeedsToNewGarden(userId: string, newGarden: MyGarden) {
+async function addDefaultSeedsToNewGarden(
+  userId: string,
+  newGarden: GardenWithPlants
+) {
   const seeds = await getUserSeeds(userId);
   const user = await getUserById(userId);
   seeds.plantsInSeedbank.forEach(async (seed) => {
