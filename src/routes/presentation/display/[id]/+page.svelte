@@ -2,7 +2,6 @@
   import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
   import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
-  import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
