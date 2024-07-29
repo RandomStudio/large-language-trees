@@ -40,9 +40,9 @@
           clearTimeout(timer);
           timer = null;
         }
-        console.log("Set new timeout", timeout, "ms...");
+        console.log(Date.now(), "Set new timeout", timeout, "ms...");
         timer = setTimeout(() => {
-          console.log("...Display Timeout reached!");
+          console.log(Date.now(), "...Display Timeout reached!");
           const message: DisplayNotifyServer = {
             displayId: data.id,
             event: "timeout"
@@ -51,7 +51,8 @@
             method: "POST",
             body: JSON.stringify(message)
           }).then(() => {
-            timer = null;
+            console.log(Date.now(), "Set timer to null");
+            // timer = null;
           });
         }, timeout);
       }
