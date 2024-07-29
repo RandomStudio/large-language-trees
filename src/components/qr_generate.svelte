@@ -10,8 +10,8 @@
     QRCode.toCanvas(canvasElement, text, {
       width: canvasElement.offsetWidth,
       color: {
-        dark: "#0038FF", // roel_blue
-        light: "#9EE093" // roel_green
+        dark: "#4B0082", // roel_blue
+        light: "#C8F58F" // roel_green
       }
     });
   };

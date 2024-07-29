@@ -12,12 +12,13 @@
   }
 </script>
 
-<div class="mx-12 pt-32 font-inter">
-  <img src="/titleimg.png" alt="logo" />
+<img src="FlowerDuo.png" class="absolute -z-10 opacity-100" alt="FlowerDuo" />
+<div class="mx-10 pt-32 font-primer text-6xl text-roel_blue">
+  <p class="font-jeanluc text-center">LET'S<br />POLLINATE</p>
   <div class="text-center">
-    <form method="post" use:enhance class="mt-0 text-center mx-auto max-w-md">
+    <form method="post" use:enhance class="mt-4 text-center max-w-md">
       <input
-        class="bg-light_grey border-2 px-4 py-2 border-mid_grey rounded-full font-inter text-dark_grey text-xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter"
+        class="bg-roel_green/75 border-[3px] border-roel_blue rounded-full text-roel_blue font-primer text-3xl px-4 py-[0.5rem] w-full max-w-xs placeholder-roel_blue placeholder:font-primer"
         type="text"
         id="username"
         name="username"
@@ -35,7 +36,7 @@
 
       <button
         data-umami-event="Start button"
-        class="text-roel_blue bg-roel_green font-inter text-xl px-4 py-2 mt-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
+        class="text-roel_green bg-roel_blue font-primer text-3xl px-4 py-[0.5rem] mt-4 w-full max-w-xs border-[3px] border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
         type="submit"
       >
         Start
@@ -48,8 +49,11 @@
       Error: {form.message}
     </div>
   {/if}
-
-  <div class="text-left mt-4 text-sm text-roel_blue mb-20">
+</div>
+<div
+  class="font-primer text-left mt-32 text-base mx-0 text-roel_green bg-roel_blue"
+>
+  <div class="p-10">
     <p>
       Welcome to Random's synergistic Lusthof, where digital abundance is
       sprouting.
@@ -59,9 +63,9 @@
     </p>
     <br />
     <div>
-      <span class="font-semibold">Production:</span><br />
+      <span class="font-bold">Production:</span><br />
       <span>Studio Random</span><br />
-      <span class="font-semibold">Image Data:</span><br />
+      <span class="font-bold">Image Data:</span><br />
       <span>Chat GPT/ Open AI</span>
     </div>
   </div>

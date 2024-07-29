@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
+  import { page } from "$app/stores";
 
   export let plant: SelectPlant;
   export let applyFilters: boolean = false;
@@ -14,10 +15,13 @@
     class={width}
     class:filter={applyFilters}
     class:grayscale={applyFilters}
-    class:opacity-70={applyFilters}
-    class:mix-blend-multiply={applyFilters}
+    class:opacity-65={applyFilters}
+    class:contrast-200={applyFilters}
+    class:mix-blend-difference={applyFilters}
   />
-  <p class="text-roel_blue font-inter text-xl">
-    {plant.commonName}
-  </p>
+  {#if $page.url.pathname !== "/startwindow"}
+    <p class="text-roel_blue font-primer text-3xl">
+      {plant.commonName}
+    </p>
+  {/if}
 </div>

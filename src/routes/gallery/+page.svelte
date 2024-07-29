@@ -61,7 +61,7 @@
   });
 </script>
 
-<div class="mx-12 font-inter text-roel_blue text-left">
+<div class="mt-10 mx-10 font-primer text-roel_blue text-left">
   {#each data.seedBank.plantsInSeedbank as plant, index}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -79,7 +79,7 @@
       <div class="mt-4 text-center">
         <button
           data-umami-event="Start Pollinating Button"
-          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
+          class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
           on:click={() => handleClick(plant.plant.id)}
         >
           Start Pollinating
@@ -97,7 +97,7 @@
       </div>
       <div class="mt-4 text-center">
         <button
-          class="bg-roel_green text-roel_blue font-inter text-xl px-4 py-2 border-2 w-11/12 max-w-xs border-roel_blue rounded-full text-opacity-50 border-opacity-50"
+          class="bg-roel_green text-roel_blue font-primer text-2xl px-4 py-2 w-11/12 max-w-xs border-roel_blue border-[3px] rounded-full text-opacity-100"
         >
           Fertile in {convertMinutesToMinutesAndSeconds(5 - dates[index])}
         </button>

@@ -8,17 +8,17 @@
 
 <ReturnButton functionReturn={goBack}></ReturnButton>
 
-<div class="mx-12 pt-32 font-inter text-left text-roel_blue text-sm mb-20">
-  <img src="/titleimg.png" alt="logo" />
-  <p class="mt-4">
+<div class="mx-10 pt-20 font-primer text-left text-roel_blue text-base mb-20">
+  <img src="/titleimg_new.png" alt="logo" />
+  <p class="mt-12">
     What is this project about?
     <br />
-    <br /> The Garden app seeks to invert the typical narrative of digital
-    technology as a force of isolation and detachment. Instead of pulling us
-    deeper into the virtual world, Lusthof leverages technology to foster
-    real-world connections and appreciation for the natural world. This approach
-    envisions technology not as an isolating force, but as a catalyst for
-    tangible, meaningful interactions.
+    <br /> The "Let's Pollinate" app seeks to invert the typical narrative of
+    digital technology as a force of isolation and detachment. Instead of
+    pulling us deeper into the virtual world, Lusthof leverages technology to
+    foster real-world connections and appreciation for the natural world. This
+    approach envisions technology not as an isolating force, but as a catalyst
+    for tangible, meaningful interactions.
     <br /><br />In The Garden, each user begins with a single seed, representing
     the potential for growth and connection. To enrich the communal garden and
     diversify their seed collection, users must engage with other gardeners. The
