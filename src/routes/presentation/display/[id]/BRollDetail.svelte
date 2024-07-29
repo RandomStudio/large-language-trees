@@ -2,6 +2,10 @@
   // @ts-nocheck
   import { onMount } from "svelte";
 
+  export let imageUrl;
+  export let plant;
+  export let user;
+
   let container;
   let originX, originY;
   let scaleStart,
@@ -90,16 +94,16 @@
       class="place-content-center h-auto"
     />
   </div>
+
   <div
     bind:this={container}
     class="absolute right-5 w-[2000px] h-auto top-5 camera-animation z-0"
     style="--scaleStart: {scaleStart}; --scaleEnd: {scaleEnd}; --translateXStart: {translateXStart}px; --translateYStart: {translateYStart}px; --translateXEnd: {translateXEnd}px; --translateYEnd: {translateYEnd}px; transform-origin: {originX}% {originY}%;"
   >
     <!-- Container for the image and text -->
-    <img src="/46.png" alt="Plant" class="place-content-center h-auto" />
+    <img src={imageUrl} alt="Plant" class="place-content-center h-auto" />
     <div class="description bg-roel_purple text-roel_rose absolute p-2">
-      JessieK's
-      <br />Fern
+      {user}'s {plant}
     </div>
   </div>
 </div>

@@ -12,14 +12,13 @@
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
   import StatsCount from "./StatsCount.svelte";
-  import PlantZoom from "./BRollDetail.svelte";
+  import BRollDetail from "./BRollDetail.svelte";
 
   import { bRollNaming } from "$lib/events.types";
 
   export let data: PageData;
 
   let agent: TetherAgent | null = null;
-
   let timer: NodeJS.Timeout | null = null;
 
   onMount(async () => {
@@ -35,7 +34,7 @@
     );
     instructionsPlug.on("message", (p) => {
       const m = decode(p) as DisplayUpdateMessage;
-      console.log("ReceivedserverInstructDisplays message:", m);
+      console.log("Received serverInstructDisplays message:", m);
       const { payload, timeout } = m;
       if (timeout) {
         if (timer) {
@@ -113,7 +112,11 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
-      <PlantZoom></PlantZoom>
+      <BRollDetail
+        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+        plant={data.contents?.contents.plant.commonName}
+        user={data.contents?.contents.user.username}
+      ></BRollDetail>
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}{/if}
