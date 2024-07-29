@@ -13,6 +13,8 @@
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
   import StatsCount from "./StatsCount.svelte";
 
+  import { bRollNaming } from "$lib/events.types";
+
   export let data: PageData;
 
   let agent: TetherAgent | null = null;
@@ -105,21 +107,21 @@
       ></PollinationResult>
     {/if}
 
-    {#if data.contents.name == "showStatusFeed"}
+    {#if data.contents.name == bRollNaming.STATUS_FEED}
       <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
     {/if}
 
-    {#if data.contents.name == "showFeaturedPlant"}{/if}
+    {#if data.contents.name == bRollNaming.DETAIL}{/if}
 
-    {#if data.contents.name == "showFeaturedGarden"}{/if}
+    {#if data.contents.name == bRollNaming.ZOOM_OUT}{/if}
 
-    {#if data.contents.name == "showMultipleGardens"}{/if}
+    {#if data.contents.name == bRollNaming.ROLL_PAN}{/if}
 
-    {#if data.contents.name == "showLeaderboard"}
+    {#if data.contents.name == bRollNaming.TOP_LIST}
       <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
     {/if}
 
-    {#if data.contents.name == "showPlantGrowingTime"}
+    {#if data.contents.name == bRollNaming.STATISTICS_1}
       <StatsGrowingTime
         imageUrl={data.contents.contents.plant.imageUrl || ""}
         plantName={data.contents.contents.plant.commonName}
@@ -128,7 +130,7 @@
       ></StatsGrowingTime>
     {/if}
 
-    {#if data.contents?.name == "showPlantCount"}
+    {#if data.contents?.name == bRollNaming.STATISTICS_2}
       <StatsCount count={data.contents?.contents.count}></StatsCount>
     {/if}
   {/if}
