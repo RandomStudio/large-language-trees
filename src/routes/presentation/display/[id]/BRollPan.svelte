@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { DisplayMultipleGardens } from "$lib/events.types";
-  import type { GardenWithPlants } from "$lib/types";
   import DisplayGarden from "./DisplayGarden.svelte";
   export let gardens: DisplayMultipleGardens;
 </script>
