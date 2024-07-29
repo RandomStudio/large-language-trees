@@ -2,6 +2,7 @@
   import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
   import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
+  import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -130,19 +131,9 @@
       ></BRollDetail>
     {/if}
 
-    {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      <BRollZoomOut userName={data.contents.contents.user.username}
-      ></BRollZoomOut>
-    {/if}
+    {#if data.contents.name == bRollNaming.ZOOM_OUT}{/if}
 
-<<<<<<< HEAD
-    {#if data.contents.name == bRollNaming.ROLL_PAN}
-      <BRollPan gardens={data.contents}></BRollPan>
-    {/if}
-=======
-    <!-- svelte-ignore empty-block -->
     {#if data.contents.name == bRollNaming.ROLL_PAN}{/if}
->>>>>>> a9024730867f3d2fbe7d5d41a718304cc2244d0f
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
       <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
