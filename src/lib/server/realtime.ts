@@ -2,14 +2,7 @@ import { BROKER_DEFAULTS, encode, OutputPlug, TetherAgent } from "tether-agent";
 import { v4 as uuidv4 } from "uuid";
 
 import { db } from "./db";
-import {
-  eventLogs,
-  gardens,
-  plants,
-  presentationState,
-  seedbanks,
-  users
-} from "./schema";
+import { eventLogs, gardens, plants, presentationState, users } from "./schema";
 import { count, desc, eq, not } from "drizzle-orm";
 import {
   bRollNaming,
@@ -41,6 +34,7 @@ import { PLUG_NAMES } from "../../defaults/constants";
 
 export const publishEvent = async (event: SimpleEvent) => {
   const agent = await TetherAgent.create("server", {
+    loglevel: "warn",
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
       host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
@@ -102,11 +96,6 @@ export const handleDisplayNotification = async (
 ) => {
   const { displayId, event } = message;
 
-  const idleState: DisplayIdle = {
-    name: "idle",
-    contents: null
-  };
-
   if (event === "init") {
     console.log("A display came online (or reloaded)");
     const exists = await db.query.presentationState.findFirst({
@@ -121,6 +110,11 @@ export const handleDisplayNotification = async (
         priority: null
       });
     }
+    const idleState: DisplayIdle = {
+      name: "idle",
+      contents: null
+    };
+
     // Add an idle state with a short timeout, so that the new
     // display will be assigned a "B-roll" state soon...
     await updateScreenStateAndPublish(displayId, idleState, null, 2000);
@@ -143,7 +137,7 @@ export const handleDisplayNotification = async (
       console.error(
         "Something went wrong getting a random Display layout: " + e
       );
-      await updateScreenStateAndPublish(displayId, idleState, null, 2000);
+      // await updateScreenStateAndPublish(displayId, idleState, null, 2000);
     }
   }
 };
@@ -327,7 +321,7 @@ export const updatePresentationDisplaysOnEvent = async (
     }
     case "newUserFirstPlant": {
       const PRIORITY = 1;
-      const TIMEOUT = 5000;
+      const TIMEOUT = 7000;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
         const { user, plant } = latestEvent.payload;
