@@ -12,6 +12,7 @@
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
   import StatsCount from "./StatsCount.svelte";
+  import PlantZoom from "./BRollDetail.svelte";
 
   export let data: PageData;
 
@@ -109,7 +110,9 @@
       <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
     {/if}
 
-    {#if data.contents.name == "showFeaturedPlant"}{/if}
+    {#if data.contents.name == "showFeaturedPlant"}
+      <PlantZoom></PlantZoom>
+    {/if}
 
     {#if data.contents.name == "showFeaturedGarden"}{/if}
 
