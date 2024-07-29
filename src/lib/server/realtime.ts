@@ -10,7 +10,7 @@ import {
   presentationState,
   users
 } from "./schema";
-import { count, desc, eq, not } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
