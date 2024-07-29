@@ -276,14 +276,39 @@ const randomAmbientDisplay = async (
       return contents;
     }
     case "STATISTICS_1": {
-      const allPlants = await db.select().from(plants);
-      const pickPlant = pickRandomElement(allPlants);
-
-      const contents: DisplayPlantGrowingTime = {
-        name: bRollNaming.STATISTICS_1,
-        contents: pickPlant
-      };
-      return contents;
+      const allGardens = await db
+        .select({ id: gardens.id, userId: gardens.userId })
+        .from(gardens);
+      const pickGarden = pickRandomElement(allGardens);
+      const gardenWithPlants = await db.query.gardens.findFirst({
+        where: eq(gardens.id, pickGarden.id),
+        with: { plantsInGarden: true }
+      });
+      if (gardenWithPlants) {
+        const { plantsInGarden } = gardenWithPlants;
+        const pickPlant = pickRandomElement(plantsInGarden);
+        const plantInfo = await db.query.plants.findFirst({
+          where: eq(plants.id, pickPlant.plantId)
+        });
+        const user = await db.query.users.findFirst({
+          where: eq(users.id, pickGarden.userId)
+        });
+        if (user && plantInfo) {
+          const contents: DisplayPlantGrowingTime = {
+            name: bRollNaming.STATISTICS_1,
+            contents: {
+              plant: plantInfo,
+              user: stripUserInfo(user)
+            }
+          };
+          return contents;
+        } else {
+          throw Error("user/plantInfo undefined");
+        }
+      } else {
+        throw Error("gardenWithPlants undefined");
+      }
+      // const user = await db.select().from(users).where(eq(users.id, pickPlant.authorTop))
     }
     case "STATISTICS_2": {
       const [result] = await db.select({ count: count() }).from(plants);

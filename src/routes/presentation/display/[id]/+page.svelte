@@ -89,45 +89,47 @@
     </pre>
   </div>
 
-  {#if data.contents?.name == "newUserFirstPlant"}
-    <NewUserFirstPlant
-      imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
-      plantName={data.contents?.contents.plant.commonName}
-      gardenerName={data.contents?.contents.user.username}
-    ></NewUserFirstPlant>
-  {/if}
+  {#if data.contents}
+    {#if data.contents?.name == "newUserFirstPlant"}
+      <NewUserFirstPlant
+        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+        plantName={data.contents?.contents.plant.commonName}
+        gardenerName={data.contents?.contents.user.username}
+      ></NewUserFirstPlant>
+    {/if}
 
-  {#if data.contents?.name == "newPlantPollination"}
-    <PollinationResult
-      imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
-      plantName={data.contents?.contents.newPlant.commonName}
-    ></PollinationResult>
-  {/if}
+    {#if data.contents?.name == "newPlantPollination"}
+      <PollinationResult
+        imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
+        plantName={data.contents?.contents.newPlant.commonName}
+      ></PollinationResult>
+    {/if}
 
-  {#if data.contents?.name == "showStatusFeed"}
-    <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
-  {/if}
+    {#if data.contents?.name == "showStatusFeed"}
+      <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
+    {/if}
 
-  {#if data.contents?.name == "showFeaturedPlant"}{/if}
+    {#if data.contents?.name == "showFeaturedPlant"}{/if}
 
-  {#if data.contents?.name == "showFeaturedGarden"}{/if}
+    {#if data.contents?.name == "showFeaturedGarden"}{/if}
 
-  {#if data.contents?.name == "showMultipleGardens"}{/if}
+    {#if data.contents?.name == "showMultipleGardens"}{/if}
 
-  {#if data.contents?.name == "showLeaderboard"}
-    <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
-  {/if}
+    {#if data.contents.name == "showLeaderboard"}
+      <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
+    {/if}
 
-  {#if data.contents?.name == "showPlantGrowingTime"}
-    <StatsGrowingTime
-      imageUrl={data.contents.contents.imageUrl || "/59.png"}
-      plantName={data.contents?.contents.commonName}
-      gardenerName="PlaceHolder"
-      date={data.contents?.contents.created}
-    ></StatsGrowingTime>
-  {/if}
+    {#if data.contents.name == "showPlantGrowingTime"}
+      <StatsGrowingTime
+        imageUrl={data.contents.contents.plant.imageUrl || ""}
+        plantName={data.contents.contents.plant.commonName}
+        gardenerName={data.contents.contents.user.username}
+        date={data.contents.contents.plant.created}
+      ></StatsGrowingTime>
+    {/if}
 
-  {#if data.contents?.name == "showPlantCount"}
-    <StatsCount count={data.contents?.contents.count}></StatsCount>
+    {#if data.contents?.name == "showPlantCount"}
+      <StatsCount count={data.contents?.contents.count}></StatsCount>
+    {/if}
   {/if}
 </main>
