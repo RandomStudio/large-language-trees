@@ -12,6 +12,7 @@
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
+  import BRollPan from "./BRollPan.svelte";
   import StatsCount from "./StatsCount.svelte";
   import BRollDetail from "./BRollDetail.svelte";
 
@@ -134,8 +135,9 @@
       ></BRollZoomOut>
     {/if}
 
-    <!-- svelte-ignore empty-block -->
-    {#if data.contents.name == bRollNaming.ROLL_PAN}{/if}
+    {#if data.contents.name == bRollNaming.ROLL_PAN}
+      <BRollPan gardens={data.contents}></BRollPan>
+    {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
       <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
