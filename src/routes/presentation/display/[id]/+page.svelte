@@ -1,7 +1,6 @@
 <script lang="ts">
-  import BreakingNews from "./BreakingNews.svelte";
+  import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
-  import PollinationEvent from "./PollinationEvent.svelte";
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -28,27 +27,32 @@
       "serverInstructDisplays",
       { id: data.id }
     );
-    instructionsPlug.on("message", (payload) => {
-      const m = decode(payload) as DisplayUpdateMessage;
+    instructionsPlug.on("message", (p) => {
+      const m = decode(p) as DisplayUpdateMessage;
       console.log("ReceivedserverInstructDisplays message:", m);
-      const { contents, timeout } = m;
+      const { payload, timeout } = m;
       if (timeout) {
-        timer = setTimeout(async () => {
-          console.log("Display Timeout reached!");
+        if (timer) {
+          console.log("clear active timer");
+          clearTimeout(timer);
+          timer = null;
+        }
+        console.log("Set new timeout", timeout, "ms...");
+        timer = setTimeout(() => {
+          console.log("...Display Timeout reached!");
           const message: DisplayNotifyServer = {
             displayId: data.id,
             event: "timeout"
           };
-          await fetch("/api/displayNotifyServer", {
+          fetch("/api/displayNotifyServer", {
             method: "POST",
             body: JSON.stringify(message)
+          }).then(() => {
+            timer = null;
           });
-          if (timer) {
-            clearTimeout(timer);
-          }
         }, timeout);
       }
-      data.contents = contents;
+      data.contents = payload;
     });
 
     // Notify server that this display is online / reloaded
@@ -76,8 +80,26 @@
   <h1>
     Display #{data.id}
   </h1>
-
   <div>
-    {JSON.stringify(data.contents)}
+    <pre>
+      <code>
+        {JSON.stringify(data.contents, null, 2)}
+      </code>
+    </pre>
   </div>
+
+  {#if data.contents?.name == "newUserFirstPlant"}
+    <NewUserFirstPlant
+      imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+      plantName={data.contents?.contents.plant.commonName}
+      gardenerName={data.contents?.contents.user.username}
+    ></NewUserFirstPlant>
+  {/if}
+
+  {#if data.contents?.name == "newPlantPollination"}
+    <PollinationResult
+      imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
+      plantName={data.contents?.contents.newPlant.commonName}
+    ></PollinationResult>
+  {/if}
 </main>
