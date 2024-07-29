@@ -1,16 +1,38 @@
-<script>
+<script lang="ts">
+  import type { DisplayMultipleGardens } from "$lib/events.types";
+  import type { GardenWithPlants } from "$lib/types";
   import DisplayGarden from "./DisplayGarden.svelte";
-  import { garden } from "./gardenExample.js";
+  export let gardens: DisplayMultipleGardens;
 </script>
 
 <body class="relative bg-roel_purple min-h-screen">
-  <DisplayGarden xGarden={0} yGarden={0} height={300} width={230} {garden}
+  <DisplayGarden
+    xGarden={0}
+    yGarden={0}
+    height={300}
+    width={230}
+    garden={gardens.contents[0].garden}
   ></DisplayGarden>
-  <DisplayGarden xGarden={280} yGarden={320} height={300} width={200} {garden}
+  <DisplayGarden
+    xGarden={280}
+    yGarden={320}
+    height={300}
+    width={200}
+    garden={gardens.contents[1].garden}
   ></DisplayGarden>
-  <DisplayGarden xGarden={0} yGarden={640} height={300} width={200} {garden}
+  <DisplayGarden
+    xGarden={0}
+    yGarden={640}
+    height={300}
+    width={200}
+    garden={gardens.contents[2].garden}
   ></DisplayGarden>
-  <DisplayGarden xGarden={280} yGarden={960} height={300} width={200} {garden}
+  <DisplayGarden
+    xGarden={280}
+    yGarden={960}
+    height={300}
+    width={200}
+    garden={gardens.contents[3].garden}
   ></DisplayGarden>
 
   <div class="fixed bottom-5 left-40 text-roel_green text-4xl font-primer">

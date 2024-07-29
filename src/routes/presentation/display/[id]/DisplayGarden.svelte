@@ -63,7 +63,7 @@
 </script>
 
 <div
-  class="fixed border-black border-8"
+  class="fixed"
   style="width: {width}px; height: {height}px; position: absolute; left: {xGarden}px; top: {yGarden}px; "
 >
   {#each positions as { x, y, grasses, zIndex }, index}
@@ -83,8 +83,8 @@
     />
     {#if garden.plantsInGarden[index].plant.parent1 == null}
       <div
-        class=" absolute font-primer text-3xl text-roel_purple px-2 py-1 bg-roel_green text-center"
-        style={`left: ${x}px; top: ${y}px; width: 150px; height: auto; z-index: ${zIndex};`}
+        class=" absolute font-primer text-2xl text-roel_purple px-2 py-1 bg-roel_green text-center"
+        style={`left: ${x}px; top: ${y + 80}px; width: 120px; height: auto; z-index: ${zIndex};`}
       >
         {garden.name}
       </div>
