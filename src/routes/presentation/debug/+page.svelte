@@ -1,13 +1,9 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
   import { onDestroy, onMount } from "svelte";
-  import {
-    BROKER_DEFAULTS,
-    decode,
-    InputPlug,
-    TetherAgent
-  } from "tether-agent";
+  import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { PLUG_NAMES } from "../../../defaults/constants.js";
+  import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
 
   let connected = false;
   let messages: string[] = [];
@@ -18,16 +14,10 @@
 
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
-      brokerOptions: {
-        ...BROKER_DEFAULTS.browser,
-        host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
-        port: 8884,
-        protocol: "wss",
-        path: "/mqtt"
-      }
+      brokerOptions: BROWSER_CONNECTION
     });
 
-    connected = true;
+    connected = agent.getIsConnected();
 
     const eventPlug = await InputPlug.create(agent, PLUG_NAMES.simpleEvents);
 
@@ -79,7 +69,9 @@
 
 <h1>Presentation Views: Debug</h1>
 <div>
-  Tether: {connected ? "✅ connected" : "❌ not connected"}
+  Tether@{agent?.getConfig().brokerOptions.host}: {connected
+    ? "✅ connected"
+    : "❌ not connected"}
 </div>
 
 <h2 class="font-bold text-xl">Presentation State</h2>
