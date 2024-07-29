@@ -32,5 +32,7 @@ export const POST: RequestHandler = async ({ url }) => {
       console.log("TODO");
       return json({ forceMode }, { status: 200 });
     }
+  } else {
+    return json({}, { status: 500 });
   }
 };
