@@ -125,7 +125,7 @@ export interface DisplayLeaderboard extends DisplayUpdateEvent {
 
 export interface DisplayPlantGrowingTime extends DisplayUpdateEvent {
   name: bRollNaming.STATISTICS_1;
-  contents: SelectPlant;
+  contents: { plant: SelectPlant; user: PublicUserInfo };
 }
 
 export interface DisplayPlantCount extends DisplayUpdateEvent {
