@@ -17,25 +17,29 @@ The keys for the live database (on AWS) and OpenAI (ChatGPT/Dall-E) are delibera
 - Add the following lines:
 
 ```
-OPENAI_API_KEY=*******************************
-DB_CONNECTION_STRING=*******************************
+OPENAI_API_KEY=`****`
+DB_CONNECTION_STRING=`****`
 PLACEHOLDER_IMAGES=false
-AWS_ACCESS_KEY_ID_S3=*******************************
-AWS_SECRET_ACCESS_KEY_S3==*******************************
-BACKGROUND_FN_SECRET==doesnotmatter
-BACKGROUND_FN_USES_LOCAL_API=http://localhost:8888
-ADMIN_GARDEN_SHARED=true
+AWS_ACCESS_KEY_ID_S3=`****`
+AWS_SECRET_ACCESS_KEY_S3=`****`
+BACKGROUND_FN_SECRET=`****`
+ADMIN_GARDEN_SHARED=false
 S3_REGION=eu-north-1
 S3_BUCKET=random-the-garden
+BACKGROUND_FN_USES_LOCAL_API=http://localhost:8888
+PUBLIC_TETHER_HOST=localhost
+PUBLIC_TETHER_PORT=15675
+PUBLIC_TETHER_PROTOCOL=ws
+PUBLIC_TETHER_PATH=/ws
 ```
 
 ... where `****` must be replaced with the correct keys or URL strings. Ask for these if you don't have them!
 
-## Using local database and local netlify background functions
+## Using local database, local MQTT broker and local netlify background functions
 
 The `npm run dev` script will assume you want to use a local database (instead of AWS-hosted DB) and run a local "Netlify CLI" server so that background functions will run on your machine.
 
-### DB
+### Local Database
 
 To avoid messing with the live/production database (on AWS), you should run a local instance of PostgreSQL database, e.g. using Docker:
 
@@ -59,6 +63,12 @@ Create a `.env.development` file with identical contents to `.env` _except_ for 
 
 ```
 DB_CONNECTION_STRING=postgresql://postgres:mysecretpassword@localhost:5432
+```
+
+### Local MQTT broker
+For realtime messaging (using Tether) to run via a local MQTT broker (recommended!) - you can start up a preconfigured Eclipse Mosquitto broker as follows:
+```
+docker run --name tether-broker -d -p 15675:9001 -p 1883:1883 randomstudiotools/tether-broker
 ```
 
 ## Using Drizzle Studio

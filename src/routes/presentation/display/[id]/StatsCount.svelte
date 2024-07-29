@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let count;
+  export let count: number;
 </script>
 
 <div class="bg-roel_yellow w-full h-screen relative overflow-hidden">
