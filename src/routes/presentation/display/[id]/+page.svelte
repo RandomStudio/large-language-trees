@@ -114,13 +114,15 @@
     {#if data.contents.name == bRollNaming.DETAIL}
       <BRollDetail
         imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
-        plant={data.contents?.contents.plant.commonName}
-        user={data.contents?.contents.user.username}
+        plantName={data.contents?.contents.plant.commonName}
+        userName={data.contents?.contents.user.username}
       ></BRollDetail>
     {/if}
 
+    <!-- svelte-ignore empty-block -->
     {#if data.contents.name == bRollNaming.ZOOM_OUT}{/if}
 
+    <!-- svelte-ignore empty-block -->
     {#if data.contents.name == bRollNaming.ROLL_PAN}{/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
