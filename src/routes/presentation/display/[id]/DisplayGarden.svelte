@@ -84,7 +84,7 @@
     {#if garden.plantsInGarden[index].plant.parent1 == null}
       <div
         class=" absolute font-primer text-2xl text-roel_purple px-2 py-1 bg-roel_green text-center"
-        style={`left: ${x}px; top: ${y + 80}px; width: 120px; height: auto; z-index: ${zIndex};`}
+        style={`left: ${x}px; top: ${y + 80}px; width: 120px; height: auto; z-index: ${zIndex + 1};`}
       >
         {garden.name}
       </div>
