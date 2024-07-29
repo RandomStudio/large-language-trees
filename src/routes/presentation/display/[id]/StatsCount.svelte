@@ -1,3 +1,7 @@
+<script lang="ts">
+  export let count;
+</script>
+
 <div class="bg-roel_yellow w-full h-screen relative overflow-hidden">
   <div class="fill-roel_red absolute top-0 w-full h-auto">
     <svg viewBox="0 0 1000 2151" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +26,7 @@
   <div
     class="w-full flex text-center items-center justify-center absolute bottom-[120px] text-roel_red text-6xl font-jeanb"
   >
-    2890 PLANTS
+    {count} PLANTS
   </div>
   <div
     class="w-full flex text-center items-center justify-center absolute bottom-[60px] text-roel_red text-4xl font-primer"
