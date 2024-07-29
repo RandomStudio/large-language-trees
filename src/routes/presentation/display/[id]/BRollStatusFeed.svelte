@@ -1,0 +1,66 @@
+<script lang="ts">
+  export let contents;
+</script>
+
+<body class="bg-roel_rose">
+  <div>
+    <div class="fill-roel_purple absolute bottom-0 w-full h-auto">
+      <svg viewBox="0 0 1000 2151" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M500 0C776.142 0 1000 223.858 1000 500V650H0V500C0 223.858 223.858 0 500 0Z M0 650H1000V2151H0V650Z"
+        />
+      </svg>
+    </div>
+
+    <div class="relative">
+      <div class="absolute">
+        <!-- svelte-ignore a11y-img-redundant-alt -->
+        <img
+          src="/47.png"
+          alt="Lavender Image"
+          class="place-content-center h-auto"
+        />
+      </div>
+      <div class="absolute">
+        <!-- svelte-ignore a11y-img-redundant-alt -->
+        <img
+          src="/53.png"
+          alt="Lavender Image"
+          class="place-content-center h-auto"
+        />
+      </div>
+      <div class="absolute">
+        <!-- svelte-ignore a11y-img-redundant-alt -->
+        <img
+          src="/51.png"
+          alt="Lavender Image"
+          class="place-content-center h-auto"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute z-10">
+    <!-- svelte-ignore a11y-img-redundant-alt -->
+    <img src="/grassjess.png" alt="grass" class="place-content-center h-auto" />
+  </div>
+
+  <div class="absolute left-3 bottom-3 space-y-2 z-20">
+    {#each contents as sentence, index}
+      <div
+        class="flex items-center space-x-2"
+        style="opacity: {0.5 + index * 0.1}"
+      >
+        {#each sentence as info}
+          {#if info.highlight == true}
+            <div class="text-roel_purple text-xl font-primer bg-roel_rose p-1">
+              {info.text}
+            </div>
+          {:else}
+            <div class="text-xl font-primer text-roel_rose">{info.text}</div>
+          {/if}
+        {/each}
+      </div>
+    {/each}
+  </div>
+</body>

@@ -1,9 +1,8 @@
 import { db } from "$lib/server/db";
-import { gardens, gardensToPlants, users } from "$lib/server/schema";
+import { gardensToPlants } from "$lib/server/schema";
 import type { GardenPlantEntry } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
-import { GRID_HEIGHT, GRID_WIDTH } from "../../../defaults/constants";
 import {
   addPlantToGarden,
   getUserByUsername,
@@ -27,8 +26,21 @@ export const POST: RequestHandler = async ({ request }) => {
     if (adminUser) {
       const adminGarden = await getUserGarden(adminUser.id);
       if (adminGarden) {
-        await addPlantToGarden(plantId, adminGarden.id);
-        console.log("...added to admin user garden OK");
+        const exists = await db
+          .select()
+          .from(gardensToPlants)
+          .where(
+            and(
+              eq(gardensToPlants.plantId, plantId),
+              eq(gardensToPlants.gardenId, gardenId)
+            )
+          );
+        if (exists.length === 0) {
+          await addPlantToGarden(plantId, adminGarden.id);
+          console.log("...added to admin user garden OK");
+        } else {
+          console.log("...already exist in garden; skip");
+        }
       }
     }
   }
