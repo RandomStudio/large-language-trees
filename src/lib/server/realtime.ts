@@ -5,9 +5,9 @@ import { db } from "./db";
 import {
   eventLogs,
   gardens,
+  gardensToPlants,
   plants,
   presentationState,
-  seedbanks,
   users
 } from "./schema";
 import { count, desc, eq, not } from "drizzle-orm";
@@ -38,9 +38,11 @@ import {
   NUM_GARDENS_MULTI
 } from "../../defaults/presentation";
 import { PLUG_NAMES } from "../../defaults/constants";
+import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
 export const publishEvent = async (event: SimpleEvent) => {
   const agent = await TetherAgent.create("server", {
+    loglevel: "warn",
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
       host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
@@ -70,12 +72,13 @@ const publishDisplayInstructions = async (
   contents: DisplayEventContents,
   timeout: number | null
 ) => {
+  const useLocal = PUBLIC_TETHER_HOST === "localhost";
   const agent = await TetherAgent.create("server", {
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
-      host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
-      port: 8883,
-      protocol: "mqtts"
+      host: PUBLIC_TETHER_HOST,
+      port: useLocal ? 1883 : 8883,
+      protocol: useLocal ? "mqtt" : "mqtts"
     }
   });
 
@@ -102,7 +105,7 @@ export const handleDisplayNotification = async (
 ) => {
   const { displayId, event } = message;
 
-  const idleState: DisplayIdle = {
+  const IDLE_STATE: DisplayIdle = {
     name: "idle",
     contents: null
   };
@@ -121,9 +124,10 @@ export const handleDisplayNotification = async (
         priority: null
       });
     }
+
     // Add an idle state with a short timeout, so that the new
     // display will be assigned a "B-roll" state soon...
-    await updateScreenStateAndPublish(displayId, idleState, null, 2000);
+    await updateScreenStateAndPublish(displayId, IDLE_STATE, null, 2000);
   }
 
   if (event === "timeout") {
@@ -143,7 +147,7 @@ export const handleDisplayNotification = async (
       console.error(
         "Something went wrong getting a random Display layout: " + e
       );
-      await updateScreenStateAndPublish(displayId, idleState, null, 2000);
+      await updateScreenStateAndPublish(displayId, IDLE_STATE, null, 2000);
     }
   }
 };
@@ -280,35 +284,25 @@ const randomAmbientDisplay = async (
         .select({ id: gardens.id, userId: gardens.userId })
         .from(gardens);
       const pickGarden = pickRandomElement(allGardens);
-      const gardenWithPlants = await db.query.gardens.findFirst({
-        where: eq(gardens.id, pickGarden.id),
-        with: { plantsInGarden: true }
+      const plantsInGarden = await db.query.gardensToPlants.findMany({
+        with: { plant: true },
+        where: eq(gardensToPlants.gardenId, pickGarden.id)
       });
-      if (gardenWithPlants) {
-        const { plantsInGarden } = gardenWithPlants;
-        const pickPlant = pickRandomElement(plantsInGarden);
-        const plantInfo = await db.query.plants.findFirst({
-          where: eq(plants.id, pickPlant.plantId)
-        });
-        const user = await db.query.users.findFirst({
-          where: eq(users.id, pickGarden.userId)
-        });
-        if (user && plantInfo) {
-          const contents: DisplayPlantGrowingTime = {
-            name: bRollNaming.STATISTICS_1,
-            contents: {
-              plant: plantInfo,
-              user: stripUserInfo(user)
-            }
-          };
-          return contents;
-        } else {
-          throw Error("user/plantInfo undefined");
-        }
-      } else {
-        throw Error("gardenWithPlants undefined");
+      const pickPlant = pickRandomElement(plantsInGarden);
+      const user = await db.query.users.findFirst({
+        where: eq(users.id, pickGarden.userId)
+      });
+      if (!user || !pickPlant) {
+        throw Error("user/plant info missing");
       }
-      // const user = await db.select().from(users).where(eq(users.id, pickPlant.authorTop))
+      const contents: DisplayPlantGrowingTime = {
+        name: bRollNaming.STATISTICS_1,
+        contents: {
+          plant: pickPlant.plant,
+          user: stripUserInfo(user)
+        }
+      };
+      return contents;
     }
     case "STATISTICS_2": {
       const [result] = await db.select({ count: count() }).from(plants);
@@ -352,7 +346,7 @@ export const updatePresentationDisplaysOnEvent = async (
     }
     case "newUserFirstPlant": {
       const PRIORITY = 1;
-      const TIMEOUT = 5000;
+      const TIMEOUT = 7000;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
         const { user, plant } = latestEvent.payload;

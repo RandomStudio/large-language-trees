@@ -19,9 +19,42 @@
 
   let agent: TetherAgent | null = null;
 
-  let timer: NodeJS.Timeout | null = null;
+  let nextTimeout = Date.now();
+  let intervalCheck: NodeJS.Timeout | null = null;
+
+  const notifyServer = async () => {
+    const message: DisplayNotifyServer = {
+      displayId: data.id,
+      event: "timeout"
+    };
+    console.log("Notify server that", data.id, "has timed out...");
+    const res = await fetch("/api/displayNotifyServer", {
+      method: "POST",
+      body: JSON.stringify(message)
+    });
+    console.log(
+      "...",
+      Date.now(),
+      "updated server with timeout notice",
+      res.status
+    );
+  };
 
   onMount(async () => {
+    if (intervalCheck) {
+      clearInterval(intervalCheck);
+    }
+    nextTimeout = Date.now() + 2000;
+    console.log("onMount set nextTimeout", nextTimeout);
+
+    console.log("start interval timer");
+    intervalCheck = setInterval(() => {
+      if (Date.now() >= nextTimeout) {
+        console.log("... Timeout", nextTimeout, "reached!");
+        notifyServer();
+      }
+    }, 1000);
+
     // Subscribe to instructions channel
     agent = await TetherAgent.create("presentation", {
       brokerOptions: BROWSER_CONNECTION,
@@ -34,47 +67,21 @@
     );
     instructionsPlug.on("message", (p) => {
       const m = decode(p) as DisplayUpdateMessage;
-      console.log("ReceivedserverInstructDisplays message:", m);
+      console.log(Date.now(), "ReceivedserverInstructDisplays message:", m);
       const { payload, timeout } = m;
-      if (timeout) {
-        if (timer) {
-          console.log("clear active timer");
-          clearTimeout(timer);
-          timer = null;
-        }
-        console.log("Set new timeout", timeout, "ms...");
-        timer = setTimeout(() => {
-          console.log("...Display Timeout reached!");
-          const message: DisplayNotifyServer = {
-            displayId: data.id,
-            event: "timeout"
-          };
-          fetch("/api/displayNotifyServer", {
-            method: "POST",
-            body: JSON.stringify(message)
-          }).then(() => {
-            timer = null;
-          });
-        }, timeout);
-      }
       data.contents = payload;
-    });
 
-    // Notify server that this display is online / reloaded
-    const message: DisplayNotifyServer = {
-      displayId: data.id,
-      event: "init"
-    };
-    const res = await fetch("/api/displayNotifyServer", {
-      method: "POST",
-      body: JSON.stringify(message)
+      if (timeout) {
+        nextTimeout = Date.now() + timeout;
+        console.log("update nextTimeout to", nextTimeout);
+      }
     });
-    if (res.status !== 200) {
-      console.error("Error notifying server", res.status, res.statusText);
-    }
   });
 
   onDestroy(async () => {
+    if (intervalCheck) {
+      clearInterval(intervalCheck);
+    }
     agent?.disconnect();
   });
 </script>
@@ -95,15 +102,15 @@
     {#if data.contents.name == "newUserFirstPlant"}
       <NewUserFirstPlant
         imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
-        plantName={data.contents?.contents.plant.commonName}
-        gardenerName={data.contents?.contents.user.username}
+        plantName={data.contents.contents.plant.commonName}
+        gardenerName={data.contents.contents.user.username}
       ></NewUserFirstPlant>
     {/if}
 
     {#if data.contents.name == "newPlantPollination"}
       <PollinationResult
         imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
-        plantName={data.contents?.contents.newPlant.commonName}
+        plantName={data.contents.contents.newPlant.commonName}
       ></PollinationResult>
     {/if}
 
@@ -111,11 +118,17 @@
       <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
     {/if}
 
-    {#if data.contents.name == bRollNaming.DETAIL}{/if}
+    {#if data.contents.name == bRollNaming.DETAIL}
+      TODO!
+    {/if}
 
-    {#if data.contents.name == bRollNaming.ZOOM_OUT}{/if}
+    {#if data.contents.name == bRollNaming.ZOOM_OUT}
+      TODO!
+    {/if}
 
-    {#if data.contents.name == bRollNaming.ROLL_PAN}{/if}
+    {#if data.contents.name == bRollNaming.ROLL_PAN}
+      TODO!
+    {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
       <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>

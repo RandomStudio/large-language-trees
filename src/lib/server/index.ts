@@ -2,6 +2,7 @@ import { db } from "./db";
 import { ADMIN_GARDEN_SHARED } from "$env/static/private";
 import DefaultSeeds from "../../defaults/seeds.json";
 import {
+  eventLogs,
   gardens,
   gardensToPlants,
   generatedImages,
@@ -308,6 +309,7 @@ export const checkDefaultUsers = async () => {
  */
 export const cleanUp = async () => {
   console.warn("Starting cleanup...");
+  await db.delete(eventLogs);
   await db.delete(seedbanksToPlants);
   await db.delete(gardensToPlants);
   await db.delete(seedbanks);

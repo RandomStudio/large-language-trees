@@ -1,9 +1,15 @@
 import { BROKER_DEFAULTS, type IClientOptions } from "tether-agent";
+import {
+  PUBLIC_TETHER_HOST,
+  PUBLIC_TETHER_PORT,
+  PUBLIC_TETHER_PROTOCOL,
+  PUBLIC_TETHER_PATH
+} from "$env/static/public";
 
 export const BROWSER_CONNECTION: IClientOptions = {
   ...BROKER_DEFAULTS.browser,
-  host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
-  port: 8884,
-  protocol: "wss",
-  path: "/mqtt"
+  host: PUBLIC_TETHER_HOST,
+  port: parseInt(PUBLIC_TETHER_PORT),
+  protocol: PUBLIC_TETHER_PROTOCOL as IClientOptions["protocol"],
+  path: PUBLIC_TETHER_PATH
 };
