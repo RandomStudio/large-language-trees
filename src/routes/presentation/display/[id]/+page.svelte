@@ -130,7 +130,10 @@
       ></BRollDetail>
     {/if}
 
-    {#if data.contents.name == bRollNaming.ZOOM_OUT}{/if}
+    {#if data.contents.name == bRollNaming.ZOOM_OUT}
+      <BRollZoomOut userName={data.contents.contents.user.username}
+      ></BRollZoomOut>
+    {/if}
 
     {#if data.contents.name == bRollNaming.ROLL_PAN}
       <BRollPan gardens={data.contents}></BRollPan>
