@@ -19,7 +19,7 @@
     class:contrast-200={applyFilters}
     class:mix-blend-difference={applyFilters}
   />
-  {#if $page.url.pathname !== "/startwindow"}
+  {#if $page.url.pathname !== "/app/startwindow"}
     <p class="text-roel_blue font-primer text-3xl">
       {plant.commonName}
     </p>

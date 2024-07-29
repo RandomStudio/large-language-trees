@@ -197,7 +197,7 @@
   <div class="pt-[88px] mx-10 font-primer text-2xl text-roel_green text-left">
     {#if parent1}
       <p class=" text-2xl">
-        Point your camera to another gardeners Pollination QR to start
+        Point your camera to another gardener's Pollination QR to start
         crossbreeding {parent1.commonName}
       </p>
       <div class="mx-0">
@@ -219,8 +219,8 @@
           <QrGenerate text={parent1.id + "&" + data.seedBank.id} />
         </div>
       </div>
-    </div>
-  {/if}
+    {/if}
+  </div>
 </div>
 
 {#if candidateChild}

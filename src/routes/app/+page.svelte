@@ -13,7 +13,7 @@
 
 <img src="FlowerDuo.png" class="absolute -z-10 opacity-100" alt="FlowerDuo" />
 <div class="mx-10 pt-[15vh] font-primer text-6xl text-roel_blue">
-  <p class="font-jeanluc text-center">LET'S<br />POLLINATE</p>
+  <p class="font-jeanb text-center">LET'S<br />POLLINATE</p>
   <div class="text-center">
     <form method="post" use:enhance class="mt-4 text-center max-w-md">
       <input
@@ -69,3 +69,4 @@
     </div>
   </div>
 </div>
+<div class="w-screen h-60 bg-roel_blue -mt-[120px] fixed -z-10"></div>

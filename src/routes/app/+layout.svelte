@@ -16,7 +16,7 @@
 <div class="z-20 min-h-screen bg-roel_green absolute">
   {#if $page.url.pathname !== "/app/info" && $page.url.pathname !== "/app" && $page.url.pathname !== "/app/garden" && $page.url.pathname !== "/app/startwindow" && $page.url.pathname !== "/app/gallery/pollination/baobab"}
     <div class="fixed w-full z-30 pt-6 pl-8">
-      <h1 class="text-3xl text-roel_blue font-jeanluc">
+      <h1 class="text-3xl text-roel_blue font-jeanb">
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <span
           class="cursor-pointer"
@@ -31,7 +31,7 @@
   {/if}
   {#if $page.url.pathname == "/app/startwindow" || $isPollinationPage}
     <div class="fixed w-full z-30 pt-6 pl-8">
-      <h1 class="text-3xl text-roel_green font-jeanluc">
+      <h1 class="text-3xl text-roel_green font-jeanb">
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <span
           class="cursor-pointer"

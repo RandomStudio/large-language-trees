@@ -32,7 +32,7 @@
 }
 
 @font-face {
-  font-family: "JeanLucWeb-Bold";
+  font-family: "JeanB";
   src: url("/jeanlucweb-bold.eot");
   src: local("☺"), url("/jeanlucweb-bold.woff") format("woff"),
     url("/jeanlucweb-bold.otf") format("opentype"),
@@ -40,7 +40,7 @@
 }
 
 @font-face {
-  font-family: "JeanLucWeb-Thin";
+  font-family: "JeanT";
   src: url("/jeanlucweb-bold.eot");
   src: local("☺"), url("/jeanlucweb-thin.woff") format("woff"),
     url("/jeanlucweb-thin.otf") format("opentype"),
@@ -48,7 +48,7 @@
 }
 
 @font-face {
-  font-family: "MD Primer";
+  font-family: "Primer";
   src: url("/MDPrimer-Medium.woff2") format("woff2"),
     url("/MDPrimer-Medium.woff") format("woff");
   font-weight: 500;
@@ -57,7 +57,7 @@
 }
 
 @font-face {
-  font-family: "MD Primer";
+  font-family: "PrimerB";
   src: url("/MDPrimer-Bold.woff2") format("woff2"),
     url("/MDPrimer-Bold.woff") format("woff");
   font-weight: bold;
