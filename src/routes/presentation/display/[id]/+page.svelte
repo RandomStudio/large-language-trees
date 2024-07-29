@@ -1,7 +1,6 @@
 <script lang="ts">
-  import BreakingNews from "./BreakingNews.svelte";
+  import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
-  import PollinationEvent from "./PollinationEvent.svelte";
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -9,8 +8,10 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import type { DisplayUpdateMessage } from "$lib/events.types";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
-  import StatusFeed from "./StatusFeed.svelte";
-  import BRollDetail from "./BRollDetail.svelte";
+  import StatsGrowingTime from "./StatsGrowingTime.svelte";
+  import BRollStatusFeed from "./BRollStatusFeed.svelte";
+  import BRollLeaderboard from "./BRollLeaderboard.svelte";
+  import StatsCount from "./StatsCount.svelte";
 
   export let data: PageData;
 
@@ -29,27 +30,32 @@
       "serverInstructDisplays",
       { id: data.id }
     );
-    instructionsPlug.on("message", (payload) => {
-      const m = decode(payload) as DisplayUpdateMessage;
+    instructionsPlug.on("message", (p) => {
+      const m = decode(p) as DisplayUpdateMessage;
       console.log("ReceivedserverInstructDisplays message:", m);
-      const { contents, timeout } = m;
+      const { payload, timeout } = m;
       if (timeout) {
-        timer = setTimeout(async () => {
-          console.log("Display Timeout reached!");
+        if (timer) {
+          console.log("clear active timer");
+          clearTimeout(timer);
+          timer = null;
+        }
+        console.log("Set new timeout", timeout, "ms...");
+        timer = setTimeout(() => {
+          console.log("...Display Timeout reached!");
           const message: DisplayNotifyServer = {
             displayId: data.id,
             event: "timeout"
           };
-          await fetch("/api/displayNotifyServer", {
+          fetch("/api/displayNotifyServer", {
             method: "POST",
             body: JSON.stringify(message)
+          }).then(() => {
+            timer = null;
           });
-          if (timer) {
-            clearTimeout(timer);
-          }
         }, timeout);
       }
-      data.contents = contents;
+      data.contents = payload;
     });
 
     // Notify server that this display is online / reloaded
@@ -72,13 +78,58 @@
 </script>
 
 <main>
-  <BRollDetail />
-
   <h1>
     Display #{data.id}
   </h1>
-
   <div>
-    {JSON.stringify(data.contents)}
+    <pre>
+      <code>
+        {JSON.stringify(data.contents, null, 2)}
+      </code>
+    </pre>
   </div>
+
+  {#if data.contents}
+    {#if data.contents.name == "newUserFirstPlant"}
+      <NewUserFirstPlant
+        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+        plantName={data.contents?.contents.plant.commonName}
+        gardenerName={data.contents?.contents.user.username}
+      ></NewUserFirstPlant>
+    {/if}
+
+    {#if data.contents.name == "newPlantPollination"}
+      <PollinationResult
+        imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
+        plantName={data.contents?.contents.newPlant.commonName}
+      ></PollinationResult>
+    {/if}
+
+    {#if data.contents.name == "showStatusFeed"}
+      <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
+    {/if}
+
+    {#if data.contents.name == "showFeaturedPlant"}{/if}
+
+    {#if data.contents.name == "showFeaturedGarden"}{/if}
+
+    {#if data.contents.name == "showMultipleGardens"}{/if}
+
+    {#if data.contents.name == "showLeaderboard"}
+      <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
+    {/if}
+
+    {#if data.contents.name == "showPlantGrowingTime"}
+      <StatsGrowingTime
+        imageUrl={data.contents.contents.plant.imageUrl || ""}
+        plantName={data.contents.contents.plant.commonName}
+        gardenerName={data.contents.contents.user.username}
+        date={data.contents.contents.plant.created}
+      ></StatsGrowingTime>
+    {/if}
+
+    {#if data.contents?.name == "showPlantCount"}
+      <StatsCount count={data.contents?.contents.count}></StatsCount>
+    {/if}
+  {/if}
 </main>

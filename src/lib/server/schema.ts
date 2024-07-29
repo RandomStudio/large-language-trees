@@ -60,7 +60,9 @@ export const sessions = pgTable("sessions", {
 
 export const gardens = pgTable("gardens", {
   id: text("id").primaryKey(),
-  userId: text("user_id").references(() => users.id),
+  userId: text("user_id")
+    .references(() => users.id)
+    .notNull(),
   name: text("name")
 });
 
@@ -95,8 +97,12 @@ export const gardensToPlantsRelations = relations(
   })
 );
 
-export const gardensRelations = relations(gardens, ({ many }) => ({
-  plantsInGarden: many(gardensToPlants)
+export const gardensRelations = relations(gardens, ({ many, one }) => ({
+  plantsInGarden: many(gardensToPlants),
+  myOwner: one(users, {
+    fields: [gardens.userId],
+    references: [users.id]
+  })
 }));
 
 export const seedbanks = pgTable("seedbanks", {
@@ -154,4 +160,15 @@ export const presentationState = pgTable("presentation_state", {
   id: text("screen_id").primaryKey(),
   priority: integer("priority_level"),
   contents: json("contents")
+});
+
+/**
+ * We need to keep a persistent copy of incoming (Simple)Events so that
+ * the serverless system can read and write these without having to be
+ * permanently subscribed to the "events"
+ */
+export const eventLogs = pgTable("event_logs", {
+  id: text("id").primaryKey(),
+  contents: json("contents").notNull(),
+  timestamp: timestamp("added", { withTimezone: true }).notNull().defaultNow()
 });
