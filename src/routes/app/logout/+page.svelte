@@ -11,7 +11,7 @@
   export let data: AdminViewData;
 </script>
 
-<main class="container mx-auto">
+<main class="container mx-auto mt-20">
   <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
   ></UserLoginStatus>
 </main>
