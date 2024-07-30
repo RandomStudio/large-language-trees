@@ -1,4 +1,5 @@
 <script lang="ts">
+  import DisplayGarden from "./DisplayGarden.svelte";
   export let eventLogs;
   export let gardens;
 </script>
@@ -17,6 +18,35 @@
       stroke-width="1000"
     />
   </svg>
+
+  <DisplayGarden
+    xGarden={0}
+    yGarden={50}
+    height={150}
+    width={230}
+    garden={gardens[0]}
+  ></DisplayGarden>
+  <DisplayGarden
+    xGarden={280}
+    yGarden={200}
+    height={150}
+    width={200}
+    garden={gardens[1]}
+  ></DisplayGarden>
+  <DisplayGarden
+    xGarden={0}
+    yGarden={350}
+    height={150}
+    width={200}
+    garden={gardens[2]}
+  ></DisplayGarden>
+  <DisplayGarden
+    xGarden={280}
+    yGarden={500}
+    height={150}
+    width={200}
+    garden={gardens[3]}
+  ></DisplayGarden>
 
   <div class="absolute left-3 bottom-3 space-y-2 z-20">
     {#each eventLogs as sentence, index}
