@@ -24,7 +24,7 @@
     There are currently
   </div>
   <div
-    class="w-full flex text-center items-center justify-center absolute bottom-[120px] text-roel_red text-6xl font-jeanb"
+    class="w-full flex text-center items-center justify-center absolute bottom-[110px] text-roel_red text-6xl font-jeanb"
   >
     {count} PLANTS
   </div>
