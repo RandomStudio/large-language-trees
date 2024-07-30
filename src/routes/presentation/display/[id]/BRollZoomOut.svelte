@@ -1,5 +1,9 @@
 <script lang="ts">
+  import type { GardenWithPlants } from "$lib/types";
+  import DisplayGarden from "./DisplayGarden.svelte";
+
   export let userName: string;
+  export let garden: GardenWithPlants;
 </script>
 
 <body class="bg-roel_purple min-h-screen">
@@ -9,6 +13,8 @@
     {userName}'s <br /> GARDEN
   </div>
 
+  <DisplayGarden {garden} xGarden={-50} yGarden={400} height={800} width={500}
+  ></DisplayGarden>
   <div class="fixed bottom-5 left-40 text-roel_rose text-4xl font-primer">
     Join the Garden!
   </div>
