@@ -16,9 +16,9 @@
   <DisplayGarden
     garden={topGarden}
     xGarden={0}
-    yGarden={400}
+    yGarden={200}
     width={400}
-    height={700}
+    height={400}
   ></DisplayGarden>
 
   {#each topPollinators as userInfo, index}
