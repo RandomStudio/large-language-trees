@@ -1,6 +1,7 @@
 <script lang="ts">
   import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
+  import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -11,7 +12,9 @@
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
+  import BRollPan from "./BRollPan.svelte";
   import StatsCount from "./StatsCount.svelte";
+  import BRollDetail from "./BRollDetail.svelte";
 
   import { bRollNaming } from "$lib/events.types";
 
@@ -86,6 +89,7 @@
   });
 </script>
 
++page.svelte
 <main>
   <h1>
     Display #{data.id}
@@ -119,15 +123,20 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
-      TODO!
+      <BRollDetail
+        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+        plantName={data.contents?.contents.plant.commonName}
+        userName={data.contents?.contents.user.username}
+      ></BRollDetail>
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      TODO!
+      <BRollZoomOut userName={data.contents.contents.user.username}
+      ></BRollZoomOut>
     {/if}
 
     {#if data.contents.name == bRollNaming.ROLL_PAN}
-      TODO!
+      <BRollPan gardens={data.contents}></BRollPan>
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}

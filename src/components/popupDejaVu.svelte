@@ -16,11 +16,11 @@
 
 <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
   <div class="overflow-y-auto" style="max-height: calc(100% - 4rem);">
-    <div class="mx-12 font-inter text-roel_blue text-left mt-20">
-      <p class="text-xl">Whoops! C'est un déjà-vu!</p>
+    <div class="mx-10 font-primer text-roel_blue text-left mt-20">
+      <p class="text-2xl">Whoops! C'est un déjà-vu!</p>
       <div class="mt-4">
         <PlantDisplay plant={plantDetails} applyFilters={false} />
-        <p class="text-sm mt-4">
+        <p class="font-primer text-base mt-4">
           {plantDetails.description}
         </p>
         <br />

@@ -190,7 +190,7 @@
       <WaitingSpinner></WaitingSpinner>
       <div
         id="message"
-        class="text-roel_blue font-inter text-xl mt-4 text-center"
+        class="text-roel_blue font-primer text-2xl mt-4 text-center"
       >
         {messages[currentIndex]} ...
       </div>
@@ -201,8 +201,8 @@
 {#if candidateImageUrl}
   <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40">
     <div class="overflow-y-auto" style="max-height: calc(100% - 4rem);">
-      <div class="mx-12 font-inter text-roel_blue text-left mt-10">
-        <p class="text-xl">
+      <div class="mx-12 font-primer text-roel_blue text-left mt-10">
+        <p class="text-2xl">
           Hooray you made a new plant. What would you like it to be named?
         </p>
 
@@ -221,13 +221,13 @@
             <input
               type="text"
               bind:value={textInput}
-              class="bg-light_grey border-2 px-4 py-2 border-mid_grey rounded-full font-inter text-dark_grey text-xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center"
+              class="bg-roel_blue bg-opacity-10 border-[3px] px-4 py-2 border-roel_blue rounded-full font-primer text-roel_blue text-2xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center"
               placeholder="Name your flower"
             />
           </form>
         </div>
-        <p class="mt-4 text-sm">{errorText}</p>
-        <p class="mt-4 text-sm">{candidateChild.description}</p>
+        <p class="mt-8 text-base">{errorText}</p>
+        <p class="mt-8 text-base mb-10">{candidateChild.description}</p>
 
         <br />
         <br />

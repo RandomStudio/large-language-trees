@@ -28,33 +28,46 @@
   }
 </script>
 
-<div class="mx-12 font-inter text-roel_blue text-left">
-  {#if showMessage}
-    <p class="text-xl">Dear digital gardener, here is your first plant!</p>
-  {:else}
-    <p class="text-xl">
-      Now find a fellow gardener in the studio and scan their barcode to start
-      pollinating.
-    </p>
-  {/if}
-
-  <div>
+<div class="bg-roel_blue rounded-b-full">
+  <div class="font-primer text-roel_green text-left pt-[88px]">
+    {#if showMessage}
+      <p class="mx-10 text-2xl -mb-5">
+        Dear digital gardener, here is your first plant!
+      </p>
+    {:else}
+      <p class="mx-10 text-2xl -mb-5">
+        Now find a fellow gardener in the studio and scan their barcode to start
+        pollinating.
+      </p>
+    {/if}
     {#if selectedPlant}
       <PlantDisplay plant={selectedPlant}></PlantDisplay>
-
-      {#if showDescription}
-        <p class="text-sm mt-4">
-          {selectedPlant.description}
-        </p>
-      {/if}
-      {#if showBarcode}
-        <div class="absolute top-0 right-0 mt-2 mr-2 hidden">
-          <QrGenerate text={selectedPlant.id} />
-        </div>
-      {/if}
     {:else}
       <p>No plants available</p>
     {/if}
+  </div>
+</div>
+<div class="mx-10 font-primer text-roel_blue mb-[130px]">
+  <div>
+    <div>
+      {#if selectedPlant}
+        {#if showDescription}
+          <p class="text-3xl mt-8 text-center">
+            {selectedPlant.commonName}
+          </p>
+          <p class="text-base mt-6">
+            {selectedPlant.description}
+          </p>
+        {/if}
+        {#if showBarcode}
+          <div class="absolute top-0 right-0 mt-2 mr-2 hidden">
+            <QrGenerate text={selectedPlant.id} />
+          </div>
+        {/if}
+      {:else}
+        <p>No plants available</p>
+      {/if}
+    </div>
   </div>
   <div class="mt-4">
     <ButtonBottom {buttonText} functionClick={handleButtonClick}></ButtonBottom>
