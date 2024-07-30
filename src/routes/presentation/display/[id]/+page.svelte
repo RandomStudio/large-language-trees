@@ -118,7 +118,10 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.STATUS_FEED}
-      <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
+      <BRollStatusFeed
+        eventLogs={data.contents.contents.eventLogs}
+        gardens={data.contents.contents.gardens}
+      ></BRollStatusFeed>
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}

@@ -1,5 +1,6 @@
 <script lang="ts">
-  export let contents;
+  export let eventLogs;
+  export let gardens;
 </script>
 
 <body class="bg-roel_purple min-h-screen">
@@ -18,7 +19,7 @@
   </svg>
 
   <div class="absolute left-3 bottom-3 space-y-2 z-20">
-    {#each contents as sentence, index}
+    {#each eventLogs as sentence, index}
       <div
         class="flex items-center space-x-2"
         style="opacity: {0.5 + index * 0.1}"
