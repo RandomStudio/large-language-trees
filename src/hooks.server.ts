@@ -6,6 +6,7 @@ const publicAccessAllowed = (pathname: string) =>
   pathname.includes("/presentation/display") ||
   pathname.includes("/presentation/debug") ||
   pathname.includes("/api/events") ||
+  pathname.includes("/api/forceDisplay") ||
   pathname.includes("/api/displayNotifyServer");
 
 export const handle: Handle = async ({ event, resolve }) => {
