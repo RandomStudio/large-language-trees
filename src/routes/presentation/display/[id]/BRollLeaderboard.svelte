@@ -1,5 +1,6 @@
 <script lang="ts">
-  export let contents;
+  export let topPollinators;
+  export let topGarden;
 </script>
 
 <body class="bg-roel_purple h-screen flex flex-col justify-end">
@@ -11,7 +12,7 @@
       <br />POLLINATORS:
     </div>
 
-    {#each contents as userInfo, index}
+    {#each topPollinators as userInfo, index}
       <div
         class="w-full h-[80px] flex items-center justify-between px-5 {index %
           2 ===

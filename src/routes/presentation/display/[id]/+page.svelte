@@ -89,7 +89,6 @@
   });
 </script>
 
-+page.svelte
 <main>
   <h1>
     Display #{data.id}
@@ -131,7 +130,9 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      <BRollZoomOut userName={data.contents.contents.user.username}
+      <BRollZoomOut
+        garden={data.contents.contents.garden}
+        userName={data.contents.contents.user.username}
       ></BRollZoomOut>
     {/if}
 
@@ -140,7 +141,10 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
-      <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
+      <BRollLeaderboard
+        topPollinators={data.contents.contents.topPollinators}
+        topGarden={data.contents.contents.topGarden}
+      ></BRollLeaderboard>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATISTICS_1}
