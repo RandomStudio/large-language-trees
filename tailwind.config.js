@@ -12,6 +12,7 @@ module.exports = {
         roel_purple: "#4B0082",
         roel_rose: "#FFB6C1",
         roel_red: "#97021D",
+        roel_yellow: '#F5F2A7'
       },
       scale: {
         125: "1.25"
