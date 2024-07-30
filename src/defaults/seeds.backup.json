@@ -1,132 +1,3602 @@
 [
   {
-    "id": "ex-Gardenia",
-    "commonName": "Gardenia",
-    "properties": {
-      "flowerColour": "Red",
-      "petalCountRange": "5-7",
-      "petalShape": "Rose",
-      "leafColour": "Green",
-      "leafSHape": "Lanceolate",
-      "leafMarginDescription": "Dentate",
-      "stemLengthCm": 18
-    },
-    "description": "With striking red blooms featuring 5-7 petals resembling roses, this plant exudes an air of elegance and sophistication. Its lanceolate green leaves with dentate margins provide the perfect backdrop for the captivating flowers. Growing on tall stems reaching 1.8 meters, with each stem measuring approximately 18 centimeters, the Gardenia brings a sense of beauty and refinement to gardens and landscapes, enchanting all who encounter its alluring presence.",
-    "image": "5106bca1-00ae-4c3e-9f53-cde2d1bac587.webp"
-  },
-  {
-    "id": "ex-Hibiscus",
-    "commonName": "Hibiscus",
-    "properties": {
-      "flowerColour": "White",
-      "petalCountRange": "5-7",
-      "petalShape": "Funnel",
-      "leafColour": "Green",
-      "leafSHape": "Linear",
-      "leafMarginDescription": "Dentate",
-      "stemLengthCm": 12
-    },
-    "description": "Boasting elegant white blooms with 5-7 funnel-shaped petals, this plant is a symbol of beauty and grace. Its linear green leaves with dentate margins perfectly complement the enchanting flowers. Growing on stems reaching 1.2 meters, with each stem measuring about 12 centimeters, the Hibiscus adds a touch of tropical allure to gardens, enticing hummingbirds and garden enthusiasts with its ethereal charm and delicate appearance.",
-    "image": "img-8rDtAfHm9kE1qIGEnT99fV1W.png"
-  },
-  {
-    "id": "ex-Glory",
-    "commonName": "Morning Glory",
-    "properties": {
-      "flowerColour": "Purple",
-      "petalCountRange": "5-7",
-      "petalShape": "Funnel",
-      "leafColour": "Green",
-      "leafSHape": "Linear",
-      "leafMarginDescription": "Entire",
-      "stemLengthCm": 15
-    },
-    "description": "Displaying vibrant purple blooms with 5-7 funnel-shaped petals, this plant graces gardens with a touch of elegance. Its linear green leaves, featuring entire margins, complement the striking flowers beautifully. Growing on stems reaching 1.5 meters, each stem measuring approximately 15 centimeters, the Morning Glory adds a dash of charm and color to fences, trellises, and garden landscapes, captivating onlookers with its simple yet enchanting beauty.",
-    "image": "ex-Glory.png"
-  },
-
-  {
-    "id": "ex-Pansy",
-    "commonName": "Pansy",
-    "properties": {
-      "flowerColour": "Yellow",
-      "petalCountRange": "5-7",
-      "petalShape": "Butterfly",
-      "leafColour": "Green",
-      "leafSHape": "Lanceolate",
-      "leafMarginDescription": "Dentate",
-      "stemLengthCm": 10
-    },
-    "description": "The sunshine-yellow blooms of this charming plant boast 5-7 petals resembling delicate butterflies, set amidst vibrant green lanceolate leaves with dentate margins. Rising elegantly on stems reaching 1 meter, each stem measuring around 10 centimeters, this delightful flower, known for its cheerful appearance, adds a splash of color and whimsy to gardens and containers, attracting both pollinators and admirers."
-  },
-  {
-    "id": "ex-Passionflower",
-    "commonName": "Passionflower",
-    "properties": {
-      "flowerColour": "Blue",
-      "petalCountRange": "10-12",
-      "petalShape": "Cup",
-      "leafColour": "Green",
-      "leafSHape": "Palmately lobed",
-      "leafMarginDescription": "Dentate",
-      "stemLengthCm": 14
-    },
-    "description": "The exquisite 'Passionflower' showcases mesmerizing blue flowers with 10-12 petals shaped like delicate cups. Its green leaves are palmately lobed with dentate margins, adding to the allure of the plant. Growing on stems reaching 1.4 meters, with each stem measuring around 14 centimeters, this stunning flower symbolizes faith and spirituality, making a captivating addition to gardens and arbors, attracting both pollinators and admirers alike."
-  },
-  {
-    "id": "ex-Rose",
-    "commonName": "Rose",
+    "id": "echeveria",
+    "commonName": "Echeveria",
+    "imageUrl": "/plants/echeveria.png",
     "properties": {
       "flowerColour": "Pink",
-      "petalCountRange": "5-7",
-      "petalShape": "Rose",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "6-8",
+      "petalShape": "Star",
       "leafColour": "Green",
-      "leafSHape": "Lanceolate",
-      "leafMarginDescription": "Dentate",
-      "stemLengthCm": 11
+      "leafColourRGB": "#008000",
+      "leafShape": "Obovate",
+      "leafMarginDescription": "Entire",
+      "heightInMetres": 0.2,
+      "funFact": "Echeveria, a genus of succulents valued as ornamental plants, faces challenges in classification due to the shortage of specimens and molecular studies."
     },
-    "description": "The beautiful 'Rose' features stunning pink flowers with 5-7 petals shaped like a classic rose. Its lanceolate green leaves have a dentate margin, and it grows on stems reaching up to 1.1 meters tall, with each stem measuring around 11 centimeters. This plant is a symbol of love and elegance, adding beauty to gardens and bouquets alike."
+    "description": "Echeveria features a dense rosette of obovate, green leaves, typically growing up to 20 centimeters in height. Its flowers are star-shaped and pink, emerging on slender, arching stalks. The leaf margins are smooth, contributing to its neat, compact appearance."
   },
   {
-    "id": "ex-Sunflower",
-    "commonName": "Sunflower",
+    "id": "rose",
+    "commonName": "Rose",
+    "imageUrl": "/plants/rose.png",
     "properties": {
-      "flowerColour": "Orange",
-      "petalCountRange": "89-92",
-      "petalShape": "Vase",
+      "flowerColour": "Varies",
+      "flowerColourRGB": null,
+      "petalCountRange": "5-40",
+      "petalShape": "Rounded",
       "leafColour": "Green",
-      "leafSHape": "Ovate",
-      "leafMarginDescription": "Lobed",
-      "stemLengthCm": 20
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.2,
+      "funFact": "Roses are extensively used in perfumery, and their cultural significance spans thousands of years, often depicted in art and associated with romance."
     },
-    "description": "The radiant 'Sunflower' boasts striking orange blooms with a remarkable petal count ranging from 89 to 92, shaped like a charming vase. Its ovate green leaves have a lobed margin, and it stands tall on stems reaching up to 2 meters, with each stem measuring approximately 20 centimeters. This sun-loving plant symbolizes happiness and positivity, brightening up any garden or landscape with its cheerful appearance."
+    "description": "Roses display a magnificent array of petal colors and arrangements, with each bloom consisting of 5 to 40 rounded petals. The green, oval-shaped leaves feature serrated margins. Typically, roses grow to a height of about 0.2 meters."
   },
   {
-    "id": "ex-Lily",
-    "commonName": "Tiger Lily",
+    "id": "common_mushroom",
+    "commonName": "Common Mushroom",
+    "imageUrl": "/plants/common_mushroom.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "White",
+      "leafColourRGB": "#FFFFFF",
+      "leafShape": "Cap-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.1,
+      "funFact": "Common mushrooms are one of the few natural sources of Vitamin D, widely cultivated for their versatility and flavor in culinary dishes."
+    },
+    "description": "The common mushroom features a prominent white cap that is smooth and rounded, supported by a short, stout stalk. It typically grows up to 10 centimeters tall. The under-cap gills are closely spaced and contain spores necessary for reproduction."
+  },
+  {
+    "id": "prickly_pear_cactus",
+    "commonName": "Prickly Pear Cactus",
+    "imageUrl": "/plants/prickly_pear_cactus.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Flat pads",
+      "leafMarginDescription": "Spiny",
+      "heightInMetres": 2.0,
+      "funFact": "The prickly pear cactus bears fruits that are not only edible but have been a staple in Native American diets for thousands of years."
+    },
+    "description": "The prickly pear cactus is distinguished by its flat, green pads that are covered with clusters of spines. Bright yellow flowers bloom at the edges of these pads. This cactus can reach up to two meters in height and thrives in arid environments."
+  },
+  {
+    "id": "pitcher_plant",
+    "commonName": "Pitcher Plant",
+    "imageUrl": "/plants/pitcher_plant.png",
     "properties": {
       "flowerColour": "Red",
-      "petalCountRange": "6-8",
-      "petalShape": "Trumpet",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "5-6",
+      "petalShape": "Oval",
       "leafColour": "Green",
-      "leafSHape": "Linear",
-      "leafMarginDescription": "Entire",
-      "stemLengthCm": 16
+      "leafColourRGB": "#008000",
+      "leafShape": "Tubular",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "The pitcher plant is a carnivorous species, using its cone-shaped leaves to trap insects and small animals, which are then digested to supplement the plant's nutritional needs."
     },
-    "description": "The captivating 'Tiger Lily' showcases vibrant red flowers with 6-8 petals forming elegant trumpet shapes. Its linear green leaves have entire margins, complementing the striking blooms gracefully. Standing tall on stems reaching 1.6 meters, with each stem measuring around 16 centimeters, this exotic plant adds a touch of wild beauty to gardens and landscapes, evoking a sense of mystery and allure."
+    "description": "The pitcher plant is renowned for its modified leaves that form deep, tubular structures capable of trapping insects. These leaves are typically bright green with red veins. It sports tall, oval-shaped red flowers and grows to about 30 centimeters in height."
   },
   {
-    "id": "ex-Violet",
-    "commonName": "Violet",
+    "id": "trillium",
+    "commonName": "Trillium",
+    "imageUrl": "/plants/trillium.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "3",
+      "petalShape": "Oval",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.4,
+      "funFact": "Trillium is often associated with spring as it blooms early in the season, and its presence is used by many naturalists to gauge the health of forest ecosystems."
+    },
+    "description": "Trillium stands out with its three large white petals and three green oval leaves, forming a striking contrast. The plant typically grows up to 40 centimeters tall. The entire structure is symmetric, with each segment directly aligned with the others, creating a visually harmonious appearance."
+  },
+  {
+    "id": "peony",
+    "commonName": "Peony",
+    "imageUrl": "/plants/peony.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5-10",
+      "petalShape": "Rounded",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Peonies are highly regarded in floral decoration and are especially celebrated in Chinese culture, where the flower is often associated with royalty and honor."
+    },
+    "description": "Peonies are known for their lush, rounded pink petals that can range from 5 to 10 per flower, creating full, dense blooms. Their green lanceolate leaves are edged with a serrated margin. The plants can grow up to 60 centimeters tall, often standing out in garden settings for their size and vibrant colors."
+  },
+  {
+    "id": "tomato",
+    "commonName": "Tomato",
+    "imageUrl": "/plants/tomato.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Star",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Compound",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 1.2,
+      "funFact": "Tomatoes were once believed to be poisonous in Europe and were grown purely for their ornamental value before becoming a staple in global cuisines."
+    },
+    "description": "Tomato plants are distinguished by their yellow, star-shaped flowers and bright red, spherical fruits. The green compound leaves are deeply serrated, providing a lush backdrop for the fruit. Typically, tomato plants can grow up to 1.2 meters tall."
+  },
+  {
+    "id": "sunflower",
+    "commonName": "Sunflower",
+    "imageUrl": "/plants/sunflower.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "20-30",
+      "petalShape": "Oval",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Heart",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 3.0,
+      "funFact": "Sunflowers are unique in their ability to provide energy in the form of oil and are also known for their heliotropic movements, following the sun across the sky."
+    },
+    "description": "Sunflowers are iconic for their large, bright yellow flowers with 20 to 30 oval petals encircling a dark brown central disk. The green, heart-shaped leaves are large and coarsely serrated. Sunflowers can tower up to 3 meters tall, dominating their surroundings with a vibrant display."
+  },
+  {
+    "id": "sugar_maple",
+    "commonName": "Sugar Maple",
+    "imageUrl": "/plants/sugar_maple.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Palmate",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 30.0,
+      "funFact": "The sugar maple is renowned for its crucial role in producing maple syrup, a process that involves tapping the trees for sap during the early spring."
+    },
+    "description": "The sugar maple is notable for its palmate, lobed leaves that turn vibrant shades of yellow, orange, and red in autumn. This tree can grow to a majestic height of 30 meters, making it a dominant presence in the forest canopy. The leaves are typically large, providing ample shade in the summer months."
+  },
+  {
+    "id": "bamboo",
+    "commonName": "Bamboo",
+    "imageUrl": "/plants/bamboo.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 30.0,
+      "funFact": "Bamboo is one of the fastest-growing plants in the world, capable of growing up to 91 cm in a single day under optimal conditions."
+    },
+    "description": "Bamboo is characterized by its tall, straight culms that are green and segmented, reaching heights of up to 30 meters. The lanceolate leaves are small relative to the stem, with a smooth texture. It commonly forms dense clumps, each culm rising straight up and tapering slightly towards the top."
+  },
+  {
+    "id": "lavender",
+    "commonName": "Lavender",
+    "imageUrl": "/plants/lavender.png",
     "properties": {
       "flowerColour": "Purple",
-      "petalCountRange": "5-7",
-      "petalShape": "Cup",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Multiple",
+      "petalShape": "Small",
       "leafColour": "Green",
-      "leafSHape": "Linear",
-      "leafMarginDescription": "Entire",
-      "stemLengthCm": 13
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Lavender is beloved for its fragrance and is extensively used in aromatherapy and perfumery, known to promote relaxation and reduce stress."
     },
-    "description": "The delicate 'Violet' presents charming purple flowers with 5-7 petals forming dainty cup shapes. Its linear green leaves feature entire margins, enhancing the elegance of the blooms. Standing gracefully on stems reaching 1.3 meters, with each stem measuring about 13 centimeters, this enchanting plant symbolizes modesty and faithfulness, bringing a touch of beauty and serenity to gardens and floral arrangements."
+    "description": "Lavender plants are easily recognized by their small, purple flowers that grow in whorls along a slender, woody stem. The linear, green leaves are narrow and can be slightly silver-toned. Lavender typically reaches a height of up to 60 centimeters."
+  },
+  {
+    "id": "orchid",
+    "commonName": "Orchid",
+    "imageUrl": "/plants/orchid.png",
+    "properties": {
+      "flowerColour": "Varies",
+      "flowerColourRGB": null,
+      "petalCountRange": "Varies",
+      "petalShape": "Complex",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Orchids are one of the largest and most diverse families of flowering plants, with over 25,000 species and more than 100,000 hybrids and cultivars."
+    },
+    "description": "Orchids exhibit a wide array of colors and complex shapes, often with intricate patterns on their petals. Their green, oval leaves are thick and leathery, typically growing out of a central stem. Orchids generally reach a modest height but are known for the stunning visual variety and symmetry of their blooms."
+  },
+  {
+    "id": "blue_agave",
+    "commonName": "Blue Agave",
+    "imageUrl": "/plants/blue_agave.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Long",
+      "leafColour": "Blue-green",
+      "leafColourRGB": "#5F9EA0",
+      "leafShape": "Sword-shaped",
+      "leafMarginDescription": "Spiky",
+      "heightInMetres": 2.0,
+      "funFact": "Blue agave is the primary plant used for the production of tequila, and it takes about 8 to 12 years to mature fully before harvest."
+    },
+    "description": "Blue agave plants are recognized by their rosette of thick, sword-shaped leaves that have a distinctive blue-green color with spiky margins. They can grow up to 2 meters tall. The plant flowers once in its lifetime, producing a tall spike with clusters of yellow flowers."
+  },
+  {
+    "id": "venus_flytrap",
+    "commonName": "Venus Flytrap",
+    "imageUrl": "/plants/venus_flytrap.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5-7",
+      "petalShape": "Oval",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Modified",
+      "leafMarginDescription": "Spiky",
+      "heightInMetres": 0.1,
+      "funFact": "The Venus flytrap is a carnivorous plant that captures and digests small insects and arthropods with its modified leaves that snap shut when triggered."
+    },
+    "description": "The Venus flytrap features small, modified leaves that act as traps with inner surfaces lined with hair-like structures that detect prey. The leaves snap shut when these hairs are touched twice in quick succession. It also produces small white flowers on tall stems above the traps."
+  },
+  {
+    "id": "redwood",
+    "commonName": "Redwood",
+    "imageUrl": "/plants/redwood.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 115.0,
+      "funFact": "Redwoods are among the tallest trees in the world, with some specimens growing over 350 feet tall and living for over 2,000 years."
+    },
+    "description": "Redwood trees are monumental in size, with a massive trunk and bark that can appear red-brown. They have small, needle-like leaves arranged in spirals around their twigs. Redwoods can soar to heights exceeding 100 meters, making them some of the tallest and most ancient trees on Earth."
+  },
+  {
+    "id": "saguaro_cactus",
+    "commonName": "Saguaro Cactus",
+    "imageUrl": "/plants/saguaro_cactus.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Rounded",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Columnar",
+      "leafMarginDescription": "Spiky",
+      "heightInMetres": 15.0,
+      "funFact": "The saguaro cactus is iconic of the American Southwest and can live for over 150 years, growing slowly and storing large amounts of water."
+    },
+    "description": "The saguaro cactus stands tall with a thick, green, columnar trunk and can reach heights of up to 15 meters. It is covered with protective spines and features large, white flowers that bloom at night. The arms of mature saguaros may number in the dozens, curving upwards."
+  },
+  {
+    "id": "dandelion",
+    "commonName": "Dandelion",
+    "imageUrl": "/plants/dandelion.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Oval",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.3,
+      "funFact": "Dandelions are known for their bright yellow flowers and unique seed dispersal mechanism, where seeds are carried away by the wind on parachute-like structures."
+    },
+    "description": "Dandelions are marked by their vivid yellow flowers composed of numerous small petals, and their deep green, lanceolate leaves with serrated edges. They typically grow close to the ground, reaching heights of about 30 centimeters. The plant forms a rosette at the ground level."
+  },
+  {
+    "id": "tulip",
+    "commonName": "Tulip",
+    "imageUrl": "/plants/tulip.png",
+    "properties": {
+      "flowerColour": "Varies",
+      "flowerColourRGB": null,
+      "petalCountRange": "6",
+      "petalShape": "Cup-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oblong",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.4,
+      "funFact": "Tulips were once so valuable in the Netherlands during the 17th century that they were considered a form of currency and caused an economic bubble known as 'Tulip Mania.'"
+    },
+    "description": "Tulips feature distinct, cup-shaped flowers that can vary widely in color, each consisting of six petals. Their green, oblong leaves have a smooth texture and are usually arranged in a rosette around the base. Tulips typically reach a height of about 40 centimeters."
+  },
+  {
+    "id": "moss",
+    "commonName": "Moss",
+    "imageUrl": "/plants/moss.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Small and dense",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.1,
+      "funFact": "Mosses play a crucial role in their ecosystems, often serving as soil stabilizers and indicators of environmental quality due to their sensitivity to pollutants."
+    },
+    "description": "Moss is characterized by its soft, dense green mats that cover the ground or other surfaces. The leaves are tiny and tightly packed, creating a velvety texture. Mosses typically grow very low to the ground, usually only a few centimeters tall."
+  },
+  {
+    "id": "aloe_vera",
+    "commonName": "Aloe Vera",
+    "imageUrl": "/plants/aloe_vera.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Succulent",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.8,
+      "funFact": "Aloe vera is widely used in cosmetics and medicine for its soothing, moisturizing, and healing properties."
+    },
+    "description": "Aloe vera plants are recognized by their thick, fleshy, green leaves that grow vertically from a central base. The leaves are edged with small teeth and can reach up to 80 centimeters in height. They occasionally produce yellow, tubular flowers on tall spikes."
+  },
+  {
+    "id": "cinnamon",
+    "commonName": "Cinnamon",
+    "imageUrl": "/plants/cinnamon.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 10.0,
+      "funFact": "Cinnamon is derived from the inner bark of the tree, and it has been used since ancient times both as a spice and for medicinal purposes."
+    },
+    "description": "Cinnamon trees can grow up to 10 meters tall, featuring aromatic oval leaves that are bright green. The small, star-shaped white flowers are not very conspicuous. It is the bark that is commercially valuable, often harvested from young branches."
+  },
+  {
+    "id": "ginkgo",
+    "commonName": "Ginkgo",
+    "imageUrl": "/plants/ginkgo.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Fan-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 35.0,
+      "funFact": "Ginkgo biloba is known as a 'living fossil' because it is the only surviving member of a group of ancient plants that existed over 200 million years ago."
+    },
+    "description": "Ginkgo trees are notable for their unique, fan-shaped, green leaves that turn a bright yellow in the fall. They can grow up to 35 meters tall. The trees are dioecious, with separate male and female plants."
+  },
+  {
+    "id": "water_lily",
+    "commonName": "Water Lily",
+    "imageUrl": "/plants/water_lily.png",
+    "properties": {
+      "flowerColour": "Varies",
+      "flowerColourRGB": null,
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Round",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Water lilies are not only beautiful but also help improve the ecosystem of a pond by providing habitat and reducing algae growth."
+    },
+    "description": "Water lilies feature broad, floating leaves that are circular and have a waxy, smooth surface. The flowers vary in color and sit elegantly on the water's surface, supported by flexible stems that rise from the underwater root system. They are prominent in still, shallow waters."
+  },
+  {
+    "id": "palm_tree",
+    "commonName": "Palm Tree",
+    "imageUrl": "/plants/palm_tree.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Small",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Fronds",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 20.0,
+      "funFact": "Palm trees are symbolic of tropical regions and can live for many years; some species like the coconut palm are also economically important for their fruit."
+    },
+    "description": "Palm trees are characterized by their tall, unbranched trunks topped with a crown of large, arching fronds. These fronds are typically long and feather-shaped, emerging directly from the top of the trunk. Palms can reach significant heights, often standing as iconic figures in tropical landscapes."
+  },
+  {
+    "id": "ferns",
+    "commonName": "Ferns",
+    "imageUrl": "/plants/ferns.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Divided",
+      "leafMarginDescription": "Varied",
+      "heightInMetres": 1.5,
+      "funFact": "Ferns are ancient plants that predate the dinosaurs and reproduce via spores, lacking flowers and seeds."
+    },
+    "description": "Ferns are distinguished by their lush, green, divided fronds that often grow in a classic feather-like pattern. These plants thrive in moist, shady environments. The fronds unfurl from tightly coiled new growths, which are popularly known as fiddleheads."
+  },
+  {
+    "id": "marigold",
+    "commonName": "Marigold",
+    "imageUrl": "/plants/marigold.png",
+    "properties": {
+      "flowerColour": "Yellow or Orange",
+      "flowerColourRGB": "#FFD700",
+      "petalCountRange": "Many",
+      "petalShape": "Rounded",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Marigolds are often planted in gardens not only for their cheerful blooms but also because they are known to repel certain pests."
+    },
+    "description": "Marigolds are vibrant with dense clusters of small, rounded petals that are typically yellow or orange. Their green, oval leaves are slightly serrated and have a pungent scent when crushed. Marigolds grow compactly, typically not exceeding 50 centimeters in height."
+  },
+  {
+    "id": "cocoa",
+    "commonName": "Cocoa",
+    "imageUrl": "/plants/cocoa.png",
+    "properties": {
+      "flowerColour": "White to Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Small",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 8.0,
+      "funFact": "Cocoa beans, which come from the cocoa tree, are the primary ingredient in chocolate, a product that has been cherished worldwide for centuries."
+    },
+    "description": "Cocoa trees bear oval-shaped, green leaves and small, star-shaped flowers that range in color from white to pink, directly growing on the trunk and older branches. The trees are typically medium-sized, growing up to 8 meters tall. They produce pods that contain the valuable cocoa beans."
+  },
+  {
+    "id": "lotus",
+    "commonName": "Lotus",
+    "imageUrl": "/plants/lotus.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Many",
+      "petalShape": "Broad",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Round",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.8,
+      "funFact": "The lotus is significant in various cultural traditions, symbolizing purity and beauty, as it emerges clean from murky waters."
+    },
+    "description": "Lotus plants are celebrated for their large, round leaves that float on water surfaces, and their striking, broad-petalled pink flowers that rise above the water. The green leaves are waxy and repel water. Lotus plants grow up to 80 centimeters tall, with roots anchored in the muddy bottom of ponds."
+  },
+  {
+    "id": "bamboo_orchid",
+    "commonName": "Bamboo Orchid",
+    "imageUrl": "/plants/bamboo_orchid.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5",
+      "petalShape": "Elongated",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.2,
+      "funFact": "The bamboo orchid, aptly named for its bamboo-like stems, is known for its vibrant purple flowers and is a popular choice for tropical gardens."
+    },
+    "description": "Bamboo orchids have tall, cane-like stems that resemble bamboo, topped with elongated purple petals that form delicate flowers. The lanceolate, green leaves grow along the stem, contributing to its graceful appearance. These orchids can reach up to 1.2 meters in height."
+  },
+  {
+    "id": "jackfruit",
+    "commonName": "Jackfruit",
+    "imageUrl": "/plants/jackfruit.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 20.0,
+      "funFact": "Jackfruit is the largest tree-borne fruit, known for its distinctive smell and large, fleshy fruits that can weigh over 40 kilograms."
+    },
+    "description": "Jackfruit trees are marked by their large, glossy, oval leaves and massive, green fruits that hang from the trunk and larger branches. The tree can grow up to 20 meters tall, with a dense canopy. The fruits are notable for their bumpy, fibrous texture and considerable size."
+  },
+  {
+    "id": "jade_plant",
+    "commonName": "Jade Plant",
+    "imageUrl": "/plants/jade_plant.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.0,
+      "funFact": "Jade plants are popular in feng shui for supposedly bringing financial luck; they are also very easy to care for."
+    },
+    "description": "The jade plant features thick, shiny, smooth green leaves that grow in opposing pairs along the branches. It is a succulent with a woody stem that can grow into a small shrub-like appearance, reaching up to one meter in height. White, star-shaped flowers bloom in clusters."
+  },
+  {
+    "id": "magnolia",
+    "commonName": "Magnolia",
+    "imageUrl": "/plants/magnolia.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Large",
+      "petalShape": "Broad",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 20.0,
+      "funFact": "Magnolias are among the oldest flowering plants, with fossils dating back over 95 million years."
+    },
+    "description": "Magnolia trees are renowned for their large, fragrant white flowers that can be up to 30 cm in diameter. The leaves are dark green, glossy, and oval-shaped, contributing to a dense canopy. These trees can reach up to 20 meters in height and bloom prominently in early spring."
+  },
+  {
+    "id": "birch",
+    "commonName": "Birch",
+    "imageUrl": "/plants/birch.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Triangular",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 30.0,
+      "funFact": "Birch trees are known for their distinctive white bark, which peels off in horizontal strips and is used in various cultural applications."
+    },
+    "description": "Birch trees are easily identifiable by their white, peeling bark and triangular, serrated leaves. They can grow up to 30 meters tall, often forming slender, upright trunks. The leaves turn a bright yellow in the fall, adding seasonal beauty to their surroundings."
+  },
+  {
+    "id": "carnivorous_plants",
+    "commonName": "Carnivorous Plants",
+    "imageUrl": "/plants/carnivorous_plants.png",
+    "properties": {
+      "flowerColour": "Varies",
+      "flowerColourRGB": null,
+      "petalCountRange": "Varies",
+      "petalShape": "Varies",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Modified",
+      "leafMarginDescription": "Varies",
+      "heightInMetres": 0.5,
+      "funFact": "Carnivorous plants have evolved various mechanisms to trap and digest insects and other small creatures as a way to supplement the poor mineral nutrition they get from the environments."
+    },
+    "description": "Carnivorous plants exhibit a variety of trapping mechanisms, including sticky surfaces, pitfall traps, and snap traps, often accompanied by vivid colors to attract prey. Their modified leaves perform these functions, with each species adapting uniquely to its environment. These plants are generally small, usually not exceeding half a meter in height."
+  },
+  {
+    "id": "oak",
+    "commonName": "Oak",
+    "imageUrl": "/plants/oak.png",
+    "properties": {
+      "flowerColour": "Yellow-green",
+      "flowerColourRGB": "#9ACD32",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 40.0,
+      "funFact": "Oak trees are vital for wildlife; they support hundreds of insect species and provide acorns, which are a key food source for many animals."
+    },
+    "description": "Oak trees are characterized by their robust stature and broad, lobed leaves with serrated margins. These trees can grow up to 40 meters tall, developing a rugged, broad trunk and a wide-spreading canopy. Oaks produce small, yellow-green flowers and are known for their acorns."
+  },
+  {
+    "id": "ivy",
+    "commonName": "Ivy",
+    "imageUrl": "/plants/ivy.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#8FBC8F",
+      "petalCountRange": "Small",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Heart-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 30.0,
+      "funFact": "Ivy is a climbing plant that adheres to surfaces with tiny rootlets, often seen covering walls and trees, which can sometimes damage the host structure."
+    },
+    "description": "Ivy is known for its vigorous climbing habit, with heart-shaped, deep green leaves that cling to surfaces via small rootlets. It can grow extensively, covering large areas or climbing up to 30 meters high. Ivy produces small, spherical green flowers."
+  },
+  {
+    "id": "sequoia",
+    "commonName": "Sequoia",
+    "imageUrl": "/plants/sequoia.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#228B22",
+      "leafShape": "Scale-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 95.0,
+      "funFact": "Sequoias are among the tallest and oldest trees on Earth, with some specimens over 3,000 years old and reaching heights close to 100 meters."
+    },
+    "description": "Sequoia trees are immense, with a massive trunk and a reddish-brown bark that feels fibrous and spongy. Their green, scale-like leaves form dense clusters along the branches. Sequoias can reach staggering heights of up to 95 meters, dominating their landscape."
+  },
+  {
+    "id": "hawthorn",
+    "commonName": "Hawthorn",
+    "imageUrl": "/plants/hawthorn.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Five",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 10.0,
+      "funFact": "Hawthorn trees are often associated with folklore and are believed to house fairies, especially in parts of Europe."
+    },
+    "description": "Hawthorn trees are distinguished by their lobed, green leaves with deeply serrated edges and small, sharp thorns. They produce clusters of white flowers followed by red berries. Typically, hawthorns grow up to 10 meters tall and form dense, thorny hedges."
+  },
+  {
+    "id": "maple",
+    "commonName": "Maple",
+    "imageUrl": "/plants/maple.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Palmate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 30.0,
+      "funFact": "Maple trees are famous for their vivid fall colors and the maple syrup made from the sap of certain species."
+    },
+    "description": "Maple trees are known for their distinctive palmate leaves which turn spectacular shades of red, orange, and yellow in autumn. They produce small yellow flowers and can grow up to 30 meters. The smooth, gray bark and rounded canopy are recognizable features."
+  },
+  {
+    "id": "yew",
+    "commonName": "Yew",
+    "imageUrl": "/plants/yew.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 20.0,
+      "funFact": "Yew trees are highly toxic, yet they are used in medicine to produce the drug paclitaxel, which is used in cancer therapy."
+    },
+    "description": "Yew trees feature narrow, dark green, needle-like leaves that grow in two flattened rows along the branches. They can reach up to 20 meters in height and produce small, inconspicuous flowers followed by red berries. Yews have a dense, rounded form."
+  },
+  {
+    "id": "cedar",
+    "commonName": "Cedar",
+    "imageUrl": "/plants/cedar.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Scale-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 30.0,
+      "funFact": "Cedars are known for their aromatic wood, which is resistant to decay and used in furniture, fencing, and building."
+    },
+    "description": "Cedar trees are valued for their durable, fragrant wood and dense, scale-like green leaves. They typically grow up to 30 meters tall, forming a conical shape that becomes more irregular with age. Cedars produce small cones and have a thick, ridged bark."
+  },
+  {
+    "id": "spruce",
+    "commonName": "Spruce",
+    "imageUrl": "/plants/spruce.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 35.0,
+      "funFact": "Spruce trees are commonly used as Christmas trees due to their ideal shape and pleasant scent."
+    },
+    "description": "Spruce trees have a classic conical shape, with dense, needle-like leaves that are sharp to the touch. They can grow up to 35 meters tall, often used for their timber. Spruces are known for their symmetrical form and drooping branches as they mature."
+  },
+  {
+    "id": "poppy",
+    "commonName": "Poppy",
+    "imageUrl": "/plants/poppy.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "4-6",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Poppies are symbolic of remembrance and have been used since World War I to honor fallen soldiers."
+    },
+    "description": "Poppies are noted for their vibrant red flowers with delicate, round petals that appear in late spring to early summer. Their leaves are lanceolate, green, and often serrated. Poppies grow quickly and reach about 50 centimeters in height, forming clumps."
+  },
+  {
+    "id": "cactus",
+    "commonName": "Cactus",
+    "imageUrl": "/plants/cactus.png",
+    "properties": {
+      "flowerColour": "Varies",
+      "flowerColourRGB": null,
+      "petalCountRange": "Many",
+      "petalShape": "Varies",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Spiny",
+      "leafMarginDescription": "None",
+      "heightInMetres": 2.5,
+      "funFact": "Cacti are specially adapted to dry environments with modifications such as spines for defense and thick stems for water storage."
+    },
+    "description": "Cacti are diverse in form but commonly have thick, fleshy stems covered in spines. They may grow as singular columns or branched systems and can vary greatly in height. Flowers, when present, are often colorful and large compared to the body of the cactus."
+  },
+  {
+    "id": "azalea",
+    "commonName": "Azalea",
+    "imageUrl": "/plants/azalea.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Elliptical",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.0,
+      "funFact": "Azaleas are celebrated for their vibrant blooms and are a symbol of spring in many cultures."
+    },
+    "description": "Azaleas are known for their spectacular blooms, ranging in color but often seen in various shades of pink. These flowers are typically round, with five distinct petals per bloom. The plants themselves are bushy, with small, elliptical green leaves, growing up to 2 meters tall."
+  },
+  {
+    "id": "rhododendron",
+    "commonName": "Rhododendron",
+    "imageUrl": "/plants/rhododendron.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5-10",
+      "petalShape": "Round",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 5.0,
+      "funFact": "Rhododendrons are highly toxic to horses, with ingestion leading to severe physiological reactions."
+    },
+    "description": "Rhododendrons are large shrubs or small trees, often reaching up to 5 meters in height. They feature large, lanceolate, dark green leaves and produce clusters of large, colorful flowers, typically purple, with multiple round petals."
+  },
+  {
+    "id": "begonia",
+    "commonName": "Begonia",
+    "imageUrl": "/plants/begonia.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Varies",
+      "petalShape": "Varies",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Asymmetrical",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Begonias are known for their unique leaf shapes and vivid flowers, which make them popular as ornamental houseplants."
+    },
+    "description": "Begonias are distinguished by their bright red flowers and asymmetrical, serrated leaves, which are often lush and green. The plants are relatively compact, typically growing up to 60 centimeters tall."
+  },
+  {
+    "id": "chrysanthemum",
+    "commonName": "Chrysanthemum",
+    "imageUrl": "/plants/chrysanthemum.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Ovate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 1.0,
+      "funFact": "Chrysanthemums are associated with autumn and are a symbol of longevity and rejuvenation in many cultures."
+    },
+    "description": "Chrysanthemums feature dense, vibrant yellow flowers composed of many small, round petals. They have dark green, ovate leaves with serrated edges, and typically reach about 1 meter in height."
+  },
+  {
+    "id": "daisy",
+    "commonName": "Daisy",
+    "imageUrl": "/plants/daisy.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "10-20",
+      "petalShape": "Oval",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Spatulate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Daisies are known for their classic flower structure, which includes a yellow center surrounded by white petals, and are often used to symbolize purity."
+    },
+    "description": "Daisies are iconic for their simple yet striking flowers, with a central yellow disc and numerous long, white, oval petals. They have green, spatulate leaves, and grow compactly, typically not exceeding 50 centimeters in height."
+  },
+  {
+    "id": "orchid_cattleya",
+    "commonName": "Cattleya Orchid",
+    "imageUrl": "/plants/orchid_cattleya.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5",
+      "petalShape": "Large",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Elliptical",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Cattleya orchids are popular in the floral industry, especially for corsages, due to their large, showy flowers."
+    },
+    "description": "Cattleya orchids are prized for their large, vibrant purple flowers, which consist of five broad petals each. These orchids have thick, fleshy, elliptical leaves and typically grow about 50 centimeters tall."
+  },
+  {
+    "id": "heather",
+    "commonName": "Heather",
+    "imageUrl": "/plants/heather.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Small",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Heather is often associated with the highlands of Scotland, where it is abundant and forms a picturesque landscape."
+    },
+    "description": "Heather is noted for its small, bell-shaped, pink flowers and dense, green, linear leaves. It forms low-growing shrubs that commonly reach up to 60 centimeters tall, often used in rock gardens and for ground cover."
+  },
+  {
+    "id": "holly",
+    "commonName": "Holly",
+    "imageUrl": "/plants/holly.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "4",
+      "petalShape": "Small",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Ovate",
+      "leafMarginDescription": "Spiny",
+      "heightInMetres": 15.0,
+      "funFact": "Holly is traditionally used in Christmas decorations, with its bright red berries and glossy, spiny leaves symbolizing festivity."
+    },
+    "description": "Holly plants are known for their glossy, dark green, ovate leaves with spiny edges, and small white flowers. They can grow into large bushes or small trees, reaching up to 15 meters in height, often bearing bright red berries."
+  },
+  {
+    "id": "juniper",
+    "commonName": "Juniper",
+    "imageUrl": "/plants/juniper.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Blue-Green",
+      "leafColourRGB": "#5F9EA0",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 12.0,
+      "funFact": "Junipers are valued for their wood and aromatic berries, which are used to flavor gin."
+    },
+    "description": "Juniper shrubs or trees are characterized by their dense, blue-green, needle-like leaves, and can reach up to 12 meters in height. They produce small seed cones, commonly referred to as juniper berries, which are actually fleshy and have a bluish appearance."
+  },
+  {
+    "id": "kudzu",
+    "commonName": "Kudzu",
+    "imageUrl": "/plants/kudzu.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Triangular",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 20.0,
+      "funFact": "Kudzu is known as 'the vine that ate the South' in the United States due to its rapid growth and ability to cover almost any surface or structure."
+    },
+    "description": "Kudzu vines are fast-growing, with large, green, triangular leaves and clusters of fragrant, purple flowers. Capable of climbing over trees or shrubs, kudzu can reach lengths of over 20 meters."
+  },
+  {
+    "id": "larkspur",
+    "commonName": "Larkspur",
+    "imageUrl": "/plants/larkspur.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "5",
+      "petalShape": "Elongated",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Palmate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 1.0,
+      "funFact": "Larkspur flowers symbolize love and affection, and their tall, striking appearance makes them popular in gardens and floral arrangements."
+    },
+    "description": "Larkspur plants are known for their tall spikes of deep blue flowers, each with five elongated petals. They have finely divided, palmate green leaves and typically grow about 1 meter tall, adding a vertical element to gardens."
+  },
+  {
+    "id": "lilac",
+    "commonName": "Lilac",
+    "imageUrl": "/plants/lilac.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "4",
+      "petalShape": "Small",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Heart-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 7.0,
+      "funFact": "Lilacs are often associated with the early days of spring, emitting a strong, sweet fragrance that is highly prized in perfumery."
+    },
+    "description": "Lilac shrubs are celebrated for their fragrant, purple flowers that appear in dense clusters in late spring. They have heart-shaped, green leaves and typically grow up to 7 meters tall, making them popular for their ornamental value and sweet scent."
+  },
+  {
+    "id": "lily_of_the_valley",
+    "commonName": "Lily of the Valley",
+    "imageUrl": "/plants/lily_of_the_valley.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Lily of the Valley is known for its delicate scent and is often used in perfumery, despite its toxic properties."
+    },
+    "description": "Lily of the Valley produces delicate, bell-shaped white flowers that hang from a slender stem. The plant has broad, green, oval leaves that form a dense ground cover. It typically grows to about 30 centimeters in height."
+  },
+  {
+    "id": "morning_glory",
+    "commonName": "Morning Glory",
+    "imageUrl": "/plants/morning_glory.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "5",
+      "petalShape": "Trumpet-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Heart-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 3.0,
+      "funFact": "Morning Glory vines are known for their rapid growth and beautiful trumpet-shaped flowers that typically open in the early morning."
+    },
+    "description": "Morning Glory is a climbing vine that features vibrant blue, trumpet-shaped flowers and heart-shaped leaves. It can quickly reach heights of up to 3 meters, twining around structures and other plants."
+  },
+  {
+    "id": "myrtle",
+    "commonName": "Myrtle",
+    "imageUrl": "/plants/myrtle.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 5.0,
+      "funFact": "Myrtle has been a symbol of love and immortality since ancient times and is often used in wedding bouquets."
+    },
+    "description": "Myrtle is an evergreen shrub with dense foliage, featuring small, glossy, oval leaves and white, round flowers. It typically grows up to 5 meters tall and can be pruned into various shapes."
+  },
+  {
+    "id": "nightshade",
+    "commonName": "Nightshade",
+    "imageUrl": "/plants/nightshade.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 1.2,
+      "funFact": "Many species of nightshade are highly toxic and have been historically used for their medicinal and poisonous properties."
+    },
+    "description": "Nightshade plants are known for their star-shaped purple flowers and dark green, oval leaves with serrated edges. They grow as small shrubs or climbing vines, reaching about 1.2 meters in height."
+  },
+  {
+    "id": "oleander",
+    "commonName": "Oleander",
+    "imageUrl": "/plants/oleander.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 3.0,
+      "funFact": "Oleander is highly toxic if ingested, yet remains a popular ornamental shrub due to its showy flowers and resilience to drought."
+    },
+    "description": "Oleander is a hardy shrub with lanceolate, dark green leaves and vibrant pink, round flowers. It can grow up to 3 meters tall and is often used for privacy hedges and ornamental displays."
+  },
+  {
+    "id": "olive",
+    "commonName": "Olive",
+    "imageUrl": "/plants/olive.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Round",
+      "leafColour": "Silver-Green",
+      "leafColourRGB": "#C0C0C0",
+      "leafShape": "Oblong",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 10.0,
+      "funFact": "Olive trees are ancient plants, cultivated for thousands of years for their fruit and oil, both staples in Mediterranean diets."
+    },
+    "description": "Olive trees are characterized by their gnarled trunks and silvery-green, oblong leaves. They produce small, white flowers and are widely cultivated for their fruit, reaching heights of up to 10 meters."
+  },
+  {
+    "id": "peach_tree",
+    "commonName": "Peach Tree",
+    "imageUrl": "/plants/peach_tree.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 5.0,
+      "funFact": "Peach trees are known for their delicious fruit and beautiful pink blossoms that appear in early spring before the leaves."
+    },
+    "description": "Peach trees bloom with soft pink flowers early in the spring, followed by green, lanceolate leaves with serrated edges. They are medium-sized fruit trees, typically reaching around 5 meters in height."
+  },
+  {
+    "id": "pear_tree",
+    "commonName": "Pear Tree",
+    "imageUrl": "/plants/pear_tree.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 6.0,
+      "funFact": "Pear trees are valued not only for their fruit but also for their ornamental qualities, especially during the spring when they are covered in white blossoms."
+    },
+    "description": "Pear trees are notable for their abundant white flowers and broad green leaves. These trees can grow up to 6 meters tall and are widely cultivated for their sweet, juicy fruits."
+  },
+  {
+    "id": "pecan_tree",
+    "commonName": "Pecan Tree",
+    "imageUrl": "/plants/pecan_tree.png",
+    "properties": {
+      "flowerColour": "Yellow-green",
+      "flowerColourRGB": "#9ACD32",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Pinnate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 30.0,
+      "funFact": "Pecan trees are native to North America and produce a nut that is highly valued for its taste and nutritional content."
+    },
+    "description": "Pecan trees are large, stately trees that can reach heights of up to 30 meters. They have long, pinnate leaves that turn golden in the fall and produce clusters of rich, edible nuts."
+  },
+  {
+    "id": "quince",
+    "commonName": "Quince",
+    "imageUrl": "/plants/quince.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 5.0,
+      "funFact": "Quince is an ancient fruit, once held sacred by Aphrodite in Greek mythology, and traditionally used in jams and jellies."
+    },
+    "description": "Quince trees produce striking pink flowers and have a dense foliage of green, oval leaves with serrated margins. They typically grow up to 5 meters tall and bear fruit that is aromatic and firm, often used in cooking and preserves."
+  },
+  {
+    "id": "rosemary",
+    "commonName": "Rosemary",
+    "imageUrl": "/plants/rosemary.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.5,
+      "funFact": "Rosemary is not only a popular culinary herb but also has traditional uses in folk medicine, believed to improve memory."
+    },
+    "description": "Rosemary is an aromatic shrub with needle-like leaves that are rich green and highly fragrant. It produces small, tubular blue flowers. Typically, rosemary grows up to 1.5 meters tall and is favored in gardens for both its culinary and ornamental uses."
+  },
+  {
+    "id": "saffron_crocus",
+    "commonName": "Saffron Crocus",
+    "imageUrl": "/plants/saffron_crocus.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "6",
+      "petalShape": "Cup-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Grass-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Saffron, derived from the stigmas of this crocus, is among the world's most valuable spices by weight."
+    },
+    "description": "Saffron Crocus is known for its vibrant purple flowers and delicate, grass-like green leaves. The plant is small, typically growing to 30 centimeters tall, and blooms in autumn. The prized saffron stigmas are harvested from within the flowers."
+  },
+  {
+    "id": "sage",
+    "commonName": "Sage",
+    "imageUrl": "/plants/sage.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Sage has been used for centuries as a culinary herb and in medicinal applications, believed to have anti-inflammatory properties."
+    },
+    "description": "Sage is a perennial herb with woolly, oval leaves that are green and often have a slightly serrated margin. It produces small, tubular purple flowers. Sage typically grows about 60 centimeters tall and is a popular herb in both culinary and ornamental gardens."
+  },
+  {
+    "id": "salvia",
+    "commonName": "Salvia",
+    "imageUrl": "/plants/salvia.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.8,
+      "funFact": "Salvia, also known as sage, is used in a variety of medicinal, culinary, and ornamental applications."
+    },
+    "description": "Salvia plants are distinguished by their vibrant red tubular flowers and green, oval, often serrated leaves. They can grow to be about 80 centimeters tall, and are popular in gardens for their attractive blooms and aromatic foliage."
+  },
+  {
+    "id": "snapdragon",
+    "commonName": "Snapdragon",
+    "imageUrl": "/plants/snapdragon.png",
+    "properties": {
+      "flowerColour": "Varies",
+      "flowerColourRGB": null,
+      "petalCountRange": "Multiple",
+      "petalShape": "Bilabial",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Snapdragons are named for the shape of their flowers, which can be pinched open to resemble a dragon's mouth."
+    },
+    "description": "Snapdragons are popular garden plants known for their colorful, bilabial flowers that can be squeezed to open like a mouth. They have slender, lanceolate leaves and typically grow to about 50 centimeters in height."
+  },
+  {
+    "id": "sorrel",
+    "commonName": "Sorrel",
+    "imageUrl": "/plants/sorrel.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Small",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Sorrel is often used in soups and sauces for its tangy, lemon-like flavor, which comes from oxalic acid in its leaves."
+    },
+    "description": "Sorrel is a leafy green vegetable with tall, slender stems and small red flowers. Its green, oval leaves are commonly used in culinary dishes for their sharp, acidic taste. Sorrel grows to about 60 centimeters in height."
+  },
+  {
+    "id": "spirea",
+    "commonName": "Spirea",
+    "imageUrl": "/plants/spirea.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Many",
+      "petalShape": "Small",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 2.0,
+      "funFact": "Spirea is a popular choice for ornamental hedges and borders due to its beautiful cascades of pink flowers in spring and summer."
+    },
+    "description": "Spirea shrubs are known for their clusters of small pink flowers that create a frothy appearance when in full bloom. They have green, lanceolate leaves that are finely serrated, growing up to 2 meters tall."
+  },
+  {
+    "id": "strawberry",
+    "commonName": "Strawberry",
+    "imageUrl": "/plants/strawberry.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.3,
+      "funFact": "Strawberries are the only fruit with seeds on the outside, and each berry can have over 200 seeds."
+    },
+    "description": "Strawberry plants are low-growing, with white flowers and coarsely serrated, oval green leaves. Known for their sweet red fruits, strawberries spread through runners and are commonly grown in gardens and on commercial farms."
+  },
+  {
+    "id": "sunrose",
+    "commonName": "Sunrose",
+    "imageUrl": "/plants/sunrose.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Sunrose is known for its drought resistance and is commonly used in rock gardens and dry, sunny borders."
+    },
+    "description": "Sunrose features bright yellow, round flowers and linear, green leaves. This ground-covering plant is particularly suited for sunny, dry areas, growing to about 30 centimeters tall."
+  },
+  {
+    "id": "sweet_pea",
+    "commonName": "Sweet Pea",
+    "imageUrl": "/plants/sweet_pea.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5",
+      "petalShape": "Bilabial",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Pinnate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.0,
+      "funFact": "Sweet peas are known for their sweet fragrance and vibrant colors, making them popular in bouquets and garden displays."
+    },
+    "description": "Sweet Pea is a climbing plant that produces fragrant, bilabial purple flowers and has pinnate, green leaves. It can grow up to 2 meters tall, often requiring support to climb effectively."
+  },
+  {
+    "id": "tea_plant",
+    "commonName": "Tea Plant",
+    "imageUrl": "/plants/tea_plant.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5-7",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 2.0,
+      "funFact": "Tea plants are the source of common tea leaves used worldwide, with the leaves undergoing various processing types to produce different teas."
+    },
+    "description": "The tea plant is an evergreen shrub or small tree with glossy, green, serrated leaves and small white flowers. It typically grows up to 2 meters tall and is widely cultivated in tropical and subtropical regions."
+  },
+  {
+    "id": "thistle",
+    "commonName": "Thistle",
+    "imageUrl": "/plants/thistle.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Many",
+      "petalShape": "Spiky",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Spiky",
+      "heightInMetres": 1.5,
+      "funFact": "Thistles are often considered weeds but are appreciated for their role in supporting wildlife, particularly butterflies and bees."
+    },
+    "description": "Thistles are known for their sharp, spiky appearance, with deep green, lanceolate leaves and a tall stem topped with vibrant purple, spiky flowers. They can grow up to 1.5 meters tall and are resilient in various environments."
+  },
+  {
+    "id": "thyme",
+    "commonName": "Thyme",
+    "imageUrl": "/plants/thyme.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Small",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Thyme is a staple in many culinary dishes and is also used in natural medicine for its antiseptic properties."
+    },
+    "description": "Thyme is a low-growing, aromatic herb with small, green leaves and tiny pink, tubular flowers. It forms dense mats and is often used as ground cover in gardens or as a culinary herb."
+  },
+  {
+    "id": "tobacco",
+    "commonName": "Tobacco",
+    "imageUrl": "/plants/tobacco.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Large",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.5,
+      "funFact": "Tobacco has been cultivated for thousands of years for its leaves, which contain nicotine and are used in smoking products."
+    },
+    "description": "Tobacco plants are tall, with large, sticky, green leaves and clusters of pink, tubular flowers. They can grow up to 2.5 meters tall and are primarily grown for their leaves, which are harvested for smoking and other uses."
+  },
+  {
+    "id": "tulip_tree",
+    "commonName": "Tulip Tree",
+    "imageUrl": "/plants/tulip_tree.png",
+    "properties": {
+      "flowerColour": "Yellow-green",
+      "flowerColourRGB": "#ADFF2F",
+      "petalCountRange": "6",
+      "petalShape": "Tulip-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Four-lobed",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 30.0,
+      "funFact": "The tulip tree is named for its large flowers, which resemble tulips, and is one of the tallest eastern North American deciduous trees."
+    },
+    "description": "The tulip tree is known for its distinct, four-lobed leaves and large tulip-like flowers that are yellow-green with orange markings. It can grow up to 30 meters tall, making it a striking addition to large landscapes."
+  },
+  {
+    "id": "wheat",
+    "commonName": "Wheat",
+    "imageUrl": "/plants/wheat.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.2,
+      "funFact": "Wheat is one of the world's most important food crops, used to make bread, pasta, and many other food staples."
+    },
+    "description": "Wheat plants are characterized by their tall, slender stalks and linear leaves, topped with dense clusters of grain seeds. They typically grow about 1.2 meters tall and are cultivated extensively in fields worldwide."
+  },
+  {
+    "id": "willow",
+    "commonName": "Willow",
+    "imageUrl": "/plants/willow.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 10.0,
+      "funFact": "Willow trees are often planted along riverbanks for their ability to prevent soil erosion and their quick growth."
+    },
+    "description": "Willow trees are notable for their long, drooping branches and lanceolate leaves, which are often finely serrated. They produce small yellow flowers and are particularly fond of wet environments, growing up to 10 meters tall."
+  },
+  {
+    "id": "wisteria",
+    "commonName": "Wisteria",
+    "imageUrl": "/plants/wisteria.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Many",
+      "petalShape": "Drooping clusters",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Pinnate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 10.0,
+      "funFact": "Wisteria vines are known for their stunning, long drooping clusters of flowers and can live for over a hundred years."
+    },
+    "description": "Wisteria is a vigorous climbing vine known for its beautiful hanging clusters of fragrant, purple flowers. It has compound, green pinnate leaves and can grow vigorously, often requiring sturdy support structures."
+  },
+  {
+    "id": "zinnia",
+    "commonName": "Zinnia",
+    "imageUrl": "/plants/zinnia.png",
+    "properties": {
+      "flowerColour": "Multicolored",
+      "flowerColourRGB": null,
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Zinnias are popular in butterfly gardens as they attract a variety of pollinators and are easy to grow, making them great for beginner gardeners."
+    },
+    "description": "Zinnias are cheerful, multicolored flowers known for their vibrant, round blooms and sturdy stems. They have green, oval leaves and grow quickly, reaching about 60 centimeters in height, perfect for adding a pop of color to garden beds."
+  },
+  {
+    "id": "wolfsbane",
+    "commonName": "Wolfsbane",
+    "imageUrl": "/plants/wolfsbane.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "Many",
+      "petalShape": "Hooded",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Palmate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.0,
+      "funFact": "Wolfsbane is famously toxic and has a rich history in folklore where it was used to ward off werewolves."
+    },
+    "description": "Wolfsbane is known for its striking hooded blue flowers and deeply divided, palmate green leaves. It typically grows up to 1 meter tall and is often found in mountainous regions."
+  },
+  {
+    "id": "foxglove",
+    "commonName": "Foxglove",
+    "imageUrl": "/plants/foxglove.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Many",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 1.5,
+      "funFact": "Foxglove is a source of digitalis, a potent heart medicine, but is also highly toxic if ingested."
+    },
+    "description": "Foxglove stands out with tall spikes of hanging pink tubular flowers, surrounded by large, green, oval leaves with serrated edges. It can grow up to 1.5 meters tall and prefers shady conditions."
+  },
+  {
+    "id": "hellebore",
+    "commonName": "Hellebore",
+    "imageUrl": "/plants/hellebore.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5",
+      "petalShape": "Cup-shaped",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Leathery",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Hellebores are one of the earliest flowering plants, often blooming in winter or early spring, hence their nickname 'Christmas rose'."
+    },
+    "description": "Hellebores are known for their beautiful, cup-shaped purple flowers and leathery, dark green leaves. These plants typically grow about 50 cm tall and thrive in winter, providing color when most other plants are dormant."
+  },
+  {
+    "id": "anemone",
+    "commonName": "Anemone",
+    "imageUrl": "/plants/anemone.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5-8",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Anemones, also known as windflowers, are said to have been created by the goddess Aphrodite as she mourned the death of Adonis."
+    },
+    "description": "Anemones are delicate with simple, white round flowers and lobed, green leaves. They often grow in clumps and can reach heights of 50 centimeters, spreading easily under suitable conditions."
+  },
+  {
+    "id": "arum",
+    "commonName": "Arum",
+    "imageUrl": "/plants/arum.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Spadix",
+      "petalShape": "Spathe",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Arrow-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Arum plants are known for their unique flower structure, a spadix wrapped by a large spathe, which can emit a foul odor to attract pollinators."
+    },
+    "description": "Arum plants feature a distinctive flowering structure with a white, hood-like spathe surrounding a central spadix. They have glossy, arrow-shaped green leaves and typically reach up to 60 cm in height."
+  },
+  {
+    "id": "ash_tree",
+    "commonName": "Ash Tree",
+    "imageUrl": "/plants/ash_tree.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Compound",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 25.0,
+      "funFact": "Ash trees are valued for their strong, flexible wood, used in making furniture, baseball bats, and other items requiring resilience."
+    },
+    "description": "Ash trees are large, fast-growing trees known for their compound green leaves and clusters of small purple flowers. They can grow up to 25 meters tall and are common in both urban and forest environments."
+  },
+  {
+    "id": "aspen",
+    "commonName": "Aspen",
+    "imageUrl": "/plants/aspen.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Round",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 20.0,
+      "funFact": "Aspen trees are known for their quaking leaves, which tremble even in light breezes due to flattened petioles."
+    },
+    "description": "Aspen trees have round, green leaves that flutter in the slightest breeze, giving a distinctive rustling sound. They typically grow up to 20 meters tall and are known for their smooth, white bark."
+  },
+  {
+    "id": "balsam_fir",
+    "commonName": "Balsam Fir",
+    "imageUrl": "/plants/balsam_fir.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 20.0,
+      "funFact": "Balsam fir is popular as a Christmas tree due to its pleasant fragrance and symmetrical shape."
+    },
+    "description": "Balsam fir is a conifer with a dense, pyramidal shape and dark green needle-like leaves. It can grow up to 20 meters tall and is favored for its aromatic qualities and as a traditional holiday tree."
+  },
+  {
+    "id": "barberry",
+    "commonName": "Barberry",
+    "imageUrl": "/plants/barberry.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 2.0,
+      "funFact": "Barberry is used both ornamentally and medicinally, known for its sharp spines and brightly colored berries."
+    },
+    "description": "Barberry shrubs are dense and compact, adorned with small, oval, serrated green leaves and clusters of small, yellow flowers. They can reach up to 2 meters in height and often feature sharp thorns and red berries."
+  },
+  {
+    "id": "bay_laurel",
+    "commonName": "Bay Laurel",
+    "imageUrl": "/plants/bay_laurel.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Round",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 10.0,
+      "funFact": "Bay laurel leaves are commonly used as a seasoning in cooking and were also used by the ancient Greeks to crown victors and poets."
+    },
+    "description": "Bay laurel is an evergreen shrub or small tree with aromatic, dark green, oval leaves. It typically grows up to 10 meters tall and produces small yellow flowers. The leaves are highly valued for their culinary use."
+  },
+  {
+    "id": "beech",
+    "commonName": "Beech",
+    "imageUrl": "/plants/beech.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 35.0,
+      "funFact": "Beech trees are known for their smooth, grey bark and edible nuts which are favored by wildlife."
+    },
+    "description": "Beech trees are large, majestic trees with smooth, silver-grey bark and dense, glossy green leaves. They typically grow up to 35 meters tall and produce small, inconspicuous green flowers followed by triangular nuts."
+  },
+  {
+    "id": "black_elder",
+    "commonName": "Black Elder",
+    "imageUrl": "/plants/black_elder.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Flat",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Compound",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 6.0,
+      "funFact": "Black elder is famous for its medicinal properties and the elderberries it produces, which are used in syrups and jams."
+    },
+    "description": "Black Elder is a shrub or small tree known for its clusters of fragrant, white flowers and dark berries. It has compound green leaves with serrated margins and typically grows up to 6 meters tall."
+  },
+  {
+    "id": "black_walnut",
+    "commonName": "Black Walnut",
+    "imageUrl": "/plants/black_walnut.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Compound",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 30.0,
+      "funFact": "Black walnut trees are valued for their hard, dense wood and the distinctive, flavorful nuts they produce."
+    },
+    "description": "Black Walnut trees are large with rough, dark bark and large, compound leaves. They can grow up to 30 meters tall and are known for their globular green fruits that contain a hard, edible nut."
+  },
+  {
+    "id": "bladderwort",
+    "commonName": "Bladderwort",
+    "imageUrl": "/plants/bladderwort.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Fine",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.2,
+      "funFact": "Bladderworts are aquatic carnivorous plants that trap small organisms with bladder-like structures submerged underwater."
+    },
+    "description": "Bladderwort plants are small, aquatic carnivores with fine, hair-like green leaves and bright yellow flowers. They float in water with their bladders, which are used to capture tiny water creatures."
+  },
+  {
+    "id": "bloodroot",
+    "commonName": "Bloodroot",
+    "imageUrl": "/plants/bloodroot.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "8-12",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.2,
+      "funFact": "Bloodroot gets its name from the red-orange sap in its roots and stems, historically used as a dye and herbal remedy."
+    },
+    "description": "Bloodroot features a single white flower with multiple petals and a distinctive yellow center, surrounded by a lobed, green leaf. It grows low to the ground and is known for its striking red sap."
+  },
+  {
+    "id": "bluebell",
+    "commonName": "Bluebell",
+    "imageUrl": "/plants/bluebell.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "Many",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Narrow",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Bluebells are often associated with ancient woodlands and their carpet of blue in spring is a famed sight across many parts of Europe."
+    },
+    "description": "Bluebell plants are known for their drooping, bell-shaped blue flowers and slender green leaves. They commonly grow in clusters, creating a vibrant blue display in woodland areas during spring."
+  },
+  {
+    "id": "borage",
+    "commonName": "Borage",
+    "imageUrl": "/plants/borage.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Hairy",
+      "heightInMetres": 0.9,
+      "funFact": "Borage is known for its star-shaped blue flowers and cucumber-like taste of the leaves, often used in salads and drinks."
+    },
+    "description": "Borage is an annual herb with coarse, hairy leaves and striking star-shaped blue flowers. It grows about 90 cm tall and is popular in gardens for its edible leaves and attractive blooms."
+  },
+  {
+    "id": "broom",
+    "commonName": "Broom",
+    "imageUrl": "/plants/broom.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Pea-like",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Small",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.0,
+      "funFact": "Broom is known for its vibrant yellow flowers and is often used in landscaping for soil stabilization and ornamental purposes."
+    },
+    "description": "Broom plants are vigorous shrubs with small, green leaves and large clusters of bright yellow, pea-like flowers. They can grow up to 2 meters tall and are fast-growing, often used to cover dry, sunny banks."
+  },
+  {
+    "id": "buddleia",
+    "commonName": "Butterfly Bush",
+    "imageUrl": "/plants/buddleia.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Many",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 3.0,
+      "funFact": "Buddleia is dubbed 'Butterfly Bush' for its ability to attract butterflies with its long, fragrant flower spikes."
+    },
+    "description": "Butterfly Bush is renowned for its long, cone-shaped clusters of fragrant purple flowers and lanceolate leaves. It typically grows up to 3 meters tall and is a magnet for butterflies and other pollinators."
+  },
+  {
+    "id": "bulrush",
+    "commonName": "Bulrush",
+    "imageUrl": "/plants/bulrush.png",
+    "properties": {
+      "flowerColour": "Brown",
+      "flowerColourRGB": "#A52A2A",
+      "petalCountRange": "None",
+      "petalShape": "Spike",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 3.0,
+      "funFact": "Bulrushes are commonly found in wetlands where they play a crucial role in water filtration and habitat support."
+    },
+    "description": "Bulrushes are tall, reed-like plants with long, linear green leaves and distinctive brown, cylindrical flower spikes. They often reach up to 3 meters in height and thrive in wet, marshy areas."
+  },
+  {
+    "id": "buttercup",
+    "commonName": "Buttercup",
+    "imageUrl": "/plants/buttercup.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Buttercups are known for their glossy, yellow flowers which are capable of reflecting light and creating a shimmering effect."
+    },
+    "description": "Buttercups feature bright yellow, shiny flowers with five petals each and lobed green leaves. They typically grow about 50 cm tall and are found in grassy fields and along roadways."
+  },
+  {
+    "id": "calendula",
+    "commonName": "Calendula",
+    "imageUrl": "/plants/calendula.png",
+    "properties": {
+      "flowerColour": "Orange",
+      "flowerColourRGB": "#FFA500",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Calendula is renowned for its healing properties, particularly in skin care products for its anti-inflammatory benefits."
+    },
+    "description": "Calendula plants are adorned with bright orange, daisy-like flowers and green, oval leaves. They grow to about 60 cm in height and are popular in gardens for both their beauty and medicinal uses."
+  },
+  {
+    "id": "camellia",
+    "commonName": "Camellia",
+    "imageUrl": "/plants/camellia.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 5.0,
+      "funFact": "Camellias are famous for their bright, ornate flowers and are a staple in many Asian gardens."
+    },
+    "description": "Camellias are evergreen shrubs or small trees with glossy, dark green leaves and large, vivid red flowers. They can grow up to 5 meters tall and are popular for ornamental use due to their striking blooms."
+  },
+  {
+    "id": "canary_grass",
+    "commonName": "Canary Grass",
+    "imageUrl": "/plants/canary_grass.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "None",
+      "petalShape": "Spike",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.7,
+      "funFact": "Canary grass is primarily used for birdseed but has also been explored as a biofuel source due to its high biomass yield."
+    },
+    "description": "Canary grass features tall, dense green spikes and narrow, linear leaves. It commonly reaches heights of about 70 cm and is often used in agriculture as fodder and for ornamental purposes."
+  },
+  {
+    "id": "candytuft",
+    "commonName": "Candytuft",
+    "imageUrl": "/plants/candytuft.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Narrow",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Candytuft, with its snow-white blooms, is a popular choice for rock gardens and as a ground cover due to its low-growing nature."
+    },
+    "description": "Candytuft is a low-growing perennial with clusters of small, white flowers and narrow green leaves. It forms dense mats and is often used to edge gardens or as a decorative ground cover."
+  },
+  {
+    "id": "canna_lily",
+    "commonName": "Canna Lily",
+    "imageUrl": "/plants/canna_lily.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Many",
+      "petalShape": "Broad",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Broad",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.5,
+      "funFact": "Canna lilies are not true lilies but get their name from their lily-like flowers; they are actually related to ginger plants."
+    },
+    "description": "Canna Lilies feature large, tropical-looking broad leaves and vibrant red flowers. They grow up to 1.5 meters tall and are popular in gardens for their dramatic appearance and colorful blooms."
+  },
+  {
+    "id": "cardinal_flower",
+    "commonName": "Cardinal Flower",
+    "imageUrl": "/plants/cardinal_flower.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Many",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.2,
+      "funFact": "Cardinal flowers are particularly favored by hummingbirds, which are attracted to the bright red, tubular flowers."
+    },
+    "description": "Cardinal Flowers are known for their striking, bright red, tubular flowers that rise above lanceolate green leaves. They typically grow up to 1.2 meters tall and thrive in moist, shaded environments."
+  },
+  {
+    "id": "catnip",
+    "commonName": "Catnip",
+    "imageUrl": "/plants/catnip.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Heart-shaped",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Catnip is famously loved by cats due to the nepetalactone it contains, which causes a temporary, euphoric response in many felines."
+    },
+    "description": "Catnip plants are hardy perennials with heart-shaped, green, serrated leaves and small, white, tubular flowers. They grow to about 50 cm tall and are well-known for attracting cats and repelling certain insects."
+  },
+  {
+    "id": "cedar_of_lebanon",
+    "commonName": "Cedar of Lebanon",
+    "imageUrl": "/plants/cedar_of_lebanon.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 35.0,
+      "funFact": "The Cedar of Lebanon is famous for its historical and biblical significance, used in ancient building projects and a symbol of wisdom and longevity."
+    },
+    "description": "Cedar of Lebanon is known for its massive stature and spreading branches, with dense clusters of dark green needles. It typically grows up to 35 meters tall and features a broad, often flat-topped crown."
+  },
+  {
+    "id": "celandine",
+    "commonName": "Celandine",
+    "imageUrl": "/plants/celandine.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "4",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Deeply lobed",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Celandine is known for its bright yellow flowers and its use in traditional medicine, particularly for its anti-inflammatory properties."
+    },
+    "description": "Celandine is a small plant with bright yellow flowers and deeply lobed green leaves. It reaches about 50 cm in height and spreads quickly in shaded, moist areas."
+  },
+  {
+    "id": "chamomile",
+    "commonName": "Chamomile",
+    "imageUrl": "/plants/chamomile.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Daisy-like",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Feathery",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Chamomile is celebrated for its soothing and medicinal properties, often used in teas to promote relaxation and sleep."
+    },
+    "description": "Chamomile is a low-growing herb with delicate, daisy-like white flowers and feathery green leaves. It is commonly found in gardens and fields, reaching about 30 cm in height."
+  },
+  {
+    "id": "cherry_tree",
+    "commonName": "Cherry Tree",
+    "imageUrl": "/plants/cherry_tree.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 10.0,
+      "funFact": "Cherry trees are cherished for their beautiful spring blossoms and delicious fruits, playing a significant role in many cultural festivals around the world."
+    },
+    "description": "Cherry trees are notable for their beautiful pink blossoms that cover the tree in spring, followed by edible red fruits. They have green, oval, serrated leaves and typically grow up to 10 meters tall."
+  },
+  {
+    "id": "chestnut",
+    "commonName": "Chestnut",
+    "imageUrl": "/plants/chestnut.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Spiky",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oblong",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 30.0,
+      "funFact": "Chestnut trees are valued not only for their nuts but also for their durable, rot-resistant wood."
+    },
+    "description": "Chestnut trees are large deciduous trees with broad, oblong green leaves and long, spiky white flower clusters. They grow up to 30 meters tall and produce edible nuts encased in a thick husk."
+  },
+  {
+    "id": "chicory",
+    "commonName": "Chicory",
+    "imageUrl": "/plants/chicory.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 1.0,
+      "funFact": "Chicory is known for its edible leaves and roots, with the roots often used as a coffee substitute or additive."
+    },
+    "description": "Chicory is a hardy plant with bright blue flowers and lanceolate green leaves. It reaches about 1 meter in height and is often found along roadsides and in open fields."
+  },
+  {
+    "id": "chinese_elm",
+    "commonName": "Chinese Elm",
+    "imageUrl": "/plants/chinese_elm.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 15.0,
+      "funFact": "Chinese Elm is highly resistant to Dutch elm disease and is a popular choice for bonsai due to its attractive bark and foliage."
+    },
+    "description": "Chinese Elm is a versatile and durable tree with small, serrated, oval leaves and a distinctive mottled bark. It can grow up to 15 meters tall and is popular in both urban and rural landscapes."
+  },
+  {
+    "id": "christmas_cactus",
+    "commonName": "Christmas Cactus",
+    "imageUrl": "/plants/christmas_cactus.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Many",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Segmented",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Christmas Cactus is named for its season of blooming around the holidays, with flowers that hang from the ends of its leaves."
+    },
+    "description": "Christmas Cactus is known for its unique, segmented leaves and vivid pink, tubular flowers that bloom typically during the winter holidays. It commonly grows as a houseplant and reaches about 30 cm in height."
+  },
+  {
+    "id": "chrysoprase",
+    "commonName": "Chrysoprase",
+    "imageUrl": "/plants/chrysoprase.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "None",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "None",
+      "leafColourRGB": "None",
+      "leafShape": "None",
+      "leafMarginDescription": "None",
+      "heightInMetres": 0,
+      "funFact": "Chrysoprase is actually a gemstone, not a plant, valued for its bright green color and used in jewelry and decorative art."
+    },
+    "description": "Chrysoprase is a gemstone known for its vibrant, apple-green hue which comes from nickel content. It is polished and used in various decorative and jewelry applications."
+  },
+  {
+    "id": "clematis",
+    "commonName": "Clematis",
+    "imageUrl": "/plants/clematis.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "4-8",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 4.0,
+      "funFact": "Clematis is a popular climbing vine known for its beautiful flowers and is often called the 'queen of the climbers'."
+    },
+    "description": "Clematis plants are vigorous climbers with lanceolate green leaves and large, showy purple flowers that bloom prolifically. They can reach up to 4 meters in height and are commonly used to decorate fences and trellises."
+  },
+  {
+    "id": "clover",
+    "commonName": "Clover",
+    "imageUrl": "/plants/clover.png",
+    "properties": {
+      "flowerColour": "White or Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Small",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.2,
+      "funFact": "Clover is a symbol of good luck and is important agriculturally for nitrogen fixation, which enriches the soil."
+    },
+    "description": "Clover is a low-growing plant, recognizable by its small, trifoliate green leaves and dense clusters of tiny, pink or white flowers. It is often found in grassy areas and is used both as a ground cover and in crop rotation to improve soil health."
+  },
+  {
+    "id": "coconut",
+    "commonName": "Coconut",
+    "imageUrl": "/plants/coconut.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Pinnate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 30.0,
+      "funFact": "Coconut trees are part of the palm family and are known for their large, edible seeds, which are also called coconuts."
+    },
+    "description": "Coconut trees are tall, slender palms that reach up to 30 meters, characterized by long pinnate leaves and large, fibrous fruits known as coconuts. They thrive in tropical climates along sandy coastlines."
+  },
+  {
+    "id": "coffee_plant",
+    "commonName": "Coffee Plant",
+    "imageUrl": "/plants/coffee_plant.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Star-shaped",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 5.0,
+      "funFact": "Coffee plants are cultivated for their beans, which are actually seeds, used to make coffee, one of the world's most popular beverages."
+    },
+    "description": "Coffee plants have glossy, dark green oval leaves and small, fragrant white flowers. They grow up to 5 meters in height and produce cherry-like fruits that contain coffee beans."
+  },
+  {
+    "id": "coleus",
+    "commonName": "Coleus",
+    "imageUrl": "/plants/coleus.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "Small",
+      "petalShape": "Spike",
+      "leafColour": "Varies",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Coleus is prized for its bright, variegated leaves rather than its flowers, making it a popular choice for decorative foliage in gardens and homes."
+    },
+    "description": "Coleus is known for its strikingly colorful leaves that can range from green to red, pink, and even multicolored. It produces small blue flower spikes, but it's primarily grown for its vibrant foliage. Typically, it reaches about 60 cm in height."
+  },
+  {
+    "id": "coltsfoot",
+    "commonName": "Coltsfoot",
+    "imageUrl": "/plants/coltsfoot.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Daisy-like",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Broad",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Coltsfoot is one of the first plants to bloom in spring, often used in traditional medicine for its cough-suppressing properties."
+    },
+    "description": "Coltsfoot features daisy-like yellow flowers that appear before its broad green leaves in early spring. It is a low-growing plant, often found in moist areas and used medicinally for respiratory issues."
+  },
+  {
+    "id": "comfrey",
+    "commonName": "Comfrey",
+    "imageUrl": "/plants/comfrey.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Many",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Hairy",
+      "heightInMetres": 1.0,
+      "funFact": "Comfrey is known for its healing properties, especially in skin care and bone healing, due to its high allantoin content."
+    },
+    "description": "Comfrey is a robust plant with hairy, oval leaves and clusters of bell-shaped purple flowers. It grows up to 1 meter tall and is commonly used in herbal medicine and as a fertilizer in gardens."
+  },
+  {
+    "id": "cornflower",
+    "commonName": "Cornflower",
+    "imageUrl": "/plants/cornflower.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.8,
+      "funFact": "Cornflower, with its vibrant blue flowers, is a symbol of agricultural traditions and is often used in wildflower mixes."
+    },
+    "description": "Cornflowers are admired for their bright blue flowers and slender, lanceolate leaves. Standing about 80 cm tall, these flowers are a favorite in gardens and wildflower arrangements for their striking color."
+  },
+  {
+    "id": "coral_bells",
+    "commonName": "Coral Bells",
+    "imageUrl": "/plants/coral_bells.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Many",
+      "petalShape": "Small",
+      "leafColour": "Varies",
+      "leafColourRGB": "#008000",
+      "leafShape": "Rounded",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Coral Bells are not only known for their delicate bell-shaped flowers but also for their colorful foliage, which can range from green to deep red and purple."
+    },
+    "description": "Coral Bells are popular for both their small, bell-shaped red flowers and their vibrant, often variegated foliage. They typically form neat mounds about 50 cm high and are used extensively in garden borders and as ground cover."
+  },
+  {
+    "id": "cork_oak",
+    "commonName": "Cork Oak",
+    "imageUrl": "/plants/cork_oak.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 20.0,
+      "funFact": "Cork Oak is notable for its thick, spongy bark that is harvested to make cork products, and the tree does not need to be cut down to harvest the bark."
+    },
+    "description": "Cork Oak is a medium-sized evergreen tree with thick, rugged bark used for cork production. It has dark green, serrated, oval leaves and can grow up to 20 meters tall."
+  },
+  {
+    "id": "cornus",
+    "commonName": "Cornus",
+    "imageUrl": "/plants/cornus.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "4",
+      "petalShape": "Small",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 6.0,
+      "funFact": "Cornus, commonly known as dogwood, is celebrated for its beautiful spring blossoms and striking fall foliage."
+    },
+    "description": "Cornus trees are known for their showy white flowers that appear in the spring, followed by bright red berries. They have green, oval leaves and can grow up to 6 meters tall."
+  },
+  {
+    "id": "cottonwood",
+    "commonName": "Cottonwood",
+    "imageUrl": "/plants/cottonwood.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Triangular",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 30.0,
+      "funFact": "Cottonwoods are fast-growing trees that produce fluffy, cotton-like seeds, which can blanket the ground in white in early summer."
+    },
+    "description": "Cottonwood trees are large and fast-growing, with broad, triangular, green leaves that tremble in the slightest breeze. They can reach heights of up to 30 meters."
+  },
+  {
+    "id": "cowslip",
+    "commonName": "Cowslip",
+    "imageUrl": "/plants/cowslip.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Cowslip is a traditional English wildflower, often found in meadows and known for its cluster of drooping yellow flowers in spring."
+    },
+    "description": "Cowslip plants have clusters of small, bright yellow flowers and soft, green, oval leaves. They typically grow in clumps and reach about 30 cm in height."
+  },
+  {
+    "id": "crabapple",
+    "commonName": "Crabapple",
+    "imageUrl": "/plants/crabapple.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 7.0,
+      "funFact": "Crabapple trees are ornamental, known for their attractive spring blossoms and small, colorful fruit which persist into winter, providing food for wildlife."
+    },
+    "description": "Crabapple trees are admired for their vibrant pink flowers and decorative, small fruits that range in color from red to yellow. These trees typically grow up to 7 meters tall and are popular in landscape design."
+  },
+  {
+    "id": "cranberry",
+    "commonName": "Cranberry",
+    "imageUrl": "/plants/cranberry.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "4",
+      "petalShape": "Round",
+      "leafColour": "Dark Green",
+      "leafColourRGB": "#006400",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.2,
+      "funFact": "Cranberries are harvested in water-filled bogs and are famous for their use in sauces and juices, especially during Thanksgiving in the United States."
+    },
+    "description": "Cranberry plants are low-growing evergreens with small, pink flowers and dark green, oval leaves. They bear tart, red fruits and are often seen spreading across boggy areas."
+  },
+  {
+    "id": "creeping_thyme",
+    "commonName": "Creeping Thyme",
+    "imageUrl": "/plants/creeping_thyme.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Small",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.1,
+      "funFact": "Creeping Thyme is a popular ground cover known for its fragrance and ability to tolerate foot traffic, making it ideal for paths and patios."
+    },
+    "description": "Creeping Thyme is a low, mat-forming herb with fragrant foliage and small purple flowers. It grows close to the ground, usually not exceeding 10 cm in height, and spreads quickly to form dense mats."
+  },
+  {
+    "id": "apple_tree",
+    "commonName": "Apple Tree",
+    "imageUrl": "/plants/apple_tree.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 10.0,
+      "funFact": "Apple trees are one of the most widely cultivated fruit trees in the world, known for their delicious fruits used in countless recipes."
+    },
+    "description": "Apple trees are deciduous with a spreading habit and are celebrated for their springtime bloom of white flowers followed by edible fruits. They typically grow up to 10 meters tall."
+  },
+  {
+    "id": "banana",
+    "commonName": "Banana",
+    "imageUrl": "/plants/banana.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Large",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Paddle-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 7.0,
+      "funFact": "Banana plants are actually large herbaceous perennials, and the 'tree' is technically a pseudostem made from leaf sheaths."
+    },
+    "description": "Banana plants are known for their large, paddle-shaped leaves and towering flower stalks, which produce hands of bananas. They can grow up to 7 meters tall and are commonly found in tropical regions."
+  },
+  {
+    "id": "basil",
+    "commonName": "Basil",
+    "imageUrl": "/plants/basil.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Basil is highly aromatic with a variety of culinary uses, and it is particularly noted for its role in Italian cuisine."
+    },
+    "description": "Basil is a popular culinary herb featuring small white flowers and aromatic, green, oval leaves. It typically grows up to 50 cm tall and is a staple in herb gardens."
+  },
+  {
+    "id": "blueberry",
+    "commonName": "Blueberry",
+    "imageUrl": "/plants/blueberry.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.0,
+      "funFact": "Blueberries are not only delicious but also packed with antioxidants and have been linked to numerous health benefits."
+    },
+    "description": "Blueberry bushes produce bell-shaped white flowers and dark blue berries. They have green, oval leaves and can grow up to 2 meters tall, thriving in acidic soil."
+  },
+  {
+    "id": "broccoli",
+    "commonName": "Broccoli",
+    "imageUrl": "/plants/broccoli.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Cluster",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Large",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Broccoli is a nutritional powerhouse, full of vitamins, minerals, and fiber, and belongs to the cabbage family."
+    },
+    "description": "Broccoli plants are characterized by large green leaves and dense clusters of green florets on stalks, used as a vegetable. The plant can grow up to 60 cm tall."
+  },
+  {
+    "id": "carrot",
+    "commonName": "Carrot",
+    "imageUrl": "/plants/carrot.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Umbel",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Fern-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Carrots are biennial plants primarily grown for their edible roots, which come in colors ranging from orange to purple, white, and yellow."
+    },
+    "description": "Carrot plants have fern-like green leaves and are most famous for their edible orange roots. Flowers form as white umbels in their second year. Typically, the plant grows up to 30 cm above the ground."
+  },
+  {
+    "id": "cauliflower",
+    "commonName": "Cauliflower",
+    "imageUrl": "/plants/cauliflower.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "None",
+      "petalShape": "Head",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Large",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Cauliflower is highly versatile in cooking and can be used in a variety of dishes, from raw salads to mashed as a substitute for potatoes."
+    },
+    "description": "Cauliflower plants produce large, white, edible heads surrounded by broad green leaves. It grows about 50 cm tall and is a cool-weather crop."
+  },
+  {
+    "id": "celery",
+    "commonName": "Celery",
+    "imageUrl": "/plants/celery.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Cluster",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oblong",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.7,
+      "funFact": "Celery is mainly water and very low in calories, making it a popular choice for diets and detox regimens."
+    },
+    "description": "Celery plants have long, fibrous stalks with oblong green leaves and a bushy appearance. It reaches about 70 cm in height and is typically grown for its crunchy stalks."
+  },
+  {
+    "id": "chili_pepper",
+    "commonName": "Chili Pepper",
+    "imageUrl": "/plants/chili_pepper.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Chili peppers are widely used around the world to add spice to dishes and are known for their heat, which is measured in Scoville units."
+    },
+    "description": "Chili pepper plants produce small, white, star-shaped flowers and spicy peppers in various colors. They have green, oval leaves and typically grow up to 60 cm tall."
+  },
+  {
+    "id": "chives",
+    "commonName": "Chives",
+    "imageUrl": "/plants/chives.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Many",
+      "petalShape": "Pom-pom",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Tubular",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Chives are a member of the onion family and are valued for their mild, onion-like flavor, making them a favorite garnish for many dishes."
+    },
+    "description": "Chives are small, bulbous plants with tubular green leaves and attractive purple flowers. They reach about 30 cm in height and are commonly used as a herb in cooking."
+  },
+  {
+    "id": "cilantro",
+    "commonName": "Cilantro",
+    "imageUrl": "/plants/cilantro.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Cluster",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Cilantro refers to the leaves of the coriander plant and is commonly used in culinary dishes around the globe, especially in Asian and Latin American cuisines."
+    },
+    "description": "Cilantro plants have delicate lobed leaves and small, clustered white flowers. It grows up to 50 cm tall and is popular for its distinctive, pungent flavor."
+  },
+  {
+    "id": "corn",
+    "commonName": "Corn",
+    "imageUrl": "/plants/corn.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "Tassel",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.5,
+      "funFact": "Corn is a staple crop used in various forms across different cultures, from cornmeal and popcorn to corn syrup and biofuel."
+    },
+    "description": "Corn plants are tall grasses that can reach up to 2.5 meters, known for their large ears of yellow kernels protected by husks and topped with silken tassels."
+  },
+  {
+    "id": "cucumber",
+    "commonName": "Cucumber",
+    "imageUrl": "/plants/cucumber.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Heart-shaped",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.3,
+      "funFact": "Cucumbers are 95% water, making them a hydrating food, and they belong to the same botanical family as melons and squash."
+    },
+    "description": "Cucumber plants are trailing vines with heart-shaped, green leaves and tendrils for climbing. They produce bright yellow, star-shaped flowers followed by long, green fruits."
+  },
+  {
+    "id": "eggplant",
+    "commonName": "Eggplant",
+    "imageUrl": "/plants/eggplant.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Large",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 1.2,
+      "funFact": "Eggplant, also known as aubergine, is rich in nutrients and has been cultivated in regions like India and China for its edible fruit since prehistoric times."
+    },
+    "description": "Eggplant is a bushy, sturdy plant with large, green serrated leaves and star-shaped purple flowers. It produces glossy, bulbous fruits, commonly deep purple in color."
+  },
+  {
+    "id": "garlic",
+    "commonName": "Garlic",
+    "imageUrl": "/plants/garlic.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Umbel",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Garlic has been used both as a food flavoring and a traditional medicine for centuries, known for its strong aroma and numerous health benefits."
+    },
+    "description": "Garlic plants feature long, slender green leaves and a stalk that produces a white, spherical flower cluster. They grow up to 60 cm tall, and the bulbs are cultivated for culinary use."
+  },
+  {
+    "id": "ginger",
+    "commonName": "Ginger",
+    "imageUrl": "/plants/ginger.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Cone",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.0,
+      "funFact": "Ginger is renowned for its spicy root, which is used worldwide in many cuisines and for medicinal purposes, particularly for digestion."
+    },
+    "description": "Ginger is a perennial plant with thick, fibrous roots and lanceolate green leaves. It typically grows about 1 meter tall and produces clusters of small yellow flowers."
+  },
+  {
+    "id": "grape",
+    "commonName": "Grape",
+    "imageUrl": "/plants/grape.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "Small",
+      "petalShape": "Cluster",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Toothed",
+      "heightInMetres": 10.0,
+      "funFact": "Grapevines are cultivated on every continent except Antarctica and are used to produce wine, juice, and fresh fruits."
+    },
+    "description": "Grapevines are vigorous climbers known for their lobed, toothed leaves and clusters of small green flowers, which mature into bunches of grapes. They can grow up to 10 meters long when supported."
+  },
+  {
+    "id": "green_bean",
+    "commonName": "Green Bean",
+    "imageUrl": "/plants/green_bean.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Green beans are also known as snap beans due to the snapping sound they make when broken, and are rich in vitamins A, C, and K."
+    },
+    "description": "Green bean plants are low-growing and produce oval green leaves and clusters of small white flowers, followed by long, slender green pods that are harvested as vegetables."
+  },
+  {
+    "id": "horseradish",
+    "commonName": "Horseradish",
+    "imageUrl": "/plants/horseradish.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Cluster",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.5,
+      "funFact": "Horseradish is cultivated for its pungent root, commonly grated and used as a spicy condiment in various cuisines."
+    },
+    "description": "Horseradish plants grow large, green, oval leaves and produce white flower clusters. They can reach up to 1.5 meters tall and are primarily grown for their large, edible roots."
+  },
+  {
+    "id": "kale",
+    "commonName": "Kale",
+    "imageUrl": "/plants/kale.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Cluster",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Curly",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.9,
+      "funFact": "Kale is a superfood loaded with nutrients and antioxidants, known for its health benefits and culinary versatility."
+    },
+    "description": "Kale is a form of cabbage with green or purple leaves, often curly and not formed into a head. It grows up to 90 cm tall and is widely used in dishes for its nutritional value."
+  },
+  {
+    "id": "kiwi",
+    "commonName": "Kiwi",
+    "imageUrl": "/plants/kiwi.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 9.0,
+      "funFact": "Kiwi plants are climbing vines that produce brown, fuzzy fruits with bright green or golden flesh, known for their high vitamin C content."
+    },
+    "description": "Kiwi vines produce large oval leaves and white flowers that develop into the well-known fuzzy, brown-skinned fruits. The vines are vigorous climbers, often reaching lengths of up to 9 meters."
+  },
+  {
+    "id": "leek",
+    "commonName": "Leek",
+    "imageUrl": "/plants/leek.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Umbel",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.9,
+      "funFact": "Leeks are a member of the onion family but have a milder, more delicate flavor and are commonly used in European cuisines."
+    },
+    "description": "Leeks are tall, slender plants with a mild onion-like flavor, characterized by long green leaves and white necks. They bloom with spherical white flower clusters and can grow up to 90 cm tall."
+  },
+  {
+    "id": "lemon",
+    "commonName": "Lemon",
+    "imageUrl": "/plants/lemon.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 6.0,
+      "funFact": "Lemons are high in vitamin C and are used extensively in culinary dishes, drinks, and as a natural cleaning agent."
+    },
+    "description": "Lemon trees are evergreen with glossy green leaves and fragrant white flowers. They produce bright yellow, sour citrus fruits and can reach up to 6 meters in height."
+  },
+  {
+    "id": "lettuce",
+    "commonName": "Lettuce",
+    "imageUrl": "/plants/lettuce.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Daisy-like",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Varies",
+      "leafMarginDescription": "Varies",
+      "heightInMetres": 0.3,
+      "funFact": "Lettuce is one of the oldest known vegetables and was used by the ancient Egyptians to produce oil from its seeds."
+    },
+    "description": "Lettuce plants are cultivated mainly for their leaves, ranging from deep green to red and purple, with varied shapes and textures. They grow low to the ground and can spread up to 30 cm."
+  },
+  {
+    "id": "lime",
+    "commonName": "Lime",
+    "imageUrl": "/plants/lime.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 4.5,
+      "funFact": "Limes are key ingredients in many cuisines worldwide, famous for their intense, sour flavor and aromatic zest."
+    },
+    "description": "Lime trees are smaller citrus trees that bear white, fragrant flowers and bright green, juicy fruits known for their tart flavor. They typically grow up to 4.5 meters tall."
+  },
+  {
+    "id": "mint",
+    "commonName": "Mint",
+    "imageUrl": "/plants/mint.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.9,
+      "funFact": "Mint is known for its strong, refreshing aroma and flavor, widely used in drinks, desserts, and savory dishes, as well as in aromatherapy and cosmetics."
+    },
+    "description": "Mint plants are vigorous perennials with aromatic green leaves and spikes of small purple flowers. They spread quickly and can grow up to 90 cm tall."
+  },
+  {
+    "id": "onion",
+    "commonName": "Onion",
+    "imageUrl": "/plants/onion.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Umbel",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Tubular",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Onions have been cultivated for thousands of years and are highly valued for their flavoring in cooking, as well as their medicinal properties."
+    },
+    "description": "Onion plants form a bulb at the base of their tubular green leaves and can produce large spherical clusters of white flowers when fully matured. They typically grow about 60 cm tall."
+  },
+  {
+    "id": "orange",
+    "commonName": "Orange",
+    "imageUrl": "/plants/orange.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 10.0,
+      "funFact": "Oranges are one of the most popular fruits around the world and are a major source of vitamin C."
+    },
+    "description": "Orange trees are evergreen citrus trees with glossy oval leaves and fragrant white flowers. They produce sweet, juicy oranges and typically grow up to 10 meters tall."
+  },
+  {
+    "id": "oregano",
+    "commonName": "Oregano",
+    "imageUrl": "/plants/oregano.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Small",
+      "petalShape": "Cluster",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.8,
+      "funFact": "Oregano is a staple herb in Mediterranean cuisine, known for its robust scent and flavor, often used in pizza and pasta sauces."
+    },
+    "description": "Oregano is a perennial herb with oval, green, serrated leaves and small pink flower clusters. It grows up to 80 cm tall and spreads widely."
+  },
+  {
+    "id": "parsley",
+    "commonName": "Parsley",
+    "imageUrl": "/plants/parsley.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Umbel",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Curly or flat",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.8,
+      "funFact": "Parsley is not only a popular culinary garnish but also rich in vitamins and has anti-inflammatory properties."
+    },
+    "description": "Parsley plants have bright green, either curly or flat leaves, depending on the variety. They produce clusters of small yellow flowers and are commonly used as a decorative and flavorful herb in many dishes."
+  },
+  {
+    "id": "pea",
+    "commonName": "Pea",
+    "imageUrl": "/plants/pea.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Small",
+      "petalShape": "Butterfly",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.0,
+      "funFact": "Peas are one of the oldest cultivated vegetables, with evidence of cultivation dating back thousands of years; they are used in many cuisines globally."
+    },
+    "description": "Pea plants are climbing vines with tendrils, producing small white butterfly-shaped flowers and pods containing edible peas. They typically reach up to 2 meters when supported."
+  },
+  {
+    "id": "peach",
+    "commonName": "Peach",
+    "imageUrl": "/plants/peach.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 5.0,
+      "funFact": "Peach trees are cultivated not only for their delicious fruits but also for their attractive spring blossoms."
+    },
+    "description": "Peach trees bloom with stunning pink flowers each spring, followed by juicy, fuzzy fruits. The trees have lanceolate, green, serrated leaves and can grow up to 5 meters tall."
+  },
+  {
+    "id": "pear",
+    "commonName": "Pear",
+    "imageUrl": "/plants/pear.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 10.0,
+      "funFact": "Pear trees are known for their longevity, with some orchards boasting trees over 100 years old still producing fruit."
+    },
+    "description": "Pear trees feature white flowers in early spring and produce sweet, bell-shaped fruits. They have green, oval leaves and can reach heights of up to 10 meters."
+  },
+  {
+    "id": "pineapple",
+    "commonName": "Pineapple",
+    "imageUrl": "/plants/pineapple.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Many",
+      "petalShape": "Spiky",
+      "leafColour": "Blue-Green",
+      "leafColourRGB": "#008080",
+      "leafShape": "Sword-shaped",
+      "leafMarginDescription": "Spiky",
+      "heightInMetres": 1.0,
+      "funFact": "Pineapple plants can take up to 24 months to produce a single pineapple and are the only bromeliad to produce edible fruit."
+    },
+    "description": "Pineapple plants have spiky, sword-shaped leaves and produce a large, spiky fruit from the center of the rosette. The plants are short, generally not exceeding 1 meter in height."
+  },
+  {
+    "id": "potato",
+    "commonName": "Potato",
+    "imageUrl": "/plants/potato.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Compound",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Potatoes are incredibly versatile in the culinary world and are the world's fourth-largest food crop following rice, wheat, and maize."
+    },
+    "description": "Potato plants feature compound green leaves and white or purple star-shaped flowers. The valuable part, the tuber, grows underground."
+  },
+  {
+    "id": "pumpkin",
+    "commonName": "Pumpkin",
+    "imageUrl": "/plants/pumpkin.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Large",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Large",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Pumpkins are a staple of Halloween decorations and Thanksgiving cuisine in the United States, particularly famous for pumpkin pie."
+    },
+    "description": "Pumpkin plants spread across the ground with large, serrated, green leaves and big, yellow flowers. They are known for producing large, round fruits that vary in color from deep orange to white."
+  },
+  {
+    "id": "radish",
+    "commonName": "Radish",
+    "imageUrl": "/plants/radish.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "4",
+      "petalShape": "Cross",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.4,
+      "funFact": "Radishes are fast-growing root vegetables, often ready to harvest just three weeks after planting."
+    },
+    "description": "Radish plants produce small, white flowers and have crisp, edible roots. They have green, serrated leaves and are quick to mature, making them popular in gardens."
+  },
+  {
+    "id": "raspberry",
+    "commonName": "Raspberry",
+    "imageUrl": "/plants/raspberry.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 2.0,
+      "funFact": "Raspberries are perennial plants with woody stems, known for their delicious fruit which can come in colors ranging from red to black, yellow, or purple."
+    },
+    "description": "Raspberry bushes are perennial plants with white flowers and sweet, juicy berries. They have green, serrated leaves and can grow up to 2 meters tall."
+  },
+  {
+    "id": "red_onion",
+    "commonName": "Red Onion",
+    "imageUrl": "/plants/red_onion.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Umbel",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Tubular",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Red onions are known for their deep purple skin and mild flavor, making them a favorite in salads and culinary dishes for both color and taste."
+    },
+    "description": "Red onion plants produce tubular green leaves and a bulb at the base of the plant. They flower with large white clusters and are widely used for their flavorful bulbs."
+  },
+  {
+    "id": "rosemary",
+    "commonName": "Rosemary",
+    "imageUrl": "/plants/rosemary.png",
+    "properties": {
+      "flowerColour": "Blue",
+      "flowerColourRGB": "#0000FF",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Needle-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 1.5,
+      "funFact": "Rosemary is not only loved for its aromatic leaves in cooking but also has several medicinal properties, including enhancing memory."
+    },
+    "description": "Rosemary is an evergreen shrub with fragrant, needle-like leaves and blue, tubular flowers. It typically grows up to 1.5 meters tall and thrives in full sun and well-drained soil."
+  },
+  {
+    "id": "sage",
+    "commonName": "Sage",
+    "imageUrl": "/plants/sage.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Small",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Sage is a staple herb in many kitchens, particularly used in dishes like stuffing and sausages due to its strong, earthy flavor."
+    },
+    "description": "Sage plants have soft, yet slightly rough leaves, typically gray-green in color, and produce purple tubular flowers. They are drought-tolerant and grow about 60 cm tall."
+  },
+  {
+    "id": "spinach",
+    "commonName": "Spinach",
+    "imageUrl": "/plants/spinach.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Inconspicuous",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Spinach is rich in iron and vitamins, and was famously used by the cartoon character Popeye to gain strength."
+    },
+    "description": "Spinach plants produce lush, green leaves that are rich in nutrients. They grow low to the ground and can reach about 30 cm in height, often harvested before flowering for the best flavor."
+  },
+  {
+    "id": "squash",
+    "commonName": "Squash",
+    "imageUrl": "/plants/squash.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Large",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Broad",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Squash plants are prolific producers and have been cultivated in various forms for thousands of years across multiple cultures."
+    },
+    "description": "Squash plants are known for their sprawling growth, broad green leaves, and large yellow flowers. They produce a variety of fruits in different shapes and sizes, typically growing about 60 cm tall."
+  },
+  {
+    "id": "strawberry",
+    "commonName": "Strawberry",
+    "imageUrl": "/plants/strawberry.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Round",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Triangular",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.2,
+      "funFact": "Strawberries are the only fruit with seeds on the outside, each berry can have over 200 seeds."
+    },
+    "description": "Strawberry plants are low-growing, with white flowers and juicy, red fruits. They have green, triangular, serrated leaves and spread through runners."
+  },
+  {
+    "id": "sweet_potato",
+    "commonName": "Sweet Potato",
+    "imageUrl": "/plants/sweet_potato.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Heart-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Sweet potatoes are not related to regular potatoes; they belong to the morning glory family and are known for their nutritious tubers."
+    },
+    "description": "Sweet potato plants have sprawling vines with heart-shaped leaves and occasionally produce star-shaped purple flowers. They are widely cultivated for their sweet, starchy tubers."
+  },
+  {
+    "id": "tarragon",
+    "commonName": "Tarragon",
+    "imageUrl": "/plants/tarragon.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "Small",
+      "petalShape": "Inconspicuous",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Narrow",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Tarragon is a perennial herb known for its aromatic leaves, which are particularly popular in French cuisine."
+    },
+    "description": "Tarragon plants have slim, green leaves and small, inconspicuous flowers. They grow to about 60 cm tall and are valued for their aromatic, flavorful leaves."
+  },
+  {
+    "id": "tomato",
+    "commonName": "Tomato",
+    "imageUrl": "/plants/tomato.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Compound",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 2.0,
+      "funFact": "Tomatoes are botanically considered fruits, but are commonly used as vegetables in cooking."
+    },
+    "description": "Tomato plants are vigorous growers with compound green leaves and bright yellow, star-shaped flowers. They produce edible fruits that range in color from red to yellow, green, and even purple."
+  },
+  {
+    "id": "watermelon",
+    "commonName": "Watermelon",
+    "imageUrl": "/plants/watermelon.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "5",
+      "petalShape": "Star-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Large",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.6,
+      "funFact": "Watermelon is composed of about 92% water, making it a perfect refreshing snack during the hot summer months."
+    },
+    "description": "Watermelon plants are sprawling vines with large, serrated leaves and yellow flowers. They are known for their large, juicy fruits with a green rind and sweet red interior."
+  },
+  {
+    "id": "zucchini",
+    "commonName": "Zucchini",
+    "imageUrl": "/plants/zucchini.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Large",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Large",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.7,
+      "funFact": "Zucchini is a type of summer squash that can grow extremely quickly, sometimes doubling in size within a day."
+    },
+    "description": "Zucchini plants have large, serrated leaves and produce large yellow bell-shaped flowers. They are fast-growing and yield elongated, edible fruits commonly used in various culinary dishes."
+  },
+  {
+    "id": "daffodil",
+    "commonName": "Daffodil",
+    "imageUrl": "/plants/daffodil.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "6",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.4,
+      "funFact": "Daffodils are among the first flowers to bloom in spring, symbolizing rebirth and new beginnings."
+    },
+    "description": "Daffodils are noted for their bright yellow flowers with a central trumpet-shaped structure surrounded by six floral leaves. They typically grow up to 40 cm tall and thrive in full sun to partial shade."
+  },
+  {
+    "id": "hyacinth",
+    "commonName": "Hyacinth",
+    "imageUrl": "/plants/hyacinth.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Many",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Hyacinths are highly fragrant, spring-blooming bulbs, known for their intense color and strong scent."
+    },
+    "description": "Hyacinth plants display dense clusters of fragrant purple flowers on erect spikes, with glossy green, linear leaves. They usually reach up to 30 cm in height."
+  },
+  {
+    "id": "hibiscus",
+    "commonName": "Hibiscus",
+    "imageUrl": "/plants/hibiscus.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "5",
+      "petalShape": "Large",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Toothed",
+      "heightInMetres": 2.5,
+      "funFact": "Hibiscus flowers are not only striking but also edible, and are used in teas which are believed to lower blood pressure."
+    },
+    "description": "Hibiscus plants feature large, vivid red flowers and broad green leaves. They can grow up to 2.5 meters tall, thriving in sunny environments."
+  },
+  {
+    "id": "bird_of_paradise",
+    "commonName": "Bird of Paradise",
+    "imageUrl": "/plants/bird_of_paradise.png",
+    "properties": {
+      "flowerColour": "Orange and Blue",
+      "flowerColourRGB": "#FFA500, #0000FF",
+      "petalCountRange": "6",
+      "petalShape": "Crane-like",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oblong",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 2.0,
+      "funFact": "Bird of Paradise is named for its striking flower, which resembles a bird in flight and is native to South Africa."
+    },
+    "description": "Bird of Paradise features exotic flowers with bright orange and blue colors, resembling the shape of a bird. It has large, oblong green leaves and can grow up to 2 meters tall."
+  },
+  {
+    "id": "bleeding_heart",
+    "commonName": "Bleeding Heart",
+    "imageUrl": "/plants/bleeding_heart.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "Heart-shaped",
+      "petalShape": "Drooping",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Fern-like",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 0.8,
+      "funFact": "Bleeding Heart flowers are valued for their unusual, heart-shaped flowers and are popular in shady garden areas."
+    },
+    "description": "Bleeding Heart plants are known for their beautiful, heart-shaped pink flowers that hang from arching stems, complemented by fern-like leaves."
+  },
+  {
+    "id": "calla_lily",
+    "commonName": "Calla Lily",
+    "imageUrl": "/plants/calla_lily.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "1 (spathe)",
+      "petalShape": "Trumpet",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Arrow-shaped",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.6,
+      "funFact": "Calla Lilies are not true lilies but are so named for their elegant, trumpet-shaped flowers, often used in weddings."
+    },
+    "description": "Calla Lily plants feature a single, elegant white spathe, resembling a trumpet, which wraps around a yellow spadix. They have smooth, arrow-shaped leaves."
+  },
+  {
+    "id": "banyan",
+    "commonName": "Banyan Tree",
+    "imageUrl": "/plants/banyan.png",
+    "properties": {
+      "flowerColour": "Not visible",
+      "flowerColourRGB": "#000000",
+      "petalCountRange": "Inconspicuous",
+      "petalShape": "Inconspicuous",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 30.0,
+      "funFact": "The Banyan tree is the national tree of India, famous for its aerial prop roots that grow into thick woody trunks, often creating a forest of its own."
+    },
+    "description": "Banyan trees are remarkable for their extensive aerial root system and massive canopy spread. They are vital to ecosystems, providing shelter and support to various wildlife."
+  },
+  {
+    "id": "cypress",
+    "commonName": "Cypress",
+    "imageUrl": "/plants/cypress.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "Inconspicuous",
+      "petalShape": "Cones",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Scale-like",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 25.0,
+      "funFact": "Cypress trees are often associated with mourning but are also valued for their wood's durable qualities and resistance to weather conditions."
+    },
+    "description": "Cypress trees are tall, evergreen with a distinctive conical shape, featuring small, scale-like green leaves and producing woody cones. They can grow up to 25 meters in height."
+  },
+  {
+    "id": "aldertree",
+    "commonName": "Alder",
+    "imageUrl": "/plants/aldertree.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Catkins",
+      "petalShape": "Cylindrical",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oval",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 20.0,
+      "funFact": "Alder trees are notable for their ability to enrich the soil with nitrogen, making them valuable for reforestation and soil improvement."
+    },
+    "description": "Alder trees are fast-growing and have a conical shape with green, serrated leaves and red cylindrical catkins. They can grow up to 20 meters and are common in wet environments."
+  },
+  {
+    "id": "acacia",
+    "commonName": "Acacia",
+    "imageUrl": "/plants/acacia.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Many",
+      "petalShape": "Puffball",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Feathery",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 12.0,
+      "funFact": "Acacia trees are known for their hardy nature and ability to survive in arid environments, often used in sustainable forestry practices."
+    },
+    "description": "Acacia trees are recognized for their distinctive yellow puffball flowers and feathery, finely divided green leaves. They typically reach up to 12 meters in height and thrive in dry climates."
+  },
+  {
+    "id": "joshua_tree",
+    "commonName": "Joshua Tree",
+    "imageUrl": "/plants/joshua_tree.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "Many",
+      "petalShape": "Bell-shaped",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Sword-like",
+      "leafMarginDescription": "Spiky",
+      "heightInMetres": 12.0,
+      "funFact": "Joshua Trees are native to the Mojave Desert and were named by Mormon settlers who were reminded of the biblical figure Joshua raising his hands in prayer."
+    },
+    "description": "Joshua Trees are distinctive for their twisted, bristled branches and spiky leaves. They produce clusters of creamy white flowers and can grow up to 12 meters tall."
+  },
+  {
+    "id": "monkey_puzzle_tree",
+    "commonName": "Monkey Puzzle Tree",
+    "imageUrl": "/plants/monkey_puzzle_tree.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "None",
+      "petalShape": "Cones",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Scale-like",
+      "leafMarginDescription": "Sharp-edged",
+      "heightInMetres": 30.0,
+      "funFact": "The Monkey Puzzle Tree is so named because it was said to be a puzzle for a monkey to climb, given its sharp, spirally arranged leaves."
+    },
+    "description": "The Monkey Puzzle Tree is an evergreen with a unique appearance, featuring sharp, triangular leaves that are tough and scale-like. It can grow up to 30 meters tall and is often used in ornamental landscaping."
   }
 ]
