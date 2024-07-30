@@ -1,40 +1,48 @@
 <script lang="ts">
+  import type { GardenWithPlants } from "$lib/types";
+  import DisplayGarden from "./DisplayGarden.svelte";
   export let topPollinators;
-  export let topGarden;
+  export let topGarden: GardenWithPlants;
 </script>
 
 <body class="bg-roel_purple h-screen flex flex-col justify-end">
-  <div class="w-full">
-    <div
-      class="w-full h-[230px] flex items-center text-left pl-5 text-roel_purple text-7xl font-jeanb bg-roel_rose"
-    >
-      MOST ACTIVE
-      <br />POLLINATORS:
-    </div>
-
-    {#each topPollinators as userInfo, index}
-      <div
-        class="w-full h-[80px] flex items-center justify-between px-5 {index %
-          2 ===
-        0
-          ? 'bg-roel_purple'
-          : 'bg-roel_rose'}"
-      >
-        <div
-          class="text-4xl font-primer {index % 2 === 0
-            ? 'text-roel_rose'
-            : 'text-roel_purple'}"
-        >
-          {userInfo.username}
-        </div>
-        <div
-          class="text-4xl font-primer {index % 2 === 0
-            ? 'text-roel_rose'
-            : 'text-roel_purple'}"
-        >
-          x {userInfo.count}
-        </div>
-      </div>
-    {/each}
+  <div
+    class="w-full h-[230px] flex items-center text-left pl-5 text-roel_purple text-7xl font-jeanb bg-roel_rose"
+  >
+    MOST ACTIVE
+    <br />POLLINATORS:
   </div>
+
+  <DisplayGarden
+    garden={topGarden}
+    xGarden={0}
+    yGarden={400}
+    width={400}
+    height={700}
+  ></DisplayGarden>
+
+  {#each topPollinators as userInfo, index}
+    <div
+      class="w-full h-[80px] flex items-center justify-between px-5 {index %
+        2 ===
+      0
+        ? 'bg-roel_purple'
+        : 'bg-roel_rose'}"
+    >
+      <div
+        class="text-4xl font-primer {index % 2 === 0
+          ? 'text-roel_rose'
+          : 'text-roel_purple'}"
+      >
+        {userInfo.username}
+      </div>
+      <div
+        class="text-4xl font-primer {index % 2 === 0
+          ? 'text-roel_rose'
+          : 'text-roel_purple'}"
+      >
+        x {userInfo.count}
+      </div>
+    </div>
+  {/each}
 </body>
