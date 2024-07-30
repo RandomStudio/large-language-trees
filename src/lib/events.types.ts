@@ -77,13 +77,15 @@ export interface FeedTextPart {
 export type FeedTextEntry = FeedTextPart[];
 
 export enum bRollNaming {
+  IDLE = "idle",
   STATUS_FEED = "showStatusFeed",
   DETAIL = "showFeaturedPlant",
   ZOOM_OUT = "showFeaturedGarden",
   ROLL_PAN = "showMultipleGardens",
   TOP_LIST = "showLeaderboard",
   STATISTICS_1 = "showPlantGrowingTime",
-  STATISTICS_2 = "showPlantCount"
+  STATISTICS_2 = "showPlantCount",
+  STATISTICS_3 = "showPlantPollinationCount"
 }
 
 export interface DisplayStatusFeed extends DisplayUpdateEvent {
@@ -141,8 +143,17 @@ export interface DisplayPlantCount extends DisplayUpdateEvent {
     count: number;
   };
 }
+
+export interface DisplayPlantPollinationStats extends DisplayUpdateEvent {
+  name: bRollNaming.STATISTICS_3;
+  contents: {
+    plant: SelectPlant;
+    pollinationCount: number;
+    user: PublicUserInfo;
+  };
+}
 export interface DisplayIdle extends DisplayUpdateEvent {
-  name: "idle";
+  name: bRollNaming.IDLE;
   contents: null;
 }
 
@@ -156,6 +167,7 @@ export type DisplayEventContents =
   | DisplayLeaderboard
   | DisplayPlantGrowingTime
   | DisplayPlantCount
+  | DisplayPlantPollinationStats
   | DisplayIdle;
 
 /** Interface for "serverInstructDisplays" messages.
