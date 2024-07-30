@@ -160,7 +160,10 @@
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_2}
-      <StatsCount count={data.contents?.contents.count}></StatsCount>
+      <StatsCount
+        count={data.contents.contents.count}
+        gardens={data.contents.contents.gardens}
+      ></StatsCount>
     {/if}
   {/if}
 </main>

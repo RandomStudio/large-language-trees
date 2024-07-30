@@ -1,5 +1,8 @@
 <script lang="ts">
+  import type { GardenWithPlants, PublicUserInfo } from "$lib/types";
+  import DisplayGarden from "./DisplayGarden.svelte";
   export let count: number;
+  export let gardens: { garden: GardenWithPlants; user: PublicUserInfo }[];
 </script>
 
 <div class="bg-roel_yellow w-full h-screen relative overflow-hidden">
@@ -17,6 +20,35 @@
       />
     </svg>
   </div>
+
+  <DisplayGarden
+    xGarden={0}
+    yGarden={0}
+    height={200}
+    width={230}
+    garden={gardens[0].garden}
+  ></DisplayGarden>
+  <DisplayGarden
+    xGarden={280}
+    yGarden={200}
+    height={300}
+    width={200}
+    garden={gardens[1].garden}
+  ></DisplayGarden>
+  <DisplayGarden
+    xGarden={0}
+    yGarden={400}
+    height={300}
+    width={200}
+    garden={gardens[2].garden}
+  ></DisplayGarden>
+  <DisplayGarden
+    xGarden={280}
+    yGarden={600}
+    height={300}
+    width={200}
+    garden={gardens[3].garden}
+  ></DisplayGarden>
 
   <div
     class="w-full flex text-center items-center justify-center absolute bottom-[180px] text-roel_red text-4xl font-primer"
