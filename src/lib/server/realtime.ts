@@ -204,17 +204,29 @@ export const getDataForAmbientDisplay = async (
           `Not enough event logs (${latestEvents.length} < ${MIN_STATUS_FEED}) to show this view`
         );
       }
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
+      const gardens = pickMultipleRandomElements(allGardens, NUM_GARDENS_MULTI);
       const contents: DisplayStatusFeed = {
         name: bRollNaming.STATUS_FEED,
-        contents: latestEvents.map((entry) => entry.contents as FeedTextEntry)
+        contents: {
+          eventLogs: latestEvents.map(
+            (entry) => entry.contents as FeedTextEntry
+          ),
+          gardens
+        }
       };
       return contents;
     }
     case "ROLL_PAN": {
-      // TODO: exclude admin gardens
-      const allGardens = await db.query.gardens.findMany({
-        with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
-      });
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
       if (allGardens.length < 5) {
         throw Error("Not enough gardens to display count=" + NUM_GARDENS_MULTI);
       }
@@ -272,12 +284,24 @@ export const getDataForAmbientDisplay = async (
         })
         .slice(0, LIMIT_LEADERBOARD);
 
+      const topGarden = orderedByPlantCount[0];
+      const topGardenWithPlants = await db.query.gardens.findFirst({
+        where: eq(gardens.id, topGarden.id),
+        with: { plantsInGarden: { with: { plant: true } } }
+      });
+      if (!topGardenWithPlants) {
+        throw Error("failed to load top garden with plants");
+      }
+
       const contents: DisplayLeaderboard = {
         name: bRollNaming.TOP_LIST,
-        contents: orderedByPlantCount.map((garden) => ({
-          username: garden.myOwner.username,
-          count: garden.plantsInGarden.length
-        }))
+        contents: {
+          topPollinators: orderedByPlantCount.map((garden) => ({
+            username: garden.myOwner.username,
+            count: garden.plantsInGarden.length
+          })),
+          topGarden: topGardenWithPlants
+        }
       };
       return contents;
     }
