@@ -88,7 +88,7 @@ export enum bRollNaming {
 
 export interface DisplayStatusFeed extends DisplayUpdateEvent {
   name: bRollNaming.STATUS_FEED;
-  contents: FeedTextEntry[];
+  contents: { gardens: GardenWithPlants[]; event: FeedTextEntry[] };
 }
 
 export interface DisplayFeaturedPlant extends DisplayUpdateEvent {
@@ -110,9 +110,12 @@ export interface DisplayFeaturedGarden extends DisplayUpdateEvent {
 export interface DisplayMultipleGardens extends DisplayUpdateEvent {
   name: bRollNaming.ROLL_PAN;
   contents: {
-    garden: GardenWithPlants;
-    user: PublicUserInfo;
-  }[];
+    pollinators: {
+      garden: GardenWithPlants;
+      user: PublicUserInfo;
+    }[];
+    topGarden: GardenWithPlants;
+  };
 }
 
 export interface DisplayLeaderboard extends DisplayUpdateEvent {
