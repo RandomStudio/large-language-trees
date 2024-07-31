@@ -6,16 +6,7 @@
   import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
   import { bRollNaming } from "$lib/events.types.js";
 
-  const modes = [
-    "showStatusFeed",
-    "showFeaturedPlant",
-    "showFeaturedGarden",
-    "showMultipleGardens",
-    "showLeaderboard",
-    "showPlantGrowingTime",
-    "showPlantCount"
-  ];
-
+  const modes = Object.keys(bRollNaming);
   let connected = false;
   let messages: string[] = [];
 
