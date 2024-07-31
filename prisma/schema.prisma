@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_CONNECTION_STRING")
+}
+
+model event_logs {
+  id       String   @id
+  contents Json     @db.Json
+  added    DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model gardens {
+  id                String              @id
+  user_id           String
+  name              String?
+  users             users               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "gardens_user_id_users_id_fk")
+  gardens_to_plants gardens_to_plants[]
+}
+
+model gardens_to_plants {
+  garden_id String
+  plant_id  String
+  rowIndex  Int
+  colIndex  Int
+  gardens   gardens @relation(fields: [garden_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "gardens_to_plants_garden_id_gardens_id_fk")
+  plants    plants  @relation(fields: [plant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "gardens_to_plants_plant_id_plants_id_fk")
+
+  @@id([garden_id, plant_id], map: "gardens_to_plants_garden_id_plant_id_pk")
+}
+
+model generated_images {
+  id            String  @id
+  plant_id      String
+  url           String?
+  error_message String?
+}
+
+model plants {
+  id                                String                @id(map: "users_pkey")
+  common_name                       String
+  parent1_id                        String?
+  parent2_id                        String?
+  description                       String
+  properties                        Json                  @db.Json
+  image_url                         String?
+  created                           DateTime              @default(now()) @db.Timestamptz(6)
+  author_top                        String?
+  author_bottom                     String?
+  gardens_to_plants                 gardens_to_plants[]
+  users_plants_author_bottomTousers users?                @relation("plants_author_bottomTousers", fields: [author_bottom], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "plants_author_bottom_users_id_fk")
+  users_plants_author_topTousers    users?                @relation("plants_author_topTousers", fields: [author_top], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "plants_author_top_users_id_fk")
+  seedbanks_to_plants               seedbanks_to_plants[]
+}
+
+model presentation_state {
+  screen_id      String @id
+  priority_level Int?
+  contents       Json?  @db.Json
+}
+
+model prompt_settings {
+  id                 String @id
+  text_model         String
+  text_preamble      String
+  text_explanation   String
+  text_instructions  String
+  image_model        String
+  image_instructions String
+}
+
+model seedbanks {
+  id                  String                @id
+  user_id             String?
+  users               users?                @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "seedbanks_user_id_users_id_fk")
+  seedbanks_to_plants seedbanks_to_plants[]
+}
+
+model seedbanks_to_plants {
+  seedbank_id String
+  plant_id    String
+  plants      plants    @relation(fields: [plant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "seedbanks_to_plants_plant_id_plants_id_fk")
+  seedbanks   seedbanks @relation(fields: [seedbank_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "seedbanks_to_plants_seedbank_id_seedbanks_id_fk")
+
+  @@id([seedbank_id, plant_id], map: "seedbanks_to_plants_seedbank_id_plant_id_pk")
+}
+
+model sessions {
+  id         String   @id
+  user_id    String
+  expires_at DateTime @db.Timestamptz(6)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_user_id_users_id_fk")
+}
+
+model users {
+  id                                 String      @id(map: "users_pkey1")
+  username                           String      @unique(map: "users_username_unique")
+  password_hash                      String
+  is_admin                           Boolean?    @default(false)
+  gardens                            gardens[]
+  plants_plants_author_bottomTousers plants[]    @relation("plants_author_bottomTousers")
+  plants_plants_author_topTousers    plants[]    @relation("plants_author_topTousers")
+  seedbanks                          seedbanks[]
+  sessions                           sessions[]
+}
