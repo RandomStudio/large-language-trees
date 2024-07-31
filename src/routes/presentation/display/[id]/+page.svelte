@@ -124,11 +124,11 @@
       ></BRollStatusFeed>
     {/if}
 
-    {#if data.contents.name == bRollNaming.DETAIL && false}
+    {#if data.contents.name == bRollNaming.DETAIL}
       <BRollDetail
-        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
-        plantName={data.contents?.contents.plant.commonName}
-        userName={data.contents?.contents.user.username}
+        imageUrl={data.contents.contents.plant.imageUrl || ""}
+        plantName={data.contents.contents.plant.commonName}
+        userName={data.contents.contents.user.username}
       ></BRollDetail>
     {/if}
 
