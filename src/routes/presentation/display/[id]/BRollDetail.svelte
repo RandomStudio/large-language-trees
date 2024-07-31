@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { afterUpdate } from "svelte";
 
   export let imageUrl: string;
   export let plantName: string;
@@ -7,62 +7,75 @@
 
   let container: HTMLDivElement;
   let plantImage: HTMLImageElement;
-  let description;
-  let originX, originY;
-  let scaleStart,
-    scaleEnd,
-    translateXStart,
-    translateYStart,
-    translateXEnd,
-    translateYEnd;
+  let description: HTMLDivElement;
+  let originX: number, originY: number;
+  let scaleStart: number,
+    scaleEnd: number,
+    translateXStart: number,
+    translateYStart: number,
+    translateXEnd: number,
+    translateYEnd: number;
 
-  let descriptionLeft, descriptionTop;
+  let descriptionLeft: number, descriptionTop: number;
 
-  function getRandom(min, max) {
+  function getRandom(min: number, max: number): number {
     return Math.random() * (max - min) + min;
   }
 
-  function isNonTransparentPixel(x, y, context) {
+  function isNonTransparentPixel(
+    x: number,
+    y: number,
+    context: CanvasRenderingContext2D
+  ): boolean {
     const imageData = context.getImageData(x, y, 1, 1).data;
     return imageData[3] !== 0; // Alpha value 0 indicates transparent
   }
 
-  function setInitialPosition() {
-    const img = container.querySelector("img");
-    description = container.querySelector(".description");
+  function setInitialPosition(): void {
+    const imgWidth: number = plantImage.naturalWidth;
+    const imgHeight: number = plantImage.naturalHeight;
 
-    const imgWidth = img.naturalWidth;
-    const imgHeight = img.naturalHeight;
+    if (!imgWidth || !imgHeight) {
+      console.error("Image dimensions not available.");
+      return;
+    }
 
-    const maxScale = Math.max(scaleStart, scaleEnd);
-    const maxTranslateX = Math.max(
+    const maxScale: number = Math.max(scaleStart, scaleEnd);
+    const maxTranslateX: number = Math.max(
       Math.abs(translateXStart),
       Math.abs(translateXEnd)
     );
-    const maxTranslateY = Math.max(
+    const maxTranslateY: number = Math.max(
       Math.abs(translateYStart),
       Math.abs(translateYEnd)
     );
 
-    const visibleWidth = imgWidth * maxScale;
-    const visibleHeight = imgHeight * maxScale;
+    const visibleWidth: number = imgWidth * maxScale;
+    const visibleHeight: number = imgHeight * maxScale;
 
     // Create a canvas to analyze image transparency
-    const canvas = document.createElement("canvas");
+    const canvas: HTMLCanvasElement = document.createElement("canvas");
     canvas.width = imgWidth;
     canvas.height = imgHeight;
     const context = canvas.getContext("2d");
 
-    // Draw the image onto the canvas
-    context.drawImage(img, 0, 0, imgWidth, imgHeight);
+    if (!context) {
+      throw new Error("Unable to obtain 2D context from canvas.");
+    }
 
-    let placed = false;
-    while (!placed) {
-      const randomMarginWidth = getRandom(
+    // Draw the image onto the canvas
+    context.drawImage(plantImage, 0, 0, imgWidth, imgHeight);
+
+    let placed: boolean = false;
+    let attemptCount = 0;
+
+    while (!placed && attemptCount < 10) {
+      // Limit the number of attempts to avoid infinite loops
+      const randomMarginWidth: number = getRandom(
         visibleWidth * 0.2,
         visibleWidth * 0.3
       );
-      const randomMarginHeight = getRandom(
+      const randomMarginHeight: number = getRandom(
         visibleHeight * 0.2,
         visibleHeight * 0.3
       );
@@ -73,14 +86,14 @@
         descriptionLeft = randomMarginWidth / imgWidth;
         descriptionTop = randomMarginHeight / imgHeight;
 
-        const descWidth = description.offsetWidth;
-        const descHeight = description.offsetHeight;
+        const descWidth: number = description.offsetWidth;
+        const descHeight: number = description.offsetHeight;
 
-        const newLeft = randomMarginWidth * maxScale + maxTranslateX;
-        const newTop = randomMarginHeight * maxScale + maxTranslateY;
+        const newLeft: number = randomMarginWidth * maxScale + maxTranslateX;
+        const newTop: number = randomMarginHeight * maxScale + maxTranslateY;
 
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        const viewportWidth: number = window.innerWidth;
+        const viewportHeight: number = window.innerHeight;
 
         if (
           newLeft + descWidth <= viewportWidth &&
@@ -91,42 +104,56 @@
           placed = true;
         }
       }
+      attemptCount++;
+    }
+
+    if (!placed) {
+      console.error("Failed to place description within viewable area.");
     }
   }
 
-  function updateDescriptionPosition() {
-    // const img = container.querySelector("img");
-    const rect = plantImage.getBoundingClientRect();
+  function updateDescriptionPosition(): void {
+    const rect: DOMRect = plantImage.getBoundingClientRect();
 
-    const imgWidth = rect.width;
-    const imgHeight = rect.height;
+    const imgWidth: number = rect.width;
+    const imgHeight: number = rect.height;
 
-    const newLeft = rect.left + imgWidth * descriptionLeft;
-    const newTop = rect.top + imgHeight * descriptionTop;
+    const newLeft: number = rect.left + imgWidth * descriptionLeft;
+    const newTop: number = rect.top + imgHeight * descriptionTop;
 
     description.style.left = `${newLeft}px`;
     description.style.top = `${newTop}px`;
   }
 
-  function animate() {
+  function animate(): void {
     updateDescriptionPosition();
     requestAnimationFrame(animate);
   }
 
-  onMount(() => {
-    scaleStart = getRandom(0.5, 1.0);
-    scaleEnd = getRandom(1.0, 1.5);
+  // Initialize variables and set initial position
+  $: {
+    if (imageUrl && container && plantImage && description) {
+      scaleStart = getRandom(0.5, 1.0);
+      scaleEnd = getRandom(1.0, 1.5);
 
-    translateXStart = getRandom(-100, 100);
-    translateYStart = getRandom(-100, 100);
-    translateXEnd = getRandom(-100, 100);
-    translateYEnd = getRandom(-100, 100);
+      translateXStart = getRandom(-100, 100);
+      translateYStart = getRandom(-100, 100);
+      translateXEnd = getRandom(-100, 100);
+      translateYEnd = getRandom(-100, 100);
 
-    originX = getRandom(0, 100);
-    originY = getRandom(0, 100);
+      originX = getRandom(0, 100);
+      originY = getRandom(0, 100);
 
-    setInitialPosition();
-    requestAnimationFrame(animate);
+      setInitialPosition();
+      requestAnimationFrame(animate);
+    }
+  }
+
+  // Use afterUpdate to ensure content is fully rendered before positioning
+  afterUpdate(() => {
+    if (description && plantImage) {
+      updateDescriptionPosition();
+    }
   });
 </script>
 
@@ -137,6 +164,7 @@
     Join the Garden!
   </div>
   <div class="absolute right-5 top-5 w-28 h-auto z-10">
+    <!-- svelte-ignore a11y-img-redundant-alt -->
     <img
       src="/livinggarden_QR_purple.png"
       alt="Barcode"
@@ -149,6 +177,7 @@
     class="absolute right-5 top-5 w-[2000px] h-auto z-0"
     style="position: relative;"
   >
+    <!-- Container for the image and text -->
     <img
       bind:this={plantImage}
       src={imageUrl}
@@ -156,13 +185,14 @@
       class="place-content-center h-auto camera-animation"
       style="--scaleStart: {scaleStart}; --scaleEnd: {scaleEnd}; --translateXStart: {translateXStart}px; --translateYStart: {translateYStart}px; --translateXEnd: {translateXEnd}px; --translateYEnd: {translateYEnd}px; transform-origin: {originX}% {originY}%;"
     />
-    <div class="description bg-roel_purple text-roel_rose absolute p-2">
+    <div
+      bind:this={description}
+      class="description bg-roel_purple text-roel_rose absolute p-2"
+    >
       {userName}'s {plantName}
     </div>
   </div>
 </div>
-
-BRollDetail: currently unavailable
 
 <style>
   .camera-animation {
