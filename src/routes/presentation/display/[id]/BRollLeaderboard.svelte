@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let contents;
+  import type { DisplayLeaderboard } from "$lib/events.types";
+
+  export let contents: DisplayLeaderboard;
 </script>
 
 <body class="bg-roel_purple h-screen flex flex-col justify-end">
@@ -11,7 +13,7 @@
       <br />POLLINATORS:
     </div>
 
-    {#each contents as userInfo, index}
+    {#each contents.contents.topPollinators as userInfo, index}
       <div
         class="w-full h-[80px] flex items-center justify-between px-5 {index %
           2 ===

@@ -140,7 +140,7 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
-      <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
+      <BRollLeaderboard contents={data.contents}></BRollLeaderboard>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATISTICS_1}

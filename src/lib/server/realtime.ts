@@ -383,7 +383,9 @@ export const getDataForAmbientDisplay = async (
       };
     }
     default: {
-      throw Error("unknown pickDisplayType");
+      throw Error(
+        "unknown pickDisplayType: " + JSON.stringify({ pickDisplayType })
+      );
     }
   }
 };
