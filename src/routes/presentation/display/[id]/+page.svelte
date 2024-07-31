@@ -89,7 +89,6 @@
   });
 </script>
 
-+page.svelte
 <main>
   <h1>
     Display #{data.id}
@@ -119,19 +118,24 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.STATUS_FEED}
-      <BRollStatusFeed contents={data.contents}></BRollStatusFeed>
+      <BRollStatusFeed
+        eventLogs={data.contents.contents.eventLogs}
+        gardens={data.contents.contents.gardens}
+      ></BRollStatusFeed>
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
       <BRollDetail
-        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
-        plantName={data.contents?.contents.plant.commonName}
-        userName={data.contents?.contents.user.username}
+        imageUrl={data.contents.contents.plant.imageUrl || ""}
+        plantName={data.contents.contents.plant.commonName}
+        userName={data.contents.contents.user.username}
       ></BRollDetail>
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      <BRollZoomOut userName={data.contents.contents.user.username}
+      <BRollZoomOut
+        garden={data.contents.contents.garden}
+        userName={data.contents.contents.user.username}
       ></BRollZoomOut>
     {/if}
 
@@ -140,7 +144,10 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
-      <BRollLeaderboard contents={data.contents}></BRollLeaderboard>
+      <BRollLeaderboard
+        topPollinators={data.contents.contents.topPollinators}
+        topGarden={data.contents.contents.topGarden}
+      ></BRollLeaderboard>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATISTICS_1}
@@ -153,7 +160,10 @@
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_2}
-      <StatsCount count={data.contents?.contents.count}></StatsCount>
+      <StatsCount
+        count={data.contents.contents.count}
+        gardens={data.contents.contents.gardens}
+      ></StatsCount>
     {/if}
   {/if}
 </main>

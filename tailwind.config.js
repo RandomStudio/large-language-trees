@@ -8,7 +8,11 @@ module.exports = {
         roel_blue: "#4B0082",
         dark_grey: "#302F2F",
         mid_grey: "#898989",
-        light_grey: "#D9D9D9"
+        light_grey: "#D9D9D9",
+        roel_purple: "#4B0082",
+        roel_rose: "#FFB6C1",
+        roel_red: "#97021D",
+        roel_yellow: '#F5F2A7'
       },
       scale: {
         125: "1.25"
