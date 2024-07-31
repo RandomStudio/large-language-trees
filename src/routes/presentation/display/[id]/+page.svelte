@@ -25,11 +25,7 @@
   let nextTimeout = Date.now();
   let intervalCheck: NodeJS.Timeout | null = null;
 
-  const notifyServer = async () => {
-    const message: DisplayNotifyServer = {
-      displayId: data.id,
-      event: "timeout"
-    };
+  const notifyServer = async (message: DisplayNotifyServer) => {
     console.log("Notify server that", data.id, "has timed out...");
     const res = await fetch("/api/displayNotifyServer", {
       method: "POST",
@@ -44,6 +40,10 @@
   };
 
   onMount(async () => {
+    notifyServer({
+      event: "init",
+      displayId: data.id
+    });
     if (intervalCheck) {
       clearInterval(intervalCheck);
     }
@@ -54,7 +54,10 @@
     intervalCheck = setInterval(() => {
       if (Date.now() >= nextTimeout) {
         console.log("... Timeout", nextTimeout, "reached!");
-        notifyServer();
+        notifyServer({
+          displayId: data.id,
+          event: "timeout"
+        });
       }
     }, 1000);
 
