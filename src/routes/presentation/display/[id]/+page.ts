@@ -1,3 +1,4 @@
+import { bRollNaming } from "$lib/events.types";
 import type { PageLoad } from "./$types";
 import type { PresentationDisplayFrontendState } from "./types";
 
@@ -6,6 +7,6 @@ export const load: PageLoad = ({
 }): PresentationDisplayFrontendState => {
   return {
     id: params.id,
-    contents: { name: "idle", contents: null }
+    contents: { name: bRollNaming.IDLE, contents: null }
   };
 };
