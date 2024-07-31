@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let contents;
+  import type { DisplayStatusFeed } from "$lib/events.types";
+
+  export let contents: DisplayStatusFeed;
 </script>
 
 <body class="bg-roel_rose">
@@ -46,7 +48,7 @@
   </div>
 
   <div class="absolute left-3 bottom-3 space-y-2 z-20">
-    {#each contents as sentence, index}
+    {#each contents.contents.eventLogs as sentence, index}
       <div
         class="flex items-center space-x-2"
         style="opacity: {0.5 + index * 0.1}"

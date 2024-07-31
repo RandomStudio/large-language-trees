@@ -119,7 +119,7 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.STATUS_FEED}
-      <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
+      <BRollStatusFeed contents={data.contents}></BRollStatusFeed>
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
