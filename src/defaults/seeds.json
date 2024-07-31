@@ -576,22 +576,22 @@
     "description": "Jackfruit trees are marked by their large, glossy, oval leaves and massive, green fruits that hang from the trunk and larger branches. The tree can grow up to 20 meters tall, with a dense canopy. The fruits are notable for their bumpy, fibrous texture and considerable size."
   },
   {
-    "id": "jade_plant",
-    "commonName": "Jade Plant",
-    "imageUrl": "/plants/jade_plant.png",
+    "id": "pink_caladium",
+    "commonName": "Pink Caladium",
+    "imageUrl": "/plants/pink_caladium.png",
     "properties": {
-      "flowerColour": "White",
-      "flowerColourRGB": "#FFFFFF",
-      "petalCountRange": "Small",
-      "petalShape": "Star-shaped",
-      "leafColour": "Green",
-      "leafColourRGB": "#008000",
-      "leafShape": "Oval",
+      "flowerColour": "N/A",
+      "flowerColourRGB": "N/A",
+      "petalCountRange": "N/A",
+      "petalShape": "N/A",
+      "leafColour": "Pink with green edges",
+      "leafColourRGB": "#FF69B4",
+      "leafShape": "Heart-shaped",
       "leafMarginDescription": "Smooth",
-      "heightInMetres": 1.0,
-      "funFact": "Jade plants are popular in feng shui for supposedly bringing financial luck; they are also very easy to care for."
+      "heightInMetres": 0.5,
+      "funFact": "Caladiums are often called 'Angel Wings' due to their uniquely shaped and colorful foliage."
     },
-    "description": "The jade plant features thick, shiny, smooth green leaves that grow in opposing pairs along the branches. It is a succulent with a woody stem that can grow into a small shrub-like appearance, reaching up to one meter in height. White, star-shaped flowers bloom in clusters."
+    "description": "Pink Caladium is a popular ornamental plant known for its large, heart-shaped leaves that are predominantly pink with green edges. Unlike many plants, Caladiums are primarily grown for their striking foliage rather than their flowers. The plant typically grows up to 0.5 meters tall and is widely used in gardens and as a houseplant for its vibrant, eye-catching leaves. Native to South America, Pink Caladiums are prized for adding a splash of color to shaded garden areas."
   },
   {
     "id": "magnolia",
@@ -630,22 +630,22 @@
     "description": "Birch trees are easily identifiable by their white, peeling bark and triangular, serrated leaves. They can grow up to 30 meters tall, often forming slender, upright trunks. The leaves turn a bright yellow in the fall, adding seasonal beauty to their surroundings."
   },
   {
-    "id": "carnivorous_plants",
-    "commonName": "Carnivorous Plants",
-    "imageUrl": "/plants/carnivorous_plants.png",
+    "id": "lingonberry",
+    "commonName": "Lingonberry",
+    "imageUrl": "/plants/lingonberry.png",
     "properties": {
-      "flowerColour": "Varies",
-      "flowerColourRGB": null,
-      "petalCountRange": "Varies",
-      "petalShape": "Varies",
+      "flowerColour": "White to pale pink",
+      "flowerColourRGB": "#F8F8FF",
+      "petalCountRange": "Four",
+      "petalShape": "Bell-shaped",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Modified",
-      "leafMarginDescription": "Varies",
-      "heightInMetres": 0.5,
-      "funFact": "Carnivorous plants have evolved various mechanisms to trap and digest insects and other small creatures as a way to supplement the poor mineral nutrition they get from the environments."
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Lingonberries are rich in antioxidants and are a traditional food in Scandinavian cuisine, often made into jams and sauces."
     },
-    "description": "Carnivorous plants exhibit a variety of trapping mechanisms, including sticky surfaces, pitfall traps, and snap traps, often accompanied by vivid colors to attract prey. Their modified leaves perform these functions, with each species adapting uniquely to its environment. These plants are generally small, usually not exceeding half a meter in height."
+    "description": "Lingonberry (*Vaccinium vitis-idaea*) is a low-growing evergreen shrub known for its small, oval green leaves and clusters of white to pale pink, bell-shaped flowers. The plant typically grows up to 0.3 meters tall and produces bright red, tart berries. Lingonberries are commonly found in the boreal forests and Arctic tundra and are prized for their use in traditional dishes, particularly in Northern European cuisine."
   },
   {
     "id": "oak",
@@ -810,22 +810,22 @@
     "description": "Poppies are noted for their vibrant red flowers with delicate, round petals that appear in late spring to early summer. Their leaves are lanceolate, green, and often serrated. Poppies grow quickly and reach about 50 centimeters in height, forming clumps."
   },
   {
-    "id": "cactus",
-    "commonName": "Cactus",
-    "imageUrl": "/plants/cactus.png",
+    "id": "amorphophallus_titanum",
+    "commonName": "Titan Arum",
+    "imageUrl": "/plants/amorphophallus_titanum.png",
     "properties": {
-      "flowerColour": "Varies",
-      "flowerColourRGB": null,
-      "petalCountRange": "Many",
-      "petalShape": "Varies",
+      "flowerColour": "Deep red",
+      "flowerColourRGB": "#8B0000",
+      "petalCountRange": "One large spathe",
+      "petalShape": "Funnel-shaped",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Spiny",
-      "leafMarginDescription": "None",
-      "heightInMetres": 2.5,
-      "funFact": "Cacti are specially adapted to dry environments with modifications such as spines for defense and thick stems for water storage."
+      "leafShape": "Large and divided",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 3,
+      "funFact": "The Titan Arum produces one of the largest flowers in the world and emits a strong odor resembling rotting flesh to attract pollinators."
     },
-    "description": "Cacti are diverse in form but commonly have thick, fleshy stems covered in spines. They may grow as singular columns or branched systems and can vary greatly in height. Flowers, when present, are often colorful and large compared to the body of the cactus."
+    "description": "*Amorphophallus titanum*, commonly known as the Titan Arum or Corpse Flower, is a rare and unusual plant native to the rainforests of Sumatra. It is famous for its massive inflorescence, which can reach up to 3 meters in height. The flower consists of a large, funnel-shaped spathe that is deep red on the inside, surrounding a tall central spadix. The plant emits a strong odor of rotting flesh to attract carrion beetles and flies for pollination. The Titan Arum is a remarkable and infrequent bloomer, making it a popular attraction when it does flower."
   },
   {
     "id": "azalea",
@@ -2520,7 +2520,7 @@
     "description": "Apple trees are deciduous with a spreading habit and are celebrated for their springtime bloom of white flowers followed by edible fruits. They typically grow up to 10 meters tall."
   },
   {
-    "id": "banana",
+    "id": "musa_acuminata",
     "commonName": "Banana",
     "imageUrl": "/plants/banana.png",
     "properties": {
@@ -2574,7 +2574,7 @@
     "description": "Blueberry bushes produce bell-shaped white flowers and dark blue berries. They have green, oval leaves and can grow up to 2 meters tall, thriving in acidic soil."
   },
   {
-    "id": "broccoli",
+    "id": "Brassica_oleracea",
     "commonName": "Broccoli",
     "imageUrl": "/plants/broccoli.png",
     "properties": {
@@ -3078,22 +3078,22 @@
     "description": "Peach trees bloom with stunning pink flowers each spring, followed by juicy, fuzzy fruits. The trees have lanceolate, green, serrated leaves and can grow up to 5 meters tall."
   },
   {
-    "id": "pear",
-    "commonName": "Pear",
-    "imageUrl": "/plants/pear.png",
+    "id": "hydnora_africana",
+    "commonName": "Hydnora africana",
+    "imageUrl": "/plants/hydnora_africana.png",
     "properties": {
-      "flowerColour": "White",
-      "flowerColourRGB": "#FFFFFF",
-      "petalCountRange": "5",
-      "petalShape": "Round",
-      "leafColour": "Green",
-      "leafColourRGB": "#008000",
-      "leafShape": "Oval",
-      "leafMarginDescription": "Serrated",
-      "heightInMetres": 10.0,
-      "funFact": "Pear trees are known for their longevity, with some orchards boasting trees over 100 years old still producing fruit."
+      "flowerColour": "Brownish-orange",
+      "flowerColourRGB": "#D2691E",
+      "petalCountRange": "Three",
+      "petalShape": "Fleshy and tubular",
+      "leafColour": "None",
+      "leafColourRGB": "N/A",
+      "leafShape": "N/A",
+      "leafMarginDescription": "N/A",
+      "heightInMetres": 0.3,
+      "funFact": "Hydnora africana is a parasitic plant that spends most of its life underground, only emerging to flower. It emits a strong odor to attract pollinators."
     },
-    "description": "Pear trees feature white flowers in early spring and produce sweet, bell-shaped fruits. They have green, oval leaves and can reach heights of up to 10 meters."
+    "description": "*Hydnora africana* is a parasitic plant native to southern Africa, known for its unusual appearance and behavior. It lacks chlorophyll, which means it does not have green leaves and does not perform photosynthesis. The plant has fleshy, tubular flowers that are brownish-orange in color. Typically, *Hydnora africana* grows up to 0.3 meters tall when it emerges above ground to flower. It emits a strong, unpleasant odor to attract beetles, its primary pollinators."
   },
   {
     "id": "Ananas comosus",
@@ -3109,7 +3109,7 @@
       "leafShape": "Sword-shaped",
       "leafMarginDescription": "Spiky",
       "heightInMetres": 1.0,
-      "funFact": "Pineapple plants can take up to 24 months to produce a single pineapple and are the only bromeliad to produce edible fruit."
+      "funFact": "Ananas comosus can take up to 24 months to produce a single pineapple and are the only bromeliad to produce edible fruit."
     },
     "description": "Pineapple plants have spiky, sword-shaped leaves and produce a large, spiky fruit from the center of the rosette. The plants are short, generally not exceeding 1 meter in height."
   },

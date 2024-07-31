@@ -36,7 +36,7 @@
     "description": "Roses display a magnificent array of petal colors and arrangements, with each bloom consisting of 5 to 40 rounded petals. The green, oval-shaped leaves feature serrated margins. Typically, roses grow to a height of about 0.2 meters."
   },
   {
-    "id": "common_mushroom",
+    "id": "Agaricus bisporus",
     "commonName": "Common Mushroom",
     "imageUrl": "/plants/common_mushroom.png",
     "properties": {
@@ -252,22 +252,22 @@
     "description": "Blue agave plants are recognized by their rosette of thick, sword-shaped leaves that have a distinctive blue-green color with spiky margins. They can grow up to 2 meters tall. The plant flowers once in its lifetime, producing a tall spike with clusters of yellow flowers."
   },
   {
-    "id": "venus_flytrap",
-    "commonName": "Venus Flytrap",
-    "imageUrl": "/plants/venus_flytrap.png",
+    "id": "bladderworts",
+    "commonName": "Bladderworts",
+    "imageUrl": "/plants/bladderworts.png",
     "properties": {
-      "flowerColour": "White",
-      "flowerColourRGB": "#FFFFFF",
-      "petalCountRange": "5-7",
-      "petalShape": "Oval",
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Five",
+      "petalShape": "Lipped",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Modified",
-      "leafMarginDescription": "Spiky",
-      "heightInMetres": 0.1,
-      "funFact": "The Venus flytrap is a carnivorous plant that captures and digests small insects and arthropods with its modified leaves that snap shut when triggered."
+      "leafShape": "Filamentous",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Bladderworts are unique among plants for their bladder-like traps that capture tiny aquatic prey."
     },
-    "description": "The Venus flytrap features small, modified leaves that act as traps with inner surfaces lined with hair-like structures that detect prey. The leaves snap shut when these hairs are touched twice in quick succession. It also produces small white flowers on tall stems above the traps."
+    "description": "Bladderworts are fascinating carnivorous plants known for their intricate, filamentous green leaves and small, bladder-like traps used to capture tiny aquatic organisms. They produce vibrant yellow flowers with a distinctive lipped shape. Typically, bladderworts grow up to 0.5 meters tall and are found in freshwater environments, where their carnivorous nature helps them thrive in nutrient-poor conditions."
   },
   {
     "id": "redwood",
@@ -450,6 +450,24 @@
     "description": "Palm trees are characterized by their tall, unbranched trunks topped with a crown of large, arching fronds. These fronds are typically long and feather-shaped, emerging directly from the top of the trunk. Palms can reach significant heights, often standing as iconic figures in tropical landscapes."
   },
   {
+    "id": "ficus_carica",
+    "commonName": "Common Fig",
+    "imageUrl": "/plants/ficus_carica.png",
+    "properties": {
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
+      "petalCountRange": "Inconspicuous",
+      "petalShape": "N/A",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 10,
+      "funFact": "The fig is one of the first plants cultivated by humans, with a history dating back over 11,000 years."
+    },
+    "description": "Ficus carica, commonly known as the Common Fig, is a deciduous tree or large shrub that produces sweet, edible fruits. It has large, deeply lobed green leaves and inconspicuous flowers that develop inside the fruit. Typically, the Common Fig grows up to 10 meters tall and is valued both for its delicious fruit and its ornamental appeal in gardens."
+  },
+  {
     "id": "ferns",
     "commonName": "Ferns",
     "imageUrl": "/plants/ferns.png",
@@ -558,22 +576,22 @@
     "description": "Jackfruit trees are marked by their large, glossy, oval leaves and massive, green fruits that hang from the trunk and larger branches. The tree can grow up to 20 meters tall, with a dense canopy. The fruits are notable for their bumpy, fibrous texture and considerable size."
   },
   {
-    "id": "jade_plant",
-    "commonName": "Jade Plant",
-    "imageUrl": "/plants/jade_plant.png",
+    "id": "pink_caladium",
+    "commonName": "Pink Caladium",
+    "imageUrl": "/plants/pink_caladium.png",
     "properties": {
-      "flowerColour": "White",
-      "flowerColourRGB": "#FFFFFF",
-      "petalCountRange": "Small",
-      "petalShape": "Star-shaped",
-      "leafColour": "Green",
-      "leafColourRGB": "#008000",
-      "leafShape": "Oval",
+      "flowerColour": "N/A",
+      "flowerColourRGB": "N/A",
+      "petalCountRange": "N/A",
+      "petalShape": "N/A",
+      "leafColour": "Pink with green edges",
+      "leafColourRGB": "#FF69B4",
+      "leafShape": "Heart-shaped",
       "leafMarginDescription": "Smooth",
-      "heightInMetres": 1.0,
-      "funFact": "Jade plants are popular in feng shui for supposedly bringing financial luck; they are also very easy to care for."
+      "heightInMetres": 0.5,
+      "funFact": "Caladiums are often called 'Angel Wings' due to their uniquely shaped and colorful foliage."
     },
-    "description": "The jade plant features thick, shiny, smooth green leaves that grow in opposing pairs along the branches. It is a succulent with a woody stem that can grow into a small shrub-like appearance, reaching up to one meter in height. White, star-shaped flowers bloom in clusters."
+    "description": "Pink Caladium is a popular ornamental plant known for its large, heart-shaped leaves that are predominantly pink with green edges. Unlike many plants, Caladiums are primarily grown for their striking foliage rather than their flowers. The plant typically grows up to 0.5 meters tall and is widely used in gardens and as a houseplant for its vibrant, eye-catching leaves. Native to South America, Pink Caladiums are prized for adding a splash of color to shaded garden areas."
   },
   {
     "id": "magnolia",
@@ -612,22 +630,22 @@
     "description": "Birch trees are easily identifiable by their white, peeling bark and triangular, serrated leaves. They can grow up to 30 meters tall, often forming slender, upright trunks. The leaves turn a bright yellow in the fall, adding seasonal beauty to their surroundings."
   },
   {
-    "id": "carnivorous_plants",
-    "commonName": "Carnivorous Plants",
-    "imageUrl": "/plants/carnivorous_plants.png",
+    "id": "lingonberry",
+    "commonName": "Lingonberry",
+    "imageUrl": "/plants/lingonberry.png",
     "properties": {
-      "flowerColour": "Varies",
-      "flowerColourRGB": null,
-      "petalCountRange": "Varies",
-      "petalShape": "Varies",
+      "flowerColour": "White to pale pink",
+      "flowerColourRGB": "#F8F8FF",
+      "petalCountRange": "Four",
+      "petalShape": "Bell-shaped",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Modified",
-      "leafMarginDescription": "Varies",
-      "heightInMetres": 0.5,
-      "funFact": "Carnivorous plants have evolved various mechanisms to trap and digest insects and other small creatures as a way to supplement the poor mineral nutrition they get from the environments."
+      "leafShape": "Oval",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.3,
+      "funFact": "Lingonberries are rich in antioxidants and are a traditional food in Scandinavian cuisine, often made into jams and sauces."
     },
-    "description": "Carnivorous plants exhibit a variety of trapping mechanisms, including sticky surfaces, pitfall traps, and snap traps, often accompanied by vivid colors to attract prey. Their modified leaves perform these functions, with each species adapting uniquely to its environment. These plants are generally small, usually not exceeding half a meter in height."
+    "description": "Lingonberry (*Vaccinium vitis-idaea*) is a low-growing evergreen shrub known for its small, oval green leaves and clusters of white to pale pink, bell-shaped flowers. The plant typically grows up to 0.3 meters tall and produces bright red, tart berries. Lingonberries are commonly found in the boreal forests and Arctic tundra and are prized for their use in traditional dishes, particularly in Northern European cuisine."
   },
   {
     "id": "oak",
@@ -792,22 +810,22 @@
     "description": "Poppies are noted for their vibrant red flowers with delicate, round petals that appear in late spring to early summer. Their leaves are lanceolate, green, and often serrated. Poppies grow quickly and reach about 50 centimeters in height, forming clumps."
   },
   {
-    "id": "cactus",
-    "commonName": "Cactus",
-    "imageUrl": "/plants/cactus.png",
+    "id": "amorphophallus_titanum",
+    "commonName": "Titan Arum",
+    "imageUrl": "/plants/amorphophallus_titanum.png",
     "properties": {
-      "flowerColour": "Varies",
-      "flowerColourRGB": null,
-      "petalCountRange": "Many",
-      "petalShape": "Varies",
+      "flowerColour": "Deep red",
+      "flowerColourRGB": "#8B0000",
+      "petalCountRange": "One large spathe",
+      "petalShape": "Funnel-shaped",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Spiny",
-      "leafMarginDescription": "None",
-      "heightInMetres": 2.5,
-      "funFact": "Cacti are specially adapted to dry environments with modifications such as spines for defense and thick stems for water storage."
+      "leafShape": "Large and divided",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 3,
+      "funFact": "The Titan Arum produces one of the largest flowers in the world and emits a strong odor resembling rotting flesh to attract pollinators."
     },
-    "description": "Cacti are diverse in form but commonly have thick, fleshy stems covered in spines. They may grow as singular columns or branched systems and can vary greatly in height. Flowers, when present, are often colorful and large compared to the body of the cactus."
+    "description": "*Amorphophallus titanum*, commonly known as the Titan Arum or Corpse Flower, is a rare and unusual plant native to the rainforests of Sumatra. It is famous for its massive inflorescence, which can reach up to 3 meters in height. The flower consists of a large, funnel-shaped spathe that is deep red on the inside, surrounding a tall central spadix. The plant emits a strong odor of rotting flesh to attract carrion beetles and flies for pollination. The Titan Arum is a remarkable and infrequent bloomer, making it a popular attraction when it does flower."
   },
   {
     "id": "azalea",
@@ -1206,22 +1224,22 @@
     "description": "Quince trees produce striking pink flowers and have a dense foliage of green, oval leaves with serrated margins. They typically grow up to 5 meters tall and bear fruit that is aromatic and firm, often used in cooking and preserves."
   },
   {
-    "id": "rosemary",
-    "commonName": "Rosemary",
-    "imageUrl": "/plants/rosemary.png",
+    "id": "mistletoe",
+    "commonName": "Mistletoe",
+    "imageUrl": "/plants/mistletoe.png",
     "properties": {
-      "flowerColour": "Blue",
-      "flowerColourRGB": "#0000FF",
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
       "petalCountRange": "Small",
-      "petalShape": "Tubular",
+      "petalShape": "Round",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Needle-like",
+      "leafShape": "Oval",
       "leafMarginDescription": "Smooth",
-      "heightInMetres": 1.5,
-      "funFact": "Rosemary is not only a popular culinary herb but also has traditional uses in folk medicine, believed to improve memory."
+      "heightInMetres": 0.6,
+      "funFact": "Mistletoe is famously known for its role in Christmas traditions, where it is used as a decoration under which people kiss."
     },
-    "description": "Rosemary is an aromatic shrub with needle-like leaves that are rich green and highly fragrant. It produces small, tubular blue flowers. Typically, rosemary grows up to 1.5 meters tall and is favored in gardens for both its culinary and ornamental uses."
+    "description": "Mistletoe is a parasitic plant that attaches to and extracts nutrients from its host plants. It has green, oval leaves and produces small, white, round flowers. Typically, mistletoe grows up to 0.6 meters tall and is often associated with winter holidays and traditions."
   },
   {
     "id": "saffron_crocus",
@@ -1242,22 +1260,22 @@
     "description": "Saffron Crocus is known for its vibrant purple flowers and delicate, grass-like green leaves. The plant is small, typically growing to 30 centimeters tall, and blooms in autumn. The prized saffron stigmas are harvested from within the flowers."
   },
   {
-    "id": "sage",
-    "commonName": "Sage",
-    "imageUrl": "/plants/sage.png",
+    "id": "basil",
+    "commonName": "Basil",
+    "imageUrl": "/plants/basil.png",
     "properties": {
-      "flowerColour": "Purple",
-      "flowerColourRGB": "#800080",
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
       "petalCountRange": "Small",
       "petalShape": "Tubular",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
       "leafShape": "Oval",
-      "leafMarginDescription": "Serrated",
-      "heightInMetres": 0.6,
-      "funFact": "Sage has been used for centuries as a culinary herb and in medicinal applications, believed to have anti-inflammatory properties."
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 0.5,
+      "funFact": "Basil is not only a key ingredient in many Italian dishes but also has a history of being considered a holy herb in various cultures."
     },
-    "description": "Sage is a perennial herb with woolly, oval leaves that are green and often have a slightly serrated margin. It produces small, tubular purple flowers. Sage typically grows about 60 centimeters tall and is a popular herb in both culinary and ornamental gardens."
+    "description": "Basil is a widely used culinary herb with bright green, oval leaves that are highly aromatic. It produces small, white, tubular flowers. Typically, basil grows up to 0.5 meters tall and is cherished in gardens for its culinary versatility and pleasant fragrance."
   },
   {
     "id": "salvia",
@@ -2196,24 +2214,6 @@
     "description": "Christmas Cactus is known for its unique, segmented leaves and vivid pink, tubular flowers that bloom typically during the winter holidays. It commonly grows as a houseplant and reaches about 30 cm in height."
   },
   {
-    "id": "chrysoprase",
-    "commonName": "Chrysoprase",
-    "imageUrl": "/plants/chrysoprase.png",
-    "properties": {
-      "flowerColour": "None",
-      "flowerColourRGB": "None",
-      "petalCountRange": "None",
-      "petalShape": "None",
-      "leafColour": "None",
-      "leafColourRGB": "None",
-      "leafShape": "None",
-      "leafMarginDescription": "None",
-      "heightInMetres": 0,
-      "funFact": "Chrysoprase is actually a gemstone, not a plant, valued for its bright green color and used in jewelry and decorative art."
-    },
-    "description": "Chrysoprase is a gemstone known for its vibrant, apple-green hue which comes from nickel content. It is polished and used in various decorative and jewelry applications."
-  },
-  {
     "id": "clematis",
     "commonName": "Clematis",
     "imageUrl": "/plants/clematis.png",
@@ -2520,7 +2520,7 @@
     "description": "Apple trees are deciduous with a spreading habit and are celebrated for their springtime bloom of white flowers followed by edible fruits. They typically grow up to 10 meters tall."
   },
   {
-    "id": "banana",
+    "id": "musa_acuminata",
     "commonName": "Banana",
     "imageUrl": "/plants/banana.png",
     "properties": {
@@ -2538,22 +2538,22 @@
     "description": "Banana plants are known for their large, paddle-shaped leaves and towering flower stalks, which produce hands of bananas. They can grow up to 7 meters tall and are commonly found in tropical regions."
   },
   {
-    "id": "basil",
-    "commonName": "Basil",
-    "imageUrl": "/plants/basil.png",
+    "id": "rice",
+    "commonName": "Rice",
+    "imageUrl": "/plants/rice.png",
     "properties": {
-      "flowerColour": "White",
-      "flowerColourRGB": "#FFFFFF",
+      "flowerColour": "Green",
+      "flowerColourRGB": "#008000",
       "petalCountRange": "Small",
-      "petalShape": "Tubular",
+      "petalShape": "Spikelet",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Oval",
+      "leafShape": "Linear",
       "leafMarginDescription": "Smooth",
-      "heightInMetres": 0.5,
-      "funFact": "Basil is highly aromatic with a variety of culinary uses, and it is particularly noted for its role in Italian cuisine."
+      "heightInMetres": 1.2,
+      "funFact": "Rice is a staple food for more than half of the world's population and has been cultivated for over 5,000 years."
     },
-    "description": "Basil is a popular culinary herb featuring small white flowers and aromatic, green, oval leaves. It typically grows up to 50 cm tall and is a staple in herb gardens."
+    "description": "Rice is a grass species widely cultivated for its edible grain, a staple food in many parts of the world. The plant has long, slender, linear green leaves and produces small, green spikelet flowers. Typically, rice plants grow up to 1.2 meters tall and are commonly grown in flooded fields known as paddies."
   },
   {
     "id": "blueberry",
@@ -2574,7 +2574,7 @@
     "description": "Blueberry bushes produce bell-shaped white flowers and dark blue berries. They have green, oval leaves and can grow up to 2 meters tall, thriving in acidic soil."
   },
   {
-    "id": "broccoli",
+    "id": "Brassica_oleracea",
     "commonName": "Broccoli",
     "imageUrl": "/plants/broccoli.png",
     "properties": {
@@ -3078,25 +3078,25 @@
     "description": "Peach trees bloom with stunning pink flowers each spring, followed by juicy, fuzzy fruits. The trees have lanceolate, green, serrated leaves and can grow up to 5 meters tall."
   },
   {
-    "id": "pear",
-    "commonName": "Pear",
-    "imageUrl": "/plants/pear.png",
+    "id": "hydnora_africana",
+    "commonName": "Hydnora africana",
+    "imageUrl": "/plants/hydnora_africana.png",
     "properties": {
-      "flowerColour": "White",
-      "flowerColourRGB": "#FFFFFF",
-      "petalCountRange": "5",
-      "petalShape": "Round",
-      "leafColour": "Green",
-      "leafColourRGB": "#008000",
-      "leafShape": "Oval",
-      "leafMarginDescription": "Serrated",
-      "heightInMetres": 10.0,
-      "funFact": "Pear trees are known for their longevity, with some orchards boasting trees over 100 years old still producing fruit."
+      "flowerColour": "Brownish-orange",
+      "flowerColourRGB": "#D2691E",
+      "petalCountRange": "Three",
+      "petalShape": "Fleshy and tubular",
+      "leafColour": "None",
+      "leafColourRGB": "N/A",
+      "leafShape": "N/A",
+      "leafMarginDescription": "N/A",
+      "heightInMetres": 0.3,
+      "funFact": "Hydnora africana is a parasitic plant that spends most of its life underground, only emerging to flower. It emits a strong odor to attract pollinators."
     },
-    "description": "Pear trees feature white flowers in early spring and produce sweet, bell-shaped fruits. They have green, oval leaves and can reach heights of up to 10 meters."
+    "description": "*Hydnora africana* is a parasitic plant native to southern Africa, known for its unusual appearance and behavior. It lacks chlorophyll, which means it does not have green leaves and does not perform photosynthesis. The plant has fleshy, tubular flowers that are brownish-orange in color. Typically, *Hydnora africana* grows up to 0.3 meters tall when it emerges above ground to flower. It emits a strong, unpleasant odor to attract beetles, its primary pollinators."
   },
   {
-    "id": "pineapple",
+    "id": "Ananas comosus",
     "commonName": "Pineapple",
     "imageUrl": "/plants/pineapple.png",
     "properties": {
@@ -3109,7 +3109,7 @@
       "leafShape": "Sword-shaped",
       "leafMarginDescription": "Spiky",
       "heightInMetres": 1.0,
-      "funFact": "Pineapple plants can take up to 24 months to produce a single pineapple and are the only bromeliad to produce edible fruit."
+      "funFact": "Ananas comosus can take up to 24 months to produce a single pineapple and are the only bromeliad to produce edible fruit."
     },
     "description": "Pineapple plants have spiky, sword-shaped leaves and produce a large, spiky fruit from the center of the rosette. The plants are short, generally not exceeding 1 meter in height."
   },
@@ -3276,22 +3276,22 @@
     "description": "Squash plants are known for their sprawling growth, broad green leaves, and large yellow flowers. They produce a variety of fruits in different shapes and sizes, typically growing about 60 cm tall."
   },
   {
-    "id": "strawberry",
-    "commonName": "Strawberry",
-    "imageUrl": "/plants/strawberry.png",
+    "id": "papaya",
+    "commonName": "Papaya",
+    "imageUrl": "/plants/papaya.png",
     "properties": {
       "flowerColour": "White",
       "flowerColourRGB": "#FFFFFF",
-      "petalCountRange": "5",
-      "petalShape": "Round",
+      "petalCountRange": "Five",
+      "petalShape": "Star-shaped",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Triangular",
-      "leafMarginDescription": "Serrated",
-      "heightInMetres": 0.2,
-      "funFact": "Strawberries are the only fruit with seeds on the outside, each berry can have over 200 seeds."
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 10,
+      "funFact": "Papaya is rich in an enzyme called papain, which aids digestion and is used as a meat tenderizer."
     },
-    "description": "Strawberry plants are low-growing, with white flowers and juicy, red fruits. They have green, triangular, serrated leaves and spread through runners."
+    "description": "Papaya is a tropical fruit tree that produces large, lobed green leaves and small, star-shaped white flowers. The tree can grow up to 10 meters tall and is known for its sweet, orange-fleshed fruit. Papaya is widely cultivated for both its delicious fruit and its digestive health benefits."
   },
   {
     "id": "sweet_potato",
@@ -3330,22 +3330,22 @@
     "description": "Tarragon plants have slim, green leaves and small, inconspicuous flowers. They grow to about 60 cm tall and are valued for their aromatic, flavorful leaves."
   },
   {
-    "id": "tomato",
-    "commonName": "Tomato",
-    "imageUrl": "/plants/tomato.png",
+    "id": "forsythia",
+    "commonName": "Forsythia",
+    "imageUrl": "/plants/forsythia.png",
     "properties": {
       "flowerColour": "Yellow",
       "flowerColourRGB": "#FFFF00",
-      "petalCountRange": "5",
-      "petalShape": "Star-shaped",
+      "petalCountRange": "Four",
+      "petalShape": "Bell-shaped",
       "leafColour": "Green",
       "leafColourRGB": "#008000",
-      "leafShape": "Compound",
+      "leafShape": "Oval",
       "leafMarginDescription": "Serrated",
-      "heightInMetres": 2.0,
-      "funFact": "Tomatoes are botanically considered fruits, but are commonly used as vegetables in cooking."
+      "heightInMetres": 3,
+      "funFact": "Forsythia is often one of the first shrubs to bloom in spring, making it a symbol of the season’s arrival."
     },
-    "description": "Tomato plants are vigorous growers with compound green leaves and bright yellow, star-shaped flowers. They produce edible fruits that range in color from red to yellow, green, and even purple."
+    "description": "Forsythia is a deciduous shrub known for its vibrant yellow, bell-shaped flowers that bloom in early spring. The plant has green, oval leaves with serrated edges. Typically, forsythia grows up to 3 meters tall and is favored in gardens for its early blooming and striking appearance."
   },
   {
     "id": "watermelon",
