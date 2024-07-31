@@ -5,131 +5,131 @@
   export let plantName: string;
   export let userName: string;
 
-  // let container;
-  // let description;
-  // let originX, originY;
-  // let scaleStart,
-  //   scaleEnd,
-  //   translateXStart,
-  //   translateYStart,
-  //   translateXEnd,
-  //   translateYEnd;
+  let container: HTMLDivElement;
+  let plantImage: HTMLImageElement;
+  let description;
+  let originX, originY;
+  let scaleStart,
+    scaleEnd,
+    translateXStart,
+    translateYStart,
+    translateXEnd,
+    translateYEnd;
 
-  // let descriptionLeft, descriptionTop;
+  let descriptionLeft, descriptionTop;
 
-  // function getRandom(min, max) {
-  //   return Math.random() * (max - min) + min;
-  // }
+  function getRandom(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
-  // function isNonTransparentPixel(x, y, context) {
-  //   const imageData = context.getImageData(x, y, 1, 1).data;
-  //   return imageData[3] !== 0; // Alpha value 0 indicates transparent
-  // }
+  function isNonTransparentPixel(x, y, context) {
+    const imageData = context.getImageData(x, y, 1, 1).data;
+    return imageData[3] !== 0; // Alpha value 0 indicates transparent
+  }
 
-  // function setInitialPosition() {
-  //   const img = container.querySelector("img");
-  //   description = container.querySelector(".description");
+  function setInitialPosition() {
+    const img = container.querySelector("img");
+    description = container.querySelector(".description");
 
-  //   const imgWidth = img.naturalWidth;
-  //   const imgHeight = img.naturalHeight;
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
 
-  //   const maxScale = Math.max(scaleStart, scaleEnd);
-  //   const maxTranslateX = Math.max(
-  //     Math.abs(translateXStart),
-  //     Math.abs(translateXEnd)
-  //   );
-  //   const maxTranslateY = Math.max(
-  //     Math.abs(translateYStart),
-  //     Math.abs(translateYEnd)
-  //   );
+    const maxScale = Math.max(scaleStart, scaleEnd);
+    const maxTranslateX = Math.max(
+      Math.abs(translateXStart),
+      Math.abs(translateXEnd)
+    );
+    const maxTranslateY = Math.max(
+      Math.abs(translateYStart),
+      Math.abs(translateYEnd)
+    );
 
-  //   const visibleWidth = imgWidth * maxScale;
-  //   const visibleHeight = imgHeight * maxScale;
+    const visibleWidth = imgWidth * maxScale;
+    const visibleHeight = imgHeight * maxScale;
 
-  //   // Create a canvas to analyze image transparency
-  //   const canvas = document.createElement("canvas");
-  //   canvas.width = imgWidth;
-  //   canvas.height = imgHeight;
-  //   const context = canvas.getContext("2d");
+    // Create a canvas to analyze image transparency
+    const canvas = document.createElement("canvas");
+    canvas.width = imgWidth;
+    canvas.height = imgHeight;
+    const context = canvas.getContext("2d");
 
-  //   // Draw the image onto the canvas
-  //   context.drawImage(img, 0, 0, imgWidth, imgHeight);
+    // Draw the image onto the canvas
+    context.drawImage(img, 0, 0, imgWidth, imgHeight);
 
-  //   let placed = false;
-  //   while (!placed) {
-  //     const randomMarginWidth = getRandom(
-  //       visibleWidth * 0.2,
-  //       visibleWidth * 0.3
-  //     );
-  //     const randomMarginHeight = getRandom(
-  //       visibleHeight * 0.2,
-  //       visibleHeight * 0.3
-  //     );
+    let placed = false;
+    while (!placed) {
+      const randomMarginWidth = getRandom(
+        visibleWidth * 0.2,
+        visibleWidth * 0.3
+      );
+      const randomMarginHeight = getRandom(
+        visibleHeight * 0.2,
+        visibleHeight * 0.3
+      );
 
-  //     if (
-  //       isNonTransparentPixel(randomMarginWidth, randomMarginHeight, context)
-  //     ) {
-  //       descriptionLeft = randomMarginWidth / imgWidth;
-  //       descriptionTop = randomMarginHeight / imgHeight;
+      if (
+        isNonTransparentPixel(randomMarginWidth, randomMarginHeight, context)
+      ) {
+        descriptionLeft = randomMarginWidth / imgWidth;
+        descriptionTop = randomMarginHeight / imgHeight;
 
-  //       const descWidth = description.offsetWidth;
-  //       const descHeight = description.offsetHeight;
+        const descWidth = description.offsetWidth;
+        const descHeight = description.offsetHeight;
 
-  //       const newLeft = randomMarginWidth * maxScale + maxTranslateX;
-  //       const newTop = randomMarginHeight * maxScale + maxTranslateY;
+        const newLeft = randomMarginWidth * maxScale + maxTranslateX;
+        const newTop = randomMarginHeight * maxScale + maxTranslateY;
 
-  //       const viewportWidth = window.innerWidth;
-  //       const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
 
-  //       if (
-  //         newLeft + descWidth <= viewportWidth &&
-  //         newTop + descHeight <= viewportHeight
-  //       ) {
-  //         description.style.left = `${randomMarginWidth}px`;
-  //         description.style.top = `${randomMarginHeight}px`;
-  //         placed = true;
-  //       }
-  //     }
-  //   }
-  // }
+        if (
+          newLeft + descWidth <= viewportWidth &&
+          newTop + descHeight <= viewportHeight
+        ) {
+          description.style.left = `${randomMarginWidth}px`;
+          description.style.top = `${randomMarginHeight}px`;
+          placed = true;
+        }
+      }
+    }
+  }
 
-  // function updateDescriptionPosition() {
-  //   const img = container.querySelector("img");
-  //   const rect = img.getBoundingClientRect();
+  function updateDescriptionPosition() {
+    // const img = container.querySelector("img");
+    const rect = plantImage.getBoundingClientRect();
 
-  //   const imgWidth = rect.width;
-  //   const imgHeight = rect.height;
+    const imgWidth = rect.width;
+    const imgHeight = rect.height;
 
-  //   const newLeft = rect.left + imgWidth * descriptionLeft;
-  //   const newTop = rect.top + imgHeight * descriptionTop;
+    const newLeft = rect.left + imgWidth * descriptionLeft;
+    const newTop = rect.top + imgHeight * descriptionTop;
 
-  //   description.style.left = `${newLeft}px`;
-  //   description.style.top = `${newTop}px`;
-  // }
+    description.style.left = `${newLeft}px`;
+    description.style.top = `${newTop}px`;
+  }
 
-  // function animate() {
-  //   updateDescriptionPosition();
-  //   requestAnimationFrame(animate);
-  // }
+  function animate() {
+    updateDescriptionPosition();
+    requestAnimationFrame(animate);
+  }
 
-  // onMount(() => {
-  //   scaleStart = getRandom(0.5, 1.0);
-  //   scaleEnd = getRandom(1.0, 1.5);
+  onMount(() => {
+    scaleStart = getRandom(0.5, 1.0);
+    scaleEnd = getRandom(1.0, 1.5);
 
-  //   translateXStart = getRandom(-100, 100);
-  //   translateYStart = getRandom(-100, 100);
-  //   translateXEnd = getRandom(-100, 100);
-  //   translateYEnd = getRandom(-100, 100);
+    translateXStart = getRandom(-100, 100);
+    translateYStart = getRandom(-100, 100);
+    translateXEnd = getRandom(-100, 100);
+    translateYEnd = getRandom(-100, 100);
 
-  //   originX = getRandom(0, 100);
-  //   originY = getRandom(0, 100);
+    originX = getRandom(0, 100);
+    originY = getRandom(0, 100);
 
-  //   setInitialPosition();
-  //   requestAnimationFrame(animate);
-  // });
+    setInitialPosition();
+    requestAnimationFrame(animate);
+  });
 </script>
 
-<!-- 
 <div class="w-screen h-screen bg-roel_rose relative overflow-hidden">
   <div
     class="absolute right-36 top-5 text-roel_purple text-3xl font-primer z-10"
@@ -150,6 +150,7 @@
     style="position: relative;"
   >
     <img
+      bind:this={plantImage}
       src={imageUrl}
       alt="Plant"
       class="place-content-center h-auto camera-animation"
@@ -159,7 +160,7 @@
       {userName}'s {plantName}
     </div>
   </div>
-</div> -->
+</div>
 
 BRollDetail: currently unavailable
 

@@ -1,7 +1,10 @@
 <script lang="ts">
   import type { GardenWithPlants } from "$lib/types";
   import DisplayGarden from "./DisplayGarden.svelte";
-  export let topPollinators;
+  export let topPollinators: {
+    username: string;
+    count: number;
+  }[];
   export let topGarden: GardenWithPlants;
 </script>
 
