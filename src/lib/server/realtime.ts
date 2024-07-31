@@ -8,9 +8,19 @@ import {
   gardensToPlants,
   plants,
   presentationState,
+  seedbanksToPlants,
   users
 } from "./schema";
-import { count, desc, eq, isNotNull, not, sumDistinct } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  isNotNull,
+  not,
+  or,
+  sumDistinct
+} from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
@@ -75,6 +85,7 @@ const publishDisplayInstructions = async (
 ) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
   const agent = await TetherAgent.create("server", {
+    loglevel: "warn",
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
       host: PUBLIC_TETHER_HOST,
@@ -359,21 +370,67 @@ export const getDataForAmbientDisplay = async (
       return contents;
     }
     case bRollNaming.STATISTICS_3: {
-      const plantsParent2Counts = await db
-        .select({ id: plants.id, value: sumDistinct(plants.parent2) })
+      const allPlants = await db
+        .select({
+          id: plants.id,
+          commonName: plants.commonName,
+          parent1: plants.parent1,
+          parent2: plants.parent2
+        })
         .from(plants)
-        .where(isNotNull(plants.parent2));
+        .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
+        .where(isNotNull(seedbanksToPlants));
 
-      const pickRandomParent = pickRandomElement(plantsParent2Counts);
+      console.log({ allPlants });
+      const pickPlant = pickRandomElement(allPlants);
 
-      // const contents: DisplayPlantPollinationStats = {
-      //   name: bRollNaming.STATISTICS_3,
-      //   contents: {
-      //     plant,
-      //     pollinationCount,
-      //     user
-      //   }
-      // };
+      const asParentCount = await db
+        .select({ id: plants.id, name: plants.commonName })
+        .from(plants)
+        .where(
+          or(eq(plants.parent1, pickPlant.id), eq(plants.parent2, pickPlant.id))
+        );
+
+      console.log(
+        "plant",
+        pickPlant,
+        "appears as parent",
+        asParentCount.length,
+        "times"
+      );
+
+      const plantWithSeedbanks = await db.query.plants.findFirst({
+        where: eq(plants.id, pickPlant.id),
+        with: { inSeedbanks: { with: { seedbank: true } } }
+      });
+      if (plantWithSeedbanks?.inSeedbanks === undefined) {
+        throw Error("why no seedbank entry?");
+      }
+
+      // In theory, the plant could be in multiple seedbanks,
+      // but with the way the "game" plays now, it typically appears
+      // only once. So we pick the first one.
+      const [seedbank] = plantWithSeedbanks?.inSeedbanks;
+      if (!seedbank.seedbank.userId) {
+        throw Error("why no user ID?");
+      }
+      const owner = await db.query.users.findFirst({
+        where: eq(users.id, seedbank.seedbank.userId)
+      });
+      if (!owner) {
+        throw Error("why no owner?");
+      }
+
+      const contents: DisplayPlantPollinationStats = {
+        name: bRollNaming.STATISTICS_3,
+        contents: {
+          plant: plantWithSeedbanks,
+          pollinationCount: asParentCount.length,
+          user: stripUserInfo(owner)
+        }
+      };
+
+      return contents;
     }
     case bRollNaming.IDLE: {
       // TODO: this is useless, shouldn't be chosen
