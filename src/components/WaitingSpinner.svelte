@@ -1,7 +1,7 @@
 <img
-  src="/spinnerPlant.png"
+  src="/morphGif.gif"
   alt="Spinner"
-  class="w-40 relative flipped-spin"
+  class="w-60 relative flipped-spin"
   style="margin: auto; transform: scaleX(-1);"
 />
 
@@ -16,6 +16,6 @@
   }
 
   .flipped-spin {
-    animation: spin 4s linear infinite; /* 4 seconds for slower spin */
+    /*animation: spin 4s linear infinite; /* 4 seconds for slower spin */
   }
 </style>
