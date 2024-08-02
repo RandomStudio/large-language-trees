@@ -1,6 +1,6 @@
 import { createHandler } from "graphql-http";
 import { graphQlSchema } from "$lib/server/db";
-import { json, text, type RequestHandler } from "@sveltejs/kit";
+import { json, type RequestHandler } from "@sveltejs/kit";
 
 /**
  * GraphQL proof of concept
