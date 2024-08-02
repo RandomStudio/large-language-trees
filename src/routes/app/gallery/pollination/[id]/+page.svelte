@@ -192,16 +192,20 @@
   }
 </script>
 
+<svelte:head>
+  <meta name="theme-color" content="#4B0082" />
+</svelte:head>
+
 <ReturnButton functionReturn={handleReturn}></ReturnButton>
 <div class="bg-roel_blue rounded-b-full">
-  <div class="pt-[88px] mx-10 font-primer text-2xl text-roel_green text-left">
+  <div class="pt-[68px] mx-10 font-primer text-2xl text-roel_green text-left">
     {#if parent1}
       <p class=" text-2xl">
         Point your camera to another gardener's Pollination QR to start
         crossbreeding {parent1.commonName}
       </p>
       <div class="mx-0">
-        <div class="relative mt-6 pb-10">
+        <div class="relative mt-4 pb-10">
           <video
             bind:this={videoElement}
             class="object-cover aspect-square overflow-hidden rounded-full z-0"
@@ -215,7 +219,7 @@
             class="absolute -bottom-3 -right-8 -mb-1 w-40 h-40 z-10"
           />
         </div>
-        <div class="mt-4 mx-10 absolute place-self-center">
+        <div class="mt-2 mx-16 absolute place-self-center">
           <QrGenerate text={parent1.id + "&" + data.seedBank.id} />
         </div>
       </div>
