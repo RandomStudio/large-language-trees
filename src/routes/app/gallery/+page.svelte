@@ -138,6 +138,6 @@
     }}
     isOriginalPlant={selectedPlant.id == yourPlant?.id}
     isPollinatingPlant={DateTime.fromJSDate(selectedPlant.created).diffNow() >
-      DURATION_TILL_FERTILE
+      DURATION_TILL_FERTILE}
   ></PopupInfo>
 {/if}
