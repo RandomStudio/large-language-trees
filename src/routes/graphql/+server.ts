@@ -34,15 +34,11 @@ const endPoint: RequestHandler = async ({ request, url }) => {
 
   console.log({ body, init });
 
-  // return text(body || "");
+  // TODO: the result is already a string so this is perhaps redundant,
+  // but it does ensure that SvelteKit automatically returns a response
+  // with the header "content-type: application/json".
   return json(JSON.parse(body || "{}"));
 };
-
-// const handler: RequestHandler = async ({ request }) => {
-//   return graphQlHandler({
-//     raw: request
-//   });
-// };
 
 export const GET = endPoint;
 export const HEAD = endPoint;
