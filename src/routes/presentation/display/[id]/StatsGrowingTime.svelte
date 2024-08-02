@@ -1,17 +1,21 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { getColors } from "./findColors";
-  import moment from "moment";
+  import { DateTime } from "luxon";
 
   export let imageUrl: string;
   export let plantName: string;
   export let gardenerName: string;
-  export let date: Date;
+  export let created: Date;
+
+  let age = DateTime.now().diff(DateTime.fromJSDate(created));
 
   let brightColor = "rgb(255, 185, 198)";
   let darkColor = "rgb(117, 0, 147)";
 
   let img: HTMLImageElement;
+
+  let ticker: NodeJS.Timeout | null = null;
 
   onMount(() => {
     img.onload = () => {
@@ -19,15 +23,16 @@
       brightColor = result.brightColor;
       darkColor = result.darkColor;
     };
+    ticker = setInterval(() => {
+      age = DateTime.now().diff(DateTime.fromJSDate(created));
+    }, 1000);
   });
-  const now = moment();
-  const duration = moment.duration(now.diff(date));
 
-  const hours = Math.floor(duration.asHours());
-  const minutes = duration.minutes();
-  const seconds = duration.seconds();
-
-  const formattedTime = `${hours}H ${minutes}M ${seconds}S`;
+  onDestroy(() => {
+    if (ticker) {
+      clearInterval(ticker);
+    }
+  });
 </script>
 
 <div class="min-h-screen" style="background-color:{brightColor}">
@@ -62,7 +67,7 @@
   >
     <div class="text-4xl font-primer">has been growing for:<br /></div>
     <div class="text-6xl font-jeanb">
-      {formattedTime}
+      {age.toFormat("hh'H' mm'M' ss'S")}
     </div>
   </div>
 </div>
