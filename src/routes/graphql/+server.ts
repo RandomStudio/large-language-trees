@@ -7,6 +7,7 @@ const handler = createHandler({ schema: graphQlSchema });
 // const endPoint: RequestHandler = async () => json({ foo: "bar" });
 
 const endPoint: RequestHandler = async ({ request, url }) => {
+  // request.body
   const incoming = await request.json();
   console.log({ incoming });
 
@@ -18,6 +19,8 @@ const endPoint: RequestHandler = async ({ request, url }) => {
     raw: request,
     context: undefined
   });
+
+  console.log({ body, init });
 
   return json(body);
 };
