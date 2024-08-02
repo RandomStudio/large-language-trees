@@ -1,6 +1,18 @@
 import { createHandler } from "graphql-http";
 import { graphQlSchema } from "$lib/server/db";
-import { json, type RequestHandler } from "@sveltejs/kit";
+import { json, text, type RequestHandler } from "@sveltejs/kit";
+
+/**
+ * GraphQL proof of concept
+ *
+ * Example with linked/related entities:
+ *
+ * curl -X POST http://localhost:8888/graphql -H "Origin: http://localhost:8888" -H "Content-Type: application/json" -d '{"query": "query { users { id, mySeedbank { id, plantsInSeedbank { plantId, plant { commonName } } } } }"}' | jq
+ *
+ * Example, getting authorTopUser from plants (relation):
+ *
+ * curl -X POST http://localhost:8888/graphql -H "Origin: http://localhost:8888" -H "Content-Type: application/json" -d '{"query": "query { plants { id, commonName, authorTopUser { id, username } } }"}' | jq .
+ */
 
 const handler = createHandler({ schema: graphQlSchema });
 
@@ -22,7 +34,8 @@ const endPoint: RequestHandler = async ({ request, url }) => {
 
   console.log({ body, init });
 
-  return json(body);
+  // return text(body || "");
+  return json(JSON.parse(body || "{}"));
 };
 
 // const handler: RequestHandler = async ({ request }) => {

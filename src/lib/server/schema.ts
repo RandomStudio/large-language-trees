@@ -142,8 +142,16 @@ export const seedbanksRelations = relations(seedbanks, ({ many }) => ({
   plantsInSeedbank: many(seedbanksToPlants)
 }));
 
-export const plantsRelations = relations(plants, ({ many }) => ({
-  inSeedbanks: many(seedbanksToPlants)
+export const plantsRelations = relations(plants, ({ many, one }) => ({
+  inSeedbanks: many(seedbanksToPlants),
+  authorTopUser: one(users, {
+    fields: [plants.authorTop],
+    references: [users.id]
+  }),
+  authorBottomUser: one(users, {
+    fields: [plants.authorBottom],
+    references: [users.id]
+  })
 }));
 
 export const promptSettingsTable = pgTable("prompt_settings", {
