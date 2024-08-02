@@ -7,7 +7,7 @@
 
   export let data: GardenViewData;
 
-  let selectedPlant = data.seedBank.plantsInSeedbank[0].plant;
+  let selectedPlant = data.seedbank.plantsInSeedbank[0].plant;
   let showMessage = true;
   let showNewParagraph = false; // Control visibility of the new paragraph
   let showDescription = true; // Control visibility of the plant description

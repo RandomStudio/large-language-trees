@@ -60,7 +60,7 @@ export interface UserWithSeedbank extends SelectUser {
 }
 
 export interface GardenViewData {
-  seedBank: MySeeds;
+  seedbank: MySeeds;
   user: SelectUser;
   garden: GardenWithPlants;
 }

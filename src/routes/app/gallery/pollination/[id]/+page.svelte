@@ -24,7 +24,7 @@
   export let data: EnhancedGardenViewData;
 
   let parent1 =
-    data.seedBank.plantsInSeedbank.find(
+    data.seedbank.plantsInSeedbank.find(
       (plant) => plant.plantId === data.plantId
     )?.plant || undefined;
 
@@ -41,7 +41,7 @@
   $: existingChild = (
     parents: [SelectPlant, SelectPlant]
   ): SelectPlant | null =>
-    data.seedBank.plantsInSeedbank.find(
+    data.seedbank.plantsInSeedbank.find(
       (plant) =>
         parents.find((p) => p.id == plant.plant.parent1) &&
         parents.find((p) => p.id == plant.plant.parent2)
@@ -171,7 +171,7 @@
       const seedbankRes = await fetch(`/api/seedbanks/${otherUserSeedbankId}`);
       const otherSeedbank = (await seedbankRes.json()) as SelectSeedbank;
       candidateChild.authorBottom = otherSeedbank.userId;
-      await addConfirmedPlant(candidateChild, data.garden.id, data.seedBank.id);
+      await addConfirmedPlant(candidateChild, data.garden.id, data.seedbank.id);
       await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
 
       const event: EventNewPollination = {
@@ -220,7 +220,7 @@
           />
         </div>
         <div class="mt-2 mx-16 absolute place-self-center">
-          <QrGenerate text={parent1.id + "&" + data.seedBank.id} />
+          <QrGenerate text={parent1.id + "&" + data.seedbank.id} />
         </div>
       </div>
     {/if}
