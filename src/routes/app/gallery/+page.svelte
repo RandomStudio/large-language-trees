@@ -11,7 +11,10 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
   import { type SimpleEvent } from "$lib/events.types";
-  import { PLUG_NAMES } from "../../../defaults/constants";
+  import {
+    DURATION_TILL_FERTILE,
+    PLUG_NAMES
+  } from "../../../defaults/constants";
 
   function addTimeLeft(inputData: GardenViewData) {
     return {
@@ -23,7 +26,7 @@
           plant: {
             ...p.plant,
             timeLeft: DateTime.fromJSDate(p.plant.created)
-              .plus(Duration.fromObject({ minutes: 5 }))
+              .plus(DURATION_TILL_FERTILE)
               .diffNow()
           }
         }))
@@ -42,56 +45,14 @@
     goto(`gallery/pollination/` + id);
   }
 
-  // function convertMinutesToMinutesAndSeconds(decimalMinutes: number) {
-  //   const minutes = Math.floor(decimalMinutes);
-  //   const seconds = Math.round((decimalMinutes - minutes) * 60);
-  //   return minutes != 0 ? `${minutes} min ${seconds} sec` : `${seconds} sec`;
-  // }
-
   let yourPlant: SelectPlant | null =
     data.seedbank.plantsInSeedbank.find(
       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
 
   function updateTimeLeft() {
-    // dataWithTimes.seedbank.plantsInSeedbank.forEach((p) => {
-    //   const created = DateTime.fromJSDate(p.plant.created);
-    //   const timeFertile = created.plus(Duration.fromObject({ minutes: 5 }));
-    //   const timeLeft = timeFertile.diffNow();
-    //   console.log({
-    //     created: created.toISOTime(),
-    //     timeFertile: timeFertile.toISOTime(),
-    //     timeLeft: timeLeft.toHuman()
-    //   });
-    //   p.plant.timeLeft = timeLeft;
-    // });
-    console.log(
-      dataWithTimes.seedbank.plantsInSeedbank.map((p) => p.plant.timeLeft)
-    );
     dataWithTimes = addTimeLeft(data);
   }
-
-  // async function updateDates() {
-  //   const newDates = [];
-  //   let index = 0;
-  //   for (const [key, plant] of Object.entries(data.seedBank.plantsInSeedbank)) {
-  //     const createdDate = DateTime.fromJSDate(plant.plant.created);
-  //     const duration = createdDate.diffNow();
-  //     const minutes = duration.toHuman();
-  //     newDates[index] = minutes;
-  //     index++;
-  //   }
-  //   dates = newDates;
-  // }
-
-  // async function fetchdata() {
-  //   invalidateAll();
-  //   // console.log(data.seedBank.plantsInSeedbank);
-  //   yourPlant =
-  //     data.seedBank.plantsInSeedbank.find(
-  //       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
-  //     )?.plant || null;
-  // }
 
   let agent: TetherAgent | null;
 
@@ -177,6 +138,6 @@
     }}
     isOriginalPlant={selectedPlant.id == yourPlant?.id}
     isPollinatingPlant={DateTime.fromJSDate(selectedPlant.created).diffNow() >
-      Duration.fromObject({ minutes: 5 })}
+      DURATION_TILL_FERTILE
   ></PopupInfo>
 {/if}
