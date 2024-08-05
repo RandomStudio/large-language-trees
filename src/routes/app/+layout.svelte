@@ -37,7 +37,7 @@
       </h1>
     </div>
   {/if}
-  {#if $page.url.pathname == "/app/startwindow" || $isPollinationPage}
+  {#if $page.url.pathname == "/app/startwindow"}
     <div class="fixed w-full z-30 pt-3 pl-8">
       <h1 class="text-3xl text-roel_green font-jeanb">
         <!-- svelte-ignore a11y-no-static-element-interactions -->
