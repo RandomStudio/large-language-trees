@@ -28,10 +28,6 @@
   }
 </script>
 
-<svelte:head>
-  <meta name="theme-color" content="#4B0082" />
-</svelte:head>
-
 <div class="bg-roel_blue rounded-b-full">
   <div class="font-primer text-roel_green text-left pt-[68px]">
     {#if showMessage}
