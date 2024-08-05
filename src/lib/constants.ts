@@ -19,7 +19,7 @@ export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({
 
 export const DISPLAY_VIEW_WEIGHTINGS = new Map([
   [bRollNaming.STATUS_FEED, 1],
-  [bRollNaming.DETAIL, 10],
+  [bRollNaming.DETAIL, 4],
   [bRollNaming.ZOOM_OUT, 2],
   [bRollNaming.ROLL_PAN, 2],
   [bRollNaming.TOP_LIST, 1],
