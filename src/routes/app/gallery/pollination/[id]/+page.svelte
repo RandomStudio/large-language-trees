@@ -192,13 +192,9 @@
   }
 </script>
 
-<svelte:head>
-  <meta name="theme-color" content="#4B0082" />
-</svelte:head>
-
 <ReturnButton functionReturn={handleReturn}></ReturnButton>
 <div class="bg-roel_blue rounded-b-full">
-  <div class="pt-[68px] mx-10 font-primer text-2xl text-roel_green text-left">
+  <div class="pt-[35px] mx-10 font-primer text-2xl text-roel_green text-left">
     {#if parent1}
       <p class=" text-2xl">
         Point your camera to another gardener's Pollination QR to start
