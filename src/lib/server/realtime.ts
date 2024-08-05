@@ -11,16 +11,7 @@ import {
   seedbanksToPlants,
   users
 } from "./schema";
-import {
-  and,
-  count,
-  desc,
-  eq,
-  isNotNull,
-  not,
-  or,
-  sumDistinct
-} from "drizzle-orm";
+import { count, desc, eq, isNotNull, or } from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
@@ -39,16 +30,21 @@ import {
   type FeedTextEntry,
   type SimpleEvent
 } from "$lib/events.types";
-import { pickMultipleRandomElements, pickRandomElement } from "random-elements";
+import {
+  pickKeysWithWeights,
+  pickMultipleRandomElements,
+  pickRandomElement
+} from "random-elements";
 import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/types";
 import { stripUserInfo } from "$lib/security";
 import {
+  DISPLAY_VIEW_WEIGHTINGS,
   LIMIT_LEADERBOARD,
   LIMIT_STATUS_FEED,
   MIN_STATUS_FEED,
-  NUM_GARDENS_MULTI
-} from "../../defaults/presentation";
-import { PLUG_NAMES } from "$lib/constants";
+  NUM_GARDENS_MULTI,
+  PLUG_NAMES
+} from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
 export const publishEvent = async (event: SimpleEvent) => {
@@ -146,11 +142,7 @@ export const handleDisplayNotification = async (
     console.log(
       "A display timed out its current animation, pick something new"
     );
-    const values = Object.values(bRollNaming);
-    // type keyType = keyof typeof bRollNaming;
-    // const keys = Object.keys(bRollNaming) as keyType[];
-
-    const pickDisplayType = pickRandomElement(values);
+    const pickDisplayType = pickKeysWithWeights(DISPLAY_VIEW_WEIGHTINGS);
 
     try {
       const contents = await getDataForAmbientDisplay(pickDisplayType);
