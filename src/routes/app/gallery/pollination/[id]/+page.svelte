@@ -192,10 +192,6 @@
   }
 </script>
 
-<svelte:head>
-  <meta name="theme-color" content="#4B0082" />
-</svelte:head>
-
 <ReturnButton functionReturn={handleReturn}></ReturnButton>
 <div class="bg-roel_blue rounded-b-full">
   <div class="pt-[68px] mx-10 font-primer text-2xl text-roel_green text-left">

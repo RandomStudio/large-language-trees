@@ -10,6 +10,14 @@
   });
 </script>
 
+<svelte:head>
+  {#if $page.url.pathname == "/app/startwindow" || $isPollinationPage}
+    <meta name="theme-color" content="#4B0082" />
+  {:else}
+    <meta name="theme-color" content="#C8F58F" />
+  {/if}
+</svelte:head>
+
 <div class="bg-roel_green w-screen h-screen fixed"></div>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
