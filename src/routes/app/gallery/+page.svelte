@@ -11,10 +11,7 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
   import { type SimpleEvent } from "$lib/events.types";
-  import {
-    DURATION_TILL_FERTILE,
-    PLUG_NAMES
-  } from "../../../defaults/constants";
+  import { DURATION_TILL_FERTILE, PLUG_NAMES } from "$lib/constants";
 
   function addTimeLeft(inputData: GardenViewData) {
     return {

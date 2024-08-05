@@ -2,7 +2,7 @@
   import { invalidateAll } from "$app/navigation";
   import { onDestroy, onMount } from "svelte";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
-  import { PLUG_NAMES } from "../../../defaults/constants.js";
+  import { PLUG_NAMES } from "$lib/constants.js";
   import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
   import { bRollNaming } from "$lib/events.types.js";
 

@@ -6,7 +6,7 @@
     InsertPlant,
     AttachImageResponse
   } from "$lib/types";
-  import { TOLERANCE_SIMPLE } from "../../../../../defaults/constants";
+  import { TOLERANCE_SIMPLE } from "$lib/constants";
   import TransparencyMaker from "../../../../../components/TransparencyMaker.svelte";
   import ButtonBottom from "../../../../../components/ButtonBottom.svelte";
   import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";

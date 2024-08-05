@@ -15,7 +15,7 @@ import {
   users
 } from "./schema";
 import { eq, isNull } from "drizzle-orm";
-import { GRID_HEIGHT, GRID_WIDTH } from "../../defaults/constants";
+import { GRID_HEIGHT, GRID_WIDTH } from "$lib/constants";
 import type {
   GardenPlantEntry,
   InsertPlant,
