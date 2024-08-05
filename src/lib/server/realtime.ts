@@ -108,10 +108,45 @@ const publishDisplayInstructions = async (
   await agent.disconnect();
 };
 
+/** It is not strictly **necessary** to publish these messages via Tether/MQTT,
+ * since they originate from the display instances and are POSTed via HTTP requests
+ * to the server. However, since they are part of the event/realtime system, it
+ * makes debugging easier if we are able to subscribe to these messages just like the
+ * rest.
+ *
+ * Recall that the reason we don't use Tether/MQTT from the displays-to-server is that
+ * the Netlify application is "serverless" and therefore cannot subscribe to MQTT
+ * messages in the usual way - it is not a persistent process and cannot maintain a
+ * persisted TCP connection.
+ */
+const publishDisplayNotification = async (message: DisplayNotifyServer) => {
+  const useLocal = PUBLIC_TETHER_HOST === "localhost";
+  const agent = await TetherAgent.create("presentation", {
+    loglevel: "warn",
+    brokerOptions: {
+      ...BROKER_DEFAULTS.nodeJS,
+      host: PUBLIC_TETHER_HOST,
+      port: useLocal ? 1883 : 8883,
+      protocol: useLocal ? "mqtt" : "mqtts"
+    }
+  });
+
+  const plug = new OutputPlug(agent, PLUG_NAMES.displayNotifications, {
+    id: message.displayId,
+    publishOptions: { qos: 1 }
+  });
+
+  await plug.publish(encode(message));
+
+  await agent.disconnect();
+};
+
 export const handleDisplayNotification = async (
   message: DisplayNotifyServer
 ) => {
   const { displayId, event } = message;
+
+  await publishDisplayNotification(message);
 
   const IDLE_STATE: DisplayIdle = {
     name: bRollNaming.IDLE,
@@ -142,6 +177,7 @@ export const handleDisplayNotification = async (
     console.log(
       "A display timed out its current animation, pick something new"
     );
+    console.log({ weights: DISPLAY_VIEW_WEIGHTINGS, bRollViews: bRollNaming });
     const pickDisplayType = pickKeysWithWeights(DISPLAY_VIEW_WEIGHTINGS);
 
     try {

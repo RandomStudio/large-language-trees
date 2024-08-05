@@ -10,7 +10,8 @@ export const HEIGHT_PROPERTY_KEY = "heightInMetres";
 
 export const PLUG_NAMES = {
   simpleEvents: "events",
-  displayInstructions: "serverInstructDisplays"
+  displayInstructions: "serverInstructDisplays",
+  displayNotifications: "displayNotifyServer"
 };
 
 export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({

@@ -60,7 +60,7 @@
     "postgres": "^3.4.4",
     "q-floodfill": "^1.3.1",
     "qrcode": "^1.5.3",
-    "random-elements": "^0.4.0",
+    "random-elements": "^0.4.1",
     "tether-agent": "^3.2.0",
     "uuid": "^9.0.1"
   }
