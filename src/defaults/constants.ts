@@ -1,3 +1,5 @@
+import { Duration } from "luxon";
+
 export const GRID_WIDTH = 6;
 export const GRID_HEIGHT = 30;
 export const URL_PREFIX =
@@ -9,3 +11,7 @@ export const PLUG_NAMES = {
   simpleEvents: "events",
   displayInstructions: "serverInstructDisplays"
 };
+
+export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({
+  minutes: 5
+});
