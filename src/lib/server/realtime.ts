@@ -48,7 +48,7 @@ import {
   MIN_STATUS_FEED,
   NUM_GARDENS_MULTI
 } from "../../defaults/presentation";
-import { PLUG_NAMES } from "../../defaults/constants";
+import { PLUG_NAMES } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
 export const publishEvent = async (event: SimpleEvent) => {
