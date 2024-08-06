@@ -4,7 +4,7 @@
   export let gardens: DisplayMultipleGardens;
 </script>
 
-<body class="relative bg-roel_purple min-h-screen">
+<body class="relative bg-roel_purple h-screen">
   <DisplayGarden
     xGarden={0}
     yGarden={0}
@@ -38,14 +38,9 @@
     showGardenName={true}
   ></DisplayGarden>
 
-  <div class="fixed bottom-5 left-40 text-roel_green text-4xl font-primer">
+  <div
+    class="w-full flex text-left items-left left-[90px] justify-start absolute bottom-[20px] text-roel_green text-4xl font-primer"
+  >
     Join the Garden!
-  </div>
-  <div class="fixed left-5 bottom-5 w-28 h-auto">
-    <img
-      src="/livinggarden_QR_purple_green.png"
-      alt="Barcode"
-      class="w-full h-auto"
-    />
   </div>
 </body>
