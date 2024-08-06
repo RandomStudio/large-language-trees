@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import { type GardenViewData, type SelectPlant } from "../../../lib/types";
   import { onDestroy, onMount } from "svelte";
-  import { DateTime, Duration } from "luxon";
+  import { DateTime } from "luxon";
 
   import PlantDisplay from "../../../components/PlantDisplay.svelte";
   import PopupInfo from "../../../components/PopupInfo.svelte";

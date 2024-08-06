@@ -99,7 +99,7 @@
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
 
     if (codeReader) {
-      console.warn("codeReader was already running; stop it first")''
+      console.warn("codeReader was already running; stop it first");
       codeReader.stopContinuousDecode();
     }
 
@@ -116,7 +116,7 @@
         otherUserSeedbankId = part2;
         onCodeScanned(parent2Id)
           .then(() => {
-            console.log("done");
+            console.log("(onCodeScanned) ...done");
           })
           .catch((e) => {
             console.error("Error updating after QR code found: ", e);
@@ -130,6 +130,7 @@
   }
 
   async function onCodeScanned(parent2Id: string) {
+    stopScanning();
     const res = await fetch("/api/plants/" + parent2Id);
 
     if (res.status == 200) {
@@ -161,6 +162,9 @@
 
   function stopScanning() {
     console.log("Stop camera + scanning");
+    if (!videoElement) {
+      return;
+    }
 
     if (codeReader) {
       codeReader.stopContinuousDecode();
