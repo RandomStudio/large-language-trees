@@ -23,6 +23,9 @@
 
   export let data: EnhancedGardenViewData;
 
+  let videoElement: HTMLVideoElement;
+  let codeReader: BrowserMultiFormatReader | null = null;
+
   let parent1 =
     data.seedbank.plantsInSeedbank.find(
       (plant) => plant.plantId === data.plantId
@@ -47,44 +50,61 @@
         parents.find((p) => p.id == plant.plant.parent2)
     )?.plant || null;
 
-  let videoElement: HTMLVideoElement;
-  let stream: MediaStream;
-
   onMount(async () => {
-    let constraints = {
-      video: {
-        facingMode: "environment"
-      }
-    };
-
     try {
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
-      setupStream(stream);
-    } catch (err) {
-      if (isOverconstrainedError(err)) {
-        // Fallback constraints if the exact constraints are not met
-        constraints = {
-          video: {
-            facingMode: "user"
-          }
-        };
-        try {
-          stream = await navigator.mediaDevices.getUserMedia(constraints);
-          setupStream(stream);
-        } catch (err) {
-          handleError(err);
-        }
-      } else {
-        handleError(err);
-      }
+      await startQrScanning();
+    } catch (e) {
+      console.error("onMount: Error starting camera / QR scanning");
+      // Should this redirect or display error notification?
+      // goto("/app/gallery");
     }
   });
 
-  function setupStream(stream: MediaStream) {
+  async function getStream() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment"
+        }
+      });
+      return stream;
+    } catch (err) {
+      if (isOverconstrainedError(err)) {
+        console.warn(
+          "Stream attempt #1 failed, but it was OverConstrainedError; try again...",
+          err
+        );
+        // Fallback constraints if the exact constraints are not met
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: "user"
+            }
+          });
+          return stream;
+        } catch (err) {
+          throw Error("Stream attempt #2 failed: " + err);
+        }
+      } else {
+        throw Error("Stream attempt #1 failed: " + err);
+      }
+    }
+  }
+
+  async function startQrScanning() {
+    console.log("Attempt to start camera + QR scanning...");
+    const stream = await getStream(); // throws Error if unsuccessful
+    console.log("... stream started OK");
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
 
-    const codeReader = new BrowserMultiFormatReader();
+    if (codeReader) {
+      console.warn("codeReader was already running; stop it first")''
+      codeReader.stopContinuousDecode();
+    }
+
+    codeReader = new BrowserMultiFormatReader();
+
     codeReader.decodeFromStream(stream, videoElement, (result, err) => {
       if (result && !busy) {
         // Handle the result here
@@ -94,37 +114,12 @@
         console.log("scan text:", { part1, part2 });
         const parent2Id = part1;
         otherUserSeedbankId = part2;
-        fetch("/api/plants/" + parent2Id)
-          .then(async (res) => {
-            if (res.status == 200) {
-              parent2 = await res.json();
-              if (parent1 && parent2 && parent1.id != parent2.id) {
-                child = existingChild([parent1, parent2]);
-                if (child == null) {
-                  waiting = true;
-                  try {
-                    candidateChild = await confirmBreed([parent1, parent2]);
-                    if (candidateChild) {
-                      console.log("Got candidate child OK:", candidateChild);
-                      busy = false;
-                    }
-                    waiting = false;
-                  } catch (e) {
-                    console.error("Error getting candidate child", e);
-                    handleError(e);
-                  }
-                }
-              } else {
-                child = parent1 || null;
-              }
-            } else {
-              handleError(
-                new Error(`Failed to fetch plant with id ${parent2Id}`)
-              );
-            }
+        onCodeScanned(parent2Id)
+          .then(() => {
+            console.log("done");
           })
-          .catch((err) => {
-            handleError(err);
+          .catch((e) => {
+            console.error("Error updating after QR code found: ", e);
           });
       }
       if (err && !(err instanceof NotFoundException)) {
@@ -134,34 +129,64 @@
     });
   }
 
-  function stopStream() {
-    if (stream) {
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
+  async function onCodeScanned(parent2Id: string) {
+    const res = await fetch("/api/plants/" + parent2Id);
+
+    if (res.status == 200) {
+      parent2 = await res.json();
+      if (parent1 && parent2 && parent1.id != parent2.id) {
+        child = existingChild([parent1, parent2]);
+        if (child === null) {
+          waiting = true;
+          try {
+            candidateChild = await confirmBreed([parent1, parent2]);
+            if (candidateChild) {
+              console.log("Got candidate child OK:", candidateChild);
+              busy = false;
+            }
+            waiting = false;
+          } catch (e) {
+            console.error("Error getting candidate child", e);
+            // Should this redirect or display error notification?
+          }
+        }
+      } else {
+        child = parent1 || null;
+      }
+    } else {
+      throw Error(`Failed to fetch plant with id ${parent2Id}`);
+      // Should this redirect or display error notification?
     }
+  }
+
+  function stopScanning() {
+    console.log("Stop camera + scanning");
+
+    if (codeReader) {
+      codeReader.stopContinuousDecode();
+    }
+
+    const stream = videoElement.srcObject as MediaStream | null;
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+    videoElement.srcObject = null;
   }
 
   function isOverconstrainedError(err: unknown): err is OverconstrainedError {
     return (err as OverconstrainedError).name === "OverconstrainedError";
   }
 
-  function handleError(err: unknown) {
-    if (err instanceof Error) {
-      console.error("Error: ", err.message);
-    } else {
-      console.error("Unknown error: ", err);
-    }
-    stopStream();
-    goto("/app/gallery");
-  }
-
-  function handleReturn() {
-    stopStream();
-    goto("/app/gallery");
+  function onReturnButtonClicked() {
+    stopScanning();
+    console.log("onReturnButtonClicked; wait 1s then redirect...");
+    setTimeout(() => {
+      goto("/app/gallery");
+    }, 1000);
   }
 
   onDestroy(() => {
-    stopStream();
+    stopScanning();
   });
 
   async function insertNewPlant(updatedPlant: InsertPlant) {
@@ -192,7 +217,8 @@
   }
 </script>
 
-<ReturnButton functionReturn={handleReturn}></ReturnButton>
+<ReturnButton onClicked={onReturnButtonClicked}></ReturnButton>
+
 <div class="bg-roel_blue rounded-b-full">
   <div class="pt-[35px] mx-10 font-primer text-2xl text-roel_green text-left">
     {#if parent1}
@@ -224,26 +250,18 @@
 </div>
 
 {#if candidateChild}
-  {stopStream()}
   <ConfirmBreedPopup
     {candidateChild}
-    onCancel={() => {
+    onCancel={async () => {
       candidateChild = null;
       busy = false; // Allow scanning again if the process is cancelled
-      // Restart the camera stream
-      onMount(async () => {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }
-        });
-        setupStream(stream);
-      });
+      await startQrScanning();
     }}
     onConfirm={insertNewPlant}
   />
 {/if}
 
 {#if waiting}
-  {stopStream()}
   <div
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
   >
@@ -252,6 +270,5 @@
 {/if}
 
 {#if child}
-  {stopStream()}
   <PopupDejaVu plantDetails={child} />
 {/if}
