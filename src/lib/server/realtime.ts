@@ -62,6 +62,7 @@ export const publishEvent = async (event: SimpleEvent) => {
   });
 
   const plug = new OutputPlug(agent, PLUG_NAMES.simpleEvents, {
+    id: event.name,
     publishOptions: { qos: 2 }
   });
 
