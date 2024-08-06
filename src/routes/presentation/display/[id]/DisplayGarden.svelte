@@ -8,7 +8,7 @@
   export let yGarden = 200;
   export let showGardenName = true;
 
-  let plantProportion = 0.7;
+  let plantProportion = 0.8;
   let averageSizePlant = Math.floor(
     Math.sqrt((plantProportion * height * width) / garden.plantsInGarden.length)
   );
@@ -70,12 +70,14 @@
       const x = Math.random() * width;
       const y = Math.random() * height;
       const size =
-        calculateProportionalSize(
-          plant.plant.properties.heightInMetres,
-          minHeightPlant,
-          maxHeightPlant,
-          minSizePlant,
-          maxSizePlant
+        Math.floor(
+          calculateProportionalSize(
+            plant.plant.properties.heightInMetres,
+            minHeightPlant,
+            maxHeightPlant,
+            minSizePlant,
+            maxSizePlant
+          )
         ) || averageSizePlant;
       const zIndex = Math.floor(y); // Assurez-vous que c'est un entier
       const grasses = grassAroundMain({ x, y, zIndex });
@@ -141,7 +143,6 @@
         style={`left: ${x}px; top: ${y + 80}px; width: 120px; height: auto; z-index: ${zIndex + 1};`}
       >
         {garden.name}
-        {size}px
       </div>
     {/if}
   {/each}
