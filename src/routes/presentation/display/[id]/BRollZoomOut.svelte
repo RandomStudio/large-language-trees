@@ -13,8 +13,17 @@
     {userName}'s <br /> GARDEN
   </div>
 
-  <DisplayGarden {garden} xGarden={-50} yGarden={400} height={800} width={500}
+  <DisplayGarden
+    {garden}
+    xGarden={-100}
+    yGarden={500}
+    height={740}
+    width={740}
+    showGardenName={false}
+    showPlantName={true}
+    colorBGText="roel_rose"
   ></DisplayGarden>
+
   <div class="fixed bottom-5 left-40 text-roel_rose text-4xl font-primer">
     Join the Garden!
   </div>

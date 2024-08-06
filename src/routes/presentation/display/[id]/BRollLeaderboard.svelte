@@ -15,11 +15,13 @@
 
   <DisplayGarden
     garden={topGarden}
-    xGarden={0}
-    yGarden={300}
-    width={540}
-    height={540}
+    xGarden={-100}
+    yGarden={0}
+    width={740}
+    height={740}
     showGardenName={true}
+    showPlantName={false}
+    colorBGText={"roel_rose"}
   ></DisplayGarden>
 
   {#each topPollinators as userInfo, index}

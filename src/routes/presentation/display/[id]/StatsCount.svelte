@@ -24,30 +24,34 @@
   <DisplayGarden
     xGarden={0}
     yGarden={0}
-    height={200}
-    width={230}
+    height={300}
+    width={300}
     garden={gardens[0].garden}
+    showGardenName={false}
   ></DisplayGarden>
   <DisplayGarden
-    xGarden={280}
-    yGarden={200}
+    xGarden={240}
+    yGarden={250}
     height={300}
-    width={200}
+    width={300}
     garden={gardens[1].garden}
+    showGardenName={false}
   ></DisplayGarden>
   <DisplayGarden
     xGarden={0}
-    yGarden={400}
+    yGarden={500}
     height={300}
-    width={200}
+    width={300}
     garden={gardens[2].garden}
+    showGardenName={false}
   ></DisplayGarden>
   <DisplayGarden
-    xGarden={280}
-    yGarden={600}
+    xGarden={240}
+    yGarden={750}
     height={300}
-    width={200}
+    width={300}
     garden={gardens[3].garden}
+    showGardenName={false}
   ></DisplayGarden>
 
   <div

@@ -8,30 +8,34 @@
   <DisplayGarden
     xGarden={0}
     yGarden={0}
-    height={300}
-    width={230}
+    height={350}
+    width={350}
     garden={gardens.contents[0].garden}
+    showGardenName={true}
   ></DisplayGarden>
   <DisplayGarden
-    xGarden={280}
-    yGarden={320}
-    height={300}
-    width={200}
+    xGarden={190}
+    yGarden={300}
+    height={350}
+    width={350}
     garden={gardens.contents[1].garden}
+    showGardenName={true}
   ></DisplayGarden>
   <DisplayGarden
     xGarden={0}
-    yGarden={640}
-    height={300}
-    width={200}
+    yGarden={600}
+    height={350}
+    width={350}
     garden={gardens.contents[2].garden}
+    showGardenName={true}
   ></DisplayGarden>
   <DisplayGarden
-    xGarden={280}
-    yGarden={960}
-    height={300}
-    width={200}
+    xGarden={190}
+    yGarden={900}
+    height={350}
+    width={350}
     garden={gardens.contents[3].garden}
+    showGardenName={true}
   ></DisplayGarden>
 
   <div class="fixed bottom-5 left-40 text-roel_green text-4xl font-primer">

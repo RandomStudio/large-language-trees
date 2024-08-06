@@ -7,6 +7,8 @@
   export let xGarden = 500;
   export let yGarden = 200;
   export let showGardenName = true;
+  export let showPlantName = false;
+  export let colorBGText = "roel_green";
 
   let plantProportion = 0.6;
   let averageSizePlant = Math.floor(
@@ -191,13 +193,19 @@
       class="absolute"
       style={`left: ${x}px; top: ${y}px; width: ${size}px; height: auto; z-index: ${zIndex}; transform:translate(-50%,-50%)`}
     />
-    <p>The size is {size}</p>
     {#if garden.plantsInGarden[index].plant.parent1 == null && showGardenName}
       <div
-        class=" absolute font-primer text-2xl text-roel_purple px-2 py-1 bg-roel_green text-center"
+        class="absolute font-primer text-2xl text-roel_purple px-2 py-1 text-center bg-{colorBGText}"
         style={`left: ${x - 60}px; top: ${y + size / 2}px; width: 120px; height: auto; z-index:2000;`}
       >
         {garden.name}
+      </div>
+    {:else if showPlantName}
+      <div
+        class="absolute font-primer text-2xl text-roel_purple px-2 py-1 text-center bg-{colorBGText}"
+        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: 120px; height: auto;z-index:${zIndex}`}
+      >
+        {garden.plantsInGarden[index].plant.commonName}
       </div>
     {/if}
   {/each}
