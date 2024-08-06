@@ -8,7 +8,7 @@
   export let yGarden = 200;
   export let showGardenName = true;
 
-  let plantProportion = 0.8;
+  let plantProportion = 0.6;
   let averageSizePlant = Math.floor(
     Math.sqrt((plantProportion * height * width) / garden.plantsInGarden.length)
   );
@@ -52,6 +52,8 @@
     return proportionalSize;
   }
 
+  const radius = Math.min(width / 2, height / 2);
+
   let positions: {
     x: number;
     y: number;
@@ -66,9 +68,47 @@
   }[] = [];
 
   function randomizePositions() {
-    positions = garden.plantsInGarden.map((plant) => {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
+    const centralPlant = garden.plantsInGarden.find(
+      (plant) => plant.plant.parent1 === null
+    );
+
+    positions = centralPlant
+      ? [
+          {
+            x: width / 2,
+            y: height / 2,
+            size:
+              Math.floor(
+                calculateProportionalSize(
+                  centralPlant.plant.properties.heightInMetres,
+                  minHeightPlant,
+                  maxHeightPlant,
+                  minSizePlant,
+                  maxSizePlant
+                )
+              ) || averageSizePlant,
+            zIndex: Math.floor(height / 2),
+            grasses: grassAroundMain({
+              x: width / 2,
+              y: height / 2,
+              size: averageSizePlant,
+              zIndex: Math.floor(height / 2)
+            })
+          }
+        ]
+      : [];
+
+    const otherPlants = garden.plantsInGarden.filter(
+      (plant) => plant !== centralPlant
+    );
+
+    otherPlants.forEach((plant, index) => {
+      const angle = Math.random() * Math.PI * 2;
+      const distance = ((index + 1) / otherPlants.length) * radius;
+
+      const x = width / 2 + distance * Math.cos(angle);
+      const y = height / 2 + distance * Math.sin(angle);
+
       const size =
         Math.floor(
           calculateProportionalSize(
@@ -79,37 +119,51 @@
             maxSizePlant
           )
         ) || averageSizePlant;
-      const zIndex = Math.floor(y); // Assurez-vous que c'est un entier
-      const grasses = grassAroundMain({ x, y, zIndex });
-      return { x, y, size, zIndex, grasses };
+
+      const zIndex = Math.floor(y);
+      const grasses = grassAroundMain({ x, y, size, zIndex });
+
+      positions.push({ x, y, size, zIndex, grasses });
     });
   }
 
-  function grassAroundMain(position: { x: number; y: number; zIndex: number }) {
-    const size = 45;
+  function grassAroundMain(position: {
+    x: number;
+    y: number;
+    size: number;
+    zIndex: number;
+  }) {
+    const baseSize = averageSizePlant * 0.6;
+    const variationFactor = 0.2; // 20%
+
+    function randomizeSize(size: number) {
+      // Génère une variation de ±20% pour la taille
+      return size * (1 + Math.random() * 2 * variationFactor - variationFactor);
+    }
+
     return [
       {
-        x: position.x + 25,
-        y: position.y + 60,
-        size,
+        x: position.x,
+        y: position.y + position.size / 3,
+        size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex + 1
       },
       {
-        x: position.x + 25,
-        y: position.y + 10,
-        size,
+        x: position.x - position.size / 3,
+        y: position.y,
+        size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
       },
       {
         x: position.x,
-        y: position.y + 40,
-        size,
+        y: position.y - position.size / 3,
+        size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
       },
       {
-        x: position.x + 50,
-        y: position.y + 40,
-        size,
+        x: position.x + position.size / 3,
+        y: position.y,
+        size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
       }
     ];
@@ -128,19 +182,20 @@
         src="/grassjess.png"
         alt="Grass"
         class="absolute"
-        style={`left: ${grass.x}px; top: ${grass.y}px; width: ${grass.size}px; z-index: ${grass.zIndexGrass};`}
+        style={`left: ${grass.x}px; top: ${grass.y}px; width: ${grass.size}px; z-index: ${grass.zIndexGrass};transform:translate(-50%,-50%)`}
       />
     {/each}
     <img
       src={garden.plantsInGarden[index].plant.imageUrl}
       alt="Plant"
       class="absolute"
-      style={`left: ${x}px; top: ${y}px; width: ${size}px; height: auto; z-index: ${zIndex}; transform: translate(-50%, -50%)`}
+      style={`left: ${x}px; top: ${y}px; width: ${size}px; height: auto; z-index: ${zIndex}; transform:translate(-50%,-50%)`}
     />
+    <p>The size is {size}</p>
     {#if garden.plantsInGarden[index].plant.parent1 == null && showGardenName}
       <div
         class=" absolute font-primer text-2xl text-roel_purple px-2 py-1 bg-roel_green text-center"
-        style={`left: ${x}px; top: ${y + 80}px; width: 120px; height: auto; z-index: ${zIndex + 1};`}
+        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: 120px; height: auto; z-index:2000;`}
       >
         {garden.name}
       </div>
