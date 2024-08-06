@@ -48,13 +48,16 @@ import {
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
 export const publishEvent = async (event: SimpleEvent) => {
+  const useLocal = PUBLIC_TETHER_HOST === "localhost";
+
   const agent = await TetherAgent.create("server", {
     loglevel: "warn",
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
-      host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
-      port: 8883,
-      protocol: "mqtts"
+      ...BROKER_DEFAULTS.nodeJS,
+      host: PUBLIC_TETHER_HOST,
+      port: useLocal ? 1883 : 8883,
+      protocol: useLocal ? "mqtt" : "mqtts"
     }
   });
 
