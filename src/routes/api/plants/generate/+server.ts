@@ -20,6 +20,8 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
+  console.log("Get ready to request from OpenAI...");
+
   const completion = await openai.chat.completions.create({
     messages: prompt || buildTextPrompt(promptSettings, plant1, plant2),
     model: model || promptSettings.text.model,
