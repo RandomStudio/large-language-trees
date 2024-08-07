@@ -6,7 +6,7 @@
   }
 </script>
 
-<ReturnButton functionReturn={goBack}></ReturnButton>
+<ReturnButton onClicked={goBack}></ReturnButton>
 
 <div class="mx-10 pt-20 font-primer text-left text-roel_blue text-base mb-20">
   <img src="/titleimg_new.png" alt="logo" />

@@ -12,7 +12,7 @@
   }
 </script>
 
-<ReturnButton functionReturn={handleClose}></ReturnButton>
+<ReturnButton onClicked={handleClose}></ReturnButton>
 
 <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
   <div class="overflow-y-auto" style="max-height: calc(100% - 4rem);">

@@ -96,15 +96,15 @@
   {#if data.contents}
     {#if data.contents.name == "newUserFirstPlant"}
       <NewUserFirstPlant
-        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+        imageUrl={data.contents.contents.plant.imageUrl || ""}
         plantName={data.contents.contents.plant.commonName}
         gardenerName={data.contents.contents.user.username}
       ></NewUserFirstPlant>
     {/if}
 
-    {#if data.contents.name == "newPlantPollination"}
+    {#if data.contents.name == "newPlantPollination" && data.contents.contents.newPlant.imageUrl}
       <PollinationResult
-        imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
+        imageUrl={data.contents.contents.newPlant.imageUrl || ""}
         plantName={data.contents.contents.newPlant.commonName}
       ></PollinationResult>
     {/if}

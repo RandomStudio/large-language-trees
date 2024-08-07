@@ -1,8 +1,12 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type GardenViewData, type SelectPlant } from "../../../lib/types";
+  import {
+    type GardenViewData,
+    type InsertPlant,
+    type SelectPlant
+  } from "../../../lib/types";
   import { onDestroy, onMount } from "svelte";
-  import { DateTime, Duration } from "luxon";
+  import { DateTime } from "luxon";
 
   import PlantDisplay from "../../../components/PlantDisplay.svelte";
   import PopupInfo from "../../../components/PopupInfo.svelte";
@@ -10,8 +14,9 @@
   import { invalidateAll } from "$app/navigation";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
-  import { type SimpleEvent } from "$lib/events.types";
+  import { type EventNewPollination } from "$lib/events.types";
   import { DURATION_TILL_FERTILE, PLUG_NAMES } from "$lib/constants";
+  import PlantWasAddedPopup from "./pollination/PlantWasAddedPopup.svelte";
 
   function addTimeLeft(inputData: GardenViewData) {
     return {
@@ -55,6 +60,8 @@
 
   let datesInterval: NodeJS.Timeout | null = null;
 
+  let newPlantForPopup: InsertPlant | null = null;
+
   onMount(async () => {
     datesInterval = setInterval(updateTimeLeft, 1000);
     // const databaseInterval = setInterval(fetchdata, 1000);
@@ -63,13 +70,25 @@
       brokerOptions: BROWSER_CONNECTION
     });
 
-    const eventsPlug = await InputPlug.create(agent, PLUG_NAMES.simpleEvents);
+    const eventsPlug = await InputPlug.create(agent, PLUG_NAMES.simpleEvents, {
+      id: "newPlantPollination"
+    });
     eventsPlug.on("message", (payload) => {
-      const m = decode(payload) as SimpleEvent;
-      if (m.name === "newPlantPollination") {
-        // For any "newPlantPollination" event, reload page data just in case
-        invalidateAll();
+      const m = decode(payload) as EventNewPollination;
+      if (
+        m.payload.authorTop === data.user.id ||
+        m.payload.authorBottom === data.user.id
+      ) {
+        console.log("This plant belongs to me!", m.payload);
+        newPlantForPopup = m.payload;
+
+        setTimeout(() => {
+          console.log("Now clear popup...");
+          newPlantForPopup = null;
+          invalidateAll();
+        }, 4000);
       }
+      // For any "newPlantPollination" event, reload page data just in case
     });
   });
 
@@ -77,11 +96,18 @@
     if (datesInterval) {
       clearInterval(datesInterval);
     }
+    if (agent) {
+      agent.disconnect();
+    }
   });
 </script>
 
+{#if newPlantForPopup}
+  <PlantWasAddedPopup plant={newPlantForPopup} />
+{/if}
+
 <div class="mt-10 mx-10 font-primer text-roel_blue text-left">
-  {#each dataWithTimes.seedbank.plantsInSeedbank as plant, index}
+  {#each dataWithTimes.seedbank.plantsInSeedbank as plant}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
