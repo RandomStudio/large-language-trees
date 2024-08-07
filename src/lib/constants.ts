@@ -42,3 +42,6 @@ export const MIN_STATUS_FEED = 2;
  * maintain this limit.
  */
 export const EVENT_LOG_MAX = 100;
+
+/** How many plants (with their users) to show for "showMultipleFeaturedPlants" */
+export const MULTIPLE_FEATURED_PLANTS_COUNT = 2;

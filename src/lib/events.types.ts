@@ -80,6 +80,7 @@ export enum bRollNaming {
   IDLE = "idle",
   STATUS_FEED = "showStatusFeed",
   DETAIL = "showFeaturedPlant",
+  DETAIL_MULTI = "showMultipleFeaturedPlants",
   ZOOM_OUT = "showFeaturedGarden",
   ROLL_PAN = "showMultipleGardens",
   TOP_LIST = "showLeaderboard",
@@ -99,6 +100,14 @@ export interface DisplayFeaturedPlant extends DisplayUpdateEvent {
     plant: SelectPlant;
     user: PublicUserInfo;
   };
+}
+
+export interface DisplayMultipleFeaturedPlants extends DisplayUpdateEvent {
+  name: bRollNaming.DETAIL_MULTI;
+  contents: {
+    plant: SelectPlant;
+    user: PublicUserInfo;
+  }[];
 }
 
 export interface DisplayFeaturedGarden extends DisplayUpdateEvent {
@@ -162,6 +171,7 @@ export type DisplayEventContents =
   | DisplayPollination
   | DisplayStatusFeed
   | DisplayFeaturedPlant
+  | DisplayMultipleFeaturedPlants
   | DisplayFeaturedGarden
   | DisplayMultipleGardens
   | DisplayLeaderboard
