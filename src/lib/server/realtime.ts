@@ -295,6 +295,7 @@ export const getDataForAmbientDisplay = async (
       });
       const pickGarden = pickRandomElement(allGardens);
       const plantsInGarden = await db.query.gardensToPlants.findMany({
+        where: eq(gardensToPlants.gardenId, pickGarden.id),
         with: { plant: true }
       });
       const contents: DisplayFeaturedGarden = {
