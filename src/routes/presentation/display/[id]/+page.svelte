@@ -17,6 +17,7 @@
   import BRollDetail from "./BRollDetail.svelte";
 
   import { bRollNaming } from "$lib/events.types";
+  import StatsPollinations from "./StatsPollinations.svelte";
 
   export let data: PageData;
 
@@ -156,6 +157,14 @@
         count={data.contents.contents.count}
         gardens={data.contents.contents.gardens}
       ></StatsCount>
+    {/if}
+
+    {#if data.contents?.name == bRollNaming.STATISTICS_3}
+      <StatsPollinations
+        plant={data.contents.contents.plant}
+        pollinationCount={data.contents.contents.pollinationCount}
+        user={data.contents.contents.user}
+      ></StatsPollinations>
     {/if}
   {/if}
 </main>
