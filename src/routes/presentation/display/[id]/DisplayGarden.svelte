@@ -215,7 +215,7 @@
     {:else if showPlantName}
       <div
         class="absolute font-primer text-2xl text-roel_purple px-2 py-1 text-center bg-{colorBGText}"
-        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: 120px; height: auto;z-index:${zIndex}`}
+        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: 120px; height: auto;z-index:${zIndex + 1}`}
       >
         {garden.plantsInGarden[index].plant.commonName}
       </div>
