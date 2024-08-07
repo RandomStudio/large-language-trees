@@ -25,7 +25,16 @@
     };
   });
 
-  let commentary = "Show it some love!";
+  let comment = "Show it some love!";
+  if (pollinationCount > 30) {
+    comment = "...should we be concerned!";
+  }
+  if (pollinationCount > 20) {
+    comment = "What a player!";
+  }
+  if (pollinationCount > 10) {
+    comment = "...impressive!";
+  }
 </script>
 
 <div class="min-h-screen" style:background-color={brightColor}>
@@ -64,9 +73,9 @@
   </div>
 
   <div
-    class=" flex justify-end items-center absolute text-4xl font-primer px-2 py-0.5 right-[30px] bottom-[30px]"
+    class=" flex justify-end items-center absolute text-3xl font-primer px-2 py-0.5 right-[30px] bottom-[30px]"
     style="background-color:{darkColor}; color: {brightColor}"
   >
-    {commentary}
+    {comment}
   </div>
 </div>
