@@ -1,8 +1,7 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "$env/static/private";
-import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import type { InsertPlant, SelectPlant } from "$lib/types";
+import type { InsertPlant } from "$lib/types";
 import { v4 as uuidv4 } from "uuid";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import { buildTextPrompt } from "$lib/promptUtils";
