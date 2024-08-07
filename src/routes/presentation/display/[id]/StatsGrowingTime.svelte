@@ -19,6 +19,7 @@
 
   onMount(() => {
     img.onload = () => {
+      console.log("loaded");
       const result = getColors(img);
       brightColor = result.brightColor;
       darkColor = result.darkColor;
@@ -44,7 +45,7 @@
     {plantName.toUpperCase()}
   </div>
 
-  <div class=" absolute top-1/2 w-full h-auto" style="fill:{darkColor}">
+  <div class="absolute top-1/2 w-full h-auto" style="fill:{darkColor}">
     <svg viewBox="0 0 1000 801" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
@@ -53,12 +54,7 @@
   </div>
 
   <div class="fixed inset-0 flex items-center justify-center">
-    <img
-      src={imageUrl}
-      alt="Lavender"
-      bind:this={img}
-      crossorigin="anonymous"
-    />
+    <img alt="Featured Plant" src={imageUrl} bind:this={img} />
   </div>
 
   <div
