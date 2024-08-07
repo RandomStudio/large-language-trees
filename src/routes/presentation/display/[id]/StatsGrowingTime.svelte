@@ -24,6 +24,7 @@
       brightColor = result.brightColor;
       darkColor = result.darkColor;
     };
+    img.crossOrigin = "anonymous";
     ticker = setInterval(() => {
       age = DateTime.now().diff(DateTime.fromJSDate(created));
     }, 1000);
@@ -54,7 +55,12 @@
   </div>
 
   <div class="fixed inset-0 flex items-center justify-center">
-    <img alt="Featured Plant" src={imageUrl} bind:this={img} />
+    <img
+      alt="Featured Plant"
+      src={imageUrl}
+      bind:this={img}
+      crossorigin="anonymous"
+    />
   </div>
 
   <div
