@@ -195,7 +195,7 @@
       <img
         src="/grassjess.png"
         alt="Grass"
-        class="absolute"
+        class="absolute opacity-90"
         style={`left: ${grass.x}px; top: ${grass.y}px; width: ${grass.size}px; z-index: ${grass.zIndexGrass};transform:translate(-50%,-50%)`}
       />
     {/each}
