@@ -14,7 +14,7 @@
   import BRollLeaderboard from "./BRollLeaderboard.svelte";
   import BRollPan from "./BRollPan.svelte";
   import StatsCount from "./StatsCount.svelte";
-  import BRollDetail from "./BRollDetail.svelte";
+  import BRollDetail2 from "./BRollDetail2.svelte";
 
   import { bRollNaming } from "$lib/events.types";
   import StatsPollinations from "./StatsPollinations.svelte";
@@ -118,11 +118,10 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
-      <BRollDetail
-        imageUrl={data.contents.contents.plant.imageUrl || ""}
-        plantName={data.contents.contents.plant.commonName}
-        userName={data.contents.contents.user.username}
-      ></BRollDetail>
+      <BRollDetail2
+        plant={data.contents.contents.plant}
+        user={data.contents.contents.user}
+      ></BRollDetail2>
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
