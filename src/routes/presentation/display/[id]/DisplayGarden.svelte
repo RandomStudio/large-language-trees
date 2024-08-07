@@ -136,14 +136,18 @@
     zIndex: number;
   }) {
     const baseSize = averageSizePlant * 0.6;
-    const variationFactor = 0.2; // 20%
+    const variationFactor = 0.2;
+    const maxDistance = position.size / 3;
 
     function randomizeSize(size: number) {
-      // Génère une variation de ±20% pour la taille
       return size * (1 + Math.random() * 2 * variationFactor - variationFactor);
     }
 
-    return [
+    function randomizePosition(center: number) {
+      return center + (Math.random() * 2 - 1) * maxDistance;
+    }
+
+    const grassPatches = [
       {
         x: position.x,
         y: position.y + position.size / 3,
@@ -158,7 +162,7 @@
       },
       {
         x: position.x,
-        y: position.y - position.size / 3,
+        y: position.y - position.size / 4,
         size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
       },
@@ -167,15 +171,23 @@
         y: position.y,
         size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
+      },
+      {
+        x: randomizePosition(position.x),
+        y: randomizePosition(position.y),
+        size: randomizeSize(baseSize),
+        zIndexGrass: position.zIndex
       }
     ];
+
+    return grassPatches;
   }
 
   randomizePositions();
 </script>
 
 <div
-  class="fixed"
+  class="fixed border-4 border-black"
   style="width: {width}px; height: {height}px; position: absolute; left: {xGarden}px; top: {yGarden}px; "
 >
   {#each positions as { x, y, size, zIndex, grasses }, index}
