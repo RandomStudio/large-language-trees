@@ -15,8 +15,8 @@
     Math.sqrt((plantProportion * height * width) / garden.plantsInGarden.length)
   );
 
-  let maxSizePlant = averageSizePlant * 1.25;
-  let minSizePlant = averageSizePlant * 0.75;
+  let maxSizePlant = averageSizePlant * 1.35;
+  let minSizePlant = averageSizePlant * 0.65;
 
   function findMinMaxHeight() {
     if (!garden.plantsInGarden || garden.plantsInGarden.length === 0) {
@@ -175,7 +175,7 @@
 </script>
 
 <div
-  class="fixed border-4 border-black"
+  class="fixed"
   style="width: {width}px; height: {height}px; position: absolute; left: {xGarden}px; top: {yGarden}px; "
 >
   {#each positions as { x, y, size, zIndex, grasses }, index}
