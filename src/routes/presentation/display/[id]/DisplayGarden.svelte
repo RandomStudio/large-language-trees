@@ -207,15 +207,15 @@
     />
     {#if garden.plantsInGarden[index].plant.parent1 == null && showGardenName}
       <div
-        class="absolute font-primer text-2xl text-roel_purple px-2 py-1 text-center bg-{colorBGText}"
-        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: 120px; height: auto; z-index:2000;`}
+        class="absolute font-primer text-2xl text-roel_purple px-2 py-0.5 text-center bg-{colorBGText}"
+        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:2000`}
       >
         {garden.name}
       </div>
     {:else if showPlantName}
       <div
-        class="absolute font-primer text-2xl text-roel_purple px-2 py-1 text-center bg-{colorBGText}"
-        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: 120px; height: auto;z-index:${zIndex + 1}`}
+        class="absolute font-primer text-2xl text-roel_purple px-2 py-0.5 text-center bg-{colorBGText}"
+        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:${zIndex + 1}`}
       >
         {garden.plantsInGarden[index].plant.commonName}
       </div>
