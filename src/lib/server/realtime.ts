@@ -656,16 +656,42 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       const plantBottom = await db.query.plants.findFirst({
         where: eq(plants.id, parent2)
       });
+      if (!plantTop || !plantBottom) {
+        throw Error(
+          "Failed to find plant details for " +
+            JSON.stringify({ plantTop, plantBottom })
+        );
+      }
+      const { authorTop, authorBottom } = event.payload;
+      if (!authorTop || !authorBottom) {
+        throw Error(
+          "Missing user IDS for " + JSON.stringify({ authorTop, authorBottom })
+        );
+      }
+      const authorTopUser = await db.query.users.findFirst({
+        where: eq(users.id, authorTop)
+      });
+      const authorBottomUser = await db.query.users.findFirst({
+        where: eq(users.id, authorBottom)
+      });
+
+      if (!authorTopUser || !authorBottomUser) {
+        throw Error(
+          "Failed to find user details for " +
+            JSON.stringify({ authorTop, authorBottom })
+        );
+      }
       return [
         {
-          text: `${event.payload.authorTop}'s ${plantTop?.commonName}`,
+          text: `${authorTopUser.username}'s ${plantTop.commonName}`,
           highlight: true
         },
         {
           text: "just pollinated"
         },
         {
-          text: `${event.payload.authorBottom}'s ${plantBottom?.commonName}`
+          text: `${authorBottomUser.username}'s ${plantBottom.commonName}`,
+          highlight: true
         }
       ];
     }
