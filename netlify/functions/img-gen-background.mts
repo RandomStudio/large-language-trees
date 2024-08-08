@@ -1,5 +1,10 @@
+/** Should be identical to the version in
+ * `src/routes/api/images/generate/+server.ts`
+ */
 interface BackgroundGenerateImageRequest {
   plantId: string;
+  parent1Id: string;
+  parent2Id: string;
   fullPrompt: string;
   model: string;
   backgroundSecret: string;

@@ -1,25 +1,62 @@
 import { invalidateAll } from "$app/navigation";
-import type { InsertPlant, SelectPlant } from "$lib/types";
+import type {
+  GeneratePlantRequestBody,
+  InsertPlant,
+  SelectCandidateText,
+  SelectPlant
+} from "$lib/types";
+
+const checkCandidateTextReady = async (
+  plantId: string
+): Promise<InsertPlant | null> => {
+  const exists = await fetch(`/api/plants/${plantId}/candidateText`);
+  console.log("response status", exists.status);
+  if (exists.status === 200) {
+    const newPlant = (await exists.json()) as SelectCandidateText;
+    const contents = newPlant.contents as string;
+    return JSON.parse(contents) as InsertPlant;
+  } else {
+    return null;
+  }
+};
+
+const awaitTimeout = async (t: number): Promise<void> =>
+  new Promise((resolve, _reject) => {
+    setTimeout(() => {
+      resolve();
+    }, t);
+  });
 
 export async function confirmBreed(
+  userId: string,
   parents: [SelectPlant, SelectPlant]
 ): Promise<InsertPlant> {
-  console.log("confirmBreed...");
+  const jsonBody: GeneratePlantRequestBody = {
+    userId,
+    parents
+  };
   const res = await fetch("/api/plants/generate", {
     method: "POST",
-    body: JSON.stringify({
-      parents
-    })
+    body: JSON.stringify(jsonBody)
   });
-  console.log("Got response on /api/plants/generate", res);
-  if (res.status === 200) {
-    console.log("Created new candidate plant OK:", res);
-    return (await res.json()) as InsertPlant;
-  } else {
-    const { status, statusText } = res;
-    console.error("Error generating on backend:", { status, statusText });
-    throw Error("Generate failure");
+
+  const jsonResponse = (await res.json()) as {
+    backgroundResponse: any;
+    newPlantId: string;
+  };
+
+  const newPlantId = jsonResponse.newPlantId;
+
+  let candidatePlant = null;
+
+  while (candidatePlant === null) {
+    await awaitTimeout(2000);
+    console.log("Check for candidate text generation...");
+    candidatePlant = await checkCandidateTextReady(newPlantId);
   }
+
+  console.log("... got a candidate plant!", candidatePlant);
+  return candidatePlant;
 }
 
 export async function addConfirmedPlant(

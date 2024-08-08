@@ -5,6 +5,9 @@ import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import type { GenerateImageRequest } from "./types";
 
+/** Should be identical to the version in
+ * `netlify/functions/img-gen-background.mts`
+ */
 interface BackroundGenerateImageRequest {
   plantId: string;
   fullPrompt: string;
@@ -43,7 +46,7 @@ export const POST: RequestHandler = async (event) => {
     model: model || promptSettings.image.model
   };
   console.log({ bodyJson });
-  await fetch("/.netlify/functions/img-gen-background", {
+  await event.fetch("/.netlify/functions/img-gen-background", {
     method: "POST",
     body: JSON.stringify(bodyJson)
   });

@@ -2,6 +2,7 @@ import type {
   gardens,
   gardensToPlants,
   generatedImages,
+  generatedText,
   plants,
   presentationState,
   promptSettingsTable,
@@ -9,6 +10,7 @@ import type {
   seedbanksToPlants,
   users
 } from "$lib/server/schema";
+import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 export type SelectPlant = typeof plants.$inferSelect;
 export type InsertPlant = typeof plants.$inferInsert;
@@ -35,6 +37,8 @@ export type GeneratedImage = typeof generatedImages.$inferSelect;
 export type SelectPromptSettings = typeof promptSettingsTable.$inferInsert;
 
 export type PresentationDisplayState = typeof presentationState.$inferInsert;
+
+export type SelectCandidateText = typeof generatedText.$inferSelect;
 
 export interface GardenPlantEntryWithPlant extends GardenPlantEntry {
   plant: SelectPlant;
@@ -111,4 +115,11 @@ export interface PromptConfig {
     model: ImageModelNames;
     instructions: string;
   };
+}
+
+export interface GeneratePlantRequestBody {
+  userId: string;
+  prompt?: ChatCompletionMessageParam[];
+  model?: string;
+  parents: [SelectPlant, SelectPlant];
 }
