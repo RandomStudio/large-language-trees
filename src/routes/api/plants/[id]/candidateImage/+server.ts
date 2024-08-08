@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import type { CandidateImageBody } from "./types";
 import { uploadToS3 } from "$lib/server/images";
-import { URL_PREFIX } from "../../../../../defaults/constants";
+import { URL_PREFIX } from "$lib/constants";
 
 export const GET: RequestHandler = async ({ params }) => {
   const plantId = params["id"];

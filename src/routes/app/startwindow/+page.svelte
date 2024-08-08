@@ -7,7 +7,7 @@
 
   export let data: GardenViewData;
 
-  let selectedPlant = data.seedBank.plantsInSeedbank[0].plant;
+  let selectedPlant = data.seedbank.plantsInSeedbank[0].plant;
   let showMessage = true;
   let showNewParagraph = false; // Control visibility of the new paragraph
   let showDescription = true; // Control visibility of the plant description
@@ -29,7 +29,7 @@
 </script>
 
 <div class="bg-roel_blue rounded-b-full">
-  <div class="font-primer text-roel_green text-left pt-[88px]">
+  <div class="font-primer text-roel_green text-left pt-[68px]">
     {#if showMessage}
       <p class="mx-10 text-2xl -mb-5">
         Dear digital gardener, here is your first plant!
@@ -41,7 +41,9 @@
       </p>
     {/if}
     {#if selectedPlant}
-      <PlantDisplay plant={selectedPlant}></PlantDisplay>
+      <div class="mx-auto mt-3 w-64">
+        <PlantDisplay plant={selectedPlant}></PlantDisplay>
+      </div>
     {:else}
       <p>No plants available</p>
     {/if}
@@ -52,10 +54,10 @@
     <div>
       {#if selectedPlant}
         {#if showDescription}
-          <p class="text-3xl mt-8 text-center">
+          <p class="text-3xl mt-4 text-center">
             {selectedPlant.commonName}
           </p>
-          <p class="text-base mt-6">
+          <p class="text-base mt-3">
             {selectedPlant.description}
           </p>
         {/if}

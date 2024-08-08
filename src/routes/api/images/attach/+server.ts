@@ -4,7 +4,7 @@ import { plants } from "$lib/server/schema";
 import type { AttachImageRequest, AttachImageResponse } from "$lib/types";
 import { error, json, type RequestHandler } from "@sveltejs/kit";
 import { v4 as uuidv4 } from "uuid";
-import { URL_PREFIX } from "../../../../defaults/constants";
+import { URL_PREFIX } from "$lib/constants";
 import { eq } from "drizzle-orm";
 
 export const POST: RequestHandler = async ({ request }) => {

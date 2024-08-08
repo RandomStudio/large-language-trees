@@ -1,7 +1,7 @@
 <script lang="ts">
   import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
-  import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
+  import BRollZoomOut from "./BRollZoomOut.svelte";
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -17,6 +17,8 @@
   import BRollDetail from "./BRollDetail.svelte";
 
   import { bRollNaming } from "$lib/events.types";
+  import BRollDetailMulti from "./BRollDetailMulti.svelte";
+  import StatsPollinations from "./StatsPollinations.svelte";
 
   export let data: PageData;
 
@@ -25,11 +27,7 @@
   let nextTimeout = Date.now();
   let intervalCheck: NodeJS.Timeout | null = null;
 
-  const notifyServer = async () => {
-    const message: DisplayNotifyServer = {
-      displayId: data.id,
-      event: "timeout"
-    };
+  const notifyServer = async (message: DisplayNotifyServer) => {
     console.log("Notify server that", data.id, "has timed out...");
     const res = await fetch("/api/displayNotifyServer", {
       method: "POST",
@@ -44,6 +42,10 @@
   };
 
   onMount(async () => {
+    notifyServer({
+      event: "init",
+      displayId: data.id
+    });
     if (intervalCheck) {
       clearInterval(intervalCheck);
     }
@@ -54,7 +56,10 @@
     intervalCheck = setInterval(() => {
       if (Date.now() >= nextTimeout) {
         console.log("... Timeout", nextTimeout, "reached!");
-        notifyServer();
+        notifyServer({
+          displayId: data.id,
+          event: "timeout"
+        });
       }
     }, 1000);
 
@@ -89,49 +94,45 @@
   });
 </script>
 
-+page.svelte
 <main>
-  <h1>
-    Display #{data.id}
-  </h1>
-  <div>
-    <pre>
-      <code>
-        {JSON.stringify(data.contents, null, 2)}
-      </code>
-    </pre>
-  </div>
-
   {#if data.contents}
     {#if data.contents.name == "newUserFirstPlant"}
       <NewUserFirstPlant
-        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
+        imageUrl={data.contents.contents.plant.imageUrl || ""}
         plantName={data.contents.contents.plant.commonName}
         gardenerName={data.contents.contents.user.username}
       ></NewUserFirstPlant>
     {/if}
 
-    {#if data.contents.name == "newPlantPollination"}
+    {#if data.contents.name == "newPlantPollination" && data.contents.contents.newPlant.imageUrl}
       <PollinationResult
-        imageUrl={data.contents.contents.newPlant.imageUrl || "/59.png"}
+        imageUrl={data.contents.contents.newPlant.imageUrl || ""}
         plantName={data.contents.contents.newPlant.commonName}
       ></PollinationResult>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATUS_FEED}
-      <BRollStatusFeed contents={data.contents.contents}></BRollStatusFeed>
+      <BRollStatusFeed
+        eventLogs={data.contents.contents.eventLogs}
+        gardens={data.contents.contents.gardens}
+      ></BRollStatusFeed>
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
       <BRollDetail
-        imageUrl={data.contents.contents.plant.imageUrl || "/59.png"}
-        plantName={data.contents?.contents.plant.commonName}
-        userName={data.contents?.contents.user.username}
+        plant={data.contents.contents.plant}
+        user={data.contents.contents.user}
       ></BRollDetail>
     {/if}
 
+    {#if data.contents.name === bRollNaming.DETAIL_MULTI}
+      <BRollDetailMulti plantsWithusers={data.contents.contents} />
+    {/if}
+
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      <BRollZoomOut userName={data.contents.contents.user.username}
+      <BRollZoomOut
+        garden={data.contents.contents.garden}
+        userName={data.contents.contents.user.username}
       ></BRollZoomOut>
     {/if}
 
@@ -140,7 +141,10 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
-      <BRollLeaderboard contents={data.contents.contents}></BRollLeaderboard>
+      <BRollLeaderboard
+        topPollinators={data.contents.contents.topPollinators}
+        topGarden={data.contents.contents.topGarden}
+      ></BRollLeaderboard>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATISTICS_1}
@@ -148,12 +152,23 @@
         imageUrl={data.contents.contents.plant.imageUrl || ""}
         plantName={data.contents.contents.plant.commonName}
         gardenerName={data.contents.contents.user.username}
-        date={data.contents.contents.plant.created}
+        created={data.contents.contents.plant.created}
       ></StatsGrowingTime>
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_2}
-      <StatsCount count={data.contents?.contents.count}></StatsCount>
+      <StatsCount
+        count={data.contents.contents.count}
+        gardens={data.contents.contents.gardens}
+      ></StatsCount>
+    {/if}
+
+    {#if data.contents?.name == bRollNaming.STATISTICS_3}
+      <StatsPollinations
+        plant={data.contents.contents.plant}
+        pollinationCount={data.contents.contents.pollinationCount}
+        user={data.contents.contents.user}
+      ></StatsPollinations>
     {/if}
   {/if}
 </main>

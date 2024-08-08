@@ -8,9 +8,10 @@ import {
   gardensToPlants,
   plants,
   presentationState,
+  seedbanksToPlants,
   users
 } from "./schema";
-import { count, desc, eq, not } from "drizzle-orm";
+import { count, desc, eq, isNotNull, or } from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
@@ -19,39 +20,51 @@ import {
   type DisplayFirstPlant,
   type DisplayIdle,
   type DisplayLeaderboard,
+  type DisplayMultipleFeaturedPlants,
   type DisplayMultipleGardens,
   type DisplayPlantCount,
   type DisplayPlantGrowingTime,
+  type DisplayPlantPollinationStats,
   type DisplayPollination,
   type DisplayStatusFeed,
   type DisplayUpdateMessage,
   type FeedTextEntry,
   type SimpleEvent
 } from "$lib/events.types";
-import { pickMultipleRandomElements, pickRandomElement } from "random-elements";
+import {
+  pickKeysWithWeights,
+  pickMultipleRandomElements,
+  pickRandomElement
+} from "random-elements";
 import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/types";
 import { stripUserInfo } from "$lib/security";
 import {
+  DISPLAY_VIEW_WEIGHTINGS,
   LIMIT_LEADERBOARD,
   LIMIT_STATUS_FEED,
   MIN_STATUS_FEED,
-  NUM_GARDENS_MULTI
-} from "../../defaults/presentation";
-import { PLUG_NAMES } from "../../defaults/constants";
+  MULTIPLE_FEATURED_PLANTS_COUNT,
+  NUM_GARDENS_MULTI,
+  PLUG_NAMES
+} from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
 export const publishEvent = async (event: SimpleEvent) => {
+  const useLocal = PUBLIC_TETHER_HOST === "localhost";
+
   const agent = await TetherAgent.create("server", {
     loglevel: "warn",
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
-      host: "50e2193c64234fd18838db7ad6711592.s1.eu.hivemq.cloud",
-      port: 8883,
-      protocol: "mqtts"
+      ...BROKER_DEFAULTS.nodeJS,
+      host: PUBLIC_TETHER_HOST,
+      port: useLocal ? 1883 : 8883,
+      protocol: useLocal ? "mqtt" : "mqtts"
     }
   });
 
   const plug = new OutputPlug(agent, PLUG_NAMES.simpleEvents, {
+    id: event.name,
     publishOptions: { qos: 2 }
   });
 
@@ -64,7 +77,7 @@ export const publishEvent = async (event: SimpleEvent) => {
 
   await logSimpleEvents(event);
 
-  await updatePresentationDisplaysOnEvent(event);
+  await showMainEvent(event);
 };
 
 const publishDisplayInstructions = async (
@@ -74,6 +87,7 @@ const publishDisplayInstructions = async (
 ) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
   const agent = await TetherAgent.create("server", {
+    loglevel: "warn",
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
       host: PUBLIC_TETHER_HOST,
@@ -100,13 +114,48 @@ const publishDisplayInstructions = async (
   await agent.disconnect();
 };
 
+/** It is not strictly **necessary** to publish these messages via Tether/MQTT,
+ * since they originate from the display instances and are POSTed via HTTP requests
+ * to the server. However, since they are part of the event/realtime system, it
+ * makes debugging easier if we are able to subscribe to these messages just like the
+ * rest.
+ *
+ * Recall that the reason we don't use Tether/MQTT from the displays-to-server is that
+ * the Netlify application is "serverless" and therefore cannot subscribe to MQTT
+ * messages in the usual way - it is not a persistent process and cannot maintain a
+ * persisted TCP connection.
+ */
+const publishDisplayNotification = async (message: DisplayNotifyServer) => {
+  const useLocal = PUBLIC_TETHER_HOST === "localhost";
+  const agent = await TetherAgent.create("presentation", {
+    loglevel: "warn",
+    brokerOptions: {
+      ...BROKER_DEFAULTS.nodeJS,
+      host: PUBLIC_TETHER_HOST,
+      port: useLocal ? 1883 : 8883,
+      protocol: useLocal ? "mqtt" : "mqtts"
+    }
+  });
+
+  const plug = new OutputPlug(agent, PLUG_NAMES.displayNotifications, {
+    id: message.displayId,
+    publishOptions: { qos: 1 }
+  });
+
+  await plug.publish(encode(message));
+
+  await agent.disconnect();
+};
+
 export const handleDisplayNotification = async (
   message: DisplayNotifyServer
 ) => {
   const { displayId, event } = message;
 
+  await publishDisplayNotification(message);
+
   const IDLE_STATE: DisplayIdle = {
-    name: "idle",
+    name: bRollNaming.IDLE,
     contents: null
   };
 
@@ -134,13 +183,11 @@ export const handleDisplayNotification = async (
     console.log(
       "A display timed out its current animation, pick something new"
     );
-    type keyType = keyof typeof bRollNaming;
-    const keys = Object.keys(bRollNaming) as keyType[];
-
-    const pickDisplayType = pickRandomElement(keys);
+    console.log({ weights: DISPLAY_VIEW_WEIGHTINGS, bRollViews: bRollNaming });
+    const pickDisplayType = pickKeysWithWeights(DISPLAY_VIEW_WEIGHTINGS);
 
     try {
-      const contents = await randomAmbientDisplay(pickDisplayType);
+      const contents = await getDataForAmbientDisplay(pickDisplayType);
 
       await updateScreenStateAndPublish(displayId, contents, 0, 15000);
     } catch (e) {
@@ -152,11 +199,11 @@ export const handleDisplayNotification = async (
   }
 };
 
-const randomAmbientDisplay = async (
-  pickDisplayType: keyof typeof bRollNaming
+export const getDataForAmbientDisplay = async (
+  pickDisplayType: bRollNaming
 ): Promise<DisplayEventContents> => {
   switch (pickDisplayType) {
-    case "DETAIL": {
+    case bRollNaming.DETAIL: {
       const allNormalUsers = await db.query.users.findMany({
         where: eq(users.isAdmin, false),
         with: { myGarden: true }
@@ -167,20 +214,22 @@ const randomAmbientDisplay = async (
       const pickRandomUser = pickRandomElement(allNormalUsers);
 
       const userGarden = pickRandomUser.myGarden;
-      const plantsInGarden = await db.query.gardens.findMany({
+      const gardenWithPlants = await db.query.gardens.findFirst({
         where: eq(gardens.id, userGarden.id),
         with: { plantsInGarden: true }
       });
-      if (plantsInGarden.length === 0) {
-        throw Error("no plants in user garden!");
+      if (!gardenWithPlants) {
+        throw Error("no plants in user garden");
       }
-      const pickRandomPlant = pickRandomElement(plantsInGarden);
-      const thePlant = await db.query.plants.findFirst({
-        where: eq(plants.id, pickRandomPlant.id)
-      });
 
+      const pickRandomPlant = pickRandomElement(
+        gardenWithPlants.plantsInGarden
+      );
+      const thePlant = await db.query.plants.findFirst({
+        where: eq(plants.id, pickRandomPlant.plantId)
+      });
       if (thePlant === undefined) {
-        throw Error("failed to find plant " + pickRandomPlant.id);
+        throw Error("failed to find plant " + pickRandomPlant);
       }
       const contents: DisplayFeaturedPlant = {
         name: bRollNaming.DETAIL,
@@ -191,7 +240,55 @@ const randomAmbientDisplay = async (
       };
       return contents;
     }
-    case "STATUS_FEED": {
+
+    case bRollNaming.DETAIL_MULTI: {
+      const allNormalUsers = await db.query.users.findMany({
+        where: eq(users.isAdmin, false),
+        with: { myGarden: true }
+      });
+      if (allNormalUsers.length == 0) {
+        throw Error("no users to choose from!");
+      }
+      const pickRandomUsers = pickMultipleRandomElements(
+        allNormalUsers,
+        MULTIPLE_FEATURED_PLANTS_COUNT
+      );
+
+      let results = await Promise.all(
+        pickRandomUsers.map(async (u) => {
+          const userGarden = u.myGarden;
+          const gardenWithPlants = await db.query.gardens.findFirst({
+            where: eq(gardens.id, userGarden.id),
+            with: { plantsInGarden: true }
+          });
+          if (!gardenWithPlants) {
+            throw Error("no plants in user garden");
+          }
+
+          const pickRandomPlant = pickRandomElement(
+            gardenWithPlants.plantsInGarden
+          );
+          const thePlant = await db.query.plants.findFirst({
+            where: eq(plants.id, pickRandomPlant.plantId)
+          });
+          if (thePlant === undefined) {
+            throw Error("failed to find plant " + pickRandomPlant);
+          }
+          return {
+            plant: thePlant,
+            user: stripUserInfo(u)
+          };
+        })
+      );
+
+      const contents: DisplayMultipleFeaturedPlants = {
+        name: bRollNaming.DETAIL_MULTI,
+        contents: results
+      };
+      return contents;
+    }
+
+    case bRollNaming.STATUS_FEED: {
       const latestEvents = await db
         .select()
         .from(eventLogs)
@@ -202,17 +299,30 @@ const randomAmbientDisplay = async (
           `Not enough event logs (${latestEvents.length} < ${MIN_STATUS_FEED}) to show this view`
         );
       }
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
+      const gardens = pickMultipleRandomElements(allGardens, NUM_GARDENS_MULTI);
       const contents: DisplayStatusFeed = {
         name: bRollNaming.STATUS_FEED,
-        contents: latestEvents.map((entry) => entry.contents as FeedTextEntry)
+        contents: {
+          eventLogs: latestEvents.map(
+            (entry) => entry.contents as FeedTextEntry
+          ),
+          gardens
+        }
       };
       return contents;
     }
-    case "ROLL_PAN": {
-      // TODO: exclude admin gardens
-      const allGardens = await db.query.gardens.findMany({
-        with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
-      });
+
+    case bRollNaming.ROLL_PAN: {
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
       if (allGardens.length < 5) {
         throw Error("Not enough gardens to display count=" + NUM_GARDENS_MULTI);
       }
@@ -230,12 +340,14 @@ const randomAmbientDisplay = async (
       };
       return contents;
     }
-    case "ZOOM_OUT": {
+
+    case bRollNaming.ZOOM_OUT: {
       const allGardens = await db.query.gardens.findMany({
         with: { myOwner: true, plantsInGarden: true }
       });
       const pickGarden = pickRandomElement(allGardens);
       const plantsInGarden = await db.query.gardensToPlants.findMany({
+        where: eq(gardensToPlants.gardenId, pickGarden.id),
         with: { plant: true }
       });
       const contents: DisplayFeaturedGarden = {
@@ -250,7 +362,8 @@ const randomAmbientDisplay = async (
       };
       return contents;
     }
-    case "TOP_LIST": {
+
+    case bRollNaming.TOP_LIST: {
       // TODO: This is probably not a slow query, but certainly a very big payload,
       // potentially: it is ALL gardens with ALL plant details for EVERY plant in
       // each garden, plus all user details.
@@ -270,16 +383,29 @@ const randomAmbientDisplay = async (
         })
         .slice(0, LIMIT_LEADERBOARD);
 
+      const topGarden = orderedByPlantCount[0];
+      const topGardenWithPlants = await db.query.gardens.findFirst({
+        where: eq(gardens.id, topGarden.id),
+        with: { plantsInGarden: { with: { plant: true } } }
+      });
+      if (!topGardenWithPlants) {
+        throw Error("failed to load top garden with plants");
+      }
+
       const contents: DisplayLeaderboard = {
         name: bRollNaming.TOP_LIST,
-        contents: orderedByPlantCount.map((garden) => ({
-          username: garden.myOwner.username,
-          count: garden.plantsInGarden.length
-        }))
+        contents: {
+          topPollinators: orderedByPlantCount.map((garden) => ({
+            username: garden.myOwner.username,
+            count: garden.plantsInGarden.length
+          })),
+          topGarden: topGardenWithPlants
+        }
       };
       return contents;
     }
-    case "STATISTICS_1": {
+
+    case bRollNaming.STATISTICS_1: {
       const allGardens = await db
         .select({ id: gardens.id, userId: gardens.userId })
         .from(gardens);
@@ -304,7 +430,7 @@ const randomAmbientDisplay = async (
       };
       return contents;
     }
-    case "STATISTICS_2": {
+    case bRollNaming.STATISTICS_2: {
       const [result] = await db.select({ count: count() }).from(plants);
       const allGardens = await db.query.gardens.findMany({
         with: {
@@ -330,15 +456,88 @@ const randomAmbientDisplay = async (
       };
       return contents;
     }
+
+    case bRollNaming.STATISTICS_3: {
+      const allPlants = await db
+        .select({
+          id: plants.id,
+          commonName: plants.commonName,
+          parent1: plants.parent1,
+          parent2: plants.parent2
+        })
+        .from(plants)
+        .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
+        .where(isNotNull(seedbanksToPlants));
+
+      console.log({ allPlants });
+      const pickPlant = pickRandomElement(allPlants);
+
+      const asParentCount = await db
+        .select({ id: plants.id, name: plants.commonName })
+        .from(plants)
+        .where(
+          or(eq(plants.parent1, pickPlant.id), eq(plants.parent2, pickPlant.id))
+        );
+
+      console.log(
+        "plant",
+        pickPlant,
+        "appears as parent",
+        asParentCount.length,
+        "times"
+      );
+
+      const plantWithSeedbanks = await db.query.plants.findFirst({
+        where: eq(plants.id, pickPlant.id),
+        with: { inSeedbanks: { with: { seedbank: true } } }
+      });
+      if (plantWithSeedbanks?.inSeedbanks === undefined) {
+        throw Error("why no seedbank entry?");
+      }
+
+      // In theory, the plant could be in multiple seedbanks,
+      // but with the way the "game" plays now, it typically appears
+      // only once. So we pick the first one.
+      const [seedbank] = plantWithSeedbanks?.inSeedbanks;
+      if (!seedbank.seedbank.userId) {
+        throw Error("why no user ID?");
+      }
+      const owner = await db.query.users.findFirst({
+        where: eq(users.id, seedbank.seedbank.userId)
+      });
+      if (!owner) {
+        throw Error("why no owner?");
+      }
+
+      const contents: DisplayPlantPollinationStats = {
+        name: bRollNaming.STATISTICS_3,
+        contents: {
+          plant: plantWithSeedbanks,
+          pollinationCount: asParentCount.length,
+          user: stripUserInfo(owner)
+        }
+      };
+
+      return contents;
+    }
+
+    case bRollNaming.IDLE: {
+      // TODO: this is useless, shouldn't be chosen
+      return {
+        name: bRollNaming.IDLE,
+        contents: null
+      };
+    }
+
     default: {
-      throw Error("unknown pickDisplayType");
+      throw Error(
+        "unknown pickDisplayType: " + JSON.stringify({ pickDisplayType })
+      );
     }
   }
 };
 
-export const updatePresentationDisplaysOnEvent = async (
-  latestEvent: SimpleEvent
-) => {
+export const showMainEvent = async (latestEvent: SimpleEvent) => {
   switch (latestEvent.name) {
     case "newUser": {
       // Ignore new user events for now
@@ -444,8 +643,11 @@ const findScreenFor = async (priority: number): Promise<string | null> => {
     : null;
 };
 
+export const getAllScreens = async () =>
+  await db.select().from(presentationState);
+
 /** Publish updates on channel, persist to database */
-const updateScreenStateAndPublish = async (
+export const updateScreenStateAndPublish = async (
   targetId: string,
   contents: DisplayEventContents,
   priority: number | null,
@@ -511,16 +713,42 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       const plantBottom = await db.query.plants.findFirst({
         where: eq(plants.id, parent2)
       });
+      if (!plantTop || !plantBottom) {
+        throw Error(
+          "Failed to find plant details for " +
+            JSON.stringify({ plantTop, plantBottom })
+        );
+      }
+      const { authorTop, authorBottom } = event.payload;
+      if (!authorTop || !authorBottom) {
+        throw Error(
+          "Missing user IDS for " + JSON.stringify({ authorTop, authorBottom })
+        );
+      }
+      const authorTopUser = await db.query.users.findFirst({
+        where: eq(users.id, authorTop)
+      });
+      const authorBottomUser = await db.query.users.findFirst({
+        where: eq(users.id, authorBottom)
+      });
+
+      if (!authorTopUser || !authorBottomUser) {
+        throw Error(
+          "Failed to find user details for " +
+            JSON.stringify({ authorTop, authorBottom })
+        );
+      }
       return [
         {
-          text: `${event.payload.authorTop}'s ${plantTop?.commonName}`,
+          text: `${authorTopUser.username}'s ${plantTop.commonName}`,
           highlight: true
         },
         {
           text: "just pollinated"
         },
         {
-          text: `${event.payload.authorBottom}'s ${plantBottom?.commonName}`
+          text: `${authorBottomUser.username}'s ${plantBottom.commonName}`,
+          highlight: true
         }
       ];
     }

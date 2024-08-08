@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({
       return {
         // TODO: just load the user seedbank (including its seeds, not seeds + seedbankId separately)
         user: thisUser,
-        seedBank,
+        seedbank: seedBank,
         garden,
         plantId
       };

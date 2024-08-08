@@ -2,9 +2,11 @@
   import { invalidateAll } from "$app/navigation";
   import { onDestroy, onMount } from "svelte";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
-  import { PLUG_NAMES } from "../../../defaults/constants.js";
+  import { PLUG_NAMES } from "$lib/constants.js";
   import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
+  import { bRollNaming } from "$lib/events.types.js";
 
+  const modes = Object.keys(bRollNaming);
   let connected = false;
   let messages: string[] = [];
 
@@ -35,29 +37,8 @@
       PLUG_NAMES.displayInstructions
     );
 
-    displayInstructionsPlug.on("message", (payload, topic) => {
+    displayInstructionsPlug.on("message", () => {
       invalidateAll();
-
-      //   const screenId = parseAgentIdOrGroup(topic);
-
-      //   const targetDisplay = data.displays.find((s) => s.id === screenId);
-      //   if (targetDisplay) {
-      //     console.log(
-      //       "change targetDisplay",
-      //       targetDisplay,
-      //       "to content",
-      //       decoded.contents
-      //     );
-
-      //   } else {
-      //     console.error(
-      //       "Could not match target screen ID",
-      //       screenId,
-      //       "with displays in",
-      //       JSON.stringify(data.displays.map((d) => d.id))
-      //     );
-      //     throw Error("Could not match target display");
-      //   }
     });
   });
 
@@ -72,6 +53,20 @@
   Tether@{agent?.getConfig().brokerOptions.host}: {connected
     ? "✅ connected"
     : "❌ not connected"}
+</div>
+
+<div>
+  <h2 class="font-bold text-xl">Test Displays</h2>
+  {#each modes as m}
+    <button
+      class="rounded border-solid border-sky-500 border-2 p-2 m-2"
+      on:click={async () => {
+        await fetch(`/api/forceDisplay?mode=${m}`, {
+          method: "POST"
+        });
+      }}>{m}</button
+    >
+  {/each}
 </div>
 
 <h2 class="font-bold text-xl">Presentation State</h2>

@@ -1,17 +1,45 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type GardenViewData, type SelectPlant } from "../../../lib/types";
+  import {
+    type GardenViewData,
+    type InsertPlant,
+    type SelectPlant
+  } from "../../../lib/types";
   import { onDestroy, onMount } from "svelte";
-  export let data: GardenViewData;
+  import { DateTime } from "luxon";
+
   import PlantDisplay from "../../../components/PlantDisplay.svelte";
   import PopupInfo from "../../../components/PopupInfo.svelte";
 
   import { invalidateAll } from "$app/navigation";
-  import moment from "moment";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
-  import { type SimpleEvent } from "$lib/events.types";
-  import { PLUG_NAMES } from "../../../defaults/constants";
+  import { type EventNewPollination } from "$lib/events.types";
+  import { DURATION_TILL_FERTILE, PLUG_NAMES } from "$lib/constants";
+  import PlantWasAddedPopup from "./pollination/PlantWasAddedPopup.svelte";
+
+  function addTimeLeft(inputData: GardenViewData) {
+    return {
+      ...inputData,
+      seedbank: {
+        ...inputData.seedbank,
+        plantsInSeedbank: inputData.seedbank.plantsInSeedbank.map((p) => ({
+          ...p,
+          plant: {
+            ...p.plant,
+            timeLeft: DateTime.fromJSDate(p.plant.created)
+              .plus(DURATION_TILL_FERTILE)
+              .diffNow()
+          }
+        }))
+      }
+    };
+  }
+
+  export let data: GardenViewData;
+
+  let dataWithTimes = addTimeLeft(data);
+  console.log(dataWithTimes);
 
   let selectedPlant: SelectPlant | null = null;
 
@@ -19,61 +47,48 @@
     goto(`gallery/pollination/` + id);
   }
 
-  function convertMinutesToMinutesAndSeconds(decimalMinutes: number) {
-    const minutes = Math.floor(decimalMinutes);
-    const seconds = Math.round((decimalMinutes - minutes) * 60);
-    return minutes != 0 ? `${minutes} min ${seconds} sec` : `${seconds} sec`;
-  }
-
   let yourPlant: SelectPlant | null =
-    data.seedBank.plantsInSeedbank.find(
+    data.seedbank.plantsInSeedbank.find(
       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
 
-  let dates: number[] = [];
-
-  async function updateDates() {
-    const now = moment();
-    const newDates = [];
-    let index = 0;
-    for (const [key, plant] of Object.entries(data.seedBank.plantsInSeedbank)) {
-      const createdDate = moment(plant.plant.created);
-      const duration = moment.duration(now.diff(createdDate));
-      const minutes = duration.asMinutes();
-      newDates[index] = minutes;
-      index++;
-    }
-    dates = newDates;
+  function updateTimeLeft() {
+    dataWithTimes = addTimeLeft(data);
   }
-
-  // async function fetchdata() {
-  //   invalidateAll();
-  //   // console.log(data.seedBank.plantsInSeedbank);
-  //   yourPlant =
-  //     data.seedBank.plantsInSeedbank.find(
-  //       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
-  //     )?.plant || null;
-  // }
 
   let agent: TetherAgent | null;
 
   let datesInterval: NodeJS.Timeout | null = null;
 
+  let newPlantForPopup: InsertPlant | null = null;
+
   onMount(async () => {
-    datesInterval = setInterval(updateDates, 1000);
+    datesInterval = setInterval(updateTimeLeft, 1000);
     // const databaseInterval = setInterval(fetchdata, 1000);
 
     agent = await TetherAgent.create("app", {
       brokerOptions: BROWSER_CONNECTION
     });
 
-    const eventsPlug = await InputPlug.create(agent, PLUG_NAMES.simpleEvents);
+    const eventsPlug = await InputPlug.create(agent, PLUG_NAMES.simpleEvents, {
+      id: "newPlantPollination"
+    });
     eventsPlug.on("message", (payload) => {
-      const m = decode(payload) as SimpleEvent;
-      if (m.name === "newPlantPollination") {
-        // For any "newPlantPollination" event, reload page data just in case
-        invalidateAll();
+      const m = decode(payload) as EventNewPollination;
+      if (
+        m.payload.authorTop === data.user.id ||
+        m.payload.authorBottom === data.user.id
+      ) {
+        console.log("This plant belongs to me!", m.payload);
+        newPlantForPopup = m.payload;
+
+        setTimeout(() => {
+          console.log("Now clear popup...");
+          newPlantForPopup = null;
+          invalidateAll();
+        }, 4000);
       }
+      // For any "newPlantPollination" event, reload page data just in case
     });
   });
 
@@ -81,15 +96,22 @@
     if (datesInterval) {
       clearInterval(datesInterval);
     }
+    if (agent) {
+      agent.disconnect();
+    }
   });
 </script>
 
+{#if newPlantForPopup}
+  <PlantWasAddedPopup plant={newPlantForPopup} />
+{/if}
+
 <div class="mt-10 mx-10 font-primer text-roel_blue text-left">
-  {#each data.seedBank.plantsInSeedbank as plant, index}
+  {#each dataWithTimes.seedbank.plantsInSeedbank as plant}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-
-    {#if dates[index] > 5 || plant.plant == yourPlant}
+    <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
+    {#if plant.plant == yourPlant || plant.plant.timeLeft.milliseconds <= 0}
       <div
         on:click={() => {
           console.log("click!");
@@ -122,7 +144,7 @@
         <button
           class="bg-roel_green text-roel_blue font-primer text-2xl px-4 py-2 w-11/12 max-w-xs border-roel_blue border-[3px] rounded-full text-opacity-100"
         >
-          Fertile in {convertMinutesToMinutesAndSeconds(5 - dates[index])}
+          Fertile in {plant.plant.timeLeft.toFormat("mm:ss")}
         </button>
       </div>
     {/if}
@@ -138,8 +160,7 @@
       selectedPlant = null;
     }}
     isOriginalPlant={selectedPlant.id == yourPlant?.id}
-    isPollinatingPlant={Math.abs(
-      moment().diff(moment(selectedPlant.created), "minutes")
-    ) > 5}
+    isPollinatingPlant={DateTime.fromJSDate(selectedPlant.created).diffNow() >
+      DURATION_TILL_FERTILE}
   ></PopupInfo>
 {/if}
