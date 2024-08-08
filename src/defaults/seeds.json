@@ -3418,5 +3418,275 @@
       "funFact": "Zucchini is a type of summer squash that can grow extremely quickly, sometimes doubling in size within a day."
     },
     "description": "Zucchini plants have large, serrated leaves and produce large yellow bell-shaped flowers. They are fast-growing and yield elongated, edible fruits commonly used in various culinary dishes."
+  },
+  {
+    "id": "venus-flytrap",
+    "commonName": "Venus Flytrap",
+    "imageUrl": "/plants/venusflytrap.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5-6",
+      "petalShape": "Star",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Obovate",
+      "leafMarginDescription": "Ciliate",
+      "heightInMetres": 0.15,
+      "funFact": "In a groundbreaking study published in Current Biology, scientists utilized CRISPR-Cas9 technology for the first time in a carnivorous plant, the Venus flytrap, to demonstrate the crucial role of two ion channels in triggering the closure of the trap when prey brushes against its trigger hairs, shedding light on the long-standing mystery of how this plant captures its prey."
+    },
+    "description": "The Venus Flytrap is a carnivorous plant with distinctive trapping mechanisms, white star-shaped flowers, and green obovate leaves, growing up to 15 centimeters. Scientists used CRISPR-Cas9 to study the ion channels in its traps."
+  },
+  {
+    "id": "baobab",
+    "commonName": "Baobab",
+    "imageUrl": "/plants/baobab.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "5",
+      "petalShape": "Bell",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Palmate",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 25,
+      "funFact": "The baobab tree, known as the Tree of Life, can store hundreds of gallons of water in its trunk, making it a vital resource for both animals and humans during droughts."
+    },
+    "description": "The Baobab tree is an iconic symbol of the African savannah, known for its white bell-shaped flowers and impressive height of up to 25 meters. The baobab tree, known as the Tree of Life, can store hundreds of gallons of water in its trunk."
+  },
+  {
+    "id": "bonsai",
+    "commonName": "Bonsai",
+    "imageUrl": "/plants/bonzai.png",
+    "properties": {
+      "flowerColour": "Varied",
+      "flowerColourRGB": "#FFD700",
+      "petalCountRange": "5",
+      "petalShape": "Rounded",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Elliptical",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 0.5,
+      "funFact": "Bonsai trees, with their miniature stature and intricate designs, are a captivating blend of art and horticulture, embodying centuries of Japanese tradition and patience."
+    },
+    "description": "Bonsai trees are miniature masterpieces of horticulture with varied flower colors and green elliptical leaves, growing to around 50 centimeters. Bonsai trees embody centuries of Japanese tradition and patience."
+  },
+  {
+    "id": "prunus-serrulata",
+    "commonName": "Prunus Serrulata",
+    "imageUrl": "/plants/prunusserrulata.png",
+    "properties": {
+      "flowerColour": "Pink",
+      "flowerColourRGB": "#FFC0CB",
+      "petalCountRange": "5",
+      "petalShape": "Rosette",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lanceolate",
+      "leafMarginDescription": "Serrated",
+      "heightInMetres": 8,
+      "funFact": "Prunus serrulata, commonly known as the Japanese cherry blossom or sakura, paints landscapes with ethereal beauty during springtime, symbolizing renewal, fleeting beauty, and the transient nature of life in Japanese culture."
+    },
+    "description": "Prunus Serrulata, known as Japanese cherry, is famous for its beautiful pink blossoms and green lanceolate leaves, reaching a height of 8 meters. Prunus serrulata, or sakura, symbolizes renewal and the transient nature of life in Japanese culture."
+  },
+  {
+    "id": "fir-tree",
+    "commonName": "Fir Tree",
+    "imageUrl": "/plants/firtree.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "#000000",
+      "petalCountRange": "0",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Needle",
+      "leafMarginDescription": "Smooth",
+      "heightInMetres": 30,
+      "funFact": "The annual Rockefeller Center Christmas tree tradition, which began in 1931 amidst the Great Depression, features a majestic fir tree standing between West 48th and 51st street on Rockefeller Plaza, symbolizing hope and attracting millions of visitors each year, including a patriotic display post-9/11."
+    },
+    "description": "Fir trees are towering evergreens known for their needle-like leaves and lack of flowers, reaching heights of up to 30 meters. The Rockefeller Center Christmas tree tradition features a majestic fir tree, symbolizing hope each year."
+  },
+  {
+    "id": "liatris",
+    "commonName": "Liatris",
+    "imageUrl": "/plants/liatris.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "Numerous",
+      "petalShape": "Tubular",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Linear",
+      "leafMarginDescription": "Entire",
+      "heightInMetres": 1.2,
+      "funFact": "Liatris, revered by Native Americans for centuries, holds a special place in traditional medicine, with various tribes using it to treat ailments ranging from respiratory issues to sore throats, showcasing its time-honored role as a healing herb in indigenous cultures."
+    },
+    "description": "Liatris, also known as blazing star, is a striking perennial with purple tubular flowers and green linear leaves, growing up to 1.2 meters. Liatris has been used in traditional medicine by Native Americans."
+  },
+  {
+    "id": "mangrove",
+    "commonName": "Mangrove",
+    "imageUrl": "/plants/mangrove.png",
+    "properties": {
+      "flowerColour": "White",
+      "flowerColourRGB": "#FFFFFF",
+      "petalCountRange": "4-6",
+      "petalShape": "Star",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Elliptical",
+      "leafMarginDescription": "Entire",
+      "heightInMetres": 3,
+      "funFact": "Half of the world's mangrove forests, including those in southern India, Sri Lanka, and the Maldives, are at risk due to human activities, according to the International Union for Conservation of Nature (IUCN). Angela Andrade, chair of the IUCN commission on ecosystem management, emphasizes the critical role these ecosystems play in carbon storage and biodiversity."
+    },
+    "description": "Mangroves are vital coastal plants that thrive in salty conditions, featuring white star-shaped flowers and green elliptical leaves, growing up to 3 meters. Half of the world's mangrove forests are at risk due to human activities."
+  },
+  {
+    "id": "passion-flower",
+    "commonName": "Passion Flower",
+    "imageUrl": "/plants/passionflower.png",
+    "properties": {
+      "flowerColour": "Purple",
+      "flowerColourRGB": "#800080",
+      "petalCountRange": "5-10",
+      "petalShape": "Radial",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Palmate",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 3,
+      "funFact": "According to folklore, passionflower got its name because its corona resembles the crown of thorns worn by Jesus during the crucifixion. "
+    },
+    "description": "Passionflowers are exotic climbers known for their intricate purple radial flowers and green palmate leaves, growing up to 3 meters. Passionflower's corona resembles the crown of thorns worn by Jesus during the crucifixion."
+  },
+  {
+    "id": "sweetviolet",
+    "commonName": "Sweet Violet",
+    "imageUrl": "/plants/sweetviolet.png",
+    "properties": {
+      "flowerColour": "Violet",
+      "flowerColourRGB": "#EE82EE",
+      "petalCountRange": "5",
+      "petalShape": "Heart",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Cordate",
+      "leafMarginDescription": "Crenate",
+      "heightInMetres": 0.1,
+      "funFact": "A chance discovery by bushwalker Juliette Gaynor-Brown in Tasmania's Ben Lomond National Park revealed the presence of a rare native violet previously unrecorded in the state. Identified as the dwarf violet, Viola improcera, experts confirmed its endangered status and extended range. The find underscores the importance of citizen science in conservation efforts."
+    },
+    "description": "Violettes are delicate flowers with violet-colored heart-shaped petals and green cordate leaves, growing up to 10 centimeters. A rare native violet was discovered by bushwalker Juliette Gaynor-Brown in Tasmania."
+  },
+  {
+    "id": "pansy",
+    "commonName": "Pansy",
+    "imageUrl": "/plants/pansy.png",
+    "properties": {
+      "flowerColour": "Multicolor",
+      "flowerColourRGB": "#FFD700",
+      "petalCountRange": "5",
+      "petalShape": "Rounded",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Oblong",
+      "leafMarginDescription": "Crenate",
+      "heightInMetres": 0.2,
+      "funFact": "In Paris, the field pansy, Viola arvensis, has shown signs of rapid evolution, producing less nectar and smaller flowers, possibly due to decreasing insect pollinators. Evidence suggests it's self-pollinating, challenging conventional plant-insect pollination dynamics. This phenomenon underscores the complex impacts of environmental changes on plant-pollinator interactions and urges further study."
+    },
+    "description": "Pansies are cheerful flowers known for their multicolored blooms with five rounded petals and green oblong leaves, growing up to 20 centimeters. The field pansy in Paris has shown signs of rapid evolution, producing less nectar."
+  },
+  {
+    "id": "oak",
+    "commonName": "Oak",
+    "imageUrl": "/plants/oak.png",
+    "properties": {
+      "flowerColour": "None",
+      "flowerColourRGB": "#000000",
+      "petalCountRange": "0",
+      "petalShape": "None",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Lobed",
+      "leafMarginDescription": "Lobed",
+      "heightInMetres": 30,
+      "funFact": "The iconic spire of Notre Dame Cathedral in Paris, destroyed in a fire in 2019, is set to be rebuilt using oak trees sourced from the historic Forest of Bercé in France. These majestic oaks, aged over two hundred years old, will undergo precise measurements before becoming part of the cathedral's reconstruction, a process described as a historic moment by those involved."
+    },
+    "description": "Oak trees are majestic giants with lobed green leaves and lack of showy flowers, reaching up to 30 meters. The spire of Notre Dame Cathedral will be rebuilt using oak trees from the Forest of Bercé."
+  },
+  {
+    "id": "euphorbia-obesa",
+    "commonName": "Euphorbia Obesa",
+    "imageUrl": "/plants/euphorbiaobesa.png",
+    "properties": {
+      "flowerColour": "Yellow",
+      "flowerColourRGB": "#FFFF00",
+      "petalCountRange": "Small",
+      "petalShape": "Star",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "None",
+      "leafMarginDescription": "None",
+      "heightInMetres": 0.3,
+      "funFact": "The Euphorbia obesa, also known as the baseball plant due to its striking resemblance to a baseball, is a rare and unique succulent native to South Africa. Despite its appearance, this plant is not actually a cactus but belongs to the Euphorbiaceae family. Its spherical shape and intriguing patterns make it a favorite among succulent enthusiasts worldwide."
+    },
+    "description": "Euphorbia Obesa, known as the baseball plant, features small yellow star-shaped flowers and grows up to 30 centimeters. This rare succulent is native to South Africa and resembles a baseball."
+  },
+  {
+    "id": "calliandra-haematocephala",
+    "commonName": "Calliandra Haematocephala",
+    "imageUrl": "/plants/calliandrahaematocephala.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "Numerous",
+      "petalShape": "Brush",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Bipinnate",
+      "leafMarginDescription": "Entire",
+      "heightInMetres": 3,
+      "funFact": "Calliandra haematocephala, also known as the Common Powder Puff plant, is a versatile addition to permaculture gardens. This fast-growing legume serves multiple purposes, including providing valuable mulch, shade, and fodder for livestock. It is also utilized in land rehabilitation efforts and supports honey production by attracting pollinators. With its hardy nature and numerous benefits, Calliandra haematocephala is a valuable asset in sustainable gardening practices."
+    },
+    "description": "Calliandra Haematocephala, or the powderpuff tree, is known for its red brush-like flowers and green bipinnate leaves, growing up to 3 meters. This plant is a versatile addition to permaculture gardens."
+  },
+  {
+    "id": "garrya-elliptica",
+    "commonName": "Garrya Elliptica",
+    "imageUrl": "/plants/garryaelliptica.png",
+    "properties": {
+      "flowerColour": "Gray",
+      "flowerColourRGB": "#808080",
+      "petalCountRange": "Small",
+      "petalShape": "Catkin",
+      "leafColour": "Green",
+      "leafColourRGB": "#008000",
+      "leafShape": "Elliptical",
+      "leafMarginDescription": "Wavy",
+      "heightInMetres": 4,
+      "funFact": "Garrya elliptica, also known as the Silk Tassel Bush, not only adds aesthetic charm to gardens with its distinctive catkins but also provides essential habitat and food for wildlife, making it a valuable asset to ecosystems."
+    },
+    "description": "Garrya Elliptica, also known as the silk tassel bush, has small gray catkin-like flowers and green elliptical leaves, growing up to 4 meters. It provides essential habitat and food for wildlife."
+  },
+  {
+    "id": "fly-agaric",
+    "commonName": "Fly Agaric",
+    "imageUrl": "/plants/flyagaric.png",
+    "properties": {
+      "flowerColour": "Red",
+      "flowerColourRGB": "#FF0000",
+      "petalCountRange": "None",
+      "petalShape": "None",
+      "leafColour": "None",
+      "leafColourRGB": "#000000",
+      "leafShape": "None",
+      "leafMarginDescription": "None",
+      "heightInMetres": 0.2,
+      "funFact": "In the fantasy novel Alice in Wonderland, there is a magic mushroom that can make Alice change in size, its magical properties said to have been inspired by the hallucinogenic effect of the fly agaric mushroom."
+    },
+    "description": "Fly Agaric is a well-known mushroom with a red cap and white spots, growing up to 20 centimeters tall. It is known for its toxic properties and is often depicted in fairy tales."
   }
 ]
