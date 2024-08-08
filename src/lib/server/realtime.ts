@@ -20,6 +20,7 @@ import {
   type DisplayFirstPlant,
   type DisplayIdle,
   type DisplayLeaderboard,
+  type DisplayMultipleFeaturedPlants,
   type DisplayMultipleGardens,
   type DisplayPlantCount,
   type DisplayPlantGrowingTime,
@@ -42,6 +43,7 @@ import {
   LIMIT_LEADERBOARD,
   LIMIT_STATUS_FEED,
   MIN_STATUS_FEED,
+  MULTIPLE_FEATURED_PLANTS_COUNT,
   NUM_GARDENS_MULTI,
   PLUG_NAMES
 } from "$lib/constants";
@@ -238,6 +240,54 @@ export const getDataForAmbientDisplay = async (
       };
       return contents;
     }
+
+    case bRollNaming.DETAIL_MULTI: {
+      const allNormalUsers = await db.query.users.findMany({
+        where: eq(users.isAdmin, false),
+        with: { myGarden: true }
+      });
+      if (allNormalUsers.length == 0) {
+        throw Error("no users to choose from!");
+      }
+      const pickRandomUsers = pickMultipleRandomElements(
+        allNormalUsers,
+        MULTIPLE_FEATURED_PLANTS_COUNT
+      );
+
+      let results = await Promise.all(
+        pickRandomUsers.map(async (u) => {
+          const userGarden = u.myGarden;
+          const gardenWithPlants = await db.query.gardens.findFirst({
+            where: eq(gardens.id, userGarden.id),
+            with: { plantsInGarden: true }
+          });
+          if (!gardenWithPlants) {
+            throw Error("no plants in user garden");
+          }
+
+          const pickRandomPlant = pickRandomElement(
+            gardenWithPlants.plantsInGarden
+          );
+          const thePlant = await db.query.plants.findFirst({
+            where: eq(plants.id, pickRandomPlant.plantId)
+          });
+          if (thePlant === undefined) {
+            throw Error("failed to find plant " + pickRandomPlant);
+          }
+          return {
+            plant: thePlant,
+            user: stripUserInfo(u)
+          };
+        })
+      );
+
+      const contents: DisplayMultipleFeaturedPlants = {
+        name: bRollNaming.DETAIL_MULTI,
+        contents: results
+      };
+      return contents;
+    }
+
     case bRollNaming.STATUS_FEED: {
       const latestEvents = await db
         .select()
@@ -266,6 +316,7 @@ export const getDataForAmbientDisplay = async (
       };
       return contents;
     }
+
     case bRollNaming.ROLL_PAN: {
       const allGardens = (
         await db.query.gardens.findMany({
@@ -289,6 +340,7 @@ export const getDataForAmbientDisplay = async (
       };
       return contents;
     }
+
     case bRollNaming.ZOOM_OUT: {
       const allGardens = await db.query.gardens.findMany({
         with: { myOwner: true, plantsInGarden: true }
@@ -310,6 +362,7 @@ export const getDataForAmbientDisplay = async (
       };
       return contents;
     }
+
     case bRollNaming.TOP_LIST: {
       // TODO: This is probably not a slow query, but certainly a very big payload,
       // potentially: it is ALL gardens with ALL plant details for EVERY plant in
@@ -351,6 +404,7 @@ export const getDataForAmbientDisplay = async (
       };
       return contents;
     }
+
     case bRollNaming.STATISTICS_1: {
       const allGardens = await db
         .select({ id: gardens.id, userId: gardens.userId })
@@ -402,6 +456,7 @@ export const getDataForAmbientDisplay = async (
       };
       return contents;
     }
+
     case bRollNaming.STATISTICS_3: {
       const allPlants = await db
         .select({
@@ -465,6 +520,7 @@ export const getDataForAmbientDisplay = async (
 
       return contents;
     }
+
     case bRollNaming.IDLE: {
       // TODO: this is useless, shouldn't be chosen
       return {
@@ -472,6 +528,7 @@ export const getDataForAmbientDisplay = async (
         contents: null
       };
     }
+
     default: {
       throw Error(
         "unknown pickDisplayType: " + JSON.stringify({ pickDisplayType })
@@ -656,16 +713,42 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       const plantBottom = await db.query.plants.findFirst({
         where: eq(plants.id, parent2)
       });
+      if (!plantTop || !plantBottom) {
+        throw Error(
+          "Failed to find plant details for " +
+            JSON.stringify({ plantTop, plantBottom })
+        );
+      }
+      const { authorTop, authorBottom } = event.payload;
+      if (!authorTop || !authorBottom) {
+        throw Error(
+          "Missing user IDS for " + JSON.stringify({ authorTop, authorBottom })
+        );
+      }
+      const authorTopUser = await db.query.users.findFirst({
+        where: eq(users.id, authorTop)
+      });
+      const authorBottomUser = await db.query.users.findFirst({
+        where: eq(users.id, authorBottom)
+      });
+
+      if (!authorTopUser || !authorBottomUser) {
+        throw Error(
+          "Failed to find user details for " +
+            JSON.stringify({ authorTop, authorBottom })
+        );
+      }
       return [
         {
-          text: `${event.payload.authorTop}'s ${plantTop?.commonName}`,
+          text: `${authorTopUser.username}'s ${plantTop.commonName}`,
           highlight: true
         },
         {
           text: "just pollinated"
         },
         {
-          text: `${event.payload.authorBottom}'s ${plantBottom?.commonName}`
+          text: `${authorBottomUser.username}'s ${plantBottom.commonName}`,
+          highlight: true
         }
       ];
     }

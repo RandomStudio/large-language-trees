@@ -17,6 +17,7 @@
   import BRollDetail from "./BRollDetail.svelte";
 
   import { bRollNaming } from "$lib/events.types";
+  import BRollDetailMulti from "./BRollDetailMulti.svelte";
   import StatsPollinations from "./StatsPollinations.svelte";
 
   export let data: PageData;
@@ -123,6 +124,10 @@
         plantName={data.contents.contents.plant.commonName}
         userName={data.contents.contents.user.username}
       ></BRollDetail>
+    {/if}
+
+    {#if data.contents.name === bRollNaming.DETAIL_MULTI}
+      <BRollDetailMulti plantsWithusers={data.contents.contents} />
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
