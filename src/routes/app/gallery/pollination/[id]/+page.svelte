@@ -140,12 +140,16 @@
         if (child === null) {
           waiting = true;
           try {
-            candidateChild = await confirmBreed([parent1, parent2]);
+            candidateChild = await confirmBreed(data.user.id, [
+              parent1,
+              parent2
+            ]);
             if (candidateChild) {
               console.log("Got candidate child OK:", candidateChild);
               busy = false;
             }
             waiting = false;
+            console.log({ candidateChild });
           } catch (e) {
             console.error("Error getting candidate child", e);
             // Should this redirect or display error notification?
@@ -227,8 +231,7 @@
   <div class="pt-[35px] mx-10 font-primer text-2xl text-roel_green text-left">
     {#if parent1}
       <p class=" text-2xl">
-        Point your camera to another gardener's Pollination QR to start
-        crossbreeding {parent1.commonName}
+        Scan another gardeners QR to crossbreed the {parent1.commonName}
       </p>
       <div class="mx-0">
         <div class="relative mt-4 pb-10">
@@ -252,6 +255,12 @@
     {/if}
   </div>
 </div>
+
+<!-- <div class="fixed top-0 left-0" style:z-index={100}>
+  <pre>
+    <code>{JSON.stringify({ candidateChild, waiting }, null, 2)}</code>
+  </pre>
+</div> -->
 
 {#if candidateChild}
   <ConfirmBreedPopup

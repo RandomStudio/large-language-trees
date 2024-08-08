@@ -5,8 +5,8 @@
   export let gardens: { garden: GardenWithPlants; user: PublicUserInfo }[];
 </script>
 
-<div class="bg-roel_yellow w-full h-screen relative overflow-hidden">
-  <div class="fill-roel_red absolute top-0 w-full h-auto">
+<div class="bg-roel_green w-full h-screen relative overflow-hidden">
+  <div class="fill-roel_purple absolute top-0 w-full h-auto">
     <svg viewBox="0 0 1000 2151" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="svgClip">
@@ -55,17 +55,17 @@
   ></DisplayGarden>
 
   <div
-    class="w-full flex text-center items-center justify-center absolute bottom-[180px] text-roel_red text-4xl font-primer"
+    class="w-full flex text-center items-center justify-center absolute bottom-[180px] text-roel_purple text-4xl font-primer"
   >
     There are currently
   </div>
   <div
-    class="w-full flex text-center items-center justify-center absolute bottom-[110px] text-roel_red text-6xl font-jeanb"
+    class="w-full flex text-center items-center justify-center absolute bottom-[110px] text-roel_purple text-6xl font-jeanb"
   >
     {count} PLANTS
   </div>
   <div
-    class="w-full flex text-center items-center justify-center absolute bottom-[60px] text-roel_red text-4xl font-primer"
+    class="w-full flex text-center items-center justify-center absolute bottom-[60px] text-roel_purple text-4xl font-primer"
   >
     growing in the garden!
   </div>
