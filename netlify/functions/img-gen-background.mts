@@ -1,3 +1,6 @@
+/** Should be identical to the version in
+ * `src/routes/api/images/generate/+server.ts`
+ */
 interface BackgroundGenerateImageRequest {
   plantId: string;
   fullPrompt: string;

@@ -5,6 +5,9 @@ import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import type { GenerateImageRequest } from "./types";
 
+/** Should be identical to the version in
+ * `netlify/functions/img-gen-background.mts`
+ */
 interface BackroundGenerateImageRequest {
   plantId: string;
   fullPrompt: string;
