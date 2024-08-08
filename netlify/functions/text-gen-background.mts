@@ -1,3 +1,6 @@
+/** Should be identical to the version in
+ * `/src/routes/api/plants/generate/+server.ts`
+ */
 interface BackgroundGenerateTextRequest {
   userId: string;
   newPlantId: string;
@@ -71,6 +74,7 @@ export default async (req: Request) => {
       Authorization: `Bearer ${apiKey}`
     },
     body: JSON.stringify({
+      response_format: { type: "json_object" },
       model,
       messages
     })
@@ -90,6 +94,8 @@ export default async (req: Request) => {
         parent1Id,
         parent2Id
       );
+
+      console.log("New plant as parsed:", JSON.stringify(parsedPlant, null, 2));
 
       // Insert the candidate plant into the generated_text table...
       await notifyCandidateTextReady(newPlantId, {
@@ -167,7 +173,10 @@ const notifyCandidateTextReady = async (
     }
   );
   if (addPlantToDbRes.status === 200 || addPlantToDbRes.status === 201) {
-    console.log("Success!");
+    console.log("Success POSTing to our endpoint");
+    if (body.errorMessage) {
+      console.error("There was an error:", body.errorMessage);
+    }
   } else {
     const { statusText, status } = addPlantToDbRes;
     console.error("Something went wrong when POSTing to our API endpoint:", {

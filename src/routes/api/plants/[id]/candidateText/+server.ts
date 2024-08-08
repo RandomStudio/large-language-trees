@@ -26,7 +26,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
     .insert(generatedText)
     .values({ userId, plantId, contents, errorMessage });
 
-  return json({}, { status: 202 });
+  return json({}, { status: 201 });
 };
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -44,7 +44,7 @@ export const GET: RequestHandler = async ({ params }) => {
   } else {
     console.log(
       "No matching candidate plant (text generation) for",
-      matchingCandidatePlant,
+      plantId,
       "... this is OK"
     );
     return json({}, { status: 202 });

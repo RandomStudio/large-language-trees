@@ -46,7 +46,7 @@ export const POST: RequestHandler = async (event) => {
     model: model || promptSettings.image.model
   };
   console.log({ bodyJson });
-  await fetch("/.netlify/functions/img-gen-background", {
+  await event.fetch("/.netlify/functions/img-gen-background", {
     method: "POST",
     body: JSON.stringify(bodyJson)
   });
