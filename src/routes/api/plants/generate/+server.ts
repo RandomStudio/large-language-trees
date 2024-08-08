@@ -1,5 +1,4 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
-import type { InsertPlant } from "$lib/types";
 import { v4 as uuidv4 } from "uuid";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import { buildTextPrompt } from "$lib/promptUtils";
@@ -10,6 +9,8 @@ import { BACKGROUND_FN_SECRET } from "$env/static/private";
  * `/netlify/functions/text-gen-background.mts`
  */
 interface BackgroundGenerateTextRequest {
+  userId: string;
+  newPlantId: string;
   model: string;
   messages: {
     role: string;
@@ -21,7 +22,7 @@ interface BackgroundGenerateTextRequest {
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as GeneratePlantRequestBody;
 
-  const { prompt, parents } = data;
+  const { prompt, parents, userId } = data;
   const [plant1, plant2] = parents;
   const promptSettings = await getPromptSettings();
 
@@ -32,7 +33,11 @@ export const POST: RequestHandler = async ({ request }) => {
   const messages = prompt || buildTextPrompt(promptSettings, plant1, plant2);
   const model = data.model || promptSettings.text.model;
 
+  const newPlantId = uuidv4();
+
   const bodyJson: BackgroundGenerateTextRequest = {
+    userId,
+    newPlantId,
     model,
     messages: messages as {
       role: string;
@@ -46,5 +51,8 @@ export const POST: RequestHandler = async ({ request }) => {
     body: JSON.stringify(bodyJson)
   });
 
-  return json(await res.json(), { status: res.status });
+  return json(
+    { backgroundResponse: await res.json(), newPlantId },
+    { status: res.status }
+  );
 };

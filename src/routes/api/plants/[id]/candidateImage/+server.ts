@@ -3,9 +3,13 @@ import { generatedImages } from "$lib/server/schema";
 import { error, json, type RequestHandler } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
-import type { CandidateImageBody } from "./types";
 import { uploadToS3 } from "$lib/server/images";
 import { URL_PREFIX } from "$lib/constants";
+
+interface CandidateImageBody {
+  url?: string;
+  errorMessage?: string;
+}
 
 export const GET: RequestHandler = async ({ params }) => {
   const plantId = params["id"];

@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS "generated_text" (
-	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
 	"plant_id" text,
 	"error_message" text

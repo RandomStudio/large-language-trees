@@ -30,11 +30,11 @@ export const generatedImages = pgTable("generated_images", {
 });
 
 export const generatedText = pgTable("generated_text", {
-  id: text("id").primaryKey(),
+  plantId: text("plant_id").primaryKey(),
   userId: text("user_id")
     .notNull()
     .references(() => users.id), // ID of the user who initiated the gen request
-  plantId: text("plant_id").references(() => plants.id), // can be null, if plant not generated yet!
+  contents: json("contents"), // can be null, if plant not generated yet!
   errorMessage: text("error_message")
 });
 

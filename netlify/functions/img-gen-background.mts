@@ -3,6 +3,8 @@
  */
 interface BackgroundGenerateImageRequest {
   plantId: string;
+  parent1Id: string;
+  parent2Id: string;
   fullPrompt: string;
   model: string;
   backgroundSecret: string;

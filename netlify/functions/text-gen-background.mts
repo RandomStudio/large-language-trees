@@ -1,10 +1,23 @@
 interface BackgroundGenerateTextRequest {
+  userId: string;
+  newPlantId: string;
+  parent1Id: string;
+  parent2Id: string;
   model: string;
   messages: {
     role: string;
     content: string;
   }[];
   backgroundSecret: string;
+}
+
+/** Should be identical to the interface in
+ * `src/routes/api/plants/[id]/candidateText/+server.ts`
+ */
+interface CandidateTextBody {
+  userId: string;
+  contents?: string;
+  errorMessage?: string;
 }
 
 /** As per https://platform.openai.com/docs/guides/chat-completions/response-format */
@@ -32,7 +45,15 @@ interface ChatResponse {
 export default async (req: Request) => {
   const requestBody = (await req.json()) as BackgroundGenerateTextRequest;
 
-  const { model, messages, backgroundSecret } = requestBody;
+  const {
+    userId,
+    model,
+    messages,
+    backgroundSecret,
+    newPlantId,
+    parent1Id,
+    parent2Id
+  } = requestBody;
 
   const realSecret = process.env.BACKGROUND_FN_SECRET;
 
@@ -48,18 +69,42 @@ export default async (req: Request) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`
-    }
+    },
+    body: JSON.stringify({
+      model,
+      messages
+    })
   });
 
   console.log("Got response from OpenAI API:", aiRes);
 
   if (aiRes.status === 200) {
-    const jsonResponse = await aiRes.json() as ChatResponse;
+    const jsonResponse = (await aiRes.json()) as ChatResponse;
 
     const message = jsonResponse.choices[0].message.content;
 
-    const parsedPlant =     
+    try {
+      const parsedPlant = parseNewPlant(
+        newPlantId,
+        message,
+        parent1Id,
+        parent2Id
+      );
 
+      // Insert the candidate plant into the generated_text table...
+      await notifyCandidateTextReady(newPlantId, {
+        userId,
+        contents: JSON.stringify(parsedPlant)
+      });
+    } catch (e) {
+      console.error(
+        "Something went wrong parsing the new plant response: " + e
+      );
+      await notifyCandidateTextReady(newPlantId, {
+        userId,
+        errorMessage: "Failure on new plant response"
+      });
+    }
   } else {
     const { status, statusText } = aiRes;
     console.error("Request failed with error:", { status, statusText });
@@ -73,8 +118,10 @@ export default async (req: Request) => {
 };
 
 const parseNewPlant = (
+  newPlantId: string,
   text: string,
-  parentIds: [string, string]
+  parent1Id: string,
+  parent2Id: string
 ): object => {
   try {
     const cleanText = text.trim().replace(/g\n/g, "");
@@ -84,9 +131,9 @@ const parseNewPlant = (
     if (json["commonName"] && json["description"] && json["properties"]) {
       console.log("JSON appears to have the valid fields");
       return {
-        id: uuidv4(),
-        parent1: parentIds[0],
-        parent2: parentIds[1],
+        id: newPlantId,
+        parent1: parent1Id,
+        parent2: parent2Id,
         commonName: json["commonName"],
         description: json["description"],
         properties: { ...json["properties"] }
@@ -95,6 +142,38 @@ const parseNewPlant = (
       throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
     }
   } catch (e) {
-    throw Error("Error parsing JSON: " + JSON.stringify({ e, text, json }));
+    throw Error("Error parsing JSON: " + JSON.stringify({ e, text }));
+  }
+};
+
+const notifyCandidateTextReady = async (
+  plantId: string,
+  body: CandidateTextBody
+) => {
+  const useLocalApi = process.env.BACKGROUND_FN_USES_LOCAL_API;
+
+  const origin = useLocalApi || "https://livinggarden.netlify.app";
+  console.log("POST to", origin);
+
+  const addPlantToDbRes = await fetch(
+    `${origin}/api/plants/${plantId}/candidateText`,
+    {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(body),
+      headers: {
+        origin
+      }
+    }
+  );
+  if (addPlantToDbRes.status === 200 || addPlantToDbRes.status === 201) {
+    console.log("Success!");
+  } else {
+    const { statusText, status } = addPlantToDbRes;
+    console.error("Something went wrong when POSTing to our API endpoint:", {
+      statusText,
+      status
+    });
+    console.error(addPlantToDbRes);
   }
 };
