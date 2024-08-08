@@ -18,35 +18,40 @@
       stroke-width="1000"
     />
   </svg>
-
-  <DisplayGarden
-    xGarden={0}
-    yGarden={50}
-    height={150}
-    width={230}
-    garden={gardens[0]}
-  ></DisplayGarden>
-  <DisplayGarden
-    xGarden={280}
-    yGarden={200}
-    height={150}
-    width={200}
-    garden={gardens[1]}
-  ></DisplayGarden>
-  <DisplayGarden
-    xGarden={0}
-    yGarden={350}
-    height={150}
-    width={200}
-    garden={gardens[2]}
-  ></DisplayGarden>
-  <DisplayGarden
-    xGarden={280}
-    yGarden={500}
-    height={150}
-    width={200}
-    garden={gardens[3]}
-  ></DisplayGarden>
+  <div class="z-0">
+    <DisplayGarden
+      xGarden={0}
+      yGarden={100}
+      height={300}
+      width={300}
+      garden={gardens[0]}
+      showGardenName={false}
+    ></DisplayGarden>
+    <DisplayGarden
+      xGarden={240}
+      yGarden={300}
+      height={300}
+      width={300}
+      garden={gardens[1]}
+      showGardenName={false}
+    ></DisplayGarden>
+    <DisplayGarden
+      xGarden={0}
+      yGarden={500}
+      height={300}
+      width={300}
+      garden={gardens[2]}
+      showGardenName={false}
+    ></DisplayGarden>
+    <DisplayGarden
+      xGarden={240}
+      yGarden={700}
+      height={300}
+      width={300}
+      garden={gardens[3]}
+      showGardenName={false}
+    ></DisplayGarden>
+  </div>
 
   <div class="absolute left-3 bottom-3 space-y-2 z-20">
     {#each eventLogs as sentence, index}

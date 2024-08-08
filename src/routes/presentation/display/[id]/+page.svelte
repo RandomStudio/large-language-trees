@@ -1,7 +1,7 @@
 <script lang="ts">
   import NewUserFirstPlant from "./NewUserFirstPlant.svelte";
   import PollinationResult from "./PollinationResult.svelte";
-  import BRollZoomOut from "./BRollZoomOut.svelte"; // Import the BRollZoomOut component
+  import BRollZoomOut from "./BRollZoomOut.svelte";
 
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -18,6 +18,7 @@
 
   import { bRollNaming } from "$lib/events.types";
   import BRollDetailMulti from "./BRollDetailMulti.svelte";
+  import StatsPollinations from "./StatsPollinations.svelte";
 
   export let data: PageData;
 
@@ -94,17 +95,6 @@
 </script>
 
 <main>
-  <h1>
-    Display #{data.id}
-  </h1>
-  <div>
-    <pre>
-      <code>
-        {JSON.stringify(data.contents, null, 2)}
-      </code>
-    </pre>
-  </div>
-
   {#if data.contents}
     {#if data.contents.name == "newUserFirstPlant"}
       <NewUserFirstPlant
@@ -172,6 +162,14 @@
         count={data.contents.contents.count}
         gardens={data.contents.contents.gardens}
       ></StatsCount>
+    {/if}
+
+    {#if data.contents?.name == bRollNaming.STATISTICS_3}
+      <StatsPollinations
+        plant={data.contents.contents.plant}
+        pollinationCount={data.contents.contents.pollinationCount}
+        user={data.contents.contents.user}
+      ></StatsPollinations>
     {/if}
   {/if}
 </main>
