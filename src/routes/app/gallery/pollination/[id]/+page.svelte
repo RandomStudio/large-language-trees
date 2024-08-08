@@ -227,8 +227,7 @@
   <div class="pt-[35px] mx-10 font-primer text-2xl text-roel_green text-left">
     {#if parent1}
       <p class=" text-2xl">
-        Point your camera to another gardener's Pollination QR to start
-        crossbreeding {parent1.commonName}
+        Scan another gardeners QR to crossbreed the {parent1.commonName}
       </p>
       <div class="mx-0">
         <div class="relative mt-4 pb-10">
