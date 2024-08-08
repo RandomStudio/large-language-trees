@@ -120,9 +120,8 @@
 
     {#if data.contents.name == bRollNaming.DETAIL}
       <BRollDetail
-        imageUrl={data.contents.contents.plant.imageUrl || ""}
-        plantName={data.contents.contents.plant.commonName}
-        userName={data.contents.contents.user.username}
+        plant={data.contents.contents.plant}
+        user={data.contents.contents.user}
       ></BRollDetail>
     {/if}
 
