@@ -35,7 +35,7 @@
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
     <img src={plant.imageUrl} alt="Plant" class="target-image" />
     <div
-      class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2"
+      class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
       style="left: {540 / 2 - xEnd}px; top: {1620 / 2 -
         yEnd}px; transform: translate(-50%, -50%);"
     >

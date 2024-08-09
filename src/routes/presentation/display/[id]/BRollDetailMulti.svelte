@@ -38,7 +38,7 @@
     <img src={plant1.plant.imageUrl} alt="Plant" class="target-image" />
     <img src={plant2.plant.imageUrl} alt="Plant" class="target-image" />
     <div
-      class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2"
+      class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
       style="left: {540 / 2 - xEnd}px; top: {1620 / 2 -
         yEnd}px; transform: translate(-50%, -50%);"
     >
