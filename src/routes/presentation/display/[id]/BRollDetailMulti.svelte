@@ -52,19 +52,20 @@
         class="target-image"
         style="transform: translateX({$x1}px) translateY({$y1}px);"
       />
-
-      <img
-        src={plant2.plant.imageUrl}
-        alt="Plant"
-        class="target-image"
-        style="transform: translateX({$x2}px) translateY({$y2}px);"
-      />
-      <div
-        class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
-        style="left: {540 / 2 - xEnd2}px; top: {1620 / 2 -
-          yEnd2}px; transform: translate(-50%, -50%);"
-      >
-        {plant2.user.username}'s {plant2.plant.commonName}
+      <div>
+        <img
+          src={plant2.plant.imageUrl}
+          alt="Plant"
+          class="target-image"
+          style="transform: translateX({$x2}px) translateY({$y2}px);"
+        />
+        <div
+          class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
+          style="left: {540 / 2 - xEnd2}px; top: {1620 / 2 -
+            yEnd2}px;transform: translateX({$x2}px) translateX(-50%) translateY({$y2}px);"
+        >
+          {plant2.user.username}'s {plant2.plant.commonName}
+        </div>
       </div>
     </div>
   </div>
@@ -98,6 +99,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    mix-blend-mode: hard-light; /* Modifier selon le mode de mélange désiré */
+    mix-blend-mode: hue; /* Modifier selon le mode de mélange désiré */
   }
 </style>
