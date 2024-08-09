@@ -228,9 +228,9 @@
 <ReturnButton onClicked={onReturnButtonClicked}></ReturnButton>
 
 <div class="bg-roel_blue rounded-b-full">
-  <div class="pt-[35px] mx-10 font-primer text-2xl text-roel_green text-left">
+  <div class="pt-[17px] mx-10 font-primer text-2xl text-roel_green text-left">
     {#if parent1}
-      <p class=" text-2xl">
+      <p class=" text-2xl mr-6">
         Scan another gardeners QR to crossbreed the {parent1.commonName}
       </p>
       <div class="mx-0">

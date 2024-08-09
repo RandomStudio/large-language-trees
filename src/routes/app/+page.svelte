@@ -44,7 +44,9 @@
   </div>
 
   {#if form?.message}
-    <div class="text-roel_blue text-left">
+    <div
+      class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-center text-2xl"
+    >
       Error: {form.message}
     </div>
   {/if}
