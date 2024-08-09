@@ -705,7 +705,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
     case "newPlantPollination": {
       const { parent1, parent2 } = event.payload;
       if (!parent1 || !parent2) {
-        throw Error("");
+        throw Error("parents not in payload: " + JSON.stringify(event.payload));
       }
       const plantTop = await db.query.plants.findFirst({
         where: eq(plants.id, parent1)

@@ -140,12 +140,16 @@
         if (child === null) {
           waiting = true;
           try {
-            candidateChild = await confirmBreed([parent1, parent2]);
+            candidateChild = await confirmBreed(data.user.id, [
+              parent1,
+              parent2
+            ]);
             if (candidateChild) {
               console.log("Got candidate child OK:", candidateChild);
               busy = false;
             }
             waiting = false;
+            console.log({ candidateChild });
           } catch (e) {
             console.error("Error getting candidate child", e);
             // Should this redirect or display error notification?
@@ -251,6 +255,12 @@
     {/if}
   </div>
 </div>
+
+<!-- <div class="fixed top-0 left-0" style:z-index={100}>
+  <pre>
+    <code>{JSON.stringify({ candidateChild, waiting }, null, 2)}</code>
+  </pre>
+</div> -->
 
 {#if candidateChild}
   <ConfirmBreedPopup
