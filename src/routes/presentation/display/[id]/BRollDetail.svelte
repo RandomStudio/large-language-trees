@@ -7,7 +7,7 @@
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
 
-  const sizePicture = 3000;
+  const sizePicture = 2000;
   const duration = 15000; //ms
 
   const xStart = Math.floor(Math.random() * (-sizePicture + 540));
@@ -53,8 +53,8 @@
   }
 
   .camera {
-    width: 3000px;
-    height: 3000px;
+    width: 2000px;
+    height: 2000px;
     position: absolute;
   }
 
