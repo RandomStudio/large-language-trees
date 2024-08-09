@@ -43,23 +43,30 @@
 </script>
 
 <div class="viewport bg-roel_rose">
-  <div
-    class="camera"
-    style="transform: translateX({$x1}px) translateY({$y1}px);"
-  >
-    <img src={plant1.plant.imageUrl} alt="Plant" class="target-image" />
-  </div>
-  <div
-    class="camera"
-    style="transform: translateX({$x2}px) translateY({$y2}px);"
-  >
-    <img src={plant2.plant.imageUrl} alt="Plant" class="target-image" />
-    <div
-      class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
-      style="left: {540 / 2 - xEnd2}px; top: {1620 / 2 -
-        yEnd2}px; transform: translate(-50%, -50%);"
-    >
-      {plant2.user.username}'s {plant2.plant.commonName}
+  <div class="camera">
+    <!-- Conteneur spécifique pour les images avec isolation -->
+    <div class="images-container">
+      <img
+        src={plant1.plant.imageUrl}
+        alt="Plant"
+        class="target-image"
+        style="transform: translateX({$x1}px) translateY({$y1}px);"
+      />
+      <div>
+        <img
+          src={plant2.plant.imageUrl}
+          alt="Plant"
+          class="target-image"
+          style="transform: translateX({$x2}px) translateY({$y2}px);"
+        />
+        <div
+          class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
+          style="left: {540 / 2 - xEnd2}px; top: {1620 / 2 -
+            yEnd2}px;transform: translateX({$x2}px) translateX(-50%) translateY({$y2}px);"
+        >
+          {plant2.user.username}'s {plant2.plant.commonName}
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -76,11 +83,22 @@
     width: 2000px;
     height: 2000px;
     position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .images-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    isolation: isolate; /* Crée un contexte de composition isolé */
   }
 
   .target-image {
+    position: absolute;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    mix-blend-mode: hue; /* Modifier selon le mode de mélange désiré */
   }
 </style>
