@@ -106,8 +106,11 @@
 
     {#if data.contents.name == "newPlantPollination" && data.contents.contents.newPlant.imageUrl}
       <PollinationResult
-        imageUrl={data.contents.contents.newPlant.imageUrl || ""}
-        plantName={data.contents.contents.newPlant.commonName}
+        plantTop={data.contents.contents.plantTop}
+        plantBottom={data.contents.contents.plantBottom}
+        authorTop={data.contents.contents.authorTop}
+        authorBottom={data.contents.contents.authorBottom}
+        newPlant={data.contents.contents.newPlant}
       ></PollinationResult>
     {/if}
 

@@ -40,7 +40,7 @@
   <div class="fixed inset-0 flex items-center justify-center">
     <img
       src={imageUrl}
-      alt="Lavender"
+      alt="Hero view the new user's first plant"
       bind:this={img}
       crossorigin="anonymous"
     />

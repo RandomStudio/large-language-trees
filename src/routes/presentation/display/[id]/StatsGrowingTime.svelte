@@ -13,14 +13,11 @@
   let brightColor = "rgb(255, 185, 198)";
   let darkColor = "rgb(117, 0, 147)";
 
-  let randomString = Math.round(Math.random() * 1000).toString();
-
   let img: HTMLImageElement;
 
   let ticker: NodeJS.Timeout | null = null;
 
   onMount(() => {
-    randomString = Math.round(Math.random() * 1000).toString();
     img.onload = () => {
       const result = getColors(img);
       brightColor = result.brightColor;
@@ -58,7 +55,7 @@
   <div class="fixed inset-0 flex items-center justify-center">
     <img
       alt="Featured Plant"
-      src={imageUrl + "?" + randomString}
+      src={imageUrl}
       crossorigin="anonymous"
       bind:this={img}
     />
