@@ -19,6 +19,7 @@
     class:opacity-65={applyFilters}
     class:contrast-200={applyFilters}
     class:mix-blend-difference={applyFilters}
+    crossorigin="anonymous"
   />
   <AnimatedPlant imageURL={plant.imageUrl || ""} />
   {#if $page.url.pathname !== "/app/startwindow"}

@@ -246,6 +246,7 @@
             src={parent1.imageUrl}
             alt="Small Image"
             class="absolute -bottom-3 -right-8 -mb-1 w-40 h-40 z-10"
+            crossorigin="anonymous"
           />
         </div>
         <div class="mt-2 mx-16 absolute place-self-center">
