@@ -18,7 +18,12 @@
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[70px]"
     >
-      <img src="/43.png" alt="Lavender" class="w-[400px]" />
+      <img
+        src="/43.png"
+        alt="Pollinating Plant First Parent"
+        class="w-[400px]"
+        crossorigin="anonymous"
+      />
     </div>
   </div>
 
@@ -39,7 +44,12 @@
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[-70px]"
     >
-      <img src="/58.png" alt="Lavender" class="w-[400px] rotate-180" />
+      <img
+        src="/58.png"
+        alt="Pollinating Plant Second Parent"
+        class="w-[400px] rotate-180"
+        crossorigin="anonymous"
+      />
     </div>
   </div>
 

@@ -51,6 +51,7 @@
         alt="Plant"
         class="target-image"
         style="transform: translateX({$x1}px) translateY({$y1}px);"
+        crossorigin="anonymous"
       />
       <div>
         <img
@@ -58,6 +59,7 @@
           alt="Plant"
           class="target-image"
           style="transform: translateX({$x2}px) translateY({$y2}px);"
+          crossorigin="anonymous"
         />
         <div
           class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"

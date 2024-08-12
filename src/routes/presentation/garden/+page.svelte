@@ -414,6 +414,7 @@
           --skew-degrees: {skewDegrees}deg;
           --negative-skew-degrees: -{skewDegrees}deg;
         "
+      crossorigin="anonymous"
     />
     <img
       src="grassjess.png"
