@@ -15,6 +15,8 @@
   export let imageURL: string;
 
   let canvasElement: HTMLCanvasElement;
+  export let applyFilters: boolean = false;
+
   onMount(async () => {
     // Create a new application with the specified canvas
     const app = new Application();
@@ -98,6 +100,11 @@
     bind:this={canvasElement}
     width="1024"
     height="1024"
-    class="w-full md:w-6/12"
+    class="w-full"
+    class:filter={applyFilters}
+    class:grayscale={applyFilters}
+    class:opacity-65={applyFilters}
+    class:contrast-200={applyFilters}
+    class:mix-blend-difference={applyFilters}
   />
 </div>
