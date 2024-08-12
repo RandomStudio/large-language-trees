@@ -18,6 +18,7 @@
     class:opacity-65={applyFilters}
     class:contrast-200={applyFilters}
     class:mix-blend-difference={applyFilters}
+    crossorigin="anonymous"
   />
   {#if $page.url.pathname !== "/app/startwindow"}
     <p class="text-roel_blue font-primer text-3xl">

@@ -207,6 +207,7 @@
       alt="Plant"
       class="absolute"
       style={`left: ${x}px; top: ${y}px; width: ${size}px; height: auto; z-index: ${zIndex}; transform:translate(-50%,-50%)`}
+      crossorigin="anonymous"
     />
     {#if parent1 == null && showGardenName}
       <div

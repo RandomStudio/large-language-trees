@@ -90,7 +90,7 @@
     <div class="fixed inset-0 flex items-center justify-center">
       <img
         src={newPlantimageUrl}
-        alt="Lavender"
+        alt="Resulting plant, hero view"
         bind:this={imgNew}
         crossorigin="anonymous"
       />
