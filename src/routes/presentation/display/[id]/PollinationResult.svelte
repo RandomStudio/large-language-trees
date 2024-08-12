@@ -39,22 +39,18 @@
       const resultTop = getColors(imgTop);
       brightColorTop = resultTop.brightColor;
       darkColorTop = resultTop.darkColor;
-      imgTop.crossOrigin = "anonymous";
     };
 
     imgBottom.onload = () => {
       const resultBottom = getColors(imgBottom);
       brightColorBottom = resultBottom.brightColor;
       darkColorBottom = resultBottom.darkColor;
-      imgBottom.crossOrigin = "anonymous";
     };
 
     imgNew.onload = () => {
       const resultNew = getColors(imgNew);
       brightColorNew = resultNew.brightColor;
       darkColorNew = resultNew.darkColor;
-      imgNew.crossOrigin = "anonymous";
-      console.log(resultNew);
     };
 
     setTimeout(() => {
@@ -63,125 +59,130 @@
   });
 </script>
 
-{#if status == "PollinationResult"}
-  <div class="min-h-screen" style="background-color:{darkColorNew}">
-    <div
-      class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
-      style="background-color: {darkColorNew}; color: {brightColorNew};"
+<div
+  class="min-h-screen"
+  style="background-color:{darkColorNew}; display:{status ===
+  'PollinationResult'
+    ? 'block'
+    : 'none'}"
+>
+  <div
+    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    style="background-color: {darkColorNew}; color: {brightColorNew};"
+  >
+    RESULTING <br /> IN...
+  </div>
+
+  <div
+    class="fixed inset-x-0 bottom-1/2 w-full h-auto"
+    style="fill:{brightColorNew}"
+  >
+    <svg
+      viewBox="0 0 1000 801"
+      xmlns="http://www.w3.org/2000/svg"
+      class="rotate-180 mx-auto"
     >
-      RESULTING <br /> IN...
-    </div>
+      <path
+        d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
+      />
+    </svg>
+  </div>
+
+  <div class="fixed inset-0 flex items-center justify-center">
+    <img
+      src={newPlantimageUrl}
+      alt="Resulting plant, hero view"
+      bind:this={imgNew}
+      crossorigin="anonymous"
+    />
+  </div>
+
+  <div
+    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-6xl font-jeanb z-10"
+    style="background-color:{brightColorNew}; color:{darkColorNew}"
+  >
+    THE <br />
+    {newPlantName.toUpperCase()}
+  </div>
+</div>
+
+<div
+  class="min-h-screen"
+  style="display:{status === 'PollinationResult' ? 'none' : 'block'}"
+>
+  <div
+    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    style="background-color: {darkColorTop}; color: {brightColorTop};"
+  >
+    {authorNameTop.toUpperCase()}'S <br />
+    {plantNameTop.toUpperCase()}
+  </div>
+
+  <div
+    class="h-[560px] flex flex-col justify-end items-center relative"
+    style="background-color:{brightColorTop}"
+  >
+    <svg
+      width="400"
+      height="400"
+      class="rotate-180 translate-y-[200px]"
+      style="fill:{darkColorTop}"
+    >
+      <path d="M0,200 a1,1 0 0,0 400,0" />
+    </svg>
 
     <div
-      class="fixed inset-x-0 bottom-1/2 w-full h-auto"
-      style="fill:{brightColorNew}"
+      class="absolute inset-0 flex items-center justify-center translate-y-[70px]"
     >
-      <svg
-        viewBox="0 0 1000 801"
-        xmlns="http://www.w3.org/2000/svg"
-        class="rotate-180 mx-auto"
-      >
-        <path
-          d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
-        />
-      </svg>
-    </div>
-
-    <div class="fixed inset-0 flex items-center justify-center">
       <img
-        src={newPlantimageUrl}
-        alt="Resulting plant, hero view"
-        bind:this={imgNew}
+        src={plantImageUrlTop}
+        alt="Lavender"
+        class="w-[400px]"
+        bind:this={imgTop}
         crossorigin="anonymous"
       />
     </div>
+  </div>
 
+  <div class="fixed inset-0 flex items-center justify-center z-20">
     <div
-      class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-6xl font-jeanb z-10"
-      style="background-color:{brightColorNew}; color:{darkColorNew}"
+      class="py-1 px-6 z-50 font-primerb text-3xl"
+      style="background-color: {brightColorTop}; color: {darkColorBottom};"
     >
-      THE <br />
-      {newPlantName.toUpperCase()}
+      is pollinating with
     </div>
   </div>
-{/if}
 
-{#if status == "PollinationEvent"}
-  <div class="min-h-screen">
-    <div
-      class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
-      style="background-color: {darkColorTop}; color: {brightColorTop};"
+  <div
+    class="h-[560px] flex flex-col justify-end items-center relative"
+    style="background-color:{darkColorBottom}"
+  >
+    <svg
+      width="400"
+      height="400"
+      class="translate-y-[-361px]"
+      style="fill:{brightColorBottom}"
     >
-      {authorNameTop.toUpperCase()}'S <br />
-      {plantNameTop.toUpperCase()}
-    </div>
-
+      <path d="M0,200 a1,1 0 0,0 400,0" />
+    </svg>
     <div
-      class="h-[560px] flex flex-col justify-end items-center relative"
-      style="background-color:{brightColorTop}"
+      class="absolute inset-0 flex items-center justify-center translate-y-[-70px]"
     >
-      <svg
-        width="400"
-        height="400"
-        class="rotate-180 translate-y-[200px]"
-        style="fill:{darkColorTop}"
-      >
-        <path d="M0,200 a1,1 0 0,0 400,0" />
-      </svg>
-
-      <div
-        class="absolute inset-0 flex items-center justify-center translate-y-[70px]"
-      >
-        <img
-          src={plantImageUrlTop}
-          alt="Lavender"
-          class="w-[400px]"
-          bind:this={imgTop}
-          crossorigin="anonymous"
-        />
-      </div>
-    </div>
-
-    <div class="fixed inset-0 flex items-center justify-center z-20">
-      <div
-        class="py-1 px-6 z-50 font-primerb text-3xl"
-        style="background-color: {brightColorTop}; color: {darkColorBottom};"
-      >
-        is pollinating with
-      </div>
-    </div>
-
-    <div
-      class="h-[560px] flex flex-col justify-end items-center relative"
-      style="background-color:{darkColorBottom}"
-    >
-      <svg
-        width="400"
-        height="400"
-        class="translate-y-[-361px]"
-        style="fill:{brightColorBottom}"
-      >
-        <path d="M0,200 a1,1 0 0,0 400,0" />
-      </svg>
-      <div
-        class="absolute inset-0 flex items-center justify-center translate-y-[-70px]"
-      >
-        <img
-          src={plantImageUrlBottom}
-          alt="Lavender"
-          class="w-[400px] rotate-180"
-          bind:this={imgBottom}
-          crossorigin="anonymous"
-        />
-      </div>
-    </div>
-
-    <div
-      class="w-full h-[250px] flex text-center items-center justify-center bottom-[0px] text-6xl font-jeanb z-10"
-      style="background-color: {brightColorBottom}; color: {darkColorBottom};"
-    >
-      {authorNameBottom.toUpperCase()}'S <br />
-      {plantNameBottom.toUpperCase()}
+      <img
+        src={plantImageUrlBottom}
+        alt="Lavender"
+        class="w-[400px] rotate-180"
+        bind:this={imgBottom}
+        crossorigin="anonymous"
+      />
     </div>
   </div>
-{/if}
+
+  <div
+    class="w-full h-[250px] flex text-center items-center justify-center bottom-[0px] text-6xl font-jeanb z-10"
+    style="background-color: {brightColorBottom}; color: {darkColorBottom};"
+  >
+    {authorNameBottom.toUpperCase()}'S <br />
+    {plantNameBottom.toUpperCase()}
+  </div>
+</div>
