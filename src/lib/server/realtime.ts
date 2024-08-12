@@ -342,9 +342,11 @@ export const getDataForAmbientDisplay = async (
     }
 
     case bRollNaming.ZOOM_OUT: {
-      const allGardens = await db.query.gardens.findMany({
-        with: { myOwner: true, plantsInGarden: true }
-      });
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: { myOwner: true, plantsInGarden: true }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
       const pickGarden = pickRandomElement(allGardens);
       const plantsInGarden = await db.query.gardensToPlants.findMany({
         where: eq(gardensToPlants.gardenId, pickGarden.id),
@@ -368,9 +370,11 @@ export const getDataForAmbientDisplay = async (
       // potentially: it is ALL gardens with ALL plant details for EVERY plant in
       // each garden, plus all user details.
       // An orderBy + LIMIT would probably help, but this would require a join.
-      const allGardens = await db.query.gardens.findMany({
-        with: { myOwner: true, plantsInGarden: true }
-      });
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: { myOwner: true, plantsInGarden: true }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
 
       if (allGardens.length < LIMIT_LEADERBOARD) {
         throw Error("Not enough gardens for leaderboard");
@@ -406,9 +410,11 @@ export const getDataForAmbientDisplay = async (
     }
 
     case bRollNaming.STATISTICS_1: {
-      const allGardens = await db
-        .select({ id: gardens.id, userId: gardens.userId })
-        .from(gardens);
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: { myOwner: true, plantsInGarden: true }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
       const pickGarden = pickRandomElement(allGardens);
       const plantsInGarden = await db.query.gardensToPlants.findMany({
         with: { plant: true },
@@ -432,12 +438,14 @@ export const getDataForAmbientDisplay = async (
     }
     case bRollNaming.STATISTICS_2: {
       const [result] = await db.select({ count: count() }).from(plants);
-      const allGardens = await db.query.gardens.findMany({
-        with: {
-          plantsInGarden: { with: { plant: true } },
-          myOwner: true
-        }
-      });
+      const allGardens = (
+        await db.query.gardens.findMany({
+          with: {
+            plantsInGarden: { with: { plant: true } },
+            myOwner: true
+          }
+        })
+      ).filter((g) => g.myOwner.isAdmin === false);
 
       const pickGardens = pickMultipleRandomElements(
         allGardens,
@@ -458,19 +466,22 @@ export const getDataForAmbientDisplay = async (
     }
 
     case bRollNaming.STATISTICS_3: {
-      const allPlants = await db
-        .select({
-          id: plants.id,
-          commonName: plants.commonName,
-          parent1: plants.parent1,
-          parent2: plants.parent2
-        })
-        .from(plants)
-        .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
-        .where(isNotNull(seedbanksToPlants));
+      const allNormalUsers = await db.query.users.findMany({
+        where: eq(users.isAdmin, false)
+      });
 
-      console.log({ allPlants });
-      const pickPlant = pickRandomElement(allPlants);
+      const pickUser = pickRandomElement(allNormalUsers);
+
+      console.log("pick user", pickUser.username, "from", allNormalUsers);
+
+      const userPlants = await db.query.plants.findMany({
+        where: or(
+          eq(plants.authorTop, pickUser.id),
+          eq(plants.authorBottom, pickUser.id)
+        )
+      });
+
+      const pickPlant = pickRandomElement(userPlants);
 
       const asParentCount = await db
         .select({ id: plants.id, name: plants.commonName })
@@ -487,34 +498,12 @@ export const getDataForAmbientDisplay = async (
         "times"
       );
 
-      const plantWithSeedbanks = await db.query.plants.findFirst({
-        where: eq(plants.id, pickPlant.id),
-        with: { inSeedbanks: { with: { seedbank: true } } }
-      });
-      if (plantWithSeedbanks?.inSeedbanks === undefined) {
-        throw Error("why no seedbank entry?");
-      }
-
-      // In theory, the plant could be in multiple seedbanks,
-      // but with the way the "game" plays now, it typically appears
-      // only once. So we pick the first one.
-      const [seedbank] = plantWithSeedbanks?.inSeedbanks;
-      if (!seedbank.seedbank.userId) {
-        throw Error("why no user ID?");
-      }
-      const owner = await db.query.users.findFirst({
-        where: eq(users.id, seedbank.seedbank.userId)
-      });
-      if (!owner) {
-        throw Error("why no owner?");
-      }
-
       const contents: DisplayPlantPollinationStats = {
         name: bRollNaming.STATISTICS_3,
         contents: {
-          plant: plantWithSeedbanks,
+          plant: pickPlant,
           pollinationCount: asParentCount.length,
-          user: stripUserInfo(owner)
+          user: stripUserInfo(pickUser)
         }
       };
 
@@ -522,7 +511,6 @@ export const getDataForAmbientDisplay = async (
     }
 
     case bRollNaming.IDLE: {
-      // TODO: this is useless, shouldn't be chosen
       return {
         name: bRollNaming.IDLE,
         contents: null

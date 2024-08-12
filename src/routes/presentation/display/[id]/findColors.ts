@@ -1,6 +1,3 @@
-import ColorThief from "colorthief";
-
-
 type RGBColor = [number, number, number];
 
 function calculateBrightness([r, g, b]: RGBColor): number {
@@ -29,8 +26,7 @@ function calculateBrightness([r, g, b]: RGBColor): number {
   }
 
   export function getColors(img:HTMLImageElement){
-    const colorThief = new ColorThief();
-    const colors = colorThief.getPalette(img, 10);
+    const colors = getPaletteFromImage(img,10,10)
     const brightnessThreshold = 130;
     let brightColors: RGBColor[] = [];
     let darkColors: RGBColor[] = [];
@@ -63,3 +59,38 @@ function calculateBrightness([r, g, b]: RGBColor): number {
         darkColor : `rgb(117, 0, 147)`}
     }
   }
+
+  function getPaletteFromImage(img: HTMLImageElement, colorCount: number, quality: number): [number, number, number][] {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d')!;
+    canvas.width = img.width;
+    canvas.height = img.height;
+    context.drawImage(img, 0, 0, img.width, img.height);
+
+    const imageData = context.getImageData(0, 0, img.width, img.height);
+    const data = imageData.data;
+    const colorMap: Record<string, number> = {};
+
+    for (let i = 0; i < data.length; i += 4 * quality) {
+        const alpha = data[i + 3];
+        if (alpha > 0) {  // Ignorer les pixels totalement transparents
+            const rgbKey = `${data[i]}-${data[i + 1]}-${data[i + 2]}`;
+            if (colorMap[rgbKey]) {
+                colorMap[rgbKey]++;
+            } else {
+                colorMap[rgbKey] = 1;
+            }
+        }
+    }
+
+    const sortedColors = Object.keys(colorMap)
+        .map(key => ({
+            color: key.split('-').map(num => parseInt(num)) as [number, number, number],
+            count: colorMap[key]
+        }))
+        .sort((a, b) => b.count - a.count)
+        .map(c => c.color)
+        .slice(0, colorCount);
+
+    return sortedColors;
+}
