@@ -111,7 +111,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
-    {#if plant.plant == yourPlant || plant.plant.timeLeft.milliseconds <= 0}
+    {#if plant.plant.parent1 == null || plant.plant.timeLeft.milliseconds <= 0}
       <div
         on:click={() => {
           console.log("click!");
