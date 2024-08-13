@@ -45,3 +45,7 @@ export const EVENT_LOG_MAX = 100;
 
 /** How many plants (with their users) to show for "showMultipleFeaturedPlants" */
 export const MULTIPLE_FEATURED_PLANTS_COUNT = 2;
+
+/** The maximum number of characters for plantname and username */
+export const LIMIT_CHARACTERS_USERNAME = 20;
+export const LIMIT_CHARACTERS_PLANTNAME = 30;
