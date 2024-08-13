@@ -12,6 +12,7 @@
   import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
   import PopupError from "../../../../../components/PopupError.svelte";
   import { type GenerateImageRequest } from "../../../../api/images/generate/types";
+  import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
 
   export let candidateChild: InsertPlant;
 
@@ -223,7 +224,7 @@
               bind:value={textInput}
               class="bg-roel_blue bg-opacity-10 border-[3px] px-4 py-2 border-roel_blue rounded-full font-primer text-roel_blue text-2xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center"
               placeholder="Name your flower"
-              maxlength="30"
+              maxlength={LIMIT_CHARACTERS_PLANTNAME}
             />
           </form>
         </div>
