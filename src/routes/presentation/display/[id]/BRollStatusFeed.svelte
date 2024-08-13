@@ -26,6 +26,8 @@
       width={300}
       garden={gardens[0]}
       showGardenName={false}
+      innerwidth={window.innerWidth}
+      innerheight={window.innerHeight}
     ></DisplayGarden>
     <DisplayGarden
       xGarden={240}
@@ -34,6 +36,8 @@
       width={300}
       garden={gardens[1]}
       showGardenName={false}
+      innerwidth={window.innerWidth}
+      innerheight={window.innerHeight}
     ></DisplayGarden>
     <DisplayGarden
       xGarden={0}
@@ -42,6 +46,8 @@
       width={300}
       garden={gardens[2]}
       showGardenName={false}
+      innerwidth={window.innerWidth}
+      innerheight={window.innerHeight}
     ></DisplayGarden>
     <DisplayGarden
       xGarden={240}
@@ -50,6 +56,8 @@
       width={300}
       garden={gardens[3]}
       showGardenName={false}
+      innerwidth={window.innerWidth}
+      innerheight={window.innerHeight}
     ></DisplayGarden>
   </div>
 

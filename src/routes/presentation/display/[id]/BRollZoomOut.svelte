@@ -15,13 +15,15 @@
 
   <DisplayGarden
     {garden}
-    xGarden={-100}
+    xGarden={0}
     yGarden={500}
-    height={740}
-    width={740}
+    height={540}
+    width={540}
     showGardenName={false}
     showPlantName={true}
     colorBGText="roel_rose"
+    innerwidth={window.innerWidth}
+    innerheight={window.innerHeight}
   ></DisplayGarden>
 
   <div
