@@ -22,7 +22,7 @@ describe.only("Home page", () => {
   beforeEach(() => {
     cy.viewport(550, 750); // Set viewport to 550px x 750px
     cy.viewport("iphone-6"); // Set viewport to 375px x 667px
-    cy.visit("http://localhost:8888/");
+    cy.visit("/");
   });
   it("Can log in as admin", () => {
     cy.location("pathname").should("equal", "/app");
@@ -53,7 +53,7 @@ describe.only("Home page", () => {
   });
   it("Can log in as existing user", () => {
     const randomUsername =
-      "test_user_" + Math.floor(Math.random() * 100000).toString();
+      "test_user_AAA_" + Math.floor(Math.random() * 100000).toString();
     cy.get('[data-test="username-field"]').should("exist").type(randomUsername);
     cy.get('[data-test="start-button"]').should("exist").click();
     cy.location("pathname").should("equal", "/app/startwindow");

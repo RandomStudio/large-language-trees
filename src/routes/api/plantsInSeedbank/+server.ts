@@ -5,17 +5,29 @@ import {
   getUserSeedbank
 } from "$lib/server";
 import { db } from "$lib/server/db";
-import { seedbanksToPlants } from "$lib/server/schema";
+import { seedbanks, seedbanksToPlants } from "$lib/server/schema";
 import type { SeedbankEntry } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 
 export const POST: RequestHandler = async ({ request }) => {
-  const data = (await request.json()) as SeedbankEntry;
+  const data = (await request.json()) as {
+    plantId: string;
+    otherUserId: string;
+  };
 
   console.log("POST plantsInSeedbank", data);
 
-  await addPlantToSeedbank(data.plantId, data.seedbankId);
+  const otherUserSeedbank = await db.query.seedbanks.findFirst({
+    where: eq(seedbanks.userId, data.otherUserId)
+  });
+
+  if (!otherUserSeedbank) {
+    console.error("No seedbank for user with ID", data.otherUserId);
+    return json({}, { status: 404 });
+  }
+
+  await addPlantToSeedbank(data.plantId, otherUserSeedbank.id);
 
   if (ADMIN_GARDEN_SHARED === "true") {
     console.warn(

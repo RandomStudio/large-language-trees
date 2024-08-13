@@ -9,7 +9,8 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({
   locals,
-  params
+  params,
+  url
 }): Promise<EnhancedGardenViewData> => {
   const userId = locals.user?.id;
 
@@ -29,7 +30,9 @@ export const load: PageServerLoad = async ({
         user: thisUser,
         seedbank: seedBank,
         garden,
-        plantId
+        plantId,
+        otherPlantId: url.searchParams.get("parent2"),
+        otherUserId: url.searchParams.get("autorBottom")
       };
     } else {
       throw Error("could not find user when querying");
