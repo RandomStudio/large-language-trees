@@ -19,8 +19,8 @@
 </svelte:head>
 
 <div class="z-20 min-h-screen bg-roel_green absolute">
-  {#if !$page.url.pathname.includes("admin")}
-    {#if $page.url.pathname == "/app/startwindow" && !$isPollinationPage}
+  {#if !$page.url.pathname.includes("admin") && !$isPollinationPage}
+    {#if $page.url.pathname == "/app/startwindow"}
       <div
         class="fixed w-full z-30 pt-3 pl-8"
         data-test="lets-pollinate-header"
