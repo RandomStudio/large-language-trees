@@ -22,6 +22,7 @@
         id="username"
         name="username"
         placeholder="Fill in your name"
+        maxlength="30"
         on:input={handleInput}
       />
       <input
