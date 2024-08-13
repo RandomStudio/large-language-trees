@@ -16,7 +16,7 @@
   <DisplayGarden
     garden={topGarden}
     xGarden={0}
-    yGarden={0}
+    yGarden={200}
     width={540}
     height={540}
     showGardenName={true}
