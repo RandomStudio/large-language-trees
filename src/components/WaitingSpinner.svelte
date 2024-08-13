@@ -1,5 +1,5 @@
 <img
-  src="/morphGif.gif"
+  src="/NewMorphGif.gif"
   alt="Spinner"
   class="w-60 relative flipped-spin"
   style="margin: auto; transform: scaleX(-1);"
