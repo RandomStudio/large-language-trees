@@ -72,7 +72,7 @@
   </div>
 
   <div
-    class="w-full h-[200px] flex text-center items-center justify-center absolute bottom-[10vh] text-6xl font-jeanb"
+    class="w-full h-[200px] flex text-center items-center justify-center absolute bottom-[70px] text-6xl font-jeanb"
     style=" color:{darkColor}"
   >
     HAS POLLINATED <br />
