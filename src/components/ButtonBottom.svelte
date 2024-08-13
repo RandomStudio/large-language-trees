@@ -5,6 +5,7 @@
 </script>
 
 <div
+  data-test="bottom-action-button"
   class="fixed left-0 right-0 bottom-0 flex items-center justify-center z-50 bg-gradient-to-t from-roel_green/100 from-25% to-roel_green/0"
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
