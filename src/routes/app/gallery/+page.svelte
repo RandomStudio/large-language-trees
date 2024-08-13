@@ -47,7 +47,7 @@
     goto(`gallery/pollination/` + id);
   }
 
-  let yourPlant: SelectPlant | null =
+  let yourOriginalPlant: SelectPlant | null =
     data.seedbank.plantsInSeedbank.find(
       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
@@ -111,7 +111,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
-    {#if plant.plant == yourPlant || plant.plant.timeLeft.milliseconds <= 0}
+    {#if plant.plant.parent1 == null || plant.plant.timeLeft.milliseconds <= 0}
       <div
         on:click={() => {
           console.log("click!");
@@ -159,7 +159,7 @@
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant.id == yourPlant?.id}
+    isOriginalPlant={selectedPlant.id == yourOriginalPlant?.id}
     isPollinatingPlant={DateTime.fromJSDate(selectedPlant.created).diffNow() >
       DURATION_TILL_FERTILE}
   ></PopupInfo>
