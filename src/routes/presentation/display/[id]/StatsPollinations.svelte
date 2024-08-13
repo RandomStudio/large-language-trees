@@ -46,10 +46,18 @@
     {plantName.toUpperCase()}
   </div>
 
-  <div class=" absolute top-1/2 w-full h-auto" style="fill:{darkColor}">
-    <svg viewBox="0 0 1000 801" xmlns="http://www.w3.org/2000/svg">
+  <div
+    class="svg-container"
+    style="position: absolute; top: 50vh; height: 26vh; width: 100vw; overflow: hidden;"
+  >
+    <svg
+      viewBox="0 0 1000 801"
+      preserveAspectRatio="none"
+      style="width: 100%; height: 100%;"
+    >
       <path
         d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
+        fill={darkColor}
       />
     </svg>
   </div>
@@ -57,14 +65,14 @@
   <div class="fixed inset-0 flex items-center justify-center">
     <img
       src={imageUrl}
-      alt="Hero plant image"
+      alt="Hero plant"
       bind:this={img}
       crossorigin="anonymous"
     />
   </div>
 
   <div
-    class="w-full h-[200px] flex text-center items-center justify-center absolute top-[1250px] text-6xl font-jeanb"
+    class="w-full h-[200px] flex text-center items-center justify-center absolute bottom-[10vh] text-6xl font-jeanb"
     style=" color:{darkColor}"
   >
     HAS POLLINATED <br />
