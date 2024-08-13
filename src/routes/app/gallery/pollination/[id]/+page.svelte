@@ -42,6 +42,7 @@
   let child: SelectPlant | null = null;
 
   let isLoadingCamera = true;
+  let errorMessage: string | null = null;
 
   $: existingChild = (
     parents: [SelectPlant, SelectPlant]
@@ -85,15 +86,18 @@
           });
           return stream;
         } catch (err) {
+          errorMessage = "Please check the camera authorisations";
           throw Error("Stream attempt #2 failed: " + err);
         }
       } else {
+        errorMessage = "Please check the camera authorisations";
         throw Error("Stream attempt #1 failed: " + err);
       }
     }
   }
 
   async function startQrScanning() {
+    errorMessage = null;
     console.log("Attempt to start camera + QR scanning...");
     const stream = await getStream(); // throws Error if unsuccessful
     console.log("... stream started OK");
@@ -236,6 +240,9 @@
       <p class=" text-2xl mr-6">
         Scan another gardeners QR to crossbreed the {parent1.commonName}
       </p>
+      {#if errorMessage}
+        <p class="text-xl text-red-500">{errorMessage}</p>
+      {/if}
       <div class="mx-0">
         <div class="relative mt-4 pb-10">
           <div
