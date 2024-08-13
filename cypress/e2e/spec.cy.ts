@@ -31,4 +31,23 @@ describe("Home page", () => {
       .find("button")
       .contains("Start Pollinating");
   });
+  it("Can log in as existing user", () => {
+    const randomUsername =
+      "test_user_" + Math.floor(Math.random() * 100000).toString();
+    cy.get('[data-test="username-field"]').should("exist").type(randomUsername);
+    cy.get('[data-test="start-button"]').should("exist").click();
+    cy.location("pathname").should("equal", "/app/startwindow");
+    cy.get('[data-test="welcome-text"]')
+      .should("exist")
+      .contains("here is your first plant");
+    cy.visit("/app/logout");
+    cy.get('[data-test="logout-button"]').should("exist").click();
+    // Log in again...
+    cy.get('[data-test="username-field"]').should("exist").type(randomUsername);
+    cy.get('[data-test="start-button"]').should("exist").click();
+    cy.location("pathname").should("equal", "/app/gallery");
+    cy.get('[data-test="start-pollinating-button"]')
+      .should("exist")
+      .contains("Start Pollinating");
+  });
 });
