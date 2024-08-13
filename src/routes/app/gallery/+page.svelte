@@ -47,7 +47,7 @@
     goto(`gallery/pollination/` + id);
   }
 
-  let yourPlant: SelectPlant | null =
+  let yourOriginalPlant: SelectPlant | null =
     data.seedbank.plantsInSeedbank.find(
       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
@@ -159,7 +159,7 @@
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant.id == yourPlant?.id}
+    isOriginalPlant={selectedPlant.id == yourOriginalPlant?.id}
     isPollinatingPlant={DateTime.fromJSDate(selectedPlant.created).diffNow() >
       DURATION_TILL_FERTILE}
   ></PopupInfo>
