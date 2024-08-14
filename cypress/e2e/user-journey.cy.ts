@@ -1,4 +1,4 @@
-describe("User can pollinate plant", () => {
+describe("User can pollinate a new plant", () => {
   beforeEach(() => {
     cy.viewport(550, 750); // Set viewport to 550px x 750px
     cy.viewport("iphone-6"); // Set viewport to 375px x 667px
@@ -16,13 +16,11 @@ describe("User can pollinate plant", () => {
     // Click then click again
     cy.get('[data-test="bottom-action-button"]')
       .should("exist")
-      .find("button")
       .contains("Great!")
       .click();
 
     cy.get('[data-test="bottom-action-button"]')
       .should("exist")
-      .find("button")
       .contains("Start Pollinating")
       .click();
 
@@ -57,6 +55,8 @@ describe("User can pollinate plant", () => {
         .should("include", "app/gallery/pollination")
         .then((p) => {
           cy.visit(`${p}?authorBottom=${user1}&parent2=${user1PlantId}`);
+
+          // cy.getByData("bottom-action-button").should("exist").click();
         });
     });
   });

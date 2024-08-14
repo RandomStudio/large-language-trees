@@ -16,7 +16,8 @@
     "drizzle-generate": "npx drizzle-kit generate",
     "drizzle-push": "npx drizzle-kit push",
     "drizzle-studio": "npm run drizzle-generate && npm run drizzle-push && npx drizzle-kit studio",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "cy:headless": "cypress run --browser chrome"
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "^0.26.0",

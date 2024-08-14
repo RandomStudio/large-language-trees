@@ -33,7 +33,7 @@ describe.only("Home page", () => {
   });
   it("Can log in creating new user", () => {
     const randomUsername =
-      "test_user_" + Math.floor(Math.random() * 100000).toString();
+      "test_" + Math.floor(Math.random() * 100000).toString();
     cy.get('[data-test="username-field"]').should("exist").type(randomUsername);
     cy.get('[data-test="start-button"]').should("exist").click();
     cy.location("pathname").should("equal", "/app/startwindow");
@@ -43,17 +43,15 @@ describe.only("Home page", () => {
       .contains("here is your first plant");
     cy.get('[data-test="bottom-action-button"]')
       .should("exist")
-      .find("button")
       .contains("Great!")
       .click();
     cy.get('[data-test="bottom-action-button"]')
       .should("exist")
-      .find("button")
       .contains("Start Pollinating");
   });
   it("Can log in as existing user", () => {
     const randomUsername =
-      "test_user_AAA_" + Math.floor(Math.random() * 100000).toString();
+      "test_" + Math.floor(Math.random() * 100000).toString();
     cy.get('[data-test="username-field"]').should("exist").type(randomUsername);
     cy.get('[data-test="start-button"]').should("exist").click();
     cy.location("pathname").should("equal", "/app/startwindow");
