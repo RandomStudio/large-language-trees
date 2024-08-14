@@ -51,7 +51,7 @@ describe.only("Home page", () => {
   });
   it("Can log in as existing user", () => {
     const randomUsername =
-      "test_" + Math.floor(Math.random() * 100000).toString();
+      "test_long_" + Math.floor(Math.random() * 100000).toString();
     cy.get('[data-test="username-field"]').should("exist").type(randomUsername);
     cy.get('[data-test="start-button"]').should("exist").click();
     cy.location("pathname").should("equal", "/app/startwindow");

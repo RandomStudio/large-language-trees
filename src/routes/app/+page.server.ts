@@ -9,6 +9,7 @@ import { generateIdFromEntropySize } from "lucia";
 import { hash } from "@node-rs/argon2";
 import { publishEvent } from "$lib/server/realtime";
 import type { EventNewUser } from "$lib/events.types";
+import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
 
 export const load = async ({ locals }) => {
   const username = locals.user?.username;
@@ -27,7 +28,7 @@ export const actions = {
     if (
       typeof username !== "string" ||
       username.length < 3 ||
-      username.length > 31 ||
+      username.length > LIMIT_CHARACTERS_USERNAME ||
       !/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]+$/.test(username)
     ) {
       console.error("invalid username");
