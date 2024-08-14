@@ -57,10 +57,14 @@
           "otherPlantId and otherUserId provided by URL search params; skip scanning..."
         );
         otherUserId = data.otherUserId;
-        onCodeScanned(otherUserId).then(() => {
+        onCodeScanned(data.otherPlantId).then(() => {
           "onCodeScanned success; skipped actual scanning and used searchparams";
         });
       } else {
+        console.log(
+          "no/incorrect searchparams provided, so we're going to use QR scanning...",
+          { otherPlantId: data.otherPlantId, otherUserId: data.otherUserId }
+        );
         await startQrScanning();
       }
     } catch (e) {

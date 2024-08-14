@@ -43,10 +43,10 @@ describe("User can pollinate plant", () => {
       cy.getByData("logout-button").click();
 
       // Log in second user
-      const user2 =
+      const user2_username =
         "test_user_B_" + Math.floor(Math.random() * 100000).toString();
 
-      cy.getByData("username-field").type(user2);
+      cy.getByData("username-field").type(user2_username);
       cy.getByData("start-button").click();
 
       // Click through twice

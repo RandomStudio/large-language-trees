@@ -5,7 +5,7 @@ import {
   getUserSeedbank
 } from "$lib/server";
 import { db } from "$lib/server/db";
-import { seedbanks, seedbanksToPlants } from "$lib/server/schema";
+import { seedbanks, seedbanksToPlants, users } from "$lib/server/schema";
 import type { SeedbankEntry } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
@@ -13,21 +13,38 @@ import { and, eq } from "drizzle-orm";
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as {
     plantId: string;
-    otherUserId: string;
+    seedbankId?: string;
+    userId?: string;
   };
 
   console.log("POST plantsInSeedbank", data);
 
-  const otherUserSeedbank = await db.query.seedbanks.findFirst({
-    where: eq(seedbanks.userId, data.otherUserId)
-  });
+  const { seedbankId, userId } = data;
 
-  if (!otherUserSeedbank) {
-    console.error("No seedbank for user with ID", data.otherUserId);
-    return json({}, { status: 404 });
+  if (seedbankId) {
+    console.log("Provided seedbank ID", seedbankId, "use this");
+    await addPlantToSeedbank(data.plantId, seedbankId);
+  } else {
+    console.log(`Provided no seedbank ID; look up by userId "${userId}"`);
+    if (!userId) {
+      return json(
+        {},
+        {
+          statusText: "We were provided neither a seedbankId nor a userId",
+          status: 400
+        }
+      );
+    }
+    const userSeedbank = await db.query.seedbanks.findFirst({
+      where: eq(seedbanks.userId, userId)
+    });
+
+    if (!userSeedbank) {
+      console.error("No seedbank for user with ID", data.userId);
+      return json({}, { status: 404 });
+    }
+    await addPlantToSeedbank(data.plantId, userSeedbank.id);
   }
-
-  await addPlantToSeedbank(data.plantId, otherUserSeedbank.id);
 
   if (ADMIN_GARDEN_SHARED === "true") {
     console.warn(
