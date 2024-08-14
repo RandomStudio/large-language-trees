@@ -16,7 +16,7 @@
 
   let canvasElement: HTMLCanvasElement;
   export let applyFilters: boolean = false;
-  export let size: string;
+  export let positionStyles: string;
 
   onMount(async () => {
     // Create a new application with the specified canvas
@@ -101,7 +101,7 @@
     bind:this={canvasElement}
     width="1024"
     height="1024"
-    class={size}
+    class={positionStyles}
     class:filter={applyFilters}
     class:grayscale={applyFilters}
     class:opacity-65={applyFilters}

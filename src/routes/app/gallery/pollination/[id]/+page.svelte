@@ -25,7 +25,8 @@
   export let data: EnhancedGardenViewData;
 
   export let applyFilters: boolean = false;
-  export let size: string = "absolute -bottom-3 -right-8 -mb-1 w-40 h-40 z-10";
+  export let positionStyles: string =
+    "absolute -bottom-3 -right-8 -mb-1 w-40 h-40 z-10";
 
   let videoElement: HTMLVideoElement;
   let codeReader: BrowserMultiFormatReader | null = null;
@@ -249,7 +250,7 @@
           <AnimatedPlant
             imageURL={parent1.imageUrl || ""}
             {applyFilters}
-            {size}
+            {positionStyles}
           />
         </div>
         <div class="mt-2 mx-16 absolute place-self-center">
