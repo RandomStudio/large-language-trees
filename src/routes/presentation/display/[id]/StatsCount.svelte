@@ -73,12 +73,12 @@
     There are currently
   </div>
   <div
-    class="w-full flex text-center items-center justify-center absolute bottom-[110px] text-roel_purple text-6xl font-jeanb"
+    class="w-full flex text-center items-center justify-center absolute bottom-[110px] text-roel_purple text-7xl font-jeanb"
   >
     {count} PLANTS
   </div>
   <div
-    class="w-full flex text-center items-center justify-center absolute bottom-[60px] text-roel_purple text-4xl font-primer"
+    class="w-full flex text-center items-center justify-center absolute bottom-[70px] text-roel_purple text-4xl font-primer"
   >
     growing in the garden!
   </div>

@@ -8,7 +8,7 @@
 
 <body class="bg-roel_purple w-full h-screen relative overflow-hidden">
   <div
-    class="bg-roel_rose w-full h-[250px] flex text-center text-roel_purple items-center justify-center text-6xl font-jeanb"
+    class="bg-roel_rose w-full h-[250px] flex text-center text-roel_purple items-center justify-center text-7xl font-jeanb"
   >
     {userName}'s <br /> GARDEN
   </div>

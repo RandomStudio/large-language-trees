@@ -39,7 +39,7 @@
 
 <div class="min-h-screen" style:background-color={brightColor}>
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
     style="background-color: {darkColor}; color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />

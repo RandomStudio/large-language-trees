@@ -67,7 +67,7 @@
     : 'none'}"
 >
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
     style="background-color: {darkColorNew}; color: {brightColorNew};"
   >
     RESULTING <br /> IN...
@@ -98,7 +98,7 @@
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-6xl font-jeanb z-10"
+    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-7xl font-jeanb z-10"
     style="background-color:{brightColorNew}; color:{darkColorNew}"
   >
     THE <br />
@@ -111,7 +111,7 @@
   style="display:{status === 'PollinationResult' ? 'none' : 'block'}"
 >
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
     style="background-color: {darkColorTop}; color: {brightColorTop};"
   >
     {authorNameTop.toUpperCase()}'S <br />
@@ -179,7 +179,7 @@
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center bottom-[0px] text-6xl font-jeanb z-10"
+    class="w-full h-[250px] flex text-center items-center justify-center bottom-[0px] text-7xl font-jeanb z-10"
     style="background-color: {brightColorBottom}; color: {darkColorBottom};"
   >
     {authorNameBottom.toUpperCase()}'S <br />

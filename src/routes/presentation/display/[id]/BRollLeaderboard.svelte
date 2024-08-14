@@ -7,7 +7,7 @@
 
 <body class="bg-roel_purple h-screen flex flex-col justify-end">
   <div
-    class="w-full h-[230px] flex items-center text-left pl-5 text-roel_purple text-7xl font-jeanb bg-roel_rose"
+    class="w-full h-[15vh] flex items-center text-left pl-5 text-roel_purple text-7xl font-jeanb bg-roel_rose"
   >
     MOST ACTIVE
     <br />POLLINATORS:
@@ -28,7 +28,7 @@
 
   {#each topPollinators as userInfo, index}
     <div
-      class="w-full h-[80px] flex items-center justify-between px-5 {index %
+      class="w-full h-[7vh] flex items-center justify-between px-5 {index %
         2 ===
       0
         ? 'bg-roel_purple'

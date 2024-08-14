@@ -37,7 +37,7 @@
 
 <div class="min-h-screen" style="background-color:{brightColor}">
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
     style="background-color: {darkColor}; color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -74,7 +74,7 @@
     style="color:{darkColor}"
   >
     <div class="text-4xl font-primer">has been growing for:<br /></div>
-    <div class="text-6xl font-jeanb">
+    <div class="text-7xl font-jeanb">
       {age.toFormat("hh'H' mm'M' ss'S")}
     </div>
   </div>
