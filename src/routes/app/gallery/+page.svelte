@@ -106,7 +106,12 @@
   <PlantWasAddedPopup plant={newPlantForPopup} />
 {/if}
 
-<div class="mt-10 mx-10 font-primer text-roel_blue text-left">
+<div class="mt-16 mx-10 font-primer text-roel_blue text-left">
+  <div
+    class="text-roel_blue font-primer text-3xl text-center border-b-[3px] border-roel_blue rounded-lg px-4 py-2"
+  >
+    {data.garden.name}
+  </div>
   {#each dataWithTimes.seedbank.plantsInSeedbank as plant}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
