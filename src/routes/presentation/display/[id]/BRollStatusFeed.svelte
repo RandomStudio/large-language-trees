@@ -67,7 +67,7 @@
   </div>
 
   <div
-    class="absolute flex flex-col items-start bottom-3 z-20 w-full left-[2vh]"
+    class="absolute flex flex-col items-start bottom-[2vh] z-20 w-full left-[2vh]"
   >
     <div class="items-start space-y-[2vh]">
       {#each eventLogs as sentence, index}
@@ -78,7 +78,7 @@
           {#each sentence as info}
             {#if info.highlight == true}
               <div
-                class="text-roel_purple text-xl font-primer bg-roel_rose p-1"
+                class="text-roel_purple text-xl font-primer bg-roel_rose px-2"
               >
                 {info.text}
               </div>
