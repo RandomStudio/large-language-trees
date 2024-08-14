@@ -3458,7 +3458,7 @@
   {
     "id": "bonsai",
     "commonName": "Bonsai",
-    "imageUrl": "/plants/bonzai.png",
+    "imageUrl": "/plants/bonsai.png",
     "properties": {
       "flowerColour": "Varied",
       "flowerColourRGB": "#FFD700",
