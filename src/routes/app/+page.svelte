@@ -1,6 +1,8 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import type { ActionData } from "./$types";
+  import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
+
   export let form: ActionData;
 
   let showButton = false;
@@ -21,7 +23,9 @@
         type="text"
         id="username"
         name="username"
+        data-test="username-field"
         placeholder="Fill in your name"
+        maxlength={LIMIT_CHARACTERS_USERNAME}
         on:input={handleInput}
       />
       <input
@@ -35,6 +39,7 @@
 
       <button
         data-umami-event="Start button"
+        data-test="start-button"
         class="text-roel_green bg-roel_blue font-primer text-3xl px-4 py-[0.5rem] mt-4 w-full max-w-xs border-[3px] border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
         type="submit"
       >

@@ -10,9 +10,27 @@
   export let showGardenName = true;
   export let showPlantName = false;
   export let colorBGText = "roel_green";
+  export let innerwidth: number = 540;
+  export let innerheight: number = 1620;
+
+  const previousHeight = 1620;
+  const previousWidth = 540;
+
+  width = convertWidth(width, innerwidth);
+  height = convertHeight(height, innerheight);
+  xGarden = convertWidth(xGarden, innerwidth);
+  yGarden = convertHeight(yGarden, innerheight);
 
   let plantProportion = 0.6;
   let positions: PlantPosition[];
+
+  function convertHeight(y: number, innerheight: number) {
+    return (y * innerheight) / previousHeight;
+  }
+
+  function convertWidth(x: number, innerwidth: number) {
+    return (x * innerwidth) / previousWidth;
+  }
 
   function findMinMaxHeight() {
     if (!garden.plantsInGarden || garden.plantsInGarden.length === 0) {
@@ -207,6 +225,7 @@
       alt="Plant"
       class="absolute"
       style={`left: ${x}px; top: ${y}px; width: ${size}px; height: auto; z-index: ${zIndex}; transform:translate(-50%,-50%)`}
+      crossorigin="anonymous"
     />
     {#if parent1 == null && showGardenName}
       <div

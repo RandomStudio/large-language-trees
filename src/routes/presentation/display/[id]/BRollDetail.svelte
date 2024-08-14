@@ -31,9 +31,14 @@
   });
 </script>
 
-<div class="viewport bg-roel_rose">
+<div class="viewport bg-roel_rose min-h-screen">
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
-    <img src={plant.imageUrl} alt="Plant" class="target-image" />
+    <img
+      src={plant.imageUrl}
+      alt="Plant"
+      class="target-image"
+      crossorigin="anonymous"
+    />
     <div
       class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
       style="left: {540 / 2 - xEnd}px; top: {1620 / 2 -
@@ -46,8 +51,6 @@
 
 <style>
   .viewport {
-    width: 540px;
-    height: 1620px;
     overflow: hidden;
     position: relative;
   }

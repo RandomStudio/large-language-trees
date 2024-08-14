@@ -38,6 +38,7 @@
             src={selectedPlant.imageUrl}
             alt={selectedPlant.commonName}
             style="width: 100%;"
+            crossorigin="anonymous"
           />
         </div>
         <p class="flex justify-center text-roel_blue">

@@ -22,7 +22,7 @@
 
 <div class="min-h-screen" style:background-color={brightColor}>
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
     style="background-color: {darkColor}; color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -40,14 +40,14 @@
   <div class="fixed inset-0 flex items-center justify-center">
     <img
       src={imageUrl}
-      alt="Lavender"
+      alt="Hero view the new user's first plant"
       bind:this={img}
       crossorigin="anonymous"
     />
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-6xl font-jeanb"
+    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-7xl font-jeanb"
     style="background-color={brightColor}; color:{darkColor}"
   >
     JUST SPROUTED <br /> IN THE GARDEN!

@@ -1,6 +1,6 @@
 <body>
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-6xl font-jeanb bg-roel_red"
+    class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"
   >
     STEVEB'S <br /> ROSE
   </div>
@@ -18,7 +18,12 @@
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[70px]"
     >
-      <img src="/43.png" alt="Lavender" class="w-[400px]" />
+      <img
+        src="/43.png"
+        alt="Pollinating Plant First Parent"
+        class="w-[400px]"
+        crossorigin="anonymous"
+      />
     </div>
   </div>
 
@@ -39,12 +44,17 @@
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[-70px]"
     >
-      <img src="/58.png" alt="Lavender" class="w-[400px] rotate-180" />
+      <img
+        src="/58.png"
+        alt="Pollinating Plant Second Parent"
+        class="w-[400px] rotate-180"
+        crossorigin="anonymous"
+      />
     </div>
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-6xl font-jeanb bg-roel_rose"
+    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-7xl font-jeanb bg-roel_rose"
   >
     ROELSCOOTER'S <br /> LAVENDER
   </div>

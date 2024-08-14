@@ -101,10 +101,11 @@ export async function addConfirmedPlant(
 
 export async function addConfirmedPlantToOtherUser(
   candidateChild: InsertPlant,
-  seedbankId: string
+  otherUserId: string
 ) {
+  console.log("addConfirmedPlantToOtherUser", { otherUserId });
   await fetch("/api/plantsInSeedbank", {
     method: "POST",
-    body: JSON.stringify({ plantId: candidateChild.id, seedbankId })
+    body: JSON.stringify({ plantId: candidateChild.id, userId: otherUserId })
   });
 }
