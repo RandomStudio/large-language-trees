@@ -56,10 +56,8 @@ describe("User can pollinate a new plant", () => {
         .then((p) => {
           cy.visit(`${p}?authorBottom=${user1}&parent2=${user1PlantId}`);
 
-          // This currently doesn't work!
-          setTimeout(() => {
-            cy.getByData("bottom-action-button").should("exist").click();
-          }, 60000);
+          cy.wait(60000);
+          cy.getByData("bottom-action-button").should("exist").click();
         });
     });
   });
