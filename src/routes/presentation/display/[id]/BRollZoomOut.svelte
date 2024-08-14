@@ -8,20 +8,22 @@
 
 <body class="bg-roel_purple w-full h-screen relative overflow-hidden">
   <div
-    class="bg-roel_rose w-full h-[250px] flex text-center text-roel_purple items-center justify-center text-6xl font-jeanb"
+    class="bg-roel_rose w-full h-[250px] flex text-center text-roel_purple items-center justify-center text-7xl font-jeanb"
   >
     {userName}'s <br /> GARDEN
   </div>
 
   <DisplayGarden
     {garden}
-    xGarden={-100}
+    xGarden={0}
     yGarden={500}
-    height={740}
-    width={740}
+    height={540}
+    width={540}
     showGardenName={false}
     showPlantName={true}
     colorBGText="roel_rose"
+    innerwidth={window.innerWidth}
+    innerheight={window.innerHeight}
   ></DisplayGarden>
 
   <div
