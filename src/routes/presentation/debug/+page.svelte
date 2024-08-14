@@ -73,10 +73,10 @@
 <ul>
   {#each data.displays as display}
     <div class="border-solid border-2 border-slate-300 m-2 p-2">
-      <h3 class="font-bold">
+      <h3 class="font-bold border-b-slate-200 border-b-2">
         Display "{display.id}"
       </h3>
-      <div>
+      <div class="h-60 overflow-scroll">
         Contents: <pre class="text-xs"><code
             >{display.contents === null
               ? "empty"
