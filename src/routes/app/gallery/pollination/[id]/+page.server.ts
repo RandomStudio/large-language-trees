@@ -9,7 +9,8 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({
   locals,
-  params
+  params,
+  url
 }): Promise<EnhancedGardenViewData> => {
   const userId = locals.user?.id;
 
@@ -22,6 +23,16 @@ export const load: PageServerLoad = async ({
       where: eq(users.id, userId),
       with: { mySeedbank: true }
     });
+    let otherUserId = null;
+    const otherUserUsername = url.searchParams.get("authorBottom");
+    if (otherUserUsername) {
+      const otherUser = await db.query.users.findFirst({
+        where: eq(users.username, otherUserUsername)
+      });
+      if (otherUser) {
+        otherUserId = otherUser.id;
+      }
+    }
     const plantId = params.id;
     if (thisUser && plantId) {
       return {
@@ -29,7 +40,9 @@ export const load: PageServerLoad = async ({
         user: thisUser,
         seedbank: seedBank,
         garden,
-        plantId
+        plantId,
+        otherPlantId: url.searchParams.get("parent2"),
+        otherUserId: otherUserId
       };
     } else {
       throw Error("could not find user when querying");

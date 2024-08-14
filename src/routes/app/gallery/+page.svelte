@@ -128,6 +128,7 @@
       </div>
       <div class="mt-4 text-center">
         <button
+          data-test="start-pollinating-button"
           data-umami-event="Start Pollinating Button"
           class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
           on:click={() => handleClick(plant.plant.id)}

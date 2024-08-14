@@ -36,7 +36,7 @@
   let parent2: SelectPlant | null = null;
 
   let candidateChild: InsertPlant | null = null;
-  let otherUserSeedbankId: string | null = null;
+  let otherUserId: string | null = null;
 
   let waiting: boolean = false;
   let child: SelectPlant | null = null;
@@ -55,7 +55,21 @@
 
   onMount(async () => {
     try {
-      await startQrScanning();
+      if (data.otherPlantId && data.otherUserId) {
+        console.log(
+          "otherPlantId and otherUserId provided by URL search params; skip scanning..."
+        );
+        otherUserId = data.otherUserId;
+        onCodeScanned(data.otherPlantId).then(() => {
+          "onCodeScanned success; skipped actual scanning and used searchparams";
+        });
+      } else {
+        console.log(
+          "no/incorrect searchparams provided, so we're going to use QR scanning...",
+          { otherPlantId: data.otherPlantId, otherUserId: data.otherUserId }
+        );
+        await startQrScanning();
+      }
     } catch (e) {
       console.error("onMount: Error starting camera / QR scanning");
       // Should this redirect or display error notification?
@@ -120,7 +134,7 @@
         const [part1, part2] = readText.split("&");
         console.log("scan text:", { part1, part2 });
         const parent2Id = part1;
-        otherUserSeedbankId = part2;
+        otherUserId = part2;
         onCodeScanned(parent2Id)
           .then(() => {
             console.log("(onCodeScanned) ...done");
@@ -205,14 +219,12 @@
   });
 
   async function insertNewPlant(updatedPlant: InsertPlant) {
-    if (candidateChild && otherUserSeedbankId) {
+    if (candidateChild && otherUserId) {
       candidateChild = updatedPlant;
       candidateChild.authorTop = data.user.id;
-      const seedbankRes = await fetch(`/api/seedbanks/${otherUserSeedbankId}`);
-      const otherSeedbank = (await seedbankRes.json()) as SelectSeedbank;
-      candidateChild.authorBottom = otherSeedbank.userId;
+      candidateChild.authorBottom = otherUserId;
       await addConfirmedPlant(candidateChild, data.garden.id, data.seedbank.id);
-      await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
+      await addConfirmedPlantToOtherUser(candidateChild, otherUserId);
 
       const event: EventNewPollination = {
         name: "newPlantPollination",
@@ -227,7 +239,7 @@
       candidateChild = null;
       busy = false;
     } else {
-      console.error("Missing data", { candidateChild, otherUserSeedbankId });
+      console.error("Missing data", { candidateChild, otherUserId });
     }
   }
 </script>
