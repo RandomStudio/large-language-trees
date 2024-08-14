@@ -9,11 +9,9 @@
   const sizePicture = 2000;
   const duration = 15000; //ms
 
-  // Fonctions pour générer les positions de départ et de fin aléatoires
   const randomPosition = () => Math.floor(Math.random() * (-sizePicture + 540));
   const randomOffset = () => Math.floor(Math.random() * (-sizePicture + 1620));
 
-  // Initialisation pour plant1
   const xStart1 = randomPosition();
   const xEnd1 = randomPosition();
   const yStart1 = randomOffset();
@@ -22,7 +20,6 @@
   let x1 = tweened(xStart1, { duration, easing: cubicOut });
   let y1 = tweened(yStart1, { duration, easing: cubicOut });
 
-  // Initialisation pour plant2
   const xStart2 = randomPosition();
   const xEnd2 = randomPosition();
   const yStart2 = randomOffset();
@@ -42,9 +39,8 @@
   const plant2 = plantsWithusers[1];
 </script>
 
-<div class="viewport bg-roel_rose">
+<div class="viewport bg-roel_rose min-h-screen">
   <div class="camera">
-    <!-- Conteneur spécifique pour les images avec isolation -->
     <div class="images-container">
       <img
         src={plant1.plant.imageUrl}
@@ -75,8 +71,6 @@
 
 <style>
   .viewport {
-    width: 540px;
-    height: 1620px;
     overflow: hidden;
     position: relative;
   }
@@ -93,7 +87,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    isolation: isolate; /* Crée un contexte de composition isolé */
+    isolation: isolate;
   }
 
   .target-image {
@@ -101,6 +95,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    mix-blend-mode: hue; /* Modifier selon le mode de mélange désiré */
+    mix-blend-mode: hue;
   }
 </style>

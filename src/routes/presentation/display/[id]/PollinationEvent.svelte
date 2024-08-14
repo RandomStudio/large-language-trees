@@ -1,6 +1,6 @@
 <body>
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-6xl font-jeanb bg-roel_red"
+    class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"
   >
     STEVEB'S <br /> ROSE
   </div>
@@ -54,7 +54,7 @@
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-6xl font-jeanb bg-roel_rose"
+    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-7xl font-jeanb bg-roel_rose"
   >
     ROELSCOOTER'S <br /> LAVENDER
   </div>

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import type { ActionData } from "./$types";
+  import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
+
   export let form: ActionData;
 
   let showButton = false;
@@ -23,6 +25,7 @@
         name="username"
         data-test="username-field"
         placeholder="Fill in your name"
+        maxlength={LIMIT_CHARACTERS_USERNAME}
         on:input={handleInput}
       />
       <input

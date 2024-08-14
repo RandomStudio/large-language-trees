@@ -19,12 +19,13 @@ export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({
 });
 
 export const DISPLAY_VIEW_WEIGHTINGS = new Map([
+  [bRollNaming.DETAIL_MULTI, 8],
+  [bRollNaming.DETAIL, 8],
   [bRollNaming.STATUS_FEED, 1],
-  [bRollNaming.DETAIL, 4],
-  [bRollNaming.ZOOM_OUT, 2],
-  [bRollNaming.ROLL_PAN, 2],
+  [bRollNaming.ZOOM_OUT, 1],
+  [bRollNaming.ROLL_PAN, 1],
   [bRollNaming.TOP_LIST, 1],
-  [bRollNaming.STATISTICS_1, 2],
+  [bRollNaming.STATISTICS_1, 1],
   [bRollNaming.STATISTICS_2, 1],
   [bRollNaming.STATISTICS_3, 1]
 ]);
@@ -45,3 +46,7 @@ export const EVENT_LOG_MAX = 100;
 
 /** How many plants (with their users) to show for "showMultipleFeaturedPlants" */
 export const MULTIPLE_FEATURED_PLANTS_COUNT = 2;
+
+/** The maximum number of characters for plantname and username */
+export const LIMIT_CHARACTERS_USERNAME = 20;
+export const LIMIT_CHARACTERS_PLANTNAME = 30;
