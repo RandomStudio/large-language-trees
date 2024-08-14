@@ -66,8 +66,10 @@
     ></DisplayGarden>
   </div>
 
-  <div class="absolute flex flex-col items-center bottom-3 z-20 w-full">
-    <div class="items-start space-y-2">
+  <div
+    class="absolute flex flex-col items-start bottom-3 z-20 w-full left-[2vh]"
+  >
+    <div class="items-start space-y-[2vh]">
       {#each eventLogs as sentence, index}
         <div
           class="flex items-center space-x-2"
