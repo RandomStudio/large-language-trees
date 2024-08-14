@@ -31,11 +31,11 @@
 <div class="bg-roel_blue rounded-b-full">
   <div class="font-primer text-roel_green text-left pt-[68px]">
     {#if showMessage}
-      <p class="mx-10 text-2xl -mb-5">
+      <p class="mx-10 text-2xl -mb-5" data-test="welcome-text">
         Dear digital gardener, here is your first plant!
       </p>
     {:else}
-      <p class="mx-10 text-2xl -mb-5">
+      <p class="mx-10 text-2xl -mb-5" data-test="welcome-text">
         Now find a fellow gardener in the studio and scan their barcode to start
         pollinating.
       </p>

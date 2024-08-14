@@ -41,10 +41,13 @@
   let parent2: SelectPlant | null = null;
 
   let candidateChild: InsertPlant | null = null;
-  let otherUserSeedbankId: string | null = null;
+  let otherUserId: string | null = null;
 
   let waiting: boolean = false;
   let child: SelectPlant | null = null;
+
+  let isLoadingCamera = true;
+  let errorMessage: string | null = null;
 
   $: existingChild = (
     parents: [SelectPlant, SelectPlant]
@@ -57,7 +60,21 @@
 
   onMount(async () => {
     try {
-      await startQrScanning();
+      if (data.otherPlantId && data.otherUserId) {
+        console.log(
+          "otherPlantId and otherUserId provided by URL search params; skip scanning..."
+        );
+        otherUserId = data.otherUserId;
+        onCodeScanned(data.otherPlantId).then(() => {
+          "onCodeScanned success; skipped actual scanning and used searchparams";
+        });
+      } else {
+        console.log(
+          "no/incorrect searchparams provided, so we're going to use QR scanning...",
+          { otherPlantId: data.otherPlantId, otherUserId: data.otherUserId }
+        );
+        await startQrScanning();
+      }
     } catch (e) {
       console.error("onMount: Error starting camera / QR scanning");
       // Should this redirect or display error notification?
@@ -88,18 +105,22 @@
           });
           return stream;
         } catch (err) {
+          errorMessage = "Please check the camera authorisations";
           throw Error("Stream attempt #2 failed: " + err);
         }
       } else {
+        errorMessage = "Please check the camera authorisations";
         throw Error("Stream attempt #1 failed: " + err);
       }
     }
   }
 
   async function startQrScanning() {
+    errorMessage = null;
     console.log("Attempt to start camera + QR scanning...");
     const stream = await getStream(); // throws Error if unsuccessful
     console.log("... stream started OK");
+    isLoadingCamera = false;
     videoElement.srcObject = stream;
     videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
 
@@ -118,7 +139,7 @@
         const [part1, part2] = readText.split("&");
         console.log("scan text:", { part1, part2 });
         const parent2Id = part1;
-        otherUserSeedbankId = part2;
+        otherUserId = part2;
         onCodeScanned(parent2Id)
           .then(() => {
             console.log("(onCodeScanned) ...done");
@@ -203,14 +224,12 @@
   });
 
   async function insertNewPlant(updatedPlant: InsertPlant) {
-    if (candidateChild && otherUserSeedbankId) {
+    if (candidateChild && otherUserId) {
       candidateChild = updatedPlant;
       candidateChild.authorTop = data.user.id;
-      const seedbankRes = await fetch(`/api/seedbanks/${otherUserSeedbankId}`);
-      const otherSeedbank = (await seedbankRes.json()) as SelectSeedbank;
-      candidateChild.authorBottom = otherSeedbank.userId;
+      candidateChild.authorBottom = otherUserId;
       await addConfirmedPlant(candidateChild, data.garden.id, data.seedbank.id);
-      await addConfirmedPlantToOtherUser(candidateChild, otherUserSeedbankId);
+      await addConfirmedPlantToOtherUser(candidateChild, otherUserId);
 
       const event: EventNewPollination = {
         name: "newPlantPollination",
@@ -225,7 +244,7 @@
       candidateChild = null;
       busy = false;
     } else {
-      console.error("Missing data", { candidateChild, otherUserSeedbankId });
+      console.error("Missing data", { candidateChild, otherUserId });
     }
   }
 </script>
@@ -238,15 +257,23 @@
       <p class=" text-2xl mr-6">
         Scan another gardeners QR to crossbreed the {parent1.commonName}
       </p>
+      {#if errorMessage}
+        <p class="text-xl text-red-500">{errorMessage}</p>
+      {/if}
       <div class="mx-0">
         <div class="relative mt-4 pb-10">
-          <video
-            bind:this={videoElement}
-            class="object-cover aspect-square overflow-hidden rounded-full z-0"
+          <div
+            class="object-cover aspect-square overflow-hidden rounded-full z-10 bg-black"
           >
-            <track kind="captions" srclang="en" label="English captions" />
-          </video>
-          <!-- svelte-ignore a11y-img-redundant-alt -->
+            <div style="display:{isLoadingCamera ? 'none' : 'block'}">
+              <video
+                bind:this={videoElement}
+                class="object-cover aspect-square"
+              >
+                <track kind="captions" srclang="en" label="English captions" />
+              </video>
+            </div>
+          </div>
           <AnimatedPlant
             imageURL={parent1.imageUrl || ""}
             {applyFilters}

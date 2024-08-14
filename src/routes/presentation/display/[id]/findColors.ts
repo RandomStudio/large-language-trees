@@ -73,7 +73,7 @@ function calculateBrightness([r, g, b]: RGBColor): number {
 
     for (let i = 0; i < data.length; i += 4 * quality) {
         const alpha = data[i + 3];
-        if (alpha > 0) {  // Ignorer les pixels totalement transparents
+        if (alpha > 0) { 
             const rgbKey = `${data[i]}-${data[i + 1]}-${data[i + 2]}`;
             if (colorMap[rgbKey]) {
                 colorMap[rgbKey]++;

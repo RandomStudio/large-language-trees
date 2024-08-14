@@ -31,7 +31,7 @@
   });
 </script>
 
-<div class="viewport bg-roel_rose">
+<div class="viewport bg-roel_rose min-h-screen">
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
     <img
       src={plant.imageUrl}
@@ -51,8 +51,6 @@
 
 <style>
   .viewport {
-    width: 540px;
-    height: 1620px;
     overflow: hidden;
     position: relative;
   }

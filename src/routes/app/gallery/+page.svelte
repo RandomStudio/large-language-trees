@@ -47,7 +47,7 @@
     goto(`gallery/pollination/` + id);
   }
 
-  let yourPlant: SelectPlant | null =
+  let yourOriginalPlant: SelectPlant | null =
     data.seedbank.plantsInSeedbank.find(
       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
@@ -106,12 +106,17 @@
   <PlantWasAddedPopup plant={newPlantForPopup} />
 {/if}
 
-<div class="mt-10 mx-10 font-primer text-roel_blue text-left">
+<div class="mt-16 mx-10 font-primer text-roel_blue text-left">
+  <div
+    class="text-roel_blue font-primer text-3xl text-center border-b-[3px] border-roel_blue rounded-lg px-4 py-2"
+  >
+    {data.garden.name}
+  </div>
   {#each dataWithTimes.seedbank.plantsInSeedbank as plant}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
-    {#if plant.plant == yourPlant || plant.plant.timeLeft.milliseconds <= 0}
+    {#if plant.plant.parent1 == null || plant.plant.timeLeft.milliseconds <= 0}
       <div
         on:click={() => {
           console.log("click!");
@@ -123,6 +128,7 @@
       </div>
       <div class="mt-4 text-center">
         <button
+          data-test="start-pollinating-button"
           data-umami-event="Start Pollinating Button"
           class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
           on:click={() => handleClick(plant.plant.id)}
@@ -159,7 +165,7 @@
     closePopup={() => {
       selectedPlant = null;
     }}
-    isOriginalPlant={selectedPlant.id == yourPlant?.id}
+    isOriginalPlant={selectedPlant.id == yourOriginalPlant?.id}
     isPollinatingPlant={DateTime.fromJSDate(selectedPlant.created).diffNow() >
       DURATION_TILL_FERTILE}
   ></PopupInfo>
