@@ -37,17 +37,25 @@
 
 <div class="min-h-screen" style="background-color:{brightColor}">
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-6xl font-jeanb"
+    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
     style="background-color: {darkColor}; color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
     {plantName.toUpperCase()}
   </div>
 
-  <div class="absolute top-1/2 w-full h-auto" style="fill:{darkColor}">
-    <svg viewBox="0 0 1000 801" xmlns="http://www.w3.org/2000/svg">
+  <div
+    class="svg-container"
+    style="position: absolute; top: 50vh; height: 26vh; width: 100vw; overflow: hidden;"
+  >
+    <svg
+      viewBox="0 0 1000 801"
+      preserveAspectRatio="none"
+      style="width: 100%; height: 100%;"
+    >
       <path
         d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
+        fill={darkColor}
       />
     </svg>
   </div>
@@ -63,10 +71,10 @@
 
   <div
     class="w-full h-[250px] flex flex-col text-center items-center justify-center absolute bottom-0"
-    style="background-color:{brightColor}; color:{darkColor}"
+    style="color:{darkColor}"
   >
     <div class="text-4xl font-primer">has been growing for:<br /></div>
-    <div class="text-6xl font-jeanb">
+    <div class="text-7xl font-jeanb">
       {age.toFormat("hh'H' mm'M' ss'S")}
     </div>
   </div>
