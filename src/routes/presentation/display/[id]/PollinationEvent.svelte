@@ -1,4 +1,4 @@
-<body>
+<div>
   <div
     class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"
   >
@@ -58,4 +58,4 @@
   >
     ROELSCOOTER'S <br /> LAVENDER
   </div>
-</body>
+</div>

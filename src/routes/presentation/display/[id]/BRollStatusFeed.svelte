@@ -4,7 +4,7 @@
   export let gardens;
 </script>
 
-<body class="bg-roel_purple min-h-screen">
+<div class="bg-roel_purple min-h-screen">
   <div
     class="svg-container"
     style="position: absolute; height: 100vh; width: 100vw; overflow: hidden;"
@@ -90,4 +90,4 @@
       {/each}
     </div>
   </div>
-</body>
+</div>

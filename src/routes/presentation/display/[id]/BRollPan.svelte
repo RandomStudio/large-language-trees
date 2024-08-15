@@ -4,7 +4,7 @@
   export let gardens: DisplayMultipleGardens;
 </script>
 
-<body class="relative bg-roel_purple h-screen">
+<div class="relative bg-roel_purple h-screen">
   <DisplayGarden
     xGarden={0}
     yGarden={0}
@@ -51,4 +51,4 @@
   >
     Join the Garden!
   </div>
-</body>
+</div>

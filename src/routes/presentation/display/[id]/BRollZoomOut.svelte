@@ -6,7 +6,7 @@
   export let garden: GardenWithPlants;
 </script>
 
-<body class="bg-roel_purple w-full h-screen relative overflow-hidden">
+<div class="bg-roel_purple w-full h-screen relative overflow-hidden">
   <div
     class="bg-roel_rose w-full h-[250px] flex text-center text-roel_purple items-center justify-center text-7xl font-jeanb"
   >
@@ -31,4 +31,4 @@
   >
     Join the Garden!
   </div>
-</body>
+</div>
