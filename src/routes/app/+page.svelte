@@ -61,11 +61,11 @@
           <div
             class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-sm text-center"
           >
-            Would you like to <button
+            Choose a different username, or <button
               class="underline"
               formaction="?/loginExistingUser">log in</button
             >
-            as <span class="font-bold">{form.existingUser.username}</span> instead?
+            as <span class="font-bold">{form.existingUser.username}</span> instead
           </div>
         {/if}
       {/if}
