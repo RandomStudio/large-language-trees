@@ -54,6 +54,11 @@
     >
       Error: {form.message}
     </div>
+    {#if form?.existingUser}
+      <div>
+        Would you like to log in as {form.existingUser.username} instead?
+      </div>
+    {/if}
   {/if}
 </div>
 <div

@@ -1,6 +1,5 @@
 import { lucia } from "$lib/server/auth";
 import { fail, redirect, type RequestEvent } from "@sveltejs/kit";
-import { verify } from "@node-rs/argon2";
 import type { Actions, RouteParams } from "./$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
@@ -11,6 +10,7 @@ import { publishEvent } from "$lib/server/realtime";
 import type { EventNewUser } from "$lib/events.types";
 import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
 import type { SelectUser } from "$lib/types";
+import { stripUserInfo } from "$lib/security";
 
 export const load = async ({ locals }) => {
   const username = locals.user?.username;
@@ -34,7 +34,8 @@ export const actions = {
     ) {
       console.error("invalid username");
       return fail(400, {
-        message: "Invalid username"
+        message: "Invalid username",
+        existingUser: null
       });
     }
     if (
@@ -44,7 +45,8 @@ export const actions = {
     ) {
       console.error("invalid password");
       return fail(400, {
-        message: "Invalid password"
+        message: "Invalid password",
+        existingUser: null
       });
     }
 
@@ -93,7 +95,10 @@ export const actions = {
     } else {
       // This is an existing user, so reject
 
-      return fail(400, { message: "That username already exists" });
+      return fail(400, {
+        message: "That username already exists",
+        existingUser: stripUserInfo(existingUser)
+      });
     }
   }
 } satisfies Actions;
