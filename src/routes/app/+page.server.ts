@@ -5,7 +5,7 @@ import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
-import { hash } from "@node-rs/argon2";
+import { hash, verify } from "@node-rs/argon2";
 import { publishEvent } from "$lib/server/realtime";
 import type { EventNewUser } from "$lib/events.types";
 import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
@@ -21,7 +21,9 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-  default: async (event) => {
+  attemptNewRegistration: async (event) => {
+    console.log("form action: attemptNewRegistration");
+
     const formData = await event.request.formData();
     const username = formData.get("username");
     const password = formData.get("password");
@@ -99,6 +101,62 @@ export const actions = {
         message: "That username already exists",
         existingUser: stripUserInfo(existingUser)
       });
+    }
+  },
+  loginExistingUser: async (event) => {
+    console.log("form action: loginExistingUser");
+    const formData = await event.request.formData();
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    if (!username || typeof username !== "string") {
+      console.error("username error", username, typeof username);
+      return fail(400, {
+        message: "Could not log in with existing username",
+        existingUser: null
+      });
+    }
+
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.username, username)
+    });
+
+    if (!existingUser) {
+      return fail(400, {
+        message: "Could not log in with existing username",
+        existingUser: null
+      });
+    }
+
+    if (!password || typeof password !== "string") {
+      throw Error("password not submitted with form");
+    }
+
+    const validPassword = await verify(existingUser.passwordHash, password, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1
+    });
+
+    if (!validPassword) {
+      console.error("Validation failure");
+      return fail(400, {
+        message: "Incorrect username or password"
+      });
+    }
+
+    const session = await lucia.createSession(existingUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    event.cookies.set(sessionCookie.name, sessionCookie.value, {
+      path: ".",
+      ...sessionCookie.attributes
+    });
+
+    if (username === "admin") {
+      redirect(302, "/app/admin");
+    } else {
+      redirect(302, "/app/gallery");
     }
   }
 } satisfies Actions;
