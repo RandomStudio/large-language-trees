@@ -1,7 +1,7 @@
 import { lucia } from "$lib/server/auth";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, redirect, type RequestEvent } from "@sveltejs/kit";
 import { verify } from "@node-rs/argon2";
-import type { Actions } from "./$types";
+import type { Actions, RouteParams } from "./$types";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
@@ -10,11 +10,12 @@ import { hash } from "@node-rs/argon2";
 import { publishEvent } from "$lib/server/realtime";
 import type { EventNewUser } from "$lib/events.types";
 import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
+import type { SelectUser } from "$lib/types";
 
 export const load = async ({ locals }) => {
   const username = locals.user?.username;
   if (username) {
-    console.log("You are already logged in!");
+    console.log(`${username} was already logged in; simply redirect`);
     redirect(302, "/app/gallery");
   }
 };
@@ -63,14 +64,6 @@ export const actions = {
         parallelism: 1
       });
 
-      const alreadyExists = await db
-        .select()
-        .from(users)
-        .where(eq(users.username, username));
-      if (alreadyExists.length > 0) {
-        return fail(400, { message: "That username already exists" });
-      }
-
       const isAdmin = username === "admin";
       const newUser = {
         id: userId,
@@ -85,12 +78,7 @@ export const actions = {
       );
       await db.insert(users).values(newUser);
 
-      const session = await lucia.createSession(userId, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      event.cookies.set(sessionCookie.name, sessionCookie.value, {
-        path: ".",
-        ...sessionCookie.attributes
-      });
+      await createNewUserSession(newUser, event);
 
       if (username === "admin") {
         redirect(302, "/app/admin");
@@ -103,33 +91,20 @@ export const actions = {
         redirect(302, "/app/startwindow");
       }
     } else {
-      // This is an existing user, so try to log in
-      const validPassword = await verify(existingUser.passwordHash, password, {
-        memoryCost: 19456,
-        timeCost: 2,
-        outputLen: 32,
-        parallelism: 1
-      });
+      // This is an existing user, so reject
 
-      if (!validPassword) {
-        console.error("Validation failure");
-        return fail(400, {
-          message: "Incorrect username or password"
-        });
-      }
-
-      const session = await lucia.createSession(existingUser.id, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      event.cookies.set(sessionCookie.name, sessionCookie.value, {
-        path: ".",
-        ...sessionCookie.attributes
-      });
-
-      if (username === "admin") {
-        redirect(302, "/app/admin");
-      } else {
-        redirect(302, "/app/gallery");
-      }
+      return fail(400, { message: "That username already exists" });
     }
   }
 } satisfies Actions;
+async function createNewUserSession(
+  existingUser: SelectUser,
+  event: RequestEvent<RouteParams, "/app">
+) {
+  const session = await lucia.createSession(existingUser.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  event.cookies.set(sessionCookie.name, sessionCookie.value, {
+    path: ".",
+    ...sessionCookie.attributes
+  });
+}
