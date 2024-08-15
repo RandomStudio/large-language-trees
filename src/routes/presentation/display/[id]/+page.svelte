@@ -20,6 +20,8 @@
   import BRollDetailMulti from "./BRollDetailMulti.svelte";
   import StatsPollinations from "./StatsPollinations.svelte";
 
+  import { fade } from "svelte/transition";
+
   export let data: PageData;
 
   let agent: TetherAgent | null = null;
@@ -97,81 +99,103 @@
 <main>
   {#if data.contents}
     {#if data.contents.name == "newUserFirstPlant"}
-      <NewUserFirstPlant
-        imageUrl={data.contents.contents.plant.imageUrl || ""}
-        plantName={data.contents.contents.plant.commonName}
-        gardenerName={data.contents.contents.user.username}
-      ></NewUserFirstPlant>
+      <div transition:fade={{ duration: 4000 }}>
+        <NewUserFirstPlant
+          imageUrl={data.contents.contents.plant.imageUrl || ""}
+          plantName={data.contents.contents.plant.commonName}
+          gardenerName={data.contents.contents.user.username}
+        ></NewUserFirstPlant>
+      </div>
     {/if}
 
     {#if data.contents.name == "newPlantPollination" && data.contents.contents.newPlant.imageUrl}
-      <PollinationResult
-        plantTop={data.contents.contents.plantTop}
-        plantBottom={data.contents.contents.plantBottom}
-        authorTop={data.contents.contents.authorTop}
-        authorBottom={data.contents.contents.authorBottom}
-        newPlant={data.contents.contents.newPlant}
-      ></PollinationResult>
+      <div transition:fade>
+        <PollinationResult
+          plantTop={data.contents.contents.plantTop}
+          plantBottom={data.contents.contents.plantBottom}
+          authorTop={data.contents.contents.authorTop}
+          authorBottom={data.contents.contents.authorBottom}
+          newPlant={data.contents.contents.newPlant}
+        ></PollinationResult>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATUS_FEED}
-      <BRollStatusFeed
-        eventLogs={data.contents.contents.eventLogs}
-        gardens={data.contents.contents.gardens}
-      ></BRollStatusFeed>
+      <div transition:fade>
+        <BRollStatusFeed
+          eventLogs={data.contents.contents.eventLogs}
+          gardens={data.contents.contents.gardens}
+        ></BRollStatusFeed>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
-      <BRollDetail
-        plant={data.contents.contents.plant}
-        user={data.contents.contents.user}
-      ></BRollDetail>
+      <div transition:fade>
+        <BRollDetail
+          plant={data.contents.contents.plant}
+          user={data.contents.contents.user}
+        ></BRollDetail>
+      </div>
     {/if}
 
     {#if data.contents.name === bRollNaming.DETAIL_MULTI}
-      <BRollDetailMulti plantsWithusers={data.contents.contents} />
+      <div transition:fade>
+        <BRollDetailMulti plantsWithusers={data.contents.contents} />
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      <BRollZoomOut
-        garden={data.contents.contents.garden}
-        userName={data.contents.contents.user.username}
-      ></BRollZoomOut>
+      <div transition:fade>
+        <BRollZoomOut
+          garden={data.contents.contents.garden}
+          userName={data.contents.contents.user.username}
+        ></BRollZoomOut>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.ROLL_PAN}
-      <BRollPan gardens={data.contents}></BRollPan>
+      <div transition:fade>
+        <BRollPan gardens={data.contents}></BRollPan>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
-      <BRollLeaderboard
-        topPollinators={data.contents.contents.topPollinators}
-        topGarden={data.contents.contents.topGarden}
-      ></BRollLeaderboard>
+      <div transition:fade>
+        <BRollLeaderboard
+          topPollinators={data.contents.contents.topPollinators}
+          topGarden={data.contents.contents.topGarden}
+        ></BRollLeaderboard>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATISTICS_1}
-      <StatsGrowingTime
-        imageUrl={data.contents.contents.plant.imageUrl || ""}
-        plantName={data.contents.contents.plant.commonName}
-        gardenerName={data.contents.contents.user.username}
-        created={data.contents.contents.plant.created}
-      ></StatsGrowingTime>
+      <div transition:fade>
+        <StatsGrowingTime
+          imageUrl={data.contents.contents.plant.imageUrl || ""}
+          plantName={data.contents.contents.plant.commonName}
+          gardenerName={data.contents.contents.user.username}
+          created={data.contents.contents.plant.created}
+        ></StatsGrowingTime>
+      </div>
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_2}
-      <StatsCount
-        count={data.contents.contents.count}
-        gardens={data.contents.contents.gardens}
-      ></StatsCount>
+      <div transition:fade>
+        <StatsCount
+          count={data.contents.contents.count}
+          gardens={data.contents.contents.gardens}
+        ></StatsCount>
+      </div>
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_3}
-      <StatsPollinations
-        plant={data.contents.contents.plant}
-        pollinationCount={data.contents.contents.pollinationCount}
-        user={data.contents.contents.user}
-      ></StatsPollinations>
+      <div transition:fade>
+        <StatsPollinations
+          plant={data.contents.contents.plant}
+          pollinationCount={data.contents.contents.pollinationCount}
+          user={data.contents.contents.user}
+        ></StatsPollinations>
+      </div>
     {/if}
   {/if}
 </main>

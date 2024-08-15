@@ -208,7 +208,7 @@
 </script>
 
 <div
-  class="fixed border-black border-4"
+  class="fixed border-black border-0"
   style="width: {width}px; height: {height}px; position: absolute; left: {xGarden}px; top: {yGarden}px; "
 >
   {#each positions as { parent1, commonName, imageUrl, x, y, size, zIndex, grasses }}
