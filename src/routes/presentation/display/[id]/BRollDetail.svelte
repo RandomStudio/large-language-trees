@@ -3,9 +3,11 @@
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
+  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
 
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
+  export let applyFilters: boolean = false;
 
   const sizePicture = 2000;
   const duration = 15000; //ms
@@ -33,12 +35,7 @@
 
 <div class="viewport bg-roel_rose min-h-screen">
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
-    <img
-      src={plant.imageUrl}
-      alt="Plant"
-      class="target-image"
-      crossorigin="anonymous"
-    />
+    <AnimatedPlant imageURL={plant.imageUrl || ""} {applyFilters} />
     <div
       class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
       style="left: {540 / 2 - xEnd}px; top: {1620 / 2 -
