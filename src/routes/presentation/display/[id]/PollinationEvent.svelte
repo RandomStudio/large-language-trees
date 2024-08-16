@@ -1,12 +1,12 @@
-<div>
+<div class="w-screen h-screen">
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"
+    class="w-screen h-screen flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"
   >
     STEVEB'S <br /> ROSE
   </div>
 
   <div
-    class="bg-roel_green h-[560px] flex flex-col justify-end items-center relative"
+    class="bg-roel_green h-[560px] w-screen flex flex-col justify-end items-center relative"
   >
     <svg
       width="400"

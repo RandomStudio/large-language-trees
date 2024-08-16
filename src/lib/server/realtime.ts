@@ -45,7 +45,7 @@ import {
   LIMIT_STATUS_FEED,
   MIN_STATUS_FEED,
   MULTIPLE_FEATURED_PLANTS_COUNT,
-  NEW_PLANT_TIMEOUT,
+  POLLINATION_RESULT_TIMEOUT,
   NEW_USER_TIMEOUT,
   NUM_GARDENS_MULTI,
   PLUG_NAMES
@@ -590,7 +590,7 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
               targetScreen,
               e,
               PRIORITY,
-              NEW_PLANT_TIMEOUT
+              POLLINATION_RESULT_TIMEOUT
             );
           } else {
             console.error(
