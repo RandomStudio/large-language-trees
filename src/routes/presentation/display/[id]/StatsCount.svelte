@@ -5,7 +5,7 @@
   export let gardens: { garden: GardenWithPlants; user: PublicUserInfo }[];
 </script>
 
-<div class="bg-roel_green w-full min-h-screen relative overflow-hidden">
+<div class="bg-roel_green w-screen h-screen relative overflow-hidden">
   <div
     style="position: absolute; top: 0vh; height: 76vh; width: 100vw; overflow: hidden;"
   >

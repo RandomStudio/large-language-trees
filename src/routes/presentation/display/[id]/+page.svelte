@@ -20,6 +20,10 @@
   import BRollDetailMulti from "./BRollDetailMulti.svelte";
   import StatsPollinations from "./StatsPollinations.svelte";
 
+  import { fade } from "svelte/transition";
+
+  import { FADE_DURATION } from "$lib/constants";
+
   export let data: PageData;
 
   let agent: TetherAgent | null = null;
@@ -94,84 +98,136 @@
   });
 </script>
 
-<main>
+<main class="container">
   {#if data.contents}
     {#if data.contents.name == "newUserFirstPlant"}
-      <NewUserFirstPlant
-        imageUrl={data.contents.contents.plant.imageUrl || ""}
-        plantName={data.contents.contents.plant.commonName}
-        gardenerName={data.contents.contents.user.username}
-      ></NewUserFirstPlant>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <NewUserFirstPlant
+          imageUrl={data.contents.contents.plant.imageUrl || ""}
+          plantName={data.contents.contents.plant.commonName}
+          gardenerName={data.contents.contents.user.username}
+        ></NewUserFirstPlant>
+      </div>
     {/if}
 
     {#if data.contents.name == "newPlantPollination" && data.contents.contents.newPlant.imageUrl}
-      <PollinationResult
-        plantTop={data.contents.contents.plantTop}
-        plantBottom={data.contents.contents.plantBottom}
-        authorTop={data.contents.contents.authorTop}
-        authorBottom={data.contents.contents.authorBottom}
-        newPlant={data.contents.contents.newPlant}
-      ></PollinationResult>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <PollinationResult
+          plantTop={data.contents.contents.plantTop}
+          plantBottom={data.contents.contents.plantBottom}
+          authorTop={data.contents.contents.authorTop}
+          authorBottom={data.contents.contents.authorBottom}
+          newPlant={data.contents.contents.newPlant}
+        ></PollinationResult>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATUS_FEED}
-      <BRollStatusFeed
-        eventLogs={data.contents.contents.eventLogs}
-        gardens={data.contents.contents.gardens}
-      ></BRollStatusFeed>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <BRollStatusFeed
+          eventLogs={data.contents.contents.eventLogs}
+          gardens={data.contents.contents.gardens}
+        ></BRollStatusFeed>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
-      <BRollDetail
-        plant={data.contents.contents.plant}
-        user={data.contents.contents.user}
-      ></BRollDetail>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <BRollDetail
+          plant={data.contents.contents.plant}
+          user={data.contents.contents.user}
+        ></BRollDetail>
+      </div>
     {/if}
 
     {#if data.contents.name === bRollNaming.DETAIL_MULTI}
-      <BRollDetailMulti plantsWithusers={data.contents.contents} />
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <BRollDetailMulti plantsWithusers={data.contents.contents} />
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      <BRollZoomOut
-        garden={data.contents.contents.garden}
-        userName={data.contents.contents.user.username}
-      ></BRollZoomOut>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <BRollZoomOut
+          garden={data.contents.contents.garden}
+          userName={data.contents.contents.user.username}
+        ></BRollZoomOut>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.ROLL_PAN}
-      <BRollPan gardens={data.contents}></BRollPan>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <BRollPan gardens={data.contents}></BRollPan>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
-      <BRollLeaderboard
-        topPollinators={data.contents.contents.topPollinators}
-        topGarden={data.contents.contents.topGarden}
-      ></BRollLeaderboard>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <BRollLeaderboard
+          topPollinators={data.contents.contents.topPollinators}
+          topGarden={data.contents.contents.topGarden}
+        ></BRollLeaderboard>
+      </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.STATISTICS_1}
-      <StatsGrowingTime
-        imageUrl={data.contents.contents.plant.imageUrl || ""}
-        plantName={data.contents.contents.plant.commonName}
-        gardenerName={data.contents.contents.user.username}
-        created={data.contents.contents.pollinationTimestamp}
-      ></StatsGrowingTime>
+      <div class="fixed top-0 left-0" transition:fade>
+        <StatsGrowingTime
+          imageUrl={data.contents.contents.plant.imageUrl || ""}
+          plantName={data.contents.contents.plant.commonName}
+          gardenerName={data.contents.contents.user.username}
+          created={data.contents.contents.pollinationTimestamp}
+        ></StatsGrowingTime>
+      </div>
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_2}
-      <StatsCount
-        count={data.contents.contents.count}
-        gardens={data.contents.contents.gardens}
-      ></StatsCount>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <StatsCount
+          count={data.contents.contents.count}
+          gardens={data.contents.contents.gardens}
+        ></StatsCount>
+      </div>
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_3}
-      <StatsPollinations
-        plant={data.contents.contents.plant}
-        pollinationCount={data.contents.contents.pollinationCount}
-        user={data.contents.contents.user}
-      ></StatsPollinations>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <StatsPollinations
+          plant={data.contents.contents.plant}
+          pollinationCount={data.contents.contents.pollinationCount}
+          user={data.contents.contents.user}
+        ></StatsPollinations>
+      </div>
     {/if}
   {/if}
 </main>

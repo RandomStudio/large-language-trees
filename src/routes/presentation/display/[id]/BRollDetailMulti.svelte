@@ -41,7 +41,7 @@
   const plant2 = plantsWithusers[1];
 </script>
 
-<div class="viewport bg-roel_rose min-h-screen">
+<div class="viewport bg-roel_rose w-screen h-screen">
   <div class="camera">
     <div class="images-container">
       <AnimatedPlant imageURL={plant1.plant.imageUrl || ""} {applyFilters} />
