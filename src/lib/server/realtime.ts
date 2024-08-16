@@ -311,7 +311,13 @@ export const getDataForAmbientDisplay = async (
           eventLogs: latestEvents.map(
             (entry) => entry.contents as FeedTextEntry
           ),
-          gardens
+          gardens: gardens.map((g) => ({
+            ...g,
+            plantsInGarden: g.plantsInGarden.map((p) => ({
+              ...p.plant,
+              pollinationDate: p.plantingDate
+            }))
+          }))
         }
       };
       return contents;
@@ -334,7 +340,13 @@ export const getDataForAmbientDisplay = async (
       const contents: DisplayMultipleGardens = {
         name: bRollNaming.ROLL_PAN,
         contents: pickGardens.map((garden) => ({
-          garden,
+          garden: {
+            ...garden,
+            plantsInGarden: garden.plantsInGarden.map((p) => ({
+              ...p.plant,
+              pollinationDate: p.plantingDate
+            }))
+          },
           user: stripUserInfo(garden.myOwner)
         }))
       };
@@ -357,7 +369,10 @@ export const getDataForAmbientDisplay = async (
         contents: {
           garden: {
             ...pickGarden,
-            plantsInGarden
+            plantsInGarden: plantsInGarden.map((p) => ({
+              ...p.plant,
+              pollinationDate: p.plantingDate
+            }))
           },
           user: stripUserInfo(pickGarden.myOwner)
         }
@@ -403,7 +418,13 @@ export const getDataForAmbientDisplay = async (
             username: garden.myOwner.username,
             count: garden.plantsInGarden.length
           })),
-          topGarden: topGardenWithPlants
+          topGarden: {
+            ...topGardenWithPlants,
+            plantsInGarden: topGardenWithPlants.plantsInGarden.map((p) => ({
+              ...p.plant,
+              pollinationDate: p.plantingDate
+            }))
+          }
         }
       };
       return contents;
@@ -431,7 +452,8 @@ export const getDataForAmbientDisplay = async (
         name: bRollNaming.STATISTICS_1,
         contents: {
           plant: pickPlant.plant,
-          user: stripUserInfo(user)
+          user: stripUserInfo(user),
+          pollinationTimestamp: pickPlant.plantingDate
         }
       };
       return contents;
@@ -456,7 +478,13 @@ export const getDataForAmbientDisplay = async (
         name: bRollNaming.STATISTICS_2,
         contents: {
           gardens: pickGardens.map((garden) => ({
-            garden,
+            garden: {
+              ...garden,
+              plantsInGarden: garden.plantsInGarden.map((p) => ({
+                ...p.plant,
+                pollinationDate: p.plantingDate
+              }))
+            },
             user: stripUserInfo(garden.myOwner)
           })),
           count: result.count

@@ -189,7 +189,7 @@ async function getNewPlantForUser(): Promise<InsertPlant> {
 export const getUserGarden = async (
   userId: string
 ): Promise<GardenWithPlants> => {
-  const user: UserWithGarden | undefined = await db.query.users.findFirst({
+  const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
       myGarden: { with: { plantsInGarden: { with: { plant: true } } } }
@@ -210,7 +210,15 @@ export const getUserGarden = async (
       return newGarden;
     } else {
       console.log("user has garden named", user.myGarden.name);
-      return user.myGarden;
+      return {
+        id: user.myGarden.id,
+        name: user.myGarden.name,
+        userId: user.id,
+        plantsInGarden: user.myGarden.plantsInGarden.map((p) => ({
+          ...p.plant,
+          pollinationDate: p.plantingDate
+        }))
+      };
     }
   } else {
     throw Error(`user not found for userId "${userId}"`);
@@ -374,13 +382,9 @@ export async function addPlantToGarden(plantId: string, gardenId: string) {
     where: eq(gardensToPlants.gardenId, gardenId)
   });
 
-  const { col, row } = findEmpty(otherPlants, { row: 0, col: 0 });
-
-  console.log("Found empty spot:", { col, row });
-
   const result = await db
     .insert(gardensToPlants)
-    .values({ gardenId, plantId, rowIndex: row, colIndex: col })
+    .values({ gardenId, plantId })
     .returning();
 
   console.log("Added plant", result, "to garden");
@@ -389,25 +393,6 @@ export async function addPlantToGarden(plantId: string, gardenId: string) {
     throw Error("error adding plant to garden");
   }
 }
-
-const findEmpty = (
-  otherPlants: GardenPlantEntry[],
-  closeTo: { row: number; col: number }
-) => {
-  let col = closeTo.col;
-  let row = closeTo.row;
-
-  while (
-    otherPlants.find(
-      (entry) => entry.colIndex === col && entry.rowIndex === row
-    )
-  ) {
-    col = Math.floor(Math.random() * GRID_WIDTH);
-    row = Math.floor(Math.random() * GRID_HEIGHT);
-  }
-
-  return { col, row };
-};
 
 export async function addPlantToSeedbank(plantId: string, seedbankId: string) {
   const entry: SeedbankEntry = {
