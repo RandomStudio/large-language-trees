@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import { type GardenViewData } from "../../../lib/types";
   import PlantDisplay from "../../../components/PlantDisplay.svelte";
-  import QrGenerate from "../../../components/qr_generate.svelte";
+  import QrGenerate from "../../../components/PollinationQrCode.svelte";
   import ButtonBottom from "../../../components/ButtonBottom.svelte";
 
   export let data: GardenViewData;
@@ -63,7 +63,7 @@
         {/if}
         {#if showBarcode}
           <div class="absolute top-0 right-0 mt-2 mr-2 hidden">
-            <QrGenerate text={selectedPlant.id + "&" + data.user.id} />
+            <QrGenerate plantId={selectedPlant.id} userId={data.user.id} />
           </div>
         {/if}
       {:else}

@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  // @ts-ignore
   import QRCode from "qrcode";
 
-  export let text: string = "";
+  export let plantId: string;
+  export let userId: string;
+
   let canvasElement: HTMLCanvasElement;
 
   const generateQRCode = (text: string) => {
@@ -17,15 +18,14 @@
   };
 
   onMount(() => {
+    let text = `${plantId}&${userId}`;
     generateQRCode(text);
   });
 </script>
 
-{#if text}
-  <div class="flex items-center justify-center">
-    <canvas
-      bind:this={canvasElement}
-      style="width:80%; height: auto; aspect-ratio: 1;"
-    ></canvas>
-  </div>
-{/if}
+<div class="flex items-center justify-center">
+  <canvas
+    bind:this={canvasElement}
+    style="width:80%; height: auto; aspect-ratio: 1;"
+  ></canvas>
+</div>
