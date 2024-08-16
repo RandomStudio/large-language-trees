@@ -27,12 +27,12 @@ export const load: PageServerLoad = async ({
       with: { mySeedbank: true }
     });
     if (thisUser) {
-      return {
-        // TODO: just load the user seedbank (including its seeds, not seeds + seedbankId separately)
+      const viewData: GardenViewData = {
         user: thisUser,
         seedbank: seedBank,
         garden
       };
+      return viewData;
     } else {
       throw Error("could not find user when querying");
     }

@@ -174,7 +174,7 @@
           imageUrl={data.contents.contents.plant.imageUrl || ""}
           plantName={data.contents.contents.plant.commonName}
           gardenerName={data.contents.contents.user.username}
-          created={data.contents.contents.plant.created}
+          created={data.contents.contents.pollinationTimestamp}
         ></StatsGrowingTime>
       </div>
     {/if}

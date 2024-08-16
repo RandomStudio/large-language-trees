@@ -71,6 +71,8 @@ export async function addConfirmedPlant(
     candidateChild.imageUrl,
     "..."
   );
+  const { authorTop, authorBottom } = candidateChild;
+  console.log("Some (generated) plant details:", { authorTop, authorBottom });
   const res = await fetch("/api/plants", {
     method: "POST",
     body: JSON.stringify(candidateChild)

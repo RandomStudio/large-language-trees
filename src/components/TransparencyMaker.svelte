@@ -51,12 +51,12 @@
             throw Error;
           }
           for (let i = 0; i < listCorners.length; i++) {
-            console.log("round " + i);
+            // console.log("round " + i);
             let corner = listCorners[i];
             if (corner.length >= 2) {
               let x = Math.floor(canvasElement.width * corner[0]);
               let y = Math.floor(canvasElement.height * corner[1]);
-              console.log(`Processing corner (${x}, ${y})`);
+              // console.log(`Processing corner (${x}, ${y})`);
               if (
                 !processRound(
                   imageData,
@@ -68,10 +68,10 @@
                   y
                 )
               ) {
-                console.log(`Processing failed at corner (${x}, ${y}).`);
+                // console.log(`Processing failed at corner (${x}, ${y}).`);
               }
             } else {
-              console.log(`Insufficient data for corner index ${i}.`);
+              // console.log(`Insufficient data for corner index ${i}.`);
             }
           }
           imageData = ctx.getImageData(
@@ -85,7 +85,7 @@
         //Colors of the palette
         const colorThief = new ColorThief();
         const palette = colorThief.getPalette(img, 4);
-        console.log(palette);
+        // console.log(palette);
 
         function generate8BitColorPalette() {
           let palette = [];
@@ -380,14 +380,14 @@
   ) {
     const pixelColor = ctx.getImageData(x, y, 1, 1).data;
     const [r, g, b, a] = pixelColor;
-    console.log(`Selected pixel color at (${x}, ${y}):`, { r, g, b, a });
+    // console.log(`Selected pixel color at (${x}, ${y}):`, { r, g, b, a });
 
     if (useFloodFill && FloodFill) {
       const floodFill = new FloodFill(imageData);
       floodFill.fill("rgba(0,0,0,0)", x, y, tolerance, [r, g, b, a]);
 
       const count = floodFill.modifiedPixelsCount;
-      console.log("Modified", count, "pixels using floodfill");
+      // console.log("Modified", count, "pixels using floodfill");
     } else {
       let count = 0;
       for (let i = 0; i < imageData.data.length; i += 4) {
@@ -408,7 +408,7 @@
           imageData.data[i + 3] = 0;
         }
       }
-      console.log("Altered", count, "pixels using simple replace");
+      // console.log("Altered", count, "pixels using simple replace");
     }
 
     ctx.putImageData(imageData, 0, 0);
@@ -573,7 +573,7 @@
 
       if (isHole) {
         const avgDifference = averageBorderDifference(holePixels);
-        console.log(avgDifference);
+        // console.log(avgDifference);
         if (avgDifference <= difference) {
           // Fill the hole with white color if the average difference is low
           for (const [hx, hy] of holePixels) {

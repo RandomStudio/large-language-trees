@@ -17,7 +17,12 @@
 <div class="mx-10 pt-[15vh] font-primer text-6xl text-roel_blue">
   <p class="font-jeanb text-center">LET'S<br />POLLINATE</p>
   <div class="text-center">
-    <form method="post" use:enhance class="mt-4 text-center max-w-md">
+    <form
+      method="post"
+      use:enhance
+      class="mt-4 text-center max-w-md"
+      action="?/attemptNewRegistration"
+    >
       <input
         class="bg-roel_green/75 border-[3px] border-roel_blue rounded-full text-roel_blue font-primer text-3xl px-4 py-[0.5rem] w-full max-w-xs placeholder-roel_blue placeholder:font-primer"
         type="text"
@@ -45,16 +50,27 @@
       >
         Start
       </button>
+
+      {#if form?.message}
+        <div
+          class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-center text-2xl"
+        >
+          Error: {form.message}
+        </div>
+        {#if form?.existingUser}
+          <div
+            class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-sm text-center"
+          >
+            Choose a different username, or <button
+              class="underline"
+              formaction="?/loginExistingUser">log in</button
+            >
+            as <span class="font-bold">{form.existingUser.username}</span> instead
+          </div>
+        {/if}
+      {/if}
     </form>
   </div>
-
-  {#if form?.message}
-    <div
-      class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-center text-2xl"
-    >
-      Error: {form.message}
-    </div>
-  {/if}
 </div>
 <div
   class="font-primer text-left mt-32 text-base mx-0 text-roel_green bg-roel_blue"

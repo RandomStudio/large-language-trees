@@ -17,7 +17,6 @@ export const plants = pgTable("plants", {
   imageUrl: text("image_url"),
   parent1: text("parent1_id"),
   parent2: text("parent2_id"),
-  created: timestamp("created", { withTimezone: true }).notNull().defaultNow(),
   authorTop: text("author_top").references(() => users.id),
   authorBottom: text("author_bottom").references(() => users.id)
 });
@@ -84,8 +83,7 @@ export const gardensToPlants = pgTable(
     plantId: text("plant_id")
       .notNull()
       .references(() => plants.id),
-    rowIndex: integer("rowIndex").notNull(),
-    colIndex: integer("colIndex").notNull()
+    plantingDate: timestamp("planting_date").defaultNow().notNull()
   },
   (t) => ({
     pk: primaryKey({ columns: [t.gardenId, t.plantId] })

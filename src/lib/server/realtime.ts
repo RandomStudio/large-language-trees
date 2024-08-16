@@ -434,7 +434,8 @@ export const getDataForAmbientDisplay = async (
         name: bRollNaming.STATISTICS_1,
         contents: {
           plant: pickPlant.plant,
-          user: stripUserInfo(user)
+          user: stripUserInfo(user),
+          pollinationTimestamp: pickPlant.plantingDate
         }
       };
       return contents;

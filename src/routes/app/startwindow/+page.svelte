@@ -63,7 +63,7 @@
         {/if}
         {#if showBarcode}
           <div class="absolute top-0 right-0 mt-2 mr-2 hidden">
-            <QrGenerate text={selectedPlant.id} />
+            <QrGenerate text={selectedPlant.id + "&" + data.user.id} />
           </div>
         {/if}
       {:else}

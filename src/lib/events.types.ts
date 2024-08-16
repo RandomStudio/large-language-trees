@@ -139,7 +139,11 @@ export interface DisplayLeaderboard extends DisplayUpdateEvent {
 
 export interface DisplayPlantGrowingTime extends DisplayUpdateEvent {
   name: bRollNaming.STATISTICS_1;
-  contents: { plant: SelectPlant; user: PublicUserInfo };
+  contents: {
+    plant: SelectPlant;
+    user: PublicUserInfo;
+    pollinationTimestamp: Date;
+  };
 }
 
 export interface DisplayPlantCount extends DisplayUpdateEvent {
