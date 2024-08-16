@@ -53,3 +53,4 @@ export const LIMIT_CHARACTERS_PLANTNAME = 30;
 export const BROLL_TIMEOUT = 15000;
 export const NEW_USER_TIMEOUT = 7000;
 export const NEW_PLANT_TIMEOUT = 8000;
+export const FADE_DURATION = 1500;
