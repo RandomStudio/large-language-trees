@@ -5,7 +5,7 @@
   export let topGarden: GardenWithPlants;
 </script>
 
-<div class="bg-roel_purple h-screen flex flex-col justify-end">
+<div class="bg-roel_purple w-screen h-screen flex flex-col justify-end">
   <div
     class="w-full h-[15vh] flex items-center text-left pl-5 text-roel_purple text-7xl font-jeanb bg-roel_rose"
   >

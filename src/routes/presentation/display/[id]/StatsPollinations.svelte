@@ -37,7 +37,7 @@
   }
 </script>
 
-<div class="min-h-screen" style:background-color={brightColor}>
+<div class="w-screen h-screen" style:background-color={brightColor}>
   <div
     class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
     style="background-color: {darkColor}; color: {brightColor};"

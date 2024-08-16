@@ -39,11 +39,14 @@ import {
 import type { DisplayNotifyServer } from "../../routes/api/displayNotifyServer/types";
 import { stripUserInfo } from "$lib/security";
 import {
+  BROLL_TIMEOUT,
   DISPLAY_VIEW_WEIGHTINGS,
   LIMIT_LEADERBOARD,
   LIMIT_STATUS_FEED,
   MIN_STATUS_FEED,
   MULTIPLE_FEATURED_PLANTS_COUNT,
+  NEW_PLANT_TIMEOUT,
+  NEW_USER_TIMEOUT,
   NUM_GARDENS_MULTI,
   PLUG_NAMES
 } from "$lib/constants";
@@ -189,7 +192,7 @@ export const handleDisplayNotification = async (
     try {
       const contents = await getDataForAmbientDisplay(pickDisplayType);
 
-      await updateScreenStateAndPublish(displayId, contents, 0, 15000);
+      await updateScreenStateAndPublish(displayId, contents, 0, BROLL_TIMEOUT);
     } catch (e) {
       console.error(
         "Something went wrong getting a random Display layout: " + e
@@ -533,7 +536,6 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
     }
     case "newUserFirstPlant": {
       const PRIORITY = 1;
-      const TIMEOUT = 7000;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
         const { user, plant } = latestEvent.payload;
@@ -544,13 +546,12 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
             user
           }
         };
-        await updateScreenStateAndPublish(targetScreen, e, PRIORITY, TIMEOUT);
+        await updateScreenStateAndPublish(targetScreen, e, PRIORITY, NEW_USER_TIMEOUT);
       }
       break;
     }
     case "newPlantPollination": {
       const PRIORITY = 1;
-      const TIMEOUT = 8000;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
         const plant = latestEvent.payload;
@@ -588,7 +589,7 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
               targetScreen,
               e,
               PRIORITY,
-              TIMEOUT
+              NEW_PLANT_TIMEOUT
             );
           } else {
             console.error(
@@ -704,7 +705,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       if (!plantTop || !plantBottom) {
         throw Error(
           "Failed to find plant details for " +
-            JSON.stringify({ plantTop, plantBottom })
+          JSON.stringify({ plantTop, plantBottom })
         );
       }
       const { authorTop, authorBottom } = event.payload;
@@ -723,7 +724,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       if (!authorTopUser || !authorBottomUser) {
         throw Error(
           "Failed to find user details for " +
-            JSON.stringify({ authorTop, authorBottom })
+          JSON.stringify({ authorTop, authorBottom })
         );
       }
       return [
