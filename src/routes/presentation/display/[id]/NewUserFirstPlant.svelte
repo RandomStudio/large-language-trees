@@ -20,21 +20,20 @@
   });
 </script>
 
-<div class="min-h-screen" style:background-color={brightColor}>
+<div class="w-screen h-screen" style:background-color={brightColor}>
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
+    class="w-full h-[15vh] flex text-center items-center justify-center text-8xl font-jeanb"
     style="background-color: {darkColor}; color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
     {plantName.toUpperCase()}
   </div>
 
-  <div class=" absolute top-1/2 w-full h-auto" style="fill:{darkColor}">
-    <svg viewBox="0 0 1000 801" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
-      />
-    </svg>
+  <div class="w-screen h-[70vh]">
+    <div
+      class="w-screen h-[75vw] mt-[25vh] rounded-b-full absolute"
+      style="background-color:{darkColor}"
+    ></div>
   </div>
 
   <div class="fixed inset-0 flex items-center justify-center">
@@ -47,7 +46,7 @@
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-7xl font-jeanb"
+    class="w-full h-[15vh] flex text-center items-center justify-center absolute bottom-0 text-8xl font-jeanb"
     style="background-color={brightColor}; color:{darkColor}"
   >
     JUST SPROUTED <br /> IN THE GARDEN!

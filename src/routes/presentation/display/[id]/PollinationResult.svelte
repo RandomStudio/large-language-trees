@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { getColors } from "./findColors";
   import type { InsertPlant, PublicUserInfo, SelectPlant } from "$lib/types";
+  import { POLLINATION_EVENT_TIMEOUT } from "$lib/constants";
 
   export let plantTop: SelectPlant;
   export let plantBottom: SelectPlant;
@@ -55,38 +56,28 @@
 
     setTimeout(() => {
       status = "PollinationResult";
-    }, 3000);
+    }, POLLINATION_EVENT_TIMEOUT);
   });
 </script>
 
 <div
-  class="min-h-screen"
+  class="w-screen h-screen"
   style="background-color:{darkColorNew}; display:{status ===
   'PollinationResult'
     ? 'block'
     : 'none'}"
 >
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
+    class="w-full h-[15vh] flex text-center items-center justify-center text-8xl font-jeanb"
     style="background-color: {darkColorNew}; color: {brightColorNew};"
   >
     RESULTING <br /> IN...
   </div>
 
   <div
-    class="fixed inset-x-0 bottom-1/2 w-full h-auto"
-    style="fill:{brightColorNew}"
-  >
-    <svg
-      viewBox="0 0 1000 801"
-      xmlns="http://www.w3.org/2000/svg"
-      class="rotate-180 mx-auto"
-    >
-      <path
-        d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
-      />
-    </svg>
-  </div>
+    class="w-screen h-[75vw] rounded-t-full absolute"
+    style="background-color:{brightColorNew}"
+  ></div>
 
   <div class="fixed inset-0 flex items-center justify-center">
     <img
@@ -98,7 +89,7 @@
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-7xl font-jeanb z-10"
+    class="w-full h-[15vh] flex text-center items-center justify-center absolute bottom-0 text-8xl font-jeanb z-10"
     style="background-color:{brightColorNew}; color:{darkColorNew}"
   >
     THE <br />
@@ -106,12 +97,14 @@
   </div>
 </div>
 
+<!-- ▲ RESULT ▲  //  ▼ EVENT ▼ -->
+
 <div
-  class="min-h-screen"
+  class="w-screen h-screen"
   style="display:{status === 'PollinationResult' ? 'none' : 'block'}"
 >
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
+    class="w-screen h-[15vh] flex text-center items-center justify-center text-8xl font-jeanb"
     style="background-color: {darkColorTop}; color: {brightColorTop};"
   >
     {authorNameTop.toUpperCase()}'S <br />
@@ -119,25 +112,21 @@
   </div>
 
   <div
-    class="h-[560px] flex flex-col justify-end items-center relative"
+    class="h-[35vh] flex flex-col justify-end items-center relative"
     style="background-color:{brightColorTop}"
   >
-    <svg
-      width="400"
-      height="400"
-      class="rotate-180 translate-y-[200px]"
-      style="fill:{darkColorTop}"
-    >
-      <path d="M0,200 a1,1 0 0,0 400,0" />
-    </svg>
+    <div
+      class="w-[90vw] h-[45vw] rounded-t-full absolute"
+      style="background-color:{darkColorTop}"
+    ></div>
 
     <div
-      class="absolute inset-0 flex items-center justify-center translate-y-[70px]"
+      class="absolute inset-0 flex items-center justify-center translate-y-[1vh]"
     >
       <img
         src={plantImageUrlTop}
         alt="Lavender"
-        class="w-[400px]"
+        class="w-[35vh]"
         bind:this={imgTop}
         crossorigin="anonymous"
       />
@@ -146,7 +135,7 @@
 
   <div class="fixed inset-0 flex items-center justify-center z-20">
     <div
-      class="py-1 px-6 z-50 font-primerb text-3xl"
+      class="py-1 px-6 z-50 font-primerb text-6xl"
       style="background-color: {brightColorTop}; color: {darkColorBottom};"
     >
       is pollinating with
@@ -154,24 +143,20 @@
   </div>
 
   <div
-    class="h-[560px] flex flex-col justify-end items-center relative"
+    class="h-[35vh] flex flex-col justify-end items-center relative top-0"
     style="background-color:{darkColorBottom}"
   >
-    <svg
-      width="400"
-      height="400"
-      class="translate-y-[-361px]"
-      style="fill:{brightColorBottom}"
-    >
-      <path d="M0,200 a1,1 0 0,0 400,0" />
-    </svg>
     <div
-      class="absolute inset-0 flex items-center justify-center translate-y-[-70px]"
+      class="w-[90vw] h-[45vw] rounded-b-full absolute top-0"
+      style="background-color:{brightColorBottom}"
+    ></div>
+    <div
+      class="absolute inset-0 flex items-center justify-center translate-y-[-1vh]"
     >
       <img
         src={plantImageUrlBottom}
         alt="Lavender"
-        class="w-[400px] rotate-180"
+        class="w-[35vh] rotate-180"
         bind:this={imgBottom}
         crossorigin="anonymous"
       />
@@ -179,7 +164,7 @@
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center bottom-[0px] text-7xl font-jeanb z-10"
+    class="w-full h-[15vh] flex text-center items-center justify-center bottom-[0px] text-8xl font-jeanb z-10"
     style="background-color: {brightColorBottom}; color: {darkColorBottom};"
   >
     {authorNameBottom.toUpperCase()}'S <br />

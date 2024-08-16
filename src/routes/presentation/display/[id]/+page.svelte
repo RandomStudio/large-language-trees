@@ -22,6 +22,8 @@
 
   import { fade } from "svelte/transition";
 
+  import { FADE_DURATION } from "$lib/constants";
+
   export let data: PageData;
 
   let agent: TetherAgent | null = null;
@@ -99,7 +101,10 @@
 <main class="container">
   {#if data.contents}
     {#if data.contents.name == "newUserFirstPlant"}
-      <div class="fixed top-0 left-0" transition:fade={{ duration: 4000 }}>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <NewUserFirstPlant
           imageUrl={data.contents.contents.plant.imageUrl || ""}
           plantName={data.contents.contents.plant.commonName}
@@ -109,7 +114,10 @@
     {/if}
 
     {#if data.contents.name == "newPlantPollination" && data.contents.contents.newPlant.imageUrl}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <PollinationResult
           plantTop={data.contents.contents.plantTop}
           plantBottom={data.contents.contents.plantBottom}
@@ -121,7 +129,10 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.STATUS_FEED}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <BRollStatusFeed
           eventLogs={data.contents.contents.eventLogs}
           gardens={data.contents.contents.gardens}
@@ -130,7 +141,10 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.DETAIL}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <BRollDetail
           plant={data.contents.contents.plant}
           user={data.contents.contents.user}
@@ -139,13 +153,19 @@
     {/if}
 
     {#if data.contents.name === bRollNaming.DETAIL_MULTI}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <BRollDetailMulti plantsWithusers={data.contents.contents} />
       </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.ZOOM_OUT}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <BRollZoomOut
           garden={data.contents.contents.garden}
           userName={data.contents.contents.user.username}
@@ -154,13 +174,19 @@
     {/if}
 
     {#if data.contents.name == bRollNaming.ROLL_PAN}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <BRollPan gardens={data.contents}></BRollPan>
       </div>
     {/if}
 
     {#if data.contents.name == bRollNaming.TOP_LIST}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <BRollLeaderboard
           topPollinators={data.contents.contents.topPollinators}
           topGarden={data.contents.contents.topGarden}
@@ -180,7 +206,10 @@
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_2}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <StatsCount
           count={data.contents.contents.count}
           gardens={data.contents.contents.gardens}
@@ -189,7 +218,10 @@
     {/if}
 
     {#if data.contents?.name == bRollNaming.STATISTICS_3}
-      <div class="fixed top-0 left-0" transition:fade>
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
         <StatsPollinations
           plant={data.contents.contents.plant}
           pollinationCount={data.contents.contents.pollinationCount}
