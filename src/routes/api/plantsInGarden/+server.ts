@@ -1,5 +1,5 @@
 import { db } from "$lib/server/db";
-import { gardensToPlants } from "$lib/server/schema";
+import { gardens, gardensToPlants } from "$lib/server/schema";
 import type { GardenPlantEntry } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
@@ -11,12 +11,55 @@ import {
 import { ADMIN_GARDEN_SHARED } from "$env/static/private";
 
 export const POST: RequestHandler = async ({ request }) => {
-  const data = (await request.json()) as { plantId: string; gardenId: string };
-  const { gardenId, plantId } = data;
+  const data = (await request.json()) as {
+    plantId: string;
+    gardenId?: string;
+    userId?: string;
+  };
+  const { gardenId, plantId, userId } = data;
 
   console.log("POST plantsInGarden", data);
 
-  await addPlantToGarden(plantId, gardenId);
+  if (!gardenId && !userId) {
+    console.error("Not enough information to add plant to garden", {
+      plantId,
+      userId,
+      gardenId
+    });
+    return json(
+      {},
+      {
+        status: 400,
+        statusText: "Not enough information to add plant to garden!"
+      }
+    );
+  }
+  if (gardenId) {
+    await addPlantToGarden(plantId, gardenId);
+  } else {
+    console.log(
+      "No gardenId provided, will search for garden with userId",
+      userId,
+      "..."
+    );
+    if (!userId) {
+      return json(
+        {},
+        {
+          status: 400,
+          statusText:
+            "If no gardenId is provided, userId must be provided instead"
+        }
+      );
+    }
+    const garden = await db.query.gardens.findFirst({
+      where: eq(gardens.userId, userId)
+    });
+    if (!garden) {
+      throw Error("Failed to find garden matching userID " + userId);
+    }
+    await addPlantToGarden(plantId, garden.id);
+  }
 
   if (ADMIN_GARDEN_SHARED === "true") {
     console.warn(

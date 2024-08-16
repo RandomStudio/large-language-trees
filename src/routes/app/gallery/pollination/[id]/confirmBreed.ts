@@ -79,7 +79,9 @@ export async function addConfirmedPlant(
   });
   const { status } = res;
   if (status === 201) {
-    console.log("Sucessfully added!");
+    console.log(
+      "Sucessfully created; also add to this user's Garden and Seedbank"
+    );
 
     await fetch("/api/plantsInGarden", {
       method: "POST",
@@ -101,12 +103,17 @@ export async function addConfirmedPlant(
   }
 }
 
+/** Add the new plant to both the seedbank AND garden of the other user */
 export async function addConfirmedPlantToOtherUser(
   candidateChild: InsertPlant,
   otherUserId: string
 ) {
   console.log("addConfirmedPlantToOtherUser", { otherUserId });
   await fetch("/api/plantsInSeedbank", {
+    method: "POST",
+    body: JSON.stringify({ plantId: candidateChild.id, userId: otherUserId })
+  });
+  await fetch("/api/plantsInGarden", {
     method: "POST",
     body: JSON.stringify({ plantId: candidateChild.id, userId: otherUserId })
   });
