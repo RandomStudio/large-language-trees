@@ -37,12 +37,12 @@
       return { min: 0, max: 0 };
     }
 
-    let min = (garden.plantsInGarden[0].plant.properties as any)
+    let min = (garden.plantsInGarden[0].properties as any)
       .heightInMetres as number;
     let max = min;
 
     for (const plant of garden.plantsInGarden) {
-      const height = (plant.plant.properties as any).heightInMetres;
+      const height = (plant.properties as any).heightInMetres;
       if (height < min) min = height;
       if (height > max) max = height;
     }
@@ -203,7 +203,7 @@
   }
 
   beforeUpdate(() => {
-    positions = randomizePositions(garden.plantsInGarden.map((x) => x.plant));
+    positions = randomizePositions(garden.plantsInGarden);
   });
 </script>
 
