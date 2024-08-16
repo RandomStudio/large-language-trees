@@ -3,6 +3,7 @@
   import {
     type GardenViewData,
     type InsertPlant,
+    type PlantWithDate,
     type SelectPlant
   } from "../../../lib/types";
   import { onDestroy, onMount } from "svelte";
@@ -26,12 +27,21 @@
         plantsInSeedbank: inputData.seedbank.plantsInSeedbank.map((p) => ({
           ...p,
           plant: {
-            ...p.plant,
-            timeLeft: DateTime.fromJSDate(p.plant.created)
-              .plus(DURATION_TILL_FERTILE)
-              .diffNow()
+            ...p.plant
           }
         }))
+      },
+      garden: {
+        ...inputData.garden,
+        plantsInGarden: [
+          // ...inputData.garden.plantsInGarden
+          ...inputData.garden.plantsInGarden.map((p) => ({
+            ...p,
+            timeLeft: DateTime.fromJSDate(p.pollinationDate)
+              .plus(DURATION_TILL_FERTILE)
+              .diffNow()
+          }))
+        ]
       }
     };
   }
@@ -41,7 +51,7 @@
   let dataWithTimes = addTimeLeft(data);
   console.log(dataWithTimes);
 
-  let selectedPlant: SelectPlant | null = null;
+  let selectedPlant: PlantWithDate | null = null;
 
   function handleClick(id: string) {
     goto(`gallery/pollination/` + id);
@@ -112,26 +122,26 @@
   >
     {data.garden.name}
   </div>
-  {#each dataWithTimes.seedbank.plantsInSeedbank as plant}
+  {#each dataWithTimes.garden.plantsInGarden as plant}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
-    {#if plant.plant.parent1 == null || plant.plant.timeLeft.milliseconds <= 0}
+    {#if plant.parent1 == null || plant.timeLeft.milliseconds < 0}
       <div
         on:click={() => {
           console.log("click!");
-          selectedPlant = plant.plant;
+          selectedPlant = plant;
         }}
         class="cursor-pointer mt-4"
       >
-        <PlantDisplay plant={plant.plant} applyFilters={false} />
+        <PlantDisplay {plant} applyFilters={false} />
       </div>
       <div class="mt-4 text-center">
         <button
           data-test="start-pollinating-button"
           data-umami-event="Start Pollinating Button"
           class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
-          on:click={() => handleClick(plant.plant.id)}
+          on:click={() => handleClick(plant.id)}
         >
           Start Pollinating
         </button>
@@ -140,17 +150,17 @@
       <div
         on:click={() => {
           console.log("click!");
-          selectedPlant = plant.plant;
+          selectedPlant = plant;
         }}
         class="cursor-pointer mt-4"
       >
-        <PlantDisplay plant={plant.plant} applyFilters={true} />
+        <PlantDisplay {plant} applyFilters={true} />
       </div>
       <div class="mt-4 text-center">
         <button
           class="bg-roel_green text-roel_blue font-primer text-2xl px-4 py-2 w-11/12 max-w-xs border-roel_blue border-[3px] rounded-full text-opacity-100"
         >
-          Fertile in {plant.plant.timeLeft.toFormat("mm:ss")}
+          Fertile in {plant.timeLeft.toFormat("mm:ss")}
         </button>
       </div>
     {/if}
@@ -166,7 +176,8 @@
       selectedPlant = null;
     }}
     isOriginalPlant={selectedPlant.id == yourOriginalPlant?.id}
-    isPollinatingPlant={DateTime.fromJSDate(selectedPlant.created).diffNow() >
-      DURATION_TILL_FERTILE}
+    isPollinatingPlant={DateTime.fromJSDate(
+      selectedPlant.pollinationDate
+    ).diffNow() > DURATION_TILL_FERTILE}
   ></PopupInfo>
 {/if}

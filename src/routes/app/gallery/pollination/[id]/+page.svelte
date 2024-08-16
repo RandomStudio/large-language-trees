@@ -223,6 +223,12 @@
       candidateChild = updatedPlant;
       candidateChild.authorTop = data.user.id;
       candidateChild.authorBottom = otherUserId;
+      console.log(
+        "insertNewPlant setting authorTop = ",
+        data.user.id,
+        ", authorBottom = ",
+        otherUserId
+      );
       await addConfirmedPlant(candidateChild, data.garden.id, data.seedbank.id);
       await addConfirmedPlantToOtherUser(candidateChild, otherUserId);
 
@@ -278,7 +284,7 @@
           />
         </div>
         <div class="mt-2 mx-16 absolute place-self-center">
-          <QrGenerate text={parent1.id + "&" + data.seedbank.id} />
+          <QrGenerate text={parent1.id + "&" + data.user.id} />
         </div>
       </div>
     {/if}

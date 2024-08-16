@@ -10,6 +10,7 @@ import type {
   seedbanksToPlants,
   users
 } from "$lib/server/schema";
+import type { DateTime } from "luxon";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 export type SelectPlant = typeof plants.$inferSelect;
@@ -40,12 +41,11 @@ export type PresentationDisplayState = typeof presentationState.$inferInsert;
 
 export type SelectCandidateText = typeof generatedText.$inferSelect;
 
-export interface GardenPlantEntryWithPlant extends GardenPlantEntry {
-  plant: SelectPlant;
+export interface PlantWithDate extends SelectPlant {
+  pollinationDate: Date;
 }
-
 export interface GardenWithPlants extends SelectGarden {
-  plantsInGarden: GardenPlantEntryWithPlant[];
+  plantsInGarden: PlantWithDate[];
 }
 export interface UserWithGarden extends SelectUser {
   myGarden: GardenWithPlants;
