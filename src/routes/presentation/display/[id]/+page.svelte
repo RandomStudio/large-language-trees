@@ -145,10 +145,12 @@
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
-        <BRollDetail
-          plant={data.contents.contents.plant}
-          user={data.contents.contents.user}
-        ></BRollDetail>
+        {#key data.contents.contents.plant.id}
+          <BRollDetail
+            plant={data.contents.contents.plant}
+            user={data.contents.contents.user}
+          ></BRollDetail>
+        {/key}
       </div>
     {/if}
 
@@ -157,7 +159,9 @@
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
-        <BRollDetailMulti plantsWithusers={data.contents.contents} />
+        {#key data.contents.contents}
+          <BRollDetailMulti plantsWithusers={data.contents.contents} />
+        {/key}
       </div>
     {/if}
 

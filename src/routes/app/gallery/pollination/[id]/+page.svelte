@@ -7,6 +7,7 @@
   import { goto } from "$app/navigation";
   import ReturnButton from "../../../../../components/ReturnButton.svelte";
   import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
+  import AnimatedPlant from "../../../../../components/AnimatedPlant.svelte";
 
   import {
     addConfirmedPlant,
@@ -22,6 +23,10 @@
   import type { EventNewPollination } from "$lib/events.types";
 
   export let data: EnhancedGardenViewData;
+
+  export let applyFilters: boolean = false;
+  export let positionStyles: string =
+    "absolute -bottom-3 -right-8 -mb-1 w-40 h-40 z-10";
 
   let videoElement: HTMLVideoElement;
   let codeReader: BrowserMultiFormatReader | null = null;
@@ -275,12 +280,10 @@
               </video>
             </div>
           </div>
-          <!-- svelte-ignore a11y-img-redundant-alt -->
-          <img
-            src={parent1.imageUrl}
-            alt="Small Image"
-            class="absolute -bottom-3 -right-8 -mb-1 w-40 h-40 z-20"
-            crossorigin="anonymous"
+          <AnimatedPlant
+            imageURL={parent1.imageUrl || ""}
+            {applyFilters}
+            {positionStyles}
           />
         </div>
         <div class="mt-2 mx-16 absolute place-self-center">
