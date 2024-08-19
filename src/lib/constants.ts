@@ -45,12 +45,12 @@ export const MIN_STATUS_FEED = 2;
 export const EVENT_LOG_MAX = 100;
 
 /** How many plants (with their users) to show for "showMultipleFeaturedPlants" */
-export const MULTIPLE_FEATURED_PLANTS_COUNT = 2;
+export const MULTIPLE_FEATURED_PLANTS_COUNT = 4;
 
 /** The maximum number of characters for plantname and username */
 export const LIMIT_CHARACTERS_USERNAME = 20;
 export const LIMIT_CHARACTERS_PLANTNAME = 30;
-export const BROLL_TIMEOUT = 10000;
+export const BROLL_TIMEOUT = 1000000;
 export const NEW_USER_TIMEOUT = 5000;
 export const POLLINATION_EVENT_TIMEOUT = 5000;
 export const POLLINATION_RESULT_TIMEOUT = 10000;

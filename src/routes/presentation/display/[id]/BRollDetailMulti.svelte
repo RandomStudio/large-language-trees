@@ -2,108 +2,121 @@
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import { onMount } from "svelte";
   import { tweened } from "svelte/motion";
-  import { cubicOut } from "svelte/easing";
+  import { cubicIn, cubicOut } from "svelte/easing";
   import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
 
   export let plantsWithusers: { plant: SelectPlant; user: PublicUserInfo }[];
   export let applyFilters: boolean = false;
   export let positionStyles: string = "w-full";
 
-  const sizePicture = 2000;
-  const duration = 15000; //ms
+  const sizePicture = 250; //vw
+  const duration = 10000; //ms
+  const delay = 4000; // ms
 
-  const randomPosition = () => Math.floor(Math.random() * (-sizePicture + 540));
-  const randomOffset = () => Math.floor(Math.random() * (-sizePicture + 1620));
+  const xStartOdd = -sizePicture / 2.5;
+  const xEndOdd = -sizePicture;
+  const yStartOdd = sizePicture / 1.4;
+  const yEndOdd = -sizePicture * 0.1;
 
-  const xStart1 = randomPosition();
-  const xEnd1 = randomPosition();
-  const yStart1 = randomOffset();
-  const yEnd1 = randomOffset();
+  const xStartEven = xStartOdd / 2;
+  const xEndEven = -sizePicture;
+  const yStartEven = yStartOdd;
+  const yEndEven = yEndOdd;
 
-  let x1 = tweened(xStart1, { duration, easing: cubicOut });
-  let y1 = tweened(yStart1, { duration, easing: cubicOut });
+  let x1 = tweened(xStartOdd, { duration, easing: cubicIn });
+  let y1 = tweened(yStartOdd, { duration, easing: cubicOut });
 
-  const xStart2 = randomPosition();
-  const xEnd2 = randomPosition();
-  const yStart2 = randomOffset();
-  const yEnd2 = randomOffset();
+  let x2 = tweened(xStartEven, { duration, easing: cubicIn });
+  let y2 = tweened(yStartEven, { duration, easing: cubicOut });
 
-  let x2 = tweened(xStart2, { duration, easing: cubicOut });
-  let y2 = tweened(yStart2, { duration, easing: cubicOut });
+  let x3 = tweened(xStartOdd, { duration, easing: cubicIn });
+  let y3 = tweened(yStartOdd, { duration, easing: cubicOut });
+
+  let x4 = tweened(xStartEven, { duration, easing: cubicIn });
+  let y4 = tweened(yStartEven, { duration, easing: cubicOut });
 
   onMount(() => {
-    x1.set(xEnd1);
-    y1.set(yEnd1);
-    x2.set(xEnd2);
-    y2.set(yEnd2);
+    setTimeout(() => {
+      x1.set(xEndOdd);
+      y1.set(yEndOdd);
+    }, delay * 0);
+
+    setTimeout(() => {
+      x2.set(xEndEven);
+      y2.set(yEndEven);
+    }, delay * 1);
+
+    setTimeout(() => {
+      x3.set(xEndOdd);
+      y3.set(yEndOdd);
+    }, delay * 2);
+
+    setTimeout(() => {
+      x4.set(xEndEven);
+      y4.set(yEndEven);
+    }, delay * 3);
   });
 
   const plant1 = plantsWithusers[0];
   const plant2 = plantsWithusers[1];
+  const plant3 = plantsWithusers[2];
+  const plant4 = plantsWithusers[3];
 </script>
 
-<div class="viewport bg-roel_rose w-screen h-screen">
-  <div class="camera">
-    <div class="images-container">
-      <div
-        class="target-image"
-        style="transform: translateX({$x1}px) translateY({$y1}px);"
-      >
-        <AnimatedPlant
-          imageURL={plant1.plant.imageUrl || ""}
-          {applyFilters}
-          {positionStyles}
-        />
-      </div>
-
-      <div>
-        <div
-          class="target-image"
-          style="transform: translateX({$x2}px) translateY({$y2}px);"
-        >
-          <AnimatedPlant
-            imageURL={plant2.plant.imageUrl || ""}
-            {applyFilters}
-            {positionStyles}
-          />
-        </div>
-        <div
-          class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
-          style="left: {540 / 2 - xEnd2}px; top: {1620 / 2 -
-            yEnd2}px;transform: translateX({$x2}px) translateX(-50%) translateY({$y2}px);"
-        >
-          {plant2.user.username}'s {plant2.plant.commonName}
-        </div>
-      </div>
+<div class="w-screen h-screen bg-roel_rose">
+  <div class="images-container">
+    <div
+      class="target-image"
+      style="transform: translateX({$x1}vw) translateY({$y1}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
+    >
+      <AnimatedPlant
+        imageURL={plant1.plant.imageUrl || ""}
+        {applyFilters}
+        {positionStyles}
+      />
+    </div>
+    <div
+      class="target-image"
+      style="transform: translateX({$x2}vw) translateY({$y2}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
+    >
+      <AnimatedPlant
+        imageURL={plant2.plant.imageUrl || ""}
+        {applyFilters}
+        {positionStyles}
+      />
+    </div>
+    <div
+      class="target-image"
+      style="transform: translateX({$x3}vw) translateY({$y3}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
+    >
+      <AnimatedPlant
+        imageURL={plant3.plant.imageUrl || ""}
+        {applyFilters}
+        {positionStyles}
+      />
+    </div>
+    <div
+      class="target-image"
+      style="transform: translateX({$x4}vw) translateY({$y4}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
+    >
+      <AnimatedPlant
+        imageURL={plant4.plant.imageUrl || ""}
+        {applyFilters}
+        {positionStyles}
+      />
     </div>
   </div>
 </div>
 
 <style>
-  .viewport {
-    overflow: hidden;
-    position: relative;
-  }
-
-  .camera {
-    width: 2000px;
-    height: 2000px;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
   .images-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     isolation: isolate;
   }
 
   .target-image {
     position: absolute;
-    width: 100%;
-    height: 100%;
     object-fit: cover;
     mix-blend-mode: hue;
   }
