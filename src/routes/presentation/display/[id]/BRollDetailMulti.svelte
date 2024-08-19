@@ -15,11 +15,11 @@
 
   const xStartOdd = -sizePicture / 2.5;
   const xEndOdd = -sizePicture;
-  const yStartOdd = sizePicture / 1.4;
+  const yStartOdd = sizePicture / 1.3;
   const yEndOdd = -sizePicture * 0.1;
 
   const xStartEven = xStartOdd / 2;
-  const xEndEven = -sizePicture;
+  const xEndEven = -xEndOdd;
   const yStartEven = yStartOdd;
   const yEndEven = yEndOdd;
 
