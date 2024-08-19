@@ -10,8 +10,8 @@
   export let positionStyles: string = "w-full";
 
   const sizePicture = 250; //vw
-  const duration = 10000; //ms
-  const delay = 4000; // ms
+  const duration = 14000; //ms
+  const delay = 3000; // ms
 
   const xStartOdd = -sizePicture / 2.5;
   const xEndOdd = -sizePicture;

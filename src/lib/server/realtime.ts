@@ -48,7 +48,8 @@ import {
   POLLINATION_RESULT_TIMEOUT,
   NEW_USER_TIMEOUT,
   NUM_GARDENS_MULTI,
-  PLUG_NAMES
+  PLUG_NAMES,
+  MULTI_DETAIL_TIMEOUT
 } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
@@ -192,7 +193,12 @@ export const handleDisplayNotification = async (
     try {
       const contents = await getDataForAmbientDisplay(pickDisplayType);
 
-      await updateScreenStateAndPublish(displayId, contents, 0, BROLL_TIMEOUT);
+      // check if display is DETAIL_MULTI
+      const timeout = pickDisplayType === bRollNaming.DETAIL_MULTI
+        ? MULTI_DETAIL_TIMEOUT
+        : BROLL_TIMEOUT;
+
+      await updateScreenStateAndPublish(displayId, contents, 0, timeout);
     } catch (e) {
       console.error(
         "Something went wrong getting a random Display layout: " + e
