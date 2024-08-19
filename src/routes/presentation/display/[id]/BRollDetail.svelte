@@ -8,6 +8,7 @@
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
   export let applyFilters: boolean = false;
+  export let positionStyles: string = "w-full";
 
   const sizePicture = 2000;
   const duration = 15000; //ms
@@ -35,7 +36,11 @@
 
 <div class="viewport bg-roel_rose w-screen h-screen">
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
-    <AnimatedPlant imageURL={plant.imageUrl || ""} {applyFilters} />
+    <AnimatedPlant
+      imageURL={plant.imageUrl || ""}
+      {applyFilters}
+      {positionStyles}
+    />
     <div
       class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
       style="left: {540 / 2 - xEnd}px; top: {1620 / 2 -
