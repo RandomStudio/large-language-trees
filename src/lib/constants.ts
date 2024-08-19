@@ -36,7 +36,7 @@ export const NUM_GARDENS_MULTI = 5;
 export const LIMIT_LEADERBOARD = 5;
 
 /** The maximum number of latest event logs we need to fetch from the DB */
-export const LIMIT_STATUS_FEED = 10;
+export const LIMIT_STATUS_FEED = 7;
 /** The MINIMUM number of event log entries we need in order to switch to that display */
 export const MIN_STATUS_FEED = 2;
 /** How many entries to cap the table row count; delete where necessary to
@@ -50,7 +50,7 @@ export const MULTIPLE_FEATURED_PLANTS_COUNT = 2;
 /** The maximum number of characters for plantname and username */
 export const LIMIT_CHARACTERS_USERNAME = 20;
 export const LIMIT_CHARACTERS_PLANTNAME = 30;
-export const BROLL_TIMEOUT = 15000;
+export const BROLL_TIMEOUT = 10000;
 export const NEW_USER_TIMEOUT = 5000;
 export const POLLINATION_EVENT_TIMEOUT = 5000;
 export const POLLINATION_RESULT_TIMEOUT = 10000;

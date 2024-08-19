@@ -4,24 +4,10 @@
   export let gardens;
 </script>
 
-<div class="bg-roel_purple w-screen h-screen">
+<div class="bg-roel_rose w-screen h-screen">
   <div
-    class="svg-container"
-    style="position: absolute; height: 100vh; width: 100vw; overflow: hidden;"
-  >
-    <svg
-      viewBox="0 0 1000 2400"
-      preserveAspectRatio="none"
-      style="width: 100%; height: 100%;"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M1000 2900H1500V2400V700C1500 147.715 1052.28 -300 500 -300C-52.2848 -300 -500 147.715 -500 700V2400V2900H0H1000Z"
-        class="stroke-roel_rose fill-roel_purple"
-        stroke-width="1000"
-      />
-    </svg>
-  </div>
+    class="w-screen h-screen rounded-t-full bg-roel_blue mt-[7.5vh] absolute"
+  ></div>
 
   <div class="z-0">
     <DisplayGarden
@@ -70,20 +56,20 @@
     class="absolute flex flex-col items-start bottom-[2vh] z-20 w-full left-[2vh]"
   >
     <div class="items-start space-y-[2vh]">
-      {#each eventLogs as sentence, index}
+      {#each eventLogs.slice().reverse() as sentence, index}
         <div
           class="flex items-center space-x-2"
-          style="opacity: {0.5 + index * 0.1}"
+          style="opacity: {0.0 + index * 0.2}"
         >
           {#each sentence as info}
             {#if info.highlight == true}
               <div
-                class="text-roel_purple text-xl font-primer bg-roel_rose px-2"
+                class="text-roel_purple text-4xl font-primer bg-roel_rose px-2 max-w-[35vw] text-center pt-[1vw] pb-[1vw]"
               >
                 {info.text}
               </div>
             {:else}
-              <div class="text-xl font-primer text-roel_rose">{info.text}</div>
+              <div class="text-4xl font-primer text-roel_rose">{info.text}</div>
             {/if}
           {/each}
         </div>
