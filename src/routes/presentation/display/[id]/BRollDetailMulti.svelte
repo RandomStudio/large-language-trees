@@ -69,6 +69,12 @@
       class="target-image"
       style="transform: translateX({$x1}vw) translateY({$y1}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
+      <div
+        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
+      >
+        {plant1.user.username}'s <br />
+        {plant1.plant.commonName}
+      </div>
       <AnimatedPlant
         imageURL={plant1.plant.imageUrl || ""}
         {applyFilters}
@@ -79,6 +85,12 @@
       class="target-image"
       style="transform: translateX({$x2}vw) translateY({$y2}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
+      <div
+        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
+      >
+        {plant2.user.username}'s <br />
+        {plant2.plant.commonName}
+      </div>
       <AnimatedPlant
         imageURL={plant2.plant.imageUrl || ""}
         {applyFilters}
@@ -89,6 +101,12 @@
       class="target-image"
       style="transform: translateX({$x3}vw) translateY({$y3}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
+      <div
+        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
+      >
+        {plant3.user.username}'s <br />
+        {plant3.plant.commonName}
+      </div>
       <AnimatedPlant
         imageURL={plant3.plant.imageUrl || ""}
         {applyFilters}
@@ -99,6 +117,12 @@
       class="target-image"
       style="transform: translateX({$x4}vw) translateY({$y4}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
+      <div
+        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
+      >
+        {plant4.user.username}'s <br />
+        {plant4.plant.commonName}
+      </div>
       <AnimatedPlant
         imageURL={plant4.plant.imageUrl || ""}
         {applyFilters}
