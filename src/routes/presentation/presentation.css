@@ -58,3 +58,8 @@
   font-weight: normal;
   font-style: normal;
 }
+
+.example {
+  font-family: "gyst-variable", sans-serif;
+  font-variation-settings: 'wght' 100;
+}

@@ -24,7 +24,8 @@ module.exports = {
         primer: ["Primer", "serif"],
         primerb: ["PrimerB", "serif"],
         jeanb: ["JeanB", "serif"],
-        jeant: ["JeanT", "serif"]
+        jeant: ["JeanT", "serif"],
+        gyst: ["gyst-variable", "sans-serif"]
       }
     }
   },
