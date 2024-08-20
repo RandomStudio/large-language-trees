@@ -63,7 +63,9 @@
   const plant4 = plantsWithusers[3];
 </script>
 
-<div class="w-screen h-screen bg-roel_rose">
+<div
+  class="w-screen h-screen bg-gradient-to-t from-roel_blue from-20% to-roel_rose to-80%"
+>
   <div class="images-container">
     <div
       class="target-image"
@@ -72,7 +74,7 @@
       <div
         class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
       >
-        {plant1.user.username}'s <br />
+        {plant1.user.username}'s
         {plant1.plant.commonName}
       </div>
       <AnimatedPlant
@@ -88,7 +90,7 @@
       <div
         class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
       >
-        {plant2.user.username}'s <br />
+        {plant2.user.username}'s
         {plant2.plant.commonName}
       </div>
       <AnimatedPlant
@@ -104,7 +106,7 @@
       <div
         class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
       >
-        {plant3.user.username}'s <br />
+        {plant3.user.username}'s
         {plant3.plant.commonName}
       </div>
       <AnimatedPlant
@@ -120,7 +122,7 @@
       <div
         class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
       >
-        {plant4.user.username}'s <br />
+        {plant4.user.username}'s
         {plant4.plant.commonName}
       </div>
       <AnimatedPlant
@@ -142,6 +144,6 @@
   .target-image {
     position: absolute;
     object-fit: cover;
-    mix-blend-mode: hue;
+    mix-blend-mode: difference;
   }
 </style>

@@ -35,29 +35,16 @@
   });
 </script>
 
-<div class="w-screen h-screen" style="background-color:{brightColor}">
+<div
+  class="w-screen h-screen"
+  style="background: linear-gradient({darkColor}, {brightColor});"
+>
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center text-7xl font-jeanb"
-    style="background-color: {darkColor}; color: {brightColor};"
+    class="w-full h-[19vh] flex text-center items-start py-[3vh] justify-center text-9xl font-gyst"
+    style="color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
     {plantName.toUpperCase()}
-  </div>
-
-  <div
-    class="svg-container"
-    style="position: absolute; top: 50vh; height: 26vh; width: 100vw; overflow: hidden;"
-  >
-    <svg
-      viewBox="0 0 1000 801"
-      preserveAspectRatio="none"
-      style="width: 100%; height: 100%;"
-    >
-      <path
-        d="M0 0H1000V301C1000 577.142 776.142 801 500 801C223.858 801 0 577.142 0 301V0Z"
-        fill={darkColor}
-      />
-    </svg>
   </div>
 
   <div class="fixed inset-0 flex items-center justify-center">
@@ -73,8 +60,8 @@
     class="w-full h-[250px] flex flex-col text-center items-center justify-center absolute bottom-0"
     style="color:{darkColor}"
   >
-    <div class="text-4xl font-primer">has been growing for:<br /></div>
-    <div class="text-7xl font-jeanb">
+    <div class="text-5xl font-primer pb-[2vh]">has been growing for:<br /></div>
+    <div class="text-9xl font-gyst pb-[2vh]">
       {age.toFormat("hh'H' mm'M' ss'S")}
     </div>
   </div>

@@ -62,22 +62,17 @@
 
 <div
   class="w-screen h-screen"
-  style="background-color:{darkColorNew}; display:{status ===
+  style="background: linear-gradient({brightColorNew}, {darkColorNew}); display:{status ===
   'PollinationResult'
     ? 'block'
     : 'none'}"
 >
   <div
-    class="w-full h-[15vh] flex text-center items-center justify-center text-8xl font-jeanb"
-    style="background-color: {darkColorNew}; color: {brightColorNew};"
+    class="absolute w-screen h-screen text-center text-9xl font-gyst py-[2vh]"
+    style="color: {darkColorNew};"
   >
-    RESULTING <br /> IN...
+    Resulting <br /> in...
   </div>
-
-  <div
-    class="w-screen h-[75vw] rounded-t-full absolute"
-    style="background-color:{brightColorNew}"
-  ></div>
 
   <div class="fixed inset-0 flex items-center justify-center">
     <img
@@ -89,8 +84,8 @@
   </div>
 
   <div
-    class="w-full h-[15vh] flex text-center items-center justify-center absolute bottom-0 text-8xl font-jeanb z-10"
-    style="background-color:{brightColorNew}; color:{darkColorNew}"
+    class="absolute w-screen h-screen flex text-center items-end justify-center text-9xl py-[2vh] font-gyst"
+    style="color:{brightColorNew}"
   >
     THE <br />
     {newPlantName.toUpperCase()}
@@ -103,9 +98,48 @@
   class="w-screen h-screen"
   style="display:{status === 'PollinationResult' ? 'none' : 'block'}"
 >
+  <div class="fixed inset-0 flex items-center justify-center z-20">
+    <div
+      class="py-[1vh] px-[2vh] z-50 font-primer text-5xl"
+      style="background-color: {brightColorTop}; color: {darkColorBottom};"
+    >
+      is pollinating with
+    </div>
+  </div>
   <div
-    class="w-screen h-[15vh] flex text-center items-center justify-center text-8xl font-jeanb"
-    style="background-color: {darkColorTop}; color: {brightColorTop};"
+    class="w-screen h-[50vh] text-9xl font-gyst text-center items-center py-[2vh] flex flex-col justify-start"
+    style="background: linear-gradient({brightColorTop}, {darkColorTop}); color: {darkColorTop};"
+  >
+    {authorNameTop.toUpperCase()}'S <br />
+    {plantNameTop.toUpperCase()}
+    <div class="absolute w-[38vh] bottom-[48vh]">
+      <img
+        src={plantImageUrlTop}
+        alt="TopImage"
+        bind:this={imgTop}
+        crossorigin="anonymous"
+      />
+    </div>
+  </div>
+  <div
+    class="w-screen h-[50vh] text-9xl font-gyst text-center items-center py-[2vh] flex flex-col justify-end"
+    style="background: linear-gradient({brightColorBottom}, {darkColorBottom}); color: {brightColorBottom};"
+  >
+    {authorNameBottom.toUpperCase()}'S <br />
+    {plantNameBottom.toUpperCase()}
+    <div class="absolute w-[38vh] top-[48vh] rotate-180">
+      <img
+        src={plantImageUrlBottom}
+        alt="BottomImage"
+        bind:this={imgBottom}
+        crossorigin="anonymous"
+      />
+    </div>
+  </div>
+
+  <div
+    class="w-screen h-[50vh] flex text-center items-center justify-center text-8xl font-jeanb"
+    style="background: linear-gradient({darkColorTop}, {brightColorTop}); color: {brightColorTop};"
   >
     {authorNameTop.toUpperCase()}'S <br />
     {plantNameTop.toUpperCase()}
@@ -115,11 +149,6 @@
     class="h-[35vh] flex flex-col justify-end items-center relative"
     style="background-color:{brightColorTop}"
   >
-    <div
-      class="w-[90vw] h-[45vw] rounded-t-full absolute"
-      style="background-color:{darkColorTop}"
-    ></div>
-
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[1vh]"
     >
@@ -133,23 +162,10 @@
     </div>
   </div>
 
-  <div class="fixed inset-0 flex items-center justify-center z-20">
-    <div
-      class="py-1 px-6 z-50 font-primerb text-6xl"
-      style="background-color: {brightColorTop}; color: {darkColorBottom};"
-    >
-      is pollinating with
-    </div>
-  </div>
-
   <div
     class="h-[35vh] flex flex-col justify-end items-center relative top-0"
     style="background-color:{darkColorBottom}"
   >
-    <div
-      class="w-[90vw] h-[45vw] rounded-b-full absolute top-0"
-      style="background-color:{brightColorBottom}"
-    ></div>
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[-1vh]"
     >

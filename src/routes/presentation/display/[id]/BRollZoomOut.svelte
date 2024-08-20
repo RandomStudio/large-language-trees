@@ -1,34 +1,51 @@
 <script lang="ts">
   import type { GardenWithPlants } from "$lib/types";
   import DisplayGarden from "./DisplayGarden.svelte";
+  import { onMount } from "svelte";
+  import { tweened } from "svelte/motion";
+  import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";
+  import { BROLL_TIMEOUT } from "$lib/constants";
 
   export let userName: string;
   export let garden: GardenWithPlants;
+
+  const duration = BROLL_TIMEOUT; //ms
+  const StartScale = 4;
+  const EndScale = 1;
+
+  let zoom = tweened(StartScale, { duration, easing: cubicInOut });
+
+  onMount(() => {
+    zoom.set(EndScale);
+  });
 </script>
 
-<div class="bg-roel_purple w-screen h-screen relative overflow-hidden">
+<div
+  class="w-screen h-screen relative overflow-hidden bg-gradient-to-t from-roel_blue from-60% to-roel_rose to-85%"
+>
   <div
-    class="bg-roel_rose w-full h-[250px] flex text-center text-roel_purple items-center justify-center text-7xl font-jeanb"
+    class="absolute z-10 w-screen h-[19vh] flex text-center text-roel_purple py-[3vh] justify-center text-9xl font-gyst"
   >
-    {userName}'s <br /> GARDEN
+    {userName.toUpperCase()}'S <br /> GARDEN
   </div>
-
-  <DisplayGarden
-    {garden}
-    xGarden={0}
-    yGarden={500}
-    height={540}
-    width={540}
-    showGardenName={false}
-    showPlantName={true}
-    colorBGText="roel_rose"
-    innerwidth={window.innerWidth}
-    innerheight={window.innerHeight}
-  ></DisplayGarden>
-
   <div
-    class="w-full flex text-left items-left left-[90px] justify-start absolute bottom-[20px] text-roel_rose text-4xl font-primer"
+    class="absolute w-screen h-screen z-0"
+    style="transform: scale({$zoom});"
   >
-    Join the Garden!
+    <DisplayGarden
+      {garden}
+      xGarden={0}
+      yGarden={500}
+      height={540}
+      width={540}
+      showGardenName={false}
+      showPlantName={true}
+      colorBGText="roel_rose"
+      innerwidth={window.innerWidth}
+      innerheight={window.innerHeight}
+    ></DisplayGarden>
   </div>
+  <div
+    class="absolute z-5 mbt-0 w-screen h-[100vh] bg-gradient-to-b from-roel_rose from-5% to-40%"
+  ></div>
 </div>

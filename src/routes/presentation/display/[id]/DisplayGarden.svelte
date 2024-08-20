@@ -208,7 +208,7 @@
 </script>
 
 <div
-  class="fixed border-black border-0"
+  class="fixed border-black border-[10px]"
   style="width: {width}px; height: {height}px; position: absolute; left: {xGarden}px; top: {yGarden}px; "
 >
   {#each positions as { parent1, commonName, imageUrl, x, y, size, zIndex, grasses }}
@@ -229,15 +229,15 @@
     />
     {#if parent1 == null && showGardenName}
       <div
-        class="absolute font-primer text-2xl text-roel_purple px-2 py-0.5 text-center bg-{colorBGText}"
-        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:2000`}
+        class="absolute z-2000 font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
+        style={`left: ${x - 120}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:2000`}
       >
         {garden.name}
       </div>
     {:else if showPlantName}
       <div
-        class="absolute font-primer text-2xl text-roel_purple px-2 py-0.5 text-center bg-{colorBGText}"
-        style={`left: ${x - 60}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:${zIndex + 1}`}
+        class="absolute z-2000 font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
+        style={`left: ${x - 120}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:${zIndex + 1}`}
       >
         {commonName}
       </div>

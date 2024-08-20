@@ -4,11 +4,9 @@
   export let gardens;
 </script>
 
-<div class="bg-roel_rose w-screen h-screen">
-  <div
-    class="w-screen h-screen rounded-t-full bg-roel_blue mt-[7.5vh] absolute"
-  ></div>
-
+<div
+  class="w-screen h-screen bg-gradient-to-t from-roel_blue from-30% to-roel_rose to-80%"
+>
   <div class="z-0">
     <DisplayGarden
       xGarden={0}

@@ -34,20 +34,21 @@
   });
 </script>
 
-<div class="viewport bg-roel_rose w-screen h-screen">
+<div
+  class="viewport w-screen h-screen bg-gradient-to-t from-roel_blue from-0% to-roel_rose to-100%"
+>
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
+    <div
+      class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
+    >
+      {user.username}'s
+      {plant.commonName}
+    </div>
     <AnimatedPlant
       imageURL={plant.imageUrl || ""}
       {applyFilters}
       {positionStyles}
     />
-    <div
-      class="absolute text-3xl text-roel_rose bg-roel_purple py-0.5 px-2 font-primer"
-      style="left: {540 / 2 - xEnd}px; top: {1620 / 2 -
-        yEnd}px; transform: translate(-50%, -50%);"
-    >
-      {user.username}'s {plant.commonName}
-    </div>
   </div>
 </div>
 

@@ -20,20 +20,16 @@
   });
 </script>
 
-<div class="w-screen h-screen" style:background-color={brightColor}>
+<div
+  class="w-screen h-screen"
+  style="background: linear-gradient({darkColor}, {brightColor});"
+>
   <div
-    class="w-full h-[15vh] flex text-center items-center justify-center text-8xl font-jeanb"
-    style="background-color: {darkColor}; color: {brightColor};"
+    class="absolute w-screen h-screen flex text-center items-start justify-center text-9xl py-[2vh] font-gyst"
+    style="color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
     {plantName.toUpperCase()}
-  </div>
-
-  <div class="w-screen h-[70vh]">
-    <div
-      class="w-screen h-[75vw] mt-[25vh] rounded-b-full absolute"
-      style="background-color:{darkColor}"
-    ></div>
   </div>
 
   <div class="fixed inset-0 flex items-center justify-center">
@@ -46,9 +42,9 @@
   </div>
 
   <div
-    class="w-full h-[15vh] flex text-center items-center justify-center absolute bottom-0 text-8xl font-jeanb"
-    style="background-color={brightColor}; color:{darkColor}"
+    class="absolute w-screen h-screen flex text-center items-end justify-center text-9xl py-[2vh] font-gyst"
+    style="color: {darkColor};"
   >
-    JUST SPROUTED <br /> IN THE GARDEN!
+    Just sprouted <br /> in the garden!
   </div>
 </div>

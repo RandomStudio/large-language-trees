@@ -7,10 +7,10 @@
 
 <div class="bg-roel_purple w-screen h-screen flex flex-col justify-end">
   <div
-    class="w-full h-[15vh] flex items-center text-left pl-5 text-roel_purple text-7xl font-jeanb bg-roel_rose"
+    class="w-full h-[65vh] flex items-end pb-[1vh] text-left pl-8 text-roel_purple text-9xl font-gyst bg-gradient-to-t from-roel_rose from-20% to-roel_blue to-80%"
   >
-    MOST ACTIVE
-    <br />POLLINATORS:
+    Most Active
+    <br />Pollinators:
   </div>
 
   <DisplayGarden
@@ -28,21 +28,21 @@
 
   {#each topPollinators as userInfo, index}
     <div
-      class="w-full h-[7vh] flex items-center justify-between px-5 {index %
+      class="w-full h-[7vh] flex items-center justify-between px-10 {index %
         2 ===
       0
         ? 'bg-roel_purple'
         : 'bg-roel_rose'}"
     >
       <div
-        class="text-4xl font-primer {index % 2 === 0
+        class="text-5xl font-primer {index % 2 === 0
           ? 'text-roel_rose'
           : 'text-roel_purple'}"
       >
         {userInfo.username}
       </div>
       <div
-        class="text-4xl font-primer {index % 2 === 0
+        class="text-5xl font-primer {index % 2 === 0
           ? 'text-roel_rose'
           : 'text-roel_purple'}"
       >

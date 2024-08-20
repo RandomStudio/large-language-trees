@@ -226,11 +226,13 @@
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
-        <StatsPollinations
-          plant={data.contents.contents.plant}
-          pollinationCount={data.contents.contents.pollinationCount}
-          user={data.contents.contents.user}
-        ></StatsPollinations>
+        {#key data.contents.contents.plant.id}
+          <StatsPollinations
+            plant={data.contents.contents.plant}
+            pollinationCount={data.contents.contents.pollinationCount}
+            user={data.contents.contents.user}
+          ></StatsPollinations>
+        {/key}
       </div>
     {/if}
   {/if}
