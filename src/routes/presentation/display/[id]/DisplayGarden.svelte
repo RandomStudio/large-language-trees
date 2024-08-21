@@ -16,6 +16,10 @@
   const previousHeight = 1620;
   const previousWidth = 540;
 
+  const skewDegrees = 6;
+  const animationLength = 6;
+  const skewOffset = 20;
+
   width = convertWidth(width, innerwidth);
   height = convertHeight(height, innerheight);
   xGarden = convertWidth(xGarden, innerwidth);
@@ -159,7 +163,7 @@
     const maxDistance = position.size / 3;
 
     function randomizeSize(size: number) {
-      return size * (1 + Math.random() * 2 * variationFactor - variationFactor);
+      return size * (1 + Math.random() * 1 * variationFactor - variationFactor);
     }
 
     function randomizePosition(center: number) {
@@ -216,16 +220,28 @@
       <img
         src="/grassjess.png"
         alt="Grass"
-        class="absolute opacity-90"
+        class="absolute opacity-90 skew-animated"
         style={`left: ${grass.x}px; top: ${grass.y}px; width: ${grass.size}px; z-index: ${grass.zIndexGrass};transform:translate(-50%,-50%)`}
+        style:--skew-animation-delay={(Math.random() * -animationLength) / 3 +
+          "s"}
+        style:--skew-animation-length={animationLength + "s"}
+        style:--skew-degrees={skewDegrees + "deg"}
+        style:--negative-skew-degrees={"-" + skewDegrees + "deg"}
+        style:--skew-offset={skewOffset + "px"}
       />
     {/each}
     <img
       src={imageUrl}
       alt="Plant"
-      class="absolute"
+      class="absolute skew-animated"
       style={`left: ${x}px; top: ${y}px; width: ${size}px; height: auto; z-index: ${zIndex}; transform:translate(-50%,-50%)`}
       crossorigin="anonymous"
+      style:--skew-animation-delay={(Math.random() * -animationLength) / 3 +
+        "s"}
+      style:--skew-animation-length={animationLength + "s"}
+      style:--skew-degrees={skewDegrees + "deg"}
+      style:--negative-skew-degrees={"-" + skewDegrees + "deg"}
+      style:--skew-offset={skewOffset + "px"}
     />
     {#if parent1 == null && showGardenName}
       <div
@@ -244,3 +260,27 @@
     {/if}
   {/each}
 </div>
+
+<style>
+  @keyframes skew-animation {
+    0% {
+      transform: skew(var(--skew-degrees))
+        translateX(calc(var(--skew-offset) * -1));
+    }
+    50% {
+      transform: skew(var(--negative-skew-degrees))
+        translateX(calc(var(--skew-offset) * 1));
+    }
+    100% {
+      transform: skew(var(--skew-degrees))
+        translateX(calc(var(--skew-offset) * -1));
+    }
+  }
+
+  .skew-animated {
+    animation:
+      skew-animation var(--skew-animation-length) infinite
+        var(--skew-animation-delay),
+      birth-animation 2s ease-out;
+  }
+</style>
