@@ -97,7 +97,7 @@
 </script>
 
 <div>
-  <div class="absolute w-[300px] h-[300px] bg-transparent"></div>
+  <div class="absolute w-[300px] h-[300px] bg-transparent z-10"></div>
   <canvas
     bind:this={canvasElement}
     width="1024"
