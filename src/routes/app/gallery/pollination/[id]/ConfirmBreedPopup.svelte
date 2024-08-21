@@ -14,6 +14,8 @@
   import { type GenerateImageRequest } from "../../../../api/images/generate/types";
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
 
+  import { fade } from "svelte/transition";
+
   export let candidateChild: InsertPlant;
 
   let error: boolean = false;
@@ -237,11 +239,13 @@
     </div>
   </div>
 
-  <ButtonBottom
-    buttonText="Ok"
-    functionClick={() => handleAction()}
-    width="w-7/12"
-  ></ButtonBottom>
+  <div transition:fade={{ delay: 2000, duration: 1 }}>
+    <ButtonBottom
+      buttonText="Ok"
+      functionClick={() => handleAction()}
+      width="w-7/12"
+    ></ButtonBottom>
+  </div>
 
   <button
     data-umami-event="Cancel Pollination Button"
