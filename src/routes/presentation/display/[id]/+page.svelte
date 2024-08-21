@@ -200,12 +200,14 @@
 
     {#if data.contents.name == bRollNaming.STATISTICS_1}
       <div class="fixed top-0 left-0" transition:fade>
-        <StatsGrowingTime
-          imageUrl={data.contents.contents.plant.imageUrl || ""}
-          plantName={data.contents.contents.plant.commonName}
-          gardenerName={data.contents.contents.user.username}
-          created={data.contents.contents.pollinationTimestamp}
-        ></StatsGrowingTime>
+        {#key data.contents.contents.plant.imageUrl}
+          <StatsGrowingTime
+            imageUrl={data.contents.contents.plant.imageUrl || ""}
+            plantName={data.contents.contents.plant.commonName}
+            gardenerName={data.contents.contents.user.username}
+            created={data.contents.contents.pollinationTimestamp}
+          ></StatsGrowingTime>
+        {/key}
       </div>
     {/if}
 

@@ -3,12 +3,18 @@
   import { getColors } from "./findColors";
   import type { InsertPlant, PublicUserInfo, SelectPlant } from "$lib/types";
   import { POLLINATION_EVENT_TIMEOUT } from "$lib/constants";
+  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+  import { fade } from "svelte/transition";
+  import { FADE_DURATION } from "$lib/constants";
 
   export let plantTop: SelectPlant;
   export let plantBottom: SelectPlant;
   export let authorTop: PublicUserInfo;
   export let authorBottom: PublicUserInfo;
   export let newPlant: InsertPlant;
+
+  export let applyFilters: boolean = false;
+  export let positionStyles: string = "w-full";
 
   let plantNameTop = plantTop.commonName;
   let plantNameBottom = plantBottom.commonName;
@@ -61,6 +67,7 @@
 </script>
 
 <div
+  transition:fade={{ duration: FADE_DURATION }}
   class="w-screen h-screen"
   style="background: linear-gradient({brightColorNew}, {darkColorNew}); display:{status ===
   'PollinationResult'
@@ -76,11 +83,19 @@
 
   <div class="fixed inset-0 flex items-center justify-center">
     <img
+      class="opacity-0"
       src={newPlantimageUrl}
       alt="Resulting plant, hero view"
       bind:this={imgNew}
       crossorigin="anonymous"
     />
+    <div class="absolute w-screen h-screen flex items-center justify-center">
+      <AnimatedPlant
+        imageURL={newPlantimageUrl || ""}
+        {applyFilters}
+        {positionStyles}
+      />
+    </div>
   </div>
 
   <div
@@ -95,6 +110,7 @@
 <!-- ▲ RESULT ▲  //  ▼ EVENT ▼ -->
 
 <div
+  transition:fade={{ duration: FADE_DURATION }}
   class="w-screen h-screen"
   style="display:{status === 'PollinationResult' ? 'none' : 'block'}"
 >
@@ -114,11 +130,19 @@
     {plantNameTop.toUpperCase()}
     <div class="absolute w-[38vh] bottom-[48vh]">
       <img
+        class="opacity-0"
         src={plantImageUrlTop}
         alt="TopImage"
         bind:this={imgTop}
         crossorigin="anonymous"
       />
+      <div class="w-full h-full">
+        <AnimatedPlant
+          imageURL={plantImageUrlTop || ""}
+          {applyFilters}
+          {positionStyles}
+        />
+      </div>
     </div>
   </div>
   <div
@@ -129,61 +153,19 @@
     {plantNameBottom.toUpperCase()}
     <div class="absolute w-[38vh] top-[48vh] rotate-180">
       <img
+        class="opacity-0"
         src={plantImageUrlBottom}
         alt="BottomImage"
         bind:this={imgBottom}
         crossorigin="anonymous"
       />
+      <div class="w-full h-full">
+        <AnimatedPlant
+          imageURL={plantImageUrlBottom || ""}
+          {applyFilters}
+          {positionStyles}
+        />
+      </div>
     </div>
-  </div>
-
-  <div
-    class="w-screen h-[50vh] flex text-center items-center justify-center text-8xl font-jeanb"
-    style="background: linear-gradient({darkColorTop}, {brightColorTop}); color: {brightColorTop};"
-  >
-    {authorNameTop.toUpperCase()}'S <br />
-    {plantNameTop.toUpperCase()}
-  </div>
-
-  <div
-    class="h-[35vh] flex flex-col justify-end items-center relative"
-    style="background-color:{brightColorTop}"
-  >
-    <div
-      class="absolute inset-0 flex items-center justify-center translate-y-[1vh]"
-    >
-      <img
-        src={plantImageUrlTop}
-        alt="Lavender"
-        class="w-[35vh]"
-        bind:this={imgTop}
-        crossorigin="anonymous"
-      />
-    </div>
-  </div>
-
-  <div
-    class="h-[35vh] flex flex-col justify-end items-center relative top-0"
-    style="background-color:{darkColorBottom}"
-  >
-    <div
-      class="absolute inset-0 flex items-center justify-center translate-y-[-1vh]"
-    >
-      <img
-        src={plantImageUrlBottom}
-        alt="Lavender"
-        class="w-[35vh] rotate-180"
-        bind:this={imgBottom}
-        crossorigin="anonymous"
-      />
-    </div>
-  </div>
-
-  <div
-    class="w-full h-[15vh] flex text-center items-center justify-center bottom-[0px] text-8xl font-jeanb z-10"
-    style="background-color: {brightColorBottom}; color: {darkColorBottom};"
-  >
-    {authorNameBottom.toUpperCase()}'S <br />
-    {plantNameBottom.toUpperCase()}
   </div>
 </div>

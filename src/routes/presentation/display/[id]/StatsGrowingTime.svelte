@@ -2,6 +2,10 @@
   import { onDestroy, onMount } from "svelte";
   import { getColors } from "./findColors";
   import { DateTime } from "luxon";
+  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+
+  export let applyFilters: boolean = false;
+  export let positionStyles: string = "w-full";
 
   export let imageUrl: string;
   export let plantName: string;
@@ -49,11 +53,19 @@
 
   <div class="fixed inset-0 flex items-center justify-center">
     <img
+      class="opacity-0"
       alt="Featured Plant"
       src={imageUrl}
       crossorigin="anonymous"
       bind:this={img}
     />
+    <div class="absolute w-screen h-screen flex items-center justify-center">
+      <AnimatedPlant
+        imageURL={imageUrl || ""}
+        {applyFilters}
+        {positionStyles}
+      />
+    </div>
   </div>
 
   <div
