@@ -32,10 +32,31 @@
     x.set(xEnd);
     y.set(yEnd);
   });
+
+  const soundFiles = [
+    "Sound 1 - Schuup.mp3",
+    "Sound 2 - Dududu.mp3",
+    "Sound 3 - Whistles.mp3",
+    "Sound 4 - Schuup2.mp3",
+    "Sound 5 - Dududu2.mp3",
+    "Sound 6 - Ghost.mp3"
+  ];
+
+  function getRandomSoundFile() {
+    const randomIndex = Math.floor(Math.random() * soundFiles.length);
+    return soundFiles[randomIndex];
+  }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class="viewport w-screen h-screen bg-gradient-to-t from-roel_blue from-0% to-roel_rose to-100%"
+  on:click={() => {
+    console.log("SOUND ENABLED");
+    const audio = new Audio(getRandomSoundFile());
+    audio.play();
+  }}
 >
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
     <div

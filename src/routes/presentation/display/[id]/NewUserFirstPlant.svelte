@@ -11,12 +11,12 @@
   export let positionStyles: string = "w-full";
 
   const soundFiles = [
-    "sound1.mp3",
-    "sound2.mp3",
-    "sound3.mp3",
-    "sound4.mp3",
-    "sound5.mp3",
-    "sound6.mp3"
+    "Sound 1 - Schuup.mp3",
+    "Sound 2 - Dududu.mp3",
+    "Sound 3 - Whistles.mp3",
+    "Sound 4 - Schuup2.mp3",
+    "Sound 5 - Dududu2.mp3",
+    "Sound 6 - Ghost.mp3"
   ];
 
   function getRandomSoundFile() {
