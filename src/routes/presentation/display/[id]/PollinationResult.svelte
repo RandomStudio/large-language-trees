@@ -41,6 +41,20 @@
 
   let status = "PollinationEvent";
 
+  const soundFiles = [
+    "/Sound 1 - Schuup.mp3",
+    "/Sound 2 - Dududu.mp3",
+    "/Sound 3 - Whistles.mp3",
+    "/Sound 4 - Schuup2.mp3",
+    "/Sound 5 - Dududu2.mp3",
+    "/Sound 6 - Ghost.mp3"
+  ];
+
+  function getRandomSoundFile() {
+    const randomIndex = Math.floor(Math.random() * soundFiles.length);
+    return soundFiles[randomIndex];
+  }
+
   onMount(() => {
     imgTop.onload = () => {
       const resultTop = getColors(imgTop);
@@ -62,6 +76,8 @@
 
     setTimeout(() => {
       status = "PollinationResult";
+      const audio = new Audio(getRandomSoundFile());
+      audio.play();
     }, POLLINATION_EVENT_TIMEOUT);
   });
 </script>

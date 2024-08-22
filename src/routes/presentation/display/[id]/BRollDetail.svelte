@@ -34,12 +34,12 @@
   });
 
   const soundFiles = [
-    "Sound 1 - Schuup.mp3",
-    "Sound 2 - Dududu.mp3",
-    "Sound 3 - Whistles.mp3",
-    "Sound 4 - Schuup2.mp3",
-    "Sound 5 - Dududu2.mp3",
-    "Sound 6 - Ghost.mp3"
+    "/Sound 1 - Schuup.mp3",
+    "/Sound 2 - Dududu.mp3",
+    "/Sound 3 - Whistles.mp3",
+    "/Sound 4 - Schuup2.mp3",
+    "/Sound 5 - Dududu2.mp3",
+    "/Sound 6 - Ghost.mp3"
   ];
 
   function getRandomSoundFile() {
