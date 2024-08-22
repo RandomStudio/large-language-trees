@@ -39,7 +39,7 @@
       height={540}
       width={540}
       showGardenName={false}
-      showPlantName={true}
+      showPlantName={false}
       colorBGText="roel_rose"
       innerwidth={window.innerWidth}
       innerheight={window.innerHeight}
