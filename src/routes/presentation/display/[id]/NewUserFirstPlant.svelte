@@ -10,6 +10,20 @@
   export let applyFilters: boolean = false;
   export let positionStyles: string = "w-full";
 
+  const soundFiles = [
+    "sound1.mp3",
+    "sound2.mp3",
+    "sound3.mp3",
+    "sound4.mp3",
+    "sound5.mp3",
+    "sound6.mp3"
+  ];
+
+  function getRandomSoundFile() {
+    const randomIndex = Math.floor(Math.random() * soundFiles.length);
+    return soundFiles[randomIndex];
+  }
+
   let brightColor = "rgb(255, 185, 198)";
   let darkColor = "rgb(117, 0, 147)";
 
@@ -20,6 +34,8 @@
       const result = getColors(img);
       brightColor = result.brightColor;
       darkColor = result.darkColor;
+      const audio = new Audio(getRandomSoundFile());
+      audio.play();
     };
   });
 </script>
