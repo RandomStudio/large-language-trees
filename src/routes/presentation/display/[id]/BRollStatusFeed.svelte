@@ -7,7 +7,7 @@
 <div
   class="w-screen h-screen bg-gradient-to-t from-roel_blue from-30% to-roel_rose to-80%"
 >
-  <div class="z-0">
+  <div class="z-[0] scale-150 translate-y-[-17vh] translate-x-[-5vh]">
     <DisplayGarden
       xGarden={0}
       yGarden={100}
@@ -51,7 +51,7 @@
   </div>
 
   <div
-    class="absolute flex flex-col items-start bottom-[2vh] z-20 w-full left-[2vh]"
+    class="absolute flex flex-col items-start bottom-[2vh] z-[99999] w-full left-[2vh]"
   >
     <div class="items-start space-y-[2vh]">
       {#each eventLogs.slice().reverse() as sentence, index}

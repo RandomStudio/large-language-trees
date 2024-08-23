@@ -58,14 +58,11 @@
     heightInMetres: number,
     minHeightPlant: number,
     maxHeightPlant: number,
-    minSizePlant: number,
-    maxSizePlant: number
+    baseScale: number
   ) {
     const heightRange = maxHeightPlant - minHeightPlant;
-    const sizeRange = maxSizePlant - minSizePlant;
     const heightProportion = (heightInMetres - minHeightPlant) / heightRange;
-
-    const proportionalSize = minSizePlant + heightProportion * sizeRange;
+    const proportionalSize = baseScale + heightProportion * baseScale;
 
     return proportionalSize;
   }
@@ -84,41 +81,26 @@
   }
 
   function randomizePositions(plantsInGarden: SelectPlant[]): PlantPosition[] {
-    let averageSizePlant = Math.floor(
-      Math.sqrt(
-        (plantProportion * height * width) / garden.plantsInGarden.length
-      )
-    );
-    let maxHeightPlant = findMinMaxHeight().max;
-    let minHeightPlant = findMinMaxHeight().min;
-    let maxSizePlant = averageSizePlant * 1.35;
-    let minSizePlant = averageSizePlant * 0.65;
-    let radius = Math.min(width / 2, height / 2);
+    const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
+    const baseScale = 300;
+    const radius = Math.min(width / 2, height / 2);
+
     return plantsInGarden.map((plant, index) => {
       if (plant.parent1 === null) {
         return {
           ...plant,
           x: width / 2,
-          y: height / 2,
-          size:
-            Math.floor(
-              calculateProportionalSize(
-                (plant.properties as any).heightInMetres,
-                minHeightPlant,
-                maxHeightPlant,
-                minSizePlant,
-                maxSizePlant
-              )
-            ) || averageSizePlant,
+          y: height / 4,
+          size: baseScale,
           zIndex: Math.floor(height / 2),
           grasses: grassAroundMain(
             {
               x: width / 2,
               y: height / 2,
-              size: averageSizePlant,
+              size: baseScale,
               zIndex: Math.floor(height / 2)
             },
-            averageSizePlant
+            baseScale
           )
         };
       } else {
@@ -128,22 +110,11 @@
         const x = width / 2 + distance * Math.cos(angle);
         const y = height / 2 + distance * Math.sin(angle);
 
-        const size =
-          Math.floor(
-            calculateProportionalSize(
-              (plant.properties as any).heightInMetres,
-              minHeightPlant,
-              maxHeightPlant,
-              minSizePlant,
-              maxSizePlant
-            )
-          ) || averageSizePlant;
+        const size = baseScale;
+        console.log(size);
 
         const zIndex = Math.floor(y);
-        const grasses = grassAroundMain(
-          { x, y, size, zIndex },
-          averageSizePlant
-        );
+        const grasses = grassAroundMain({ x, y, size, zIndex }, baseScale);
         return { ...plant, x, y, size, zIndex, grasses };
       }
     });
@@ -156,14 +127,14 @@
       size: number;
       zIndex: number;
     },
-    averageSizePlant: number
+    baseScale: number
   ) {
-    const baseSize = averageSizePlant * 0.6;
+    const baseSize = baseScale * 0.5;
     const variationFactor = 0.2;
     const maxDistance = position.size / 3;
 
     function randomizeSize(size: number) {
-      return size * (1 + Math.random() * 1 * variationFactor - variationFactor);
+      return size * (1 + Math.random() * variationFactor - variationFactor);
     }
 
     function randomizePosition(center: number) {
@@ -172,32 +143,32 @@
 
     const grassPatches = [
       {
-        x: position.x,
-        y: position.y + position.size / 3,
+        x: position.x * 1,
+        y: position.y + position.size / 2.8 - 100,
         size: randomizeSize(baseSize),
-        zIndexGrass: position.zIndex + 1
+        zIndexGrass: position.zIndex + 0
       },
       {
-        x: position.x - position.size / 3,
-        y: position.y,
-        size: randomizeSize(baseSize),
-        zIndexGrass: position.zIndex
-      },
-      {
-        x: position.x,
-        y: position.y - position.size / 4,
+        x: (position.x - position.size / 3) * 1,
+        y: position.y * 1.2,
         size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
       },
       {
-        x: position.x + position.size / 3,
-        y: position.y,
+        x: position.x * 1.3,
+        y: position.y * 1.2 - position.size / 4,
         size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
       },
       {
-        x: randomizePosition(position.x),
-        y: randomizePosition(position.y),
+        x: (position.x + position.size / 3) * 1,
+        y: position.y * 1.2,
+        size: randomizeSize(baseSize),
+        zIndexGrass: position.zIndex + 1000
+      },
+      {
+        x: randomizePosition(position.x * 1),
+        y: randomizePosition(position.y * 1.2),
         size: randomizeSize(baseSize),
         zIndexGrass: position.zIndex
       }
@@ -221,7 +192,7 @@
         src="/grassjess.png"
         alt="Grass"
         class="absolute opacity-90 skew-animated"
-        style={`left: ${grass.x}px; top: ${grass.y}px; width: ${grass.size}px; z-index: ${grass.zIndexGrass};transform:translate(-50%,-50%)`}
+        style={`left: ${grass.x}px; top: ${grass.y}px; width: ${grass.size}px; z-index: ${grass.zIndexGrass - 100};transform:translate(-50%,-50%)`}
         style:--skew-animation-delay={(Math.random() * -animationLength) / 3 +
           "s"}
         style:--skew-animation-length={animationLength + "s"}
@@ -245,7 +216,7 @@
     />
     {#if parent1 == null && showGardenName}
       <div
-        class="absolute z-2000 font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
+        class="absolute z-2000 font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50"
         style={`left: ${x - 120}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:2000`}
       >
         {garden.name}

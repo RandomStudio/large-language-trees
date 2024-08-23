@@ -10,8 +10,8 @@
   export let garden: GardenWithPlants;
 
   const duration = BROLL_TIMEOUT; //ms
-  const StartScale = 4;
-  const EndScale = 1;
+  const StartScale = 6;
+  const EndScale = 2;
 
   let zoom = tweened(StartScale, { duration, easing: cubicInOut });
 
@@ -24,17 +24,14 @@
   class="w-screen h-screen relative overflow-hidden bg-gradient-to-t from-roel_blue from-60% to-roel_rose to-85%"
 >
   <div
-    class="absolute z-10 w-screen h-[19vh] flex text-center text-roel_purple py-[3vh] justify-center text-9xl font-gyst"
+    class="absolute z-10 w-screen h-[30vh] flex text-center text-roel_purple py-[3vh] justify-center text-9xl font-gyst bg-gradient-to-b from-roel_rose from-20%"
   >
     {userName.toUpperCase()}'S <br /> GARDEN
   </div>
-  <div
-    class="absolute w-screen h-screen z-0"
-    style="transform: scale({$zoom});"
-  >
+  <div class="w-screen h-screen z-0" style="transform: scale({$zoom});">
     <DisplayGarden
       {garden}
-      xGarden={0}
+      xGarden={-65}
       yGarden={500}
       height={540}
       width={540}

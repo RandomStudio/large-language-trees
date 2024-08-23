@@ -7,28 +7,34 @@
 
 <div class="bg-roel_purple w-screen h-screen flex flex-col justify-end">
   <div
-    class="w-full h-[65vh] flex items-end pb-[1vh] text-left pl-8 text-roel_purple text-9xl font-gyst bg-gradient-to-t from-roel_rose from-20% to-roel_blue to-80%"
+    class="w-full h-[65vh] flex items-end text-left pl-8 text-roel_purple text-9xl font-gyst bg-gradient-to-t from-roel_rose from-20% to-roel_blue to-80%"
   >
-    Most Active
-    <br />Pollinators:
+    <div
+      class="w-screen z-[9999] bg-gradient-to-t from-roel_rose from-20% pb-[1vh]"
+    >
+      Most Active
+      <br />Pollinators:
+    </div>
   </div>
 
-  <DisplayGarden
-    garden={topGarden}
-    xGarden={0}
-    yGarden={200}
-    width={540}
-    height={540}
-    showGardenName={true}
-    showPlantName={false}
-    colorBGText={"roel_rose"}
-    innerwidth={window.innerWidth}
-    innerheight={window.innerHeight}
-  ></DisplayGarden>
+  <div class="absolute w-full h-full scale-150">
+    <DisplayGarden
+      garden={topGarden}
+      xGarden={-40}
+      yGarden={200}
+      width={540}
+      height={540}
+      showGardenName={true}
+      showPlantName={false}
+      colorBGText={"roel_rose"}
+      innerwidth={window.innerWidth}
+      innerheight={window.innerHeight}
+    ></DisplayGarden>
+  </div>
 
   {#each topPollinators as userInfo, index}
     <div
-      class="w-full h-[7vh] flex items-center justify-between px-10 {index %
+      class="w-full h-[7vh] flex items-center justify-between px-10 z-[9999] {index %
         2 ===
       0
         ? 'bg-roel_purple'
