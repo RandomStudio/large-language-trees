@@ -7,7 +7,7 @@
   import { goto } from "$app/navigation";
   import ReturnButton from "../../../../../components/ReturnButton.svelte";
   import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
-  import AnimatedPlant from "../../../../../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   import {
     addConfirmedPlant,

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getColors } from "./findColors";
-  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   export let imageUrl: string;
   export let plantName: string;

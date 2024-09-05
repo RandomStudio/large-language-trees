@@ -1,9 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
-  import ButtonBottom from "./ButtonBottom.svelte";
-
-  import PlantDisplay from "./PlantDisplay.svelte";
+  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "./ReturnButton.svelte";
 
   export let plantDetails: SelectPlant;

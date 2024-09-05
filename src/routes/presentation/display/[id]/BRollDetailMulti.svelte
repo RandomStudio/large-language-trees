@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { tweened } from "svelte/motion";
   import { cubicIn, cubicOut } from "svelte/easing";
-  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   export let plantsWithusers: { plant: SelectPlant; user: PublicUserInfo }[];
   export let applyFilters: boolean = false;

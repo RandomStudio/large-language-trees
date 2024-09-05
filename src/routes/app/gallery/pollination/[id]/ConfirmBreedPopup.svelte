@@ -8,7 +8,7 @@
   } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "$lib/constants";
   import TransparencyMaker from "../../../../../components/TransparencyMaker.svelte";
-  import ButtonBottom from "../../../../../components/ButtonBottom.svelte";
+  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
   import PopupError from "../../../../../components/PopupError.svelte";
   import { type GenerateImageRequest } from "../../../../api/images/generate/types";

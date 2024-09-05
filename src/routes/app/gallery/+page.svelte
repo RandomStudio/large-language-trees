@@ -9,7 +9,7 @@
   import { onDestroy, onMount } from "svelte";
   import { DateTime } from "luxon";
 
-  import PlantDisplay from "../../../components/PlantDisplay.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import PopupInfo from "../../../components/PopupInfo.svelte";
 
   import { invalidateAll } from "$app/navigation";

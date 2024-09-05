@@ -3,7 +3,7 @@
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
-  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   export let plant: SelectPlant;
   export let user: PublicUserInfo;

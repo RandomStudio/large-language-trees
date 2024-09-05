@@ -3,7 +3,7 @@
   import { getColors } from "./findColors";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import writtenNumber from "written-number";
-  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   export let applyFilters: boolean = false;
   export let positionStyles: string = "w-full";
