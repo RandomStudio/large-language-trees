@@ -3,7 +3,7 @@
   import { getColors } from "./findColors";
   import type { InsertPlant, PublicUserInfo, SelectPlant } from "$lib/types";
   import { POLLINATION_EVENT_TIMEOUT } from "$lib/constants";
-  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
   import { fade } from "svelte/transition";
   import { FADE_DURATION } from "$lib/constants";
 

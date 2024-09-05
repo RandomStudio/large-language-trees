@@ -7,10 +7,10 @@
     AttachImageResponse
   } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "$lib/constants";
-  import TransparencyMaker from "../../../../../components/TransparencyMaker.svelte";
-  import ButtonBottom from "../../../../../components/ButtonBottom.svelte";
-  import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
-  import PopupError from "../../../../../components/PopupError.svelte";
+  import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
+  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
+  import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
+  import PopupError from "./PopupError.svelte";
   import { type GenerateImageRequest } from "../../../../api/images/generate/types";
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
 
@@ -18,7 +18,7 @@
 
   export let candidateChild: InsertPlant;
 
-  let error: boolean = false;
+  let userErrorMessage: string | null = null;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
    * returning to the parent component ready to add to the database.
@@ -142,6 +142,8 @@
                 replaceImage(url);
               } else {
                 console.error("error updating image on backend:");
+                userErrorMessage =
+                  "Whoops, something went wrong with that image!";
               }
             } else {
               console.log("Got status code", res.status, "; try again...");
@@ -150,7 +152,7 @@
         }
       } else {
         console.error("Error fetching generated new image");
-        error = true;
+        userErrorMessage = "A bird came and took the seed image away!";
       }
     }
   };
@@ -190,7 +192,7 @@
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
   >
     <div class="flex flex-col items-center">
-      <WaitingSpinner></WaitingSpinner>
+      <PlantMorphSpinner></PlantMorphSpinner>
       <div
         id="message"
         class="text-roel_blue font-primer text-2xl mt-4 text-center"
@@ -240,10 +242,7 @@
   </div>
 
   <div transition:fade={{ delay: 2000, duration: 1 }}>
-    <ButtonBottom
-      buttonText="Ok"
-      functionClick={() => handleAction()}
-      width="w-7/12"
+    <ButtonBottom text="Ok" onClick={handleAction} width="w-7/12"
     ></ButtonBottom>
   </div>
 
@@ -255,6 +254,6 @@
   >
 {/if}
 
-{#if error}
-  <PopupError {candidateChild} {onCancel} {onConfirm}></PopupError>
+{#if userErrorMessage}
+  <PopupError errorText={userErrorMessage} onClick={onCancel}></PopupError>
 {/if}

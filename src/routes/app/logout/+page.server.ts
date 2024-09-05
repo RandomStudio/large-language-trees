@@ -1,6 +1,9 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db";
+import { eq } from "drizzle-orm";
+import { users } from "$lib/server/schema";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const username = locals.user?.username;
@@ -11,7 +14,10 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   if (userId) {
-    return { username, isAdmin: true };
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId)
+    });
+    return { username, isAdmin: user?.isAdmin || false };
   } else {
     throw Error("userId missing");
   }

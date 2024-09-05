@@ -1,15 +1,13 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
-  import ButtonBottom from "./ButtonBottom.svelte";
-  import PlantDisplay from "./PlantDisplay.svelte";
-  import ReturnButton from "./ReturnButton.svelte";
+  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
 
   export let plantDetails: SelectPlant;
 
-  function handleClose() {
-    goto("../");
-  }
+  export let handleClose: () => void;
 </script>
 
 <ReturnButton onClicked={handleClose}></ReturnButton>
@@ -30,5 +28,4 @@
   </div>
 </div>
 
-<ButtonBottom buttonText="Back" functionClick={handleClose} width="w-7/12"
-></ButtonBottom>
+<ButtonBottom text="Back" onClick={handleClose} width="w-7/12"></ButtonBottom>

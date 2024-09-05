@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from "svelte";
   import { getColors } from "./findColors";
   import { DateTime } from "luxon";
-  import AnimatedPlant from "../../../../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   export let applyFilters: boolean = false;
   export let positionStyles: string = "w-full";

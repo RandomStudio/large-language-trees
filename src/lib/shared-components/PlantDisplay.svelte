@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
   import { page } from "$app/stores";
-  import AnimatedPlant from "../components/AnimatedPlant.svelte";
+  import AnimatedPlant from "./AnimatedPlant.svelte";
 
   export let plant: SelectPlant;
   export let applyFilters: boolean = false;

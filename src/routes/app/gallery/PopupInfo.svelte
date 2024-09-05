@@ -1,10 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
-  import ButtonBottom from "./ButtonBottom.svelte";
-
-  import PlantDisplay from "./PlantDisplay.svelte";
-  import ReturnButton from "./ReturnButton.svelte";
+  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
 
   export let plantDetails: SelectPlant;
   export let closePopup: () => any;
@@ -36,7 +35,7 @@
 
 {#if isPollinatingPlant || isOriginalPlant}
   <ButtonBottom
-    buttonText="Start Pollinating"
-    functionClick={() => goto("gallery/pollination/" + plantDetails.id)}
+    text="Start Pollinating"
+    onClick={() => goto("gallery/pollination/" + plantDetails.id)}
   ></ButtonBottom>
 {/if}

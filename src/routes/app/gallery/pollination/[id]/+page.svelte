@@ -1,13 +1,13 @@
 <script lang="ts">
-  import QrGenerate from "../../../../../components/PollinationQrCode.svelte";
+  import QrGenerate from "./PollinationQrCode.svelte";
   import { onMount, onDestroy } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "./ConfirmBreedPopup.svelte";
-  import PopupDejaVu from "../../../../../components/popupDejaVu.svelte";
+  import PopupDejaVu from "./PopupDejaVu.svelte";
   import { goto } from "$app/navigation";
-  import ReturnButton from "../../../../../components/ReturnButton.svelte";
-  import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
-  import AnimatedPlant from "../../../../../components/AnimatedPlant.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
+  import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
+  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   import {
     addConfirmedPlant,
@@ -44,12 +44,12 @@
   let otherUserId: string | null = null;
 
   let waiting: boolean = false;
-  let child: SelectPlant | null = null;
+  let alreadyExistingBreed: SelectPlant | null = null;
 
   let isLoadingCamera = true;
   let errorMessage: string | null = null;
 
-  $: existingChild = (
+  const findExistingChild = (
     parents: [SelectPlant, SelectPlant]
   ): SelectPlant | null =>
     data.seedbank.plantsInSeedbank.find(
@@ -162,8 +162,8 @@
     if (res.status == 200) {
       parent2 = await res.json();
       if (parent1 && parent2 && parent1.id != parent2.id) {
-        child = existingChild([parent1, parent2]);
-        if (child === null) {
+        alreadyExistingBreed = findExistingChild([parent1, parent2]);
+        if (alreadyExistingBreed === null) {
           waiting = true;
           try {
             candidateChild = await confirmBreed(data.user.id, [
@@ -181,8 +181,6 @@
             // Should this redirect or display error notification?
           }
         }
-      } else {
-        child = parent1 || null;
       }
     } else {
       throw Error(`Failed to fetch plant with id ${parent2Id}`);
@@ -259,7 +257,7 @@
 
 <div class="bg-roel_blue rounded-b-full">
   <div class="pt-[17px] mx-10 font-primer text-2xl text-roel_green text-left">
-    {#if parent1}
+    {#if parent1 && !alreadyExistingBreed}
       <p class=" text-2xl mr-6">
         Scan another gardeners QR to crossbreed the {parent1.commonName}
       </p>
@@ -294,12 +292,6 @@
   </div>
 </div>
 
-<!-- <div class="fixed top-0 left-0" style:z-index={100}>
-  <pre>
-    <code>{JSON.stringify({ candidateChild, waiting }, null, 2)}</code>
-  </pre>
-</div> -->
-
 {#if candidateChild}
   <ConfirmBreedPopup
     {candidateChild}
@@ -316,10 +308,17 @@
   <div
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
   >
-    <WaitingSpinner></WaitingSpinner>
+    <PlantMorphSpinner></PlantMorphSpinner>
   </div>
 {/if}
 
-{#if child}
-  <PopupDejaVu plantDetails={child} />
+{#if alreadyExistingBreed}
+  <PopupDejaVu
+    plantDetails={alreadyExistingBreed}
+    handleClose={async () => {
+      alreadyExistingBreed = null;
+      busy = false; // Allow scanning again if the process is cancelled
+      await startQrScanning();
+    }}
+  />
 {/if}

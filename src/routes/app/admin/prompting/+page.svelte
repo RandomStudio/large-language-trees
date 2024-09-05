@@ -3,6 +3,7 @@
   import type {
     GeneratedImage,
     GeneratedImageResult,
+    GeneratePlantRequestBody,
     InsertPlant,
     PromptConfig,
     SelectPlant
@@ -11,15 +12,14 @@
     pickMultipleRandomElements,
     pickRandomElement
   } from "random-elements";
-  import PromptConfigSection from "../../../../components/PromptConfigSection.svelte";
+  import PromptConfigSection from "./PromptConfigSection.svelte";
   import { onMount } from "svelte";
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-  import Spinner from "../../../../components/Spinner.svelte";
+  import Spinner from "$lib/shared-components/BasicUtilitySpinner.svelte";
   import DefaultPrompt from "../../../../defaults/prompt-config";
-  import type { GeneratePlantRequestBody } from "../../../api/plants/generate/types";
-  import { type GenerateImageRequest } from "../../../api/images/generate/types";
-  import TransparencyMaker from "../../../../components/TransparencyMaker.svelte";
+  import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import { v4 as uuidv4 } from "uuid";
+  import { type GenerateImageRequest } from "../../../api/images/generate/types";
 
   enum Tabs {
     TEXT,
@@ -92,7 +92,9 @@
       const bodyData: GeneratePlantRequestBody = {
         prompt: finalTextPrompt,
         parents: [parent1, parent2],
-        model: data.text.model
+        model: data.text.model,
+        // TODO: the userId is not necessarily "admin"!
+        userId: "admin"
       };
       const offspring = (await (
         await fetch("/api/plants/generate", {
