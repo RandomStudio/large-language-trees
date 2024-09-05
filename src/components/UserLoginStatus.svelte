@@ -5,6 +5,8 @@
   export let isAdmin: boolean;
 </script>
 
+<div>{username}: {isAdmin ? "admin" : "not-admin"}</div>
+
 <form method="post" action="?/logout" use:enhance>
   <button
     data-test="logout-button"
