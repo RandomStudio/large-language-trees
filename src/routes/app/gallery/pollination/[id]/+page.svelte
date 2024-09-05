@@ -292,12 +292,6 @@
   </div>
 </div>
 
-<!-- <div class="fixed top-0 left-0" style:z-index={100}>
-  <pre>
-    <code>{JSON.stringify({ candidateChild, waiting }, null, 2)}</code>
-  </pre>
-</div> -->
-
 {#if candidateChild}
   <ConfirmBreedPopup
     {candidateChild}
