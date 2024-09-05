@@ -74,7 +74,18 @@
   {#each data.displays as display}
     <div class="border-solid border-2 border-slate-300 m-2 p-2">
       <h3 class="font-bold border-b-slate-200 border-b-2">
-        Display "{display.id}"
+        Display "{display.id}":
+        <a
+          href={`/presentation/display/${display.id}`}
+          target="_blank"
+          rel="noopener"
+        >
+          <span
+            class="border-2 border-slate-100 p-2 rounded-md bg-slate-50 text-sm text-slate-500 shadow-md"
+          >
+            Open display in new tab
+          </span>
+        </a>
       </h3>
       <div class="h-60 overflow-scroll">
         Contents: <pre class="text-xs"><code
