@@ -22,7 +22,11 @@
     >
       A bird came and took away the seed
     </div>
-    <ButtonBottom buttonText="Try again" functionClick={() => (display = false)}
+    <ButtonBottom
+      text="Try again"
+      onClick={() => {
+        display = false;
+      }}
     ></ButtonBottom>
   </div>
 </div>

@@ -30,5 +30,4 @@
   </div>
 </div>
 
-<ButtonBottom buttonText="Back" functionClick={handleClose} width="w-7/12"
-></ButtonBottom>
+<ButtonBottom text="Back" onClick={handleClose} width="w-7/12"></ButtonBottom>

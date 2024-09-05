@@ -240,10 +240,7 @@
   </div>
 
   <div transition:fade={{ delay: 2000, duration: 1 }}>
-    <ButtonBottom
-      buttonText="Ok"
-      functionClick={() => handleAction()}
-      width="w-7/12"
+    <ButtonBottom text="Ok" onClick={handleAction} width="w-7/12"
     ></ButtonBottom>
   </div>
 

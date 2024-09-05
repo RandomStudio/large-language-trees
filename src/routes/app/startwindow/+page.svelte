@@ -14,25 +14,6 @@
   let currentStage = Stage.WELCOME_FIRST_PLANT;
 
   let selectedPlant = data.seedbank.plantsInSeedbank[0].plant;
-  // let showMessage = true;
-  // let showNewParagraph = false; // Control visibility of the new paragraph
-  // let showDescription = true; // Control visibility of the plant description
-  // let showBarcode = false; // Control visibility of the barcode
-
-  // let buttonText = "Great!";
-
-  function handleButtonClick() {
-    if (currentStage === Stage.WELCOME_FIRST_PLANT) {
-      // showMessage = false;
-      // showDescription = false; // Hide the plant description
-      // showNewParagraph = true; // Show the new paragraph
-      // showBarcode = true; // Show the barcode
-      // buttonText = "Start Pollinating";
-      currentStage = Stage.NOW_FIND;
-    } else {
-      goto("./gallery/pollination/" + selectedPlant.id); // Navigate to the pollination route
-    }
-  }
 </script>
 
 <div class="bg-roel_blue rounded-b-full">
@@ -75,10 +56,16 @@
   </div>
   <div class="mt-4">
     <ButtonBottom
-      buttonText={currentStage === Stage.WELCOME_FIRST_PLANT
+      text={currentStage === Stage.WELCOME_FIRST_PLANT
         ? "Great!"
         : "Start Pollinating"}
-      functionClick={handleButtonClick}
+      onClick={() => {
+        if (currentStage === Stage.WELCOME_FIRST_PLANT) {
+          currentStage = Stage.NOW_FIND;
+        } else {
+          goto("./gallery/pollination/" + selectedPlant.id); // Navigate to the pollination route
+        }
+      }}
     />
   </div>
 </div>

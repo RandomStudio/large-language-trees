@@ -1,5 +1,5 @@
 <script lang="ts">
-  import QrGenerate from "../../../../../components/PollinationQrCode.svelte";
+  import QrGenerate from "./PollinationQrCode.svelte";
   import { onMount, onDestroy } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "./ConfirmBreedPopup.svelte";
