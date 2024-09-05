@@ -10,7 +10,7 @@
   import { DateTime } from "luxon";
 
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import PopupInfo from "../../../components/PopupInfo.svelte";
+  import PopupInfo from "./PopupInfo.svelte";
 
   import { invalidateAll } from "$app/navigation";
   import { decode, InputPlug, TetherAgent } from "tether-agent";

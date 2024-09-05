@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PromptSection } from "../defaults/prompt-config";
+  import type { PromptSection } from "$lib/types";
 
   export let sectionData: PromptSection;
   export let name: string;
