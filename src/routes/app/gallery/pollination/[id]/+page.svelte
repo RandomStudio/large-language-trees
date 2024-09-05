@@ -6,7 +6,7 @@
   import PopupDejaVu from "./PopupDejaVu.svelte";
   import { goto } from "$app/navigation";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
-  import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
+  import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
   import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   import {
@@ -308,7 +308,7 @@
   <div
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50 flex-col"
   >
-    <WaitingSpinner></WaitingSpinner>
+    <PlantMorphSpinner></PlantMorphSpinner>
   </div>
 {/if}
 

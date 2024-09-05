@@ -15,7 +15,7 @@
   import PromptConfigSection from "./PromptConfigSection.svelte";
   import { onMount } from "svelte";
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-  import Spinner from "../../../../components/Spinner.svelte";
+  import Spinner from "$lib/shared-components/BasicUtilitySpinner.svelte";
   import DefaultPrompt from "../../../../defaults/prompt-config";
   import { type GenerateImageRequest } from "../../../api/images/generate/types";
   import TransparencyMaker from "../../../../components/TransparencyMaker.svelte";

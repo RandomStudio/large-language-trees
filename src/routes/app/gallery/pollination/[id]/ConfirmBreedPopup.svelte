@@ -9,7 +9,7 @@
   import { TOLERANCE_SIMPLE } from "$lib/constants";
   import TransparencyMaker from "../../../../../components/TransparencyMaker.svelte";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
-  import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
+  import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
   import PopupError from "./PopupError.svelte";
   import { type GenerateImageRequest } from "../../../../api/images/generate/types";
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
@@ -192,7 +192,7 @@
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
   >
     <div class="flex flex-col items-center">
-      <WaitingSpinner></WaitingSpinner>
+      <PlantMorphSpinner></PlantMorphSpinner>
       <div
         id="message"
         class="text-roel_blue font-primer text-2xl mt-4 text-center"
