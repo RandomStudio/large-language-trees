@@ -3,13 +3,11 @@
   import type { SelectPlant } from "$lib/types";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import ReturnButton from "./ReturnButton.svelte";
+  import ReturnButton from "../../../../../components/ReturnButton.svelte";
 
   export let plantDetails: SelectPlant;
 
-  function handleClose() {
-    goto("../");
-  }
+  export let handleClose: () => void;
 </script>
 
 <ReturnButton onClicked={handleClose}></ReturnButton>
