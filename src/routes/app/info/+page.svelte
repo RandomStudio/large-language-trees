@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ReturnButton from "../../../components/ReturnButton.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
 
   function goBack() {
     window.history.back();

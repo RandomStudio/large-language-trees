@@ -5,7 +5,7 @@
   import ConfirmBreedPopup from "./ConfirmBreedPopup.svelte";
   import PopupDejaVu from "./PopupDejaVu.svelte";
   import { goto } from "$app/navigation";
-  import ReturnButton from "../../../../../components/ReturnButton.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import WaitingSpinner from "../../../../../components/WaitingSpinner.svelte";
   import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 

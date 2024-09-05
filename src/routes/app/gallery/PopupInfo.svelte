@@ -3,7 +3,7 @@
   import type { SelectPlant } from "$lib/types";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import ReturnButton from "../../../components/ReturnButton.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
 
   export let plantDetails: SelectPlant;
   export let closePopup: () => any;
