@@ -42,7 +42,7 @@ export const load: PageServerLoad = async ({
         garden,
         plantId,
         otherPlantId: url.searchParams.get("parent2"),
-        otherUserId: otherUserId
+        otherUserId
       };
     } else {
       throw Error("could not find user when querying");

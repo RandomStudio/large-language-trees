@@ -11,16 +11,18 @@
   import {
     addConfirmedPlant,
     addConfirmedPlantToOtherUser,
-    confirmBreed
-  } from "./confirmBreed";
+    startTextGeneration
+  } from "./pollination";
   import type {
     EnhancedGardenViewData,
     InsertPlant,
+    PublicUserInfo,
     SelectPlant,
     SelectSeedbank
   } from "$lib/types";
   import type { EventNewPollination } from "$lib/events.types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import NameChildPlant from "./NameChildPlant.svelte";
 
   export let data: EnhancedGardenViewData;
 
@@ -42,12 +44,15 @@
 
   let candidateChild: InsertPlant | null = null;
   let otherUserId: string | null = null;
+  let otherUserName: string | null = null;
 
   let waiting: boolean = false;
   let alreadyExistingBreed: SelectPlant | null = null;
 
   let isLoadingCamera = true;
   let errorMessage: string | null = null;
+
+  let proposedNewName: string | null = null;
 
   const findExistingChild = (
     parents: [SelectPlant, SelectPlant]
@@ -65,6 +70,7 @@
           "otherPlantId and otherUserId provided by URL search params; skip scanning..."
         );
         otherUserId = data.otherUserId;
+        otherUserName = (await getUserDetailsFor(otherUserId)).username;
         onCodeScanned(data.otherPlantId).then(() => {
           "onCodeScanned success; skipped actual scanning and used searchparams";
         });
@@ -81,6 +87,16 @@
       // goto("/app/gallery");
     }
   });
+
+  async function getUserDetailsFor(id: string): Promise<PublicUserInfo> {
+    const res = await fetch(`/api/users/${id}`);
+    if (res.status === 200) {
+      const user = (await res.json()) as PublicUserInfo;
+      return user;
+    } else {
+      throw Error("Failed to find user with id " + id);
+    }
+  }
 
   async function getStream() {
     try {
@@ -140,6 +156,7 @@
         console.log("scan text:", { part1, part2 });
         const parent2Id = part1;
         otherUserId = part2;
+
         onCodeScanned(parent2Id)
           .then(() => {
             console.log("(onCodeScanned) ...done");
@@ -156,6 +173,10 @@
   }
 
   async function onCodeScanned(parent2Id: string) {
+    if (otherUserId) {
+      otherUserName = (await getUserDetailsFor(otherUserId)).username;
+    }
+
     stopScanning();
     const res = await fetch("/api/plants/" + parent2Id);
 
@@ -164,22 +185,24 @@
       if (parent1 && parent2 && parent1.id != parent2.id) {
         alreadyExistingBreed = findExistingChild([parent1, parent2]);
         if (alreadyExistingBreed === null) {
-          waiting = true;
-          try {
-            candidateChild = await confirmBreed(data.user.id, [
-              parent1,
-              parent2
-            ]);
-            if (candidateChild) {
-              console.log("Got candidate child OK:", candidateChild);
-              busy = false;
-            }
-            waiting = false;
-            console.log({ candidateChild });
-          } catch (e) {
-            console.error("Error getting candidate child", e);
-            // Should this redirect or display error notification?
-          }
+          proposedNewName = "";
+
+          // waiting = true;
+          // try {
+          //   candidateChild = await startTextGeneration(data.user.id, [
+          //     parent1,
+          //     parent2
+          //   ]);
+          //   if (candidateChild) {
+          //     console.log("Got candidate child OK:", candidateChild);
+          //     busy = false;
+          //   }
+          //   waiting = false;
+          //   console.log({ candidateChild });
+          // } catch (e) {
+          //   console.error("Error getting candidate child", e);
+          //   // Should this redirect or display error notification?
+          // }
         }
       }
     } else {
@@ -291,6 +314,10 @@
     {/if}
   </div>
 </div>
+
+{#if proposedNewName !== null && otherUserName}
+  <NameChildPlant {otherUserName} />
+{/if}
 
 {#if candidateChild}
   <ConfirmBreedPopup

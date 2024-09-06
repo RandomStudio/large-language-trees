@@ -27,7 +27,7 @@ const awaitTimeout = async (t: number): Promise<void> =>
     }, t);
   });
 
-export async function confirmBreed(
+export async function startTextGeneration(
   userId: string,
   parents: [SelectPlant, SelectPlant]
 ): Promise<InsertPlant> {
