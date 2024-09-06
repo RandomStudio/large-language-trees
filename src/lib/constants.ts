@@ -56,3 +56,5 @@ export const NEW_USER_TIMEOUT = 8000;
 export const POLLINATION_EVENT_TIMEOUT = 8000;
 export const POLLINATION_RESULT_TIMEOUT = 16000;
 export const FADE_DURATION = 1500;
+
+export const MAX_CANVASSES = 4;

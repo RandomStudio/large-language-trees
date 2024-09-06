@@ -16,7 +16,11 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
   import { type EventNewPollination } from "$lib/events.types";
-  import { DURATION_TILL_FERTILE, PLUG_NAMES } from "$lib/constants";
+  import {
+    DURATION_TILL_FERTILE,
+    MAX_CANVASSES,
+    PLUG_NAMES
+  } from "$lib/constants";
   import PlantWasAddedPopup from "./pollination/PlantWasAddedPopup.svelte";
 
   function addTimeLeft(inputData: GardenViewData) {
@@ -134,7 +138,11 @@
         }}
         class="cursor-pointer mt-4"
       >
-        <PlantDisplay imageUrl={plant.imageUrl || ""} applyFilters={false} />
+        <PlantDisplay
+          disableAnimation={index > MAX_CANVASSES - 1}
+          imageUrl={plant.imageUrl || ""}
+          applyFilters={false}
+        />
       </div>
       <div class="mt-4 text-center">
         <button
@@ -154,7 +162,11 @@
         }}
         class="cursor-pointer mt-4"
       >
-        <PlantDisplay imageUrl={plant.imageUrl || ""} applyFilters={true} />
+        <PlantDisplay
+          disableAnimation={index > MAX_CANVASSES - 1}
+          imageUrl={plant.imageUrl || ""}
+          applyFilters={true}
+        />
       </div>
       <div class="mt-4 text-center">
         <button

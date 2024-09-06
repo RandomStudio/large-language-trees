@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { SelectPlant } from "$lib/types";
   import {
     Application,
     Assets,
@@ -7,13 +6,11 @@
     Container,
     MeshRope,
     Graphics,
-    Texture,
     Sprite,
     RenderTexture
   } from "pixi.js";
   import { onMount } from "svelte";
 
-  // export let plant: SelectPlant;
   export let imageUrl: string;
   export let commonName: string | null = null;
   export let applyFilters: boolean = false;

@@ -17,7 +17,10 @@
     <div class="mx-10 font-primer text-roel_blue text-left mt-20">
       <p class="text-2xl">Whoops! C'est un déjà-vu!</p>
       <div class="mt-4">
-        <PlantDisplay plant={plantDetails} applyFilters={false} />
+        <PlantDisplay
+          imageUrl={plantDetails.imageUrl || ""}
+          applyFilters={false}
+        />
         <p class="font-primer text-base mt-4">
           {plantDetails.description}
         </p>
