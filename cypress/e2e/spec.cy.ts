@@ -3,6 +3,7 @@ describe("Admin functions", () => {
     cy.visit("/");
     cy.get('[data-test="username-field"]').should("exist").type("admin");
     cy.get('[data-test="start-button"]').should("exist").click();
+    cy.get('[data-test="login-anyway"]').should("exist").click();
     cy.get('[data-test="admin-reset-button"]').should("exist").click();
     cy.location("pathname").should("equal", "/app");
     cy.get('[data-test="username-field"]').should("exist").type("admin");
@@ -28,6 +29,7 @@ describe.only("Home page", () => {
     cy.location("pathname").should("equal", "/app");
     cy.get('[data-test="username-field"]').should("exist").type("admin");
     cy.get('[data-test="start-button"]').should("exist").click();
+    cy.get('[data-test="login-anyway"]').should("exist").click();
     cy.location("pathname").should("equal", "/app/admin");
     cy.getByData("lets-pollinate-header").should("not.exist");
   });
@@ -63,6 +65,7 @@ describe.only("Home page", () => {
     // Log in again...
     cy.get('[data-test="username-field"]').should("exist").type(randomUsername);
     cy.get('[data-test="start-button"]').should("exist").click();
+    cy.get('[data-test="login-anyway"]').should("exist").click();
     cy.location("pathname").should("equal", "/app/gallery");
     cy.get('[data-test="start-pollinating-button"]')
       .should("exist")

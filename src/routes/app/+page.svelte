@@ -62,6 +62,8 @@
             class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-sm text-center"
           >
             Choose a different username, or <button
+              data-umami-event="Login Anyway"
+              data-test="login-anyway"
               class="underline"
               formaction="?/loginExistingUser">log in</button
             >
