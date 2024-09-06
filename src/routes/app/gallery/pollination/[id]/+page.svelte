@@ -1,5 +1,5 @@
 <script lang="ts">
-  import QrGenerate from "./PollinationQrCode.svelte";
+  import PollinationQrCode from "./PollinationQrCode.svelte";
   import { onMount, onDestroy } from "svelte";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import ConfirmBreedPopup from "./ConfirmBreedPopup.svelte";
@@ -285,7 +285,7 @@
           />
         </div>
         <div class="mt-2 mx-16 absolute place-self-center">
-          <QrGenerate plantId={parent1.id} userId={data.user.id} />
+          <PollinationQrCode plantId={parent1.id} userId={data.user.id} />
         </div>
       </div>
     {/if}
