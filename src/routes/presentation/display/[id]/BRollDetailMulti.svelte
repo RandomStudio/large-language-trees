@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { tweened } from "svelte/motion";
   import { cubicIn, cubicOut } from "svelte/easing";
-  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
   export let plantsWithusers: { plant: SelectPlant; user: PublicUserInfo }[];
   export let applyFilters: boolean = false;
@@ -77,8 +77,8 @@
         {plant1.user.username}'s
         {plant1.plant.commonName}
       </div>
-      <AnimatedPlant
-        imageURL={plant1.plant.imageUrl || ""}
+      <PlantDisplay
+        imageUrl={plant1.plant.imageUrl || ""}
         {applyFilters}
         {positionStyles}
       />
@@ -93,8 +93,8 @@
         {plant2.user.username}'s
         {plant2.plant.commonName}
       </div>
-      <AnimatedPlant
-        imageURL={plant2.plant.imageUrl || ""}
+      <PlantDisplay
+        imageUrl={plant2.plant.imageUrl || ""}
         {applyFilters}
         {positionStyles}
       />
@@ -109,8 +109,8 @@
         {plant3.user.username}'s
         {plant3.plant.commonName}
       </div>
-      <AnimatedPlant
-        imageURL={plant3.plant.imageUrl || ""}
+      <PlantDisplay
+        imageUrl={plant3.plant.imageUrl || ""}
         {applyFilters}
         {positionStyles}
       />
@@ -125,8 +125,8 @@
         {plant4.user.username}'s
         {plant4.plant.commonName}
       </div>
-      <AnimatedPlant
-        imageURL={plant4.plant.imageUrl || ""}
+      <PlantDisplay
+        imageUrl={plant4.plant.imageUrl || ""}
         {applyFilters}
         {positionStyles}
       />

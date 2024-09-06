@@ -7,7 +7,6 @@
   import { goto } from "$app/navigation";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
-  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
 
   import {
     addConfirmedPlant,
@@ -21,6 +20,7 @@
     SelectSeedbank
   } from "$lib/types";
   import type { EventNewPollination } from "$lib/events.types";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
   export let data: EnhancedGardenViewData;
 
@@ -278,8 +278,8 @@
               </video>
             </div>
           </div>
-          <AnimatedPlant
-            imageURL={parent1.imageUrl || ""}
+          <PlantDisplay
+            imageUrl={parent1.imageUrl || ""}
             {applyFilters}
             {positionStyles}
           />

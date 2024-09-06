@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from "svelte";
   import { getColors } from "./findColors";
   import { DateTime } from "luxon";
-  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
   export let applyFilters: boolean = false;
   export let positionStyles: string = "w-full";
@@ -60,11 +60,7 @@
       bind:this={img}
     />
     <div class="absolute w-screen h-screen flex items-center justify-center">
-      <AnimatedPlant
-        imageURL={imageUrl || ""}
-        {applyFilters}
-        {positionStyles}
-      />
+      <PlantDisplay imageUrl={imageUrl || ""} {applyFilters} {positionStyles} />
     </div>
   </div>
 

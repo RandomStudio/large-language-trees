@@ -53,7 +53,7 @@ interface DisplayUpdateEvent {
 export interface DisplayFirstPlant extends DisplayUpdateEvent {
   name: "newUserFirstPlant";
   contents: {
-    plant: InsertPlant;
+    plant: SelectPlant;
     user: PublicUserInfo;
   };
 }

@@ -106,8 +106,7 @@
         transition:fade={{ duration: FADE_DURATION }}
       >
         <NewUserFirstPlant
-          imageUrl={data.contents.contents.plant.imageUrl || ""}
-          plantName={data.contents.contents.plant.commonName}
+          plant={data.contents.contents.plant}
           gardenerName={data.contents.contents.user.username}
         ></NewUserFirstPlant>
       </div>

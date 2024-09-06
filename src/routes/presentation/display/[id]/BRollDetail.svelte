@@ -3,7 +3,7 @@
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
-  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
@@ -65,8 +65,8 @@
       {user.username}'s
       {plant.commonName}
     </div>
-    <AnimatedPlant
-      imageURL={plant.imageUrl || ""}
+    <PlantDisplay
+      imageUrl={plant.imageUrl || ""}
       {applyFilters}
       {positionStyles}
     />
@@ -83,11 +83,5 @@
     width: 2000px;
     height: 2000px;
     position: absolute;
-  }
-
-  .target-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 </style>
