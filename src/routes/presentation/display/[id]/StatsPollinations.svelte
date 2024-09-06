@@ -3,7 +3,7 @@
   import { getColors } from "./findColors";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import writtenNumber from "written-number";
-  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
   export let applyFilters: boolean = false;
   export let positionStyles: string = "w-full";
@@ -65,11 +65,7 @@
       crossorigin="anonymous"
     />
     <div class="absolute w-screen h-screen flex items-center justify-center">
-      <AnimatedPlant
-        imageURL={imageUrl || ""}
-        {applyFilters}
-        {positionStyles}
-      />
+      <PlantDisplay imageUrl={imageUrl || ""} {applyFilters} {positionStyles} />
     </div>
   </div>
 

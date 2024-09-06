@@ -1,10 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getColors } from "./findColors";
-  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import type { SelectPlant } from "$lib/types";
 
-  export let imageUrl: string;
-  export let plantName: string;
+  export let plant: SelectPlant;
+  // export let imageUrl: string;
+  // export let plantName: string;
   export let gardenerName: string;
 
   export let applyFilters: boolean = false;
@@ -49,20 +51,20 @@
     style="color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
-    {plantName.toUpperCase()}
+    {plant.commonName.toUpperCase()}
   </div>
 
   <div class="fixed inset-0 flex items-center justify-center">
     <img
       class="opacity-0"
-      src={imageUrl}
+      src={plant.imageUrl}
       alt="Hero view the new user's first plant"
       bind:this={img}
       crossorigin="anonymous"
     />
     <div class="absolute w-screen h-screen flex items-center justify-center">
-      <AnimatedPlant
-        imageURL={imageUrl || ""}
+      <PlantDisplay
+        imageUrl={plant.imageUrl || ""}
         {applyFilters}
         {positionStyles}
       />

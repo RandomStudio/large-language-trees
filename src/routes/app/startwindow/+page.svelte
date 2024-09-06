@@ -30,7 +30,7 @@
     {/if}
     {#if selectedPlant}
       <div class="mx-auto mt-3 w-64">
-        <PlantDisplay plant={selectedPlant}></PlantDisplay>
+        <PlantDisplay imageUrl={selectedPlant.imageUrl || ""}></PlantDisplay>
       </div>
     {:else}
       <p>No plants available</p>

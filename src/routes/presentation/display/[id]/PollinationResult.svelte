@@ -3,9 +3,9 @@
   import { getColors } from "./findColors";
   import type { InsertPlant, PublicUserInfo, SelectPlant } from "$lib/types";
   import { POLLINATION_EVENT_TIMEOUT } from "$lib/constants";
-  import AnimatedPlant from "$lib/shared-components/AnimatedPlant.svelte";
   import { fade } from "svelte/transition";
   import { FADE_DURATION } from "$lib/constants";
+  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
   export let plantTop: SelectPlant;
   export let plantBottom: SelectPlant;
@@ -106,8 +106,8 @@
       crossorigin="anonymous"
     />
     <div class="absolute w-screen h-screen flex items-center justify-center">
-      <AnimatedPlant
-        imageURL={newPlantimageUrl || ""}
+      <PlantDisplay
+        imageUrl={newPlantimageUrl || ""}
         {applyFilters}
         {positionStyles}
       />
@@ -153,8 +153,8 @@
         crossorigin="anonymous"
       />
       <div class="w-full h-full">
-        <AnimatedPlant
-          imageURL={plantImageUrlTop || ""}
+        <PlantDisplay
+          imageUrl={plantImageUrlTop || ""}
           {applyFilters}
           {positionStyles}
         />
@@ -176,8 +176,8 @@
         crossorigin="anonymous"
       />
       <div class="w-full h-full">
-        <AnimatedPlant
-          imageURL={plantImageUrlBottom || ""}
+        <PlantDisplay
+          imageUrl={plantImageUrlBottom || ""}
           {applyFilters}
           {positionStyles}
         />
