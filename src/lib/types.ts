@@ -133,3 +133,13 @@ export interface GenerateImageRequest {
   model?: string;
   backgroundSecret?: string;
 }
+
+/** Should be identical to the version in
+ * `netlify/functions/img-gen-background.mts`
+ */
+export interface BackroundGenerateImageRequest {
+  plantId: string;
+  fullPrompt: string;
+  model: string;
+  backgroundSecret: string;
+}

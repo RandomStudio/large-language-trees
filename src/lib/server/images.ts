@@ -1,6 +1,7 @@
 import {
   AWS_ACCESS_KEY_ID_S3,
   AWS_SECRET_ACCESS_KEY_S3,
+  BACKGROUND_FN_SECRET,
   S3_BUCKET,
   S3_REGION
 } from "$env/static/private";
@@ -9,6 +10,9 @@ import { Upload } from "@aws-sdk/lib-storage";
 
 import path from "path";
 import fs from "fs/promises";
+import { getPromptSettings } from "./promptSettings";
+import { buildImagePrompt } from "$lib/promptUtils";
+import type { BackroundGenerateImageRequest, PromptConfig } from "$lib/types";
 
 export const uploadToS3 = async (fetchImage: Response, id: string) => {
   const stream = fetchImage.body;
@@ -60,3 +64,31 @@ export async function streamToS3(
   const output = await upload.done();
   console.log("Uploaded OK to S3:", output);
 }
+
+export const backgroundImageRequestBody = async (
+  plantId: string,
+  description: string,
+  instructions?: string,
+  model?: string
+) => {
+  const promptSettings: PromptConfig = await getPromptSettings();
+
+  const prompt = buildImagePrompt(
+    instructions || promptSettings.image.instructions,
+    description
+  );
+
+  console.log(
+    `Generating body for (background) request for image generation with prompt "${prompt}" ...`
+  );
+  const bodyJson: BackroundGenerateImageRequest = {
+    fullPrompt: prompt,
+    backgroundSecret: BACKGROUND_FN_SECRET,
+    plantId,
+    model: model || promptSettings.image.model
+  };
+
+  return bodyJson;
+
+  // Status 202 - "Accepted" - nothing created yet
+};

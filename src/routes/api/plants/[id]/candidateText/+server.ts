@@ -1,5 +1,7 @@
 import { db } from "$lib/server/db";
+import { backgroundImageRequestBody } from "$lib/server/images";
 import { generatedText } from "$lib/server/schema";
+import type { GenerateImageRequest, InsertPlant } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 
@@ -12,21 +14,48 @@ interface CandidateTextBody {
   errorMessage?: string;
 }
 
-export const POST: RequestHandler = async ({ params, request }) => {
+/*
+  This is the endpoint used by the BACKGROUND TEXT GENERATION FUNCTION
+  once it has a valid result (a new candidate plant)...
+*/
+export const POST: RequestHandler = async ({ params, request, fetch }) => {
+  console.log(
+    "Attempt to insert new candidate plant (text generation result)..."
+  );
   const plantId = params["id"];
   if (!plantId) {
     throw Error("plant ID param required");
   }
 
-  const bodyJson = (await request.json()) as CandidateTextBody;
+  const candidateTextBody = (await request.json()) as CandidateTextBody;
 
-  const { userId, contents, errorMessage } = bodyJson;
+  const { userId, contents, errorMessage } = candidateTextBody;
 
-  await db
+  const resInsert = await db
     .insert(generatedText)
-    .values({ userId, plantId, contents, errorMessage });
+    .values({ userId, plantId, contents, errorMessage })
+    .returning();
 
-  return json({}, { status: 201 });
+  if (contents) {
+    const plantDetails = JSON.parse(contents) as InsertPlant;
+    const jsonBody: GenerateImageRequest = {
+      description: plantDetails.description,
+      plantId: plantDetails.id
+    };
+
+    const resImageRequest = await fetch("/api/images/generate", {
+      method: "POST",
+      body: JSON.stringify(jsonBody)
+    });
+    console.log(
+      "result requesting new image generation:",
+      resImageRequest.status,
+      resImageRequest.statusText
+    );
+    return json({ resInsert, resImageRequest }, { status: 201 });
+  } else {
+    throw Error("no plant details to use for image generation!");
+  }
 };
 
 export const GET: RequestHandler = async ({ params }) => {

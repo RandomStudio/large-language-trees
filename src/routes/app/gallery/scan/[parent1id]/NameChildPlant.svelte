@@ -56,7 +56,7 @@
       muted={true}
     />
 
-    <form on:submit|preventDefault={() => onNameChosen(newName)} class="mt-2">
+    <form on:submit|preventDefault class="mt-2">
       <div class="flex items-center justify-center">
         <input
           class="bg-roel_blue bg-opacity-10 border-[3px] px-4 py-2 border-roel_blue rounded-full font-primer text-roel_blue text-2xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center z-10"
