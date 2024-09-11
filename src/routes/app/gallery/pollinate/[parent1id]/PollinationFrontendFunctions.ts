@@ -35,7 +35,7 @@ export async function startTextGeneration(
   parents: [SelectPlant, SelectPlant]
 ): Promise<InsertPlant> {
   const jsonBody: GeneratePlantRequestBody = {
-    userId,
+    thisUserId: userId,
     parents
   };
   const res = await fetch("/api/plants/generate", {

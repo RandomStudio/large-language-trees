@@ -109,6 +109,10 @@
       agent.disconnect();
     }
   });
+
+  const gotoPollinate = (plantId: string) => {
+    goto(`/app/gallery/scan/${plantId}`);
+  };
 </script>
 
 {#if newPlantForPopup}
@@ -139,14 +143,14 @@
       />
     </div>
     <div class="mt-4 text-center">
-      <a
-        href={`/app/gallery/scan/${plant.plant.id}`}
+      <button
+        on:click={() => gotoPollinate(plant.plant.id)}
         data-test="start-pollinating-button"
         data-umami-event="Start Pollinating Button"
         class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
       >
         Start Pollinating
-      </a>
+      </button>
     </div>
   {/each}
   <br />
@@ -161,5 +165,9 @@
     }}
     isOriginalPlant={selectedPlant.id == yourOriginalPlant?.id}
     isPollinatingPlant={true}
+    onStartPollinate={() => {
+      // Crazy to have to check for null again
+      if (selectedPlant) gotoPollinate(selectedPlant.id);
+    }}
   ></PopupInfo>
 {/if}
