@@ -30,41 +30,16 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
 
   const { prompt, thisUserId, thisPlantId, otherUserId, otherPlantId } = data;
 
-  // First, check if this combination already exists
-  // const thisUser = db.query.users.findFirst({ where: eq(users.id, thisUserId)});
-  // if (!thisUserId) {
-  //   throw Error("user not found");
-  // }
-
-  const thisUserSeedbankWithPlants = await db.query.users.findFirst({
-    where: eq(users.id, thisUserId),
-    with: {
-      mySeedbank: { with: { plantsInSeedbank: { with: { plant: true } } } }
-    }
+  const plant1 = await db.query.plants.findFirst({
+    where: eq(plants.id, thisPlantId)
   });
-
-  if (!thisUserSeedbankWithPlants) {
-    throw Error("failed to load user");
-  }
-
-  const alreadyExistingPlant =
-    thisUserSeedbankWithPlants.mySeedbank.plantsInSeedbank.find(
-      (p) => p.plant.parent1 === thisPlantId && p.plant.parent2 === otherPlantId
-    );
-
-  if (alreadyExistingPlant) {
-    // Return 200 - OK (already exists!)
-    return json(alreadyExistingPlant, { status: 200 });
-  }
-
-  const plant1 = await db.query.plants.findFirst({ where: eq(plants.id, thisPlantId)});
-  const plant2 = await db.query.plants.findFirst({ where: eq(plants.id, otherPlantId)});
+  const plant2 = await db.query.plants.findFirst({
+    where: eq(plants.id, otherPlantId)
+  });
 
   if (!plant1 || !plant2) {
     throw Error("Failed to find existing plants (parents)");
   }
-
-  const thisUser = stripUserInfo(thisUserSeedbankWithPlants);
 
   const promptSettings = await getPromptSettings();
 
@@ -74,7 +49,7 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
   const newPlantId = uuidv4();
 
   const bodyJson: BackgroundGenerateTextRequest = {
-    userId: thisUserId,,
+    userId: thisUserId,
     newPlantId,
     parent1Id: plant1.id,
     parent2Id: plant2.id,
@@ -93,5 +68,5 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
     body: JSON.stringify(bodyJson)
   });
 
-  return json({ thisUser,  }, { status: res.status });
+  return json({ thisUserId }, { status: res.status });
 };

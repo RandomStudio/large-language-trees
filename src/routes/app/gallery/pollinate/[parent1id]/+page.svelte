@@ -22,7 +22,7 @@
   } from "$lib/types";
   import type { EventNewPollination } from "$lib/events.types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import NameChildPlant from "./NameChildPlant.svelte";
+  import NameChildPlant from "../../scan/[parent1id]/NameChildPlant.svelte";
 
   export let data: PollinationData;
 

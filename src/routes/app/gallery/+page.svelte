@@ -57,7 +57,7 @@
   let selectedPlant: SelectPlant | null = null;
 
   let yourOriginalPlant: SelectPlant | null =
-    data.userWithSeedbankPlants.mySeedbank.plantsInSeedbank.find(
+    data.plants.find(
       (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
     )?.plant || null;
 
@@ -85,8 +85,8 @@
     eventsPlug.on("message", (payload) => {
       const m = decode(payload) as EventNewPollination;
       if (
-        m.payload.authorTop === data.userWithSeedbankPlants.id ||
-        m.payload.authorBottom === data.userWithSeedbankPlants.id
+        m.payload.authorTop === data.user.id ||
+        m.payload.authorBottom === data.user.id
       ) {
         console.log("This plant belongs to me!", m.payload);
         newPlantForPopup = m.payload;
@@ -123,9 +123,9 @@
   <div
     class="text-roel_blue font-primer text-3xl text-center border-b-[3px] border-roel_blue rounded-lg px-4 py-2"
   >
-    {data.userWithSeedbankPlants.myGarden.name}
+    {data.garden.name}
   </div>
-  {#each data.userWithSeedbankPlants.mySeedbank.plantsInSeedbank as plant, index}
+  {#each data.plants as plant, index}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->

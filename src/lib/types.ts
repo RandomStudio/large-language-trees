@@ -122,6 +122,7 @@ export interface GeneratePlantRequestBody {
 
 export interface ScanStartData {
   thisUser: PublicUserInfo;
+  userPlants: SelectPlant[];
   thisPlant: SelectPlant;
 }
 

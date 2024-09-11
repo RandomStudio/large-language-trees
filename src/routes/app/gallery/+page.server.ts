@@ -1,10 +1,10 @@
 import type { PageServerLoad } from "./$types";
-import { getUserGarden, getUserSeeds } from "$lib/server";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
 import { users } from "$lib/server/schema";
+import { stripUserInfo } from "$lib/security";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const username = locals.user?.username;
@@ -30,7 +30,11 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw Error("failed to load user with seedbank+plants");
   }
 
-  return { userWithSeedbankPlants };
+  return {
+    user: stripUserInfo(userWithSeedbankPlants),
+    plants: userWithSeedbankPlants.mySeedbank.plantsInSeedbank,
+    garden: userWithSeedbankPlants.myGarden
+  };
 };
 
 export const actions: Actions = {

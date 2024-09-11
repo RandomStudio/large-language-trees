@@ -2,17 +2,27 @@
   import { goto } from "$app/navigation";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
-  import type { PublicUserInfo, ScanStartData, SelectPlant } from "$lib/types";
+  import type {
+    GeneratePlantRequestBody,
+    PublicUserInfo,
+    ScanStartData,
+    SelectPlant
+  } from "$lib/types";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import { onDestroy, onMount } from "svelte";
   import PollinationQrCode from "../../pollinate/[parent1id]/PollinationQrCode.svelte";
+  import NameChildPlant from "./NameChildPlant.svelte";
 
   export let data: ScanStartData;
+  let otherUser: PublicUserInfo | null = null;
+  let otherPlant: SelectPlant | null = null;
 
   let videoElement: HTMLVideoElement;
   let codeReader: BrowserMultiFormatReader | null = null;
   let errorMessage: string | null = null;
   let isLoadingCamera: boolean = true;
+
+  let alreadyExistsPlant: SelectPlant | null = null;
 
   const getStream = async () => {
     try {
@@ -82,6 +92,8 @@
   };
 
   const stopScanning = () => {
+    otherUser = null;
+    otherPlant = null;
     console.log("Stop camera + scanning");
     if (!videoElement) {
       return;
@@ -98,18 +110,66 @@
     videoElement.srcObject = null;
   };
 
-  const onCodeScanned = (otherPlantId: string, otherUserId: string) => {
+  const onCodeScanned = async (otherPlantId: string, otherUserId: string) => {
     stopScanning();
-
-    // goto(`/app/gallery/pollinate/${data.thisPlant.id}`);
+    alreadyExistsPlant = findAlreadyExists(
+      data.thisPlant.id,
+      otherPlantId,
+      data.userPlants
+    );
+    if (!alreadyExistsPlant) {
+      console.info("New child plant possible!");
+      otherPlant = await getOtherPlantDetails(otherPlantId);
+      otherUser = await getOtherUserDetails(otherUserId);
+    } else {
+      console.warn(
+        "This child combination already exists!",
+        alreadyExistsPlant
+      );
+    }
   };
 
   const isOverconstrainedError = (err: unknown): err is OverconstrainedError =>
     (err as OverconstrainedError).name === "OverconstrainedError";
 
+  const findAlreadyExists = (
+    thisPlantId: string,
+    otherPlantId: string,
+    thisUserPlants: SelectPlant[]
+  ): SelectPlant | null => {
+    const match = thisUserPlants.find(
+      (p) =>
+        (p.parent1 === thisPlantId && p.parent2 === thisPlantId) ||
+        (p.parent1 === otherPlantId && p.parent2 === thisPlantId)
+    );
+
+    return match || null;
+  };
+
+  const getOtherUserDetails = async (userId: string) =>
+    (await (await fetch(`/api/users/${userId}`)).json()) as PublicUserInfo;
+
+  const getOtherPlantDetails = async (plantId: string) =>
+    (await (await fetch(`/api/plants/${plantId}`)).json()) as SelectPlant;
   onMount(async () => {
     await startQrScanning();
   });
+
+  const initiateBackgroundRequest = async (
+    otherUserId: string,
+    otherPlantId: string
+  ) => {
+    const jsonBody: GeneratePlantRequestBody = {
+      thisUserId: data.thisUser.id,
+      thisPlantId: data.thisPlant.id,
+      otherUserId: otherUserId,
+      otherPlantId: otherPlantId
+    };
+    const res = await fetch(`/api/plants/generate`, {
+      method: "POST",
+      body: JSON.stringify(jsonBody)
+    });
+  };
 
   onDestroy(() => {
     stopScanning();
@@ -159,4 +219,27 @@
       </div>
     </div>
   </div>
+
+  {#if otherPlant && otherUser}
+    <NameChildPlant
+      {otherUser}
+      thisUser={data.thisUser}
+      onNameChosen={(nameChosen) => {
+        if (otherPlant && otherUser) {
+          initiateBackgroundRequest(otherUser.id, otherPlant.id)
+            .then(() => {
+              goto("/app/gallery");
+            })
+            .catch((e) => {
+              errorMessage = "Error: " + e;
+            });
+        }
+      }}
+      onCancel={() => {
+        otherPlant = null;
+        otherUser = null;
+        startQrScanning();
+      }}
+    />
+  {/if}
 </div>

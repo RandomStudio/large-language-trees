@@ -30,23 +30,40 @@ export const POST: RequestHandler = async ({ params, request }) => {
 };
 
 export const GET: RequestHandler = async ({ params }) => {
-  const plantId = params["id"];
-  if (!plantId) {
-    throw Error("plant ID param required");
-  }
+  const plantId = params["plantid"];
+  const userId = params["userid"];
 
-  const matchingCandidatePlant = await db.query.generatedText.findFirst({
-    where: eq(generatedText.plantId, plantId)
-  });
+  if (plantId) {
+    const matchingCandidatePlant = await db.query.generatedText.findFirst({
+      where: eq(generatedText.plantId, plantId)
+    });
 
-  if (matchingCandidatePlant) {
-    return json(matchingCandidatePlant, { status: 200 });
+    if (matchingCandidatePlant) {
+      return json(matchingCandidatePlant, { status: 200 });
+    } else {
+      console.log(
+        "No matching candidate plant (text generation) for plantID",
+        plantId,
+        "... this is OK"
+      );
+      return json({}, { status: 202 });
+    }
+  } else if (userId) {
+    const matchingCandidatePlant = await db.query.generatedText.findFirst({
+      where: eq(generatedText.userId, userId)
+    });
+
+    if (matchingCandidatePlant) {
+      return json(matchingCandidatePlant, { status: 200 });
+    } else {
+      console.log(
+        "No matching candidate plant (text generation) for userID",
+        userId,
+        "... this is OK"
+      );
+      return json({}, { status: 202 });
+    }
   } else {
-    console.log(
-      "No matching candidate plant (text generation) for",
-      plantId,
-      "... this is OK"
-    );
-    return json({}, { status: 202 });
+    throw Error("either plantID or userID must be provided");
   }
 };

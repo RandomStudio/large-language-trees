@@ -1,15 +1,18 @@
 <script lang="ts">
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
+  import type { PublicUserInfo } from "$lib/types";
   import { pickRandomElement } from "random-elements";
   import { onMount } from "svelte";
 
-  export let otherUserName: string;
-  export let initNewName: string;
+  export let thisUser: PublicUserInfo;
+  export let otherUser: PublicUserInfo;
   export let onNameChosen: (name: string) => void;
+  export let onCancel: () => any;
 
   let seedImage: string | null = null;
-  let newName: string = initNewName;
+  let newName: string = `${thisUser.username}x${otherUser.username}Plant`;
 
   onMount(() => {
     seedImage = pickRandomElement([
@@ -27,10 +30,12 @@
   class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40 standard-gradient"
 >
   <div class="overflow-y-auto pb-20" style="max-height: calc(100%);">
+    <ReturnButton onClicked={onCancel} />
+
     <h1 class="font-gyst text-3xl pl-8 pt-8">Hooray!</h1>
     <div class="mx-12 font-primer text-roel_blue text-left mt-5">
       <p class="text-2xl">
-        You and {otherUserName} gave life to a new seed together.
+        You and {otherUser.username} gave life to a new seed together.
       </p>
       <p class="text-2xl">What will be the name of your sprout?</p>
     </div>
