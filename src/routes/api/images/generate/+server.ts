@@ -1,6 +1,6 @@
 import { PLACEHOLDER_IMAGES, BACKGROUND_FN_SECRET } from "$env/static/private";
 import { json, type RequestHandler } from "@sveltejs/kit";
-import type { GeneratedImageResult, PromptConfig } from "$lib/types";
+import type { PromptConfig } from "$lib/types";
 import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import type { GenerateImageRequest } from "./types";
@@ -17,17 +17,8 @@ interface BackroundGenerateImageRequest {
 
 export const POST: RequestHandler = async (event) => {
   const { request, fetch } = event;
-  console.log({ PLACEHOLDER_IMAGES });
   const jsonBody = (await request.json()) as GenerateImageRequest;
   const { description, plantId, model, instructions } = jsonBody;
-
-  if (PLACEHOLDER_IMAGES === "true") {
-    const jsonResponse: GeneratedImageResult = {
-      pleaseWait: false,
-      url: "/plants/placeholder.png"
-    };
-    return json(jsonResponse, { status: 200 });
-  }
 
   const promptSettings: PromptConfig = await getPromptSettings();
 
@@ -51,6 +42,6 @@ export const POST: RequestHandler = async (event) => {
     body: JSON.stringify(bodyJson)
   });
 
-  const jsonResponse: GeneratedImageResult = { pleaseWait: true, url: null };
-  return json(jsonResponse, { status: 200 });
+  // Status 202 - "Accepted" - nothing created yet
+  return json({}, { status: 202 });
 };

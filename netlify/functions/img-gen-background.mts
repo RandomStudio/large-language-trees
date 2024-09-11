@@ -3,8 +3,6 @@
  */
 interface BackgroundGenerateImageRequest {
   plantId: string;
-  parent1Id: string;
-  parent2Id: string;
   fullPrompt: string;
   model: string;
   backgroundSecret: string;
@@ -13,6 +11,18 @@ interface BackgroundGenerateImageRequest {
 interface GenerateResult {
   url?: string;
   shouldRetry: boolean;
+}
+
+/**
+ * The JSON body that is POSTed to our own api
+ * at /api/plants/[id]/candidateImage
+ *
+ * Should be identical to the version in
+ * `src/routes/api/plants/[id]/candidateImage`
+ */
+interface GenerateImageResultBody {
+  url?: string | null;
+  errorMessage?: string | null;
 }
 
 export default async (req: Request) => {
@@ -43,10 +53,15 @@ export default async (req: Request) => {
         );
         await notifyCandidateImageReady(generateAttempt2.url, plantId);
       } else {
-        console.error("Generate attempt #2 failed to return a URL!");
+        await notifyCandidateImageFailed("Generate attempt #2 failed", plantId);
         throw Error("Generate attempt #2 failed");
       }
     } else {
+      console.error("");
+      await notifyCandidateImageFailed(
+        "Generate attempt indicated shouldRetry==false; complete failure",
+        plantId
+      );
       throw Error(
         "Generate attempt indicated shouldRetry==false; complete failure"
       );
@@ -104,18 +119,55 @@ const tryGenerate = async (
   }
 };
 
+const notifyCandidateImageFailed = async (
+  errorMessage: string,
+  plantId: string
+) => {
+  const useLocalApi = process.env.BACKGROUND_FN_USES_LOCAL_API;
+
+  const origin = useLocalApi || "https://livinggarden.netlify.app";
+  const jsonBody: GenerateImageResultBody = {
+    errorMessage
+  };
+  const addImageToDbRes = await fetch(
+    `${origin}/api/plants/${plantId}/candidateImage`,
+    {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(jsonBody),
+      headers: {
+        origin
+      }
+    }
+  );
+  if (addImageToDbRes.status === 200 || addImageToDbRes.status === 201) {
+    console.log("POSTed error message update OK");
+  } else {
+    const { statusText, status } = addImageToDbRes;
+    console.error("Something went wrong when POSTing to our API endpoint:", {
+      statusText,
+      status
+    });
+    console.error(addImageToDbRes);
+  }
+};
+
 const notifyCandidateImageReady = async (url: string, plantId: string) => {
   const useLocalApi = process.env.BACKGROUND_FN_USES_LOCAL_API;
 
   const origin = useLocalApi || "https://livinggarden.netlify.app";
   console.log("POST to", origin);
 
+  const jsonBody: GenerateImageResultBody = {
+    url
+  };
+
   const addImageToDbRes = await fetch(
     `${origin}/api/plants/${plantId}/candidateImage`,
     {
       method: "POST",
       mode: "cors",
-      body: JSON.stringify({ url }),
+      body: JSON.stringify(jsonBody),
       headers: {
         origin
       }

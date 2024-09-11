@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type {
-    GeneratedImageResult,
     GeneratedImage,
     InsertPlant,
     AttachImageResponse
@@ -11,7 +10,6 @@
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
   import PopupError from "./PopupError.svelte";
-  import { type GenerateImageRequest } from "../../../../api/images/generate/types";
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
 
   import { fade } from "svelte/transition";
@@ -33,18 +31,6 @@
   let candidateImageUrl: string | null = null;
   let errorText: string = "";
 
-  function replaceInParagraph(
-    paragraph: string,
-    target: string,
-    replacement: string
-  ) {
-    if (paragraph && target && replacement) {
-      return paragraph.split(target).join(replacement) || paragraph;
-    } else {
-      return paragraph;
-    }
-  }
-
   async function handleAction() {
     if (textInput.trim() === "") {
       errorText = "Error : Please write something";
@@ -52,11 +38,7 @@
       try {
         const previousCommonName = finalChildReadyToAdd.commonName;
         finalChildReadyToAdd.commonName = textInput;
-        finalChildReadyToAdd.description = replaceInParagraph(
-          finalChildReadyToAdd.description,
-          previousCommonName,
-          textInput
-        );
+
         await onConfirm(finalChildReadyToAdd);
         goto("../");
       } catch (error) {
@@ -80,82 +62,6 @@
     //@ts-ignore
     umami.track("Named Plant");
   }
-
-  const generateImage = async () => {
-    waitingForImage = true;
-    if (candidateChild.description) {
-      const jsonBody: GenerateImageRequest = {
-        description: candidateChild.description,
-        plantId: candidateChild.id
-      };
-      const imageGenerationResponse = await fetch("/api/images/generate", {
-        method: "POST",
-        body: JSON.stringify(jsonBody)
-      });
-      if (imageGenerationResponse.status == 200) {
-        const json =
-          (await imageGenerationResponse.json()) as GeneratedImageResult;
-        const { url, pleaseWait } = json;
-        if (pleaseWait === false && url) {
-          console.log(
-            "No need to wait, here's the URL: got candidate image URL (ready):",
-            url
-          );
-          replaceImage(url);
-        } else {
-          console.log(
-            "Request for image has been sent; poll for response (need to wait)"
-          );
-          let polling: NodeJS.Timeout | null = setInterval(async () => {
-            console.log("Checking for image...");
-
-            const res = await fetch(
-              `/api/plants/${candidateChild.id}/candidateImage`,
-              {
-                method: "GET"
-              }
-            );
-
-            if (res.status === 200) {
-              if (polling) {
-                console.log("clear polling interval!");
-                clearInterval(polling);
-                polling = null;
-              }
-
-              const generated = (await res.json()) as GeneratedImage;
-              const { plantId, url, errorMessage } = generated;
-              if (errorMessage || url === null) {
-                console.error("Image generation error:", errorMessage);
-                throw Error("Something went wrong with the image generation");
-              }
-              console.log("Yes, a generated image exists for this plant!", {
-                ...generated
-              });
-              const res2 = await fetch("/api/images/attach", {
-                method: "POST",
-                body: JSON.stringify({ plantId, url })
-              });
-              if (res2.status === 200) {
-                const { url } = (await res2.json()) as AttachImageResponse;
-                console.log("Image updated on backend OK, new S3 URL is:", url);
-                replaceImage(url);
-              } else {
-                console.error("error updating image on backend:");
-                userErrorMessage =
-                  "Whoops, something went wrong with that image!";
-              }
-            } else {
-              console.log("Got status code", res.status, "; try again...");
-            }
-          }, 2000);
-        }
-      } else {
-        console.error("Error fetching generated new image");
-        userErrorMessage = "A bird came and took the seed image away!";
-      }
-    }
-  };
 
   function replaceImage(url: string) {
     console.log(
@@ -184,7 +90,7 @@
     }
   }, 3000);
 
-  generateImage();
+  // generateImage();
 </script>
 
 {#if waitingForImage}

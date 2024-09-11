@@ -63,19 +63,8 @@ export interface UserWithSeedbank extends SelectUser {
   mySeeds: MySeeds;
 }
 
-export interface GardenViewData {
-  seedbank: MySeeds;
-  user: SelectUser;
-  garden: GardenWithPlants;
-}
-
 export interface PlantProperties {
   [key: string]: number | string;
-}
-
-export interface GeneratedImageResult {
-  pleaseWait: boolean;
-  url: string | null;
 }
 
 export interface ImageUploadResult {
@@ -92,10 +81,11 @@ export interface AttachImageResponse {
   url: string;
 }
 
-export interface EnhancedGardenViewData extends GardenViewData {
-  plantId: string;
-  otherPlantId: string | null;
-  otherUserId: string | null;
+export interface PollinationData {
+  thisPlant: SelectPlant;
+  otherPlant?: SelectPlant;
+  thisUser: PublicUserInfo;
+  otherUser?: PublicUserInfo;
 }
 
 export interface PromptSection {
@@ -120,8 +110,25 @@ export interface PromptConfig {
 }
 
 export interface GeneratePlantRequestBody {
-  userId: string;
+  thisUserId: string;
+  thisPlantId: string;
+  otherUserId: string;
+  otherPlantId: string;
+  /** Only used for developer prompt testing */
   prompt?: ChatCompletionMessageParam[];
+  /** Only used for developer prompt testing */
   model?: string;
-  parents: [SelectPlant, SelectPlant];
+}
+
+export interface ScanStartData {
+  thisUser: PublicUserInfo;
+  thisPlant: SelectPlant;
+}
+
+export interface GenerateImageRequest {
+  plantId: string;
+  description: string;
+  instructions?: string;
+  model?: string;
+  backgroundSecret?: string;
 }
