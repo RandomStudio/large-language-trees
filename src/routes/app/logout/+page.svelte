@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
-  import UserLoginStatus from "$lib/shared-components/UserLoginStatus.svelte";
+  import UserLoginStatus from "$lib/UserLoginStatus.svelte";
 
   interface AdminViewData {
     username: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import UserLoginStatus from "$lib/shared-components/UserLoginStatus.svelte";
+  import UserLoginStatus from "$lib/UserLoginStatus.svelte";
   import type { AdminViewData } from "./+page.server";
 
   export let data: AdminViewData;
