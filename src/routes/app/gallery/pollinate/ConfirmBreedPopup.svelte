@@ -1,16 +1,10 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import type {
-    GeneratedImage,
-    InsertPlant,
-    AttachImageResponse
-  } from "$lib/types";
+  import type { InsertPlant } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "$lib/constants";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
   import PopupError from "./PopupError.svelte";
-  import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
 
   import { fade } from "svelte/transition";
   import { insertNewPlant } from "./PollinationFrontendFunctions";

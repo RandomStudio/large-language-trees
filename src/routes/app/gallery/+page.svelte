@@ -1,10 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import {
-    type InsertPlant,
-    type PlantWithDate,
-    type SelectPlant
-  } from "../../../lib/types";
+  import { type InsertPlant, type SelectPlant } from "../../../lib/types";
   import { onDestroy, onMount } from "svelte";
   import { DateTime } from "luxon";
 
@@ -18,14 +14,10 @@
     type EventNewSprouting,
     type EventPlantGenerated
   } from "$lib/events.types";
-  import {
-    DURATION_TILL_FERTILE,
-    MAX_CANVASSES,
-    PLUG_NAMES
-  } from "$lib/constants";
+  import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
   import PlantWasAddedPopup from "./PlantWasAddedPopup.svelte";
-  import ConfirmBreedPopup from "./pollinate/[parent1id]/ConfirmBreedPopup.svelte";
-  import { candidateToPlant } from "./pollinate/[parent1id]/PollinationFrontendFunctions";
+  import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
+  import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
 
   export let data;
   type GalleryViewData = typeof data;

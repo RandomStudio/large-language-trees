@@ -10,7 +10,7 @@
   } from "$lib/types";
   import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
   import { onDestroy, onMount } from "svelte";
-  import PollinationQrCode from "../../pollinate/[parent1id]/PollinationQrCode.svelte";
+  import PollinationQrCode from "../../pollinate/PollinationQrCode.svelte";
   import NameChildPlant from "./NameChildPlant.svelte";
 
   export let data: ScanStartData;
