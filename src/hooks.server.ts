@@ -12,6 +12,7 @@ const publicAccessAllowed = (pathname: string) =>
 
 export const handle: Handle = async ({ event, resolve }) => {
   if (event.url.pathname === "/") {
+    console.log("Redirect from root path to app");
     redirect(302, "/app");
   }
 

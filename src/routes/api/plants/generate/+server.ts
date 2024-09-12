@@ -63,7 +63,7 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
 
   console.log("sending body", bodyJson);
 
-  const res = await fetch("/.netlify/functions/text-gen-background", {
+  const res = await fetch("/.netlify/functions/complete-gen-background", {
     method: "POST",
     body: JSON.stringify(bodyJson)
   });

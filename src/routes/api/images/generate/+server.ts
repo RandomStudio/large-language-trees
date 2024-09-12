@@ -1,27 +1,61 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
-import type { GenerateImageRequest } from "$lib/types";
-import { backgroundImageRequestBody } from "$lib/server/images";
+import type { GenerateImageRequest, PromptConfig } from "$lib/types";
+import { buildImagePrompt } from "$lib/promptUtils";
+import { getPromptSettings } from "$lib/server/promptSettings";
 
+interface GenImageToServer {
+  plantId: string;
+  description: string;
+}
+
+/** Should be identical to the version in
+ * `neflify/functions/complete-gen-background.mts`
+ *
+ * This is what our server needs to send back to the background function
+ */
+interface GenImageToBackground {
+  plantId: string;
+  fullPrompt: string;
+  model: string;
+}
+
+// interface
+
+/*
+  This endpoint is used by the BACKGROUND function to get the full prompt
+  needed for image generation.
+*/
 export const POST: RequestHandler = async ({ request, fetch }) => {
+  const { plantId, description } = (await request.json()) as GenImageToServer;
+
+  const bodyJson = await backgroundImageRequestBody(plantId, description);
+
+  return json(bodyJson, { status: 200 });
+};
+
+const backgroundImageRequestBody = async (
+  plantId: string,
+  description: string,
+  instructions?: string,
+  model?: string
+) => {
+  const promptSettings: PromptConfig = await getPromptSettings();
+
+  const prompt = buildImagePrompt(
+    instructions || promptSettings.image.instructions,
+    description
+  );
+
   console.log(
-    "Our API endpoint for intitating background function for image generation..."
+    `Generating body for (background) request for image generation with prompt "${prompt}" ...`
   );
-  const jsonBody = (await request.json()) as GenerateImageRequest;
-  const { description, plantId, model, instructions } = jsonBody;
-
-  const bodyJson = await backgroundImageRequestBody(
+  const bodyJson: GenImageToBackground = {
+    fullPrompt: prompt,
     plantId,
-    description,
-    instructions,
-    model
-  );
+    model: model || promptSettings.image.model
+  };
 
-  const res = await fetch("/.netlify/functions/img-gen-background", {
-    method: "POST",
-    body: JSON.stringify(bodyJson)
-  });
+  return bodyJson;
 
-  // console.log("img gen background res:", res);
-
-  return json(bodyJson, { status: res.status });
+  // Status 202 - "Accepted" - nothing created yet
 };

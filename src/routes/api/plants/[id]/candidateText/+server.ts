@@ -1,12 +1,11 @@
 import { db } from "$lib/server/db";
-import { backgroundImageRequestBody } from "$lib/server/images";
 import { generatedText } from "$lib/server/schema";
 import type { GenerateImageRequest, InsertPlant } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 
 /** Should be identical to the interface in
- * `/netlify/functions/text-gen-background.mts`
+ * `/netlify/functions/complete-gen-background.mts`
  */
 interface CandidateTextBody {
   userId: string;
@@ -15,7 +14,7 @@ interface CandidateTextBody {
 }
 
 /*
-  This is the endpoint used by the BACKGROUND TEXT GENERATION FUNCTION
+  This is the endpoint used by the BACKGROUND GENERATION FUNCTION (text)
   once it has a valid result (a new candidate plant)...
 */
 export const POST: RequestHandler = async ({ params, request, fetch }) => {
@@ -36,26 +35,28 @@ export const POST: RequestHandler = async ({ params, request, fetch }) => {
     .values({ userId, plantId, contents, errorMessage })
     .returning();
 
-  if (contents) {
-    const plantDetails = JSON.parse(contents) as InsertPlant;
-    const jsonBody: GenerateImageRequest = {
-      description: plantDetails.description,
-      plantId: plantDetails.id
-    };
+  // if (contents) {
+  //   const plantDetails = JSON.parse(contents) as InsertPlant;
+  //   const jsonBody: GenerateImageRequest = {
+  //     description: plantDetails.description,
+  //     plantId: plantDetails.id
+  //   };
 
-    const resImageRequest = await fetch("/api/images/generate", {
-      method: "POST",
-      body: JSON.stringify(jsonBody)
-    });
-    console.log(
-      "result requesting new image generation:",
-      resImageRequest.status,
-      resImageRequest.statusText
-    );
-    return json({ resInsert, resImageRequest }, { status: 201 });
-  } else {
-    throw Error("no plant details to use for image generation!");
-  }
+  //   const resImageRequest = await fetch("/api/images/generate", {
+  //     method: "POST",
+  //     body: JSON.stringify(jsonBody)
+  //   });
+  //   console.log(
+  //     "result requesting new image generation:",
+  //     resImageRequest.status,
+  //     resImageRequest.statusText
+  //   );
+  //   return json({ resInsert, resImageRequest }, { status: 201 });
+  // } else {
+  //   throw Error("no plant details to use for image generation!");
+  // }
+
+  return json(resInsert, { status: 201 });
 };
 
 export const GET: RequestHandler = async ({ params }) => {

@@ -64,31 +64,3 @@ export async function streamToS3(
   const output = await upload.done();
   console.log("Uploaded OK to S3:", output);
 }
-
-export const backgroundImageRequestBody = async (
-  plantId: string,
-  description: string,
-  instructions?: string,
-  model?: string
-) => {
-  const promptSettings: PromptConfig = await getPromptSettings();
-
-  const prompt = buildImagePrompt(
-    instructions || promptSettings.image.instructions,
-    description
-  );
-
-  console.log(
-    `Generating body for (background) request for image generation with prompt "${prompt}" ...`
-  );
-  const bodyJson: BackroundGenerateImageRequest = {
-    fullPrompt: prompt,
-    backgroundSecret: BACKGROUND_FN_SECRET,
-    plantId,
-    model: model || promptSettings.image.model
-  };
-
-  return bodyJson;
-
-  // Status 202 - "Accepted" - nothing created yet
-};
