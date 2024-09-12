@@ -65,6 +65,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
         if (!imageUrl) {
           throw Error("there should be an image URL for the version uploaded");
         }
+        // Publish the event (now plant generated)...
         const e: EventPlantGenerated = {
           name: "newGeneratedPlantReady",
           payload: {
@@ -75,6 +76,20 @@ export const POST: RequestHandler = async ({ request, params }) => {
           }
         };
         await publishEvent(e);
+
+        // Delete candidate plant entry...
+        const deleted = await db
+          .delete(generatedPlants)
+          .where(eq(generatedPlants.plantId, plantId))
+          .returning();
+
+        if (deleted.length === 0) {
+          throw Error(
+            "failed to delete the entry, after it was finally confirmed!"
+          );
+        }
+
+        // Return response...
         return json(res, { status: 201 });
       } else {
         return error(500, "Failed to insert new generated image URL");
