@@ -31,50 +31,9 @@
   type GalleryViewData = typeof data;
 
   let candidateChild: InsertPlant | null = null;
-
-  // function addTimeLeft(inputData: GalleryViewData) {
-  //   return {
-  //     ...inputData.userWithSeedbankPlants,
-  //     seedbank: {
-  //       ...inputData,
-  //       plantsInSeedbank: inputData.seedbank.plantsInSeedbank.map((p) => ({
-  //         ...p,
-  //         plant: {
-  //           ...p.plant,
-  //           timeLeft: DateTime.fromJSDate(p.pollinationDate)
-  //             .plus(DURATION_TILL_FERTILE)
-  //             .diffNow()
-  //         }))
-  //         }
-  //       }))
-  //     },
-  //     garden: {
-  //       ...inputData.garden,
-  //       plantsInGarden: [
-  //         // ...inputData.garden.plantsInGarden
-  //         ...inputData.garden.plantsInGarden.map((p) => ({
-  //           ...p,
-  //       ]
-  //     }
-  //   };
-  // }
-
-  // let dataWithTimes = addTimeLeft(data);
-
   let selectedPlant: SelectPlant | null = null;
 
-  let yourOriginalPlant: SelectPlant | null =
-    data.plants.find(
-      (plant) => plant.plant.parent1 == null && plant.plant.parent2 == null
-    )?.plant || null;
-
-  // function updateTimeLeft() {
-  //   dataWithTimes = addTimeLeft(data);
-  // }
-
   let agent: TetherAgent | null;
-
-  // let datesInterval: NodeJS.Timeout | null = null;
 
   let newPlantForPopup: InsertPlant | null = null;
 
@@ -164,12 +123,14 @@
 {/if}
 
 <div class="mt-16 mx-10 font-primer text-roel_blue text-left">
-  <div
-    class="text-roel_blue font-primer text-3xl text-center border-b-[3px] border-roel_blue rounded-lg px-4 py-2"
-  >
-    {data.garden.name}
-  </div>
-  {#each data.plants as plant, index}
+  <PlantDisplay
+    disableAnimation={false}
+    imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
+    applyFilters={false}
+    label={data.myOriginalPlant.plant.commonName}
+  />
+
+  {#each data.myOtherPlants as plant, index}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
@@ -178,27 +139,26 @@
         console.log("click!");
         selectedPlant = plant.plant;
       }}
-      class="cursor-pointer mt-4"
+      class="cursor-pointer mt-4 border-2 border-orange-50"
     >
       <PlantDisplay
         disableAnimation={index > MAX_CANVASSES - 1}
         imageUrl={plant.plant.imageUrl || ""}
         applyFilters={false}
+        label={plant.plant.commonName}
       />
     </div>
-    <div class="mt-4 text-center">
-      <button
-        on:click={() => gotoPollinate(plant.plant.id)}
-        data-test="start-pollinating-button"
-        data-umami-event="Start Pollinating Button"
-        class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
-      >
-        Start Pollinating
-      </button>
-    </div>
+    <div class="mt-4 text-center">Title</div>
   {/each}
-  <br />
-  <br />
+
+  {#each data.notSproutedPlants as plant}
+    <PlantDisplay
+      disableAnimation={true}
+      imageUrl={"/pollination/Seed_01.png"}
+      applyFilters={false}
+      label={"New plant"}
+    />
+  {/each}
 </div>
 
 {#if selectedPlant}
@@ -206,12 +166,6 @@
     plantDetails={selectedPlant}
     closePopup={() => {
       selectedPlant = null;
-    }}
-    isOriginalPlant={selectedPlant.id == yourOriginalPlant?.id}
-    isPollinatingPlant={true}
-    onStartPollinate={() => {
-      // Crazy to have to check for null again
-      if (selectedPlant) gotoPollinate(selectedPlant.id);
     }}
   ></PopupInfo>
 {/if}
@@ -228,5 +182,16 @@
     }}
   />
 {/if}
+
+<div class="fixed bottom-0 w-screen content-center">
+  <button
+    on:click={() => gotoPollinate(data.myOriginalPlant.plant.id)}
+    data-test="start-pollinating-button"
+    data-umami-event="Start Pollinating Button"
+    class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
+  >
+    Start Pollinating
+  </button>
+</div>
 
 <!-- <div>{JSON.stringify(candidateChild)}</div> -->

@@ -2,8 +2,8 @@ import type { PageServerLoad } from "./$types";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 import { db } from "$lib/server/db";
-import { eq } from "drizzle-orm";
-import { users } from "$lib/server/schema";
+import { eq, or } from "drizzle-orm";
+import { generatedPlants, users } from "$lib/server/schema";
 import { stripUserInfo } from "$lib/security";
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -30,9 +30,32 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw Error("failed to load user with seedbank+plants");
   }
 
+  const myOriginalPlant =
+    userWithSeedbankPlants.mySeedbank.plantsInSeedbank.find(
+      (p) => p.plant.parent1 === null && p.plant.parent2 === null
+    );
+
+  if (!myOriginalPlant) {
+    throw Error("missing plant(s)");
+  }
+
+  const myOtherPlants =
+    userWithSeedbankPlants.mySeedbank.plantsInSeedbank.filter(
+      (p) => p.plant.id !== myOriginalPlant.plant.id
+    );
+
+  const notSproutedPlants = await db.query.generatedPlants.findMany({
+    where: or(
+      eq(generatedPlants.authorTop, userId),
+      eq(generatedPlants.authorBottom, userId)
+    )
+  });
+
   return {
     user: stripUserInfo(userWithSeedbankPlants),
-    plants: userWithSeedbankPlants.mySeedbank.plantsInSeedbank,
+    myOriginalPlant,
+    myOtherPlants,
+    notSproutedPlants,
     garden: userWithSeedbankPlants.myGarden
   };
 };

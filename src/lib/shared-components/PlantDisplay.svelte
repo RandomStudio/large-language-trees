@@ -9,10 +9,10 @@
     Sprite,
     RenderTexture
   } from "pixi.js";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   export let imageUrl: string;
-  export let commonName: string | null = null;
+  export let label: string | null = null;
   export let applyFilters: boolean = false;
   export let disableAnimation: boolean = false;
   /**
@@ -22,13 +22,15 @@
 
   let canvasElement: HTMLCanvasElement;
 
+  let app: Application | null = null;
+
   onMount(async () => {
     if (disableAnimation === true) {
       return;
     }
 
     // Create a new application with the specified canvas
-    const app = new Application();
+    app = new Application();
 
     await app.init({
       view: canvasElement,
@@ -102,6 +104,13 @@
     });
     console.log("Canvas element:", canvasElement);
   });
+
+  onDestroy(() => {
+    if (app) {
+      console.log("destroy PixiJS app");
+      app.destroy();
+    }
+  });
 </script>
 
 <div>
@@ -120,9 +129,7 @@
       class:mix-blend-difference={applyFilters}
     />
   {/if}
-  {#if commonName}
-    <p class="text-roel_blue font-primer text-3xl">
-      {commonName}
-    </p>
+  {#if label}
+    <div class="mt-4 text-center">{label}</div>
   {/if}
 </div>
