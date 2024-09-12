@@ -39,9 +39,9 @@ export const POST: RequestHandler = async ({ params, request, fetch }) => {
   return json(resInsert, { status: 201 });
 };
 
-export const GET: RequestHandler = async ({ params }) => {
-  const plantId = params["plantid"];
-  const userId = params["userid"];
+export const GET: RequestHandler = async ({ params, url }) => {
+  const plantId = params["id"];
+  const userId = url.searchParams.get("userid");
 
   if (plantId) {
     const matchingCandidatePlant = await db.query.generatedPlants.findFirst({

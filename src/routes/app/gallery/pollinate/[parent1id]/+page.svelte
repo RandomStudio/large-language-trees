@@ -10,7 +10,7 @@
 
   import {
     addConfirmedPlant,
-    addConfirmedPlantToOtherUser,
+    addPlantToUser,
     startTextGeneration
   } from "./PollinationFrontendFunctions";
   import type {
@@ -20,7 +20,7 @@
     SelectPlant,
     SelectSeedbank
   } from "$lib/types";
-  import type { EventNewPollination } from "$lib/events.types";
+  import type { EventNewSprouting } from "$lib/events.types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import NameChildPlant from "../../scan/[parent1id]/NameChildPlant.svelte";
 

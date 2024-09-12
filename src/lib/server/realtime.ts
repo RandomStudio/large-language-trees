@@ -598,7 +598,7 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
       }
       break;
     }
-    case "newPlantPollination": {
+    case "newPlantSprouted": {
       const PRIORITY = 1;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
@@ -650,6 +650,10 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
           console.error("author(s) missing from", { plant });
         }
       }
+      break;
+    }
+    case "newGeneratedPlantReady": {
+      // Ignore for now
       break;
     }
     default: {
@@ -739,7 +743,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
         }
       ];
     }
-    case "newPlantPollination": {
+    case "newPlantSprouted": {
       const { parent1, parent2 } = event.payload;
       if (!parent1 || !parent2) {
         throw Error("parents not in payload: " + JSON.stringify(event.payload));

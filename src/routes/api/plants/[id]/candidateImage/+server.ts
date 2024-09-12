@@ -61,13 +61,17 @@ export const POST: RequestHandler = async ({ request, params }) => {
         .returning();
 
       if (res.length > 0) {
-        const { authorTop, authorBottom } = res[0];
+        const { authorTop, authorBottom, imageUrl } = res[0];
+        if (!imageUrl) {
+          throw Error("there should be an image URL for the version uploaded");
+        }
         const e: EventPlantGenerated = {
           name: "newGeneratedPlantReady",
           payload: {
             plantId,
             authorTop,
-            authorBottom
+            authorBottom,
+            imageUrl
           }
         };
         await publishEvent(e);

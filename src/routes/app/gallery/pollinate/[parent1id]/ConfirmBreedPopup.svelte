@@ -13,6 +13,8 @@
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
 
   import { fade } from "svelte/transition";
+  import { insertNewPlant } from "./PollinationFrontendFunctions";
+  import { onMount } from "svelte";
 
   export let candidateChild: InsertPlant;
 
@@ -24,46 +26,18 @@
   let finalChildReadyToAdd: InsertPlant = { ...candidateChild };
 
   export let onCancel: () => any;
-  export let onConfirm: (plantReadyToAdd: InsertPlant) => Promise<void>;
+  export let onConfirm: () => any;
 
-  let textInput = finalChildReadyToAdd.commonName || "";
   let waitingForImage = false;
-  let candidateImageUrl: string | null = null;
+  let candidateImageUrl: string | null = candidateChild.imageUrl || null;
   let errorText: string = "";
 
-  async function handleAction() {
-    if (textInput.trim() === "") {
-      errorText = "Error : Please write something";
-    } else {
-      try {
-        const previousCommonName = finalChildReadyToAdd.commonName;
-        finalChildReadyToAdd.commonName = textInput;
+  const finalise = async () => {
+    await insertNewPlant(finalChildReadyToAdd);
+    onConfirm();
+  };
 
-        await onConfirm(finalChildReadyToAdd);
-        goto("../");
-      } catch (error) {
-        console.error("Error during confirmation:", error);
-      }
-    }
-  }
-
-  function handleSubmit() {
-    if (textInput.trim() === "") {
-      console.log("Please write something");
-      return;
-    }
-
-    console.log("Name given:", textInput);
-
-    if (finalChildReadyToAdd.description && finalChildReadyToAdd.commonName) {
-    }
-    finalChildReadyToAdd.commonName = textInput;
-
-    //@ts-ignore
-    umami.track("Named Plant");
-  }
-
-  function replaceImage(url: string) {
+  const replaceImage = (url: string) => {
     console.log(
       "ConfirmBreedPopup replacing url",
       candidateImageUrl,
@@ -72,25 +46,11 @@
     );
     candidateImageUrl = url;
     finalChildReadyToAdd.imageUrl = url;
-  }
+  };
 
-  const messages = [
-    "Plants are being dug up",
-    "The roots are intertwining",
-    "DNA is being mixed up",
-    "A new seed is created",
-    "Watering the new plant",
-    "Flowers are budding"
-  ];
-  let currentIndex = 0;
-
-  setInterval(() => {
-    if (currentIndex < messages.length - 1) {
-      currentIndex = (currentIndex + 1) % messages.length;
-    }
-  }, 3000);
-
-  // generateImage();
+  onMount(() => {
+    console.log("I'm here!", candidateChild);
+  });
 </script>
 
 {#if waitingForImage}
@@ -103,7 +63,7 @@
         id="message"
         class="text-roel_blue font-primer text-2xl mt-4 text-center"
       >
-        {messages[currentIndex]} ...
+        Please wait...
       </div>
     </div>
   </div>
@@ -127,17 +87,7 @@
             waitingForImage = false;
           }}
         />
-        <div class="text-center">
-          <form on:submit|preventDefault={handleSubmit} class="mt-2">
-            <input
-              type="text"
-              bind:value={textInput}
-              class="bg-roel_blue bg-opacity-10 border-[3px] px-4 py-2 border-roel_blue rounded-full font-primer text-roel_blue text-2xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center"
-              placeholder="Name your flower"
-              maxlength={LIMIT_CHARACTERS_PLANTNAME}
-            />
-          </form>
-        </div>
+
         <p class="mt-8 text-base">{errorText}</p>
         <p class="mt-8 text-base mb-0">{candidateChild.description}</p>
 
@@ -148,8 +98,7 @@
   </div>
 
   <div transition:fade={{ delay: 2000, duration: 1 }}>
-    <ButtonBottom text="Ok" onClick={handleAction} width="w-7/12"
-    ></ButtonBottom>
+    <ButtonBottom text="Ok" onClick={finalise} width="w-7/12"></ButtonBottom>
   </div>
 
   <button

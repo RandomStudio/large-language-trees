@@ -2,7 +2,6 @@ import type {
   gardens,
   gardensToPlants,
   generatedPlants,
-  generatedText,
   plants,
   presentationState,
   promptSettingsTable,
@@ -25,6 +24,8 @@ export interface PublicUserInfo {
   username: string;
 }
 
+export type CandidatePlant = typeof generatedPlants.$inferSelect;
+
 export type SelectGarden = typeof gardens.$inferSelect;
 export type GardenPlantEntry = typeof gardensToPlants.$inferInsert;
 
@@ -38,8 +39,6 @@ export type GeneratedImage = typeof generatedPlants.$inferSelect;
 export type SelectPromptSettings = typeof promptSettingsTable.$inferInsert;
 
 export type PresentationDisplayState = typeof presentationState.$inferInsert;
-
-export type SelectCandidateText = typeof generatedText.$inferSelect;
 
 export interface PlantWithDate extends SelectPlant {
   pollinationDate: Date;

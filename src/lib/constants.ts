@@ -58,3 +58,12 @@ export const POLLINATION_RESULT_TIMEOUT = 16000;
 export const FADE_DURATION = 1500;
 
 export const MAX_CANVASSES = 4;
+
+export const LOADING_MESSAGES = [
+  "Plants are being dug up",
+  "The roots are intertwining",
+  "DNA is being mixed up",
+  "A new seed is created",
+  "Watering the new plant",
+  "Flowers are budding"
+];
