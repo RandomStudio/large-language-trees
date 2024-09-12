@@ -2,7 +2,8 @@
  * `/src/routes/api/plants/generate/+server.ts`
  */
 interface BackgroundGenerateTextRequest {
-  userId: string;
+  authorTop: string;
+  authorBottom: string;
   newPlantId: string;
   parent1Id: string;
   parent2Id: string;
@@ -18,7 +19,8 @@ interface BackgroundGenerateTextRequest {
  * `src/routes/api/plants/[id]/candidateText/+server.ts`
  */
 interface CandidateTextBody {
-  userId: string;
+  authorTop: string;
+  authorBottom: string;
   contents?: string;
   errorMessage?: string;
 }
@@ -44,6 +46,10 @@ interface ChatResponse {
     total_tokens: number;
   };
 }
+
+// ----------------------------------------------------------------------------
+// MAIN FUNCTION (REQUEST HANDLER)
+// ----------------------------------------------------------------------------
 
 export default async (req: Request) => {
   const requestBody = (await req.json()) as BackgroundGenerateTextRequest;
@@ -75,36 +81,23 @@ export default async (req: Request) => {
   await initImageGeneration(info, serverOrigin);
 };
 
-const getImageGenInfo = async (
-  serverOrigin: string,
-  plantId: string,
-  description: string
-): Promise<GenImageToBackground> => {
-  const jsonBody: GenImageToServer = {
-    plantId,
-    description
-  };
-
-  const res = await fetch(`${serverOrigin}/api/images/generate`, {
-    method: "POST",
-    mode: "cors",
-    body: JSON.stringify(jsonBody),
-    headers: {
-      origin: serverOrigin
-    }
-  });
-
-  const info = (await res.json()) as GenImageToBackground;
-
-  return info;
-};
+// ----------------------------------------------------------------------------
+// TEXT-GENERATION
+// ----------------------------------------------------------------------------
 
 const initTextGeneration = async (
   requestBody: BackgroundGenerateTextRequest,
   serverOrigin: string
 ): Promise<object> => {
-  const { userId, model, messages, newPlantId, parent1Id, parent2Id } =
-    requestBody;
+  const {
+    authorTop,
+    authorBottom,
+    model,
+    messages,
+    newPlantId,
+    parent1Id,
+    parent2Id
+  } = requestBody;
 
   const apiKey = process.env.OPENAI_API_KEY;
 
@@ -142,7 +135,8 @@ const initTextGeneration = async (
       await notifyCandidateTextReady(
         newPlantId,
         {
-          userId,
+          authorTop,
+          authorBottom,
           contents: JSON.stringify(parsedPlant)
         },
         serverOrigin
@@ -156,7 +150,8 @@ const initTextGeneration = async (
       await notifyCandidateTextReady(
         newPlantId,
         {
-          userId,
+          authorTop,
+          authorBottom,
           errorMessage: "Failure on new plant response"
         },
         serverOrigin
@@ -172,10 +167,6 @@ const initTextGeneration = async (
     throw Error("Request to OpenAI failed: " + statusText);
   }
 };
-
-// ----------------------------------------------------------------------------
-// TEXT-GENERATION
-// ----------------------------------------------------------------------------
 
 const parseNewPlant = (
   newPlantId: string,
@@ -271,6 +262,30 @@ interface GenerateImageResultBody {
   url?: string | null;
   errorMessage?: string | null;
 }
+
+const getImageGenInfo = async (
+  serverOrigin: string,
+  plantId: string,
+  description: string
+): Promise<GenImageToBackground> => {
+  const jsonBody: GenImageToServer = {
+    plantId,
+    description
+  };
+
+  const res = await fetch(`${serverOrigin}/api/images/generate`, {
+    method: "POST",
+    mode: "cors",
+    body: JSON.stringify(jsonBody),
+    headers: {
+      origin: serverOrigin
+    }
+  });
+
+  const info = (await res.json()) as GenImageToBackground;
+
+  return info;
+};
 
 const initImageGeneration = async (
   requestBody: GenImageToBackground,

@@ -5,7 +5,7 @@ import {
   eventLogs,
   gardens,
   gardensToPlants,
-  generatedImages,
+  generatedPlants,
   generatedText,
   plants,
   presentationState,
@@ -327,7 +327,7 @@ export const cleanUp = async () => {
   await db.delete(sessions);
   await db.delete(plants);
   await db.delete(promptSettingsTable);
-  await db.delete(generatedImages);
+  await db.delete(generatedPlants);
   await db.delete(presentationState);
   await db.delete(users);
   console.log("...cleanup complete!");

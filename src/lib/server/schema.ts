@@ -21,19 +21,16 @@ export const plants = pgTable("plants", {
   authorBottom: text("author_bottom").references(() => users.id)
 });
 
-export const generatedImages = pgTable("generated_images", {
-  id: text("id").primaryKey(),
-  plantId: text("plant_id").notNull(),
-  url: text("url"),
-  errorMessage: text("error_message")
-});
-
-export const generatedText = pgTable("generated_text", {
-  plantId: text("plant_id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id), // ID of the user who initiated the gen request
+export const generatedPlants = pgTable("generated_plants", {
+  plantId: text("plant_id").notNull().primaryKey(),
+  authorTop: text("author_top")
+    .references(() => users.id)
+    .notNull(),
+  authorBottom: text("author_bottom")
+    .references(() => users.id)
+    .notNull(),
   contents: json("contents"), // can be null, if plant not generated yet!
+  imageUrl: text("image_url"), // can be null, if image not generated yet!
   errorMessage: text("error_message")
 });
 

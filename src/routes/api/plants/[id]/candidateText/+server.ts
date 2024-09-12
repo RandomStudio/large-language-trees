@@ -1,14 +1,15 @@
 import { db } from "$lib/server/db";
-import { generatedText } from "$lib/server/schema";
+import { generatedPlants } from "$lib/server/schema";
 import type { GenerateImageRequest, InsertPlant } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 
 /** Should be identical to the interface in
  * `/netlify/functions/complete-gen-background.mts`
  */
 interface CandidateTextBody {
-  userId: string;
+  authorTop: string;
+  authorBottom: string;
   contents?: string;
   errorMessage?: string;
 }
@@ -28,33 +29,12 @@ export const POST: RequestHandler = async ({ params, request, fetch }) => {
 
   const candidateTextBody = (await request.json()) as CandidateTextBody;
 
-  const { userId, contents, errorMessage } = candidateTextBody;
+  const { authorTop, authorBottom, contents, errorMessage } = candidateTextBody;
 
   const resInsert = await db
-    .insert(generatedText)
-    .values({ userId, plantId, contents, errorMessage })
+    .insert(generatedPlants)
+    .values({ authorTop, authorBottom, plantId, contents, errorMessage })
     .returning();
-
-  // if (contents) {
-  //   const plantDetails = JSON.parse(contents) as InsertPlant;
-  //   const jsonBody: GenerateImageRequest = {
-  //     description: plantDetails.description,
-  //     plantId: plantDetails.id
-  //   };
-
-  //   const resImageRequest = await fetch("/api/images/generate", {
-  //     method: "POST",
-  //     body: JSON.stringify(jsonBody)
-  //   });
-  //   console.log(
-  //     "result requesting new image generation:",
-  //     resImageRequest.status,
-  //     resImageRequest.statusText
-  //   );
-  //   return json({ resInsert, resImageRequest }, { status: 201 });
-  // } else {
-  //   throw Error("no plant details to use for image generation!");
-  // }
 
   return json(resInsert, { status: 201 });
 };
@@ -64,8 +44,8 @@ export const GET: RequestHandler = async ({ params }) => {
   const userId = params["userid"];
 
   if (plantId) {
-    const matchingCandidatePlant = await db.query.generatedText.findFirst({
-      where: eq(generatedText.plantId, plantId)
+    const matchingCandidatePlant = await db.query.generatedPlants.findFirst({
+      where: eq(generatedPlants.plantId, plantId)
     });
 
     if (matchingCandidatePlant) {
@@ -79,15 +59,19 @@ export const GET: RequestHandler = async ({ params }) => {
       return json({}, { status: 202 });
     }
   } else if (userId) {
-    const matchingCandidatePlant = await db.query.generatedText.findFirst({
-      where: eq(generatedText.userId, userId)
+    // Search with userID for EITHER authorTop or authorBottom
+    const matchingCandidatePlant = await db.query.generatedPlants.findFirst({
+      where: or(
+        eq(generatedPlants.authorTop, userId),
+        eq(generatedPlants.authorBottom, userId)
+      )
     });
 
     if (matchingCandidatePlant) {
       return json(matchingCandidatePlant, { status: 200 });
     } else {
       console.log(
-        "No matching candidate plant (text generation) for userID",
+        "No matching candidate plant (generated candidate) for userID",
         userId,
         "... this is OK"
       );

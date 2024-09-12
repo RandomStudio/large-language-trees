@@ -10,10 +10,11 @@ import { plants, users } from "$lib/server/schema";
 import { stripUserInfo } from "$lib/security";
 
 /** Should be identical to the version in
- * `/netlify/functions/text-gen-background.mts`
+ * `/netlify/functions/complete-gen-background.mts`
  */
 interface BackgroundGenerateTextRequest {
-  userId: string;
+  authorTop: string;
+  authorBottom: string;
   newPlantId: string;
   parent1Id: string;
   parent2Id: string;
@@ -49,7 +50,8 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
   const newPlantId = uuidv4();
 
   const bodyJson: BackgroundGenerateTextRequest = {
-    userId: thisUserId,
+    authorTop: thisUserId,
+    authorBottom: otherUserId,
     newPlantId,
     parent1Id: plant1.id,
     parent2Id: plant2.id,
