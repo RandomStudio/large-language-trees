@@ -2,11 +2,7 @@
   import { buildImagePrompt, buildTextPrompt } from "$lib/promptUtils";
   import type {
     CandidatePlant,
-    GeneratedImage,
-    GenerateImageRequest,
     GeneratePlantRequestBody,
-    InsertPlant,
-    PromptConfig,
     SelectPlant
   } from "$lib/types";
   import {
@@ -17,10 +13,10 @@
   import { onDestroy, onMount } from "svelte";
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
   import Spinner from "$lib/shared-components/BasicUtilitySpinner.svelte";
-  import DefaultPrompt from "../../../../defaults/prompt-config";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import { v4 as uuidv4 } from "uuid";
   import { invalidateAll } from "$app/navigation";
+  import { type GenImageTestToServer } from "../../../api/images/testGenerate/+server";
 
   enum Tabs {
     TEXT,
@@ -159,43 +155,20 @@
     errorMessages = null;
     const plantId = "test-only-" + uuidv4();
     if (plantForImage && finalImagePrompt) {
-      const bodyData: GenerateImageRequest = {
-        instructions: data.promptConfig.image.instructions,
-        description: plantForImage.description || "",
+      const bodyData: GenImageTestToServer = {
         plantId,
+        fullPrompt: finalImagePrompt,
         model: data.promptConfig.image.model
       };
-      try {
-        const res = await fetch("/api/images/generate", {
-          method: "POST",
-          body: JSON.stringify(bodyData)
-        });
-        if (res.status >= 500) {
-          console.log("Error in generation");
-          errorMessages = `ERROR in generation`;
-        }
-        // Do not expect immediate result; poll for candidate image
-        if (candidateImagePoll) {
-          clearInterval(candidateImagePoll);
-        }
-        candidateImagePoll = setInterval(async () => {
-          console.log("Polling for candidate image...");
-          const res = await fetch(`/api/plants/${plantId}/generatedPlant`, {
-            method: "GET"
-          });
-          if (res.status === 200) {
-            console.log("...Image ready!");
-            if (candidateImagePoll) {
-              clearInterval(candidateImagePoll);
-            }
-            const generated = (await res.json()) as GeneratedImage;
-            resultPlantImageUrl = generated.imageUrl;
-            busy = false;
-          }
-        }, 2000);
-      } catch (e) {
-        console.log("Error in generation:", e);
-        errorMessages = `ERROR ${JSON.stringify(e)}`;
+      console.log(bodyData);
+      const res = await fetch("/api/images/testGenerate", {
+        method: "POST",
+        body: JSON.stringify(bodyData)
+      });
+      if (res.status !== 202) {
+        console.log("Error in generation");
+        errorMessages = `ERROR in generation`;
+        busy = false;
       }
     }
   };

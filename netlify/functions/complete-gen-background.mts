@@ -1,7 +1,4 @@
-import {
-  getImageGenInfo,
-  initImageGeneration
-} from "./image-gen-background.mts";
+import { getImageGenInfo, initImageGeneration } from "./image-gen.mts";
 
 /** Should be identical to the version in
  * `/src/routes/api/plants/generate/+server.ts`

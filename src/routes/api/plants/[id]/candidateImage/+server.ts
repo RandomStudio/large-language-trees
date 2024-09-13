@@ -11,7 +11,7 @@ import type { EventPlantGenerated } from "$lib/events.types";
 
 /**
  * Should be identical to the version in
- * `netlify/functions/img-gen-background.mts`
+ * `netlify/functions/image-gen.mts`
  */
 interface GenerateImageResultBody {
   url?: string | null;
@@ -34,6 +34,13 @@ export const POST: RequestHandler = async ({ request, params }) => {
       await uploadToS3(resImageFromOpenAI, baseName);
       const s3Url = URL_PREFIX + "/" + baseName + ".png";
       console.log("...Uploaded, now available at", s3Url);
+
+      /* 
+        When testing, it's possible that the plant text
+        has not actually been generated, in which case we should create it first...
+      */
+      await createIfNotExists(plantId);
+
       const res = await db
         .update(generatedPlants)
         .set({

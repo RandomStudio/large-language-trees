@@ -11,6 +11,7 @@ const publicAccessAllowed = (pathname: string) =>
   pathname.includes("/api/displayNotifyServer");
 
 export const handle: Handle = async ({ event, resolve }) => {
+  // console.log(event.url.pathname);
   if (event.url.pathname === "/") {
     console.log("Redirect from root path to app");
     redirect(302, "/app");

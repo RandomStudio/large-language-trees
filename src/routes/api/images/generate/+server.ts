@@ -3,7 +3,10 @@ import type { GenerateImageRequest, PromptConfig } from "$lib/types";
 import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
 
-interface GenImageToServer {
+/**
+ * Should be identical to version in `neftlify/functions/image-gen-background.mts`
+ */
+export interface GenImageToServer {
   plantId: string;
   description: string;
 }
@@ -13,13 +16,11 @@ interface GenImageToServer {
  *
  * This is what our server needs to send back to the background function
  */
-interface GenImageToBackground {
+export interface GenImageToBackground {
   plantId: string;
   fullPrompt: string;
   model: string;
 }
-
-// interface
 
 /*
   This endpoint is used by the BACKGROUND function to get the full prompt
