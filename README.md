@@ -80,3 +80,16 @@ npm run dev:drizzle-studio
 ```
 
 This will connect to the local database and the Studio interface will be available at https://local.drizzle.studio
+
+## Plant Generation Sequence Diagram
+### Normal user plant generation
+
+```mermaid
+sequenceDiagram
+    Frontend->>Server: GeneratePlantRequestBody (/api/plants/generate)
+    Server-->>DB: promptSettings, plant1, plant2
+    DB-->>Server: promptSettings, plant1, plant2
+    Server-->>BgFunction: BackgroundGenerateTextRequest (complete-gen-background)
+    BgFunction-->>Server: 202 Accepted
+    Server->>Frontend: newPlantId
+```

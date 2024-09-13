@@ -1,6 +1,7 @@
 <script lang="ts">
   import { buildImagePrompt, buildTextPrompt } from "$lib/promptUtils";
   import type {
+    CandidatePlant,
     GeneratedImage,
     GenerateImageRequest,
     GeneratePlantRequestBody,
@@ -13,25 +14,26 @@
     pickRandomElement
   } from "random-elements";
   import PromptConfigSection from "./PromptConfigSection.svelte";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
   import Spinner from "$lib/shared-components/BasicUtilitySpinner.svelte";
   import DefaultPrompt from "../../../../defaults/prompt-config";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import { v4 as uuidv4 } from "uuid";
+  import { invalidateAll } from "$app/navigation";
 
   enum Tabs {
     TEXT,
     IMAGE
   }
 
-  export let data: PromptConfig;
+  export let data;
 
   let selectedTab = Tabs.TEXT;
 
   let errorMessages: string | null = null;
 
-  let resultPlantText: InsertPlant | null = null;
+  let resultPlantText: string | null = null;
   let resultPlantImageUrl: string | null = null;
   let busy = false;
 
@@ -41,13 +43,15 @@
   let parent1: SelectPlant | null = null;
   let parent2: SelectPlant | null = null;
 
+  let waitingForPlantId: string | null = null;
   let plantForImage: SelectPlant | null = null;
 
   let candidateImagePoll: NodeJS.Timeout | null = null;
 
+  let pollInterval: NodeJS.Timeout | null = null;
+
   const backToDefaults = () => {
-    // console.log("Back to defaults!", DefaultPrompt);
-    data = { ...DefaultPrompt };
+    invalidateAll();
   };
 
   const pickRandomParents = async () => {
@@ -66,19 +70,56 @@
     plantForImage = pickRandomElement(allPlants);
   };
 
+  const checkForResults = async () => {
+    if (waitingForPlantId) {
+      console.log(
+        "Checking for generated plant with ID",
+        waitingForPlantId,
+        "..."
+      );
+
+      const res = await fetch(
+        `/api/plants/${waitingForPlantId}/generatedPlant`,
+        {
+          method: "GET"
+        }
+      );
+      if (res.status === 200) {
+        const matched = (await res.json()) as CandidatePlant;
+        console.log("Found it!", matched);
+        if (matched.contents) {
+          resultPlantText = matched.contents as string;
+          busy = false;
+        }
+        if (matched.imageUrl) {
+          resultPlantImageUrl = matched.imageUrl;
+          busy = false;
+        }
+      }
+    }
+  };
+
   onMount(async () => {
     await pickRandomParents();
     await pickRandomPlantForImage();
     preparePrompts();
+
+    pollInterval = setInterval(checkForResults, 2000);
+  });
+
+  onDestroy(() => {
+    if (pollInterval) {
+      clearInterval(pollInterval);
+    }
   });
 
   const preparePrompts = () => {
     if (parent1 && parent2) {
-      finalTextPrompt = buildTextPrompt(data, parent1, parent2);
+      finalTextPrompt = buildTextPrompt(data.promptConfig, parent1, parent2);
     }
     if (plantForImage) {
       finalImagePrompt = buildImagePrompt(
-        data.image.instructions,
+        data.promptConfig.image.instructions,
         plantForImage.description || ""
       );
       // console.log("Updated final image plant", finalImagePrompt);
@@ -86,24 +127,31 @@
   };
 
   const runTextGeneration = async () => {
+    console.log("runTextGeneration...");
     errorMessages = null;
-    if (parent1 && parent2) {
-      const bodyData: GeneratePlantRequestBody = {
-        // TODO: the userId is not necessarily "admin"!
-        thisUserId: "admin",
-        thisPlantId: parent1.id,
-        otherUserId: "other",
-        otherPlantId: parent2.id,
-        prompt: finalTextPrompt,
-        model: data.text.model
-      };
-      const offspring = (await (
-        await fetch("/api/plants/generate", {
-          method: "POST",
-          body: JSON.stringify(bodyData)
-        })
-      ).json()) as InsertPlant;
-      resultPlantText = offspring;
+    if (!parent1 || !parent2) {
+      throw Error("parent1/2 not set");
+    }
+
+    const bodyData: GeneratePlantRequestBody = {
+      thisUserId: data.adminUserDetails.id,
+      thisPlantId: parent1.id,
+      otherUserId: data.adminUserDetails.id,
+      otherPlantId: parent2.id,
+      prompt: finalTextPrompt,
+      model: data.promptConfig.text.model
+    };
+
+    const res = await fetch("/api/plants/generate", {
+      method: "POST",
+      body: JSON.stringify(bodyData)
+    });
+
+    if (res.status === 202) {
+      const { newPlantId } = (await res.json()) as { newPlantId: string };
+      waitingForPlantId = newPlantId;
+    } else {
+      errorMessages = `Unexpected response: ${res.status} - ${res.statusText}`;
     }
   };
 
@@ -112,10 +160,10 @@
     const plantId = "test-only-" + uuidv4();
     if (plantForImage && finalImagePrompt) {
       const bodyData: GenerateImageRequest = {
-        instructions: data.image.instructions,
+        instructions: data.promptConfig.image.instructions,
         description: plantForImage.description || "",
         plantId,
-        model: data.image.model
+        model: data.promptConfig.image.model
       };
       try {
         const res = await fetch("/api/images/generate", {
@@ -132,7 +180,7 @@
         }
         candidateImagePoll = setInterval(async () => {
           console.log("Polling for candidate image...");
-          const res = await fetch(`/api/plants/${plantId}/candidateImage`, {
+          const res = await fetch(`/api/plants/${plantId}/generatedPlant`, {
             method: "GET"
           });
           if (res.status === 200) {
@@ -145,10 +193,6 @@
             busy = false;
           }
         }, 2000);
-
-        // const imageResult = (await res.json()) as GeneratedImageResult;
-        // const { url } = imageResult;
-        // resultPlantImageUrl = url;
       } catch (e) {
         console.log("Error in generation:", e);
         errorMessages = `ERROR ${JSON.stringify(e)}`;
@@ -190,22 +234,22 @@
     <form method="post" action="/admin/prompting">
       <PromptConfigSection
         name="textPreamble"
-        sectionData={data.text.preamble}
+        sectionData={data.promptConfig.text.preamble}
         onChange={() => preparePrompts()}
       />
       <PromptConfigSection
         name="textExplanation"
-        sectionData={data.text.explanation}
+        sectionData={data.promptConfig.text.explanation}
         onChange={() => preparePrompts()}
       />
       <PromptConfigSection
         name="textInstructions"
-        sectionData={data.text.instructions}
+        sectionData={data.promptConfig.text.instructions}
         onChange={() => preparePrompts()}
       />
       <label class="block">
         Model
-        <select bind:value={data.text.model} name="textModel">
+        <select bind:value={data.promptConfig.text.model} name="textModel">
           <option value={"gpt-3.5-turbo"}>Chat-GPT 3.5-turbo</option>
           <option value={"gpt-4-turbo"}>Chat-GPT 4-turbo</option>
         </select>
@@ -233,7 +277,6 @@
             busy = true;
             preparePrompts();
             await runTextGeneration();
-            busy = false;
           }}>Test</button
         >
       </div>
@@ -260,6 +303,7 @@
       <button
         class="bg-orange-500 text-white py-2 px-4 rounded"
         on:click={() => {
+          waitingForPlantId = null;
           resultPlantText = null;
         }}>Close ⓧ</button
       >
@@ -279,13 +323,13 @@
           class="w-full"
           name="imageInstructions"
           rows={10}
-          bind:value={data.image.instructions}
+          bind:value={data.promptConfig.image.instructions}
           on:input={() => preparePrompts()}
         />
       </label>
       <label class="block">
         Model
-        <select bind:value={data.image.model} name="imageModel">
+        <select bind:value={data.promptConfig.image.model} name="imageModel">
           <option>dall-e-2</option>
           <option>dall-e-3</option>
         </select>
@@ -360,6 +404,6 @@
   {/if}
 
   {#if busy}
-    <Spinner />
+    <Spinner message={waitingForPlantId} />
   {/if}
 </main>

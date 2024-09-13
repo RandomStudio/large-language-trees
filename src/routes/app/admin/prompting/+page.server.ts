@@ -1,14 +1,23 @@
 import { db } from "$lib/server/db";
-import { promptSettingsTable } from "$lib/server/schema";
+import { promptSettingsTable, users } from "$lib/server/schema";
 import { promptRowToConfig } from "$lib/promptUtils";
-import type { PromptConfig } from "$lib/types";
 import type { Actions, PageServerLoad } from "./$types";
+import { stripUserInfo } from "$lib/security";
+import { eq } from "drizzle-orm";
 
-export const load: PageServerLoad = async (): Promise<PromptConfig> => {
-  console.log("loading page");
+export const load: PageServerLoad = async () => {
+  const adminUser = await db.query.users.findFirst({
+    where: eq(users.username, "admin")
+  });
+  if (!adminUser) {
+    throw Error("admin user not found");
+  }
   const loadedFromDb = await db.query.promptSettingsTable.findFirst();
   if (loadedFromDb) {
-    return promptRowToConfig(loadedFromDb);
+    return {
+      promptConfig: promptRowToConfig(loadedFromDb),
+      adminUserDetails: stripUserInfo(adminUser)
+    };
   } else {
     throw Error("Failed to load settings from DB");
   }

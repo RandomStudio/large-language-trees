@@ -228,7 +228,7 @@
         if (otherPlant && otherUser) {
           initiateBackgroundRequest(otherUser.id, otherPlant.id)
             .then(() => {
-              goto("/app/gallery");
+              goto(`/app/gallery`);
             })
             .catch((e) => {
               errorMessage = "Error: " + e;

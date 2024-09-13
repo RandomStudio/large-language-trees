@@ -69,7 +69,7 @@ export const candidateToPlant = async (
   authorTop: string,
   authorBottom: string
 ): Promise<InsertPlant> => {
-  const exists = await fetch(`/api/plants/${plantId}/candidateText`);
+  const exists = await fetch(`/api/plants/${plantId}/generatedPlant`);
   console.log("response status", exists.status);
   if (exists.status === 200) {
     let newPlant = (await exists.json()) as CandidatePlant;

@@ -18,23 +18,6 @@ interface GenerateImageResultBody {
   errorMessage?: string | null;
 }
 
-export const GET: RequestHandler = async ({ params }) => {
-  const plantId = params["id"];
-  if (plantId) {
-    const candidateImage = await db.query.generatedPlants.findFirst({
-      where: eq(generatedPlants.plantId, plantId)
-    });
-
-    if (candidateImage) {
-      return json(candidateImage, { status: 200 });
-    } else {
-      return error(404);
-    }
-  } else {
-    return error(400, "plantId param required");
-  }
-};
-
 export const POST: RequestHandler = async ({ request, params }) => {
   console.log("candidate image POST request");
   const plantId = params["id"];

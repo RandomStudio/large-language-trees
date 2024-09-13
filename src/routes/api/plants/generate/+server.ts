@@ -3,11 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import { buildTextPrompt } from "$lib/promptUtils";
 import { BACKGROUND_FN_SECRET } from "$env/static/private";
-import type { GeneratePlantRequestBody } from "$lib/types";
+import type { GeneratePlantRequestBody, SelectPlant } from "$lib/types";
 import { db } from "$lib/server/db";
-import { eq } from "drizzle-orm";
-import { plants, users } from "$lib/server/schema";
+import { eq, or } from "drizzle-orm";
+import { generatedPlants, plants, users } from "$lib/server/schema";
 import { stripUserInfo } from "$lib/security";
+import { updateWholePlant } from "$lib/server";
 
 /** Should be identical to the version in
  * `/netlify/functions/complete-gen-background.mts`
@@ -39,7 +40,7 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
   });
 
   if (!plant1 || !plant2) {
-    throw Error("Failed to find existing plants (parents)");
+    return json({}, { status: 400, statusText: "Parent plants not found" });
   }
 
   const promptSettings = await getPromptSettings();
@@ -70,5 +71,5 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
     body: JSON.stringify(bodyJson)
   });
 
-  return json({ thisUserId }, { status: res.status });
+  return json({ newPlantId }, { status: res.status });
 };

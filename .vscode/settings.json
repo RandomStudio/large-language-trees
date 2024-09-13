@@ -1,5 +1,8 @@
 {
   "editor.formatOnSave": true,
   "cmake.configureOnOpen": false,
-  "editor.defaultFormatter": null
+  "editor.defaultFormatter": null,
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
