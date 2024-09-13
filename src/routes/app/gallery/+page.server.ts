@@ -44,12 +44,16 @@ export const load: PageServerLoad = async ({ locals }) => {
       (p) => p.plant.id !== myOriginalPlant.plant.id
     );
 
-  const notSproutedPlants = await db.query.generatedPlants.findMany({
-    where: or(
-      eq(generatedPlants.authorTop, userId),
-      eq(generatedPlants.authorBottom, userId)
-    )
-  });
+  const notSproutedPlants = (
+    await db.query.generatedPlants.findMany({
+      where: or(
+        eq(generatedPlants.authorTop, userId),
+        eq(generatedPlants.authorBottom, userId)
+      )
+    })
+  ).filter(
+    (e) => myOtherPlants.find((p) => p.plant.id === e.plantId) === undefined
+  );
 
   return {
     user: stripUserInfo(userWithSeedbankPlants),
