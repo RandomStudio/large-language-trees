@@ -6,7 +6,6 @@ import {
   gardens,
   gardensToPlants,
   generatedPlants,
-  generatedText,
   plants,
   presentationState,
   promptSettingsTable,
@@ -319,7 +318,7 @@ export const checkDefaultUsers = async () => {
 export const cleanUp = async () => {
   console.warn("Starting cleanup...");
   await db.delete(eventLogs);
-  await db.delete(generatedText);
+  await db.delete(generatedPlants);
   await db.delete(seedbanksToPlants);
   await db.delete(gardensToPlants);
   await db.delete(seedbanks);

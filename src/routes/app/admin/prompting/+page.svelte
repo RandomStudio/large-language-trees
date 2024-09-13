@@ -2,7 +2,7 @@
   import { buildImagePrompt, buildTextPrompt } from "$lib/promptUtils";
   import type {
     GeneratedImage,
-    GeneratedImageResult,
+    GenerateImageRequest,
     GeneratePlantRequestBody,
     InsertPlant,
     PromptConfig,
@@ -19,7 +19,6 @@
   import DefaultPrompt from "../../../../defaults/prompt-config";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import { v4 as uuidv4 } from "uuid";
-  import { type GenerateImageRequest } from "../../../api/images/generate/types";
 
   enum Tabs {
     TEXT,
@@ -90,11 +89,13 @@
     errorMessages = null;
     if (parent1 && parent2) {
       const bodyData: GeneratePlantRequestBody = {
-        prompt: finalTextPrompt,
-        parents: [parent1, parent2],
-        model: data.text.model,
         // TODO: the userId is not necessarily "admin"!
-        userId: "admin"
+        thisUserId: "admin",
+        thisPlantId: parent1.id,
+        otherUserId: "other",
+        otherPlantId: parent2.id,
+        prompt: finalTextPrompt,
+        model: data.text.model
       };
       const offspring = (await (
         await fetch("/api/plants/generate", {
@@ -140,7 +141,7 @@
               clearInterval(candidateImagePoll);
             }
             const generated = (await res.json()) as GeneratedImage;
-            resultPlantImageUrl = generated.url;
+            resultPlantImageUrl = generated.imageUrl;
             busy = false;
           }
         }, 2000);
