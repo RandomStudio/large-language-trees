@@ -30,7 +30,14 @@ interface BackgroundGenerateTextRequest {
 export const POST: RequestHandler = async ({ request, fetch }) => {
   const data = (await request.json()) as GeneratePlantRequestBody;
 
-  const { prompt, thisUserId, thisPlantId, otherUserId, otherPlantId } = data;
+  const {
+    prompt,
+    thisUserId,
+    thisPlantId,
+    otherUserId,
+    otherPlantId,
+    userPickedNewName
+  } = data;
 
   const plant1 = await db.query.plants.findFirst({
     where: eq(plants.id, thisPlantId)
@@ -45,7 +52,9 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
 
   const promptSettings = await getPromptSettings();
 
-  const messages = prompt || buildTextPrompt(promptSettings, plant1, plant2);
+  const messages =
+    prompt ||
+    buildTextPrompt(promptSettings, plant1, plant2, userPickedNewName);
   const model = data.model || promptSettings.text.model;
 
   const newPlantId = uuidv4();

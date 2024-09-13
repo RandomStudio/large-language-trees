@@ -113,6 +113,7 @@ export interface GeneratePlantRequestBody {
   thisPlantId: string;
   otherUserId: string;
   otherPlantId: string;
+  userPickedNewName: string;
   /** Only used for developer prompt testing */
   prompt?: ChatCompletionMessageParam[];
   /** Only used for developer prompt testing */

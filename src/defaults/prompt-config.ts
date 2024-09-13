@@ -18,14 +18,14 @@ const DefaultPrompt: PromptConfig = {
     instructions: {
       label: "Final Instructions",
       description:
-        "Remind the AI what you are looking for (combining the two plants) and, if necessary, remind them of the fields (keys) that you expect to see. Definitely state that you only want pure JSON in the response, no other text. The maximum word count should be 200.",
-      text: 'Describe the new plant that would result from the combination of these two. The new common name should not just be a simple combination of the two parent plant names - try to come up with a strange sounding name. Please give the result in the same JSON format, i.e. with a field "commonName\'" for the common name and a set of key-value pairs for the new "properties". Also add a "description" field with a short paragraph (about three sentences) that describes the new plant referencing the characteristics you came up with, but feel free to invent some details if you like. Do not include any text besides the JSON in your response.'
+        "Remind the AI what you are looking for (combining the two plants) and, if necessary, remind them of the fields (keys) that you expect to see. Note that the [NEW_PLANT_NAME] will be replaced with the user-chosen name BEFORE submitting the request.",
+      text: 'Describe the new plant that would result from the combination of these two. The new common name must be "[NEW_PLANT_NAME]". Please give the result in the same JSON format, i.e. with a field "commonName" for the common name and a set of key-value pairs for the new "properties". Also add a "description" field with a short paragraph (about three sentences) that describes the new plant referencing the characteristics you came up with, but feel free to invent some details if you like. Do not include any text besides the JSON in your response.'
     }
   },
   image: {
     model: "dall-e-3",
     instructions:
-    "You are a botanist. Create a 2D image of a plant from the following description. The plant is in the centre, standing alone on a pure white background. Make sure there is no text in the image. There is only the plant in the middle of the picture. Here is the description:"
+      "You are a botanist. Create a 2D image of a plant from the following description. The plant is in the centre, standing alone on a pure white background. Make sure there is no text in the image. There is only the plant in the middle of the picture. Here is the description:"
   }
 };
 

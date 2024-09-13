@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { buildImagePrompt, buildTextPrompt } from "$lib/promptUtils";
+  import { buildTextPrompt } from "$lib/promptUtils";
   import type {
     CandidatePlant,
     GeneratePlantRequestBody,
@@ -36,7 +36,7 @@
   let busy = false;
 
   let finalTextPrompt: ChatCompletionMessageParam[] = [];
-  let finalImagePrompt: string | null = null;
+  let userPickedNewName: string = "Amazing Newplant";
 
   let parent1: SelectPlant | null = null;
   let parent2: SelectPlant | null = null;
@@ -105,7 +105,13 @@
 
   const preparePrompts = () => {
     if (parent1 && parent2) {
-      finalTextPrompt = buildTextPrompt(data.promptConfig, parent1, parent2);
+      console.log("preparePrompts...");
+      finalTextPrompt = buildTextPrompt(
+        data.promptConfig,
+        parent1,
+        parent2,
+        userPickedNewName
+      );
     }
   };
 
@@ -113,7 +119,7 @@
     console.log("runTextGeneration...");
     errorMessages = null;
     if (!parent1 || !parent2) {
-      throw Error("parent1/2 not set");
+      throw Error("parent1/2 not set, or user did not pick new name");
     }
 
     const bodyData: GeneratePlantRequestBody = {
@@ -122,7 +128,8 @@
       otherUserId: data.adminUserDetails.id,
       otherPlantId: parent2.id,
       prompt: finalTextPrompt,
-      model: data.promptConfig.text.model
+      model: data.promptConfig.text.model,
+      userPickedNewName
     };
 
     const res = await fetch("/api/plants/generate", {
@@ -166,6 +173,23 @@
     <h4>Error messages</h4>
     <p class="bg-red-500 font-bold">{errorMessages}</p>
   {/if}
+
+  {#if parent1 && parent2}
+    <div>
+      <h2>
+        Test combining {parent1.commonName} + {parent2.commonName}
+      </h2>
+    </div>
+  {/if}
+
+  <div class="mt-8">
+    <input type="text" bind:value={userPickedNewName} />:
+    <span>{userPickedNewName}</span>
+    <button
+      class="bg-orange-500 text-white py-2 px-4 rounded"
+      on:click={() => preparePrompts()}>Update</button
+    >
+  </div>
 
   <div class="mt-8">
     <button
@@ -219,19 +243,6 @@
           <option value={"gpt-4-turbo"}>Chat-GPT 4-turbo</option>
         </select>
       </label>
-
-      {#if parent1 && parent2}
-        <div>
-          <h2>
-            Test combining {parent1.commonName} + {parent2.commonName}
-          </h2>
-        </div>
-        <pre class="w-full text-wrap text-xs p-4">{JSON.stringify(
-            finalTextPrompt,
-            null,
-            2
-          )}</pre>
-      {/if}
     </form>
   {/if}
 
@@ -253,7 +264,7 @@
 
       {#if resultPlant.imageUrl}
         <div
-          class="m-8 p-4 rounded-sm shadow-2xl bg-sky-400 text-sm fixed top-16 border-2 border-slate-500 w-screen"
+          class="m-8 p-4 rounded-sm shadow-2xl bg-sky-400 text-sm border-2 border-slate-500 w-screen"
         >
           <div class="w-9/12">
             <TransparencyMaker
@@ -295,6 +306,12 @@
       </label>
     </form>
   {/if}
+
+  <pre class="w-full text-wrap text-xs p-4">{JSON.stringify(
+      finalTextPrompt,
+      null,
+      2
+    )}</pre>
 
   {#if busy}
     <Spinner message={waitingForPlantId} />

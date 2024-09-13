@@ -13,7 +13,8 @@ import type {
 export const buildTextPrompt = (
   config: PromptConfig,
   plant1: SelectPlant,
-  plant2: SelectPlant
+  plant2: SelectPlant,
+  userPickedNewName: string
 ): OpenAI.Chat.Completions.ChatCompletionMessageParam[] => {
   const { preamble, explanation, instructions } = config.text;
   return [
@@ -58,7 +59,7 @@ export const buildTextPrompt = (
         ) +
         "\n```" +
         "\n\n" +
-        instructions.text
+        instructions.text.replace("[NEW_PLANT_NAME]", userPickedNewName)
     }
   ];
 };
