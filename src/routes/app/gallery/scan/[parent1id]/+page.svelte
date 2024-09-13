@@ -157,13 +157,15 @@
 
   const initiateBackgroundRequest = async (
     otherUserId: string,
-    otherPlantId: string
+    otherPlantId: string,
+    userPickedNewName: string
   ) => {
     const jsonBody: GeneratePlantRequestBody = {
       thisUserId: data.thisUser.id,
       thisPlantId: data.thisPlant.id,
       otherUserId: otherUserId,
-      otherPlantId: otherPlantId
+      otherPlantId: otherPlantId,
+      userPickedNewName
     };
     const res = await fetch(`/api/plants/generate`, {
       method: "POST",
@@ -226,7 +228,7 @@
       thisUser={data.thisUser}
       onNameChosen={(nameChosen) => {
         if (otherPlant && otherUser) {
-          initiateBackgroundRequest(otherUser.id, otherPlant.id)
+          initiateBackgroundRequest(otherUser.id, otherPlant.id, nameChosen)
             .then(() => {
               goto(`/app/gallery`);
             })

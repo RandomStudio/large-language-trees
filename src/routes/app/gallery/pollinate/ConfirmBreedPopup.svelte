@@ -67,9 +67,7 @@
   <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40">
     <div class="overflow-y-auto pb-20" style="max-height: calc(100%);">
       <div class="mx-12 font-primer text-roel_blue text-left mt-5">
-        <p class="text-2xl">
-          Hooray you made a new plant. What would you like it to be named?
-        </p>
+        <p class="text-2xl">Hooray you made a new plant.</p>
 
         <TransparencyMaker
           src={candidateImageUrl}
