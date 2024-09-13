@@ -35,12 +35,6 @@ export const POST: RequestHandler = async ({ request, params }) => {
       const s3Url = URL_PREFIX + "/" + baseName + ".png";
       console.log("...Uploaded, now available at", s3Url);
 
-      /* 
-        When testing, it's possible that the plant text
-        has not actually been generated, in which case we should create it first...
-      */
-      await createIfNotExists(plantId);
-
       const res = await db
         .update(generatedPlants)
         .set({
@@ -67,17 +61,17 @@ export const POST: RequestHandler = async ({ request, params }) => {
         };
         await publishEvent(e);
 
-        // Delete candidate plant entry...
-        const deleted = await db
-          .delete(generatedPlants)
-          .where(eq(generatedPlants.plantId, plantId))
-          .returning();
+        // // Delete candidate plant entry...
+        // const deleted = await db
+        //   .delete(generatedPlants)
+        //   .where(eq(generatedPlants.plantId, plantId))
+        //   .returning();
 
-        if (deleted.length === 0) {
-          throw Error(
-            "failed to delete the entry, after it was finally confirmed!"
-          );
-        }
+        // if (deleted.length === 0) {
+        //   throw Error(
+        //     "failed to delete the entry, after it was finally confirmed!"
+        //   );
+        // }
 
         // Return response...
         return json(res, { status: 201 });

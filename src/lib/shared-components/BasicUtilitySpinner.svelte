@@ -3,7 +3,7 @@
 </script>
 
 <div
-  class="fixed top-16 left-o m-0 w-screen text-center bg-slate-500 bg-opacity-50"
+  class="fixed top-16 left-o m-0 w-screen text-center bg-slate-500 bg-opacity-50 pointer-events-none"
 >
   <div class="spinner centre">🌼</div>
   {#if message}
