@@ -24,12 +24,10 @@ export const plants = pgTable("plants", {
 export const generatedPlants = pgTable("generated_plants", {
   plantId: text("plant_id").notNull().primaryKey(),
   givenName: text("given_name").notNull(),
-  authorTop: text("author_top")
-    .references(() => users.id)
-    .notNull(),
-  authorBottom: text("author_bottom")
-    .references(() => users.id)
-    .notNull(),
+  authorTop: text("author_top"),
+  authorBottom: text("author_bottom"),
+  parentPlantTop: text("plant_top_id").references(() => plants.id),
+  parentPlantBottom: text("plant_bottom_id").references(() => plants.id),
   contents: json("contents"), // can be null, if plant not generated yet!
   imageUrl: text("image_url"), // can be null, if image not generated yet!
   errorMessage: text("error_message")
@@ -41,6 +39,28 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash").notNull(),
   isAdmin: boolean("is_admin").default(false)
 });
+
+export const generatedPlantsRelations = relations(
+  generatedPlants,
+  ({ one }) => ({
+    authorTop: one(users, {
+      fields: [generatedPlants.authorTop],
+      references: [users.id]
+    }),
+    authorBottom: one(users, {
+      fields: [generatedPlants.authorBottom],
+      references: [users.id]
+    }),
+    parentPlantTop: one(plants, {
+      fields: [generatedPlants.parentPlantTop],
+      references: [plants.id]
+    }),
+    parentPlantBottom: one(plants, {
+      fields: [generatedPlants.parentPlantBottom],
+      references: [plants.id]
+    })
+  })
+);
 
 export const usersRelations = relations(users, ({ one }) => ({
   myGarden: one(gardens, {

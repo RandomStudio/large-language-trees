@@ -49,7 +49,13 @@ export const load: PageServerLoad = async ({ locals }) => {
       where: or(
         eq(generatedPlants.authorTop, userId),
         eq(generatedPlants.authorBottom, userId)
-      )
+      ),
+      with: {
+        parentPlantTop: true,
+        parentPlantBottom: true,
+        authorTop: true,
+        authorBottom: true
+      }
     })
   ).filter(
     (e) => myOtherPlants.find((p) => p.plant.id === e.plantId) === undefined

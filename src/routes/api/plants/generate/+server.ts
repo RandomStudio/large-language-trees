@@ -56,7 +56,9 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
     plantId: newPlantId,
     authorTop: thisUserId,
     authorBottom: otherUserId,
-    givenName: userPickedNewName
+    givenName: userPickedNewName,
+    parentPlantTop: thisPlantId,
+    parentPlantBottom: otherPlantId
   });
 
   const promptSettings = await getPromptSettings();

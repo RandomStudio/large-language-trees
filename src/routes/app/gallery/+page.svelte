@@ -143,6 +143,9 @@
   {/each}
 
   {#each data.notSproutedPlants as plant}
+    {#if plant.authorTop && plant.authorBottom}
+      {plant.authorTop.username} ❤️ {plant.authorBottom.username}
+    {/if}
     <PlantDisplay
       disableAnimation={true}
       imageUrl={"/pollination/Seed_01.png"}
