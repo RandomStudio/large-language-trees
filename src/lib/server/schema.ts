@@ -15,19 +15,39 @@ export const plants = pgTable("plants", {
   description: text("description").notNull(),
   properties: json("properties").notNull(),
   imageUrl: text("image_url"),
-  parent1: text("parent1_id"),
-  parent2: text("parent2_id"),
-  authorTop: text("author_top").references(() => users.id),
-  authorBottom: text("author_bottom").references(() => users.id)
+  parent1: text("parent1"),
+  parent2: text("parent2"),
+  authorTop: text("author_top"),
+  authorBottom: text("author_bottom")
 });
+
+export const plantsRelations = relations(plants, ({ many, one }) => ({
+  inSeedbanks: many(seedbanksToPlants),
+  authorTop: one(users, {
+    fields: [plants.authorTop],
+    references: [users.id]
+  }),
+  authorBottom: one(users, {
+    fields: [plants.authorBottom],
+    references: [users.id]
+  }),
+  parentPlantTop: one(plants, {
+    fields: [plants.parent1],
+    references: [plants.id]
+  }),
+  parentPlantBottom: one(plants, {
+    fields: [plants.parent2],
+    references: [plants.id]
+  })
+}));
 
 export const generatedPlants = pgTable("generated_plants", {
   plantId: text("plant_id").notNull().primaryKey(),
   givenName: text("given_name").notNull(),
   authorTop: text("author_top"),
   authorBottom: text("author_bottom"),
-  parentPlantTop: text("plant_top_id").references(() => plants.id),
-  parentPlantBottom: text("plant_bottom_id").references(() => plants.id),
+  parentPlantTop: text("plant_top"),
+  parentPlantBottom: text("plant_bottom"),
   contents: json("contents"), // can be null, if plant not generated yet!
   imageUrl: text("image_url"), // can be null, if image not generated yet!
   errorMessage: text("error_message")
@@ -165,10 +185,6 @@ export const seedbanksToPlantsRelations = relations(
 );
 export const seedbanksRelations = relations(seedbanks, ({ many }) => ({
   plantsInSeedbank: many(seedbanksToPlants)
-}));
-
-export const plantsRelations = relations(plants, ({ many }) => ({
-  inSeedbanks: many(seedbanksToPlants)
 }));
 
 export const promptSettingsTable = pgTable("prompt_settings", {

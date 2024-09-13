@@ -176,6 +176,13 @@
       "when": 1726234654170,
       "tag": "0024_cloudy_wiccan",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "6",
+      "when": 1726235471194,
+      "tag": "0025_lucky_shocker",
+      "breakpoints": true
     }
   ]
 }
