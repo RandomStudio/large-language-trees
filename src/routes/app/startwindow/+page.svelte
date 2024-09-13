@@ -1,10 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type GardenViewData } from "../../../lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
-
-  export let data: GardenViewData;
 
   enum Stage {
     WELCOME_FIRST_PLANT,
@@ -13,7 +10,7 @@
 
   let currentStage = Stage.WELCOME_FIRST_PLANT;
 
-  let selectedPlant = data.seedbank.plantsInSeedbank[0].plant;
+  export let data;
 </script>
 
 <div class="bg-roel_blue rounded-b-full">
@@ -28,29 +25,21 @@
         pollinating.
       </p>
     {/if}
-    {#if selectedPlant}
-      <div class="mx-auto mt-3 w-64">
-        <PlantDisplay imageUrl={selectedPlant.imageUrl || ""}></PlantDisplay>
-      </div>
-    {:else}
-      <p>No plants available</p>
-    {/if}
+    <div class="mx-auto mt-3 w-64">
+      <PlantDisplay imageUrl={data.startPlant.imageUrl || ""}></PlantDisplay>
+    </div>
   </div>
 </div>
 <div class="mx-10 font-primer text-roel_blue mb-[130px]">
   <div>
     <div>
-      {#if selectedPlant}
-        {#if currentStage === Stage.WELCOME_FIRST_PLANT}
-          <p class="text-3xl mt-4 text-center">
-            {selectedPlant.commonName}
-          </p>
-          <p class="text-base mt-3">
-            {selectedPlant.description}
-          </p>
-        {/if}
-      {:else}
-        <p>No plants available</p>
+      {#if currentStage === Stage.WELCOME_FIRST_PLANT}
+        <p class="text-3xl mt-4 text-center">
+          {data.startPlant.commonName}
+        </p>
+        <p class="text-base mt-3">
+          {data.startPlant.description}
+        </p>
       {/if}
     </div>
   </div>
@@ -63,7 +52,7 @@
         if (currentStage === Stage.WELCOME_FIRST_PLANT) {
           currentStage = Stage.NOW_FIND;
         } else {
-          goto("./gallery/pollination/" + selectedPlant.id); // Navigate to the pollination route
+          goto(`/app/gallery/scan/${data.startPlant.id}`); // Navigate to the pollination route
         }
       }}
     />

@@ -1,28 +1,34 @@
 import { db } from "$lib/server/db";
-import { generatedImages } from "$lib/server/schema";
+import { generatedPlants } from "$lib/server/schema";
 import { error, json, type RequestHandler } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3 } from "$lib/server/images";
 import { URL_PREFIX } from "$lib/constants";
+import type { GeneratedImage } from "$lib/types";
+import { publishEvent } from "$lib/server/realtime";
+import type { EventPlantGenerated } from "$lib/events.types";
 
-interface CandidateImageBody {
-  url?: string;
-  errorMessage?: string;
+/**
+ * Should be identical to the version in
+ * `netlify/functions/img-gen-background.mts`
+ */
+interface GenerateImageResultBody {
+  url?: string | null;
+  errorMessage?: string | null;
 }
 
 export const GET: RequestHandler = async ({ params }) => {
   const plantId = params["id"];
   if (plantId) {
-    const candidateImage = await db.query.generatedImages.findFirst({
-      where: eq(generatedImages.plantId, plantId)
+    const candidateImage = await db.query.generatedPlants.findFirst({
+      where: eq(generatedPlants.plantId, plantId)
     });
 
     if (candidateImage) {
       return json(candidateImage, { status: 200 });
     } else {
-      console.log("Candidate image not found; this is OK");
-      return json({}, { status: 202 });
+      return error(404);
     }
   } else {
     return error(400, "plantId param required");
@@ -32,8 +38,9 @@ export const GET: RequestHandler = async ({ params }) => {
 export const POST: RequestHandler = async ({ request, params }) => {
   console.log("candidate image POST request");
   const plantId = params["id"];
-  const { url, errorMessage } = (await request.json()) as CandidateImageBody;
-  console.log("got", { url, plantId });
+  const { url, errorMessage } =
+    (await request.json()) as GenerateImageResultBody;
+  console.log("got", { url, plantId, errorMessage });
   if (plantId) {
     console.log({ url, errorMessage, plantId });
 
@@ -45,23 +52,53 @@ export const POST: RequestHandler = async ({ request, params }) => {
       const s3Url = URL_PREFIX + "/" + baseName + ".png";
       console.log("...Uploaded, now available at", s3Url);
       const res = await db
-        .insert(generatedImages)
-        .values({
-          id: uuidv4(),
-          plantId,
-          url: s3Url,
+        .update(generatedPlants)
+        .set({
+          imageUrl: s3Url,
           errorMessage
         })
+        .where(eq(generatedPlants.plantId, plantId))
         .returning();
 
       if (res.length > 0) {
+        const { authorTop, authorBottom, imageUrl } = res[0];
+        if (!imageUrl) {
+          throw Error("there should be an image URL for the version uploaded");
+        }
+        // Publish the event (now plant generated)...
+        const e: EventPlantGenerated = {
+          name: "newGeneratedPlantReady",
+          payload: {
+            plantId,
+            authorTop,
+            authorBottom,
+            imageUrl
+          }
+        };
+        await publishEvent(e);
+
+        // Delete candidate plant entry...
+        const deleted = await db
+          .delete(generatedPlants)
+          .where(eq(generatedPlants.plantId, plantId))
+          .returning();
+
+        if (deleted.length === 0) {
+          throw Error(
+            "failed to delete the entry, after it was finally confirmed!"
+          );
+        }
+
+        // Return response...
         return json(res, { status: 201 });
       } else {
         return error(500, "Failed to insert new generated image URL");
       }
+    } else {
+      // The response is "OK" but we had no URL
+      console.error("No URL; errorMessage ==", errorMessage);
+      return json({ errorMessage, plantId }, { status: 200 });
     }
-    // The response is "OK" but we had no URL
-    return json({ url, errorMessage, plantId }, { status: 200 });
   } else {
     return error(400, "plantId param required");
   }

@@ -3,6 +3,7 @@ import { redirect, type Handle } from "@sveltejs/kit";
 
 const publicAccessAllowed = (pathname: string) =>
   pathname.includes("/api/plants") ||
+  pathname.includes("/api/images") ||
   pathname.includes("/presentation/display") ||
   pathname.includes("/presentation/debug") ||
   pathname.includes("/api/events") ||
@@ -11,22 +12,24 @@ const publicAccessAllowed = (pathname: string) =>
 
 export const handle: Handle = async ({ event, resolve }) => {
   if (event.url.pathname === "/") {
+    console.log("Redirect from root path to app");
     redirect(302, "/app");
   }
 
   if (publicAccessAllowed(event.url.pathname)) {
-    console.warn("Unauthenticated access to", event.url.pathname, "allowed");
+    console.log("Unauthenticated access to", event.url.pathname, "allowed");
     return resolve(event);
   }
 
   const sessionId = event.cookies.get(lucia.sessionCookieName);
   if (!sessionId) {
-    console.log("clear session info");
+    console.log("no session;clear session info");
     event.locals.user = null;
     event.locals.session = null;
     console.log("path", event.url.pathname);
     if (event.url.pathname != "/app") {
       // Every path other than root should redirect if user not logged in
+      console.log("user not logged in; redirect");
       redirect(302, "/app");
     } else {
       return resolve(event);

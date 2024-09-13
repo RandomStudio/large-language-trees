@@ -53,6 +53,14 @@ import {
 } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
+/**
+ * Server-side publishing of a SimpleEvent, i.e a relay from
+ * our server out to Tether/MQTT.
+ *
+ * This involves connecting, publishing and then disconecting from
+ * Tether, because we cannot keep a persistent server-side client
+ * in Netlify.
+ */
 export const publishEvent = async (event: SimpleEvent) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
 
@@ -194,9 +202,10 @@ export const handleDisplayNotification = async (
       const contents = await getDataForAmbientDisplay(pickDisplayType);
 
       // check if display is DETAIL_MULTI
-      const timeout = pickDisplayType === bRollNaming.DETAIL_MULTI
-        ? MULTI_DETAIL_TIMEOUT
-        : BROLL_TIMEOUT;
+      const timeout =
+        pickDisplayType === bRollNaming.DETAIL_MULTI
+          ? MULTI_DETAIL_TIMEOUT
+          : BROLL_TIMEOUT;
 
       await updateScreenStateAndPublish(displayId, contents, 0, timeout);
     } catch (e) {
@@ -580,11 +589,16 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
             user
           }
         };
-        await updateScreenStateAndPublish(targetScreen, e, PRIORITY, NEW_USER_TIMEOUT);
+        await updateScreenStateAndPublish(
+          targetScreen,
+          e,
+          PRIORITY,
+          NEW_USER_TIMEOUT
+        );
       }
       break;
     }
-    case "newPlantPollination": {
+    case "newPlantSprouted": {
       const PRIORITY = 1;
       const targetScreen = await findScreenFor(PRIORITY);
       if (targetScreen) {
@@ -636,6 +650,10 @@ export const showMainEvent = async (latestEvent: SimpleEvent) => {
           console.error("author(s) missing from", { plant });
         }
       }
+      break;
+    }
+    case "newGeneratedPlantReady": {
+      // Ignore for now
       break;
     }
     default: {
@@ -725,7 +743,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
         }
       ];
     }
-    case "newPlantPollination": {
+    case "newPlantSprouted": {
       const { parent1, parent2 } = event.payload;
       if (!parent1 || !parent2) {
         throw Error("parents not in payload: " + JSON.stringify(event.payload));
@@ -739,7 +757,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       if (!plantTop || !plantBottom) {
         throw Error(
           "Failed to find plant details for " +
-          JSON.stringify({ plantTop, plantBottom })
+            JSON.stringify({ plantTop, plantBottom })
         );
       }
       const { authorTop, authorBottom } = event.payload;
@@ -758,7 +776,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
       if (!authorTopUser || !authorBottomUser) {
         throw Error(
           "Failed to find user details for " +
-          JSON.stringify({ authorTop, authorBottom })
+            JSON.stringify({ authorTop, authorBottom })
         );
       }
       return [
@@ -785,6 +803,12 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
           text: "just became top pollinator"
         }
       ];
+    }
+    case "newGeneratedPlantReady": {
+      return []; // TODO: this entry should be ignored entirely
+    }
+    default: {
+      throw Error(`unknown event "${event}"`);
     }
   }
 };

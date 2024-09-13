@@ -1,8 +1,7 @@
 import type {
   gardens,
   gardensToPlants,
-  generatedImages,
-  generatedText,
+  generatedPlants,
   plants,
   presentationState,
   promptSettingsTable,
@@ -25,6 +24,8 @@ export interface PublicUserInfo {
   username: string;
 }
 
+export type CandidatePlant = typeof generatedPlants.$inferSelect;
+
 export type SelectGarden = typeof gardens.$inferSelect;
 export type GardenPlantEntry = typeof gardensToPlants.$inferInsert;
 
@@ -33,13 +34,11 @@ export type SeedbankEntry = typeof seedbanksToPlants.$inferInsert;
 
 export type Characteristics = { [key: string]: string | number };
 
-export type GeneratedImage = typeof generatedImages.$inferSelect;
+export type GeneratedImage = typeof generatedPlants.$inferSelect;
 
 export type SelectPromptSettings = typeof promptSettingsTable.$inferInsert;
 
 export type PresentationDisplayState = typeof presentationState.$inferInsert;
-
-export type SelectCandidateText = typeof generatedText.$inferSelect;
 
 export interface PlantWithDate extends SelectPlant {
   pollinationDate: Date;
@@ -63,19 +62,8 @@ export interface UserWithSeedbank extends SelectUser {
   mySeeds: MySeeds;
 }
 
-export interface GardenViewData {
-  seedbank: MySeeds;
-  user: SelectUser;
-  garden: GardenWithPlants;
-}
-
 export interface PlantProperties {
   [key: string]: number | string;
-}
-
-export interface GeneratedImageResult {
-  pleaseWait: boolean;
-  url: string | null;
 }
 
 export interface ImageUploadResult {
@@ -92,10 +80,11 @@ export interface AttachImageResponse {
   url: string;
 }
 
-export interface EnhancedGardenViewData extends GardenViewData {
-  plantId: string;
-  otherPlantId: string | null;
-  otherUserId: string | null;
+export interface PollinationData {
+  thisPlant: SelectPlant;
+  otherPlant?: SelectPlant;
+  thisUser: PublicUserInfo;
+  otherUser?: PublicUserInfo;
 }
 
 export interface PromptSection {
@@ -120,8 +109,36 @@ export interface PromptConfig {
 }
 
 export interface GeneratePlantRequestBody {
-  userId: string;
+  thisUserId: string;
+  thisPlantId: string;
+  otherUserId: string;
+  otherPlantId: string;
+  /** Only used for developer prompt testing */
   prompt?: ChatCompletionMessageParam[];
+  /** Only used for developer prompt testing */
   model?: string;
-  parents: [SelectPlant, SelectPlant];
+}
+
+export interface ScanStartData {
+  thisUser: PublicUserInfo;
+  userPlants: SelectPlant[];
+  thisPlant: SelectPlant;
+}
+
+export interface GenerateImageRequest {
+  plantId: string;
+  description: string;
+  instructions?: string;
+  model?: string;
+  backgroundSecret?: string;
+}
+
+/** Should be identical to the version in
+ * `netlify/functions/img-gen-background.mts`
+ */
+export interface BackroundGenerateImageRequest {
+  plantId: string;
+  fullPrompt: string;
+  model: string;
+  backgroundSecret: string;
 }

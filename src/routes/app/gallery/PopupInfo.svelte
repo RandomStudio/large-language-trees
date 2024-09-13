@@ -7,13 +7,6 @@
 
   export let plantDetails: SelectPlant;
   export let closePopup: () => any;
-
-  function updatePlantDetails(plant: SelectPlant) {
-    plantDetails = plant;
-  }
-
-  export let isOriginalPlant: boolean;
-  export let isPollinatingPlant: boolean;
 </script>
 
 <ReturnButton onClicked={closePopup}></ReturnButton>
@@ -32,10 +25,3 @@
     </p>
   </div>
 </div>
-
-{#if isPollinatingPlant || isOriginalPlant}
-  <ButtonBottom
-    text="Start Pollinating"
-    onClick={() => goto("gallery/pollination/" + plantDetails.id)}
-  ></ButtonBottom>
-{/if}

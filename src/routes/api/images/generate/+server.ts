@@ -1,34 +1,44 @@
-import { PLACEHOLDER_IMAGES, BACKGROUND_FN_SECRET } from "$env/static/private";
 import { json, type RequestHandler } from "@sveltejs/kit";
-import type { GeneratedImageResult, PromptConfig } from "$lib/types";
+import type { GenerateImageRequest, PromptConfig } from "$lib/types";
 import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
-import type { GenerateImageRequest } from "./types";
+
+interface GenImageToServer {
+  plantId: string;
+  description: string;
+}
 
 /** Should be identical to the version in
- * `netlify/functions/img-gen-background.mts`
+ * `neflify/functions/complete-gen-background.mts`
+ *
+ * This is what our server needs to send back to the background function
  */
-interface BackroundGenerateImageRequest {
+interface GenImageToBackground {
   plantId: string;
   fullPrompt: string;
   model: string;
-  backgroundSecret: string;
 }
 
-export const POST: RequestHandler = async (event) => {
-  const { request, fetch } = event;
-  console.log({ PLACEHOLDER_IMAGES });
-  const jsonBody = (await request.json()) as GenerateImageRequest;
-  const { description, plantId, model, instructions } = jsonBody;
+// interface
 
-  if (PLACEHOLDER_IMAGES === "true") {
-    const jsonResponse: GeneratedImageResult = {
-      pleaseWait: false,
-      url: "/plants/placeholder.png"
-    };
-    return json(jsonResponse, { status: 200 });
-  }
+/*
+  This endpoint is used by the BACKGROUND function to get the full prompt
+  needed for image generation.
+*/
+export const POST: RequestHandler = async ({ request, fetch }) => {
+  const { plantId, description } = (await request.json()) as GenImageToServer;
 
+  const bodyJson = await backgroundImageRequestBody(plantId, description);
+
+  return json(bodyJson, { status: 200 });
+};
+
+const backgroundImageRequestBody = async (
+  plantId: string,
+  description: string,
+  instructions?: string,
+  model?: string
+) => {
   const promptSettings: PromptConfig = await getPromptSettings();
 
   const prompt = buildImagePrompt(
@@ -37,20 +47,15 @@ export const POST: RequestHandler = async (event) => {
   );
 
   console.log(
-    `Will initiate (background) request for image generation with prompt "${prompt}" ...`
+    `Generating body for (background) request for image generation with prompt "${prompt}" ...`
   );
-  const bodyJson: BackroundGenerateImageRequest = {
+  const bodyJson: GenImageToBackground = {
     fullPrompt: prompt,
-    backgroundSecret: BACKGROUND_FN_SECRET,
     plantId,
     model: model || promptSettings.image.model
   };
-  console.log({ bodyJson });
-  await event.fetch("/.netlify/functions/img-gen-background", {
-    method: "POST",
-    body: JSON.stringify(bodyJson)
-  });
 
-  const jsonResponse: GeneratedImageResult = { pleaseWait: true, url: null };
-  return json(jsonResponse, { status: 200 });
+  return bodyJson;
+
+  // Status 202 - "Accepted" - nothing created yet
 };

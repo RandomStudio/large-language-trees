@@ -26,8 +26,8 @@ export interface EventFirstPlant extends SimpleEventBody {
   };
 }
 
-export interface EventNewPollination extends SimpleEventBody {
-  name: "newPlantPollination";
+export interface EventNewSprouting extends SimpleEventBody {
+  name: "newPlantSprouted";
   payload: InsertPlant;
 }
 
@@ -39,11 +39,22 @@ export interface EventNewTopPlant extends SimpleEventBody {
   };
 }
 
+export interface EventPlantGenerated extends SimpleEventBody {
+  name: "newGeneratedPlantReady";
+  payload: {
+    plantId: string;
+    authorTop: string;
+    authorBottom: string;
+    imageUrl: string;
+  };
+}
+
 export type SimpleEvent =
   | EventNewUser
   | EventFirstPlant
-  | EventNewPollination
-  | EventNewTopPlant;
+  | EventNewSprouting
+  | EventNewTopPlant
+  | EventPlantGenerated;
 
 interface DisplayUpdateEvent {
   name: string;
@@ -53,7 +64,7 @@ interface DisplayUpdateEvent {
 export interface DisplayFirstPlant extends DisplayUpdateEvent {
   name: "newUserFirstPlant";
   contents: {
-    plant: SelectPlant;
+    plant: InsertPlant;
     user: PublicUserInfo;
   };
 }
