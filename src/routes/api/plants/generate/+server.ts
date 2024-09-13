@@ -55,7 +55,8 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
   await db.insert(generatedPlants).values({
     plantId: newPlantId,
     authorTop: thisUserId,
-    authorBottom: otherUserId
+    authorBottom: otherUserId,
+    givenName: userPickedNewName
   });
 
   const promptSettings = await getPromptSettings();

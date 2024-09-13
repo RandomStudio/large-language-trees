@@ -23,6 +23,7 @@ export const plants = pgTable("plants", {
 
 export const generatedPlants = pgTable("generated_plants", {
   plantId: text("plant_id").notNull().primaryKey(),
+  givenName: text("given_name").notNull(),
   authorTop: text("author_top")
     .references(() => users.id)
     .notNull(),

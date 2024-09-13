@@ -147,7 +147,7 @@
       disableAnimation={true}
       imageUrl={"/pollination/Seed_01.png"}
       applyFilters={false}
-      label={"New plant"}
+      label={plant.givenName}
     />
   {/each}
 </div>
