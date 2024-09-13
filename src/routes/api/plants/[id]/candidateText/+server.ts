@@ -20,7 +20,7 @@ interface CandidateTextBody {
 */
 export const POST: RequestHandler = async ({ params, request, fetch }) => {
   console.log(
-    "Attempt to insert new candidate plant (text generation result)..."
+    "Attempt to update new candidate plant (text generation result)..."
   );
   const plantId = params["id"];
   if (!plantId) {
@@ -29,11 +29,11 @@ export const POST: RequestHandler = async ({ params, request, fetch }) => {
 
   const candidateTextBody = (await request.json()) as CandidateTextBody;
 
-  const { authorTop, authorBottom, contents, errorMessage } = candidateTextBody;
+  const { contents } = candidateTextBody;
 
   const resInsert = await db
-    .insert(generatedPlants)
-    .values({ authorTop, authorBottom, plantId, contents, errorMessage })
+    .update(generatedPlants)
+    .set({ contents })
     .returning();
 
   return json(resInsert, { status: 201 });

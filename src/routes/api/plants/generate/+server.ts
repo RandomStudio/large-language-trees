@@ -50,14 +50,20 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
     return json({}, { status: 400, statusText: "Parent plants not found" });
   }
 
+  const newPlantId = uuidv4();
+
+  await db.insert(generatedPlants).values({
+    plantId: newPlantId,
+    authorTop: thisUserId,
+    authorBottom: otherUserId
+  });
+
   const promptSettings = await getPromptSettings();
 
   const messages =
     prompt ||
     buildTextPrompt(promptSettings, plant1, plant2, userPickedNewName);
   const model = data.model || promptSettings.text.model;
-
-  const newPlantId = uuidv4();
 
   const bodyJson: BackgroundGenerateTextRequest = {
     authorTop: thisUserId,
