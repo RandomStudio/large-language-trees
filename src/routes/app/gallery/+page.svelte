@@ -140,7 +140,6 @@
         label={plant.plant.commonName}
       />
     </div>
-    <div class="mt-4 text-center">Title</div>
   {/each}
 
   {#each data.notSproutedPlants as plant}
