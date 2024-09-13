@@ -12,6 +12,7 @@
   import { onDestroy, onMount } from "svelte";
   import PollinationQrCode from "../../pollinate/PollinationQrCode.svelte";
   import NameChildPlant from "./NameChildPlant.svelte";
+  import PopupDejaVu from "../../pollinate/PopupDejaVu.svelte";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -139,7 +140,7 @@
   ): SelectPlant | null => {
     const match = thisUserPlants.find(
       (p) =>
-        (p.parent1 === thisPlantId && p.parent2 === thisPlantId) ||
+        (p.parent1 === thisPlantId && p.parent2 === otherPlantId) ||
         (p.parent1 === otherPlantId && p.parent2 === thisPlantId)
     );
 
@@ -245,3 +246,14 @@
     />
   {/if}
 </div>
+
+{#if alreadyExistsPlant}
+  <PopupDejaVu
+    plantDetails={alreadyExistsPlant}
+    handleClose={() => {
+      alreadyExistsPlant = null;
+      otherPlant = null;
+      startQrScanning();
+    }}
+  />
+{/if}
