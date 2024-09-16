@@ -1,5 +1,6 @@
 import type { EventNewSprouting } from "$lib/events.types";
 import type { CandidatePlant, InsertPlant, SelectPlant } from "$lib/types";
+import type { PostPlantToGardenBody } from "../../../api/plantsInGarden/+server";
 
 const awaitTimeout = async (t: number): Promise<void> =>
   new Promise((resolve, _reject) => {
@@ -11,15 +12,7 @@ const awaitTimeout = async (t: number): Promise<void> =>
 export async function addConfirmedPlant(
   candidateChild: InsertPlant
 ): Promise<SelectPlant> {
-  console.log(
-    "Inserting new plant with ID",
-    candidateChild.id,
-    "and image",
-    candidateChild.imageUrl,
-    "..."
-  );
-  const { authorTop, authorBottom } = candidateChild;
-  console.log("Some (generated) plant details:", { authorTop, authorBottom });
+  console.log("Inserting new plant", candidateChild);
   const res = await fetch("/api/plants", {
     method: "POST",
     body: JSON.stringify(candidateChild)
@@ -29,22 +22,24 @@ export async function addConfirmedPlant(
     throw Error("failed to add plant");
   }
   const plant = (await res.json()) as SelectPlant;
+
+  // Also, delete this "candidate plant"
+  await fetch(`/api/plants/${candidateChild.id}/generatedPlant`, {
+    method: "DELETE"
+  });
+
   return plant;
 }
 
-/** Add the new plant to both the seedbank AND garden of a given user */
-export async function addPlantToUser(
-  candidateChild: InsertPlant,
-  userId: string
-) {
-  console.log("addConfirmedPlantToOtherUser", { otherUserId: userId });
-  await fetch("/api/plantsInSeedbank", {
-    method: "POST",
-    body: JSON.stringify({ plantId: candidateChild.id, userId: userId })
-  });
+/** Add a new plant to a User Garden */
+export async function addPlantToUser(insertPlant: InsertPlant, userId: string) {
+  const gardenBody: PostPlantToGardenBody = {
+    plantId: insertPlant.id,
+    userId: userId
+  };
   await fetch("/api/plantsInGarden", {
     method: "POST",
-    body: JSON.stringify({ plantId: candidateChild.id, userId: userId })
+    body: JSON.stringify(gardenBody)
   });
 }
 
@@ -68,19 +63,30 @@ export async function insertNewPlant(plant: InsertPlant) {
   console.log("event response:", eventRes.status, eventRes.statusText);
 }
 
-export const candidateToPlant = async (
-  candidate: CandidatePlant
-): Promise<InsertPlant> => {
-  const { plantId, authorTop, authorBottom } = candidate;
-  const exists = await fetch(`/api/plants/${plantId}/generatedPlant`);
-  console.log("response status", exists.status);
-  if (exists.status === 200) {
-    let newPlant = (await exists.json()) as CandidatePlant;
-    newPlant.authorBottom = authorBottom;
-    newPlant.authorTop = authorTop;
-    const contents = newPlant.contents as string;
-    return JSON.parse(contents) as InsertPlant;
-  } else {
-    throw Error("cannot find candidate plant with id " + plantId);
-  }
+export const candidateToPlant = (candidate: CandidatePlant): InsertPlant => {
+  const {
+    plantId,
+    authorTop,
+    authorBottom,
+    imageUrl,
+    contents,
+    parentTop,
+    parentBottom
+  } = candidate;
+
+  const json = JSON.parse(contents as string) as InsertPlant;
+
+  const { commonName, description, properties } = json;
+
+  return {
+    id: plantId,
+    commonName,
+    authorBottom,
+    authorTop,
+    imageUrl,
+    description,
+    properties,
+    parent1: parentTop,
+    parent2: parentBottom
+  };
 };

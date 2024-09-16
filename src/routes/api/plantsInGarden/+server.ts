@@ -6,16 +6,19 @@ import { and, eq } from "drizzle-orm";
 import {
   addPlantToGarden,
   getUserByUsername,
-  getUserGarden
+  getUserGardenWithPlants
 } from "$lib/server";
 import { ADMIN_GARDEN_SHARED } from "$env/static/private";
 
+export interface PostPlantToGardenBody {
+  plantId: string;
+  gardenId?: string;
+  userId?: string;
+}
+
 export const POST: RequestHandler = async ({ request }) => {
-  const data = (await request.json()) as {
-    plantId: string;
-    gardenId?: string;
-    userId?: string;
-  };
+  const data = (await request.json()) as PostPlantToGardenBody;
+
   const { gardenId, plantId, userId } = data;
 
   console.log("POST plantsInGarden", data);

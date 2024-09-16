@@ -76,11 +76,7 @@
         const matched = (await res.json()) as CandidatePlant;
         console.log("Found it!", matched);
         if (matched.contents) {
-          resultPlant = await candidateToPlant(
-            waitingForPlantId,
-            "test-top",
-            "test-bottom"
-          );
+          resultPlant = candidateToPlant(matched);
         }
         if (matched.imageUrl && resultPlant) {
           resultPlant.imageUrl = matched.imageUrl;

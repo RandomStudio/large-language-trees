@@ -20,7 +20,6 @@
     type EventPollinationStarting
   } from "$lib/events.types";
   import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
-  import PlantWasAddedPopup from "./PlantWasAddedPopup.svelte";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
   import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
   import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
@@ -28,40 +27,16 @@
   export let data;
   type GalleryViewData = typeof data;
 
-  let candidateChild: InsertPlant | null = null;
+  let candidateChild: CandidatePlant | null = null;
   let selectedPlantForInfo: SelectPlant | null = null;
 
   let otherUserStartedPollination: PublicUserInfo | null = null;
-  let otherUserAddedPlant: SelectPlant | null = null;
 
   let agent: TetherAgent | null;
 
   onMount(async () => {
     agent = await TetherAgent.create("app", {
       brokerOptions: BROWSER_CONNECTION
-    });
-
-    const newPollinationStartedPlug = await InputPlug.create(
-      agent,
-      PLUG_NAMES.simpleEvents,
-      {
-        id: "newPollinationStarting"
-      }
-    );
-    newPollinationStartedPlug.on("message", (payload) => {
-      const m = decode(payload) as EventPollinationStarting;
-      if (m.payload.authorBottom.id === data.user.id) {
-        console.log(
-          "New pollination started for plant of which I am the 'other' author",
-          m.payload
-        );
-        otherUserStartedPollination = m.payload.authorTop;
-        setTimeout(() => {
-          console.log("Now clear popup...");
-          otherUserStartedPollination = null;
-          invalidateAll();
-        }, 4000);
-      }
     });
 
     const newPlantAdded = await InputPlug.create(
@@ -73,23 +48,28 @@
     );
     newPlantAdded.on("message", (payload) => {
       const m = decode(payload) as EventNewSprouting;
+      if (
+        m.payload.authorTop === data.user.id ||
+        m.payload.authorBottom === data.user.id
+      ) {
+        console.log("A new plant was sprouted (added)", m.payload);
+        invalidateAll();
+      }
     });
 
-    const newPlantAddedOtherUser = await InputPlug.create(
+    const newCandidatePlantReady = await InputPlug.create(
       agent,
       PLUG_NAMES.simpleEvents,
       {
         id: "newGeneratedPlantReady"
       }
     );
-
-    newPlantAddedOtherUser.on("message", (payload) => {
+    newCandidatePlantReady.on("message", (payload) => {
       const m = decode(payload) as EventGeneratedPlantReady;
+      console.log("New plant ready. Is it mine...?", m.payload);
       if (m.payload.authorTop === data.user.id) {
         console.log("New plant ready, and needs my input:", m.payload);
-        candidateToPlant(m.payload).then((p) => {
-          candidateChild = p;
-        });
+        candidateChild = m.payload;
       }
     });
   });
@@ -112,10 +92,6 @@
   <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
 {/if}
 
-{#if otherUserAddedPlant}
-  <PlantWasAddedPopup plant={otherUserAddedPlant} />
-{/if}
-
 <div class="mt-16 mx-10 font-primer text-roel_blue text-left">
   <PlantDisplay
     disableAnimation={false}
@@ -124,11 +100,44 @@
     label={data.myOriginalPlant.plant.commonName}
   />
 
+  {#each data.awaitingConfirmation as candidatePlant}
+    {#if candidatePlant.authorTopUser && candidatePlant.authorBottomUser}
+      {candidatePlant.authorTopUser.username} ❤️ {candidatePlant
+        .authorBottomUser.username}
+    {/if}
+    <button
+      class="cursor-pointer mt-4 border-2 border-blue-500"
+      on:click={async () => {
+        candidateChild = candidatePlant;
+      }}
+    >
+      <div>Now...</div>
+      <PlantDisplay
+        disableAnimation={true}
+        imageUrl={"/pollination/Seed_01.png"}
+        applyFilters={false}
+        label={candidatePlant.givenName}
+      />
+    </button>
+  {/each}
+
+  {#each data.notSproutedPlants as plant}
+    {#if plant.authorTopUser && plant.authorBottomUser}
+      {plant.authorTopUser.username} ❤️ {plant.authorBottomUser.username}
+    {/if}
+    <PlantDisplay
+      disableAnimation={true}
+      imageUrl={"/pollination/Seed_01.png"}
+      applyFilters={false}
+      label={plant.givenName}
+    />
+  {/each}
+
   {#each data.myOtherPlants as plant, index}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
-    <div
+    <button
       on:click={() => {
         console.log("click!");
         selectedPlantForInfo = plant.plant;
@@ -141,19 +150,7 @@
         applyFilters={false}
         label={plant.plant.commonName}
       />
-    </div>
-  {/each}
-
-  {#each data.notSproutedPlants as plant}
-    {#if plant.authorTop && plant.authorBottom}
-      {plant.authorTop.username} ❤️ {plant.authorBottom.username}
-    {/if}
-    <PlantDisplay
-      disableAnimation={true}
-      imageUrl={"/pollination/Seed_01.png"}
-      applyFilters={false}
-      label={plant.givenName}
-    />
+    </button>
   {/each}
 </div>
 

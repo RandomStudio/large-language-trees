@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto, invalidateAll } from "$app/navigation";
+  import { goto } from "$app/navigation";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import type {
@@ -198,20 +198,26 @@
   };
 
   onMount(async () => {
-    await startQrScanning();
+    try {
+      await startQrScanning();
+    } catch (e) {
+      console.error("error started qr code scanning");
+    }
 
     agent = await TetherAgent.create("app", {
       brokerOptions: BROWSER_CONNECTION
     });
 
-    const newPollinationStartedReceive = await InputPlug.create(
+    // Once the other user has successfully scanned our code,
+    // we are notified
+    const newPollinationStartedOtherUser = await InputPlug.create(
       agent,
       PLUG_NAMES.simpleEvents,
       {
         id: "newPollinationStarting"
       }
     );
-    newPollinationStartedReceive.on("message", (payload) => {
+    newPollinationStartedOtherUser.on("message", (payload) => {
       const m = decode(payload) as EventPollinationStarting;
       if (m.payload.authorBottom.id === data.thisUser.id) {
         console.log(
@@ -222,7 +228,7 @@
         setTimeout(() => {
           console.log("Now clear popup...");
           otherUserStartedPollination = null;
-          invalidateAll();
+          goto("/app/gallery");
         }, 4000);
       }
     });

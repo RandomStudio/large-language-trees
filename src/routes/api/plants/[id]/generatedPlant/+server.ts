@@ -45,3 +45,27 @@ export const GET: RequestHandler = async ({ params, url }) => {
     throw Error("either plantID or userID must be provided");
   }
 };
+
+export const DELETE: RequestHandler = async ({ params }) => {
+  const plantId = params["id"];
+
+  if (!plantId) {
+    throw Error("no plantID provided");
+  }
+
+  const matchingCandidatePlant = await db.query.generatedPlants.findFirst({
+    where: eq(generatedPlants.plantId, plantId)
+  });
+
+  if (matchingCandidatePlant) {
+    const result = await db
+      .delete(generatedPlants)
+      .where(eq(generatedPlants.plantId, plantId));
+    if (result.length !== 1) {
+      throw Error(`count ${result.length} is not a single entry`);
+    }
+    return json(result, { status: 202 });
+  } else {
+    return json([], { status: 404 });
+  }
+};

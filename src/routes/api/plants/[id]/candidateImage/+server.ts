@@ -39,6 +39,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
         .update(generatedPlants)
         .set({
           imageUrl: s3Url,
+          awaitingConfirmation: true,
           errorMessage
         })
         .where(eq(generatedPlants.plantId, plantId))

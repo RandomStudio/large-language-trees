@@ -9,8 +9,6 @@ import {
   plants,
   presentationState,
   promptSettingsTable,
-  seedbanks,
-  seedbanksToPlants,
   sessions,
   users
 } from "./schema";
@@ -20,8 +18,6 @@ import type {
   GardenPlantEntry,
   InsertPlant,
   GardenWithPlants,
-  MySeeds,
-  SeedbankEntry,
   SelectPlant,
   SelectUser,
   UserWithGarden
@@ -85,84 +81,13 @@ export const checkPlantsExist = async () => {
   }
 };
 
-export const getUserSeeds = async (userId: string): Promise<MySeeds> => {
-  const seedBank = await db.query.seedbanks.findFirst({
-    where: eq(seedbanks.userId, userId),
-    with: { plantsInSeedbank: { with: { plant: true } } }
-  });
-  if (seedBank) {
-    // console.log(JSON.stringify({ seedBank }));
-    return seedBank;
-  } else {
-    const user = await getUserById(userId);
-    console.log(
-      "No seedbank for user",
-      user?.username,
-      "; Will have to create one and populate it"
-    );
-    await createNewSeedbank(userId);
-    return await getUserSeeds(userId);
-  }
-};
-
-export const createNewSeedbank = async (userId: string) => {
-  const result = await db
-    .insert(seedbanks)
-    .values({
-      id: uuidv4(),
-      userId
-    })
-    .returning();
-  const newSeedbank = result[0];
-  const adminUser = await getUserByUsername("admin");
-  if (!adminUser) {
-    throw Error("Admin user not found; something is wrong!");
-  }
-  if (userId === adminUser.id) {
-    console.log(
-      "This is the admin user. No need to add initial plants to this seedbank"
-    );
-    return;
-  }
-
-  const theUser = await db.query.users.findFirst({
-    where: eq(users.id, userId)
-  });
-
-  const thePlant = await getNewPlantForUser();
-
-  if (thePlant && theUser) {
-    const e: EventFirstPlant = {
-      name: "newUserFirstPlant",
-      payload: { plant: thePlant, user: stripUserInfo(theUser) }
-    };
-    await publishEvent(e);
-  }
-
-  await addPlantToSeedbank(thePlant.id, newSeedbank.id);
-
-  if (ADMIN_GARDEN_SHARED === "true") {
-    console.warn(
-      "ADMIN_GARDEN_SHARED enabled, so we will also add this plant to the admin user's seedbank..."
-    );
-    const adminSeedbank = await getUserSeeds(adminUser.id);
-    if (adminUser && adminSeedbank) {
-      addPlantToSeedbank(thePlant.id, adminSeedbank.id);
-    } else {
-      throw Error("admin user not found or admin seedbank not found");
-    }
-  }
-};
-
-async function getNewPlantForUser(): Promise<InsertPlant> {
-  // We look for plants that have not been assigned to any seedbank (yet)
-  // This is safe for now, because we don't expect the number of users (and thus seedbanks)
-  // to exceed the number of available plants.
+async function getFirstPlantForUser(): Promise<InsertPlant> {
+  // We look for plants that have not been assigned to any garden (yet)
   const plantsToAdd = await db
     .select()
     .from(plants)
-    .leftJoin(seedbanksToPlants, eq(seedbanksToPlants.plantId, plants.id))
-    .where(isNull(seedbanksToPlants));
+    .leftJoin(gardensToPlants, eq(gardensToPlants.plantId, plants.id))
+    .where(isNull(gardensToPlants));
   if (plantsToAdd.length > 0) {
     // await db.insert(seedbanksToPlants).values({
     //   seedbankId: newSeedbank.id,
@@ -171,7 +96,6 @@ async function getNewPlantForUser(): Promise<InsertPlant> {
     const thePlant = plantsToAdd[0].plants;
     return thePlant;
   } else {
-    // TODO: we could, instead, pick a random new plant, or even generate one
     const randomPlants = await db.query.plants.findMany({
       where: isNull(plants.parent1)
     });
@@ -185,47 +109,54 @@ async function getNewPlantForUser(): Promise<InsertPlant> {
   }
 }
 
-export const getUserGarden = async (
-  userId: string
-): Promise<GardenWithPlants> => {
+export const getUserGardenWithPlants = async (userId: string) => {
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      myGarden: { with: { plantsInGarden: { with: { plant: true } } } }
+      myGarden: { with: { plants: { with: { plant: true } } } }
     }
   });
-  if (user) {
-    if (user.myGarden === null) {
-      // Create a new garden for the user...
-      console.warn("No garden for this user! We need to create one");
-      const newGarden = await createNewGarden(user.id, user.username);
-
-      // Also add their first seed(s) to the garden (and this is not the admin user!)...
-
-      if (user.username !== "admin") {
-        await addDefaultSeedsToNewGarden(userId, newGarden);
-      }
-
-      return newGarden;
-    } else {
-      console.log("user has garden named", user.myGarden.name);
-      return {
-        id: user.myGarden.id,
-        name: user.myGarden.name,
-        userId: user.id,
-        plantsInGarden: user.myGarden.plantsInGarden.map((p) => ({
-          ...p.plant,
-          pollinationDate: p.plantingDate
-        }))
-      };
-    }
-  } else {
+  if (!user) {
     throw Error(`user not found for userId "${userId}"`);
   }
-};
+  if (user.myGarden === null) {
+    // Create a new garden for the user...
+    console.warn("No garden for this user! We need to create one");
+    const newGarden = await createNewGarden(user.id, user.username);
 
-export const getUserSeedbank = async (userId: string) =>
-  await db.query.seedbanks.findFirst({ where: eq(seedbanks.userId, userId) });
+    // Also add their first seed(s) to the garden
+
+    const theUser = await db.query.users.findFirst({
+      where: eq(users.id, userId)
+    });
+
+    const thePlant = await getFirstPlantForUser();
+
+    if (thePlant && theUser) {
+      const e: EventFirstPlant = {
+        name: "newUserFirstPlant",
+        payload: { plant: thePlant, user: stripUserInfo(theUser) }
+      };
+      await publishEvent(e);
+    }
+
+    await addPlantToGarden(thePlant.id, newGarden.id);
+
+    const gardenWithPlants = await db.query.gardens.findFirst({
+      where: eq(gardens.userId, userId),
+      with: { plants: { with: { plant: true } } }
+    });
+
+    if (!gardenWithPlants) {
+      throw Error("failed to find the garden we just created");
+    }
+
+    return gardenWithPlants;
+  } else {
+    console.log("user has garden named", user.myGarden.name);
+    return user.myGarden;
+  }
+};
 
 export const createNewGarden = async (userId: string, username: string) => {
   console.log("User has no garden (yet)");
@@ -240,7 +171,7 @@ export const createNewGarden = async (userId: string, username: string) => {
     .returning();
 
   if (newGardenResult.length == 1) {
-    return await getUserGarden(userId);
+    return newGardenResult[0];
   } else {
     throw Error("Something went wrong adding the new user garden");
   }
@@ -319,9 +250,7 @@ export const cleanUp = async () => {
   console.warn("Starting cleanup...");
   await db.delete(eventLogs);
   await db.delete(generatedPlants);
-  await db.delete(seedbanksToPlants);
   await db.delete(gardensToPlants);
-  await db.delete(seedbanks);
   await db.delete(gardens);
   await db.delete(sessions);
   await db.delete(plants);
@@ -332,55 +261,7 @@ export const cleanUp = async () => {
   console.log("...cleanup complete!");
 };
 
-async function addDefaultSeedsToNewGarden(
-  userId: string,
-  newGarden: GardenWithPlants
-) {
-  const seeds = await getUserSeeds(userId);
-  const user = await getUserById(userId);
-  seeds.plantsInSeedbank.forEach(async (seed) => {
-    console.log(
-      "addDefaultSeedsToNewGarden: Add plant",
-      seed.plant.id,
-      "to garden",
-      newGarden.id,
-      "for user",
-      user?.username
-    );
-    await addPlantToGarden(seed.plant.id, newGarden.id);
-
-    const adminUser = await getUserByUsername("admin");
-    console.log("Checked adminUser is", typeof adminUser);
-
-    if (!adminUser) {
-      throw Error("Admin user not found!");
-    }
-
-    if (userId === adminUser.id) {
-      console.warn("We are the admin user; no need to add seed to our garden");
-    }
-
-    if (ADMIN_GARDEN_SHARED === "true") {
-      console.warn(
-        "ADMIN_GARDEN_SHARED enabled; Also add this plant to the Admin user's garden"
-      );
-      const adminUserGarden = await getUserGarden(adminUser.id);
-      if (adminUserGarden) {
-        await addPlantToGarden(seed.plant.id, adminUserGarden.id);
-      } else {
-        throw Error("no admin user garden!");
-      }
-    } else {
-      console.warn("ADMIN_GARDEN_SHARED disabled; skip this");
-    }
-  });
-}
-
 export async function addPlantToGarden(plantId: string, gardenId: string) {
-  const otherPlants = await db.query.gardensToPlants.findMany({
-    where: eq(gardensToPlants.gardenId, gardenId)
-  });
-
   const result = await db
     .insert(gardensToPlants)
     .values({ gardenId, plantId })
@@ -390,18 +271,5 @@ export async function addPlantToGarden(plantId: string, gardenId: string) {
 
   if (result.length === 0) {
     throw Error("error adding plant to garden");
-  }
-}
-
-export async function addPlantToSeedbank(plantId: string, seedbankId: string) {
-  const entry: SeedbankEntry = {
-    plantId,
-    seedbankId
-  };
-
-  const result = await db.insert(seedbanksToPlants).values(entry).returning();
-
-  if (result.length === 0) {
-    throw Error("error adding plant to seedbank/gallery");
   }
 }

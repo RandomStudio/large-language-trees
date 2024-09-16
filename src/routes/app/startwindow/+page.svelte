@@ -26,7 +26,8 @@
       </p>
     {/if}
     <div class="mx-auto mt-3 w-64">
-      <PlantDisplay imageUrl={data.startPlant.imageUrl || ""}></PlantDisplay>
+      <PlantDisplay imageUrl={data.startPlant.plant.imageUrl || ""}
+      ></PlantDisplay>
     </div>
   </div>
 </div>
@@ -35,10 +36,10 @@
     <div>
       {#if currentStage === Stage.WELCOME_FIRST_PLANT}
         <p class="text-3xl mt-4 text-center">
-          {data.startPlant.commonName}
+          {data.startPlant.plant.commonName}
         </p>
         <p class="text-base mt-3">
-          {data.startPlant.description}
+          {data.startPlant.plant.description}
         </p>
       {/if}
     </div>
@@ -52,7 +53,7 @@
         if (currentStage === Stage.WELCOME_FIRST_PLANT) {
           currentStage = Stage.NOW_FIND;
         } else {
-          goto(`/app/gallery/scan/${data.startPlant.id}`); // Navigate to the pollination route
+          goto(`/app/gallery/scan/${data.startPlant.plant.id}`); // Navigate to the pollination route
         }
       }}
     />
