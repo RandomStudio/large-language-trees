@@ -7,7 +7,7 @@ import { uploadToS3 } from "$lib/server/images";
 import { URL_PREFIX } from "$lib/constants";
 import type { GeneratedImage } from "$lib/types";
 import { publishEvent } from "$lib/server/realtime";
-import type { EventPlantGenerated } from "$lib/events.types";
+import type { EventGeneratedPlantReady } from "$lib/events.types";
 
 /**
  * Should be identical to the version in
@@ -45,19 +45,14 @@ export const POST: RequestHandler = async ({ request, params }) => {
         .returning();
 
       if (res.length > 0) {
-        const { authorTop, authorBottom, imageUrl } = res[0];
-        if (!imageUrl) {
+        const candidateReadyPlant = res[0];
+        if (!candidateReadyPlant || !candidateReadyPlant.imageUrl) {
           throw Error("there should be an image URL for the version uploaded");
         }
-        // Publish the event (now plant generated)...
-        const e: EventPlantGenerated = {
+        // Publish the event (now plant generated and ready)...
+        const e: EventGeneratedPlantReady = {
           name: "newGeneratedPlantReady",
-          payload: {
-            plantId,
-            authorTop,
-            authorBottom,
-            imageUrl
-          }
+          payload: candidateReadyPlant
         };
         await publishEvent(e);
 

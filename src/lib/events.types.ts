@@ -1,4 +1,5 @@
 import type {
+  CandidatePlant,
   GardenWithPlants,
   InsertPlant,
   PublicUserInfo,
@@ -26,11 +27,6 @@ export interface EventFirstPlant extends SimpleEventBody {
   };
 }
 
-export interface EventNewSprouting extends SimpleEventBody {
-  name: "newPlantSprouted";
-  payload: InsertPlant;
-}
-
 export interface EventNewTopPlant extends SimpleEventBody {
   name: "newTopPollinator";
   payload: {
@@ -39,22 +35,39 @@ export interface EventNewTopPlant extends SimpleEventBody {
   };
 }
 
-export interface EventPlantGenerated extends SimpleEventBody {
-  name: "newGeneratedPlantReady";
+/** 1: We don't even have a name yet */
+export interface EventPollinationStarted extends SimpleEventBody {
+  name: "newPollinationStarting";
   payload: {
-    plantId: string;
-    authorTop: string;
-    authorBottom: string;
-    imageUrl: string;
+    authorTop: PublicUserInfo;
+    authorBottom: PublicUserInfo;
   };
+}
+/** 2: Generation is complete, but:
+ * - image may need to be processed (palette, transparency)
+ * - may not have been added yet (to plants list, gardens/seedbanks)
+ */
+export interface EventGeneratedPlantReady extends SimpleEventBody {
+  name: "newGeneratedPlantReady";
+  payload: CandidatePlant;
+}
+
+/**
+ * 3: Plant that was generated has been added to plant list and
+ * both users' gardens/seedbanks
+ */
+export interface EventNewSprouting extends SimpleEventBody {
+  name: "newPlantSprouted";
+  payload: SelectPlant;
 }
 
 export type SimpleEvent =
   | EventNewUser
   | EventFirstPlant
+  | EventPollinationStarted
+  | EventGeneratedPlantReady
   | EventNewSprouting
-  | EventNewTopPlant
-  | EventPlantGenerated;
+  | EventNewTopPlant;
 
 interface DisplayUpdateEvent {
   name: string;

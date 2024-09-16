@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { InsertPlant } from "$lib/types";
+  import type { SelectPlant } from "$lib/types";
 
-  export let plant: InsertPlant;
+  export let plant: SelectPlant;
 </script>
 
 <div
