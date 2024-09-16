@@ -18,6 +18,7 @@
   import PlantWasAddedPopup from "./PlantWasAddedPopup.svelte";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
   import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
+  import Layout from "../components/Layout.svelte";
 
   export let data;
   type GalleryViewData = typeof data;
@@ -114,78 +115,79 @@
   <PlantWasAddedPopup plant={newPlantForPopup} />
 {/if}
 
-<div class="mt-16 mx-10 font-primer text-roel_blue text-left">
-  <PlantDisplay
-    disableAnimation={false}
-    imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
-    applyFilters={false}
-    label={data.myOriginalPlant.plant.commonName}
-  />
-
-  {#each data.myOtherPlants as plant, index}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
-    <div
-      on:click={() => {
-        console.log("click!");
-        selectedPlant = plant.plant;
-      }}
-      class="cursor-pointer mt-4 border-2 border-orange-50"
-    >
-      <PlantDisplay
-        disableAnimation={index > MAX_CANVASSES - 1}
-        imageUrl={plant.plant.imageUrl || ""}
-        applyFilters={false}
-        label={plant.plant.commonName}
-      />
-    </div>
-  {/each}
-
-  {#each data.notSproutedPlants as plant}
-    {#if plant.authorTop && plant.authorBottom}
-      {plant.authorTop.username} ❤️ {plant.authorBottom.username}
-    {/if}
+<Layout title="Let's Pollinate">
+  <div class="mt-16 mx-10 font-primer text-roel_blue text-left">
     <PlantDisplay
-      disableAnimation={true}
-      imageUrl={"/pollination/Seed_01.png"}
+      disableAnimation={false}
+      imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
       applyFilters={false}
-      label={plant.givenName}
+      label={data.myOriginalPlant.plant.commonName}
     />
-  {/each}
-</div>
 
-{#if selectedPlant}
-  <PopupInfo
-    plantDetails={selectedPlant}
-    closePopup={() => {
-      selectedPlant = null;
-    }}
-  ></PopupInfo>
-{/if}
+    {#each data.myOtherPlants as plant, index}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
+      <div
+        on:click={() => {
+          console.log("click!");
+          selectedPlant = plant.plant;
+        }}
+        class="cursor-pointer mt-4 border-2 border-orange-50"
+      >
+        <PlantDisplay
+          disableAnimation={index > MAX_CANVASSES - 1}
+          imageUrl={plant.plant.imageUrl || ""}
+          applyFilters={false}
+          label={plant.plant.commonName}
+        />
+      </div>
+    {/each}
 
-{#if candidateChild}
-  <ConfirmBreedPopup
-    {candidateChild}
-    onCancel={() => {
-      candidateChild = null;
-    }}
-    onConfirm={() => {
-      candidateChild = null;
-      invalidateAll();
-    }}
-  />
-{/if}
+    {#each data.notSproutedPlants as plant}
+      {#if plant.authorTop && plant.authorBottom}
+        {plant.authorTop.username} ❤️ {plant.authorBottom.username}
+      {/if}
+      <PlantDisplay
+        disableAnimation={true}
+        imageUrl={"/pollination/Seed_01.png"}
+        applyFilters={false}
+        label={plant.givenName}
+      />
+    {/each}
+  </div>
 
-<div class="fixed bottom-0 w-screen content-center">
-  <button
-    on:click={() => gotoPollinate(data.myOriginalPlant.plant.id)}
-    data-test="start-pollinating-button"
-    data-umami-event="Start Pollinating Button"
-    class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
-  >
-    Start Pollinating
-  </button>
-</div>
+  {#if selectedPlant}
+    <PopupInfo
+      plantDetails={selectedPlant}
+      closePopup={() => {
+        selectedPlant = null;
+      }}
+    ></PopupInfo>
+  {/if}
 
+  {#if candidateChild}
+    <ConfirmBreedPopup
+      {candidateChild}
+      onCancel={() => {
+        candidateChild = null;
+      }}
+      onConfirm={() => {
+        candidateChild = null;
+        invalidateAll();
+      }}
+    />
+  {/if}
+
+  <div class="fixed bottom-0 w-screen content-center">
+    <button
+      on:click={() => gotoPollinate(data.myOriginalPlant.plant.id)}
+      data-test="start-pollinating-button"
+      data-umami-event="Start Pollinating Button"
+      class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
+    >
+      Start Pollinating
+    </button>
+  </div>
+</Layout>
 <!-- <div>{JSON.stringify(candidateChild)}</div> -->

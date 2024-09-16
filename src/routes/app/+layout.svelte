@@ -8,6 +8,9 @@
   const isPollinationPage = derived(page, ($page) => {
     return $page.url.pathname.includes("/pollination");
   });
+
+  const isFullPage =
+    $page.url.pathname === "/app" || $page.url.pathname.includes("admin");
 </script>
 
 <svelte:head>
@@ -18,55 +21,7 @@
   {/if}
 </svelte:head>
 
-<div class="z-20 min-h-screen bg-roel_green pageWrapper">
-  {#if !$page.url.pathname.includes("admin") && !$isPollinationPage}
-    {#if $page.url.pathname == "/app/startwindow"}
-      <div
-        class="fixed w-full z-30 pt-3 pl-8"
-        data-test="lets-pollinate-header"
-      >
-        <h1 class="text-3xl text-roel_green font-jeanb">
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <span
-            class="cursor-pointer"
-            on:click={() => {
-              goto("/app/info");
-            }}
-          >
-            Let's Pollinate
-          </span>
-        </h1>
-      </div>
-    {:else if $page.url.pathname !== "/app"}
-      <div
-        class="fixed w-full z-30 pt-3 pl-8"
-        data-test="lets-pollinate-header"
-      >
-        <h1 class="text-3xl text-roel_blue font-jeanb">
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <span
-            class="cursor-pointer"
-            on:click={() => {
-              goto("info");
-            }}
-          >
-            Let's Pollinate
-          </span>
-        </h1>
-      </div>
-    {/if}
-  {/if}
-
-  <!-- Adjust padding instead of margin to start content below the header -->
-  <div class="app">
-    {#if $page.url.pathname !== "/app/info" && $page.url.pathname !== "/app/" && $page.url.pathname !== "/app/garden"}
-      <div class="pt-0"></div>
-    {/if}
-    <slot />
-  </div>
-</div>
+<slot />
 
 <style scoped>
   .pageWrapper {

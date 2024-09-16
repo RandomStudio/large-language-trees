@@ -12,7 +12,7 @@
       width: canvasElement.offsetWidth,
       color: {
         dark: "#670093", // roel_blue
-        light: "#C8F58F" // roel_green
+        light: "#0000" // roel_green
       }
     });
   };

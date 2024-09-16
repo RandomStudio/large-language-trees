@@ -65,6 +65,15 @@
   font-display: swap;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
 .standard-gradient {
   background: linear-gradient(
     180deg,

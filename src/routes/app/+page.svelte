@@ -13,14 +13,18 @@
   }
 </script>
 
-<img src="FlowerDuo.png" class="absolute -z-10 opacity-100" alt="FlowerDuo" />
-<div class="mx-10 pt-[15vh] font-primer text-6xl text-roel_blue">
-  <p class="font-gyst text-center">LET'S<br />POLLINATE</p>
-  <div class="text-center">
+<img
+  src="FlowerDuo.png"
+  class="absolute left-0 right-0 -z-1 opacity-75"
+  alt="FlowerDuo"
+/>
+<div class="mx-10 pt-[15vh] font-primer text-6xl text-roel_blue z-2">
+  <p class="font-gyst text-center mb-[60px]">LET'S<br />POLLINATE</p>
+  <div class="text-center relative">
     <form
       method="post"
       use:enhance
-      class="mt-4 text-center max-w-md"
+      class="mt-0 text-center max-w-md"
       action="?/attemptNewRegistration"
     >
       <input
@@ -51,26 +55,26 @@
         Start
       </button>
 
-      {#if form?.message}
-        <div
-          class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-center text-2xl"
-        >
-          Error: {form.message}
-        </div>
-        {#if form?.existingUser}
-          <div
-            class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-sm text-center"
-          >
-            Choose a different username, or <button
-              data-umami-event="Login Anyway"
-              data-test="login-anyway"
-              class="underline"
-              formaction="?/loginExistingUser">log in</button
-            >
-            as <span class="font-bold">{form.existingUser.username}</span> instead
+      <div
+        class="text-roel_blue bg-roel_green bg-opacity-75 text-center absolute top-100 left-0 right-0 text-small py-4"
+      >
+        {#if form?.message}
+          <div>
+            Error: {form.message}
           </div>
+          {#if form?.existingUser}
+            <div class="mt-2">
+              Choose a different username, or <button
+                data-umami-event="Login Anyway"
+                data-test="login-anyway"
+                class="underline"
+                formaction="?/loginExistingUser">log in</button
+              >
+              as <span class="font-bold">{form.existingUser.username}</span> instead
+            </div>
+          {/if}
         {/if}
-      {/if}
+      </div>
     </form>
   </div>
 </div>
@@ -94,4 +98,3 @@
     </div>
   </div>
 </div>
-<div class="w-screen h-60 bg-roel_blue -mt-[120px] fixed -z-10"></div>

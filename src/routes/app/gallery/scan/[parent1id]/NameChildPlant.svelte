@@ -26,6 +26,24 @@
   });
 </script>
 
+<div class="font-primer text-roel_blue mb-[200px]">
+  <div class="font-primer text-roel_green text-left">
+    <p class="text-medium" data-test="welcome-text">
+      Here is your first plant!
+    </p>
+    <div class="mx-auto pt-12 w-64">
+      <PlantDisplay imageUrl={data.startPlant.imageUrl || ""}></PlantDisplay>
+    </div>
+  </div>
+  <p class="text-large text-center mb-8">
+    {data.startPlant.commonName}
+  </p>
+  <p class="text-small text-left">
+    Now find a fellow gardener and scan their QR code to start pollinating.
+  </p>
+  <ButtonBottom text={"Let it grow!"} onClick={() => onNameChosen(newName)} />
+</div>
+
 <div
   class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40 standard-gradient"
 >
@@ -65,10 +83,6 @@
           bind:value={newName}
         />
       </div>
-      <ButtonBottom
-        text={"Let it grow!"}
-        onClick={() => onNameChosen(newName)}
-      />
     </form>
   </div>
 </div>
