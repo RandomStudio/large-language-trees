@@ -14,11 +14,12 @@
         Here is your first plant!
       </p>
       <div class="mx-auto pt-12 w-64">
-        <PlantDisplay imageUrl={data.startPlant.imageUrl || ""}></PlantDisplay>
+        <PlantDisplay imageUrl={data.startPlant.plant.imageUrl || ""}
+        ></PlantDisplay>
       </div>
     </div>
     <p class="text-large text-center mb-8">
-      {data.startPlant.commonName}
+      {data.startPlant.plant.commonName}
     </p>
     <p class="text-small text-left">
       Now find a fellow gardener and scan their QR code to start pollinating.
