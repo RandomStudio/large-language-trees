@@ -192,10 +192,10 @@ export const handleDisplayNotification = async (
   }
 
   if (event === "timeout") {
-    console.log(
-      "A display timed out its current animation, pick something new"
-    );
-    console.log({ weights: DISPLAY_VIEW_WEIGHTINGS, bRollViews: bRollNaming });
+    // console.log(
+    //   "A display timed out its current animation, pick something new"
+    // );
+    // console.log({ weights: DISPLAY_VIEW_WEIGHTINGS, bRollViews: bRollNaming });
     const pickDisplayType = pickKeysWithWeights(DISPLAY_VIEW_WEIGHTINGS);
 
     try {
@@ -209,7 +209,7 @@ export const handleDisplayNotification = async (
 
       await updateScreenStateAndPublish(displayId, contents, 0, timeout);
     } catch (e) {
-      console.error(
+      console.warn(
         "Something went wrong getting a random Display layout: " + e
       );
       await updateScreenStateAndPublish(displayId, IDLE_STATE, null, 2000);
@@ -518,7 +518,7 @@ export const getDataForAmbientDisplay = async (
 
       const pickUser = pickRandomElement(allNormalUsers);
 
-      console.log("pick user", pickUser.username, "from", allNormalUsers);
+      // console.log("pick user", pickUser.username, "from", allNormalUsers);
 
       const userPlants = await db.query.plants.findMany({
         where: or(
@@ -694,11 +694,11 @@ export const updateScreenStateAndPublish = async (
   priority: number | null,
   timeout: number | null
 ) => {
-  console.log(
-    "updateScreenStateAndPublish:",
-    { targetId, name: contents.name, priority, timeout },
-    "..."
-  );
+  // console.log(
+  //   "updateScreenStateAndPublish:",
+  //   { targetId, name: contents.name, priority, timeout },
+  //   "..."
+  // );
   await db
     .update(presentationState)
     .set({ contents, priority })
