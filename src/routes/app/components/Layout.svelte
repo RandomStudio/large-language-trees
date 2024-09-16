@@ -11,7 +11,7 @@
   {:else}
     <div class="standard-gradient px-10">
       <header class="pt-4 pb-11">
-        <h1 class="text-xl text-roel_green">{title}</h1>
+        <h1 class="text-xl text-roel_green font-gyst">{title}</h1>
       </header>
       <div>
         <slot />
