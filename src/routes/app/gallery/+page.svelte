@@ -23,6 +23,7 @@
   import PlantWasAddedPopup from "./PlantWasAddedPopup.svelte";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
   import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
+  import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
 
   export let data;
   type GalleryViewData = typeof data;
@@ -63,29 +64,33 @@
       }
     });
 
-    const newPlantAddedPopup = await InputPlug.create(
+    const newPlantAdded = await InputPlug.create(
       agent,
       PLUG_NAMES.simpleEvents,
       {
         id: "newPlantSprouted"
       }
     );
-    newPlantAddedPopup.on("message", (payload) => {
+    newPlantAdded.on("message", (payload) => {
       const m = decode(payload) as EventNewSprouting;
-      if (m.payload.authorBottom === data.user.id) {
-        console.log(
-          "New plant added by other user and belongs to me",
-          m.payload
-        );
-        otherUserAddedPlant = m.payload;
+    });
 
-        setTimeout(() => {
-          console.log("Now clear popup...");
-          otherUserAddedPlant = null;
-          invalidateAll();
-        }, 4000);
+    const newPlantAddedOtherUser = await InputPlug.create(
+      agent,
+      PLUG_NAMES.simpleEvents,
+      {
+        id: "newGeneratedPlantReady"
       }
-      // For any "newPlantPollination" event, reload page data just in case
+    );
+
+    newPlantAddedOtherUser.on("message", (payload) => {
+      const m = decode(payload) as EventGeneratedPlantReady;
+      if (m.payload.authorTop === data.user.id) {
+        console.log("New plant ready, and needs my input:", m.payload);
+        candidateToPlant(m.payload).then((p) => {
+          candidateChild = p;
+        });
+      }
     });
   });
 

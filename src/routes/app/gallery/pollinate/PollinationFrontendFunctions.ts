@@ -69,10 +69,9 @@ export async function insertNewPlant(plant: InsertPlant) {
 }
 
 export const candidateToPlant = async (
-  plantId: string,
-  authorTop: string,
-  authorBottom: string
+  candidate: CandidatePlant
 ): Promise<InsertPlant> => {
+  const { plantId, authorTop, authorBottom } = candidate;
   const exists = await fetch(`/api/plants/${plantId}/generatedPlant`);
   console.log("response status", exists.status);
   if (exists.status === 200) {
