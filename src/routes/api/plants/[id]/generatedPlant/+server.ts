@@ -60,7 +60,8 @@ export const DELETE: RequestHandler = async ({ params }) => {
   if (matchingCandidatePlant) {
     const result = await db
       .delete(generatedPlants)
-      .where(eq(generatedPlants.plantId, plantId));
+      .where(eq(generatedPlants.plantId, plantId))
+      .returning();
     if (result.length !== 1) {
       throw Error(`count ${result.length} is not a single entry`);
     }
