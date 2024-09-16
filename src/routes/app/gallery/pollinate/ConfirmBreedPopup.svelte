@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { InsertPlant } from "$lib/types";
+  import type { CandidatePlant, InsertPlant } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "$lib/constants";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
@@ -7,17 +7,20 @@
   import PopupError from "./PopupError.svelte";
 
   import { fade } from "svelte/transition";
-  import { insertNewPlant } from "./PollinationFrontendFunctions";
+  import {
+    candidateToPlant,
+    insertNewPlant
+  } from "./PollinationFrontendFunctions";
   import { onMount } from "svelte";
 
-  export let candidateChild: InsertPlant;
+  export let candidateChild: CandidatePlant;
 
   let userErrorMessage: string | null = null;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
    * returning to the parent component ready to add to the database.
    */
-  let finalChildReadyToAdd: InsertPlant = { ...candidateChild };
+  let finalChildReadyToAdd: InsertPlant = candidateToPlant(candidateChild);
 
   export let onCancel: () => any;
   export let onConfirm: () => any;
@@ -81,7 +84,7 @@
         />
 
         <p class="mt-8 text-base">{errorText}</p>
-        <p class="mt-8 text-base mb-0">{candidateChild.description}</p>
+        <p class="mt-8 text-base mb-0">{finalChildReadyToAdd.description}</p>
 
         <br />
         <br />

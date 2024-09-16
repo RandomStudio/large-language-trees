@@ -59,8 +59,8 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
       authorTop: thisUserId,
       authorBottom: otherUserId,
       givenName: userPickedNewName,
-      parentPlantTop: thisPlantId,
-      parentPlantBottom: otherPlantId
+      parentTop: thisPlantId,
+      parentBottom: otherPlantId
     })
     .returning();
 

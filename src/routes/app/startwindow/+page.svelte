@@ -25,7 +25,7 @@
     </p>
     <ButtonBottom
       text="Start Pollinating"
-      onClick={() => goto(`/app/gallery/scan/${data.startPlant.id}`)}
+      onClick={() => goto(`/app/gallery/scan/${data.startPlant.plant.id}`)}
     />
   </div>
 </Layout>

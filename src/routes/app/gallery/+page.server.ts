@@ -2,7 +2,7 @@ import type { PageServerLoad } from "./$types";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { lucia } from "$lib/server/auth";
 import { db } from "$lib/server/db";
-import { eq, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { generatedPlants, users } from "$lib/server/schema";
 import { stripUserInfo } from "$lib/security";
 
@@ -18,55 +18,78 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw Error("no user ID");
   }
 
-  const userWithSeedbankPlants = await db.query.users.findFirst({
+  const userWithPlants = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      myGarden: true,
-      mySeedbank: { with: { plantsInSeedbank: { with: { plant: true } } } }
+      myGarden: { with: { plants: { with: { plant: true } } } }
     }
   });
 
-  if (!userWithSeedbankPlants) {
-    throw Error("failed to load user with seedbank+plants");
+  if (!userWithPlants) {
+    throw Error("failed to load user with garden+plants");
   }
 
-  const myOriginalPlant =
-    userWithSeedbankPlants.mySeedbank.plantsInSeedbank.find(
-      (p) => p.plant.parent1 === null && p.plant.parent2 === null
-    );
+  const myOriginalPlant = userWithPlants.myGarden.plants.find(
+    (p) => p.plant.parent1 === null && p.plant.parent2 === null
+  );
 
   if (!myOriginalPlant) {
     throw Error("missing plant(s)");
   }
 
-  const myOtherPlants =
-    userWithSeedbankPlants.mySeedbank.plantsInSeedbank.filter(
-      (p) => p.plant.id !== myOriginalPlant.plant.id
-    );
+  const myOtherPlants = userWithPlants.myGarden.plants.filter(
+    (p) => p.plant.id !== myOriginalPlant.plant.id
+  );
 
   const notSproutedPlants = (
     await db.query.generatedPlants.findMany({
       where: or(
-        eq(generatedPlants.authorTop, userId),
+        and(
+          eq(generatedPlants.awaitingConfirmation, false),
+          eq(generatedPlants.authorTop, userId)
+        ),
         eq(generatedPlants.authorBottom, userId)
       ),
       with: {
         parentPlantTop: true,
         parentPlantBottom: true,
-        authorTop: true,
-        authorBottom: true
+        authorTopUser: true,
+        authorBottomUser: true
       }
     })
   ).filter(
+    // Exclude any plants that have already sprouted for me
     (e) => myOtherPlants.find((p) => p.plant.id === e.plantId) === undefined
   );
 
-  return {
-    user: stripUserInfo(userWithSeedbankPlants),
+  const awaitingConfirmation = await db.query.generatedPlants.findMany({
+    where: and(
+      eq(generatedPlants.authorTop, userId),
+      eq(generatedPlants.awaitingConfirmation, true)
+    ),
+    with: {
+      parentPlantTop: true,
+      parentPlantBottom: true,
+      authorTopUser: true,
+      authorBottomUser: true
+    }
+  });
+
+  console.log({
+    user: stripUserInfo(userWithPlants),
     myOriginalPlant,
     myOtherPlants,
     notSproutedPlants,
-    garden: userWithSeedbankPlants.myGarden
+    awaitingConfirmation
+  });
+
+  return {
+    user: stripUserInfo(userWithPlants),
+    myOriginalPlant,
+    myOtherPlants,
+    notSproutedPlants,
+    awaitingConfirmation,
+    garden: userWithPlants.myGarden
   };
 };
 

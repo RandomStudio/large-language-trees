@@ -8,7 +8,6 @@ import {
   gardensToPlants,
   plants,
   presentationState,
-  seedbanksToPlants,
   users
 } from "./schema";
 import { count, desc, eq, isNotNull, or } from "drizzle-orm";
@@ -192,10 +191,10 @@ export const handleDisplayNotification = async (
   }
 
   if (event === "timeout") {
-    console.log(
-      "A display timed out its current animation, pick something new"
-    );
-    console.log({ weights: DISPLAY_VIEW_WEIGHTINGS, bRollViews: bRollNaming });
+    // console.log(
+    //   "A display timed out its current animation, pick something new"
+    // );
+    // console.log({ weights: DISPLAY_VIEW_WEIGHTINGS, bRollViews: bRollNaming });
     const pickDisplayType = pickKeysWithWeights(DISPLAY_VIEW_WEIGHTINGS);
 
     try {
@@ -209,7 +208,7 @@ export const handleDisplayNotification = async (
 
       await updateScreenStateAndPublish(displayId, contents, 0, timeout);
     } catch (e) {
-      console.error(
+      console.warn(
         "Something went wrong getting a random Display layout: " + e
       );
       await updateScreenStateAndPublish(displayId, IDLE_STATE, null, 2000);
@@ -234,15 +233,13 @@ export const getDataForAmbientDisplay = async (
       const userGarden = pickRandomUser.myGarden;
       const gardenWithPlants = await db.query.gardens.findFirst({
         where: eq(gardens.id, userGarden.id),
-        with: { plantsInGarden: true }
+        with: { plants: true }
       });
       if (!gardenWithPlants) {
         throw Error("no plants in user garden");
       }
 
-      const pickRandomPlant = pickRandomElement(
-        gardenWithPlants.plantsInGarden
-      );
+      const pickRandomPlant = pickRandomElement(gardenWithPlants.plants);
       const thePlant = await db.query.plants.findFirst({
         where: eq(plants.id, pickRandomPlant.plantId)
       });
@@ -277,15 +274,13 @@ export const getDataForAmbientDisplay = async (
           const userGarden = u.myGarden;
           const gardenWithPlants = await db.query.gardens.findFirst({
             where: eq(gardens.id, userGarden.id),
-            with: { plantsInGarden: true }
+            with: { plants: true }
           });
           if (!gardenWithPlants) {
             throw Error("no plants in user garden");
           }
 
-          const pickRandomPlant = pickRandomElement(
-            gardenWithPlants.plantsInGarden
-          );
+          const pickRandomPlant = pickRandomElement(gardenWithPlants.plants);
           const thePlant = await db.query.plants.findFirst({
             where: eq(plants.id, pickRandomPlant.plantId)
           });
@@ -319,7 +314,7 @@ export const getDataForAmbientDisplay = async (
       }
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+          with: { myOwner: true, plants: { with: { plant: true } } }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
       const gardens = pickMultipleRandomElements(allGardens, NUM_GARDENS_MULTI);
@@ -331,7 +326,7 @@ export const getDataForAmbientDisplay = async (
           ),
           gardens: gardens.map((g) => ({
             ...g,
-            plantsInGarden: g.plantsInGarden.map((p) => ({
+            plantsWithDates: g.plants.map((p) => ({
               ...p.plant,
               pollinationDate: p.plantingDate
             }))
@@ -344,7 +339,7 @@ export const getDataForAmbientDisplay = async (
     case bRollNaming.ROLL_PAN: {
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plantsInGarden: { with: { plant: true } } }
+          with: { myOwner: true, plants: { with: { plant: true } } }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
       if (allGardens.length < 5) {
@@ -360,7 +355,7 @@ export const getDataForAmbientDisplay = async (
         contents: pickGardens.map((garden) => ({
           garden: {
             ...garden,
-            plantsInGarden: garden.plantsInGarden.map((p) => ({
+            plantsWithDates: garden.plants.map((p) => ({
               ...p.plant,
               pollinationDate: p.plantingDate
             }))
@@ -374,7 +369,7 @@ export const getDataForAmbientDisplay = async (
     case bRollNaming.ZOOM_OUT: {
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plantsInGarden: true }
+          with: { myOwner: true, plants: true }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
       const pickGarden = pickRandomElement(allGardens);
@@ -387,7 +382,7 @@ export const getDataForAmbientDisplay = async (
         contents: {
           garden: {
             ...pickGarden,
-            plantsInGarden: plantsInGarden.map((p) => ({
+            plantsWithDates: plantsInGarden.map((p) => ({
               ...p.plant,
               pollinationDate: p.plantingDate
             }))
@@ -405,7 +400,7 @@ export const getDataForAmbientDisplay = async (
       // An orderBy + LIMIT would probably help, but this would require a join.
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plantsInGarden: true }
+          with: { myOwner: true, plants: true }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
 
@@ -416,14 +411,14 @@ export const getDataForAmbientDisplay = async (
       const orderedByPlantCount = allGardens
         .filter((g) => g.myOwner.isAdmin === false)
         .sort((a, b) => {
-          return b.plantsInGarden.length - a.plantsInGarden.length;
+          return b.plants.length - a.plants.length;
         })
         .slice(0, LIMIT_LEADERBOARD);
 
       const topGarden = orderedByPlantCount[0];
       const topGardenWithPlants = await db.query.gardens.findFirst({
         where: eq(gardens.id, topGarden.id),
-        with: { plantsInGarden: { with: { plant: true } } }
+        with: { plants: { with: { plant: true } } }
       });
       if (!topGardenWithPlants) {
         throw Error("failed to load top garden with plants");
@@ -434,11 +429,11 @@ export const getDataForAmbientDisplay = async (
         contents: {
           topPollinators: orderedByPlantCount.map((garden) => ({
             username: garden.myOwner.username,
-            count: garden.plantsInGarden.length
+            count: garden.plants.length
           })),
           topGarden: {
             ...topGardenWithPlants,
-            plantsInGarden: topGardenWithPlants.plantsInGarden.map((p) => ({
+            plantsWithDates: topGardenWithPlants.plants.map((p) => ({
               ...p.plant,
               pollinationDate: p.plantingDate
             }))
@@ -451,7 +446,7 @@ export const getDataForAmbientDisplay = async (
     case bRollNaming.STATISTICS_1: {
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plantsInGarden: true }
+          with: { myOwner: true, plants: true }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
       const pickGarden = pickRandomElement(allGardens);
@@ -481,7 +476,7 @@ export const getDataForAmbientDisplay = async (
       const allGardens = (
         await db.query.gardens.findMany({
           with: {
-            plantsInGarden: { with: { plant: true } },
+            plants: { with: { plant: true } },
             myOwner: true
           }
         })
@@ -498,7 +493,7 @@ export const getDataForAmbientDisplay = async (
           gardens: pickGardens.map((garden) => ({
             garden: {
               ...garden,
-              plantsInGarden: garden.plantsInGarden.map((p) => ({
+              plantsWithDates: garden.plants.map((p) => ({
                 ...p.plant,
                 pollinationDate: p.plantingDate
               }))
@@ -518,7 +513,7 @@ export const getDataForAmbientDisplay = async (
 
       const pickUser = pickRandomElement(allNormalUsers);
 
-      console.log("pick user", pickUser.username, "from", allNormalUsers);
+      // console.log("pick user", pickUser.username, "from", allNormalUsers);
 
       const userPlants = await db.query.plants.findMany({
         where: or(
@@ -694,11 +689,11 @@ export const updateScreenStateAndPublish = async (
   priority: number | null,
   timeout: number | null
 ) => {
-  console.log(
-    "updateScreenStateAndPublish:",
-    { targetId, name: contents.name, priority, timeout },
-    "..."
-  );
+  // console.log(
+  //   "updateScreenStateAndPublish:",
+  //   { targetId, name: contents.name, priority, timeout },
+  //   "..."
+  // );
   await db
     .update(presentationState)
     .set({ contents, priority })

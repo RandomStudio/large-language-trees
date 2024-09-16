@@ -16,15 +16,14 @@ export const load: PageServerLoad = async ({
   if (!userId) {
     throw Error("No user ID for this user!");
   }
-  const userWithSeedbankPlants = await db.query.users.findFirst({
+  const userWithGarden = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      myGarden: true,
-      mySeedbank: { with: { plantsInSeedbank: { with: { plant: true } } } }
+      myGarden: { with: { plants: { with: { plant: true } } } }
     }
   });
 
-  if (!userWithSeedbankPlants) {
+  if (!userWithGarden) {
     throw Error("error finding plant and/or user");
   }
 
@@ -34,11 +33,9 @@ export const load: PageServerLoad = async ({
     return error(400);
   }
 
-  const userPlants = userWithSeedbankPlants.mySeedbank.plantsInSeedbank.map(
-    (p) => p.plant
-  );
+  const userPlants = userWithGarden.myGarden.plants.map((p) => p.plant);
 
-  const thisPlant = userWithSeedbankPlants.mySeedbank.plantsInSeedbank.find(
+  const thisPlant = userWithGarden.myGarden.plants.find(
     (p) => p.plantId === plantId
   );
 
@@ -47,7 +44,7 @@ export const load: PageServerLoad = async ({
   }
 
   return {
-    thisUser: stripUserInfo(userWithSeedbankPlants),
+    thisUser: stripUserInfo(userWithGarden),
     userPlants,
     thisPlant: thisPlant.plant
   };

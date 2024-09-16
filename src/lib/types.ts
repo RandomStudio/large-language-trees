@@ -5,8 +5,6 @@ import type {
   plants,
   presentationState,
   promptSettingsTable,
-  seedbanks,
-  seedbanksToPlants,
   users
 } from "$lib/server/schema";
 import type { DateTime } from "luxon";
@@ -29,9 +27,6 @@ export type CandidatePlant = typeof generatedPlants.$inferSelect;
 export type SelectGarden = typeof gardens.$inferSelect;
 export type GardenPlantEntry = typeof gardensToPlants.$inferInsert;
 
-export type SelectSeedbank = typeof seedbanks.$inferInsert;
-export type SeedbankEntry = typeof seedbanksToPlants.$inferInsert;
-
 export type Characteristics = { [key: string]: string | number };
 
 export type GeneratedImage = typeof generatedPlants.$inferSelect;
@@ -44,22 +39,10 @@ export interface PlantWithDate extends SelectPlant {
   pollinationDate: Date;
 }
 export interface GardenWithPlants extends SelectGarden {
-  plantsInGarden: PlantWithDate[];
+  plantsWithDates: PlantWithDate[];
 }
 export interface UserWithGarden extends SelectUser {
   myGarden: GardenWithPlants;
-}
-
-export interface SeedbankEntryWithPlant extends SeedbankEntry {
-  plant: SelectPlant;
-}
-
-export interface MySeeds extends SelectSeedbank {
-  plantsInSeedbank: SeedbankEntryWithPlant[];
-}
-
-export interface UserWithSeedbank extends SelectUser {
-  mySeeds: MySeeds;
 }
 
 export interface PlantProperties {
