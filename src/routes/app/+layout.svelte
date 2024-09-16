@@ -18,7 +18,7 @@
   {/if}
 </svelte:head>
 
-<div class="z-20 min-h-screen bg-roel_green absolute">
+<div class="z-20 min-h-screen bg-roel_green pageWrapper">
   {#if !$page.url.pathname.includes("admin") && !$isPollinationPage}
     {#if $page.url.pathname == "/app/startwindow"}
       <div
@@ -38,7 +38,7 @@
           </span>
         </h1>
       </div>
-    {:else}
+    {:else if $page.url.pathname !== "/app"}
       <div
         class="fixed w-full z-30 pt-3 pl-8"
         data-test="lets-pollinate-header"
@@ -67,3 +67,11 @@
     <slot />
   </div>
 </div>
+
+<style scoped>
+  .pageWrapper {
+    position: fixed;
+    inset: 0;
+    overflow: auto;
+  }
+</style>

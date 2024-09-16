@@ -8,5 +8,8 @@ export default defineConfig({
       Buffer: "buffer",
       mqtt: "mqtt/dist/mqtt.js"
     }
+  },
+  server: {
+    host: '0.0.0.0'
   }
 });
