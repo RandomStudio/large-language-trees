@@ -55,10 +55,10 @@
         Start
       </button>
 
-      <div
-        class="text-roel_blue bg-roel_green bg-opacity-75 text-center absolute top-100 left-0 right-0 text-small py-4"
-      >
-        {#if form?.message}
+      {#if form?.message}
+        <div
+          class="text-roel_blue bg-roel_green bg-opacity-75 text-center absolute top-100 left-0 right-0 text-small py-4"
+        >
           <div>
             Error: {form.message}
           </div>
@@ -73,8 +73,8 @@
               as <span class="font-bold">{form.existingUser.username}</span> instead
             </div>
           {/if}
-        {/if}
-      </div>
+        </div>
+      {/if}
     </form>
   </div>
 </div>
