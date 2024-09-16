@@ -12,4 +12,6 @@
   <div>
     You and {otherUser.username} gave life to a new seed together.
   </div>
+
+  <div>otherUser.username} has the privilege to name your new sprout.</div>
 </div>

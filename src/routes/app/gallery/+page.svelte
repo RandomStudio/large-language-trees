@@ -17,7 +17,7 @@
   import {
     type EventNewSprouting,
     type EventGeneratedPlantReady,
-    type EventPollinationStarted
+    type EventPollinationStarting
   } from "$lib/events.types";
   import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
   import PlantWasAddedPopup from "./PlantWasAddedPopup.svelte";
@@ -44,11 +44,11 @@
       agent,
       PLUG_NAMES.simpleEvents,
       {
-        id: "newPollinationStarted"
+        id: "newPollinationStarting"
       }
     );
     newPollinationStartedPlug.on("message", (payload) => {
-      const m = decode(payload) as EventPollinationStarted;
+      const m = decode(payload) as EventPollinationStarting;
       if (m.payload.authorBottom.id === data.user.id) {
         console.log(
           "New pollination started for plant of which I am the 'other' author",

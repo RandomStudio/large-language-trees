@@ -8,7 +8,7 @@ import { db } from "$lib/server/db";
 import { eq, or } from "drizzle-orm";
 import { generatedPlants, plants, users } from "$lib/server/schema";
 import { publishEvent } from "$lib/server/realtime";
-import type { EventPollinationStarted } from "$lib/events.types";
+import type { EventPollinationStarting } from "$lib/events.types";
 
 /** Should be identical to the version in
  * `/netlify/functions/complete-gen-background.mts`

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import type {
@@ -13,6 +13,11 @@
   import PollinationQrCode from "../../pollinate/PollinationQrCode.svelte";
   import NameChildPlant from "./NameChildPlant.svelte";
   import PopupDejaVu from "../../pollinate/PopupDejaVu.svelte";
+  import { TetherAgent, InputPlug, decode } from "tether-agent";
+  import { PLUG_NAMES } from "$lib/constants";
+  import type { EventPollinationStarting } from "$lib/events.types";
+  import PollinationWasStartedPopup from "../../PollinationWasStartedPopup.svelte";
+  import { BROWSER_CONNECTION } from "../../../../../defaults/tether";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -23,7 +28,11 @@
   let errorMessage: string | null = null;
   let isLoadingCamera: boolean = true;
 
+  let agent: TetherAgent | null = null;
+
   let alreadyExistsPlant: SelectPlant | null = null;
+
+  let otherUserStartedPollination: PublicUserInfo | null = null;
 
   const getStream = async () => {
     try {
@@ -112,7 +121,25 @@
   };
 
   const onCodeScanned = async (otherPlantId: string, otherUserId: string) => {
+    if (otherUserId === data.thisUser.id) {
+      throw Error("this user is myself; try again");
+    }
     stopScanning();
+
+    otherUser = await getOtherUserDetails(otherUserId);
+
+    const e: EventPollinationStarting = {
+      name: "newPollinationStarting",
+      payload: {
+        authorTop: data.thisUser,
+        authorBottom: otherUser
+      }
+    };
+    await fetch("/api/events", {
+      method: "POST",
+      body: JSON.stringify(e)
+    });
+
     alreadyExistsPlant = findAlreadyExists(
       data.thisPlant.id,
       otherPlantId,
@@ -121,7 +148,6 @@
     if (!alreadyExistsPlant) {
       console.info("New child plant possible!");
       otherPlant = await getOtherPlantDetails(otherPlantId);
-      otherUser = await getOtherUserDetails(otherUserId);
     } else {
       console.warn(
         "This child combination already exists!",
@@ -152,9 +178,6 @@
 
   const getOtherPlantDetails = async (plantId: string) =>
     (await (await fetch(`/api/plants/${plantId}`)).json()) as SelectPlant;
-  onMount(async () => {
-    await startQrScanning();
-  });
 
   const initiateBackgroundRequest = async (
     otherUserId: string,
@@ -173,6 +196,37 @@
       body: JSON.stringify(jsonBody)
     });
   };
+
+  onMount(async () => {
+    await startQrScanning();
+
+    agent = await TetherAgent.create("app", {
+      brokerOptions: BROWSER_CONNECTION
+    });
+
+    const newPollinationStartedReceive = await InputPlug.create(
+      agent,
+      PLUG_NAMES.simpleEvents,
+      {
+        id: "newPollinationStarting"
+      }
+    );
+    newPollinationStartedReceive.on("message", (payload) => {
+      const m = decode(payload) as EventPollinationStarting;
+      if (m.payload.authorBottom.id === data.thisUser.id) {
+        console.log(
+          "New pollination started for plant of which I am the 'other' author",
+          m.payload
+        );
+        otherUserStartedPollination = m.payload.authorTop;
+        setTimeout(() => {
+          console.log("Now clear popup...");
+          otherUserStartedPollination = null;
+          invalidateAll();
+        }, 4000);
+      }
+    });
+  });
 
   onDestroy(() => {
     stopScanning();
@@ -256,4 +310,8 @@
       startQrScanning();
     }}
   />
+{/if}
+
+{#if otherUserStartedPollination}
+  <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
 {/if}

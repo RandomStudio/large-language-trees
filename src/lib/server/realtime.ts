@@ -804,6 +804,9 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
         }
       ];
     }
+    case "newPollinationStarting": {
+      return [];
+    }
     case "newGeneratedPlantReady": {
       return []; // TODO: this entry should be ignored entirely
     }

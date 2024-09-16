@@ -36,7 +36,7 @@ export interface EventNewTopPlant extends SimpleEventBody {
 }
 
 /** 1: We don't even have a name yet */
-export interface EventPollinationStarted extends SimpleEventBody {
+export interface EventPollinationStarting extends SimpleEventBody {
   name: "newPollinationStarting";
   payload: {
     authorTop: PublicUserInfo;
@@ -64,7 +64,7 @@ export interface EventNewSprouting extends SimpleEventBody {
 export type SimpleEvent =
   | EventNewUser
   | EventFirstPlant
-  | EventPollinationStarted
+  | EventPollinationStarting
   | EventGeneratedPlantReady
   | EventNewSprouting
   | EventNewTopPlant;
