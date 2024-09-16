@@ -19,6 +19,7 @@
   import type { EventPollinationStarting } from "$lib/events.types";
   import PollinationWasStartedPopup from "../../PollinationWasStartedPopup.svelte";
   import { BROWSER_CONNECTION } from "../../../../../defaults/tether";
+  import { error } from "@sveltejs/kit";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -240,12 +241,11 @@
       Point your camera to another gardeners Pollination QR to start
       crossbreeding {data.thisPlant.commonName}.
     </p>
-    <p class="text-xl text-red-500 pb-6">{"" ?? errorMessage}</p>
     <div class="relative shrink flex flex-col">
       <div
-        class="object-cover aspect-square w-60 place-self-center overflow-hidden rounded-full bg-black"
+        class="object-cover aspect-square w-60 place-self-center overflow-hidden rounded-full bg-transparent"
       >
-        <div style="display:{isLoadingCamera ? 'none' : 'block'}">
+        <div class="block relative {errorMessage && 'opacity-30'}">
           <video
             bind:this={videoElement}
             class="object-cover aspect-square pointer-events-none"
@@ -253,6 +253,11 @@
             <track kind="captions" srclang="en" label="English captions" />
           </video>
         </div>
+        <p
+          class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
+        >
+          {errorMessage}
+        </p>
         <PlantDisplay
           imageUrl={data.thisPlant.imageUrl || ""}
           applyFilters={false}
