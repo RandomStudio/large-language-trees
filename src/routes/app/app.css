@@ -11,58 +11,54 @@
 } */
 
 @font-face {
-  font-family: "Garamond";
-  src: url("/Garamond.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "OldStandard";
-  src: url("/OldStandard.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Inter";
-  src: url("/Inter.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "JeanB";
-  src: url("/jeanlucweb-bold.eot");
-  src: local("☺"), url("/jeanlucweb-bold.woff") format("woff"),
-    url("/jeanlucweb-bold.otf") format("opentype"),
-    url("/jeanlucweb-bold#webfontup15foyj") format("svg");
-}
-
-@font-face {
-  font-family: "JeanT";
-  src: url("/jeanlucweb-bold.eot");
-  src: local("☺"), url("/jeanlucweb-thin.woff") format("woff"),
-    url("/jeanlucweb-thin.otf") format("opentype"),
-    url("/jeanlucweb-thin#webfontdsa4toug") format("svg");
-}
-
-@font-face {
   font-family: "Primer";
-  src: url("/MDPrimer-Medium.woff2") format("woff2"),
-    url("/MDPrimer-Medium.woff") format("woff");
+  src: url("/fonts/Primer/MDPrimer-Medium.woff2") format("woff2"),
+    url("/fonts/Primer/MDPrimer-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
+@import url("https://p.typekit.net/p.css?s=1&k=eeq0cma&ht=tk&f=53658.53659&a=23614676&app=typekit&e=css");
+
 @font-face {
-  font-family: "PrimerB";
-  src: url("/MDPrimer-Bold.woff2") format("woff2"),
-    url("/MDPrimer-Bold.woff") format("woff");
-  font-weight: bold;
+  font-family: "gyst-variable";
+  src: url("https://use.typekit.net/af/621a93/000000000000000077508a98/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i3&v=3")
+      format("woff2"),
+    url("https://use.typekit.net/af/621a93/000000000000000077508a98/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i3&v=3")
+      format("woff"),
+    url("https://use.typekit.net/af/621a93/000000000000000077508a98/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i3&v=3")
+      format("opentype");
+  font-display: auto;
+  font-style: italic;
+  font-weight: 300;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: "gyst-variable";
+  src: url("https://use.typekit.net/af/01a8ab/000000000000000077508a99/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n3&v=3")
+      format("woff2"),
+    url("https://use.typekit.net/af/01a8ab/000000000000000077508a99/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n3&v=3")
+      format("woff"),
+    url("https://use.typekit.net/af/01a8ab/000000000000000077508a99/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n3&v=3")
+      format("opentype");
+  font-display: auto;
   font-style: normal;
-  font-display: swap;
+  font-weight: 300;
+  font-stretch: normal;
+}
+
+.tk-gyst-variable {
+  font-family: "gyst-variable", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
 }
 
 .standard-gradient {

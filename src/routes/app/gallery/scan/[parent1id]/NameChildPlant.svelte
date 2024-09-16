@@ -5,6 +5,7 @@
   import type { PublicUserInfo } from "$lib/types";
   import { pickRandomElement } from "random-elements";
   import { onMount } from "svelte";
+  import Layout from "../../../components/Layout.svelte";
 
   export let thisUser: PublicUserInfo;
   export let otherUser: PublicUserInfo;
@@ -26,49 +27,42 @@
   });
 </script>
 
-<div
-  class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40 standard-gradient"
->
-  <div class="overflow-y-auto pb-20" style="max-height: calc(100%);">
-    <ReturnButton onClicked={onCancel} />
-
-    <h1 class="font-gyst text-3xl pl-8 pt-8">Hooray!</h1>
-    <div class="mx-12 font-primer text-roel_blue text-left mt-5">
-      <p class="text-2xl">
-        You and {otherUser.username} gave life to a new seed together.
-      </p>
-      <p class="text-2xl">What will be the name of your sprout?</p>
+<Layout title="Hooray!">
+  <div class="mb-[200px]">
+    <div class="text-medium text-roel_green">
+      You and {otherUser.username} gave life to a new seed together.
     </div>
-    <div class="flex items-center justify-center">
-      {#if seedImage}
-        <img
-          class="w-1/2"
-          src={`/pollination/${seedImage}`}
-          alt="Random seed"
-        />
-      {/if}
+    <div class="relative">
+      <div class="flex items-center justify-center">
+        {#if seedImage}
+          <img
+            class="w-1/2"
+            src={`/pollination/${seedImage}`}
+            alt="Random seed"
+          />
+        {/if}
+      </div>
+      <video
+        class="absolute top-0 w-screen pointer-events-none"
+        src="/pollination/seedbirth.webm"
+        loop={true}
+        autoplay={true}
+        muted={true}
+      />
     </div>
-    <video
-      class="absolute top-0 w-screen placeholder:pointer-events-none"
-      src="/pollination/seedbirth.webm"
-      loop={true}
-      autoplay={true}
-      muted={true}
-    />
-
+    <p class="text-medium text-new_purple py-8">
+      What will be the name of your sprout?
+    </p>
     <form on:submit|preventDefault class="mt-2">
       <div class="flex items-center justify-center">
         <input
-          class="bg-roel_blue bg-opacity-10 border-[3px] px-4 py-2 border-roel_blue rounded-full font-primer text-roel_blue text-2xl w-11/12 max-w-xs placeholder-dark_grey placeholder:font-inter text-center z-10"
+          class="bg-transparent border-[2px] border-new_purple rounded-full placeholder-dark_grey text-center text-new_purple p-2 w-full"
           type="text w-screen"
           maxlength={LIMIT_CHARACTERS_PLANTNAME}
           bind:value={newName}
         />
       </div>
-      <ButtonBottom
-        text={"Let it grow!"}
-        onClick={() => onNameChosen(newName)}
-      />
     </form>
+    <ButtonBottom text={"Let it grow!"} onClick={() => onNameChosen(newName)} />
   </div>
-</div>
+</Layout>

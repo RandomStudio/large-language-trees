@@ -13,11 +13,13 @@
   import PollinationQrCode from "../../pollinate/PollinationQrCode.svelte";
   import NameChildPlant from "./NameChildPlant.svelte";
   import PopupDejaVu from "../../pollinate/PopupDejaVu.svelte";
+  import Layout from "../../../components/Layout.svelte";
   import { TetherAgent, InputPlug, decode } from "tether-agent";
   import { PLUG_NAMES } from "$lib/constants";
   import type { EventPollinationStarting } from "$lib/events.types";
   import PollinationWasStartedPopup from "../../PollinationWasStartedPopup.svelte";
   import { BROWSER_CONNECTION } from "../../../../../defaults/tether";
+  import { error } from "@sveltejs/kit";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -25,7 +27,7 @@
 
   let videoElement: HTMLVideoElement;
   let codeReader: BrowserMultiFormatReader | null = null;
-  let errorMessage: string | null = null;
+  let errorMessage: string = "";
   let isLoadingCamera: boolean = true;
 
   let agent: TetherAgent | null = null;
@@ -68,7 +70,7 @@
   };
 
   const startQrScanning = async () => {
-    errorMessage = null;
+    errorMessage = "";
     console.log("Attempt to start camera + QR scanning...");
     const stream = await getStream(); // throws Error if unsuccessful
     console.log("... stream started OK");
@@ -239,47 +241,42 @@
   });
 </script>
 
-<ReturnButton
-  onClicked={() => {
-    stopScanning();
-    console.log("onReturnButtonClicked; wait 1s then redirect...");
-    setTimeout(() => {
-      goto("/app/gallery");
-    }, 1000);
-  }}
-></ReturnButton>
-
-<div class="bg-roel_blue rounded-b-full">
-  <div class="pt-[17px] mx-10 font-primer text-2xl text-roel_green text-left">
-    <p class=" text-2xl mr-6">
-      Scan another gardeners QR to crossbreed the {data.thisPlant.commonName}
+<Layout title="Let's Pollinate">
+  <div class="mb-[80px]">
+    <p class="pb-4 text-roel_green">
+      Point your camera to another gardeners Pollination QR to start
+      crossbreeding {data.thisPlant.commonName}.
     </p>
-    {#if errorMessage}
-      <p class="text-xl text-red-500">{errorMessage}</p>
-    {/if}
-    <div class="mx-0">
-      <div class="relative mt-4 pb-10">
-        <div
-          class="object-cover aspect-square overflow-hidden rounded-full z-10 bg-black"
-        >
-          <div style="display:{isLoadingCamera ? 'none' : 'block'}">
-            <video bind:this={videoElement} class="object-cover aspect-square">
-              <track kind="captions" srclang="en" label="English captions" />
-            </video>
-          </div>
+    <div class="relative shrink flex flex-col">
+      <div
+        class="object-cover aspect-square w-60 place-self-center overflow-hidden rounded-full bg-transparent"
+      >
+        <div class="block relative {errorMessage && 'opacity-30'}">
+          <video
+            bind:this={videoElement}
+            class="object-cover aspect-square pointer-events-none"
+          >
+            <track kind="captions" srclang="en" label="English captions" />
+          </video>
         </div>
+        <p
+          class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
+        >
+          {errorMessage}
+        </p>
         <PlantDisplay
           imageUrl={data.thisPlant.imageUrl || ""}
           applyFilters={false}
-          positionStyles={"absolute -bottom-3 -right-8 -mb-1 w-40 h-40 z-10"}
+          positionStyles={"absolute -bottom-3 -right-8 -mb-1 w-40 h-40 pointer-events-none"}
         />
       </div>
-      <div class="mt-2 mx-16 absolute place-self-center">
-        <PollinationQrCode
-          plantId={data.thisPlant.id}
-          userId={data.thisUser.id}
-        />
-      </div>
+    </div>
+
+    <div class="mt-2 mx-16 place-self-center shrink-0">
+      <PollinationQrCode
+        plantId={data.thisPlant.id}
+        userId={data.thisUser.id}
+      />
     </div>
   </div>
 
@@ -305,19 +302,19 @@
       }}
     />
   {/if}
-</div>
 
-{#if alreadyExistsPlant}
-  <PopupDejaVu
-    plantDetails={alreadyExistsPlant}
-    handleClose={() => {
-      alreadyExistsPlant = null;
-      otherPlant = null;
-      startQrScanning();
-    }}
-  />
-{/if}
+  {#if alreadyExistsPlant}
+    <PopupDejaVu
+      plantDetails={alreadyExistsPlant}
+      handleClose={() => {
+        alreadyExistsPlant = null;
+        otherPlant = null;
+        startQrScanning();
+      }}
+    />
+  {/if}
 
-{#if otherUserStartedPollination}
-  <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
-{/if}
+  {#if otherUserStartedPollination}
+    <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
+  {/if}
+</Layout>

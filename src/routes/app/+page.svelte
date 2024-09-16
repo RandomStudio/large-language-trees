@@ -13,14 +13,18 @@
   }
 </script>
 
-<img src="FlowerDuo.png" class="absolute -z-10 opacity-100" alt="FlowerDuo" />
-<div class="mx-10 pt-[15vh] font-primer text-6xl text-roel_blue">
-  <p class="font-gyst text-center">LET'S<br />POLLINATE</p>
-  <div class="text-center">
+<img
+  src="FlowerDuo.png"
+  class="absolute left-0 right-0 -z-1 opacity-75"
+  alt="FlowerDuo"
+/>
+<div class="mx-10 pt-[15vh] font-primer text-6xl text-roel_blue z-2">
+  <p class="font-gyst text-center mb-[60px]">LET'S<br />POLLINATE</p>
+  <div class="text-center relative">
     <form
       method="post"
       use:enhance
-      class="mt-4 text-center max-w-md"
+      class="mt-0 text-center max-w-md"
       action="?/attemptNewRegistration"
     >
       <input
@@ -53,23 +57,23 @@
 
       {#if form?.message}
         <div
-          class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-center text-2xl"
+          class="text-roel_blue bg-roel_green bg-opacity-75 text-center absolute top-100 left-0 right-0 text-small py-4"
         >
-          Error: {form.message}
-        </div>
-        {#if form?.existingUser}
-          <div
-            class="text-roel_blue bg-roel_green bg-opacity-75 rounded-full mt-2 text-sm text-center"
-          >
-            Choose a different username, or <button
-              data-umami-event="Login Anyway"
-              data-test="login-anyway"
-              class="underline"
-              formaction="?/loginExistingUser">log in</button
-            >
-            as <span class="font-bold">{form.existingUser.username}</span> instead
+          <div>
+            Error: {form.message}
           </div>
-        {/if}
+          {#if form?.existingUser}
+            <div class="mt-2">
+              Choose a different username, or <button
+                data-umami-event="Login Anyway"
+                data-test="login-anyway"
+                class="underline"
+                formaction="?/loginExistingUser">log in</button
+              >
+              as <span class="font-bold">{form.existingUser.username}</span> instead
+            </div>
+          {/if}
+        </div>
       {/if}
     </form>
   </div>
@@ -77,21 +81,55 @@
 <div
   class="font-primer text-left mt-32 text-base mx-0 text-roel_green bg-roel_blue"
 >
-  <div class="p-10">
+  <div class="p-10 credits">
     <p>
-      Welcome to Random's synergistic Lusthof, where digital abundance is
-      sprouting.
-      <br />
-      <br /> Find other Gardeners in the studio to start cross-pollinating and witness
-      your sprouts flourish in our communal garden.
+      Welcome to Random's “Let's Pollinate”, the exclusive greenhouse, sprouting
+      digital abundance.
     </p>
-    <br />
-    <div>
-      <span class="font-bold">Production:</span><br />
-      <span>Studio Random</span><br />
-      <span class="font-bold">Image Data:</span><br />
-      <span>Chat GPT/ Open AI</span>
-    </div>
+    <p>
+      Find other Gardeners around you to start cross-pollinating and witness
+      your sprouts flourish in our common garden.
+    </p>
+    <h3 class="font-bold">Production:</h3>
+    <ul>
+      <li>Random Studio</li>
+      <li>Daan Lucas</li>
+    </ul>
+    <h3 class="font-bold">Concept:</h3>
+    <ul>
+      <li>Roel Wouters</li>
+      <li>Zoë Breed</li>
+    </ul>
+    <h3 class="font-bold">Executive Production:</h3>
+    <ul>
+      <li>Rachel Short</li>
+      <li>Debbie Schonenberg</li>
+    </ul>
+    <h3 class="font-bold">Development:</h3>
+    <ul>
+      <li>Stephen Buchanan</li>
+      <li>Andrew Hill</li>
+      <li>Jonathan Modin</li>
+      <li>Jessie Kürschner</li>
+      <li>Hector Albiges-Lambard</li>
+    </ul>
+    <h3 class="font-bold">Design:</h3>
+    <ul>
+      <li>Finann</li>
+      <li>Roel</li>
+    </ul>
+    <h3 class="font-bold">Image Data:</h3>
+    <ul>
+      <li>Chat GPT/ Open AI</li>
+    </ul>
   </div>
 </div>
-<div class="w-screen h-60 bg-roel_blue -mt-[120px] fixed -z-10"></div>
+
+<style scoped>
+  .credits :global(p) {
+    margin-bottom: 1rem;
+  }
+  .credits :global(h3) {
+    margin-top: 2rem;
+  }
+</style>
