@@ -156,7 +156,7 @@
 
     {#each data.notSproutedPlants as plant}
       {#if plant.authorTop && plant.authorBottom}
-        {plant.authorTop.username} ❤️ {plant.authorBottom.username}
+        {plant.authorTopUser.username} ❤️ {plant.authorTopUser.username}
       {/if}
       <PlantDisplay
         disableAnimation={false}
