@@ -14,8 +14,4 @@
       transform: rotate(360deg);
     }
   }
-
-  .flipped-spin {
-    /*animation: spin 4s linear infinite; /* 4 seconds for slower spin */
-  }
 </style>

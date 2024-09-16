@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npx netlify dev",
+    "dev:https": "USE_HTTPS=true npx netlify dev",
     "dev:aws": "npx dotenvx run --env-file=.env -- npm run dev",
     "build": "vite build",
     "preview": "vite preview",
