@@ -28,13 +28,7 @@ module.exports = {
         125: "1.25"
       },
       fontFamily: {
-        garamond: ["Garamond", "serif"],
-        oldstandard: ["OldStandard", "serif"],
-        inter: ["Inter", "serif"],
         primer: ["Primer", "serif"],
-        primerb: ["PrimerB", "serif"],
-        jeanb: ["JeanB", "serif"],
-        jeant: ["JeanT", "serif"],
         gyst: ["gyst-variable", "sans-serif"]
       },
       zIndex: {

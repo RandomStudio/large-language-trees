@@ -21,12 +21,6 @@
   {/if}
 </svelte:head>
 
-<slot />
-
-<style scoped>
-  .pageWrapper {
-    position: fixed;
-    inset: 0;
-    overflow: auto;
-  }
-</style>
+<div class="font-primer">
+  <slot />
+</div>
