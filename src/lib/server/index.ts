@@ -246,7 +246,7 @@ export const createNewGarden = async (userId: string, username: string) => {
   }
 };
 
-export const addNewPlant = async (plant: InsertPlant): Promise<InsertPlant> => {
+export const addNewPlant = async (plant: InsertPlant): Promise<SelectPlant> => {
   console.log("creating new plant", plant);
   if (typeof plant === "string") {
     throw Error("Plant is not an object");

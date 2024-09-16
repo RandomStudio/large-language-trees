@@ -1,5 +1,5 @@
 import type { EventNewSprouting } from "$lib/events.types";
-import type { CandidatePlant, InsertPlant } from "$lib/types";
+import type { CandidatePlant, InsertPlant, SelectPlant } from "$lib/types";
 
 const awaitTimeout = async (t: number): Promise<void> =>
   new Promise((resolve, _reject) => {
@@ -8,7 +8,9 @@ const awaitTimeout = async (t: number): Promise<void> =>
     }, t);
   });
 
-export async function addConfirmedPlant(candidateChild: InsertPlant) {
+export async function addConfirmedPlant(
+  candidateChild: InsertPlant
+): Promise<SelectPlant> {
   console.log(
     "Inserting new plant with ID",
     candidateChild.id,
@@ -26,6 +28,8 @@ export async function addConfirmedPlant(candidateChild: InsertPlant) {
   if (status !== 201) {
     throw Error("failed to add plant");
   }
+  const plant = (await res.json()) as SelectPlant;
+  return plant;
 }
 
 /** Add the new plant to both the seedbank AND garden of a given user */
@@ -45,7 +49,7 @@ export async function addPlantToUser(
 }
 
 export async function insertNewPlant(plant: InsertPlant) {
-  await addConfirmedPlant(plant);
+  const selectPlant = await addConfirmedPlant(plant);
   if (!plant.authorTop || !plant.authorBottom) {
     throw Error("plant missing authors");
   }
@@ -55,7 +59,7 @@ export async function insertNewPlant(plant: InsertPlant) {
 
   const event: EventNewSprouting = {
     name: "newPlantSprouted",
-    payload: plant
+    payload: selectPlant
   };
   const eventRes = await fetch("/api/events", {
     method: "POST",

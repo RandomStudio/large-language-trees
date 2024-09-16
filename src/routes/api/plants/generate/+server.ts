@@ -7,8 +7,8 @@ import type { GeneratePlantRequestBody, SelectPlant } from "$lib/types";
 import { db } from "$lib/server/db";
 import { eq, or } from "drizzle-orm";
 import { generatedPlants, plants, users } from "$lib/server/schema";
-import { stripUserInfo } from "$lib/security";
-import { updateWholePlant } from "$lib/server";
+import { publishEvent } from "$lib/server/realtime";
+import type { EventPollinationStarting } from "$lib/events.types";
 
 /** Should be identical to the version in
  * `/netlify/functions/complete-gen-background.mts`
@@ -52,14 +52,26 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
 
   const newPlantId = uuidv4();
 
-  await db.insert(generatedPlants).values({
-    plantId: newPlantId,
-    authorTop: thisUserId,
-    authorBottom: otherUserId,
-    givenName: userPickedNewName,
-    parentPlantTop: thisPlantId,
-    parentPlantBottom: otherPlantId
-  });
+  const candidateEntries = await db
+    .insert(generatedPlants)
+    .values({
+      plantId: newPlantId,
+      authorTop: thisUserId,
+      authorBottom: otherUserId,
+      givenName: userPickedNewName,
+      parentPlantTop: thisPlantId,
+      parentPlantBottom: otherPlantId
+    })
+    .returning();
+
+  const candidateEntry = candidateEntries[0];
+  if (!candidateEntry) {
+    throw Error("failed to insert new candidate entry");
+  }
+
+  // At this point, candidate has been created in DB, but
+  // no content (text or images) has been generated yet...
+  // Now initiate the generation process in the background...
 
   const promptSettings = await getPromptSettings();
 
