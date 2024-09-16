@@ -81,20 +81,55 @@
 <div
   class="font-primer text-left mt-32 text-base mx-0 text-roel_green bg-roel_blue"
 >
-  <div class="p-10">
+  <div class="p-10 credits">
     <p>
-      Welcome to Random's synergistic Lusthof, where digital abundance is
-      sprouting.
-      <br />
-      <br /> Find other Gardeners in the studio to start cross-pollinating and witness
-      your sprouts flourish in our communal garden.
+      Welcome to Random's “Let's Pollinate”, the exclusive greenhouse, sprouting
+      digital abundance.
     </p>
-    <br />
-    <div>
-      <span class="font-bold">Production:</span><br />
-      <span>Studio Random</span><br />
-      <span class="font-bold">Image Data:</span><br />
-      <span>Chat GPT/ Open AI</span>
-    </div>
+    <p>
+      Find other Gardeners around you to start cross-pollinating and witness
+      your sprouts flourish in our common garden.
+    </p>
+    <h3 class="font-bold">Production:</h3>
+    <ul>
+      <li>Random Studio</li>
+      <li>Daan Lucas</li>
+    </ul>
+    <h3 class="font-bold">Concept:</h3>
+    <ul>
+      <li>Roel Wouters</li>
+      <li>Zoë Breed</li>
+    </ul>
+    <h3 class="font-bold">Executive Production:</h3>
+    <ul>
+      <li>Rachel Short</li>
+      <li>Debbie Schonenberg</li>
+    </ul>
+    <h3 class="font-bold">Development:</h3>
+    <ul>
+      <li>Stephen Buchanan</li>
+      <li>Andrew Hill</li>
+      <li>Jonathan Modin</li>
+      <li>Jessie Kürschner</li>
+      <li>Hector Albiges-Lambard</li>
+    </ul>
+    <h3 class="font-bold">Design:</h3>
+    <ul>
+      <li>Finann</li>
+      <li>Roel</li>
+    </ul>
+    <h3 class="font-bold">Image Data:</h3>
+    <ul>
+      <li>Chat GPT/ Open AI</li>
+    </ul>
   </div>
 </div>
+
+<style scoped>
+  .credits :global(p) {
+    margin-bottom: 1rem;
+  }
+  .credits :global(h3) {
+    margin-top: 2rem;
+  }
+</style>

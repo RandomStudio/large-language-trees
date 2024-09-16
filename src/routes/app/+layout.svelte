@@ -21,6 +21,6 @@
   {/if}
 </svelte:head>
 
-<div class="font-primer">
+<div class="font-primer max-h-screen overflow-auto">
   <slot />
 </div>
