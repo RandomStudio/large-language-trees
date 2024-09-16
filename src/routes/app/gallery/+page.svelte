@@ -21,7 +21,6 @@
   } from "$lib/events.types";
   import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
-  import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
   import Layout from "../components/Layout.svelte";
   import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
   import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
