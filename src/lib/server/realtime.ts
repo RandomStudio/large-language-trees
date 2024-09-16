@@ -209,7 +209,7 @@ export const handleDisplayNotification = async (
 
       await updateScreenStateAndPublish(displayId, contents, 0, timeout);
     } catch (e) {
-      console.error(
+      console.warn(
         "Something went wrong getting a random Display layout: " + e
       );
       await updateScreenStateAndPublish(displayId, IDLE_STATE, null, 2000);
