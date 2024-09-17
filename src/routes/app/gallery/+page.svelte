@@ -22,12 +22,10 @@
   import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
   import Layout from "../components/Layout.svelte";
-  import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
   import Cta from "../components/Cta.svelte";
   import CollectionPlant from "../components/CollectionPlant.svelte";
   import TopRightButton from "$lib/shared-components/TopRightButton.svelte";
   import AppInfoPopup from "./AppInfoPopup.svelte";
-  import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
 
   export let data;
   type GalleryViewData = typeof data;
