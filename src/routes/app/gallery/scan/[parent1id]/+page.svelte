@@ -313,7 +313,7 @@
     />
   {/if}
 
-  <PollinationWasStartedPopup
-    otherUser={data.thisUser ?? otherUserStartedPollination}
-  />
+  {#if otherUserStartedPollination}
+    <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
+  {/if}
 </Layout>
