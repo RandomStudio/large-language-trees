@@ -3,6 +3,7 @@
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import Layout from "../components/Layout.svelte";
+  import Cta from "../components/Cta.svelte";
 
   export let data;
 </script>
@@ -24,9 +25,8 @@
     <p class="text-small text-left">
       Now find a fellow gardener and scan their QR code to start pollinating.
     </p>
-    <ButtonBottom
-      text="Start Pollinating"
-      onClick={() => goto(`/app/gallery/scan/${data.startPlant.plant.id}`)}
-    />
+    <Cta onClick={() => goto(`/app/gallery/scan/${data.startPlant.plant.id}`)}
+      >Start Pollinating</Cta
+    >
   </div>
 </Layout>

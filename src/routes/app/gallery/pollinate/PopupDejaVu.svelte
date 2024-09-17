@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
@@ -10,7 +9,7 @@
   export let handleClose: () => void;
 </script>
 
-<ReturnButton onClicked={handleClose}></ReturnButton>
+<ReturnButton onClick={handleClose}></ReturnButton>
 
 <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green">
   <div class="overflow-y-auto" style="max-height: calc(100% - 4rem);">

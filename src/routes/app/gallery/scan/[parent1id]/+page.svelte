@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
+
   import type {
     GeneratePlantRequestBody,
     PublicUserInfo,
@@ -298,11 +298,6 @@
               errorMessage = "Error: " + e;
             });
         }
-      }}
-      onCancel={() => {
-        otherPlant = null;
-        otherUser = null;
-        startQrScanning();
       }}
     />
   {/if}

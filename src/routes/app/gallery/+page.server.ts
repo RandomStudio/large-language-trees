@@ -83,13 +83,16 @@ export const load: PageServerLoad = async ({ locals }) => {
     awaitingConfirmation
   });
 
+  const pollinationCount = [...myOtherPlants, notSproutedPlants, awaitingConfirmation].length;
+
   return {
     user: stripUserInfo(userWithPlants),
     myOriginalPlant,
     myOtherPlants,
     notSproutedPlants,
     awaitingConfirmation,
-    garden: userWithPlants.myGarden
+    pollinationCount,
+    garden: userWithPlants.myGarden,
   };
 };
 
