@@ -164,6 +164,7 @@
       <CollectionPlant
         authorTopUser={plant.authorTopUser}
         authorBottomUser={plant.authorBottomUser}
+        isPending
         onClick={handleClickPlant}
         {plant}
       />
