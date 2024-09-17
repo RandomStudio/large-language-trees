@@ -3,7 +3,7 @@
   export let title: string | undefined = undefined;
 </script>
 
-<div class="min-h-screen max-w-screen pageWrapper flex flex-col text-small">
+<div class="min-h-full w-full flex flex-col text-small">
   <!-- used for transitions. See route +layout.svelte and app.css-->
   {#if isFullPage}
     <div class="page-contents">
@@ -24,11 +24,3 @@
     </div>
   {/if}
 </div>
-
-<style scoped>
-  .pageWrapper {
-    position: fixed;
-    inset: 0;
-    overflow: auto;
-  }
-</style>

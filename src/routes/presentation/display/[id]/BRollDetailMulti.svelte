@@ -72,7 +72,7 @@
       style="transform: translateX({$x1}vw) translateY({$y1}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
       <div
-        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
+        class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
       >
         {plant1.user.username}'s
         {plant1.plant.commonName}
@@ -88,7 +88,7 @@
       style="transform: translateX({$x2}vw) translateY({$y2}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
       <div
-        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
+        class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
       >
         {plant2.user.username}'s
         {plant2.plant.commonName}
@@ -104,7 +104,7 @@
       style="transform: translateX({$x3}vw) translateY({$y3}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
       <div
-        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
+        class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center isolate"
       >
         {plant3.user.username}'s
         {plant3.plant.commonName}
@@ -120,7 +120,7 @@
       style="transform: translateX({$x4}vw) translateY({$y4}vw); width: {sizePicture}vw; height: {sizePicture}vw;"
     >
       <div
-        class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
+        class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
       >
         {plant4.user.username}'s
         {plant4.plant.commonName}

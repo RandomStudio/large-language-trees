@@ -12,6 +12,17 @@
     const input = event.target as HTMLInputElement;
     showButton = input.value.length > 0;
   }
+
+  let formEl: HTMLFormElement;
+  let isSubmitting = false;
+  const handleSubmit = async (event: Event) => {
+    if (isSubmitting) {
+      event.preventDefault();
+      return;
+    }
+
+    isSubmitting = true;
+  };
 </script>
 
 <Layout isFullPage>
@@ -27,6 +38,8 @@
         method="post"
         use:enhance
         class="mt-0 text-center max-w-md"
+        bind:this={formEl}
+        on:submit={handleSubmit}
         action="?/attemptNewRegistration"
       >
         <input
@@ -51,8 +64,10 @@
         <button
           data-umami-event="Start button"
           data-test="start-button"
-          class="text-roel_green bg-roel_blue font-primer text-3xl px-4 py-[0.5rem] mt-4 w-full max-w-xs border-[3px] border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
+          class="text-roel_green bg-roel_blue font-primer text-3xl px-4 py-[0.5rem] mt-4 w-full max-w-xs border-[3px] border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green {isSubmitting &&
+            'opacity-50'}"
           type="submit"
+          disabled={isSubmitting}
         >
           Start
         </button>

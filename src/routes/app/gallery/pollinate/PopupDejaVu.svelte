@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
-  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
+  import Cta from "../../components/Cta.svelte";
 
   export let plantDetails: SelectPlant;
 
@@ -29,5 +29,3 @@
     </div>
   </div>
 </div>
-
-<ButtonBottom text="Back" onClick={handleClose} width="w-7/12"></ButtonBottom>

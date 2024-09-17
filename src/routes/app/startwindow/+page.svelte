@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import Layout from "../components/Layout.svelte";
   import Cta from "../components/Cta.svelte";
 

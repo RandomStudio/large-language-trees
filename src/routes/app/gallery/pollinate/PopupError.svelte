@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
+  import Cta from "../../components/Cta.svelte";
 
   export let onClick: () => void;
   export let errorText: string;
@@ -15,6 +15,6 @@
     >
       {errorText}
     </div>
-    <ButtonBottom text="Try again" {onClick} />
+    <Cta {onClick}>Try Again</Cta>
   </div>
 </div>

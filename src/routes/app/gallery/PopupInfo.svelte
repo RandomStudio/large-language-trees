@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { SelectPlant } from "$lib/types";
-  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import Layout from "../components/Layout.svelte";
@@ -12,15 +11,17 @@
 
 <ReturnButton onClick={closePopup} />
 
-<Layout title={undefined}>
-  <div class="text-roel_purple">
-    <div class="mb-12">
-      <PlantDisplay
-        imageUrl={plantDetails.imageUrl || ""}
-        applyFilters={false}
-        label={plantDetails.commonName}
-        description={plantDetails.description}
-      />
+<div class="fixed z-20 top-0 left-0 h-full overflow-auto bg-roel_green pb-32">
+  <Layout title={undefined}>
+    <div class="text-new_purple">
+      <div class="mb-12">
+        <PlantDisplay
+          imageUrl={plantDetails.imageUrl || ""}
+          applyFilters={false}
+          label={plantDetails.commonName}
+          description={plantDetails.description}
+        />
+      </div>
     </div>
-  </div>
-</Layout>
+  </Layout>
+</div>

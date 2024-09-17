@@ -5,9 +5,9 @@
   export let topGarden: GardenWithPlants;
 </script>
 
-<div class="bg-roel_purple w-screen h-screen flex flex-col justify-end">
+<div class="bg-new_purple w-screen h-screen flex flex-col justify-end">
   <div
-    class="w-full h-[65vh] flex items-end text-left pl-8 text-roel_purple text-9xl font-gyst bg-gradient-to-t from-roel_rose from-20% to-roel_blue to-80%"
+    class="w-full h-[65vh] flex items-end text-left pl-8 text-new_purple text-9xl font-gyst bg-gradient-to-t from-roel_rose from-20% to-roel_blue to-80%"
   >
     <div
       class="w-screen z-[9999] bg-gradient-to-t from-roel_rose from-20% pb-[1vh]"
@@ -37,20 +37,20 @@
       class="w-full h-[7vh] flex items-center justify-between px-10 z-[9999] {index %
         2 ===
       0
-        ? 'bg-roel_purple'
+        ? 'bg-new_purple'
         : 'bg-roel_rose'}"
     >
       <div
         class="text-5xl font-primer {index % 2 === 0
           ? 'text-roel_rose'
-          : 'text-roel_purple'}"
+          : 'text-new_purple'}"
       >
         {userInfo.username}
       </div>
       <div
         class="text-5xl font-primer {index % 2 === 0
           ? 'text-roel_rose'
-          : 'text-roel_purple'}"
+          : 'text-new_purple'}"
       >
         x {userInfo.count}
       </div>

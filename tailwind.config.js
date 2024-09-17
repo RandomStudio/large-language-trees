@@ -9,7 +9,6 @@ module.exports = {
         dark_grey: "#302F2F",
         mid_grey: "#898989",
         light_grey: "#D9D9D9",
-        roel_purple: "#670093",
         roel_rose: "#FFB9C6",
         roel_red: "#F31C1C",
         roel_yellow: '#EFE500',

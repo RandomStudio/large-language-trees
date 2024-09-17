@@ -29,14 +29,14 @@
 
   <div class="absolute inset-0 flex items-center justify-center">
     <div
-      class="bg-roel_green text-roel_purple py-1 px-6 z-50 font-primerb text-3xl"
+      class="bg-roel_green text-new_purple py-1 px-6 z-50 font-primerb text-3xl"
     >
       is pollinating with
     </div>
   </div>
 
   <div
-    class="bg-roel_purple h-[560px] flex flex-col justify-end items-center relative"
+    class="bg-new_purple h-[560px] flex flex-col justify-end items-center relative"
   >
     <svg width="400" height="400" class="translate-y-[-361px] fill-roel_rose">
       <path d="M0,200 a1,1 0 0,0 400,0" />
@@ -54,7 +54,7 @@
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-roel_purple text-7xl font-jeanb bg-roel_rose"
+    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-new_purple text-7xl font-jeanb bg-roel_rose"
   >
     ROELSCOOTER'S <br /> LAVENDER
   </div>

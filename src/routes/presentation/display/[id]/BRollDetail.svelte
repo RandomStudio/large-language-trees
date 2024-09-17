@@ -60,7 +60,7 @@
 >
   <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
     <div
-      class="absolute text-5xl text-roel_rose bg-roel_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
+      class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
     >
       {user.username}'s
       {plant.commonName}
