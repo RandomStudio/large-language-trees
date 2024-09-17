@@ -76,7 +76,7 @@ export const publishEvent = async (event: SimpleEvent) => {
 
   const plug = new OutputPlug(agent, PLUG_NAMES.simpleEvents, {
     id: event.name,
-    publishOptions: { qos: 2 }
+    publishOptions: { qos: 2, retain: true }
   });
 
   const { name, payload } = event;

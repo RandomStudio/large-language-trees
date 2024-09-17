@@ -23,7 +23,6 @@
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
   import Layout from "../components/Layout.svelte";
   import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
-  import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
 
   export let data;
   type GalleryViewData = typeof data;
