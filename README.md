@@ -132,6 +132,40 @@ sequenceDiagram
     Server->>BgFunction: 201 Created
 ```
 
+- ...The "top" user should now see the candidate plant (seed) updated in their gallery with a prompt to click and "sprout" now.
 - Note that if the first attempt fails with rate limit detected, then another attempt will be made using Dall-E 2
 
 ### Notify "top" user that generated plant awaits confirmation
+
+```mermaid
+sequenceDiagram
+    Tether-->>FE-Gallery: EventGeneratedPlantReady message
+    FE-Gallery-->>FE-ConfirmBreedPopup: candidateChild
+    FE-ConfirmBreedPopup-->>FE-TransparencyMaker: candidateImageUrl
+    FE-TransparencyMaker-->>Server: formData api/images/upload
+    Server-->>S3: image as Blob
+    Server-->>FE-TransparencyMaker: 201 Created, { url }
+    FE-TransparencyMaker-->>FE-ConfirmBreedPopup: replaced url
+```
+
+### "Top" user clicks OK to confirm
+
+```mermaid
+sequenceDiagram
+    FE-ConfirmBreedPopup-->PollinationFrontendFunctions: InsertPlant
+    PollinationFrontendFunctions->>Server: InsertPlant (/api/plants)
+    Server-->>DB: insert new Plant
+    Server-->>PollinationFrontendFunctions: 201 Created
+    PollinationFrontendFunctions->>Server: DELETE /api/plants/[id]/generatedPlant
+    Server-->>DB: delete from generatedPlants
+    Server-->>PollinationFrontendFunctions: 202 Accepted
+    PollinationFrontendFunctions-->>Server: THIS USER plantId, userId (api/plantsInGarden)
+    Server-->>DB: add entry gardensToPlants
+    Server-->>PollinationFrontendFunctions: 201 Created
+    PollinationFrontendFunctions-->>Server: OTHER USER plantId, userId (api/plantsInGarden)
+    Server-->>DB: add entry gardensToPlants
+    Server-->>PollinationFrontendFunctions: 201 Created
+    PollinationFrontendFunctions->>Tether: EventNewSprouting message
+```
+
+...Both this user ("top") and other user ("bottom") should receive the EventNewSprouting message and reload gallery as necessary.

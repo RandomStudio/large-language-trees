@@ -24,9 +24,13 @@ export async function addConfirmedPlant(
   const plant = (await res.json()) as SelectPlant;
 
   // Also, delete this "candidate plant"
-  await fetch(`/api/plants/${candidateChild.id}/generatedPlant`, {
-    method: "DELETE"
-  });
+  try {
+    await fetch(`/api/plants/${candidateChild.id}/generatedPlant`, {
+      method: "DELETE"
+    });
+  } catch (e) {
+    console.error("Error deleting generated plant", e);
+  }
 
   return plant;
 }
