@@ -47,6 +47,9 @@
 
   onMount(() => {
     console.log("I'm here!", candidateChild);
+    const updated = candidateToPlant(candidateChild);
+    console.log({ updated });
+    finalChildReadyToAdd = updated;
   });
 </script>
 

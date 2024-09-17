@@ -57,18 +57,6 @@ export const POST: RequestHandler = async ({ request, params }) => {
         };
         await publishEvent(e);
 
-        // // Delete candidate plant entry...
-        // const deleted = await db
-        //   .delete(generatedPlants)
-        //   .where(eq(generatedPlants.plantId, plantId))
-        //   .returning();
-
-        // if (deleted.length === 0) {
-        //   throw Error(
-        //     "failed to delete the entry, after it was finally confirmed!"
-        //   );
-        // }
-
         // Return response...
         return json(res, { status: 201 });
       } else {

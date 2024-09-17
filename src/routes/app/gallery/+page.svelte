@@ -27,6 +27,7 @@
   import CollectionPlant from "../components/CollectionPlant.svelte";
   import TopRightButton from "$lib/shared-components/TopRightButton.svelte";
   import AppInfoPopup from "./AppInfoPopup.svelte";
+  import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
 
   export let data;
   type GalleryViewData = typeof data;
@@ -37,12 +38,25 @@
   let otherUserStartedPollination: PublicUserInfo | null = null;
 
   let isAppInfoOpen = false;
-  let agent: TetherAgent | null;
+  let agent: TetherAgent | null = null;
+
+  let pollForPlantsReady: NodeJS.Timeout | null = null;
+
+  const pollForMyPlants = async () => {
+    const res = await fetch("/api/plants/generated");
+    const candidatePlants = (await res.json()) as CandidatePlant[];
+    return candidatePlants
+      .filter((c) => c.awaitingConfirmation === true)
+      .find((c) => c.authorTop === data.user.id);
+  };
 
   onMount(async () => {
-    agent = await TetherAgent.create("app", {
-      brokerOptions: BROWSER_CONNECTION
-    });
+    if (agent === null) {
+      agent = await TetherAgent.create("app", {
+        brokerOptions: BROWSER_CONNECTION
+      });
+      console.log("after connect, agent==", agent);
+    }
 
     const newPlantAdded = await InputPlug.create(
       agent,
@@ -77,14 +91,35 @@
         candidateChild = m.payload;
       }
     });
+
+    //Also, as a backup, poll for generated plants...
+    if (pollForPlantsReady === null) {
+      pollForPlantsReady = setInterval(() => {
+        pollForMyPlants().then((matchingPlant) => {
+          if (matchingPlant) {
+            console.log(
+              "Server polling got new plant that is ready and needs my input:",
+              matchingPlant
+            );
+            candidateChild = matchingPlant;
+            if (pollForPlantsReady) {
+              clearInterval(pollForPlantsReady);
+            }
+          }
+        });
+      }, 3000);
+    }
   });
 
   onDestroy(() => {
-    // if (datesInterval) {
-    //   clearInterval(datesInterval);
-    // }
+    console.log("gallery onDestroy...");
+    if (pollForPlantsReady) {
+      clearInterval(pollForPlantsReady);
+    }
     if (agent) {
+      console.log("...disconnect Tether");
       agent.disconnect();
+      agent = null;
     }
   });
 
@@ -185,4 +220,3 @@
     </Cta>
   </div>
 </Layout>
-<!-- <div>{JSON.stringify(candidateChild)}</div> -->
