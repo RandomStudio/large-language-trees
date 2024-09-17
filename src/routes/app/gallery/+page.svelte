@@ -181,7 +181,7 @@
       <CollectionPlant
         authorTopUser={plant.authorTopUser}
         authorBottomUser={plant.authorBottomUser}
-        isReadyToSprout
+        isPending
         onClick={handleClickPlant}
         {plant}
       />
