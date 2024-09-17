@@ -13,7 +13,7 @@
 <ReturnButton onClick={closePopup} />
 
 <Layout title={undefined}>
-  <div class="text-roel_purple">
+  <div class="text-new_purple">
     <div class="mb-12">
       <PlantDisplay
         imageUrl={plantDetails.imageUrl || ""}

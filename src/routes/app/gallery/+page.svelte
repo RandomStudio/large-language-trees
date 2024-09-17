@@ -133,14 +133,14 @@
 </script>
 
 <Layout title={undefined}>
-  {#if !isAppInfoOpen && !selectedPlantForInfo}
+  {#if !isAppInfoOpen && !selectedPlantForInfo && !candidateChild}
     <TopRightButton
       onClick={() => {
         isAppInfoOpen = true;
       }}>i</TopRightButton
     >
   {/if}
-  <div class="text-roel_purple pb-32">
+  <div class="text-new_purple pb-32">
     <div class="mb-12">
       <PlantDisplay
         disableAnimation={false}
@@ -164,7 +164,7 @@
       <CollectionPlant
         authorTopUser={plant.authorTopUser}
         authorBottomUser={plant.authorBottomUser}
-        isPending
+        isReadyToSprout
         onClick={handleClickPlant}
         {plant}
       />

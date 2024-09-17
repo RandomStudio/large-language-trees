@@ -55,17 +55,15 @@
     class="absolute w-screen h-screen flex flex-col justify-end py-[3vh] z-9999"
   >
     <div
-      class="w-screen h-auto text-center text-roel_purple text-5xl font-primer pb-[1.5vh]"
+      class="w-screen h-auto text-center text-new_purple text-5xl font-primer pb-[1.5vh]"
     >
       There are currently
     </div>
-    <div
-      class="w-screen h-auto text-center text-roel_purple text-9xl font-gyst"
-    >
+    <div class="w-screen h-auto text-center text-new_purple text-9xl font-gyst">
       {count} Plants
     </div>
     <div
-      class="w-screen h-auto text-center text-roel_purple text-5xl font-primer"
+      class="w-screen h-auto text-center text-new_purple text-5xl font-primer"
     >
       growing in the garden!
     </div>

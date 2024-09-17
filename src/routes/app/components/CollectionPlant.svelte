@@ -27,18 +27,21 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class="border-roel_purple text-roel_purple border-2 rounded-[25px] flex flex-col items-center justify-center p-2 mb-8"
+  class="border-new_purple text-new_purple border-2 rounded-[25px] flex flex-col items-center justify-center p-2 mb-8"
   on:click={() => onClick(plant)}
 >
   {#if authorTopUser && authorBottomUser}
-    <p class="text-roel_purple font-normal text-center">
+    <p class="text-new_purple font-normal text-center">
       {authorTopUser.username} ♡ {authorBottomUser.username}
     </p>
   {/if}
-  <div class="{isPending && 'animate-pulse'} text-center">
+  <div
+    class="{isPending && 'animate-pulse'} {isReadyToSprout &&
+      'shakingAnimation'} text-center"
+  >
     <PlantDisplay
       {disableAnimation}
-      imageClass="h-[161px] w-[161px] object-cover"
+      imageClass="h-[161px] w-[161px] object-contain "
       imageUrl={plant.imageUrl ?? "/pollination/Seed_01.png"}
       applyFilters={false}
     />
@@ -59,3 +62,46 @@
     {/if}
   </div>
 </div>
+
+<style scoped>
+  .shakingAnimation :global(img) {
+    animation: shake 1s infinite;
+    animation-play-state: running;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: translate(0, 0);
+    }
+    10% {
+      transform: translate(-3px, -2px) rotate(-2deg);
+    }
+    20% {
+      transform: translate(4px, 2px) rotate(2deg);
+    }
+    30% {
+      transform: translate(-5px, 0px) rotate(-3deg);
+    }
+    40% {
+      transform: translate(5px, 3px) rotate(3deg);
+    }
+    50% {
+      transform: translate(-4px, -1px) rotate(-2deg);
+    }
+    60% {
+      transform: translate(3px, 1px) rotate(2deg);
+    }
+    70% {
+      transform: translate(-2px, 2px) rotate(-1deg);
+    }
+    80% {
+      transform: translate(2px, -3px) rotate(1deg);
+    }
+    90% {
+      transform: translate(-1px, 1px) rotate(0deg);
+    }
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+  }
+</style>

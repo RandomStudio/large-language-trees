@@ -62,7 +62,7 @@
           {#each sentence as info}
             {#if info.highlight == true}
               <div
-                class="text-roel_purple text-4xl font-primer bg-roel_rose px-2 max-w-[35vw] text-center pt-[1vw] pb-[1vw]"
+                class="text-new_purple text-4xl font-primer bg-roel_rose px-2 max-w-[35vw] text-center pt-[1vw] pb-[1vw]"
               >
                 {info.text}
               </div>

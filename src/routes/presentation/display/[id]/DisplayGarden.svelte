@@ -216,14 +216,14 @@
     />
     {#if parent1 == null && showGardenName}
       <div
-        class="absolute z-2000 font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50"
+        class="absolute z-2000 font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50"
         style={`left: ${x - 120}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:2000`}
       >
         {garden.name}
       </div>
     {:else if showPlantName}
       <div
-        class="absolute z-2000 font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
+        class="absolute z-2000 font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
         style={`left: ${x - 120}px; top: ${y + size / 2}px; width: auto; height: auto; z-index:${zIndex + 1}`}
       >
         {commonName}

@@ -9,7 +9,7 @@
     on:click={onClick}
     data-test={test}
     data-umami-event={umami}
-    class="w-full bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
+    class="w-full bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full active:bg-orange-600 active:text-roel_green"
   >
     <slot />
   </button>

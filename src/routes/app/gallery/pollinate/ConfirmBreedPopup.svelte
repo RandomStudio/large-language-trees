@@ -12,6 +12,8 @@
     insertNewPlant
   } from "./PollinationFrontendFunctions";
   import { onMount } from "svelte";
+  import Layout from "../../components/Layout.svelte";
+  import Cta from "../../components/Cta.svelte";
 
   export let candidateChild: CandidatePlant;
 
@@ -53,6 +55,57 @@
   });
 </script>
 
+<div class="fixed z-20 top-0 left-0 h-full overflow-auto bg-roel_green pb-32">
+  <Layout title="Hooray you made a new plant!">
+    {#if waitingForImage}
+      <div
+        class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
+      >
+        <div class="flex flex-col items-center">
+          <PlantMorphSpinner></PlantMorphSpinner>
+          <div
+            id="message"
+            class="text-roel_blue font-primer text-2xl mt-4 text-center"
+          >
+            Please wait...
+          </div>
+        </div>
+      </div>
+    {/if}
+    {#if candidateImageUrl}
+      <div class="relative">
+        <TransparencyMaker
+          src={candidateImageUrl}
+          useFloodFill={false}
+          tolerance={TOLERANCE_SIMPLE}
+          doUpload={true}
+          onUploadComplete={(url) => {
+            replaceImage(url);
+            waitingForImage = false;
+          }}
+        />
+        <video
+          autoplay
+          loop
+          muted
+          playsinline
+          class="absolute -bottom-10 w-screen pointer-events-none"
+        >
+          <!-- Fallback to HEIC H264 MOV with transparency if WebM is not supported -->
+          <source src="/pollination/seedbirth.webm" type="video/webm" />
+          <source src="/pollination/seedbirth.mov" type="video/quicktime" />
+        </video>
+      </div>
+      <p class="mt-8 text-new_purple text-regular">{errorText}</p>
+      <p class="mt-8 text-new_purple text-regular mb-0">
+        {finalChildReadyToAdd.description}
+      </p>
+
+      <Cta onClick={finalise}>Continue</Cta>
+    {/if}
+  </Layout>
+</div>
+
 {#if waitingForImage}
   <div
     class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
@@ -67,44 +120,6 @@
       </div>
     </div>
   </div>
-{/if}
-
-{#if candidateImageUrl}
-  <div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green z-40">
-    <div class="overflow-y-auto pb-20" style="max-height: calc(100%);">
-      <div class="mx-12 font-primer text-roel_blue text-left mt-5">
-        <p class="text-2xl">Hooray you made a new plant.</p>
-
-        <TransparencyMaker
-          src={candidateImageUrl}
-          useFloodFill={false}
-          tolerance={TOLERANCE_SIMPLE}
-          doUpload={true}
-          onUploadComplete={(url) => {
-            replaceImage(url);
-            waitingForImage = false;
-          }}
-        />
-
-        <p class="mt-8 text-base">{errorText}</p>
-        <p class="mt-8 text-base mb-0">{finalChildReadyToAdd.description}</p>
-
-        <br />
-        <br />
-      </div>
-    </div>
-  </div>
-
-  <div transition:fade={{ delay: 2000, duration: 1 }}>
-    <ButtonBottom text="Ok" onClick={finalise} width="w-7/12"></ButtonBottom>
-  </div>
-
-  <button
-    data-umami-event="Cancel Pollination Button"
-    on:click={onCancel}
-    class=" border-roel_green border-2 rounded-full focus:outline-none focus:bg-transparent active:bg-transparent w-full hidden"
-    >Cancel</button
-  >
 {/if}
 
 {#if userErrorMessage}

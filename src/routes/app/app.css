@@ -68,6 +68,7 @@
 html,
 body {
   overflow: hidden;
+  overscroll-behavior-y: none;
   background-color: #c8f58f;
 }
 

@@ -18,16 +18,16 @@
 </script>
 
 <svelte:head>
-  {#if $page.url.pathname == "/app/startwindow" || $isPollinationPage}
-    <meta name="theme-color" content="#670093" />
-  {:else}
+  {#if $page.url.pathname === "/"}
     <meta name="theme-color" content="#C8F58F" />
+  {:else}
+    <meta name="theme-color" content="#4B0082" />
   {/if}
 </svelte:head>
 
 {#key data.pathname}
   <div
-    class="font-primer max-h-screen overflow-auto"
+    class="font-primer overflow-auto pageWrapper fixed top-0 left-0 right-0 h-dvh"
     in:transitionClasses={{
       duration: 300,
       delay: 400,
@@ -45,3 +45,9 @@
     <slot />
   </div>
 {/key}
+
+<style scoped>
+  .pageWrapper {
+    overscroll-behavior-y: none;
+  }
+</style>
