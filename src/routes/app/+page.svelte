@@ -92,67 +92,6 @@
         Find other Gardeners around you to start cross-pollinating and witness
         your sprouts flourish in our common garden.
       </p>
-      <h3 class="font-medium">Concept</h3>
-      <ul>
-        <li>Roel Wouters</li>
-        <li>Zoë Breed</li>
-      </ul>
-      <h3 class="font-medium">Creative Direction</h3>
-      <ul>
-        <li>Roel Wouters</li>
-      </ul>
-      <h3 class="font-medium">Executive Production</h3>
-      <ul>
-        <li>Rachel Short</li>
-        <li>Debbie Schonenberg</li>
-      </ul>
-      <h3 class="font-medium">Technical Direction</h3>
-      <ul>
-        <li>Stephen Buchanan</li>
-        <li>Andrew Hill</li>
-      </ul>
-      <h3 class="font-medium">Creative Development</h3>
-      <ul>
-        <li>Jonathan Modin</li>
-        <li>Jessie Kürschner</li>
-        <li>Hector Albiges-Lambard</li>
-      </ul>
-      <h3 class="font-medium">Art Direction</h3>
-      <ul>
-        <li>Finnan Barry</li>
-      </ul>
-      <h3 class="font-medium">Graphic Design</h3>
-      <ul>
-        <li>Matteo Pirolo</li>
-        <li>Yuna Kim</li>
-        <li>Jonatan Modin</li>
-      </ul>
-      <h3 class="font-medium">Technology</h3>
-      <ul>
-        <li>OpenAI ChatGPT 4</li>
-        <li>OpenAI Dall-E 2</li>
-        <li>SvelteKit</li>
-        <li>Drizzle ORM</li>
-        <li>PostgresQL</li>
-        <li>Tether (MQTT)</li>
-        <li>AWS S3</li>
-        <li>PixiJS</li>
-        <li>Netlify</li>
-      </ul>
-      <h3 class="font-medium">Typefaces</h3>
-      <ul>
-        <li>MD Primer</li>
-        <li>Gyst Variable</li>
-      </ul>
     </div>
   </div>
 </Layout>
-
-<style scoped>
-  .credits :global(p) {
-    margin-bottom: 1rem;
-  }
-  .credits :global(h3) {
-    margin-top: 2rem;
-  }
-</style>

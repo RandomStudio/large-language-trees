@@ -140,7 +140,7 @@
       }}>i</TopRightButton
     >
   {/if}
-  <div class="text-roel_purple pb-20">
+  <div class="text-roel_purple pb-32">
     <div class="mb-12">
       <PlantDisplay
         disableAnimation={false}
