@@ -20,6 +20,7 @@
 
 <div class="fixed bottom-0 left-10 right-10 content-center">
   <button
+    bind:this={button}
     on:click={onClick}
     data-test={test}
     data-umami-event={umami}
