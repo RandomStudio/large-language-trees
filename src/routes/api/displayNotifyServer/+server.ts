@@ -1,4 +1,4 @@
-import { handleDisplayNotification, publishEvent } from "$lib/server/realtime";
+import { handleDisplayNotification } from "$lib/server/realtime";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import type { DisplayNotifyServer } from "./types";
 
