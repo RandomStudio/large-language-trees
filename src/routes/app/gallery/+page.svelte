@@ -158,7 +158,12 @@
     >
   {/if}
   <div class="text-new_purple pb-32">
-    <div class="mb-12">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div
+      class="mb-12"
+      on:click={() => handleClickPlant(data.myOriginalPlant.plant)}
+    >
       <PlantDisplay
         disableAnimation={false}
         imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
