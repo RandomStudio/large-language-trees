@@ -103,26 +103,18 @@
         });
       }, 3000);
     }
-
-    return () => {
-      console.log("gallery onMount destroy...");
-      if (pollForPlantsReady) {
-        clearInterval(pollForPlantsReady);
-      }
-
-      console.log(agent);
-      if (agent) {
-        console.log("...disconnect Tether");
-        agent.disconnect();
-        agent = null;
-      }
-    };
   });
 
   onDestroy(() => {
-    // if (datesInterval) {
-    //   clearInterval(datesInterval);
-    // }
+    console.log("gallery onDestroy...");
+    if (pollForPlantsReady) {
+      clearInterval(pollForPlantsReady);
+    }
+    if (agent) {
+      console.log("...disconnect Tether");
+      agent.disconnect();
+      agent = null;
+    }
   });
 
   const gotoPollinate = (plantId: string) => {
