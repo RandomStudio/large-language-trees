@@ -61,6 +61,8 @@ export const users = pgTable("users", {
   isAdmin: boolean("is_admin").default(false)
 });
 
+export type User = typeof users.$inferSelect;
+
 export const generatedPlantsRelations = relations(
   generatedPlants,
   ({ one }) => ({

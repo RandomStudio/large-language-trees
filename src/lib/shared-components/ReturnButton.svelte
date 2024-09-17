@@ -1,13 +1,12 @@
 <script>
-  export let onClicked;
+  import TopRightButton from "./TopRightButton.svelte";
+
+  export let onClick;
 </script>
 
-<button
-  class="fixed top-3 right-6 z-30 text-roel_blue flex bg-roel_green items-center justify-center w-10 h-10 border-[3px] border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
-  on:click={onClicked}
->
+<TopRightButton {onClick}>
   <svg
-    class="w-6 h-6 text-roel_blue scale-125"
+    class="w-6 h-6 text-roel_green scale-125"
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
@@ -17,4 +16,4 @@
   >
     <path d="M15 19l-7-7 7-7" />
   </svg>
-</button>
+</TopRightButton>

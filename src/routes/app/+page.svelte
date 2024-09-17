@@ -83,7 +83,7 @@
   <div
     class="font-primer text-left mt-32 text-base mx-0 text-roel_green bg-roel_blue"
   >
-    <div class="p-10 credits">
+    <div class="p-10 credits font-normal">
       <p>
         Welcome to Random's “Let's Pollinate”, the exclusive greenhouse,
         sprouting digital abundance.
@@ -92,37 +92,57 @@
         Find other Gardeners around you to start cross-pollinating and witness
         your sprouts flourish in our common garden.
       </p>
-      <h3 class="font-bold">Production:</h3>
-      <ul>
-        <li>Random Studio</li>
-        <li>Daan Lucas</li>
-      </ul>
-      <h3 class="font-bold">Concept:</h3>
+      <h3 class="font-medium">Concept</h3>
       <ul>
         <li>Roel Wouters</li>
         <li>Zoë Breed</li>
       </ul>
-      <h3 class="font-bold">Executive Production:</h3>
+      <h3 class="font-medium">Creative Direction</h3>
+      <ul>
+        <li>Roel Wouters</li>
+      </ul>
+      <h3 class="font-medium">Executive Production</h3>
       <ul>
         <li>Rachel Short</li>
         <li>Debbie Schonenberg</li>
       </ul>
-      <h3 class="font-bold">Development:</h3>
+      <h3 class="font-medium">Technical Direction</h3>
       <ul>
         <li>Stephen Buchanan</li>
         <li>Andrew Hill</li>
+      </ul>
+      <h3 class="font-medium">Creative Development</h3>
+      <ul>
         <li>Jonathan Modin</li>
         <li>Jessie Kürschner</li>
         <li>Hector Albiges-Lambard</li>
       </ul>
-      <h3 class="font-bold">Design:</h3>
+      <h3 class="font-medium">Art Direction</h3>
       <ul>
-        <li>Finann</li>
-        <li>Roel</li>
+        <li>Finnan Barry</li>
       </ul>
-      <h3 class="font-bold">Image Data:</h3>
+      <h3 class="font-medium">Graphic Design</h3>
       <ul>
-        <li>Chat GPT/ Open AI</li>
+        <li>Matteo Pirolo</li>
+        <li>Yuna Kim</li>
+        <li>Jonatan Modin</li>
+      </ul>
+      <h3 class="font-medium">Technology</h3>
+      <ul>
+        <li>OpenAI ChatGPT 4</li>
+        <li>OpenAI Dall-E 2</li>
+        <li>SvelteKit</li>
+        <li>Drizzle ORM</li>
+        <li>PostgresQL</li>
+        <li>Tether (MQTT)</li>
+        <li>AWS S3</li>
+        <li>PixiJS</li>
+        <li>Netlify</li>
+      </ul>
+      <h3 class="font-medium">Typefaces</h3>
+      <ul>
+        <li>MD Primer</li>
+        <li>Gyst Variable</li>
       </ul>
     </div>
   </div>

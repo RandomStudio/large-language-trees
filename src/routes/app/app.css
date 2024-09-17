@@ -12,6 +12,15 @@
 
 @font-face {
   font-family: "Primer";
+  src: url("/fonts/Primer/MDPrimer-Regular.woff2") format("woff2"),
+    url("/fonts/Primer/MDPrimer-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Primer";
   src: url("/fonts/Primer/MDPrimer-Medium.woff2") format("woff2"),
     url("/fonts/Primer/MDPrimer-Medium.woff") format("woff");
   font-weight: 500;
@@ -59,14 +68,49 @@
 html,
 body {
   overflow: hidden;
+  background-color: #c8f58f;
 }
 
 .standard-gradient {
-  background: linear-gradient(
-    180deg,
-    #4b0082 0%,
-    #4b0082 29%,
-    #c8f58f 64%,
-    #c8f58f 100%
-  );
+  &::before {
+    background: linear-gradient(
+      180deg,
+      #4b0082 0%,
+      #4b0082 29%,
+      #c8f58f 64%,
+      #c8f58f 100%
+    );
+    content: "";
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+  }
+}
+
+.page-contents {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out 0.4s;
+}
+.transition-in-base .page-contents {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out 0.4s;
+}
+.transition-in-from .page-contents {
+  opacity: 0;
+}
+.transition-in-to .page-contents {
+  opacity: 1;
+}
+.transition-out-base .page-contents {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+.transition-out-from .page-contents {
+  opacity: 1;
+}
+.transition-out-to .page-contents {
+  opacity: 0;
 }

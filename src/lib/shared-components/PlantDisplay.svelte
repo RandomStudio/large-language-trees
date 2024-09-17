@@ -13,12 +13,15 @@
 
   export let imageUrl: string;
   export let label: string | null = null;
+  export let description: string | null = null;
   export let applyFilters: boolean = false;
   export let disableAnimation: boolean = false;
   /**
     Default width, can be overridden
   */
-  export let positionStyles: string = "w-full";
+  export let imageClass: string = "";
+  export let positionStyles: string =
+    "w-full pointer-events-none " + imageClass;
 
   let canvasElement: HTMLCanvasElement;
 
@@ -115,7 +118,7 @@
 
 <div>
   {#if disableAnimation}
-    <img src={imageUrl} alt="Static plant, no animation" />
+    <img class={imageClass} src={imageUrl} alt="Static plant, no animation" />
   {:else}
     <canvas
       bind:this={canvasElement}
@@ -130,6 +133,9 @@
     />
   {/if}
   {#if label}
-    <div class="mt-4 text-center">{label}</div>
+    <div class="pt-2 pb-4 text-center text-medium">{label}</div>
+  {/if}
+  {#if description}
+    <div class="text-center text-xs">{description}</div>
   {/if}
 </div>

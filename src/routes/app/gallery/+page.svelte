@@ -22,8 +22,11 @@
   import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
   import Layout from "../components/Layout.svelte";
-  import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
   import { candidateToPlant } from "./pollinate/PollinationFrontendFunctions";
+  import Cta from "../components/Cta.svelte";
+  import CollectionPlant from "../components/CollectionPlant.svelte";
+  import TopRightButton from "$lib/shared-components/TopRightButton.svelte";
+  import AppInfoPopup from "./AppInfoPopup.svelte";
 
   export let data;
   type GalleryViewData = typeof data;
@@ -33,6 +36,7 @@
 
   let otherUserStartedPollination: PublicUserInfo | null = null;
 
+  let isAppInfoOpen = false;
   let agent: TetherAgent | null;
 
   onMount(async () => {
@@ -87,82 +91,58 @@
   const gotoPollinate = (plantId: string) => {
     goto(`/app/gallery/scan/${plantId}`);
   };
+
+  const handleClickPlant = (plant: SelectPlant | CandidatePlant) => {
+    if ("commonName" in plant) {
+      selectedPlantForInfo = plant as SelectPlant;
+    }
+  };
 </script>
 
-{#if otherUserStartedPollination}
-  <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
-{/if}
-<Layout title="Let's Pollinate">
-  <div class="mt-16 mx-10 font-primer text-roel_blue text-left">
-    <PlantDisplay
-      disableAnimation={false}
-      imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
-      applyFilters={false}
-      label={data.myOriginalPlant.plant.commonName}
-    />
-
-    {#each data.awaitingConfirmation as candidatePlant}
-      {#if candidatePlant.authorTopUser && candidatePlant.authorBottomUser}
-        {candidatePlant.authorTopUser.username} ❤️ {candidatePlant
-          .authorBottomUser.username}
-      {/if}
-      <button
-        class="cursor-pointer mt-4 border-2 border-blue-500"
-        on:click={async () => {
-          candidateChild = candidatePlant;
-        }}
-      >
-        <div>Now...</div>
-        <PlantDisplay
-          disableAnimation={true}
-          imageUrl={"/pollination/Seed_01.png"}
-          applyFilters={false}
-          label={candidatePlant.givenName}
-        />
-      </button>
-    {/each}
-
-    {#each data.notSproutedPlants as plant}
-      {#if plant.authorTopUser && plant.authorBottomUser}
-        {plant.authorTopUser.username} ❤️ {plant.authorBottomUser.username}
-      {/if}
-      <PlantDisplay
-        disableAnimation={true}
-        imageUrl={"/pollination/Seed_01.png"}
-        applyFilters={false}
-        label={plant.givenName}
-      />
-    {/each}
-
-    {#each data.myOtherPlants as plant, index}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <!-- <code>{plant.plant.timeLeft.toFormat("mm:ss")}</code> -->
-      <div
-        on:click={() => {
-          console.log("click!");
-          selectedPlantForInfo = plant.plant;
-        }}
-        class="cursor-pointer mt-4 border-2 border-orange-50"
-      >
-        <PlantDisplay
-          disableAnimation={index > MAX_CANVASSES - 1}
-          imageUrl={plant.plant.imageUrl || ""}
-          applyFilters={false}
-          label={plant.plant.commonName}
-        />
-      </div>
-    {/each}
-
-    {#each data.notSproutedPlants as plant}
-      {#if plant.authorTop && plant.authorBottom}
-        {plant.authorTopUser.username} ❤️ {plant.authorTopUser.username}
-      {/if}
+<Layout title={undefined}>
+  {#if !isAppInfoOpen && !selectedPlantForInfo}
+    <TopRightButton
+      onClick={() => {
+        isAppInfoOpen = true;
+      }}>i</TopRightButton
+    >
+  {/if}
+  <div class="text-roel_purple pb-20">
+    <div class="mb-12">
       <PlantDisplay
         disableAnimation={false}
         imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
         applyFilters={false}
         label={data.myOriginalPlant.plant.commonName}
+        description="Has pollinated {data.pollinationCount} other plants"
+      />
+    </div>
+    {#each data.awaitingConfirmation as candidatePlant}
+      <CollectionPlant
+        authorTopUser={candidatePlant.authorTopUser}
+        authorBottomUser={candidatePlant.authorBottomUser}
+        isReadyToSprout
+        onClick={handleClickPlant}
+        plant={candidatePlant}
+      />
+    {/each}
+
+    {#each data.notSproutedPlants as plant}
+      <CollectionPlant
+        authorTopUser={plant.authorTopUser}
+        authorBottomUser={plant.authorBottomUser}
+        onClick={handleClickPlant}
+        {plant}
+      />
+    {/each}
+
+    {#each data.myOtherPlants as plant, index}
+      <CollectionPlant
+        authorTopUser={undefined}
+        authorBottomUser={undefined}
+        disableAnimation={index > MAX_CANVASSES - 1}
+        onClick={handleClickPlant}
+        plant={plant.plant}
       />
     {/each}
 
@@ -173,6 +153,15 @@
           selectedPlantForInfo = null;
         }}
       ></PopupInfo>
+    {/if}
+
+    {#if isAppInfoOpen}
+      <AppInfoPopup
+        closePopup={() => {
+          console.log("fire");
+          isAppInfoOpen = false;
+        }}
+      />
     {/if}
 
     {#if candidateChild}
@@ -187,17 +176,13 @@
         }}
       />
     {/if}
-
-    <div class="fixed bottom-0 w-screen content-center">
-      <button
-        on:click={() => gotoPollinate(data.myOriginalPlant.plant.id)}
-        data-test="start-pollinating-button"
-        data-umami-event="Start Pollinating Button"
-        class="bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 w-11/12 max-w-xs border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green"
-      >
-        Start Pollinating
-      </button>
-    </div>
+    <Cta
+      umami="Start Pollinating Button"
+      onClick={() => gotoPollinate(data.myOriginalPlant.plant.id)}
+      test="start-pollinating"
+    >
+      Start Pollinating
+    </Cta>
   </div>
 </Layout>
 <!-- <div>{JSON.stringify(candidateChild)}</div> -->

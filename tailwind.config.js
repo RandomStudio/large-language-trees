@@ -14,7 +14,7 @@ module.exports = {
         roel_red: "#F31C1C",
         roel_yellow: '#EFE500',
 
-        new_purple: '#4B00B2'
+        new_purple: '#4B0082'
       },
       fontSize: {
         xs: '16px',
@@ -30,6 +30,13 @@ module.exports = {
       fontFamily: {
         primer: ["Primer", "serif"],
         gyst: ["gyst-variable", "sans-serif"]
+      },
+      fontWeight: {
+        light: 300,
+        regular: 400,
+        medium: 500,
+        bold: 700,
+        black: 900
       },
       zIndex: {
         "-1": "-1"

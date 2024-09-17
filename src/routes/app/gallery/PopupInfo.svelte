@@ -4,24 +4,23 @@
   import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
+  import Layout from "../components/Layout.svelte";
 
   export let plantDetails: SelectPlant;
   export let closePopup: () => any;
 </script>
 
-<ReturnButton onClicked={closePopup}></ReturnButton>
+<ReturnButton nClicked={closePopup} />
 
-<div class="fixed top-0 left-0 right-0 bottom-0 bg-roel_green overflow-auto">
-  <div class="mx-10 font-primer text-roel_blue text-left mt-20 mb-20">
-    <PlantDisplay imageUrl={plantDetails.imageUrl || ""} applyFilters={false} />
-    <!--{#if !isOriginalPlant}
-      <p class="text-base mt-4 text-center">
-        Date of discovery : {plantDetails.created.getDate()}/{plantDetails.created.getUTCMonth() +
-          1}/{plantDetails.created.getFullYear()} at {plantDetails.created.getHours()}:{plantDetails.created.getMinutes()}
-      </p>
-    {/if}-->
-    <p class="text-base mt-4">
-      {plantDetails.description}
-    </p>
+<Layout title={undefined}>
+  <div class="text-roel_green">
+    <div class="mb-12">
+      <PlantDisplay
+        imageUrl={plantDetails.imageUrl || ""}
+        applyFilters={false}
+        label={plantDetails.commonName}
+        description={plantDetails.description}
+      />
+    </div>
   </div>
-</div>
+</Layout>

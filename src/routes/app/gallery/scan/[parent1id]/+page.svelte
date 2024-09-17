@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
+
   import type {
     GeneratePlantRequestBody,
     PublicUserInfo,
@@ -295,11 +295,6 @@
             });
         }
       }}
-      onCancel={() => {
-        otherPlant = null;
-        otherUser = null;
-        startQrScanning();
-      }}
     />
   {/if}
 
@@ -314,7 +309,7 @@
     />
   {/if}
 
-  {#if otherUserStartedPollination}
-    <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
-  {/if}
+  <PollinationWasStartedPopup
+    otherUser={data.thisUser ?? otherUserStartedPollination}
+  />
 </Layout>
