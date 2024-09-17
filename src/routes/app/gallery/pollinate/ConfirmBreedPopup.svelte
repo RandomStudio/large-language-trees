@@ -2,7 +2,6 @@
   import type { CandidatePlant, InsertPlant } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "$lib/constants";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
-  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import PlantMorphSpinner from "$lib/shared-components/PlantMorphSpinner.svelte";
   import PopupError from "./PopupError.svelte";
 

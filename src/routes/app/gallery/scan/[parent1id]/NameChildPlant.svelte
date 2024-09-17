@@ -1,6 +1,5 @@
 <script lang="ts">
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
-  import ButtonBottom from "$lib/shared-components/ButtonBottom.svelte";
   import type { PublicUserInfo } from "$lib/types";
   import { pickRandomElement } from "random-elements";
   import { onMount } from "svelte";
