@@ -193,10 +193,14 @@
       otherPlantId: otherPlantId,
       userPickedNewName
     };
-    const res = await fetch(`/api/plants/generate`, {
-      method: "POST",
-      body: JSON.stringify(jsonBody)
-    });
+    try {
+      const res = await fetch(`/api/plants/generate`, {
+        method: "POST",
+        body: JSON.stringify(jsonBody)
+      });
+    } catch (e) {
+      console.error("Error POSTing to /api/plants/generate", e);
+    }
   };
 
   onMount(async () => {

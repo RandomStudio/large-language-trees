@@ -66,7 +66,9 @@ DB_CONNECTION_STRING=postgresql://postgres:mysecretpassword@localhost:5432
 ```
 
 ### Local MQTT broker
+
 For realtime messaging (using Tether) to run via a local MQTT broker (recommended!) - you can start up a preconfigured Eclipse Mosquitto broker as follows:
+
 ```
 docker run --name tether-broker -d -p 15675:9001 -p 1883:1883 randomstudiotools/tether-broker
 ```
@@ -82,14 +84,54 @@ npm run dev:drizzle-studio
 This will connect to the local database and the Studio interface will be available at https://local.drizzle.studio
 
 ## Plant Generation Sequence Diagram
-### Normal user plant generation
+
+### "Top" user confirms new name
 
 ```mermaid
 sequenceDiagram
-    Frontend->>Server: GeneratePlantRequestBody (/api/plants/generate)
+    Frontend->>Server: POST GeneratePlantRequestBody (/api/plants/generate)
     Server-->>DB: promptSettings, plant1, plant2
     DB-->>Server: promptSettings, plant1, plant2
-    Server-->>BgFunction: BackgroundGenerateTextRequest (complete-gen-background)
+    Server-->>BgFunction: POST BackgroundGenerateTextRequest
     BgFunction-->>Server: 202 Accepted
-    Server->>Frontend: newPlantId
+    Server->>Frontend: { newPlantId }
 ```
+
+- ...This user gets redirected to "/app/gallery"
+- The gallery should now include the "seed" plant with the two "author" user names and the chosen name. The plant is not clickable because it is not ready (sprouted) yet.
+
+### Meanwhile in the background function
+
+BackgroundGenerateTextRequest contains:
+
+- ID strings: `authorTop`, `authorBottom`, `newPlantId`, `parent1id`, `parent2id`
+- string `model` (typically, Chat-GTP-4)
+- array of `messages` objects (`role`, `content`)
+- `backgroundSecret` string used for basic authentication
+
+```mermaid
+sequenceDiagram
+    BgFunction->>OpenAI: POST: model, messages
+    OpenAI-->>BgFunction: message parsed as Plant
+    BgFunction->>Server: POST /api/plants/[id]/candidateText
+    Server->>DB: update generatedPlants with text-contents
+    Server-->>BgFunction: 200 OK
+    BgFunction->>Server: POST GenImageToServer /api/images/generate
+    Server-->>DB: fetch prompt settings
+    DB-->>Server: prompt settings
+    Server-->>BgFunction: 200 OK GenImageToBackground (plantId, fullPrompt, model)
+    BgFunction->>OpenAI: POST: model, prompt
+    OpenAI-->>BgFunction: url*
+    BgFunction->>Server: GenerateImageResultBody apit/plants/[id]/candidateImage
+    Server->>OpenAI: GET image with URL
+    OpenAI-->>Server: image body
+    Server-->>S3: Upload image (original, not transparent)
+    Server-->>DB: Update generatedPlants: imageUrl, awaitingConfirmation=true
+    DB-->>Server: updated generatedPlants entry
+    Server->>Tether: EventGeneratedPlantReady
+    Server->>BgFunction: 201 Created
+```
+
+- Note that if the first attempt fails with rate limit detected, then another attempt will be made using Dall-E 2
+
+### Notify "top" user that generated plant awaits confirmation
