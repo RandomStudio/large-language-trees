@@ -41,7 +41,6 @@
   >
     <PlantDisplay
       {disableAnimation}
-      imageClass="h-[161px] w-[161px] object-contain "
       imageUrl={plant.imageUrl ?? "/pollination/Seed_01.png"}
       applyFilters={false}
     />

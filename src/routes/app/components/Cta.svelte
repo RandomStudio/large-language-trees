@@ -28,12 +28,3 @@
     <slot />
   </button>
 </div>
-
-<style scoped>
-  .button-with-active:active,
-  .button-with-active.touch-active {
-    background-color: #d9d9d9;
-    border-color: #d9d9d9;
-    color: #4b0082;
-  }
-</style>
