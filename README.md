@@ -83,7 +83,9 @@ npm run dev:drizzle-studio
 
 This will connect to the local database and the Studio interface will be available at https://local.drizzle.studio
 
-## Plant Generation Sequence Diagram
+## Sequence Diagrams
+
+The following diagrams are written in [Mermaid](https://mermaid.js.org/) syntax which will render correctly on GitHub or you might need to install a suitable extension for your IDE.
 
 ### "Top" user confirms new name
 
