@@ -41,12 +41,16 @@
       {/if}
     </div>
     <video
-      class="absolute top-0 w-screen pointer-events-none"
-      src="/pollination/seedbirth.webm"
-      loop={true}
-      autoplay={true}
-      muted={true}
-    />
+      autoplay
+      loop
+      muted
+      playsinline
+      class="absolute -bottom-10 w-screen pointer-events-none"
+    >
+      <!-- Fallback to HEIC H264 MOV with transparency if WebM is not supported -->
+      <source src="/pollination/seedbirth.webm" type="video/webm" />
+      <source src="/pollination/seedbirth.mov" type="video/quicktime" />
+    </video>
   </div>
   <p class="text-medium text-new_purple py-8">
     What will be the name of your sprout?

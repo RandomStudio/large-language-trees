@@ -32,7 +32,7 @@
 >
   {#if authorTopUser && authorBottomUser}
     <p class="text-roel_purple font-normal text-center">
-      {authorTopUser.username} ❤️ {authorBottomUser.username}
+      {authorTopUser.username} ♡ {authorBottomUser.username}
     </p>
   {/if}
   <div class="{isPending && 'animate-pulse'} text-center">

@@ -231,11 +231,6 @@
           m.payload
         );
         otherUserStartedPollination = m.payload.authorTop;
-        setTimeout(() => {
-          console.log("Now clear popup...");
-          otherUserStartedPollination = null;
-          goto("/app/gallery");
-        }, 4000);
       }
     });
   });

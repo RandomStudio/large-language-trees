@@ -10,10 +10,10 @@
   export let closePopup: () => any;
 </script>
 
-<ReturnButton nClicked={closePopup} />
+<ReturnButton onClick={closePopup} />
 
 <Layout title={undefined}>
-  <div class="text-roel_green">
+  <div class="text-roel_purple">
     <div class="mb-12">
       <PlantDisplay
         imageUrl={plantDetails.imageUrl || ""}
