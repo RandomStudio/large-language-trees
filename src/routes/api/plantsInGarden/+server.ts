@@ -94,6 +94,35 @@ export const POST: RequestHandler = async ({ request }) => {
   return json(data, { status: 201 });
 };
 
+export const GET: RequestHandler = async ({ url }) => {
+  const userId = url.searchParams.get("userId");
+  const gardenId = url.searchParams.get("gardenId");
+  if (!userId && !gardenId) {
+    return json([], {
+      status: 400,
+      statusText: "userId or gardenId required in urlsearchparams"
+    });
+  }
+  let garden = null;
+  if (userId) {
+    garden = await db.query.gardens.findFirst({
+      with: { plants: { with: { plant: true } } },
+      where: eq(gardens.userId, userId)
+    });
+  }
+  if (gardenId) {
+    garden = await db.query.gardens.findFirst({
+      with: { plants: { with: { plant: true } } },
+      where: eq(gardens.id, gardenId)
+    });
+  }
+  if (!garden) {
+    return json([], { status: 404, statusText: "garden not found for user" });
+  }
+  const plants = garden.plants.map((p) => p.plant);
+  return json(plants, { status: 200 });
+};
+
 export const PATCH: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as GardenPlantEntry;
 
