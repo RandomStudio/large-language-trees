@@ -39,6 +39,7 @@
   let agent: TetherAgent | null = null;
 
   let pollForPlantsReady: NodeJS.Timeout | null = null;
+  let pollForPlantsAdded: NodeJS.Timeout | null = null;
 
   const pollForMyPlants = async () => {
     const res = await fetch("/api/plants/generated");
@@ -46,6 +47,15 @@
     return candidatePlants
       .filter((c) => c.awaitingConfirmation === true)
       .find((c) => c.authorTop === data.user.id);
+  };
+
+  const pollForMyPlantsAdded = async () => {
+    const res = await fetch(`/api/plantsInGarden?userId=${data.user.id}`);
+    const plants = (await res.json()) as SelectPlant[];
+    if (plants.length !== data.myOtherPlants.length + 1) {
+      console.log("Length of my plants seems to have changed; reload");
+      invalidateAll();
+    }
   };
 
   onMount(async () => {
@@ -100,11 +110,18 @@
               matchingPlant
             );
             candidateChild = matchingPlant;
-            if (pollForPlantsReady) {
-              clearInterval(pollForPlantsReady);
-            }
+            // if (pollForPlantsReady) {
+            //   clearInterval(pollForPlantsReady);
+            // }
           }
         });
+      }, 3000);
+    }
+
+    // Also, as a backup, poll for added plants...
+    if (pollForPlantsAdded === null) {
+      pollForPlantsAdded = setInterval(() => {
+        pollForMyPlantsAdded();
       }, 3000);
     }
   });
