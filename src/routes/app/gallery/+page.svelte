@@ -92,7 +92,9 @@
 {#if otherUserStartedPollination}
   <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
 {/if}
+
 <Layout title="Let's Pollinate">
+  <!--data.myOriginalPlant-->
   <div class="mt-16 mx-10 font-primer text-roel_blue text-left">
     <PlantDisplay
       disableAnimation={false}
@@ -101,6 +103,7 @@
       label={data.myOriginalPlant.plant.commonName}
     />
 
+    <!--data.awaitingConfirmation[]-->
     {#each data.awaitingConfirmation as candidatePlant}
       {#if candidatePlant.authorTopUser && candidatePlant.authorBottomUser}
         {candidatePlant.authorTopUser.username} ❤️ {candidatePlant
@@ -109,6 +112,7 @@
       <button
         class="cursor-pointer mt-4 border-2 border-blue-500"
         on:click={async () => {
+          console.log("ready to confirm", { candidatePlant });
           candidateChild = candidatePlant;
         }}
       >
@@ -122,6 +126,7 @@
       </button>
     {/each}
 
+    <!--data.notSproutedPlants[]-->
     {#each data.notSproutedPlants as plant}
       {#if plant.authorTopUser && plant.authorBottomUser}
         {plant.authorTopUser.username} ❤️ {plant.authorBottomUser.username}
@@ -134,6 +139,7 @@
       />
     {/each}
 
+    <!--data.myOtherPlants[]-->
     {#each data.myOtherPlants as plant, index}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -152,18 +158,6 @@
           label={plant.plant.commonName}
         />
       </div>
-    {/each}
-
-    {#each data.notSproutedPlants as plant}
-      {#if plant.authorTop && plant.authorBottom}
-        {plant.authorTopUser.username} ❤️ {plant.authorTopUser.username}
-      {/if}
-      <PlantDisplay
-        disableAnimation={false}
-        imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
-        applyFilters={false}
-        label={data.myOriginalPlant.plant.commonName}
-      />
     {/each}
 
     {#if selectedPlantForInfo}
@@ -200,4 +194,3 @@
     </div>
   </div>
 </Layout>
-<!-- <div>{JSON.stringify(candidateChild)}</div> -->
