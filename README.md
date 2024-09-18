@@ -171,3 +171,11 @@ sequenceDiagram
 ```
 
 ...Both this user ("top") and other user ("bottom") should receive the EventNewSprouting message and reload gallery as necessary.
+
+## GIF
+
+One-liner ffmpeg command for converting video (with transparency) into suitable animated GIF:
+
+```
+ffmpeg -i Seed_Birth_Animation_02.mov -f gif -lavfi "split[v],palettegen,[v]paletteuse" seedbirth.gif
+```
