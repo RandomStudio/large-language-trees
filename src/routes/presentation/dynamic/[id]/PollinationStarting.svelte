@@ -1,3 +1,9 @@
+<script lang="ts">
+  import type { DisplayNewPollinatedSprout } from "$lib/events.types";
+
+  export let contents: DisplayNewPollinatedSprout;
+</script>
+
 <div class="w-screen h-screen">
   <div
     class="w-screen h-screen flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"

@@ -19,7 +19,7 @@ import { pickRandomElement } from "random-elements";
 import { defaultUsers } from "../../defaults/users";
 import DefaultPrompt from "../../defaults/prompt-config";
 import { publishEvent } from "./realtime";
-import type { EventFirstPlant } from "$lib/events.types";
+import { SimpleEventNames, type EventFirstPlant } from "$lib/events.types";
 import { stripUserInfo } from "$lib/security";
 
 export const populateDefaultPlants = async () => {
@@ -132,7 +132,7 @@ export const getUserGardenWithPlants = async (userId: string) => {
 
     if (thePlant && theUser) {
       const e: EventFirstPlant = {
-        name: "newUserFirstPlant",
+        name: SimpleEventNames.FIRST_PLANT,
         payload: { plant: thePlant, user: stripUserInfo(theUser) }
       };
       await publishEvent(e);

@@ -1,43 +1,53 @@
 import type {
   CandidatePlant,
   GardenWithPlants,
-  InsertPlant,
   PublicUserInfo,
   SelectPlant
 } from "./types";
 
-export interface SimpleEventBody {
+/** "Simple" Events are used internally, never for directly controlling Presentation Display content.
+ * They often, in turn, result in a new DisplayUpdateEvent message, however.
+ */
+export interface SimpleEvent {
   name: string;
   payload: any;
 }
 
-export interface EventNewUser extends SimpleEventBody {
-  name: "newUser";
+export const enum SimpleEventNames {
+  NEW_USER = "newUser",
+  FIRST_PLANT = "newUserFirstPlant",
+  POLLINATION_STARTING = "newPollinationStarting",
+  CANDIDATE_READY = "newGeneratedPlantReady",
+  POLLINATION_COMPLETE = "newPlantSprouted"
+}
+export interface EventNewUser extends SimpleEvent {
+  name: SimpleEventNames.NEW_USER;
   payload: {
     userId: string;
     username: string;
   };
 }
 
-export interface EventFirstPlant extends SimpleEventBody {
-  name: "newUserFirstPlant";
+export interface EventFirstPlant extends SimpleEvent {
+  name: SimpleEventNames.FIRST_PLANT;
   payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
   };
 }
 
-export interface EventNewTopPlant extends SimpleEventBody {
-  name: "newTopPollinator";
-  payload: {
-    plant: SelectPlant;
-    user: PublicUserInfo;
-  };
-}
+// TODO: this is currently unused, but probably is needed somewhere
+// export interface EventNewTopPlant extends SimpleEventBody {
+//   name: "newTopPollinator";
+//   payload: {
+//     plant: SelectPlant;
+//     user: PublicUserInfo;
+//   };
+// }
 
 /** 1: We don't even have a name yet */
-export interface EventPollinationStarting extends SimpleEventBody {
-  name: "newPollinationStarting";
+export interface EventPollinationStarting extends SimpleEvent {
+  name: SimpleEventNames.POLLINATION_STARTING;
   payload: {
     authorTop: PublicUserInfo;
     authorBottom: PublicUserInfo;
@@ -47,8 +57,8 @@ export interface EventPollinationStarting extends SimpleEventBody {
  * - image may need to be processed (palette, transparency)
  * - may not have been added yet (to plants list, gardens/seedbanks)
  */
-export interface EventGeneratedPlantReady extends SimpleEventBody {
-  name: "newGeneratedPlantReady";
+export interface EventGeneratedPlantReady extends SimpleEvent {
+  name: SimpleEventNames.CANDIDATE_READY;
   payload: CandidatePlant;
 }
 
@@ -56,35 +66,50 @@ export interface EventGeneratedPlantReady extends SimpleEventBody {
  * 3: Plant that was generated has been added to plant list and
  * both users' gardens/seedbanks
  */
-export interface EventNewSprouting extends SimpleEventBody {
-  name: "newPlantSprouted";
+export interface EventNewSprouting extends SimpleEvent {
+  name: SimpleEventNames.POLLINATION_COMPLETE;
   payload: SelectPlant;
 }
 
-export type SimpleEvent =
-  | EventNewUser
-  | EventFirstPlant
-  | EventPollinationStarting
-  | EventGeneratedPlantReady
-  | EventNewSprouting
-  | EventNewTopPlant;
-
-interface DisplayUpdateEvent {
+/** Interface for "serverInstructDisplays" messages.
+ *
+ * These messages are always published by the **server** and received
+ * by the **display** clients.
+ */
+export interface DisplayEvent {
   name: string;
-  contents: any;
+  /** Which display to target. Should be available in the topic (ID part)
+   * anyway, but provided here for redundancy.
+   */
+  targetDisplayId: string;
+  /** What content needs to be displayed, i.e. a `name` and `payload` */
+  payload: any;
+  /** How long, in ms, before the display should notify the server that
+   * it is ready for new content. If omitted, the content will stay
+   * on that display until further instructions received.
+   *
+   * The content will **not** be immediately **removed** on this display after the
+   * timeout is reached; instead, it is time for the display to notify the server
+   * that it is available for new content.
+   */
+  timeout: number | null;
 }
-
-export interface DisplayFirstPlant extends DisplayUpdateEvent {
+export interface DisplayFirstPlant extends DisplayEvent {
   name: "newUserFirstPlant";
-  contents: {
+  payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
   };
 }
 
-export interface DisplayPollination extends DisplayUpdateEvent {
+export interface DisplayPollinationStarting extends DisplayEvent {
+  name: "newPollinationStarting";
+  payload: null;
+}
+
+export interface DisplayNewPollinatedSprout extends DisplayEvent {
   name: "newPlantPollination";
-  contents: {
+  payload: {
     newPlant: SelectPlant;
     authorTop: PublicUserInfo;
     authorBottom: PublicUserInfo;
@@ -113,46 +138,46 @@ export enum bRollNaming {
   STATISTICS_3 = "showPlantPollinationCount"
 }
 
-export interface DisplayStatusFeed extends DisplayUpdateEvent {
+export interface DisplayStatusFeed extends DisplayEvent {
   name: bRollNaming.STATUS_FEED;
-  contents: { gardens: GardenWithPlants[]; eventLogs: FeedTextEntry[] };
+  payload: { gardens: GardenWithPlants[]; eventLogs: FeedTextEntry[] };
 }
 
-export interface DisplayFeaturedPlant extends DisplayUpdateEvent {
+export interface DisplayFeaturedPlant extends DisplayEvent {
   name: bRollNaming.DETAIL;
-  contents: {
+  payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
   };
 }
 
-export interface DisplayMultipleFeaturedPlants extends DisplayUpdateEvent {
+export interface DisplayMultipleFeaturedPlants extends DisplayEvent {
   name: bRollNaming.DETAIL_MULTI;
-  contents: {
+  payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
   }[];
 }
 
-export interface DisplayFeaturedGarden extends DisplayUpdateEvent {
+export interface DisplayFeaturedGarden extends DisplayEvent {
   name: bRollNaming.ZOOM_OUT;
-  contents: {
+  payload: {
     garden: GardenWithPlants;
     user: PublicUserInfo;
   };
 }
 
-export interface DisplayMultipleGardens extends DisplayUpdateEvent {
+export interface DisplayMultipleGardens extends DisplayEvent {
   name: bRollNaming.ROLL_PAN;
-  contents: {
+  payload: {
     garden: GardenWithPlants;
     user: PublicUserInfo;
   }[];
 }
 
-export interface DisplayLeaderboard extends DisplayUpdateEvent {
+export interface DisplayLeaderboard extends DisplayEvent {
   name: bRollNaming.TOP_LIST;
-  contents: {
+  payload: {
     topPollinators: {
       username: string;
       count: number;
@@ -161,18 +186,18 @@ export interface DisplayLeaderboard extends DisplayUpdateEvent {
   };
 }
 
-export interface DisplayPlantGrowingTime extends DisplayUpdateEvent {
+export interface DisplayPlantGrowingTime extends DisplayEvent {
   name: bRollNaming.STATISTICS_1;
-  contents: {
+  payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
     pollinationTimestamp: Date;
   };
 }
 
-export interface DisplayPlantCount extends DisplayUpdateEvent {
+export interface DisplayPlantCount extends DisplayEvent {
   name: bRollNaming.STATISTICS_2;
-  contents: {
+  payload: {
     gardens: {
       garden: GardenWithPlants;
       user: PublicUserInfo;
@@ -181,52 +206,15 @@ export interface DisplayPlantCount extends DisplayUpdateEvent {
   };
 }
 
-export interface DisplayPlantPollinationStats extends DisplayUpdateEvent {
+export interface DisplayPlantPollinationStats extends DisplayEvent {
   name: bRollNaming.STATISTICS_3;
-  contents: {
+  payload: {
     plant: SelectPlant;
     pollinationCount: number;
     user: PublicUserInfo;
   };
 }
-export interface DisplayIdle extends DisplayUpdateEvent {
+export interface DisplayIdle extends DisplayEvent {
   name: bRollNaming.IDLE;
-  contents: null;
-}
-
-export type DisplayEventContents =
-  | DisplayFirstPlant
-  | DisplayPollination
-  | DisplayStatusFeed
-  | DisplayFeaturedPlant
-  | DisplayMultipleFeaturedPlants
-  | DisplayFeaturedGarden
-  | DisplayMultipleGardens
-  | DisplayLeaderboard
-  | DisplayPlantGrowingTime
-  | DisplayPlantCount
-  | DisplayPlantPollinationStats
-  | DisplayIdle;
-
-/** Interface for "serverInstructDisplays" messages.
- *
- * These messages are always published by the **server** and received
- * by the **display** clients.
- */
-export interface DisplayUpdateMessage {
-  /** Which display to target. Should be available in the topic (ID part)
-   * anyway, but provided here for redundancy.
-   */
-  targetDisplayId: string;
-  /** What content needs to be displayed, i.e. a `name` and `payload` */
-  payload: DisplayEventContents;
-  /** How long, in ms, before the display should notify the server that
-   * it is ready for new content. If omitted, the content will stay
-   * on that display until further instructions received.
-   *
-   * The content will **not** be immediately **removed** on this display after the
-   * timeout is reached; instead, it is time for the display to notify the server
-   * that it is available for new content.
-   */
-  timeout: number | null;
+  payload: null;
 }

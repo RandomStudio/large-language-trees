@@ -13,7 +13,8 @@ import {
 import { count, desc, eq, or } from "drizzle-orm";
 import {
   bRollNaming,
-  type DisplayEventContents,
+  SimpleEventNames,
+  type DisplayEvent,
   type DisplayFeaturedGarden,
   type DisplayFeaturedPlant,
   type DisplayFirstPlant,
@@ -21,12 +22,11 @@ import {
   type DisplayLeaderboard,
   type DisplayMultipleFeaturedPlants,
   type DisplayMultipleGardens,
+  type DisplayNewPollinatedSprout,
   type DisplayPlantCount,
   type DisplayPlantGrowingTime,
   type DisplayPlantPollinationStats,
-  type DisplayPollination,
   type DisplayStatusFeed,
-  type DisplayUpdateMessage,
   type FeedTextEntry,
   type SimpleEvent
 } from "$lib/events.types";
@@ -48,7 +48,8 @@ import {
   NEW_USER_TIMEOUT,
   NUM_GARDENS_MULTI,
   PLUG_NAMES,
-  MULTI_DETAIL_TIMEOUT
+  MULTI_DETAIL_TIMEOUT,
+  IDLE_TIMEOUT
 } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
@@ -60,7 +61,7 @@ import { PUBLIC_TETHER_HOST } from "$env/static/public";
  * Tether, because we cannot keep a persistent server-side client
  * in Netlify.
  */
-export const publishEvent = async (event: SimpleEvent) => {
+export const publishEvent = async (incoming: SimpleEvent) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
 
   const agent = await TetherAgent.create("server", {
@@ -75,25 +76,29 @@ export const publishEvent = async (event: SimpleEvent) => {
   });
 
   const plug = new OutputPlug(agent, PLUG_NAMES.simpleEvents, {
-    id: event.name,
+    id: incoming.name,
     publishOptions: { qos: 2 }
   });
 
-  const { name, payload } = event;
+  const { name, payload } = incoming;
   console.log("Publishing event", { name, payload }, "...");
 
   await plug.publish(encode({ name, payload }));
 
   await agent.disconnect();
 
-  await logSimpleEvents(event);
+  await logSimpleEvents(incoming);
 
-  await showMainEvent(event);
+  const displayEvent = await getDisplayEvent(incoming);
+  if (displayEvent) {
+    const { event, priority } = displayEvent;
+    await updateScreenStateAndPublish(event, priority);
+  }
 };
 
 const publishDisplayInstructions = async (
   targetDisplayId: string,
-  contents: DisplayEventContents,
+  contents: DisplayEvent,
   timeout: number | null
 ) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
@@ -114,7 +119,8 @@ const publishDisplayInstructions = async (
 
   console.log("Publishing screen content update", { contents, timeout }, "...");
 
-  const message: DisplayUpdateMessage = {
+  const message: DisplayEvent = {
+    name: contents.name,
     targetDisplayId,
     payload: contents,
     timeout
@@ -163,12 +169,7 @@ export const handleDisplayNotification = async (
 ) => {
   const { displayId, event } = message;
 
-  await publishDisplayNotification(message);
-
-  const IDLE_STATE: DisplayIdle = {
-    name: bRollNaming.IDLE,
-    contents: null
-  };
+  // await publishDisplayNotification(message);
 
   if (event === "init") {
     console.log("A display came online (or reloaded)");
@@ -185,40 +186,47 @@ export const handleDisplayNotification = async (
       });
     }
 
+    const event: DisplayIdle = {
+      name: bRollNaming.IDLE,
+      payload: null,
+      targetDisplayId: message.displayId,
+      timeout: IDLE_TIMEOUT
+    };
+
     // Add an idle state with a short timeout, so that the new
     // display will be assigned a "B-roll" state soon...
-    await updateScreenStateAndPublish(displayId, IDLE_STATE, null, 2000);
+    await updateScreenStateAndPublish(event, null);
   }
 
   if (event === "timeout") {
-    // console.log(
-    //   "A display timed out its current animation, pick something new"
-    // );
-    // console.log({ weights: DISPLAY_VIEW_WEIGHTINGS, bRollViews: bRollNaming });
+    //  A display timed out its current animation, pick something new
     const pickDisplayType = pickKeysWithWeights(DISPLAY_VIEW_WEIGHTINGS);
 
-    try {
-      const contents = await getDataForAmbientDisplay(pickDisplayType);
+    // check if display is DETAIL_MULTI
+    const timeout =
+      pickDisplayType === bRollNaming.DETAIL_MULTI
+        ? MULTI_DETAIL_TIMEOUT
+        : BROLL_TIMEOUT;
 
-      // check if display is DETAIL_MULTI
-      const timeout =
-        pickDisplayType === bRollNaming.DETAIL_MULTI
-          ? MULTI_DETAIL_TIMEOUT
-          : BROLL_TIMEOUT;
+    let event = null;
 
-      await updateScreenStateAndPublish(displayId, contents, 0, timeout);
-    } catch (e) {
-      console.warn(
-        "Something went wrong getting a random Display layout: " + e
+    while (event === null) {
+      event = await getEventForAmbientDisplay(
+        pickDisplayType,
+        displayId,
+        timeout
       );
-      await updateScreenStateAndPublish(displayId, IDLE_STATE, null, 2000);
     }
+
+    await updateScreenStateAndPublish(event, null);
   }
 };
 
-export const getDataForAmbientDisplay = async (
-  pickDisplayType: bRollNaming
-): Promise<DisplayEventContents> => {
+export const getEventForAmbientDisplay = async (
+  pickDisplayType: bRollNaming,
+  targetDisplayId: string,
+  timeout: number
+): Promise<DisplayEvent | null> => {
   switch (pickDisplayType) {
     case bRollNaming.DETAIL: {
       const allNormalUsers = await db.query.users.findMany({
@@ -226,7 +234,8 @@ export const getDataForAmbientDisplay = async (
         with: { myGarden: true }
       });
       if (allNormalUsers.length == 0) {
-        throw Error("no users to choose from!");
+        console.log("no users to choose from!");
+        return null;
       }
       const pickRandomUser = pickRandomElement(allNormalUsers);
 
@@ -236,24 +245,28 @@ export const getDataForAmbientDisplay = async (
         with: { plants: true }
       });
       if (!gardenWithPlants) {
-        throw Error("no plants in user garden");
+        console.log("no plants in user garden");
+        return null;
       }
 
       const pickRandomPlant = pickRandomElement(gardenWithPlants.plants);
       const thePlant = await db.query.plants.findFirst({
         where: eq(plants.id, pickRandomPlant.plantId)
       });
-      if (thePlant === undefined) {
-        throw Error("failed to find plant " + pickRandomPlant);
+      if (!thePlant) {
+        console.log("failed to find plant " + pickRandomPlant);
+        return null;
       }
-      const contents: DisplayFeaturedPlant = {
+      const event: DisplayFeaturedPlant = {
         name: bRollNaming.DETAIL,
-        contents: {
+        payload: {
           user: stripUserInfo(pickRandomUser),
           plant: thePlant
-        }
+        },
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
 
     case bRollNaming.DETAIL_MULTI: {
@@ -262,7 +275,8 @@ export const getDataForAmbientDisplay = async (
         with: { myGarden: true }
       });
       if (allNormalUsers.length == 0) {
-        throw Error("no users to choose from!");
+        console.log("no users to choose from!");
+        return null;
       }
       const pickRandomUsers = pickMultipleRandomElements(
         allNormalUsers,
@@ -272,19 +286,19 @@ export const getDataForAmbientDisplay = async (
       let results = await Promise.all(
         pickRandomUsers.map(async (u) => {
           const userGarden = u.myGarden;
-          const gardenWithPlants = await db.query.gardens.findFirst({
+          const userPlants = await db.query.gardens.findFirst({
             where: eq(gardens.id, userGarden.id),
             with: { plants: true }
           });
-          if (!gardenWithPlants) {
+          if (!userPlants) {
             throw Error("no plants in user garden");
           }
 
-          const pickRandomPlant = pickRandomElement(gardenWithPlants.plants);
+          const pickRandomPlant = pickRandomElement(userPlants.plants);
           const thePlant = await db.query.plants.findFirst({
             where: eq(plants.id, pickRandomPlant.plantId)
           });
-          if (thePlant === undefined) {
+          if (!thePlant) {
             throw Error("failed to find plant " + pickRandomPlant);
           }
           return {
@@ -294,11 +308,13 @@ export const getDataForAmbientDisplay = async (
         })
       );
 
-      const contents: DisplayMultipleFeaturedPlants = {
+      const event: DisplayMultipleFeaturedPlants = {
         name: bRollNaming.DETAIL_MULTI,
-        contents: results
+        payload: results,
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
 
     case bRollNaming.STATUS_FEED: {
@@ -308,7 +324,7 @@ export const getDataForAmbientDisplay = async (
         .orderBy(desc(eventLogs.timestamp))
         .limit(LIMIT_STATUS_FEED);
       if (latestEvents.length < MIN_STATUS_FEED) {
-        throw Error(
+        console.log(
           `Not enough event logs (${latestEvents.length} < ${MIN_STATUS_FEED}) to show this view`
         );
       }
@@ -317,20 +333,25 @@ export const getDataForAmbientDisplay = async (
           with: { myOwner: true, plants: { with: { plant: true } } }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
-      const gardens = pickMultipleRandomElements(allGardens, NUM_GARDENS_MULTI);
-      const contents: DisplayStatusFeed = {
+      const pickGarden = pickMultipleRandomElements(
+        allGardens,
+        NUM_GARDENS_MULTI
+      );
+      const event: DisplayStatusFeed = {
         name: bRollNaming.STATUS_FEED,
-        contents: {
+        payload: {
           eventLogs: latestEvents.map(
             (entry) => entry.contents as FeedTextEntry
           ),
-          gardens: gardens.map((g) => ({
+          gardens: pickGarden.map((g) => ({
             ...g,
             plants: g.plants.map((p) => p.plant)
           }))
-        }
+        },
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
 
     case bRollNaming.ROLL_PAN: {
@@ -340,24 +361,27 @@ export const getDataForAmbientDisplay = async (
         })
       ).filter((g) => g.myOwner.isAdmin === false);
       if (allGardens.length < 5) {
-        throw Error("Not enough gardens to display count=" + NUM_GARDENS_MULTI);
+        console.log("Not enough gardens to display count=" + NUM_GARDENS_MULTI);
+        return null;
       }
       const pickGardens = pickMultipleRandomElements(
         allGardens,
         NUM_GARDENS_MULTI
       );
 
-      const contents: DisplayMultipleGardens = {
+      const event: DisplayMultipleGardens = {
         name: bRollNaming.ROLL_PAN,
-        contents: pickGardens.map((garden) => ({
+        payload: pickGardens.map((garden) => ({
           garden: {
             ...garden,
             plants: garden.plants.map((p) => p.plant)
           },
           user: stripUserInfo(garden.myOwner)
-        }))
+        })),
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
 
     case bRollNaming.ZOOM_OUT: {
@@ -367,17 +391,19 @@ export const getDataForAmbientDisplay = async (
         })
       ).filter((g) => g.myOwner.isAdmin === false);
       const garden = pickRandomElement(allGardens);
-      const contents: DisplayFeaturedGarden = {
+      const event: DisplayFeaturedGarden = {
         name: bRollNaming.ZOOM_OUT,
-        contents: {
+        payload: {
           garden: {
             ...garden,
             plants: garden.plants.map((p) => p.plant)
           },
           user: stripUserInfo(garden.myOwner)
-        }
+        },
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
 
     case bRollNaming.TOP_LIST: {
@@ -392,7 +418,8 @@ export const getDataForAmbientDisplay = async (
       ).filter((g) => g.myOwner.isAdmin === false);
 
       if (allGardens.length < LIMIT_LEADERBOARD) {
-        throw Error("Not enough gardens for leaderboard");
+        console.log("Not enough gardens for leaderboard");
+        return null;
       }
 
       const orderedByPlantCount = allGardens
@@ -408,12 +435,13 @@ export const getDataForAmbientDisplay = async (
         with: { plants: { with: { plant: true } } }
       });
       if (!topGardenWithPlants) {
-        throw Error("failed to load top garden with plants");
+        console.log("failed to load top garden with plants");
+        return null;
       }
 
-      const contents: DisplayLeaderboard = {
+      const event: DisplayLeaderboard = {
         name: bRollNaming.TOP_LIST,
-        contents: {
+        payload: {
           topPollinators: orderedByPlantCount.map((garden) => ({
             username: garden.myOwner.username,
             count: garden.plants.length
@@ -422,9 +450,11 @@ export const getDataForAmbientDisplay = async (
             ...topGardenWithPlants,
             plants: topGardenWithPlants.plants.map((p) => p.plant)
           }
-        }
+        },
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
 
     case bRollNaming.STATISTICS_1: {
@@ -445,15 +475,17 @@ export const getDataForAmbientDisplay = async (
       if (!user || !pickPlant) {
         throw Error("user/plant info missing");
       }
-      const contents: DisplayPlantGrowingTime = {
+      const event: DisplayPlantGrowingTime = {
         name: bRollNaming.STATISTICS_1,
-        contents: {
+        payload: {
           plant: pickPlant.plant,
           user: stripUserInfo(user),
           pollinationTimestamp: pickPlant.plantingDate
-        }
+        },
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
     case bRollNaming.STATISTICS_2: {
       const [result] = await db.select({ count: count() }).from(plants);
@@ -471,9 +503,9 @@ export const getDataForAmbientDisplay = async (
         NUM_GARDENS_MULTI
       );
 
-      const contents: DisplayPlantCount = {
+      const event: DisplayPlantCount = {
         name: bRollNaming.STATISTICS_2,
-        contents: {
+        payload: {
           gardens: pickGardens.map((garden) => ({
             garden: {
               ...garden,
@@ -482,9 +514,11 @@ export const getDataForAmbientDisplay = async (
             user: stripUserInfo(garden.myOwner)
           })),
           count: result.count
-        }
+        },
+        targetDisplayId,
+        timeout
       };
-      return contents;
+      return event;
     }
 
     case bRollNaming.STATISTICS_3: {
@@ -520,22 +554,26 @@ export const getDataForAmbientDisplay = async (
         "times"
       );
 
-      const contents: DisplayPlantPollinationStats = {
+      const event: DisplayPlantPollinationStats = {
         name: bRollNaming.STATISTICS_3,
-        contents: {
+        payload: {
           plant: pickPlant,
           pollinationCount: asParentCount.length,
           user: stripUserInfo(pickUser)
-        }
+        },
+        targetDisplayId,
+        timeout
       };
 
-      return contents;
+      return event;
     }
 
     case bRollNaming.IDLE: {
       return {
         name: bRollNaming.IDLE,
-        contents: null
+        payload: null,
+        targetDisplayId,
+        timeout
       };
     }
 
@@ -547,93 +585,84 @@ export const getDataForAmbientDisplay = async (
   }
 };
 
-export const showMainEvent = async (latestEvent: SimpleEvent) => {
-  switch (latestEvent.name) {
-    case "newUser": {
-      // Ignore new user events for now
-      break;
-    }
+export const getDisplayEvent = async (
+  incoming: SimpleEvent
+): Promise<{ event: DisplayEvent; priority: number } | null> => {
+  switch (incoming.name) {
     case "newUserFirstPlant": {
-      const PRIORITY = 1;
-      const targetScreen = await findScreenFor(PRIORITY);
-      if (targetScreen) {
-        const { user, plant } = latestEvent.payload;
-        const e: DisplayFirstPlant = {
+      const priority = 1;
+      const targetDisplayId = await findScreenFor(priority);
+      if (targetDisplayId) {
+        const { user, plant } = incoming.payload;
+        const event: DisplayFirstPlant = {
           name: "newUserFirstPlant",
-          contents: {
+          payload: {
             plant,
             user
-          }
+          },
+          targetDisplayId,
+          timeout: NEW_USER_TIMEOUT
         };
-        await updateScreenStateAndPublish(
-          targetScreen,
-          e,
-          PRIORITY,
-          NEW_USER_TIMEOUT
-        );
+        return { event, priority };
       }
-      break;
     }
     case "newPlantSprouted": {
-      const PRIORITY = 1;
-      const targetScreen = await findScreenFor(PRIORITY);
-      if (targetScreen) {
-        const plant = latestEvent.payload;
-        if (plant.authorTop && plant.authorBottom) {
-          const authorTop = await db.query.users.findFirst({
-            where: eq(users.id, plant.authorTop)
-          });
-          const authorBottom = await db.query.users.findFirst({
-            where: eq(users.id, plant.authorBottom)
-          });
-          if (!authorTop || !authorBottom) {
-            throw Error("where are the author users?");
-          }
-          if (!plant.parent1 || !plant.parent2) {
-            throw Error("where are the parent plants?");
-          }
-          const plantTop = await db.query.plants.findFirst({
-            where: eq(plants.id, plant.parent1)
-          });
-          const plantBottom = await db.query.plants.findFirst({
-            where: eq(plants.id, plant.parent2)
-          });
-          if (authorTop && authorBottom && plantTop && plantBottom) {
-            const e: DisplayPollination = {
-              name: "newPlantPollination",
-              contents: {
-                newPlant: plant,
-                authorTop: stripUserInfo(authorTop),
-                authorBottom: stripUserInfo(authorBottom),
-                plantTop,
-                plantBottom
-              }
-            };
-            await updateScreenStateAndPublish(
-              targetScreen,
-              e,
-              PRIORITY,
-              POLLINATION_RESULT_TIMEOUT
-            );
-          } else {
-            console.error(
-              "author(s) not found in DB:",
-              plant.authorTop,
-              plant.authorBottom
-            );
-          }
-        } else {
-          console.error("author(s) missing from", { plant });
-        }
+      const priority = 1;
+      const targetDisplayId = await findScreenFor(priority);
+      if (!targetDisplayId) {
+        console.warn("No available display found");
+        return null;
       }
-      break;
-    }
-    case "newGeneratedPlantReady": {
-      // Ignore for now
-      break;
+      const plant = incoming.payload;
+      if (plant.authorTop && plant.authorBottom) {
+        const authorTop = await db.query.users.findFirst({
+          where: eq(users.id, plant.authorTop)
+        });
+        const authorBottom = await db.query.users.findFirst({
+          where: eq(users.id, plant.authorBottom)
+        });
+        if (!authorTop || !authorBottom) {
+          throw Error("where are the author users?");
+        }
+        if (!plant.parent1 || !plant.parent2) {
+          throw Error("where are the parent plants?");
+        }
+        const plantTop = await db.query.plants.findFirst({
+          where: eq(plants.id, plant.parent1)
+        });
+        const plantBottom = await db.query.plants.findFirst({
+          where: eq(plants.id, plant.parent2)
+        });
+        if (authorTop && authorBottom && plantTop && plantBottom) {
+          const event: DisplayNewPollinatedSprout = {
+            name: "newPlantPollination",
+            payload: {
+              newPlant: plant,
+              authorTop: stripUserInfo(authorTop),
+              authorBottom: stripUserInfo(authorBottom),
+              plantTop,
+              plantBottom
+            },
+            targetDisplayId,
+            timeout: POLLINATION_RESULT_TIMEOUT
+          };
+          return { event, priority };
+        } else {
+          console.error(
+            "author(s) not found in DB:",
+            plant.authorTop,
+            plant.authorBottom
+          );
+          return null;
+        }
+      } else {
+        console.error("author(s) missing from", { plant });
+        return null;
+      }
     }
     default: {
-      console.error("Unknown event type!", latestEvent);
+      // No corresponding DisplayEvent for the incoming SimpleEvent
+      return null;
     }
   }
 };
@@ -665,21 +694,15 @@ export const getAllScreens = async () =>
 
 /** Publish updates on channel, persist to database */
 export const updateScreenStateAndPublish = async (
-  targetId: string,
-  contents: DisplayEventContents,
-  priority: number | null,
-  timeout: number | null
+  event: DisplayEvent,
+  priority: number | null
 ) => {
-  // console.log(
-  //   "updateScreenStateAndPublish:",
-  //   { targetId, name: contents.name, priority, timeout },
-  //   "..."
-  // );
+  const { timeout, targetDisplayId } = event;
   await db
     .update(presentationState)
-    .set({ contents, priority })
-    .where(eq(presentationState.id, targetId));
-  await publishDisplayInstructions(targetId, contents, timeout);
+    .set({ contents: event, priority })
+    .where(eq(presentationState.id, targetDisplayId));
+  await publishDisplayInstructions(targetDisplayId, event, timeout);
 };
 
 /** Because of our serverless architecture, we cannot listen using TCP
@@ -697,7 +720,7 @@ export const logSimpleEvents = async (event: SimpleEvent) => {
 
 const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
   switch (event.name) {
-    case "newUser": {
+    case SimpleEventNames.NEW_USER: {
       return [
         {
           text: event.payload.username,
@@ -708,7 +731,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
         }
       ];
     }
-    case "newUserFirstPlant": {
+    case SimpleEventNames.FIRST_PLANT: {
       return [
         {
           text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
@@ -719,7 +742,7 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
         }
       ];
     }
-    case "newPlantSprouted": {
+    case SimpleEventNames.POLLINATION_COMPLETE: {
       const { parent1, parent2 } = event.payload;
       if (!parent1 || !parent2) {
         throw Error("parents not in payload: " + JSON.stringify(event.payload));
@@ -769,17 +792,17 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
         }
       ];
     }
-    case "newTopPollinator": {
-      return [
-        {
-          text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
-          highlight: true
-        },
-        {
-          text: "just became top pollinator"
-        }
-      ];
-    }
+    // case "newTopPollinator": {
+    //   return [
+    //     {
+    //       text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
+    //       highlight: true
+    //     },
+    //     {
+    //       text: "just became top pollinator"
+    //     }
+    //   ];
+    // }
     case "newPollinationStarting": {
       return [];
     }

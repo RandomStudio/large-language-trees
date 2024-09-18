@@ -50,6 +50,9 @@ export const MULTIPLE_FEATURED_PLANTS_COUNT = 4;
 /** The maximum number of characters for plantname and username */
 export const LIMIT_CHARACTERS_USERNAME = 20;
 export const LIMIT_CHARACTERS_PLANTNAME = 30;
+
+// TIMEOUTS -------------------
+export const IDLE_TIMEOUT = 2000;
 export const BROLL_TIMEOUT = 10000;
 export const MULTI_DETAIL_TIMEOUT = 15000;
 export const NEW_USER_TIMEOUT = 8000;

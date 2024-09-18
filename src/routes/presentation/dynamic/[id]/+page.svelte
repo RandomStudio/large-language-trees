@@ -6,7 +6,6 @@
   import { onDestroy, onMount } from "svelte";
   import type { DisplayNotifyServer } from "../../../api/displayNotifyServer/types";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
-  import type { DisplayUpdateMessage } from "$lib/events.types";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
@@ -21,7 +20,7 @@
 
   import { fade } from "svelte/transition";
 
-  import { FADE_DURATION } from "$lib/constants";
+  import { FADE_DURATION, IDLE_TIMEOUT } from "$lib/constants";
 
   export let data;
 
@@ -52,7 +51,7 @@
     if (intervalCheck) {
       clearInterval(intervalCheck);
     }
-    nextTimeout = Date.now() + 2000;
+    nextTimeout = Date.now() + IDLE_TIMEOUT;
     console.log("onMount set nextTimeout", nextTimeout);
 
     console.log("start interval timer");
@@ -80,7 +79,7 @@
       const m = decode(p) as DisplayUpdateMessage;
       console.log(Date.now(), "ReceivedserverInstructDisplays message:", m);
       const { payload, timeout } = m;
-      data.contents = payload;
+      data.coDisplayEventtents;
 
       if (timeout) {
         nextTimeout = Date.now() + timeout;

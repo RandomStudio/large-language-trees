@@ -1,7 +1,7 @@
 import { bRollNaming } from "$lib/events.types";
 import {
   getAllScreens,
-  getDataForAmbientDisplay,
+  getEventForAmbientDisplay,
   updateScreenStateAndPublish
 } from "$lib/server/realtime";
 import { json, type RequestHandler } from "@sveltejs/kit";
@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({ url }) => {
     console.log(forceMode, "=>", bRollNaming[forceMode as keyType]);
     const ambientMode = bRollNaming[forceMode as keyType];
 
-    const data = await getDataForAmbientDisplay(ambientMode);
+    const data = await getEventForAmbientDisplay(ambientMode);
     const allScreens = await getAllScreens();
     allScreens.forEach(async (target) => {
       await updateScreenStateAndPublish(target.id, data, 1, 10000);
