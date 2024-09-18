@@ -534,6 +534,10 @@ export const getEventForAmbientDisplay = async (
         )
       });
 
+      if (!userPlants || userPlants.length === 0) {
+        throw Error("user has not plants");
+      }
+
       const pickPlant = pickRandomElement(userPlants);
 
       const asParentCount = await db
