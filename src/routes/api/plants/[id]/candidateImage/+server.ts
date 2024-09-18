@@ -7,7 +7,10 @@ import { uploadToS3 } from "$lib/server/images";
 import { URL_PREFIX } from "$lib/constants";
 import type { GeneratedImage } from "$lib/types";
 import { publishEvent } from "$lib/server/realtime";
-import type { EventGeneratedPlantReady } from "$lib/events.types";
+import {
+  SimpleEventNames,
+  type EventGeneratedPlantReady
+} from "$lib/events.types";
 
 /**
  * Should be identical to the version in
@@ -52,7 +55,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
         }
         // Publish the event (now plant generated and ready)...
         const e: EventGeneratedPlantReady = {
-          name: "newGeneratedPlantReady",
+          name: SimpleEventNames.CANDIDATE_READY,
           payload: candidateReadyPlant
         };
         await publishEvent(e);

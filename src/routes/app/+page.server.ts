@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 import { hash, verify } from "@node-rs/argon2";
 import { publishEvent } from "$lib/server/realtime";
-import type { EventNewUser } from "$lib/events.types";
+import { SimpleEventNames, type EventNewUser } from "$lib/events.types";
 import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
 import type { SelectUser } from "$lib/types";
 import { stripUserInfo } from "$lib/security";
@@ -88,7 +88,7 @@ export const actions = {
         redirect(302, "/app/admin");
       } else {
         const e: EventNewUser = {
-          name: "newUser",
+          name: SimpleEventNames.NEW_USER,
           payload: { userId, username }
         };
         await publishEvent(e);
