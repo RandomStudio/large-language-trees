@@ -26,6 +26,7 @@ import {
   type DisplayPlantCount,
   type DisplayPlantGrowingTime,
   type DisplayPlantPollinationStats,
+  type DisplayPollinationStarting,
   type DisplayStatusFeed,
   type FeedTextEntry,
   type SimpleEvent
@@ -49,7 +50,8 @@ import {
   NUM_GARDENS_MULTI,
   PLUG_NAMES,
   MULTI_DETAIL_TIMEOUT,
-  IDLE_TIMEOUT
+  IDLE_TIMEOUT,
+  POLLINATION_START_TIMEOUT
 } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 
@@ -136,7 +138,7 @@ const publishDisplayInstructions = async (
  * messages in the usual way - it is not a persistent process and cannot maintain a
  * persisted TCP connection.
  */
-const publishDisplayNotification = async (message: DisplayNotifyServer) => {
+const rePublishDisplayNotification = async (message: DisplayNotifyServer) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
   const agent = await TetherAgent.create("presentation", {
     loglevel: "warn",
@@ -207,11 +209,7 @@ export const handleDisplayNotification = async (
     let attemptsLeft = 10;
 
     while (event === null && attemptsLeft > 0) {
-      event = await getEventForAmbientDisplay(
-        pickDisplayType,
-        displayId,
-        timeout
-      );
+      event = await getEventForAmbientDisplay(pickDisplayType, timeout);
       attemptsLeft--;
     }
 
@@ -235,7 +233,6 @@ export const handleDisplayNotification = async (
 
 export const getEventForAmbientDisplay = async (
   pickDisplayType: DisplayEventNames,
-  targetDisplayId: string,
   timeout: number
 ): Promise<DisplayEvent | null> => {
   switch (pickDisplayType) {
@@ -611,6 +608,25 @@ export const getDisplayEvent = async (
         return { event, priority, targetDisplayId };
       }
     }
+    case "newPollinationStarting": {
+      const priority = 1;
+      const targetDisplayId = await findScreenFor(priority);
+      if (targetDisplayId) {
+        const { authorTop, authorBottom, plantTop, plantBottom } =
+          incoming.payload;
+        const event: DisplayPollinationStarting = {
+          name: DisplayEventNames.ANNOUNCE_POLLINATION_STARTING,
+          payload: {
+            authorTop,
+            authorBottom,
+            plantTop,
+            plantBottom
+          },
+          timeout: POLLINATION_START_TIMEOUT
+        };
+        return { event, priority, targetDisplayId };
+      }
+    }
     case "newPlantSprouted": {
       const priority = 1;
       const targetDisplayId = await findScreenFor(priority);
@@ -644,9 +660,7 @@ export const getDisplayEvent = async (
             payload: {
               newPlant: plant,
               authorTop: stripUserInfo(authorTop),
-              authorBottom: stripUserInfo(authorBottom),
-              plantTop,
-              plantBottom
+              authorBottom: stripUserInfo(authorBottom)
             },
             timeout: POLLINATION_RESULT_TIMEOUT
           };

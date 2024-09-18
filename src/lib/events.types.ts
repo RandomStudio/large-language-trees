@@ -49,6 +49,8 @@ export interface EventFirstPlant extends SimpleEvent {
 export interface EventPollinationStarting extends SimpleEvent {
   name: SimpleEventNames.POLLINATION_STARTING;
   payload: {
+    plantTop: SelectPlant;
+    plantBottom: SelectPlant;
     authorTop: PublicUserInfo;
     authorBottom: PublicUserInfo;
   };
@@ -117,7 +119,12 @@ export interface DisplayFirstPlant extends DisplayEvent {
 
 export interface DisplayPollinationStarting extends DisplayEvent {
   name: DisplayEventNames.ANNOUNCE_POLLINATION_STARTING;
-  payload: null;
+  payload: {
+    authorTop: PublicUserInfo;
+    authorBottom: PublicUserInfo;
+    plantTop: SelectPlant;
+    plantBottom: SelectPlant;
+  };
 }
 
 export interface DisplayNewPollinatedSprout extends DisplayEvent {
@@ -126,8 +133,6 @@ export interface DisplayNewPollinatedSprout extends DisplayEvent {
     newPlant: SelectPlant;
     authorTop: PublicUserInfo;
     authorBottom: PublicUserInfo;
-    plantTop: SelectPlant;
-    plantBottom: SelectPlant;
   };
 }
 

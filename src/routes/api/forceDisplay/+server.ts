@@ -16,18 +16,15 @@ export const POST: RequestHandler = async ({ url }) => {
     console.log(forceMode, "=>", DisplayEventNames[forceMode as keyType]);
     const ambientMode = DisplayEventNames[forceMode as keyType];
 
-    const allScreens = await getAllScreens();
-    allScreens.forEach(async (target) => {
-      const data = await getEventForAmbientDisplay(
-        ambientMode,
-        target.id,
-        10000
-      );
-      if (data !== null) {
+    const data = await getEventForAmbientDisplay(ambientMode, 10000);
+
+    if (data !== null) {
+      const allScreens = await getAllScreens();
+      allScreens.forEach(async (target) => {
         await updateScreenStateAndPublish(data, target.id, 1);
-      }
-    });
-    return json({ forceMode }, { status: 200 });
+      });
+    }
+    return json({ forceMode, data }, { status: 200 });
   } else {
     return json({ forceMode }, { status: 500 });
   }

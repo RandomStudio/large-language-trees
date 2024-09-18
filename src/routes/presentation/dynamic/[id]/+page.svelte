@@ -21,6 +21,7 @@
   import { fade } from "svelte/transition";
 
   import { FADE_DURATION, IDLE_TIMEOUT } from "$lib/constants";
+  import PollinationStarting from "./PollinationStarting.svelte";
 
   export let data;
 
@@ -113,14 +114,26 @@
       </div>
     {/if}
 
-    {#if data.event.name == DisplayEventNames.ANNOUNCE_NEW_SPROUT && data.event.payload.newPlant.imageUrl}
+    {#if data.event.name === DisplayEventNames.ANNOUNCE_POLLINATION_STARTING}
+      <div
+        class="fixed top-0 left-0"
+        transition:fade={{ duration: FADE_DURATION }}
+      >
+        <PollinationStarting
+          authorTop={data.event.payload.authorTop}
+          authorBottom={data.event.payload.authorBottom}
+          plantTop={data.event.payload.plantTop}
+          plantBottom={data.event.payload.plantBottom}
+        />
+      </div>
+    {/if}
+
+    {#if data.event.name == DisplayEventNames.ANNOUNCE_NEW_SPROUT}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
         <PollinationResult
-          plantTop={data.event.payload.plantTop}
-          plantBottom={data.event.payload.plantBottom}
           authorTop={data.event.payload.authorTop}
           authorBottom={data.event.payload.authorBottom}
           newPlant={data.event.payload.newPlant}

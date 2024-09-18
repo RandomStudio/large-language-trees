@@ -1,14 +1,22 @@
 <script lang="ts">
-  import type { DisplayNewPollinatedSprout } from "$lib/events.types";
+  import type {
+    DisplayNewPollinatedSprout,
+    DisplayPollinationStarting
+  } from "$lib/events.types";
+  import type { PublicUserInfo, SelectPlant } from "$lib/types";
 
-  export let contents: DisplayNewPollinatedSprout;
+  export let authorTop: PublicUserInfo;
+  export let authorBottom: PublicUserInfo;
+  export let plantTop: SelectPlant;
+  export let plantBottom: SelectPlant;
 </script>
 
 <div class="w-screen h-screen">
   <div
     class="w-screen h-screen flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"
   >
-    STEVEB'S <br /> ROSE
+    {authorTop.username}'s<br />
+    {plantTop.commonName}
   </div>
 
   <div
@@ -62,6 +70,7 @@
   <div
     class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-new_purple text-7xl font-jeanb bg-roel_rose"
   >
-    ROELSCOOTER'S <br /> LAVENDER
+    {authorBottom.username}'s<br />
+    {plantBottom.commonName}
   </div>
 </div>

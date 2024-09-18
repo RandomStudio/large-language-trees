@@ -16,7 +16,10 @@
   import Layout from "../../../components/Layout.svelte";
   import { TetherAgent, InputPlug, decode } from "tether-agent";
   import { PLUG_NAMES } from "$lib/constants";
-  import type { EventPollinationStarting } from "$lib/events.types";
+  import {
+    SimpleEventNames,
+    type EventPollinationStarting
+  } from "$lib/events.types";
   import PollinationWasStartedPopup from "../../PollinationWasStartedPopup.svelte";
   import { BROWSER_CONNECTION } from "../../../../../defaults/tether";
   import { error } from "@sveltejs/kit";
@@ -130,18 +133,6 @@
 
     otherUser = await getOtherUserDetails(otherUserId);
 
-    const e: EventPollinationStarting = {
-      name: "newPollinationStarting",
-      payload: {
-        authorTop: data.thisUser,
-        authorBottom: otherUser
-      }
-    };
-    await fetch("/api/events", {
-      method: "POST",
-      body: JSON.stringify(e)
-    });
-
     alreadyExistsPlant = findAlreadyExists(
       data.thisPlant.id,
       otherPlantId,
@@ -150,6 +141,20 @@
     if (!alreadyExistsPlant) {
       console.info("New child plant possible!");
       otherPlant = await getOtherPlantDetails(otherPlantId);
+
+      const e: EventPollinationStarting = {
+        name: SimpleEventNames.POLLINATION_STARTING,
+        payload: {
+          authorTop: data.thisUser,
+          authorBottom: otherUser,
+          plantTop: data.thisPlant,
+          plantBottom: otherPlant
+        }
+      };
+      await fetch("/api/events", {
+        method: "POST",
+        body: JSON.stringify(e)
+      });
     } else {
       console.warn(
         "This child combination already exists!",

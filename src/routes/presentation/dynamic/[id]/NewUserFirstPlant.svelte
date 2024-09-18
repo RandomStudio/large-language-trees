@@ -5,8 +5,6 @@
   import type { SelectPlant } from "$lib/types";
 
   export let plant: SelectPlant;
-  // export let imageUrl: string;
-  // export let plantName: string;
   export let gardenerName: string;
 
   export let applyFilters: boolean = false;

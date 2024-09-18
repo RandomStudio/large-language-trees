@@ -56,7 +56,7 @@ export const IDLE_TIMEOUT = 2000;
 export const BROLL_TIMEOUT = 10000;
 export const MULTI_DETAIL_TIMEOUT = 15000;
 export const NEW_USER_TIMEOUT = 8000;
-export const POLLINATION_EVENT_TIMEOUT = 8000;
+export const POLLINATION_START_TIMEOUT = 8000;
 export const POLLINATION_RESULT_TIMEOUT = 16000;
 export const FADE_DURATION = 1500;
 
