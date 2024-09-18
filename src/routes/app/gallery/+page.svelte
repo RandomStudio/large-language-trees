@@ -2,7 +2,6 @@
   import { goto } from "$app/navigation";
   import {
     type CandidatePlant,
-    type InsertPlant,
     type PublicUserInfo,
     type SelectPlant
   } from "../../../lib/types";
@@ -16,8 +15,7 @@
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
   import {
     type EventNewSprouting,
-    type EventGeneratedPlantReady,
-    type EventPollinationStarting
+    type EventGeneratedPlantReady
   } from "$lib/events.types";
   import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";

@@ -4,7 +4,6 @@
   import BRollZoomOut from "./BRollZoomOut.svelte";
 
   import { onDestroy, onMount } from "svelte";
-  import type { PageData } from "./$types";
   import type { DisplayNotifyServer } from "../../../api/displayNotifyServer/types";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import type { DisplayUpdateMessage } from "$lib/events.types";
@@ -23,6 +22,7 @@
   import { fade } from "svelte/transition";
 
   import { FADE_DURATION } from "$lib/constants";
+  import { type PageData } from "./$types";
 
   export let data: PageData;
 

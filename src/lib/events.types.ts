@@ -77,7 +77,7 @@ interface DisplayUpdateEvent {
 export interface DisplayFirstPlant extends DisplayUpdateEvent {
   name: "newUserFirstPlant";
   contents: {
-    plant: InsertPlant;
+    plant: SelectPlant;
     user: PublicUserInfo;
   };
 }
@@ -85,7 +85,7 @@ export interface DisplayFirstPlant extends DisplayUpdateEvent {
 export interface DisplayPollination extends DisplayUpdateEvent {
   name: "newPlantPollination";
   contents: {
-    newPlant: InsertPlant;
+    newPlant: SelectPlant;
     authorTop: PublicUserInfo;
     authorBottom: PublicUserInfo;
     plantTop: SelectPlant;
