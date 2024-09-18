@@ -31,7 +31,7 @@
 </div>
 
 <style>
-  .buttonContainer::before {
+  :global(.hasScroll) .buttonContainer::before {
     position: absolute;
     left: -40px;
     right: -40px;
@@ -46,7 +46,7 @@
     );
     content: "";
   }
-  .buttonContainer::after {
+  :global(.hasScroll) .buttonContainer::after {
     position: absolute;
     left: -40px;
     right: -40px;

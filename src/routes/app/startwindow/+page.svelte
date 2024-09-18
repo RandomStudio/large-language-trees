@@ -8,19 +8,23 @@
 </script>
 
 <Layout title="Let's Pollinate">
-  <div class="font-primer text-roel_blue mb-[200px]">
-    <div class="font-primer text-roel_green text-left">
-      <p class="text-medium" data-test="welcome-text">
-        Here is your first plant!
-      </p>
+  <div
+    class="font-primer text-roel_blue grid grid-rows-[max-content_1fr_max-content_1fr_max-content]"
+  >
+    <p class="text-medium text-roel_green" data-test="welcome-text">
+      Here is your first plant!
+    </p>
+    <div />
+    <div>
       <div class="mx-auto pt-12 w-64">
         <PlantDisplay imageUrl={data.startPlant.plant.imageUrl || ""}
         ></PlantDisplay>
       </div>
+      <p class="text-large text-center mb-8">
+        {data.startPlant.plant.commonName}
+      </p>
     </div>
-    <p class="text-large text-center mb-8">
-      {data.startPlant.plant.commonName}
-    </p>
+    <div />
     <p class="text-small text-left">
       Now find a fellow gardener and scan their QR code to start pollinating.
     </p>
