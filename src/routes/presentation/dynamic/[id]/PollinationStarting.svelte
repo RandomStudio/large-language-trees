@@ -1,8 +1,4 @@
 <script lang="ts">
-  import type {
-    DisplayNewPollinatedSprout,
-    DisplayPollinationStarting
-  } from "$lib/events.types";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
 
   export let authorTop: PublicUserInfo;
@@ -11,16 +7,17 @@
   export let plantBottom: SelectPlant;
 </script>
 
-<div class="w-screen h-screen">
-  <div
-    class="w-screen h-screen flex text-center items-center justify-center text-roel_green text-7xl font-jeanb bg-roel_red"
+<div class="w-screen h-screen items-center justify-center standard-gradient">
+  <div>test</div>
+  <!-- <div
+    class="w-screen h-screen text-center text-roel_yellow text-7xl font-gyst absolute top-32 z-10"
   >
     {authorTop.username}'s<br />
     {plantTop.commonName}
   </div>
 
   <div
-    class="bg-roel_green h-[560px] w-screen flex flex-col justify-end items-center relative"
+    class="bg-roel_green w-screen flex flex-col justify-end items-center relative"
   >
     <svg
       width="400"
@@ -32,25 +29,27 @@
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[70px]"
     >
-      <img
-        src="/43.png"
-        alt="Pollinating Plant First Parent"
-        class="w-[400px]"
-        crossorigin="anonymous"
-      />
+      {#if plantTop.imageUrl}
+        <img
+          src={plantTop.imageUrl}
+          alt="Pollinating Plant First Parent"
+          class="w-[400px]"
+          crossorigin="anonymous"
+        />
+      {/if}
     </div>
   </div>
 
   <div class="absolute inset-0 flex items-center justify-center">
     <div
-      class="bg-roel_green text-new_purple py-1 px-6 z-50 font-primerb text-3xl"
+      class="bg-roel_green text-new_purple py-1 px-6 z-50 font-gyst text-3xl"
     >
       is pollinating with
     </div>
   </div>
 
   <div
-    class="bg-new_purple h-[560px] flex flex-col justify-end items-center relative"
+    class="bg-new_purple w-screen flex flex-col justify-end items-center relative"
   >
     <svg width="400" height="400" class="translate-y-[-361px] fill-roel_rose">
       <path d="M0,200 a1,1 0 0,0 400,0" />
@@ -58,19 +57,21 @@
     <div
       class="absolute inset-0 flex items-center justify-center translate-y-[-70px]"
     >
-      <img
-        src="/58.png"
-        alt="Pollinating Plant Second Parent"
-        class="w-[400px] rotate-180"
-        crossorigin="anonymous"
-      />
+      {#if plantBottom.imageUrl}
+        <img
+          src={plantBottom.imageUrl}
+          alt="Pollinating Plant Second Parent"
+          class="w-[400px] rotate-180"
+          crossorigin="anonymous"
+        />
+      {/if}
     </div>
   </div>
 
   <div
-    class="w-full h-[250px] flex text-center items-center justify-center absolute bottom-0 text-new_purple text-7xl font-jeanb bg-roel_rose"
+    class="w-screen h-screen text-center text-roel_yellow text-7xl font-gyst absolute bottom-32 z-10"
   >
     {authorBottom.username}'s<br />
     {plantBottom.commonName}
-  </div>
+  </div> -->
 </div>

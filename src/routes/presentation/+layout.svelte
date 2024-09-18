@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "./presentation.css";
+  import "../../index.css";
 </script>
 
 <div>

@@ -1,10 +1,7 @@
 <script>
-  import "./app.css";
-  import { goto } from "$app/navigation";
+  import "../../index.css";
   import { page } from "$app/stores";
   import { derived } from "svelte/store";
-  import { or } from "drizzle-orm";
-  import { fade } from "svelte/transition";
   import transitionClasses from "svelte-transition-classes";
 
   export let data;
