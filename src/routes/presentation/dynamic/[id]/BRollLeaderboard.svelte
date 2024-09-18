@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GardenWithPlants } from "$lib/types";
-  import DisplayGarden from "./DisplayGarden.svelte";
+  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   export let topPollinators;
   export let topGarden: GardenWithPlants;
 </script>

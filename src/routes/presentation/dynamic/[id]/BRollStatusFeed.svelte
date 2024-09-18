@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DisplayGarden from "./DisplayGarden.svelte";
+  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   export let eventLogs;
   export let gardens;
 </script>

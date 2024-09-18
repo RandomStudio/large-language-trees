@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GardenWithPlants } from "$lib/types";
-  import DisplayGarden from "./DisplayGarden.svelte";
+  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   import { onMount } from "svelte";
   import { tweened } from "svelte/motion";
   import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";

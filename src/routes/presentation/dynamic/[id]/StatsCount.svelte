@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GardenWithPlants, PublicUserInfo } from "$lib/types";
-  import DisplayGarden from "./DisplayGarden.svelte";
+  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   export let count: number;
   export let gardens: { garden: GardenWithPlants; user: PublicUserInfo }[];
 </script>

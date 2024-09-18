@@ -5,7 +5,7 @@
   import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";
   import { BROLL_TIMEOUT } from "$lib/constants";
 
-  import DisplayGarden from "./DisplayGarden.svelte";
+  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   export let gardens: DisplayMultipleGardens;
 
   const duration = BROLL_TIMEOUT + 2000; //ms

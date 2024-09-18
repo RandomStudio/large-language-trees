@@ -38,11 +38,12 @@ export type PresentationDisplayState = typeof presentationState.$inferInsert;
 export interface PlantWithDate extends SelectPlant {
   pollinationDate: Date;
 }
+// export interface GardenWithDatedPlants extends SelectGarden {
+//   plantsWithDates: PlantWithDate[];
+// }
+
 export interface GardenWithPlants extends SelectGarden {
-  plantsWithDates: PlantWithDate[];
-}
-export interface UserWithGarden extends SelectUser {
-  myGarden: GardenWithPlants;
+  plants: SelectPlant[];
 }
 
 export interface PlantProperties {

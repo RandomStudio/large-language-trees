@@ -37,15 +37,14 @@
   }
 
   function findMinMaxHeight() {
-    if (!garden.plantsInGarden || garden.plantsInGarden.length === 0) {
+    if (!garden.plants || garden.plants.length === 0) {
       return { min: 0, max: 0 };
     }
 
-    let min = (garden.plantsInGarden[0].properties as any)
-      .heightInMetres as number;
+    let min = (garden.plants[0].properties as any).heightInMetres as number;
     let max = min;
 
-    for (const plant of garden.plantsInGarden) {
+    for (const plant of garden.plants) {
       const height = (plant.properties as any).heightInMetres;
       if (height < min) min = height;
       if (height > max) max = height;
@@ -178,7 +177,7 @@
   }
 
   beforeUpdate(() => {
-    positions = randomizePositions(garden.plantsInGarden);
+    positions = randomizePositions(garden.plants);
   });
 </script>
 
