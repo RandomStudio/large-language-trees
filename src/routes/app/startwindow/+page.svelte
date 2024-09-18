@@ -7,7 +7,7 @@
   export let data;
 </script>
 
-<Layout title="Let's Pollinate">
+<Layout hasScroll title="Let's Pollinate">
   <div
     class="font-primer text-roel_blue grid grid-rows-[max-content_1fr_max-content_1fr_max-content]"
   >
