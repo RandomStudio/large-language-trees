@@ -1,4 +1,4 @@
-import { DisplayEventsNaming } from "$lib/events.types";
+import { DisplayEventNames } from "$lib/events.types";
 import {
   getAllScreens,
   getEventForAmbientDisplay,
@@ -10,18 +10,24 @@ export const POST: RequestHandler = async ({ url }) => {
   const forceMode = url.searchParams.get("mode");
   console.log("/api/forceMode with param", { forceMode });
 
-  type keyType = keyof typeof DisplayEventsNaming;
+  type keyType = keyof typeof DisplayEventNames;
 
   if (forceMode) {
-    console.log(forceMode, "=>", DisplayEventsNaming[forceMode as keyType]);
-    const ambientMode = DisplayEventsNaming[forceMode as keyType];
+    console.log(forceMode, "=>", DisplayEventNames[forceMode as keyType]);
+    const ambientMode = DisplayEventNames[forceMode as keyType];
 
-    const data = await getEventForAmbientDisplay(ambientMode);
     const allScreens = await getAllScreens();
     allScreens.forEach(async (target) => {
-      await updateScreenStateAndPublish(target.id, data, 1, 10000);
+      const data = await getEventForAmbientDisplay(
+        ambientMode,
+        target.id,
+        10000
+      );
+      if (data !== null) {
+        await updateScreenStateAndPublish(data, target.id, 1);
+      }
     });
-    return json({ forceMode, data }, { status: 200 });
+    return json({ forceMode }, { status: 200 });
   } else {
     return json({ forceMode }, { status: 500 });
   }
