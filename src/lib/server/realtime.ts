@@ -70,6 +70,7 @@ export const publishEvent = async (incoming: SimpleEvent) => {
       ...BROKER_DEFAULTS.nodeJS,
       ...BROKER_DEFAULTS.nodeJS,
       host: PUBLIC_TETHER_HOST,
+      hostname: PUBLIC_TETHER_HOST,
       port: useLocal ? 1883 : 8883,
       protocol: useLocal ? "mqtt" : "mqtts"
     }
@@ -106,6 +107,7 @@ const publishDisplayInstructions = async (
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
       host: PUBLIC_TETHER_HOST,
+      hostname: PUBLIC_TETHER_HOST,
       port: useLocal ? 1883 : 8883,
       protocol: useLocal ? "mqtt" : "mqtts"
     }
@@ -141,6 +143,7 @@ const publishDisplayNotification = async (message: DisplayNotifyServer) => {
     brokerOptions: {
       ...BROKER_DEFAULTS.nodeJS,
       host: PUBLIC_TETHER_HOST,
+      hostname: PUBLIC_TETHER_HOST,
       port: useLocal ? 1883 : 8883,
       protocol: useLocal ? "mqtt" : "mqtts"
     }

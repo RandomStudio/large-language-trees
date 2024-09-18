@@ -4,9 +4,11 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { PLUG_NAMES } from "$lib/constants.js";
   import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
-  import { DisplayEventsNaming } from "$lib/events.types.js";
+  import { DisplayEventNames } from "$lib/events.types.js";
 
-  const modes = Object.keys(DisplayEventsNaming);
+  const modes = Object.keys(DisplayEventNames).filter(
+    (m) => !m.includes("ANNOUNCE")
+  );
   let connected = false;
   let messages: string[] = [];
 
