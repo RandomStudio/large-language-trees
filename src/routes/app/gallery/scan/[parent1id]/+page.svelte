@@ -20,9 +20,9 @@
     SimpleEventNames,
     type EventPollinationStarting
   } from "$lib/events.types";
-  import PollinationWasStartedPopup from "../../PollinationWasStartedPopup.svelte";
   import { BROWSER_CONNECTION } from "../../../../../defaults/tether";
   import { error } from "@sveltejs/kit";
+  import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -245,75 +245,73 @@
   });
 </script>
 
-<Layout title="Let's Pollinate">
-  <div class="mb-[80px]">
-    <p class="pb-4 text-roel_green">
-      Point your camera to another gardeners Pollination QR to start
-      crossbreeding {data.thisPlant.commonName}.
-    </p>
-    <div class="relative shrink flex flex-col">
-      <div
-        class="object-cover aspect-square w-60 place-self-center overflow-hidden rounded-full bg-transparent"
-      >
-        <div class="block relative {errorMessage && 'opacity-30'}">
-          <video
-            bind:this={videoElement}
-            class="object-cover aspect-square pointer-events-none"
-          >
-            <track kind="captions" srclang="en" label="English captions" />
-          </video>
-        </div>
-        <p
-          class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
+{#if otherPlant && otherUser}
+  <NameChildPlant
+    {otherUser}
+    thisUser={data.thisUser}
+    onNameChosen={(nameChosen) => {
+      if (otherPlant && otherUser) {
+        initiateBackgroundRequest(otherUser.id, otherPlant.id, nameChosen)
+          .then(() => {
+            goto(`/app/gallery`);
+          })
+          .catch((e) => {
+            errorMessage = "Error: " + e;
+          });
+      }
+    }}
+  />
+{:else if otherUserStartedPollination}
+  <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
+{:else}
+  <Layout title="Let's Pollinate">
+    <div class="grid grid-rows-[max-content_auto_max-content]">
+      <p class="pb-4 text-roel_green">
+        Point your camera to another gardeners Pollination QR to start
+        crossbreeding {data.thisPlant.commonName}.
+      </p>
+      <div class="relative shrink flex flex-col">
+        <div
+          class="object-cover aspect-square h-full w-full place-self-center overflow-hidden rounded-full bg-transparent"
         >
-          {errorMessage}
-        </p>
-        <PlantDisplay
-          imageUrl={data.thisPlant.imageUrl || ""}
-          applyFilters={false}
-          positionStyles={"absolute -bottom-3 -right-8 -mb-1 w-40 h-40 pointer-events-none"}
+          <div class="block relative {errorMessage && 'opacity-30'}">
+            <video
+              bind:this={videoElement}
+              class="object-cover aspect-square pointer-events-none"
+            >
+              <track kind="captions" srclang="en" label="English captions" />
+            </video>
+          </div>
+          <p
+            class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
+          >
+            {errorMessage}
+          </p>
+          <PlantDisplay
+            imageUrl={data.thisPlant.imageUrl || ""}
+            applyFilters={false}
+            positionStyles={"absolute -bottom-3 -right-8 -mb-1 w-40 h-40 pointer-events-none"}
+          />
+        </div>
+      </div>
+
+      <div class="">
+        <PollinationQrCode
+          plantId={data.thisPlant.id}
+          userId={data.thisUser.id}
         />
       </div>
     </div>
 
-    <div class="mt-2 mx-16 place-self-center shrink-0">
-      <PollinationQrCode
-        plantId={data.thisPlant.id}
-        userId={data.thisUser.id}
+    {#if alreadyExistsPlant}
+      <PopupDejaVu
+        plantDetails={alreadyExistsPlant}
+        handleClose={() => {
+          alreadyExistsPlant = null;
+          otherPlant = null;
+          startQrScanning();
+        }}
       />
-    </div>
-  </div>
-
-  {#if otherPlant && otherUser}
-    <NameChildPlant
-      {otherUser}
-      thisUser={data.thisUser}
-      onNameChosen={(nameChosen) => {
-        if (otherPlant && otherUser) {
-          initiateBackgroundRequest(otherUser.id, otherPlant.id, nameChosen)
-            .then(() => {
-              goto(`/app/gallery`);
-            })
-            .catch((e) => {
-              errorMessage = "Error: " + e;
-            });
-        }
-      }}
-    />
-  {/if}
-
-  {#if alreadyExistsPlant}
-    <PopupDejaVu
-      plantDetails={alreadyExistsPlant}
-      handleClose={() => {
-        alreadyExistsPlant = null;
-        otherPlant = null;
-        startQrScanning();
-      }}
-    />
-  {/if}
-
-  {#if otherUserStartedPollination}
-    <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
-  {/if}
-</Layout>
+    {/if}
+  </Layout>
+{/if}
