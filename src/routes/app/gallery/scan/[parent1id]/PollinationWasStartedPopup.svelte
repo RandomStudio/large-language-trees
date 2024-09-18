@@ -2,8 +2,8 @@
   import { goto } from "$app/navigation";
   import type { CandidatePlant, PublicUserInfo } from "$lib/types";
   import { onMount } from "svelte";
-  import Cta from "../components/Cta.svelte";
-  import Layout from "../components/Layout.svelte";
+  import Cta from "../../../components/Cta.svelte";
+  import Layout from "../../../components/Layout.svelte";
   import { pickRandomElement } from "random-elements";
 
   export let otherUser: PublicUserInfo;
@@ -22,12 +22,13 @@
   });
 </script>
 
-<div class="fixed z-20 top-0 left-0 h-full overflow-auto bg-roel_green pb-32">
-  <Layout title="Hooray!">
-    <div class="text-regular text-small text-roel_green mb-10">
+<Layout title="Hooray!">
+  <div class="grid grid-rows-[max_content_1fr_auto_1fr_max_content_1fr] h-full">
+    <div class="text-regular text-small text-roel_green">
       You and {otherUser.username} gave life to a new seed together.
     </div>
-    <div class="relative">
+    <div />
+    <div class="relative flex items-center justify-center">
       <div class="flex items-center justify-center">
         {#if seedImage}
           <img
@@ -49,9 +50,11 @@
         <source src="/pollination/seedbirth.mov" type="video/quicktime" />
       </video>
     </div>
-    <div class="text-medium text-new_purple py-10">
+    <div />
+    <div class="text-medium text-new_purple flex items-end">
       {otherUser.username} has the privilege to name your new sprout.
     </div>
+    <div />
     <Cta onClick={() => goto(`/app/gallery`)}>Continue</Cta>
-  </Layout>
-</div>
+  </div>
+</Layout>

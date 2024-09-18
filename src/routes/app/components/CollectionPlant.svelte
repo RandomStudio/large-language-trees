@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { LOADING_MESSAGES } from "$lib/constants";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import type { CandidatePlant, SelectPlant, SelectUser } from "$lib/types";
+  import { onMount } from "svelte";
 
   export let authorTopUser: SelectUser | undefined;
   export let authorBottomUser: SelectUser | undefined;
@@ -22,22 +24,50 @@
       return "No name?";
     }
   }
+
+  let currentMessage = LOADING_MESSAGES[0];
+  let animationEl: HTMLDivElement;
+  onMount(() => {
+    let i = 0;
+    let timer: number;
+    const pause = (duration: number) =>
+      new Promise((resolve) => setTimeout(resolve, duration));
+
+    if (!isPending) {
+      return;
+    }
+    const changeMessage = async () => {
+      timer = window.setTimeout(async () => {
+        i = (i + 1) % LOADING_MESSAGES.length;
+        animationEl.classList.add("isAnimating");
+        await pause(500);
+        currentMessage = LOADING_MESSAGES[i];
+        animationEl.classList.remove("isAnimating");
+        await pause(500);
+        requestAnimationFrame(changeMessage);
+      }, 2000);
+    };
+
+    changeMessage();
+    return () => clearTimeout(timer);
+  });
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class="border-new_purple text-new_purple border-2 rounded-[25px] flex flex-col items-center justify-center p-2 mb-8"
+  class="border-new_purple border-2 rounded-[25px] flex flex-col items-center justify-center p-2 mb-8"
   on:click={() => onClick(plant)}
 >
   {#if authorTopUser && authorBottomUser}
-    <p class="text-new_purple font-normal text-center">
+    <p class="font-normal text-center">
       {authorTopUser.username} ♡ {authorBottomUser.username}
     </p>
   {/if}
   <div
-    class="{isPending && 'animate-pulse'} {isReadyToSprout &&
+    class="animationContainer {isReadyToSprout &&
       'shakingAnimation'} text-center"
+    bind:this={animationEl}
   >
     <PlantDisplay
       {disableAnimation}
@@ -47,7 +77,9 @@
 
     {#if isPending}
       <div class="text-xs">{getName(plant)}</div>
-      <div class="text-small mb-2">Digging up plants...</div>
+      <div class="text-small mb-2 rotator">
+        {currentMessage}
+      </div>
     {/if}
 
     {#if isReadyToSprout}
@@ -68,6 +100,19 @@
     animation-play-state: running;
   }
 
+  .animationContainer {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+  .animationContainer.isAnimating {
+    opacity: 0.5;
+  }
+  .rotator {
+    transition: opacity 0.5s ease-out;
+  }
+  .animationContainer.isAnimating .rotator {
+    opacity: 0;
+  }
   @keyframes shake {
     0% {
       transform: translate(0, 0);

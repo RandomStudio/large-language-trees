@@ -147,7 +147,7 @@
   };
 </script>
 
-<Layout title={undefined}>
+<Layout hasScroll title={undefined}>
   {#if !isAppInfoOpen && !selectedPlantForInfo && !candidateChild}
     <TopRightButton
       onClick={() => {
