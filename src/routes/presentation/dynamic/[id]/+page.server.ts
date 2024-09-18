@@ -1,8 +1,8 @@
 import { bRollNaming } from "$lib/events.types";
-import type { PageLoad } from "./$types";
+import type { PageServerLoad } from "./$types";
 import type { PresentationDisplayFrontendState } from "./types";
 
-export const load: PageLoad = ({
+export const load: PageServerLoad = ({
   params
 }): PresentationDisplayFrontendState => {
   return {

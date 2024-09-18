@@ -22,9 +22,8 @@
   import { fade } from "svelte/transition";
 
   import { FADE_DURATION } from "$lib/constants";
-  import { type PageData } from "./$types";
 
-  export let data: PageData;
+  export let data;
 
   let agent: TetherAgent | null = null;
 

@@ -4,8 +4,7 @@ import { redirect, type Handle } from "@sveltejs/kit";
 const publicAccessAllowed = (pathname: string) =>
   pathname.includes("/api/plants") ||
   pathname.includes("/api/images") ||
-  pathname.includes("/presentation/display") ||
-  pathname.includes("/presentation/debug") ||
+  pathname.includes("/presentation") ||
   pathname.includes("/api/events") ||
   pathname.includes("/api/forceDisplay") ||
   pathname.includes("/api/displayNotifyServer");
