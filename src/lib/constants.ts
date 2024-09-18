@@ -1,5 +1,5 @@
 import { Duration } from "luxon";
-import { bRollNaming } from "./events.types";
+import { DisplayEventNames } from "./events.types";
 
 export const GRID_WIDTH = 6;
 export const GRID_HEIGHT = 30;
@@ -19,15 +19,15 @@ export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({
 });
 
 export const DISPLAY_VIEW_WEIGHTINGS = new Map([
-  [bRollNaming.DETAIL_MULTI, 8],
-  [bRollNaming.DETAIL, 8],
-  [bRollNaming.STATUS_FEED, 1],
-  [bRollNaming.ZOOM_OUT, 1],
-  [bRollNaming.ROLL_PAN, 1],
-  [bRollNaming.TOP_LIST, 1],
-  [bRollNaming.STATISTICS_1, 1],
-  [bRollNaming.STATISTICS_2, 1],
-  [bRollNaming.STATISTICS_3, 1]
+  [DisplayEventNames.DETAIL_MULTI, 8],
+  [DisplayEventNames.DETAIL, 8],
+  [DisplayEventNames.STATUS_FEED, 1],
+  [DisplayEventNames.ZOOM_OUT, 1],
+  [DisplayEventNames.ROLL_PAN, 1],
+  [DisplayEventNames.TOP_LIST, 1],
+  [DisplayEventNames.STATISTICS_1, 1],
+  [DisplayEventNames.STATISTICS_2, 1],
+  [DisplayEventNames.STATISTICS_3, 1]
 ]);
 
 /** How many gardens to display in "showMultipleGardens" / ROLL_PAN display */

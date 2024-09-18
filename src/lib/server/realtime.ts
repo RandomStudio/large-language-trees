@@ -12,7 +12,7 @@ import {
 } from "./schema";
 import { count, desc, eq, or } from "drizzle-orm";
 import {
-  bRollNaming,
+  DisplayEventNames,
   SimpleEventNames,
   type DisplayEvent,
   type DisplayFeaturedGarden,
@@ -91,15 +91,14 @@ export const publishEvent = async (incoming: SimpleEvent) => {
 
   const displayEvent = await getDisplayEvent(incoming);
   if (displayEvent) {
-    const { event, priority } = displayEvent;
-    await updateScreenStateAndPublish(event, priority);
+    const { event, priority, targetDisplayId } = displayEvent;
+    await updateScreenStateAndPublish(event, targetDisplayId, priority);
   }
 };
 
 const publishDisplayInstructions = async (
-  targetDisplayId: string,
-  contents: DisplayEvent,
-  timeout: number | null
+  event: DisplayEvent,
+  targetDisplayId: string
 ) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
   const agent = await TetherAgent.create("server", {
@@ -117,16 +116,9 @@ const publishDisplayInstructions = async (
     publishOptions: { qos: 2 }
   });
 
-  console.log("Publishing screen content update", { contents, timeout }, "...");
+  console.log("Publishing screen content update", event.name);
 
-  const message: DisplayEvent = {
-    name: contents.name,
-    targetDisplayId,
-    payload: contents,
-    timeout
-  };
-
-  await plug.publish(encode(message));
+  await plug.publish(encode(event));
 
   await agent.disconnect();
 };
@@ -169,6 +161,7 @@ export const handleDisplayNotification = async (
 ) => {
   const { displayId, event } = message;
 
+  // This is not strictly required, and slows things down
   // await publishDisplayNotification(message);
 
   if (event === "init") {
@@ -187,15 +180,14 @@ export const handleDisplayNotification = async (
     }
 
     const event: DisplayIdle = {
-      name: bRollNaming.IDLE,
+      name: DisplayEventNames.IDLE,
       payload: null,
-      targetDisplayId: message.displayId,
       timeout: IDLE_TIMEOUT
     };
 
     // Add an idle state with a short timeout, so that the new
     // display will be assigned a "B-roll" state soon...
-    await updateScreenStateAndPublish(event, null);
+    await updateScreenStateAndPublish(event, displayId, null);
   }
 
   if (event === "timeout") {
@@ -204,31 +196,47 @@ export const handleDisplayNotification = async (
 
     // check if display is DETAIL_MULTI
     const timeout =
-      pickDisplayType === bRollNaming.DETAIL_MULTI
+      pickDisplayType === DisplayEventNames.DETAIL_MULTI
         ? MULTI_DETAIL_TIMEOUT
         : BROLL_TIMEOUT;
 
     let event = null;
+    let attemptsLeft = 10;
 
-    while (event === null) {
+    while (event === null && attemptsLeft > 0) {
       event = await getEventForAmbientDisplay(
         pickDisplayType,
         displayId,
         timeout
       );
+      attemptsLeft--;
     }
 
-    await updateScreenStateAndPublish(event, null);
+    if (event === null) {
+      console.error("After 10 attempts, no suitable ambient event was found!");
+      console.warn("IDLE event will be sent instead");
+      await updateScreenStateAndPublish(
+        {
+          name: DisplayEventNames.IDLE,
+          payload: null,
+          timeout: IDLE_TIMEOUT
+        },
+        displayId,
+        null
+      );
+    } else {
+      await updateScreenStateAndPublish(event, displayId, null);
+    }
   }
 };
 
 export const getEventForAmbientDisplay = async (
-  pickDisplayType: bRollNaming,
+  pickDisplayType: DisplayEventNames,
   targetDisplayId: string,
   timeout: number
 ): Promise<DisplayEvent | null> => {
   switch (pickDisplayType) {
-    case bRollNaming.DETAIL: {
+    case DisplayEventNames.DETAIL: {
       const allNormalUsers = await db.query.users.findMany({
         where: eq(users.isAdmin, false),
         with: { myGarden: true }
@@ -258,18 +266,17 @@ export const getEventForAmbientDisplay = async (
         return null;
       }
       const event: DisplayFeaturedPlant = {
-        name: bRollNaming.DETAIL,
+        name: DisplayEventNames.DETAIL,
         payload: {
           user: stripUserInfo(pickRandomUser),
           plant: thePlant
         },
-        targetDisplayId,
         timeout
       };
       return event;
     }
 
-    case bRollNaming.DETAIL_MULTI: {
+    case DisplayEventNames.DETAIL_MULTI: {
       const allNormalUsers = await db.query.users.findMany({
         where: eq(users.isAdmin, false),
         with: { myGarden: true }
@@ -309,15 +316,14 @@ export const getEventForAmbientDisplay = async (
       );
 
       const event: DisplayMultipleFeaturedPlants = {
-        name: bRollNaming.DETAIL_MULTI,
+        name: DisplayEventNames.DETAIL_MULTI,
         payload: results,
-        targetDisplayId,
         timeout
       };
       return event;
     }
 
-    case bRollNaming.STATUS_FEED: {
+    case DisplayEventNames.STATUS_FEED: {
       const latestEvents = await db
         .select()
         .from(eventLogs)
@@ -338,7 +344,7 @@ export const getEventForAmbientDisplay = async (
         NUM_GARDENS_MULTI
       );
       const event: DisplayStatusFeed = {
-        name: bRollNaming.STATUS_FEED,
+        name: DisplayEventNames.STATUS_FEED,
         payload: {
           eventLogs: latestEvents.map(
             (entry) => entry.contents as FeedTextEntry
@@ -348,13 +354,12 @@ export const getEventForAmbientDisplay = async (
             plants: g.plants.map((p) => p.plant)
           }))
         },
-        targetDisplayId,
         timeout
       };
       return event;
     }
 
-    case bRollNaming.ROLL_PAN: {
+    case DisplayEventNames.ROLL_PAN: {
       const allGardens = (
         await db.query.gardens.findMany({
           with: { myOwner: true, plants: { with: { plant: true } } }
@@ -370,21 +375,17 @@ export const getEventForAmbientDisplay = async (
       );
 
       const event: DisplayMultipleGardens = {
-        name: bRollNaming.ROLL_PAN,
+        name: DisplayEventNames.ROLL_PAN,
         payload: pickGardens.map((garden) => ({
-          garden: {
-            ...garden,
-            plants: garden.plants.map((p) => p.plant)
-          },
-          user: stripUserInfo(garden.myOwner)
+          ...garden,
+          plants: garden.plants.map((p) => p.plant)
         })),
-        targetDisplayId,
         timeout
       };
       return event;
     }
 
-    case bRollNaming.ZOOM_OUT: {
+    case DisplayEventNames.ZOOM_OUT: {
       const allGardens = (
         await db.query.gardens.findMany({
           with: { myOwner: true, plants: { with: { plant: true } } }
@@ -392,7 +393,7 @@ export const getEventForAmbientDisplay = async (
       ).filter((g) => g.myOwner.isAdmin === false);
       const garden = pickRandomElement(allGardens);
       const event: DisplayFeaturedGarden = {
-        name: bRollNaming.ZOOM_OUT,
+        name: DisplayEventNames.ZOOM_OUT,
         payload: {
           garden: {
             ...garden,
@@ -400,13 +401,12 @@ export const getEventForAmbientDisplay = async (
           },
           user: stripUserInfo(garden.myOwner)
         },
-        targetDisplayId,
         timeout
       };
       return event;
     }
 
-    case bRollNaming.TOP_LIST: {
+    case DisplayEventNames.TOP_LIST: {
       // TODO: This is probably not a slow query, but certainly a very big payload,
       // potentially: it is ALL gardens with ALL plant details for EVERY plant in
       // each garden, plus all user details.
@@ -440,7 +440,7 @@ export const getEventForAmbientDisplay = async (
       }
 
       const event: DisplayLeaderboard = {
-        name: bRollNaming.TOP_LIST,
+        name: DisplayEventNames.TOP_LIST,
         payload: {
           topPollinators: orderedByPlantCount.map((garden) => ({
             username: garden.myOwner.username,
@@ -451,13 +451,12 @@ export const getEventForAmbientDisplay = async (
             plants: topGardenWithPlants.plants.map((p) => p.plant)
           }
         },
-        targetDisplayId,
         timeout
       };
       return event;
     }
 
-    case bRollNaming.STATISTICS_1: {
+    case DisplayEventNames.STATISTICS_1: {
       const allGardens = (
         await db.query.gardens.findMany({
           with: { myOwner: true, plants: true }
@@ -476,18 +475,17 @@ export const getEventForAmbientDisplay = async (
         throw Error("user/plant info missing");
       }
       const event: DisplayPlantGrowingTime = {
-        name: bRollNaming.STATISTICS_1,
+        name: DisplayEventNames.STATISTICS_1,
         payload: {
           plant: pickPlant.plant,
           user: stripUserInfo(user),
           pollinationTimestamp: pickPlant.plantingDate
         },
-        targetDisplayId,
         timeout
       };
       return event;
     }
-    case bRollNaming.STATISTICS_2: {
+    case DisplayEventNames.STATISTICS_2: {
       const [result] = await db.select({ count: count() }).from(plants);
       const allGardens = (
         await db.query.gardens.findMany({
@@ -504,7 +502,7 @@ export const getEventForAmbientDisplay = async (
       );
 
       const event: DisplayPlantCount = {
-        name: bRollNaming.STATISTICS_2,
+        name: DisplayEventNames.STATISTICS_2,
         payload: {
           gardens: pickGardens.map((garden) => ({
             garden: {
@@ -515,13 +513,12 @@ export const getEventForAmbientDisplay = async (
           })),
           count: result.count
         },
-        targetDisplayId,
         timeout
       };
       return event;
     }
 
-    case bRollNaming.STATISTICS_3: {
+    case DisplayEventNames.STATISTICS_3: {
       const allNormalUsers = await db.query.users.findMany({
         where: eq(users.isAdmin, false)
       });
@@ -555,24 +552,22 @@ export const getEventForAmbientDisplay = async (
       );
 
       const event: DisplayPlantPollinationStats = {
-        name: bRollNaming.STATISTICS_3,
+        name: DisplayEventNames.STATISTICS_3,
         payload: {
           plant: pickPlant,
           pollinationCount: asParentCount.length,
           user: stripUserInfo(pickUser)
         },
-        targetDisplayId,
         timeout
       };
 
       return event;
     }
 
-    case bRollNaming.IDLE: {
+    case DisplayEventNames.IDLE: {
       return {
-        name: bRollNaming.IDLE,
+        name: DisplayEventNames.IDLE,
         payload: null,
-        targetDisplayId,
         timeout
       };
     }
@@ -587,7 +582,11 @@ export const getEventForAmbientDisplay = async (
 
 export const getDisplayEvent = async (
   incoming: SimpleEvent
-): Promise<{ event: DisplayEvent; priority: number } | null> => {
+): Promise<{
+  event: DisplayEvent;
+  priority: number;
+  targetDisplayId: string;
+} | null> => {
   switch (incoming.name) {
     case "newUserFirstPlant": {
       const priority = 1;
@@ -595,15 +594,14 @@ export const getDisplayEvent = async (
       if (targetDisplayId) {
         const { user, plant } = incoming.payload;
         const event: DisplayFirstPlant = {
-          name: "newUserFirstPlant",
+          name: DisplayEventNames.ANNOUNCE_FIRST_PLANT,
           payload: {
             plant,
             user
           },
-          targetDisplayId,
           timeout: NEW_USER_TIMEOUT
         };
-        return { event, priority };
+        return { event, priority, targetDisplayId };
       }
     }
     case "newPlantSprouted": {
@@ -635,7 +633,7 @@ export const getDisplayEvent = async (
         });
         if (authorTop && authorBottom && plantTop && plantBottom) {
           const event: DisplayNewPollinatedSprout = {
-            name: "newPlantPollination",
+            name: DisplayEventNames.ANNOUNCE_NEW_SPROUT,
             payload: {
               newPlant: plant,
               authorTop: stripUserInfo(authorTop),
@@ -643,10 +641,9 @@ export const getDisplayEvent = async (
               plantTop,
               plantBottom
             },
-            targetDisplayId,
             timeout: POLLINATION_RESULT_TIMEOUT
           };
-          return { event, priority };
+          return { event, priority, targetDisplayId };
         } else {
           console.error(
             "author(s) not found in DB:",
@@ -695,14 +692,15 @@ export const getAllScreens = async () =>
 /** Publish updates on channel, persist to database */
 export const updateScreenStateAndPublish = async (
   event: DisplayEvent,
+  targetDisplayId: string,
   priority: number | null
 ) => {
-  const { timeout, targetDisplayId } = event;
+  const { timeout } = event;
   await db
     .update(presentationState)
     .set({ contents: event, priority })
     .where(eq(presentationState.id, targetDisplayId));
-  await publishDisplayInstructions(targetDisplayId, event, timeout);
+  await publishDisplayInstructions(event, targetDisplayId);
 };
 
 /** Because of our serverless architecture, we cannot listen using TCP

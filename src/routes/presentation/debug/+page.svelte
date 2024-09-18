@@ -4,9 +4,9 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { PLUG_NAMES } from "$lib/constants.js";
   import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
-  import { bRollNaming } from "$lib/events.types.js";
+  import { DisplayEventsNaming } from "$lib/events.types.js";
 
-  const modes = Object.keys(bRollNaming);
+  const modes = Object.keys(DisplayEventsNaming);
   let connected = false;
   let messages: string[] = [];
 

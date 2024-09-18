@@ -14,6 +14,22 @@
 
   let pan = tweened(StartPosition, { duration });
 
+  const POSITIONS = [
+    {
+      x: 0,
+      y: -150
+    },
+    { x: 50, y: 300 },
+    {
+      x: 300,
+      y: 100
+    },
+    {
+      x: 300,
+      y: 500
+    }
+  ];
+
   onMount(() => {
     pan.set(EndPosition);
   });
@@ -25,46 +41,18 @@
   <div
     style="transform: translateX({$pan}vw) translateY({$pan * 0.4}vw) scale(2);"
   >
-    <DisplayGarden
-      xGarden={0}
-      yGarden={-150}
-      height={700}
-      width={700}
-      garden={gardens.contents[0].garden}
-      showGardenName={true}
-      innerwidth={window.innerWidth}
-      innerheight={window.innerHeight}
-    ></DisplayGarden>
-    <DisplayGarden
-      xGarden={50}
-      yGarden={300}
-      height={700}
-      width={700}
-      garden={gardens.contents[1].garden}
-      showGardenName={true}
-      innerwidth={window.innerWidth}
-      innerheight={window.innerHeight}
-    ></DisplayGarden>
-    <DisplayGarden
-      xGarden={300}
-      yGarden={100}
-      height={700}
-      width={700}
-      garden={gardens.contents[2].garden}
-      showGardenName={true}
-      innerwidth={window.innerWidth}
-      innerheight={window.innerHeight}
-    ></DisplayGarden>
-    <DisplayGarden
-      xGarden={300}
-      yGarden={500}
-      height={700}
-      width={700}
-      garden={gardens.contents[3].garden}
-      showGardenName={true}
-      innerwidth={window.innerWidth}
-      innerheight={window.innerHeight}
-    ></DisplayGarden>
+    {#each gardens.payload as garden, index}
+      <DisplayGarden
+        xGarden={POSITIONS[index].x}
+        yGarden={POSITIONS[index].y}
+        height={700}
+        width={700}
+        {garden}
+        showGardenName={true}
+        innerwidth={window.innerWidth}
+        innerheight={window.innerHeight}
+      ></DisplayGarden>
+    {/each}
   </div>
 
   <div

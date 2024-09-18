@@ -1,4 +1,4 @@
-import { bRollNaming } from "$lib/events.types";
+import { DisplayEventsNaming } from "$lib/events.types";
 import {
   getAllScreens,
   getEventForAmbientDisplay,
@@ -10,11 +10,11 @@ export const POST: RequestHandler = async ({ url }) => {
   const forceMode = url.searchParams.get("mode");
   console.log("/api/forceMode with param", { forceMode });
 
-  type keyType = keyof typeof bRollNaming;
+  type keyType = keyof typeof DisplayEventsNaming;
 
   if (forceMode) {
-    console.log(forceMode, "=>", bRollNaming[forceMode as keyType]);
-    const ambientMode = bRollNaming[forceMode as keyType];
+    console.log(forceMode, "=>", DisplayEventsNaming[forceMode as keyType]);
+    const ambientMode = DisplayEventsNaming[forceMode as keyType];
 
     const data = await getEventForAmbientDisplay(ambientMode);
     const allScreens = await getAllScreens();

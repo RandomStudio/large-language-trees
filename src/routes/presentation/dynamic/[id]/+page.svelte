@@ -14,7 +14,7 @@
   import StatsCount from "./StatsCount.svelte";
   import BRollDetail from "./BRollDetail.svelte";
 
-  import { bRollNaming } from "$lib/events.types";
+  import { DisplayEventNames, type DisplayEvent } from "$lib/events.types";
   import BRollDetailMulti from "./BRollDetailMulti.svelte";
   import StatsPollinations from "./StatsPollinations.svelte";
 
@@ -76,10 +76,10 @@
       { id: data.id }
     );
     instructionsPlug.on("message", (p) => {
-      const m = decode(p) as DisplayUpdateMessage;
+      const m = decode(p) as DisplayEvent;
       console.log(Date.now(), "ReceivedserverInstructDisplays message:", m);
-      const { payload, timeout } = m;
-      data.coDisplayEventtents;
+      const { timeout } = m;
+      data.event = m;
 
       if (timeout) {
         nextTimeout = Date.now() + timeout;
@@ -97,139 +97,142 @@
 </script>
 
 <main class="container">
-  {#if data.contents}
-    {#if data.contents.name == "newUserFirstPlant"}
+  <!-- <code>
+    {JSON.stringify(data.event)}
+  </code> -->
+  {#if data.event}
+    {#if data.event.name == DisplayEventNames.ANNOUNCE_FIRST_PLANT}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
         <NewUserFirstPlant
-          plant={data.contents.contents.plant}
-          gardenerName={data.contents.contents.user.username}
+          plant={data.event.payload.plant}
+          gardenerName={data.event.payload.user.username}
         ></NewUserFirstPlant>
       </div>
     {/if}
 
-    {#if data.contents.name == "newPlantPollination" && data.contents.contents.newPlant.imageUrl}
+    {#if data.event.name == DisplayEventNames.ANNOUNCE_NEW_SPROUT && data.event.payload.newPlant.imageUrl}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
         <PollinationResult
-          plantTop={data.contents.contents.plantTop}
-          plantBottom={data.contents.contents.plantBottom}
-          authorTop={data.contents.contents.authorTop}
-          authorBottom={data.contents.contents.authorBottom}
-          newPlant={data.contents.contents.newPlant}
+          plantTop={data.event.payload.plantTop}
+          plantBottom={data.event.payload.plantBottom}
+          authorTop={data.event.payload.authorTop}
+          authorBottom={data.event.payload.authorBottom}
+          newPlant={data.event.payload.newPlant}
         ></PollinationResult>
       </div>
     {/if}
 
-    {#if data.contents.name == bRollNaming.STATUS_FEED}
+    {#if data.event.name == DisplayEventNames.STATUS_FEED}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
         <BRollStatusFeed
-          eventLogs={data.contents.contents.eventLogs}
-          gardens={data.contents.contents.gardens}
+          eventLogs={data.event.payload.eventLogs}
+          gardens={data.event.payload.gardens}
         ></BRollStatusFeed>
       </div>
     {/if}
 
-    {#if data.contents.name == bRollNaming.DETAIL}
+    {#if data.event.name == DisplayEventNames.DETAIL}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
-        {#key data.contents.contents.plant.id}
+        {#key data.event.payload.plant.id}
           <BRollDetail
-            plant={data.contents.contents.plant}
-            user={data.contents.contents.user}
+            plant={data.event.payload.plant}
+            user={data.event.payload.user}
           ></BRollDetail>
         {/key}
       </div>
     {/if}
 
-    {#if data.contents.name === bRollNaming.DETAIL_MULTI}
+    {#if data.event.name === DisplayEventNames.DETAIL_MULTI}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
-        {#key data.contents.contents}
-          <BRollDetailMulti plantsWithusers={data.contents.contents} />
+        {#key data.event.payload}
+          <BRollDetailMulti plantsWithusers={data.event.payload} />
         {/key}
       </div>
     {/if}
 
-    {#if data.contents.name == bRollNaming.ZOOM_OUT}
+    {#if data.event.name == DisplayEventNames.ZOOM_OUT}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
         <BRollZoomOut
-          garden={data.contents.contents.garden}
-          userName={data.contents.contents.user.username}
+          garden={data.event.payload.garden}
+          userName={data.event.payload.user.username}
         ></BRollZoomOut>
       </div>
     {/if}
 
-    {#if data.contents.name == bRollNaming.ROLL_PAN}
+    {#if data.event.name == DisplayEventNames.ROLL_PAN}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
-        <BRollPan gardens={data.contents}></BRollPan>
+        <BRollPan gardens={data.event.payload}></BRollPan>
       </div>
     {/if}
 
-    {#if data.contents.name == bRollNaming.TOP_LIST}
+    {#if data.event.name == DisplayEventNames.TOP_LIST}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
         <BRollLeaderboard
-          topPollinators={data.contents.contents.topPollinators}
-          topGarden={data.contents.contents.topGarden}
+          topPollinators={data.event.payload.topPollinators}
+          topGarden={data.event.payload.topGarden}
         ></BRollLeaderboard>
       </div>
     {/if}
 
-    {#if data.contents.name == bRollNaming.STATISTICS_1}
+    {#if data.event.name == DisplayEventNames.STATISTICS_1}
       <div class="fixed top-0 left-0" transition:fade>
-        {#key data.contents.contents.plant.imageUrl}
+        {#key data.event.payload.plant.imageUrl}
           <StatsGrowingTime
-            imageUrl={data.contents.contents.plant.imageUrl || ""}
-            plantName={data.contents.contents.plant.commonName}
-            gardenerName={data.contents.contents.user.username}
-            created={data.contents.contents.pollinationTimestamp}
+            imageUrl={data.event.payload.plant.imageUrl || ""}
+            plantName={data.event.payload.plant.commonName}
+            gardenerName={data.event.payload.user.username}
+            created={data.event.payload.pollinationTimestamp}
           ></StatsGrowingTime>
         {/key}
       </div>
     {/if}
 
-    {#if data.contents?.name == bRollNaming.STATISTICS_2}
+    {#if data.event?.name == DisplayEventNames.STATISTICS_2}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
         <StatsCount
-          count={data.contents.contents.count}
-          gardens={data.contents.contents.gardens}
+          count={data.event.payload.count}
+          gardens={data.event.payload.gardens}
         ></StatsCount>
       </div>
     {/if}
 
-    {#if data.contents?.name == bRollNaming.STATISTICS_3}
+    {#if data.event?.name == DisplayEventNames.STATISTICS_3}
       <div
         class="fixed top-0 left-0"
         transition:fade={{ duration: FADE_DURATION }}
       >
-        {#key data.contents.contents.plant.id}
+        {#key data.event.payload.plant.id}
           <StatsPollinations
-            plant={data.contents.contents.plant}
-            pollinationCount={data.contents.contents.pollinationCount}
-            user={data.contents.contents.user}
+            plant={data.event.payload.plant}
+            pollinationCount={data.event.payload.pollinationCount}
+            user={data.event.payload.user}
           ></StatsPollinations>
         {/key}
       </div>

@@ -1,5 +1,5 @@
-import type { DisplayEventContents } from "$lib/events.types";
+import type { DisplayEvent } from "$lib/events.types";
 export interface PresentationDisplayFrontendState {
   id: string;
-  contents: DisplayEventContents;
+  event: DisplayEvent;
 }

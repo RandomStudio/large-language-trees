@@ -9,7 +9,7 @@ import type {
  * They often, in turn, result in a new DisplayUpdateEvent message, however.
  */
 export interface SimpleEvent {
-  name: string;
+  name: SimpleEventNames;
   payload: any;
 }
 
@@ -77,12 +77,8 @@ export interface EventNewSprouting extends SimpleEvent {
  * by the **display** clients.
  */
 export interface DisplayEvent {
-  name: string;
-  /** Which display to target. Should be available in the topic (ID part)
-   * anyway, but provided here for redundancy.
-   */
-  targetDisplayId: string;
-  /** What content needs to be displayed, i.e. a `name` and `payload` */
+  name: DisplayEventNames;
+  /** What content needs to be displayed */
   payload: any;
   /** How long, in ms, before the display should notify the server that
    * it is ready for new content. If omitted, the content will stay
@@ -94,8 +90,25 @@ export interface DisplayEvent {
    */
   timeout: number | null;
 }
+
+export enum DisplayEventNames {
+  IDLE = "idle",
+  STATUS_FEED = "showStatusFeed",
+  DETAIL = "showFeaturedPlant",
+  DETAIL_MULTI = "showMultipleFeaturedPlants",
+  ZOOM_OUT = "showFeaturedGarden",
+  ROLL_PAN = "showMultipleGardens",
+  TOP_LIST = "showLeaderboard",
+  STATISTICS_1 = "showPlantGrowingTime",
+  STATISTICS_2 = "showPlantCount",
+  STATISTICS_3 = "showPlantPollinationCount",
+  ANNOUNCE_FIRST_PLANT = "newUserFirstPlant",
+  ANNOUNCE_POLLINATION_STARTING = "newPollinationStarting",
+  ANNOUNCE_NEW_SPROUT = "newPlantSprouted"
+}
+
 export interface DisplayFirstPlant extends DisplayEvent {
-  name: "newUserFirstPlant";
+  name: DisplayEventNames.ANNOUNCE_FIRST_PLANT;
   payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
@@ -103,12 +116,12 @@ export interface DisplayFirstPlant extends DisplayEvent {
 }
 
 export interface DisplayPollinationStarting extends DisplayEvent {
-  name: "newPollinationStarting";
+  name: DisplayEventNames.ANNOUNCE_POLLINATION_STARTING;
   payload: null;
 }
 
 export interface DisplayNewPollinatedSprout extends DisplayEvent {
-  name: "newPlantPollination";
+  name: DisplayEventNames.ANNOUNCE_NEW_SPROUT;
   payload: {
     newPlant: SelectPlant;
     authorTop: PublicUserInfo;
@@ -125,26 +138,13 @@ export interface FeedTextPart {
 
 export type FeedTextEntry = FeedTextPart[];
 
-export enum bRollNaming {
-  IDLE = "idle",
-  STATUS_FEED = "showStatusFeed",
-  DETAIL = "showFeaturedPlant",
-  DETAIL_MULTI = "showMultipleFeaturedPlants",
-  ZOOM_OUT = "showFeaturedGarden",
-  ROLL_PAN = "showMultipleGardens",
-  TOP_LIST = "showLeaderboard",
-  STATISTICS_1 = "showPlantGrowingTime",
-  STATISTICS_2 = "showPlantCount",
-  STATISTICS_3 = "showPlantPollinationCount"
-}
-
 export interface DisplayStatusFeed extends DisplayEvent {
-  name: bRollNaming.STATUS_FEED;
+  name: DisplayEventNames.STATUS_FEED;
   payload: { gardens: GardenWithPlants[]; eventLogs: FeedTextEntry[] };
 }
 
 export interface DisplayFeaturedPlant extends DisplayEvent {
-  name: bRollNaming.DETAIL;
+  name: DisplayEventNames.DETAIL;
   payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
@@ -152,7 +152,7 @@ export interface DisplayFeaturedPlant extends DisplayEvent {
 }
 
 export interface DisplayMultipleFeaturedPlants extends DisplayEvent {
-  name: bRollNaming.DETAIL_MULTI;
+  name: DisplayEventNames.DETAIL_MULTI;
   payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
@@ -160,7 +160,7 @@ export interface DisplayMultipleFeaturedPlants extends DisplayEvent {
 }
 
 export interface DisplayFeaturedGarden extends DisplayEvent {
-  name: bRollNaming.ZOOM_OUT;
+  name: DisplayEventNames.ZOOM_OUT;
   payload: {
     garden: GardenWithPlants;
     user: PublicUserInfo;
@@ -168,15 +168,12 @@ export interface DisplayFeaturedGarden extends DisplayEvent {
 }
 
 export interface DisplayMultipleGardens extends DisplayEvent {
-  name: bRollNaming.ROLL_PAN;
-  payload: {
-    garden: GardenWithPlants;
-    user: PublicUserInfo;
-  }[];
+  name: DisplayEventNames.ROLL_PAN;
+  payload: GardenWithPlants[];
 }
 
 export interface DisplayLeaderboard extends DisplayEvent {
-  name: bRollNaming.TOP_LIST;
+  name: DisplayEventNames.TOP_LIST;
   payload: {
     topPollinators: {
       username: string;
@@ -187,7 +184,7 @@ export interface DisplayLeaderboard extends DisplayEvent {
 }
 
 export interface DisplayPlantGrowingTime extends DisplayEvent {
-  name: bRollNaming.STATISTICS_1;
+  name: DisplayEventNames.STATISTICS_1;
   payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
@@ -196,7 +193,7 @@ export interface DisplayPlantGrowingTime extends DisplayEvent {
 }
 
 export interface DisplayPlantCount extends DisplayEvent {
-  name: bRollNaming.STATISTICS_2;
+  name: DisplayEventNames.STATISTICS_2;
   payload: {
     gardens: {
       garden: GardenWithPlants;
@@ -207,7 +204,7 @@ export interface DisplayPlantCount extends DisplayEvent {
 }
 
 export interface DisplayPlantPollinationStats extends DisplayEvent {
-  name: bRollNaming.STATISTICS_3;
+  name: DisplayEventNames.STATISTICS_3;
   payload: {
     plant: SelectPlant;
     pollinationCount: number;
@@ -215,6 +212,6 @@ export interface DisplayPlantPollinationStats extends DisplayEvent {
   };
 }
 export interface DisplayIdle extends DisplayEvent {
-  name: bRollNaming.IDLE;
+  name: DisplayEventNames.IDLE;
   payload: null;
 }
