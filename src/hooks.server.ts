@@ -17,7 +17,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   if (publicAccessAllowed(event.url.pathname)) {
-    console.log("Unauthenticated access to", event.url.pathname, "allowed");
+    // console.log("Unauthenticated access to", event.url.pathname, "allowed");
     return resolve(event);
   }
 

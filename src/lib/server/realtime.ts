@@ -10,7 +10,7 @@ import {
   presentationState,
   users
 } from "./schema";
-import { count, desc, eq, isNotNull, or } from "drizzle-orm";
+import { count, desc, eq, or } from "drizzle-orm";
 import {
   bRollNaming,
   type DisplayEventContents,
@@ -326,10 +326,7 @@ export const getDataForAmbientDisplay = async (
           ),
           gardens: gardens.map((g) => ({
             ...g,
-            plantsWithDates: g.plants.map((p) => ({
-              ...p.plant,
-              pollinationDate: p.plantingDate
-            }))
+            plants: g.plants.map((p) => p.plant)
           }))
         }
       };
@@ -355,10 +352,7 @@ export const getDataForAmbientDisplay = async (
         contents: pickGardens.map((garden) => ({
           garden: {
             ...garden,
-            plantsWithDates: garden.plants.map((p) => ({
-              ...p.plant,
-              pollinationDate: p.plantingDate
-            }))
+            plants: garden.plants.map((p) => p.plant)
           },
           user: stripUserInfo(garden.myOwner)
         }))
@@ -369,25 +363,18 @@ export const getDataForAmbientDisplay = async (
     case bRollNaming.ZOOM_OUT: {
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plants: true }
+          with: { myOwner: true, plants: { with: { plant: true } } }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
-      const pickGarden = pickRandomElement(allGardens);
-      const plantsInGarden = await db.query.gardensToPlants.findMany({
-        where: eq(gardensToPlants.gardenId, pickGarden.id),
-        with: { plant: true }
-      });
+      const garden = pickRandomElement(allGardens);
       const contents: DisplayFeaturedGarden = {
         name: bRollNaming.ZOOM_OUT,
         contents: {
           garden: {
-            ...pickGarden,
-            plantsWithDates: plantsInGarden.map((p) => ({
-              ...p.plant,
-              pollinationDate: p.plantingDate
-            }))
+            ...garden,
+            plants: garden.plants.map((p) => p.plant)
           },
-          user: stripUserInfo(pickGarden.myOwner)
+          user: stripUserInfo(garden.myOwner)
         }
       };
       return contents;
@@ -433,10 +420,7 @@ export const getDataForAmbientDisplay = async (
           })),
           topGarden: {
             ...topGardenWithPlants,
-            plantsWithDates: topGardenWithPlants.plants.map((p) => ({
-              ...p.plant,
-              pollinationDate: p.plantingDate
-            }))
+            plants: topGardenWithPlants.plants.map((p) => p.plant)
           }
         }
       };
@@ -493,10 +477,7 @@ export const getDataForAmbientDisplay = async (
           gardens: pickGardens.map((garden) => ({
             garden: {
               ...garden,
-              plantsWithDates: garden.plants.map((p) => ({
-                ...p.plant,
-                pollinationDate: p.plantingDate
-              }))
+              plants: garden.plants.map((p) => p.plant)
             },
             user: stripUserInfo(garden.myOwner)
           })),

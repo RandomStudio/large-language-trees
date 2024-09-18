@@ -22,7 +22,7 @@ export interface EventNewUser extends SimpleEventBody {
 export interface EventFirstPlant extends SimpleEventBody {
   name: "newUserFirstPlant";
   payload: {
-    plant: InsertPlant;
+    plant: SelectPlant;
     user: PublicUserInfo;
   };
 }

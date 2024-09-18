@@ -1,5 +1,4 @@
 import { db } from "./db";
-import { ADMIN_GARDEN_SHARED } from "$env/static/private";
 import DefaultSeeds from "../../defaults/seeds.json";
 import {
   eventLogs,
@@ -13,15 +12,7 @@ import {
   users
 } from "./schema";
 import { eq, isNull } from "drizzle-orm";
-import { GRID_HEIGHT, GRID_WIDTH } from "$lib/constants";
-import type {
-  GardenPlantEntry,
-  InsertPlant,
-  GardenWithPlants,
-  SelectPlant,
-  SelectUser,
-  UserWithGarden
-} from "$lib/types";
+import type { InsertPlant, SelectPlant, SelectUser } from "$lib/types";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
 import { pickRandomElement } from "random-elements";
@@ -130,7 +121,14 @@ export const getUserGardenWithPlants = async (userId: string) => {
       where: eq(users.id, userId)
     });
 
-    const thePlant = await getFirstPlantForUser();
+    const theInsertedPlant = await getFirstPlantForUser();
+    const thePlant = await db.query.plants.findFirst({
+      where: eq(plants.id, theInsertedPlant.id)
+    });
+
+    if (!thePlant) {
+      throw Error("could not find the plant we just added");
+    }
 
     if (thePlant && theUser) {
       const e: EventFirstPlant = {
