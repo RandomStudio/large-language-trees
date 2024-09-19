@@ -6,6 +6,7 @@
   import { PLUG_NAMES } from "$lib/constants";
   import { invalidateAll } from "$app/navigation";
   import type { EventLog } from "$lib/types";
+  import Idle from "../../shared-components/Idle.svelte";
 
   export let data;
 
@@ -49,6 +50,9 @@
   };
 </script>
 
+{#if data.logs.length === 0}
+  <Idle />
+{/if}
 <div
   class="w-screen h-screen items-center justify-center bg-purple-950 text-pink-300"
 >
@@ -61,11 +65,4 @@
       {log}
     </div>
   {/each}
-  <div
-    class="py-8 px-4 w-screen font-primerb text-medium text-purple"
-    class:bg-pink-300={isAlternateColour(data.logs.length, 0)}
-    class:text-purple-950={isAlternateColour(data.logs.length, 0)}
-  >
-    A &#x2665;&#xfe0e; B
-  </div>
 </div>

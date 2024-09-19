@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({}) => {
     .sort((a, b) => b.count - a.count)
     .slice(0, LIMIT_LEADERBOARD);
 
-  // console.log({ gardensWithPlantCounts });
+  console.log({ gardensWithPlantCounts });
 
   const topGarden = gardensWithPlantCounts[0];
 

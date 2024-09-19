@@ -21,6 +21,7 @@
   import { FADE_DURATION, IDLE_TIMEOUT } from "$lib/constants";
   import PollinationStarting from "./PollinationStarting.svelte";
   import type { RefreshDisplays } from "../../../api/displays/types";
+  import Idle from "../../shared-components/Idle.svelte";
 
   export let data;
 
@@ -207,5 +208,7 @@
         {/key}
       </div>
     {/if}
+  {:else}
+    <Idle />
   {/if}
 </main>
