@@ -1,4 +1,14 @@
 <script lang="ts">
+  export let data;
 </script>
 
-Leaderboard view
+{#each data.gardensWithPlantCounts as { user, count }}
+  <div>
+    <span>
+      {user.username}
+    </span>
+    <span>
+      x{count}
+    </span>
+  </div>
+{/each}
