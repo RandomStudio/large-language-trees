@@ -58,6 +58,19 @@
 </div>
 
 <div>
+  Re-initialise dynamic displays:
+  <button
+    class="border-2 border-slate-100 p-2 rounded-md bg-orange-500 text-sm text-slate-50 shadow-md"
+    on:click={async () => {
+      await fetch("/api/displays", { method: "POST" });
+      invalidateAll();
+    }}
+  >
+    RESET
+  </button>
+</div>
+
+<div>
   <h2 class="font-bold text-xl">Test Displays</h2>
   {#each modes as m}
     <button
