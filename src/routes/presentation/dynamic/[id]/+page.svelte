@@ -8,7 +8,6 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
-  import BRollStatusFeed from "./BRollStatusFeed.svelte";
   import BRollPan from "./BRollPan.svelte";
   import StatsCount from "./StatsCount.svelte";
   import BRollDetail from "./BRollDetail.svelte";
@@ -138,15 +137,6 @@
           authorBottom={data.event.payload.authorBottom}
           newPlant={data.event.payload.newPlant}
         ></PollinationResult>
-      </div>
-    {/if}
-
-    {#if data.event.name == DisplayEventNames.STATUS_FEED}
-      <div transition:fade={{ duration: FADE_DURATION }}>
-        <BRollStatusFeed
-          eventLogs={data.event.payload.eventLogs}
-          gardens={data.event.payload.gardens}
-        ></BRollStatusFeed>
       </div>
     {/if}
 

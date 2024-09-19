@@ -95,7 +95,6 @@ export interface DisplayEvent {
 
 export enum DisplayEventNames {
   IDLE = "idle",
-  STATUS_FEED = "showStatusFeed",
   DETAIL = "showFeaturedPlant",
   DETAIL_MULTI = "showMultipleFeaturedPlants",
   ZOOM_OUT = "showFeaturedGarden",
@@ -133,18 +132,6 @@ export interface DisplayNewPollinatedSprout extends DisplayEvent {
     authorTop: PublicUserInfo;
     authorBottom: PublicUserInfo;
   };
-}
-
-export interface FeedTextPart {
-  text: string;
-  highlight?: boolean;
-}
-
-export type FeedTextEntry = FeedTextPart[];
-
-export interface DisplayStatusFeed extends DisplayEvent {
-  name: DisplayEventNames.STATUS_FEED;
-  payload: { gardens: GardenWithPlants[]; eventLogs: FeedTextEntry[] };
 }
 
 export interface DisplayFeaturedPlant extends DisplayEvent {

@@ -10,6 +10,7 @@ export const HEIGHT_PROPERTY_KEY = "heightInMetres";
 
 export const PLUG_NAMES = {
   simpleEvents: "events",
+  eventLogs: "eventLogs",
   displayInstructions: "serverInstructDisplays",
   displayNotifications: "displayNotifyServer"
 };
@@ -21,7 +22,6 @@ export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({
 export const DISPLAY_VIEW_WEIGHTINGS = new Map([
   [DisplayEventNames.DETAIL_MULTI, 8],
   [DisplayEventNames.DETAIL, 8],
-  [DisplayEventNames.STATUS_FEED, 1],
   [DisplayEventNames.ZOOM_OUT, 1],
   [DisplayEventNames.ROLL_PAN, 1],
   [DisplayEventNames.STATISTICS_1, 1],
@@ -35,7 +35,7 @@ export const NUM_GARDENS_MULTI = 5;
 export const LIMIT_LEADERBOARD = 5;
 
 /** The maximum number of latest event logs we need to fetch from the DB */
-export const LIMIT_STATUS_FEED = 7;
+export const LIMIT_STATUS_FEED = 14;
 /** The MINIMUM number of event log entries we need in order to switch to that display */
 export const MIN_STATUS_FEED = 2;
 /** How many entries to cap the table row count; delete where necessary to

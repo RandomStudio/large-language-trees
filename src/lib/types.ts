@@ -1,4 +1,5 @@
 import type {
+  eventLogs,
   gardens,
   gardensToPlants,
   generatedPlants,
@@ -33,6 +34,8 @@ export type GeneratedImage = typeof generatedPlants.$inferSelect;
 export type SelectPromptSettings = typeof promptSettingsTable.$inferInsert;
 
 export type PresentationDisplayState = typeof presentationState.$inferInsert;
+
+export type EventLog = typeof eventLogs.$inferSelect;
 
 export interface PlantWithDate extends SelectPlant {
   pollinationDate: Date;

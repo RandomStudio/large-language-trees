@@ -163,8 +163,8 @@ const initTextGeneration = async (
   } else {
     const { status, statusText } = aiRes;
     console.error("Request failed with error:", { status, statusText });
-    if (status === 429) {
-      console.warn("Rate limit detected");
+    if (status == 429) {
+      console.error("Rate limit detected");
     }
     throw Error("Request to OpenAI failed: " + statusText);
   }

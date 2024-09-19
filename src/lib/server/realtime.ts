@@ -26,8 +26,10 @@ import {
   type DisplayPlantGrowingTime,
   type DisplayPlantPollinationStats,
   type DisplayPollinationStarting,
-  type DisplayStatusFeed,
-  type FeedTextEntry,
+  type EventFirstPlant,
+  type EventNewSprouting,
+  type EventNewUser,
+  type EventPollinationStarting,
   type SimpleEvent
 } from "$lib/events.types";
 import {
@@ -40,9 +42,6 @@ import { stripUserInfo } from "$lib/security";
 import {
   BROLL_TIMEOUT,
   DISPLAY_VIEW_WEIGHTINGS,
-  LIMIT_LEADERBOARD,
-  LIMIT_STATUS_FEED,
-  MIN_STATUS_FEED,
   MULTIPLE_FEATURED_PLANTS_COUNT,
   POLLINATION_RESULT_TIMEOUT,
   NEW_USER_TIMEOUT,
@@ -54,6 +53,7 @@ import {
 } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 import type { RefreshDisplays } from "../../routes/api/displays/types";
+import type { EventLog } from "$lib/types";
 
 /**
  * Server-side publishing of a SimpleEvent, i.e a relay from
@@ -339,42 +339,6 @@ export const getEventForAmbientDisplay = async (
       const event: DisplayMultipleFeaturedPlants = {
         name: DisplayEventNames.DETAIL_MULTI,
         payload: results,
-        timeout
-      };
-      return event;
-    }
-
-    case DisplayEventNames.STATUS_FEED: {
-      const latestEvents = await db
-        .select()
-        .from(eventLogs)
-        .orderBy(desc(eventLogs.timestamp))
-        .limit(LIMIT_STATUS_FEED);
-      if (latestEvents.length < MIN_STATUS_FEED) {
-        console.log(
-          `Not enough event logs (${latestEvents.length} < ${MIN_STATUS_FEED}) to show this view`
-        );
-      }
-      const allGardens = (
-        await db.query.gardens.findMany({
-          with: { myOwner: true, plants: { with: { plant: true } } }
-        })
-      ).filter((g) => g.myOwner.isAdmin === false);
-      const pickGarden = pickMultipleRandomElements(
-        allGardens,
-        NUM_GARDENS_MULTI
-      );
-      const event: DisplayStatusFeed = {
-        name: DisplayEventNames.STATUS_FEED,
-        payload: {
-          eventLogs: latestEvents.map(
-            (entry) => entry.contents as FeedTextEntry
-          ),
-          gardens: pickGarden.map((g) => ({
-            ...g,
-            plants: g.plants.map((p) => p.plant)
-          }))
-        },
         timeout
       };
       return event;
@@ -705,60 +669,63 @@ export const updateScreenStateAndPublish = async (
  */
 export const logSimpleEvents = async (event: SimpleEvent) => {
   const contents = await eventToLog(event);
-  await db.insert(eventLogs).values({ id: uuidv4(), contents });
+  if (contents) {
+    const res = await db
+      .insert(eventLogs)
+      .values({ id: uuidv4(), contents })
+      .returning();
+    await publishEventLogUpdate(res[0]);
+  }
 };
 
-const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
+const publishEventLogUpdate = async (entry: EventLog) => {
+  const useLocal = PUBLIC_TETHER_HOST === "localhost";
+  const agent = await TetherAgent.create("presentation", {
+    loglevel: "warn",
+    brokerOptions: {
+      ...BROKER_DEFAULTS.nodeJS,
+      host: PUBLIC_TETHER_HOST,
+      hostname: PUBLIC_TETHER_HOST,
+      port: useLocal ? 1883 : 8883,
+      protocol: useLocal ? "mqtt" : "mqtts"
+    }
+  });
+
+  const plug = new OutputPlug(agent, PLUG_NAMES.eventLogs, {
+    publishOptions: { qos: 1 }
+  });
+
+  await plug.publish(encode(entry));
+};
+
+const eventToLog = async (event: SimpleEvent): Promise<string | null> => {
   switch (event.name) {
     case SimpleEventNames.NEW_USER: {
-      return [
-        {
-          text: event.payload.username,
-          highlight: true
-        },
-        {
-          text: "just joined"
-        }
-      ];
+      const { payload } = event as EventNewUser;
+      return `${payload.username} entered the garden`;
     }
     case SimpleEventNames.FIRST_PLANT: {
-      return [
-        {
-          text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
-          highlight: true
-        },
-        {
-          text: "just sprouted in the Garden"
-        }
-      ];
+      const { payload } = event as EventFirstPlant;
+      return `${payload.user.username}'s ${payload.plant.commonName} just sprouted in the Garden`;
     }
     case SimpleEventNames.POLLINATION_COMPLETE: {
-      const { parent1, parent2 } = event.payload;
+      const { payload } = event as EventNewSprouting;
+      const { parent1, parent2, commonName } = payload;
       if (!parent1 || !parent2) {
-        throw Error("parents not in payload: " + JSON.stringify(event.payload));
+        throw Error("no parents for this plant; new sprout?");
       }
-      const plantTop = await db.query.plants.findFirst({
-        where: eq(plants.id, parent1)
-      });
-      const plantBottom = await db.query.plants.findFirst({
-        where: eq(plants.id, parent2)
-      });
-      if (!plantTop || !plantBottom) {
-        throw Error(
-          "Failed to find plant details for " +
-            JSON.stringify({ plantTop, plantBottom })
-        );
-      }
-      const { authorTop, authorBottom } = event.payload;
+      const { authorTop, authorBottom } = payload;
       if (!authorTop || !authorBottom) {
         throw Error(
           "Missing user IDS for " + JSON.stringify({ authorTop, authorBottom })
         );
       }
       const authorTopUser = await db.query.users.findFirst({
+        columns: { id: true, username: true },
         where: eq(users.id, authorTop)
       });
       const authorBottomUser = await db.query.users.findFirst({
+        columns: { id: true, username: true },
         where: eq(users.id, authorBottom)
       });
 
@@ -768,36 +735,16 @@ const eventToLog = async (event: SimpleEvent): Promise<FeedTextEntry> => {
             JSON.stringify({ authorTop, authorBottom })
         );
       }
-      return [
-        {
-          text: `${authorTopUser.username}'s ${plantTop.commonName}`,
-          highlight: true
-        },
-        {
-          text: "just pollinated"
-        },
-        {
-          text: `${authorBottomUser.username}'s ${plantBottom.commonName}`,
-          highlight: true
-        }
-      ];
+      return `${commonName} sprouted by ${authorTopUser.username} ❤️ ${authorBottomUser.username}`;
     }
-    // case "newTopPollinator": {
-    //   return [
-    //     {
-    //       text: `${event.payload.user.username}'s ${event.payload.plant.commonName}`,
-    //       highlight: true
-    //     },
-    //     {
-    //       text: "just became top pollinator"
-    //     }
-    //   ];
-    // }
-    case "newPollinationStarting": {
-      return [];
+
+    case SimpleEventNames.POLLINATION_STARTING: {
+      const { payload } = event as EventPollinationStarting;
+      const { authorTop, authorBottom } = payload;
+      return `${authorTop.username} is pollinating ${authorBottom.username}`;
     }
-    case "newGeneratedPlantReady": {
-      return []; // TODO: this entry should be ignored entirely
+    case SimpleEventNames.CANDIDATE_READY: {
+      return null;
     }
     default: {
       throw Error(`unknown event "${event}"`);

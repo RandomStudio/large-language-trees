@@ -146,6 +146,12 @@ const tryGenerate = async (
   } else {
     const { status, statusText } = aiRes;
     console.error("Request failed with error:", { status, statusText });
+    if (status === 400) {
+      console.warn("Bad request detected; will try again");
+      return {
+        shouldRetry: true
+      };
+    }
     if (status === 429) {
       console.warn("Rate limit detected; will try again");
       return {

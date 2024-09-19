@@ -209,6 +209,6 @@ export const presentationState = pgTable("presentation_state", {
  */
 export const eventLogs = pgTable("event_logs", {
   id: text("id").primaryKey(),
-  contents: json("contents").notNull(),
+  contents: text("contents").notNull(),
   timestamp: timestamp("added", { withTimezone: true }).notNull().defaultNow()
 });
