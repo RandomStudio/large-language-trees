@@ -100,7 +100,6 @@ export enum DisplayEventNames {
   ZOOM_OUT = "showFeaturedGarden",
   ROLL_PAN = "showMultipleGardens",
   STATISTICS_1 = "showPlantGrowingTime",
-  STATISTICS_2 = "showPlantCount",
   STATISTICS_3 = "showPlantPollinationCount",
   ANNOUNCE_FIRST_PLANT = "newUserFirstPlant",
   ANNOUNCE_POLLINATION_STARTING = "newPollinationStarting",
@@ -169,17 +168,6 @@ export interface DisplayPlantGrowingTime extends DisplayEvent {
     plant: SelectPlant;
     user: PublicUserInfo;
     pollinationTimestamp: Date;
-  };
-}
-
-export interface DisplayPlantCount extends DisplayEvent {
-  name: DisplayEventNames.STATISTICS_2;
-  payload: {
-    gardens: {
-      garden: GardenWithPlants;
-      user: PublicUserInfo;
-    }[];
-    count: number;
   };
 }
 

@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ params }) => {
     const user = await db.query.users.findFirst({
       where: eq(users.id, id),
       with: {
-        myGarden: { with: { plantsInGarden: { with: { plant: true } } } }
+        myGarden: { with: { plants: { with: { plant: true } } } }
       }
     });
     if (user) {

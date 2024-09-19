@@ -9,7 +9,6 @@
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollPan from "./BRollPan.svelte";
-  import StatsCount from "./StatsCount.svelte";
   import BRollDetail from "./BRollDetail.svelte";
 
   import { DisplayEventNames, type DisplayEvent } from "$lib/events.types";
@@ -188,15 +187,6 @@
             created={data.event.payload.pollinationTimestamp}
           ></StatsGrowingTime>
         {/key}
-      </div>
-    {/if}
-
-    {#if data.event?.name == DisplayEventNames.STATISTICS_2}
-      <div transition:fade={{ duration: FADE_DURATION }}>
-        <StatsCount
-          count={data.event.payload.count}
-          gardens={data.event.payload.gardens}
-        ></StatsCount>
       </div>
     {/if}
 

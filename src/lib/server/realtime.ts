@@ -22,7 +22,6 @@ import {
   type DisplayMultipleFeaturedPlants,
   type DisplayMultipleGardens,
   type DisplayNewPollinatedSprout,
-  type DisplayPlantCount,
   type DisplayPlantGrowingTime,
   type DisplayPlantPollinationStats,
   type DisplayPollinationStarting,
@@ -53,7 +52,7 @@ import {
 } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 import type { RefreshDisplays } from "../../routes/api/displays/types";
-import type { EventLog } from "$lib/types";
+import type { EventLog, GardenWithPlants, SelectGarden } from "$lib/types";
 
 /**
  * Server-side publishing of a SimpleEvent, i.e a relay from
@@ -256,6 +255,26 @@ export const handleDisplayNotification = async (
   }
 };
 
+const gardensToNestedPlants = async (
+  gardenEntries: SelectGarden[]
+): Promise<GardenWithPlants[]> => {
+  const queries = gardenEntries.map(async (g) => {
+    const gardenWithPlants = await db.query.gardens.findFirst({
+      where: eq(gardens.id, g.id),
+      with: { plants: { with: { plant: true } } }
+    });
+    if (!gardenWithPlants) {
+      throw Error("garden should match");
+    }
+    return gardenWithPlants;
+  });
+  const res = (await Promise.all(queries)).map((g) => ({
+    ...g,
+    plants: g.plants.map((p) => p.plant)
+  }));
+  return res;
+};
+
 export const getEventForAmbientDisplay = async (
   pickDisplayType: DisplayEventNames,
   timeout: number
@@ -351,24 +370,25 @@ export const getEventForAmbientDisplay = async (
     case DisplayEventNames.ROLL_PAN: {
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plants: { with: { plant: true } } }
+          // note plants are just bare relation details,
+          // not full plant contents!
+          with: { myOwner: true, plants: true }
         })
-      ).filter((g) => g.myOwner.isAdmin === false);
+      ).filter((g) => g.myOwner.isAdmin === false && g.plants.length > 0);
       if (allGardens.length < 5) {
         console.log("Not enough gardens to display count=" + NUM_GARDENS_MULTI);
         return null;
       }
+      const gardensWithPlants = await gardensToNestedPlants(allGardens);
+
       const pickGardens = pickMultipleRandomElements(
-        allGardens,
+        gardensWithPlants,
         NUM_GARDENS_MULTI
       );
 
       const event: DisplayMultipleGardens = {
         name: DisplayEventNames.ROLL_PAN,
-        payload: pickGardens.map((garden) => ({
-          ...garden,
-          plants: garden.plants.map((p) => p.plant)
-        })),
+        payload: pickGardens,
         timeout
       };
       return event;
@@ -377,18 +397,28 @@ export const getEventForAmbientDisplay = async (
     case DisplayEventNames.ZOOM_OUT: {
       const allGardens = (
         await db.query.gardens.findMany({
-          with: { myOwner: true, plants: { with: { plant: true } } }
+          // note plants are just bare relation details,
+          // not full plant contents!
+          with: { myOwner: true, plants: true }
         })
       ).filter((g) => g.myOwner.isAdmin === false);
-      const garden = pickRandomElement(allGardens);
+
+      const gardensWithPlants = await gardensToNestedPlants(allGardens);
+
+      const garden = pickRandomElement(gardensWithPlants);
+      const myOwner = allGardens.find(
+        (g) => g.myOwner.id === garden.userId
+      )?.myOwner;
+
+      if (!myOwner) {
+        throw Error("owner could not be linked back to garden");
+      }
+
       const event: DisplayFeaturedGarden = {
         name: DisplayEventNames.ZOOM_OUT,
         payload: {
-          garden: {
-            ...garden,
-            plants: garden.plants.map((p) => p.plant)
-          },
-          user: stripUserInfo(garden.myOwner)
+          garden,
+          user: stripUserInfo(myOwner)
         },
         timeout
       };
@@ -398,13 +428,15 @@ export const getEventForAmbientDisplay = async (
     case DisplayEventNames.STATISTICS_1: {
       const allGardens = (
         await db.query.gardens.findMany({
+          // note plants are just bare relation details,
+          // not full plant contents!
           with: { myOwner: true, plants: true }
         })
-      ).filter((g) => g.myOwner.isAdmin === false);
+      ).filter((g) => g.myOwner.isAdmin === false && g.plants.length > 0);
       const pickGarden = pickRandomElement(allGardens);
       const plantsInGarden = await db.query.gardensToPlants.findMany({
-        with: { plant: true },
-        where: eq(gardensToPlants.gardenId, pickGarden.id)
+        where: eq(gardensToPlants.gardenId, pickGarden.id),
+        with: { plant: true }
       });
       const pickPlant = pickRandomElement(plantsInGarden);
       const user = await db.query.users.findFirst({
@@ -419,41 +451,6 @@ export const getEventForAmbientDisplay = async (
           plant: pickPlant.plant,
           user: stripUserInfo(user),
           pollinationTimestamp: pickPlant.plantingDate
-        },
-        timeout
-      };
-      return event;
-    }
-    case DisplayEventNames.STATISTICS_2: {
-      const [result] = await db.select({ count: count() }).from(plants);
-      const allGardens = (
-        await db.query.gardens.findMany({
-          with: {
-            plants: { with: { plant: true } },
-            myOwner: true
-          }
-        })
-      ).filter((g) => g.myOwner.isAdmin === false);
-
-      if (allGardens.length === 0) {
-        throw Error("no gardens (yet)");
-      }
-      const pickGardens = pickMultipleRandomElements(
-        allGardens,
-        NUM_GARDENS_MULTI
-      );
-
-      const event: DisplayPlantCount = {
-        name: DisplayEventNames.STATISTICS_2,
-        payload: {
-          gardens: pickGardens.map((garden) => ({
-            garden: {
-              ...garden,
-              plants: garden.plants.map((p) => p.plant)
-            },
-            user: stripUserInfo(garden.myOwner)
-          })),
-          count: result.count
         },
         timeout
       };
@@ -474,8 +471,6 @@ export const getEventForAmbientDisplay = async (
       if (!pickUser) {
         throw Error("no user to pick");
       }
-
-      // console.log("pick user", pickUser.username, "from", allNormalUsers);
 
       const userPlants = await db.query.plants.findMany({
         where: or(
