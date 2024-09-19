@@ -5,6 +5,7 @@
   import { PLUG_NAMES } from "$lib/constants";
   import { SimpleEventNames } from "$lib/events.types";
   import { invalidateAll } from "$app/navigation";
+  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
 
   export let data;
 
@@ -41,6 +42,12 @@
     Most Active<br />
     Pollinators
   </div>
+
+  <DisplayGarden
+    width={window.innerWidth}
+    garden={data.topGardenWithPlants}
+    yGarden={window.innerHeight / 8}
+  />
 
   <div
     class="w-screen text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"

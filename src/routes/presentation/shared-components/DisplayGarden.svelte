@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { GardenWithPlants, SelectPlant } from "$lib/types";
-  import { beforeUpdate } from "svelte";
+  import { beforeUpdate, onMount } from "svelte";
 
   export let garden: GardenWithPlants;
   export let width = 1000;
-  export let height = 1000;
-  export let xGarden = 500;
-  export let yGarden = 200;
+  export let height = width;
+  export let xGarden = 0;
+  export let yGarden = 0;
   export let showGardenName = true;
   export let showPlantName = false;
   export let colorBGText = "roel_green";
@@ -25,8 +25,21 @@
   xGarden = convertWidth(xGarden, innerwidth);
   yGarden = convertHeight(yGarden, innerheight);
 
+  interface PlantPosition extends SelectPlant {
+    x: number;
+    y: number;
+    size: number;
+    zIndex: number;
+    grasses: {
+      x: number;
+      y: number;
+      size: number;
+      zIndexGrass: number;
+    }[];
+  }
+
   let plantProportion = 0.6;
-  let positions: PlantPosition[];
+  let positions: PlantPosition[] = [];
 
   function convertHeight(y: number, innerheight: number) {
     return (y * innerheight) / previousHeight;
@@ -64,19 +77,6 @@
     const proportionalSize = baseScale + heightProportion * baseScale;
 
     return proportionalSize;
-  }
-
-  interface PlantPosition extends SelectPlant {
-    x: number;
-    y: number;
-    size: number;
-    zIndex: number;
-    grasses: {
-      x: number;
-      y: number;
-      size: number;
-      zIndexGrass: number;
-    }[];
   }
 
   function randomizePositions(plantsInGarden: SelectPlant[]): PlantPosition[] {

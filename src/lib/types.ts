@@ -7,7 +7,6 @@ import type {
   promptSettingsTable,
   users
 } from "$lib/server/schema";
-import type { DateTime } from "luxon";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 export type SelectPlant = typeof plants.$inferSelect;
