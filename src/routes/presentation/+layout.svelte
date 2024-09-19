@@ -2,6 +2,6 @@
   import "../../index.css";
 </script>
 
-<div>
+<div class="fixed top-0 left-0">
   <slot />
 </div>
