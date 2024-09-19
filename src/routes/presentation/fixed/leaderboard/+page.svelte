@@ -1,5 +1,37 @@
 <script lang="ts">
+  import { onDestroy, onMount } from "svelte";
+  import { InputPlug, TetherAgent } from "tether-agent";
+  import { BROWSER_CONNECTION } from "../../../../defaults/tether";
+  import { PLUG_NAMES } from "$lib/constants";
+  import { SimpleEventNames } from "$lib/events.types";
+  import { invalidateAll } from "$app/navigation";
+
   export let data;
+
+  let agent: TetherAgent | null = null;
+
+  onMount(async () => {
+    agent = await TetherAgent.create("presentation", {
+      brokerOptions: BROWSER_CONNECTION,
+      id: "leaderboard"
+    });
+
+    const newSproutPlug = await InputPlug.create(
+      agent,
+      PLUG_NAMES.simpleEvents,
+      { id: SimpleEventNames.POLLINATION_COMPLETE }
+    );
+    newSproutPlug.on("message", (payload) => {
+      console.log("new sprouting; recalculate leaderboard...");
+      invalidateAll();
+    });
+  });
+
+  onDestroy(() => {
+    if (agent) {
+      agent.disconnect();
+    }
+  });
 </script>
 
 <div class="w-screen h-screen items-center justify-center standard-gradient">

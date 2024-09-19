@@ -15,7 +15,9 @@
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
   import {
     type EventNewSprouting,
-    type EventGeneratedPlantReady
+    type EventGeneratedPlantReady,
+    DisplayEventNames,
+    SimpleEventNames
   } from "$lib/events.types";
   import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
@@ -68,7 +70,7 @@
       agent,
       PLUG_NAMES.simpleEvents,
       {
-        id: "newPlantSprouted"
+        id: SimpleEventNames.POLLINATION_COMPLETE
       }
     );
     newPlantAdded.on("message", (payload) => {
@@ -86,7 +88,7 @@
       agent,
       PLUG_NAMES.simpleEvents,
       {
-        id: "newGeneratedPlantReady"
+        id: SimpleEventNames.CANDIDATE_READY
       }
     );
     newCandidatePlantReady.on("message", (payload) => {
