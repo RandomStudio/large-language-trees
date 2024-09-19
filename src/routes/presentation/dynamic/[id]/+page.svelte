@@ -9,7 +9,7 @@
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
-  import BRollLeaderboard from "./BRollLeaderboard.svelte";
+  import BRollLeaderboard from "../../fixed/leaderboard/+page.svelte";
   import BRollPan from "./BRollPan.svelte";
   import StatsCount from "./StatsCount.svelte";
   import BRollDetail from "./BRollDetail.svelte";
@@ -196,18 +196,6 @@
         transition:fade={{ duration: FADE_DURATION }}
       >
         <BRollPan gardens={data.event.payload}></BRollPan>
-      </div>
-    {/if}
-
-    {#if data.event.name == DisplayEventNames.TOP_LIST}
-      <div
-        class="fixed top-0 left-0"
-        transition:fade={{ duration: FADE_DURATION }}
-      >
-        <BRollLeaderboard
-          topPollinators={data.event.payload.topPollinators}
-          topGarden={data.event.payload.topGarden}
-        ></BRollLeaderboard>
       </div>
     {/if}
 

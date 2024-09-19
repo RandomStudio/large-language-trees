@@ -19,7 +19,6 @@ import {
   type DisplayFeaturedPlant,
   type DisplayFirstPlant,
   type DisplayIdle,
-  type DisplayLeaderboard,
   type DisplayMultipleFeaturedPlants,
   type DisplayMultipleGardens,
   type DisplayNewPollinatedSprout,
@@ -400,56 +399,6 @@ export const getEventForAmbientDisplay = async (
             plants: garden.plants.map((p) => p.plant)
           },
           user: stripUserInfo(garden.myOwner)
-        },
-        timeout
-      };
-      return event;
-    }
-
-    case DisplayEventNames.TOP_LIST: {
-      // TODO: This is probably not a slow query, but certainly a very big payload,
-      // potentially: it is ALL gardens with ALL plant details for EVERY plant in
-      // each garden, plus all user details.
-      // An orderBy + LIMIT would probably help, but this would require a join.
-      const allGardens = (
-        await db.query.gardens.findMany({
-          with: { myOwner: true, plants: true }
-        })
-      ).filter((g) => g.myOwner.isAdmin === false);
-
-      if (allGardens.length < LIMIT_LEADERBOARD) {
-        console.log("Not enough gardens for leaderboard");
-        return null;
-      }
-
-      const orderedByPlantCount = allGardens
-        .filter((g) => g.myOwner.isAdmin === false)
-        .sort((a, b) => {
-          return b.plants.length - a.plants.length;
-        })
-        .slice(0, LIMIT_LEADERBOARD);
-
-      const topGarden = orderedByPlantCount[0];
-      const topGardenWithPlants = await db.query.gardens.findFirst({
-        where: eq(gardens.id, topGarden.id),
-        with: { plants: { with: { plant: true } } }
-      });
-      if (!topGardenWithPlants) {
-        console.log("failed to load top garden with plants");
-        return null;
-      }
-
-      const event: DisplayLeaderboard = {
-        name: DisplayEventNames.TOP_LIST,
-        payload: {
-          topPollinators: orderedByPlantCount.map((garden) => ({
-            username: garden.myOwner.username,
-            count: garden.plants.length
-          })),
-          topGarden: {
-            ...topGardenWithPlants,
-            plants: topGardenWithPlants.plants.map((p) => p.plant)
-          }
         },
         timeout
       };

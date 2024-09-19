@@ -100,7 +100,6 @@ export enum DisplayEventNames {
   DETAIL_MULTI = "showMultipleFeaturedPlants",
   ZOOM_OUT = "showFeaturedGarden",
   ROLL_PAN = "showMultipleGardens",
-  TOP_LIST = "showLeaderboard",
   STATISTICS_1 = "showPlantGrowingTime",
   STATISTICS_2 = "showPlantCount",
   STATISTICS_3 = "showPlantPollinationCount",
@@ -175,17 +174,6 @@ export interface DisplayFeaturedGarden extends DisplayEvent {
 export interface DisplayMultipleGardens extends DisplayEvent {
   name: DisplayEventNames.ROLL_PAN;
   payload: GardenWithPlants[];
-}
-
-export interface DisplayLeaderboard extends DisplayEvent {
-  name: DisplayEventNames.TOP_LIST;
-  payload: {
-    topPollinators: {
-      username: string;
-      count: number;
-    }[];
-    topGarden: GardenWithPlants;
-  };
 }
 
 export interface DisplayPlantGrowingTime extends DisplayEvent {

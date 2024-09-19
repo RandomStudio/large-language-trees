@@ -15,6 +15,7 @@
 
   let formEl: HTMLFormElement;
   let isSubmitting = false;
+
   const handleSubmit = async (event: Event) => {
     if (isSubmitting) {
       event.preventDefault();
@@ -98,15 +99,22 @@
             Error: {form.message}
           </p>
           {#if form?.existingUser}
-            <p>
-              Choose a different username, or <button
-                data-umami-event="Login Anyway"
-                data-test="login-anyway"
-                class="underline"
-                formaction="?/loginExistingUser">log in</button
-              >
-              as <span class="font-bold">{form.existingUser.username}</span> instead
-            </p>
+            <form method="POST" action="?/loginExistingUser">
+              <input
+                type="hidden"
+                name="username"
+                value={form.existingUser.username}
+              />
+              <input type="hidden" name="password" value={"123456"} />
+              <p>
+                Choose a different username, or <button
+                  data-umami-event="Login Anyway"
+                  data-test="login-anyway"
+                  class="underline">log in</button
+                >
+                as <span class="font-bold">{form.existingUser.username}</span> instead
+              </p>
+            </form>
           {/if}
         </div>
       {:else}

@@ -108,6 +108,7 @@ export const actions = {
     const formData = await event.request.formData();
     const username = formData.get("username");
     const password = formData.get("password");
+    console.log({ username, password });
 
     if (!username || typeof username !== "string") {
       console.error("username error", username, typeof username);
