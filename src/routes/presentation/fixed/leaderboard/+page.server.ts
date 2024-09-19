@@ -12,6 +12,7 @@ export const load: PageServerLoad = async ({}) => {
   });
 
   const gardensWithPlantCounts = gardenPlants
+    .filter((g) => g.myOwner.isAdmin === false)
     .map((g) => ({
       gardenId: g.id,
       user: stripUserInfo(g.myOwner),
