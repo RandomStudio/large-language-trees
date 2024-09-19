@@ -78,7 +78,7 @@
       <h3 class="font-bold border-b-slate-200 border-b-2">
         Display "{display.id}":
         <a
-          href={`/presentation/display/${display.id}`}
+          href={`/presentation/dynamic/${display.id}`}
           target="_blank"
           rel="noopener"
         >
