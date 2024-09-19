@@ -22,6 +22,7 @@
 
   import { FADE_DURATION, IDLE_TIMEOUT } from "$lib/constants";
   import PollinationStarting from "./PollinationStarting.svelte";
+  import type { RefreshDisplays } from "../../../api/displays/types";
 
   export let data;
 
@@ -85,6 +86,15 @@
       if (timeout) {
         nextTimeout = Date.now() + timeout;
         console.log("update nextTimeout to", nextTimeout);
+      }
+    });
+
+    const refreshPlug = await InputPlug.create(agent, "refresh");
+    refreshPlug.on("message", (payload) => {
+      const m = decode(payload) as RefreshDisplays;
+      if (m.action === "reload") {
+        console.info("Server requested reload...");
+        location.reload();
       }
     });
   });

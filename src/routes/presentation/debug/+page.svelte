@@ -5,6 +5,7 @@
   import { PLUG_NAMES } from "$lib/constants.js";
   import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
   import { DisplayEventNames } from "$lib/events.types.js";
+  import { stringify } from "postcss";
 
   const modes = Object.keys(DisplayEventNames).filter(
     (m) => !m.includes("ANNOUNCE")
@@ -62,11 +63,29 @@
   <button
     class="border-2 border-slate-100 p-2 rounded-md bg-orange-500 text-sm text-slate-50 shadow-md"
     on:click={async () => {
-      await fetch("/api/displays", { method: "POST" });
+      await fetch("/api/displays", {
+        method: "POST",
+        body: JSON.stringify({
+          action: "init"
+        })
+      });
       invalidateAll();
     }}
   >
     RESET
+  </button>
+  <button
+    class="border-2 border-slate-100 p-2 rounded-md bg-green-500 text-sm text-slate-50 shadow-md"
+    on:click={async () => {
+      await fetch("/api/displays", {
+        method: "POST",
+        body: JSON.stringify({
+          action: "reload"
+        })
+      });
+    }}
+  >
+    RELOAD
   </button>
 </div>
 

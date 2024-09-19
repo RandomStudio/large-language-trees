@@ -53,6 +53,7 @@ import {
   POLLINATION_START_TIMEOUT
 } from "$lib/constants";
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
+import type { RefreshDisplays } from "../../routes/api/displays/types";
 
 /**
  * Server-side publishing of a SimpleEvent, i.e a relay from
@@ -98,7 +99,7 @@ export const publishEvent = async (incoming: SimpleEvent) => {
   }
 };
 
-const publishDisplayInstructions = async (
+export const publishDisplayInstructions = async (
   event: DisplayEvent,
   targetDisplayId: string
 ) => {
@@ -123,6 +124,27 @@ const publishDisplayInstructions = async (
 
   await plug.publish(encode(event));
 
+  await agent.disconnect();
+};
+
+export const publishDisplayRefresh = async (action: RefreshDisplays) => {
+  const useLocal = PUBLIC_TETHER_HOST === "localhost";
+  const agent = await TetherAgent.create("server", {
+    loglevel: "warn",
+    brokerOptions: {
+      ...BROKER_DEFAULTS.nodeJS,
+      host: PUBLIC_TETHER_HOST,
+      hostname: PUBLIC_TETHER_HOST,
+      port: useLocal ? 1883 : 8883,
+      protocol: useLocal ? "mqtt" : "mqtts"
+    }
+  });
+
+  const plug = new OutputPlug(agent, "refresh", {
+    publishOptions: { qos: 2 }
+  });
+
+  await plug.publish(encode(action));
   await agent.disconnect();
 };
 
