@@ -20,8 +20,8 @@ export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({
 });
 
 export const DISPLAY_VIEW_WEIGHTINGS = new Map([
-  [DisplayEventNames.DETAIL_MULTI, 8],
-  [DisplayEventNames.DETAIL, 8],
+  [DisplayEventNames.DETAIL_MULTI, 4],
+  [DisplayEventNames.DETAIL, 4],
   [DisplayEventNames.ZOOM_OUT, 1],
   [DisplayEventNames.ROLL_PAN, 1],
   [DisplayEventNames.STATISTICS_1, 1],
