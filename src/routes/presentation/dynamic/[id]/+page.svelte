@@ -111,6 +111,9 @@
     {JSON.stringify(data.event)}
   </code> -->
   {#if data.event}
+    {#if data.event.name === DisplayEventNames.IDLE}
+      <Idle />
+    {/if}
     {#if data.event.name == DisplayEventNames.ANNOUNCE_FIRST_PLANT}
       <div transition:fade={{ duration: FADE_DURATION }}>
         <NewUserFirstPlant

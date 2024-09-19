@@ -230,7 +230,11 @@ export const handleDisplayNotification = async (
     let attemptsLeft = 10;
 
     while (event === null && attemptsLeft > 0) {
-      event = await getEventForAmbientDisplay(pickDisplayType, timeout);
+      try {
+        event = await getEventForAmbientDisplay(pickDisplayType, timeout);
+      } catch (e) {
+        console.warn("getting ambient event failed:", e);
+      }
       attemptsLeft--;
     }
 
@@ -431,6 +435,9 @@ export const getEventForAmbientDisplay = async (
         })
       ).filter((g) => g.myOwner.isAdmin === false);
 
+      if (allGardens.length === 0) {
+        throw Error("no gardens (yet)");
+      }
       const pickGardens = pickMultipleRandomElements(
         allGardens,
         NUM_GARDENS_MULTI
@@ -458,7 +465,15 @@ export const getEventForAmbientDisplay = async (
         where: eq(users.isAdmin, false)
       });
 
+      if (allNormalUsers.length === 0) {
+        throw Error("no normal users to pick from");
+      }
+
       const pickUser = pickRandomElement(allNormalUsers);
+
+      if (!pickUser) {
+        throw Error("no user to pick");
+      }
 
       // console.log("pick user", pickUser.username, "from", allNormalUsers);
 
