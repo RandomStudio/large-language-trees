@@ -9,7 +9,6 @@
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import StatsGrowingTime from "./StatsGrowingTime.svelte";
   import BRollStatusFeed from "./BRollStatusFeed.svelte";
-  import BRollLeaderboard from "../../fixed/leaderboard/+page.svelte";
   import BRollPan from "./BRollPan.svelte";
   import StatsCount from "./StatsCount.svelte";
   import BRollDetail from "./BRollDetail.svelte";
