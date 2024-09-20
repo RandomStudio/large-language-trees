@@ -745,7 +745,7 @@ const eventToLog = async (event: SimpleEvent): Promise<string | null> => {
             JSON.stringify({ authorTop, authorBottom })
         );
       }
-      return `${commonName} sprouted by ${authorTopUser.username} &#x2665;&#xfe0e; ${authorBottomUser.username}`;
+      return `${commonName} sprouted by ${authorTopUser.username} ♡ ${authorBottomUser.username}`;
     }
 
     case SimpleEventNames.POLLINATION_STARTING: {
