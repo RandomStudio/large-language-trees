@@ -4,8 +4,7 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { PLUG_NAMES } from "$lib/constants.js";
   import { DisplayEventNames } from "$lib/events.types.js";
-  import { stringify } from "postcss";
-  import { BROWSER_CONNECTION } from "../../defaults/tether.js";
+  import { BROWSER_CONNECTION } from "../../../defaults/tether.js";
 
   const modes = Object.keys(DisplayEventNames).filter(
     (m) => !m.includes("ANNOUNCE")
