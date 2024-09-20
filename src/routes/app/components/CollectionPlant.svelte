@@ -71,7 +71,9 @@
   >
     <PlantDisplay
       {disableAnimation}
-      imageUrl={plant.imageUrl ?? "/pollination/Seed_01.png"}
+      imageUrl={isReadyToSprout
+        ? "/pollination/Seed_01.png"
+        : (plant.imageUrl ?? "/pollination/Seed_01.png")}
       applyFilters={false}
     />
 
