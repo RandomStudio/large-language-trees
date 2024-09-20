@@ -71,6 +71,10 @@ export const initImageGeneration = async (
 ) => {
   const { model, fullPrompt, plantId } = requestBody;
   const generateAttempt1 = await tryGenerate(model, fullPrompt);
+  // if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
+  //   throw Error("simulated image generation failure!");
+  // }
+
   if (generateAttempt1.url) {
     console.log("Success from generate attempt #1, url", generateAttempt1.url);
     await notifyCandidateImageReady(generateAttempt1.url, plantId);
@@ -112,9 +116,9 @@ const tryGenerate = async (
   model: string,
   prompt: string
 ): Promise<GenerateResult> => {
-  if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
-    throw Error("simulated image generation failure!");
-  }
+  // if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
+  //   throw Error("simulated image generation failure!");
+  // }
 
   const apiKey = process.env.OPENAI_API_KEY;
 
