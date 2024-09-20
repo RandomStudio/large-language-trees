@@ -26,7 +26,8 @@ export const load: PageServerLoad = async ({}) => {
   const topGarden = gardensWithPlantCounts[0];
 
   if (!topGarden) {
-    throw Error("no topGarden");
+    console.error("no topGarden");
+    return { topGarden: null, gardensWithPlantCounts: [] };
   }
 
   const topGardenWithPlants = await db.query.gardens.findFirst({
