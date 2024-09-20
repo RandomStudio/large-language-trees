@@ -133,7 +133,7 @@
     />
   {/if}
   {#if label}
-    <div class="pt-2 pb-4 text-center text-medium">{label}</div>
+    <div class="pt-2 pb-4 text-center text-medium capitalize">{label}</div>
   {/if}
   {#if description}
     <div class="text-center text-xs">{description}</div>
