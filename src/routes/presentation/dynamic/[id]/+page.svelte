@@ -163,7 +163,7 @@
     {/if}
 
     {#if data.event.name == DisplayEventNames.ZOOM_OUT}
-      <div transition:fade={{ duration: FADE_DURATION }}>
+      <div class="w-full h-full" transition:fade={{ duration: FADE_DURATION }}>
         <BRollZoomOut
           garden={data.event.payload.garden}
           userName={data.event.payload.user.username}

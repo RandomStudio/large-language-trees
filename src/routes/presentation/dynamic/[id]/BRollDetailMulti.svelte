@@ -64,7 +64,7 @@
 </script>
 
 <div
-  class="w-screen h-screen bg-gradient-to-t from-roel_blue from-20% to-roel_rose to-80%"
+  class="w-full h-full bg-gradient-to-t from-roel_blue from-20% to-roel_rose to-80%"
 >
   <div class="images-container">
     <div
