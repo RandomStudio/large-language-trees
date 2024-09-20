@@ -25,7 +25,6 @@ export const DISPLAY_VIEW_WEIGHTINGS = new Map([
   [DisplayEventNames.ZOOM_OUT, 1],
   [DisplayEventNames.ROLL_PAN, 1],
   [DisplayEventNames.STATISTICS_1, 1],
-  [DisplayEventNames.STATISTICS_2, 1],
   [DisplayEventNames.STATISTICS_3, 1]
 ]);
 
@@ -47,8 +46,8 @@ export const EVENT_LOG_MAX = 100;
 export const MULTIPLE_FEATURED_PLANTS_COUNT = 4;
 
 /** The maximum number of characters for plantname and username */
-export const LIMIT_CHARACTERS_USERNAME = 20;
-export const LIMIT_CHARACTERS_PLANTNAME = 30;
+export const LIMIT_CHARACTERS_USERNAME = 10;
+export const LIMIT_CHARACTERS_PLANTNAME = 12;
 
 // TIMEOUTS -------------------
 export const IDLE_TIMEOUT = 2000;
