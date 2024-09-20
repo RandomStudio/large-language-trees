@@ -40,11 +40,11 @@
 </script>
 
 <div
-  class="w-full h-full"
+  class="fixed top-0 left-0 w-full h-full"
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
-    class="w-full h-[19vh] flex text-center items-start py-[3vh] justify-center text-9xl font-gyst"
+    class="w-full h-[19vh] flex text-center items-start py-32 justify-center text-6xl font-gyst"
     style="color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -68,8 +68,8 @@
     class="w-full h-[250px] flex flex-col text-center items-center justify-center absolute bottom-0"
     style="color:{darkColor}"
   >
-    <div class="text-5xl font-primer pb-[2vh]">has been growing for:<br /></div>
-    <div class="text-9xl font-gyst pb-[2vh]">
+    <div class="text-3xl font-primer pb-[2vh]">has been growing for:<br /></div>
+    <div class="text-5xl font-gyst pb-[2vh]">
       {age.toFormat("hh'H' mm'M' ss'S")}
     </div>
   </div>
