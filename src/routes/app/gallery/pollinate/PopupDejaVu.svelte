@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { SelectPlant } from "$lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import Cta from "../../components/Cta.svelte";
 
   export let plantDetails: SelectPlant;
