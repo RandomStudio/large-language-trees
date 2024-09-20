@@ -6,7 +6,12 @@
   const isFixed = $page.url.searchParams.has("fixed");
 </script>
 
-<div class="fixed top-0 left-0" class:fixed-size={isFixed}>
+<div
+  class="fixed top-0 left-0"
+  class:fixed-size={isFixed}
+  class:w-screen={!isFixed}
+  class:h-screen={!isFixed}
+>
   <slot />
 </div>
 
