@@ -24,7 +24,7 @@
 
 {#key data.pathname}
   <div
-    class="font-primer overflow-auto pageWrapper fixed top-0 left-0 right-0 h-dvh"
+    class="font-primer overflow-auto pageWrapper fixed top-0 left-0 right-0 h-dvh bg-roel_green"
     in:transitionClasses={{
       duration: 300,
       delay: 400,

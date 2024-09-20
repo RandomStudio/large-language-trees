@@ -105,10 +105,10 @@
   });
 </script>
 
-<main class="container">
-  <!-- <code>
+<!-- <code>
     {JSON.stringify(data.event)}
   </code> -->
+<main class="w-full h-full">
   {#if data.event}
     {#if data.event.name === DisplayEventNames.IDLE}
       <Idle />
@@ -144,7 +144,7 @@
     {/if}
 
     {#if data.event.name == DisplayEventNames.DETAIL}
-      <div transition:fade={{ duration: FADE_DURATION }}>
+      <div class="w-full h-full" transition:fade={{ duration: FADE_DURATION }}>
         {#key data.event.payload.plant.id}
           <BRollDetail
             plant={data.event.payload.plant}
@@ -163,7 +163,7 @@
     {/if}
 
     {#if data.event.name == DisplayEventNames.ZOOM_OUT}
-      <div transition:fade={{ duration: FADE_DURATION }}>
+      <div class="w-full h-full" transition:fade={{ duration: FADE_DURATION }}>
         <BRollZoomOut
           garden={data.event.payload.garden}
           userName={data.event.payload.user.username}

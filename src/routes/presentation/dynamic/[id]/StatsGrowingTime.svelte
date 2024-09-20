@@ -40,7 +40,7 @@
 </script>
 
 <div
-  class="w-screen h-screen"
+  class="w-full h-full"
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
@@ -59,7 +59,7 @@
       crossorigin="anonymous"
       bind:this={img}
     />
-    <div class="absolute w-screen h-screen flex items-center justify-center">
+    <div class="absolute w-full h-full flex items-center justify-center">
       <PlantDisplay imageUrl={imageUrl || ""} {applyFilters} {positionStyles} />
     </div>
   </div>

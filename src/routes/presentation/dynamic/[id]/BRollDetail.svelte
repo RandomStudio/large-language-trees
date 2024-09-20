@@ -51,7 +51,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class="viewport w-screen h-screen bg-gradient-to-t from-roel_blue from-0% to-roel_rose to-100%"
+  class="viewport w-full h-full bg-gradient-to-t from-roel_blue from-0% to-roel_rose to-100%"
   on:click={() => {
     console.log("SOUND ENABLED");
     const audio = new Audio(getRandomSoundFile());

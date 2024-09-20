@@ -27,9 +27,9 @@
   });
 </script>
 
-<div class="w-screen h-screen items-center justify-center standard-gradient">
+<div class="w-full h-full items-center justify-center standard-gradient">
   <div
-    class="w-screen text-center text-roel_yellow text-4xl font-gyst absolute top-32 z-10 uppercase"
+    class="w-full text-center text-roel_yellow text-4xl font-gyst absolute top-32 z-10 uppercase"
   >
     {authorTop.username}<br />
     &
@@ -37,13 +37,13 @@
   </div>
 
   <div
-    class="grid grid-cols-1 gap-1 place-content-center place-items-center h-screen w-screen"
+    class="grid grid-cols-1 gap-1 place-content-center place-items-center h-full w-full"
   >
     <PlantDisplay imageUrl={newPlant.imageUrl || ""} applyFilters={false} />
   </div>
 
   <div
-    class="w-screen text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"
+    class="w-full text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"
   >
     Gave life to<br />
     {newPlant.commonName}

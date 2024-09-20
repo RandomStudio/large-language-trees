@@ -21,14 +21,14 @@
 </script>
 
 <div
-  class="w-screen h-screen relative overflow-hidden bg-gradient-to-t from-roel_blue from-60% to-roel_rose to-85%"
+  class="w-full h-full relative overflow-hidden bg-gradient-to-t from-roel_blue from-60% to-roel_rose to-85%"
 >
   <div
-    class="absolute z-10 w-screen h-[30vh] flex text-center text-new_purple py-[3vh] justify-center text-9xl font-gyst bg-gradient-to-b from-roel_rose from-20%"
+    class="absolute z-10 w-full h-[30vh] flex text-center text-new_purple py-[3vh] justify-center text-9xl font-gyst bg-gradient-to-b from-roel_rose from-20%"
   >
     {userName.toUpperCase()}'S <br /> GARDEN
   </div>
-  <div class="w-screen h-screen z-0" style="transform: scale({$zoom});">
+  <div class="w-full h-full z-0" style="transform: scale({$zoom});">
     <DisplayGarden
       {garden}
       xGarden={-65}
@@ -43,6 +43,6 @@
     ></DisplayGarden>
   </div>
   <div
-    class="absolute z-5 mbt-0 w-screen h-[100vh] bg-gradient-to-b from-roel_rose from-5% to-40%"
+    class="absolute z-5 mbt-0 w-full h-[100vh] bg-gradient-to-b from-roel_rose from-5% to-40%"
   ></div>
 </div>

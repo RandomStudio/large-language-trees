@@ -8,7 +8,7 @@ import {
   plants,
   presentationState,
   promptSettingsTable,
-  sessions,
+  sessionTable,
   users
 } from "./schema";
 import { eq, isNull } from "drizzle-orm";
@@ -250,7 +250,7 @@ export const cleanUp = async () => {
   await db.delete(generatedPlants);
   await db.delete(gardensToPlants);
   await db.delete(gardens);
-  await db.delete(sessions);
+  await db.delete(sessionTable);
   await db.delete(plants);
   await db.delete(promptSettingsTable);
   await db.delete(generatedPlants);

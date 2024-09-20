@@ -6,12 +6,12 @@ export const lucia = new Lucia(adapter, {
   sessionCookie: {
     attributes: {
       // set to `true` when using HTTPS
-      secure: !dev,
-    },
+      secure: !dev
+    }
   },
   getUserAttributes: (atrributes) => ({
-    username: atrributes.username,
-  }),
+    username: atrributes.username
+  })
 });
 
 declare module "lucia" {

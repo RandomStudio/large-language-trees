@@ -54,11 +54,11 @@
   <Idle />
 {/if}
 <div
-  class="w-screen h-screen items-center justify-center bg-purple-950 text-pink-300"
+  class="w-full h-full items-center justify-center bg-purple-950 text-pink-300"
 >
   {#each data.logs as log, index}
     <div
-      class="py-8 px-4 w-screen font-primerb text-medium text-purple"
+      class="py-8 px-4 w-full font-primerb text-medium text-purple"
       class:bg-pink-300={isAlternateColour(data.logs.length, index)}
       class:text-purple-950={isAlternateColour(data.logs.length, index)}
     >

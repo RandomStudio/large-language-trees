@@ -92,7 +92,7 @@ export const usersRelations = relations(users, ({ one }) => ({
   })
 }));
 
-export const sessions = pgTable("sessions", {
+export const sessionTable = pgTable("sessions", {
   id: text("id").primaryKey(),
   userId: text("user_id")
     .notNull()

@@ -41,11 +41,11 @@
 </script>
 
 <div
-  class="w-screen h-screen"
+  class="w-full h-full"
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
-    class="absolute w-screen h-screen flex text-center items-start justify-center text-9xl py-[2vh] font-gyst"
+    class="absolute w-full h-full flex text-center items-start justify-center text-9xl py-[2vh] font-gyst"
     style="color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -60,7 +60,7 @@
       bind:this={img}
       crossorigin="anonymous"
     />
-    <div class="absolute w-screen h-screen flex items-center justify-center">
+    <div class="absolute w-full h-full flex items-center justify-center">
       <PlantDisplay
         imageUrl={plant.imageUrl || ""}
         {applyFilters}
@@ -70,7 +70,7 @@
   </div>
 
   <div
-    class="absolute w-screen h-screen flex text-center items-end justify-center text-9xl py-[2vh] font-gyst"
+    class="absolute w-full h-full flex text-center items-end justify-center text-9xl py-[2vh] font-gyst"
     style="color: {darkColor};"
   >
     Just sprouted <br /> in the garden!

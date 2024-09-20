@@ -1,1 +1,0 @@
-ALTER TABLE "presentation_state" ADD COLUMN "name" text NOT NULL;
