@@ -40,17 +40,11 @@
           />
         {/if}
       </div>
-      <video
-        autoplay
-        loop
-        muted
-        playsinline
+      <img
         class="absolute -bottom-10 w-screen pointer-events-none"
-      >
-        <!-- Fallback to HEIC H264 MOV with transparency if WebM is not supported -->
-        <source src="/pollination/seedbirth.webm" type="video/webm" />
-        <source src="/pollination/seedbirth.mov" type="video/quicktime" />
-      </video>
+        src="/pollination/newplant.gif"
+        alt="Animated seeds flying over the foreground"
+      />
     </div>
     <p class="text-medium text-new_purple pb-8">
       What will be the name of your sprout?
