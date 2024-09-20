@@ -5,8 +5,8 @@
   import { onMount } from "svelte";
   import Layout from "../../../components/Layout.svelte";
   import Cta from "../../../components/Cta.svelte";
+  import { capitalise } from "$lib/promptUtils";
 
-  export let thisUser: PublicUserInfo;
   export let otherUser: PublicUserInfo;
   export let onNameChosen: (name: string) => void;
 
@@ -67,7 +67,7 @@
       disabled={newName === null}
       onClick={() => {
         if (newName) {
-          onNameChosen(newName.trim());
+          onNameChosen(capitalise(newName.trim()));
         } else {
           console.warn("no valid name yet");
         }

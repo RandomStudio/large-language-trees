@@ -53,6 +53,7 @@ import {
 import { PUBLIC_TETHER_HOST } from "$env/static/public";
 import type { RefreshDisplays } from "../../routes/api/displays/types";
 import type { EventLog, GardenWithPlants, SelectGarden } from "$lib/types";
+import { capitalise } from "$lib/promptUtils";
 
 /**
  * Server-side publishing of a SimpleEvent, i.e a relay from
@@ -712,11 +713,13 @@ const eventToLog = async (event: SimpleEvent): Promise<string | null> => {
   switch (event.name) {
     case SimpleEventNames.NEW_USER: {
       const { payload } = event as EventNewUser;
-      return `${payload.username} entered the garden`;
+      return `${capitalise(payload.username)} entered the garden`;
     }
     case SimpleEventNames.FIRST_PLANT: {
       const { payload } = event as EventFirstPlant;
-      return `${payload.user.username}'s ${payload.plant.commonName} just sprouted in the Garden`;
+      return `${capitalise(payload.user.username)}'s ${capitalise(
+        payload.plant.commonName
+      )} just sprouted in the Garden`;
     }
     case SimpleEventNames.POLLINATION_COMPLETE: {
       const { payload } = event as EventNewSprouting;
@@ -745,13 +748,17 @@ const eventToLog = async (event: SimpleEvent): Promise<string | null> => {
             JSON.stringify({ authorTop, authorBottom })
         );
       }
-      return `${commonName} sprouted by ${authorTopUser.username} ♡ ${authorBottomUser.username}`;
+      return `${capitalise(commonName)} sprouted by ${capitalise(
+        authorTopUser.username
+      )} ♡ ${capitalise(authorBottomUser.username)}`;
     }
 
     case SimpleEventNames.POLLINATION_STARTING: {
       const { payload } = event as EventPollinationStarting;
       const { authorTop, authorBottom } = payload;
-      return `${authorTop.username} is pollinating ${authorBottom.username}`;
+      return `${capitalise(authorTop.username)} is pollinating ${capitalise(
+        authorBottom.username
+      )}`;
     }
     case SimpleEventNames.CANDIDATE_READY: {
       return null;
