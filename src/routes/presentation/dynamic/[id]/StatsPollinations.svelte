@@ -45,11 +45,11 @@
 </script>
 
 <div
-  class="w-screen h-screen"
+  class="w-full h-full"
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
-    class="w-screen h-screen text-center text-9xl py-[2vh] font-gyst"
+    class="w-full h-full text-center text-9xl py-[2vh] font-gyst"
     style="color: {brightColor}"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -64,13 +64,13 @@
       bind:this={img}
       crossorigin="anonymous"
     />
-    <div class="absolute w-screen h-screen flex items-center justify-center">
+    <div class="absolute w-full h-full flex items-center justify-center">
       <PlantDisplay imageUrl={imageUrl || ""} {applyFilters} {positionStyles} />
     </div>
   </div>
 
   <div
-    class="w-screen h-screen flex flex-col text-center items-center justify-end absolute bottom-[10vh] text-9xl font-gyst"
+    class="w-full h-full flex flex-col text-center items-center justify-end absolute bottom-[10vh] text-9xl font-gyst"
     style=" color:{darkColor}"
   >
     Has pollinated <br />
