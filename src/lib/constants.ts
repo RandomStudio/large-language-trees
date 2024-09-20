@@ -24,8 +24,8 @@ export const DISPLAY_VIEW_WEIGHTINGS = new Map([
   [DisplayEventNames.DETAIL, 4],
   [DisplayEventNames.ZOOM_OUT, 1],
   [DisplayEventNames.ROLL_PAN, 1],
-  [DisplayEventNames.STATISTICS_1, 1],
-  [DisplayEventNames.STATISTICS_3, 1]
+  [DisplayEventNames.STATS_TIME, 1],
+  [DisplayEventNames.STATS_POLLINATIONS, 1]
 ]);
 
 /** How many gardens to display in "showMultipleGardens" / ROLL_PAN display */

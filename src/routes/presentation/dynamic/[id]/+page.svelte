@@ -177,7 +177,7 @@
       </div>
     {/if}
 
-    {#if data.event.name == DisplayEventNames.STATISTICS_1}
+    {#if data.event.name == DisplayEventNames.STATS_TIME}
       <div transition:fade>
         {#key data.event.payload.plant.imageUrl}
           <StatsGrowingTime
@@ -190,7 +190,7 @@
       </div>
     {/if}
 
-    {#if data.event?.name == DisplayEventNames.STATISTICS_3}
+    {#if data.event?.name == DisplayEventNames.STATS_POLLINATIONS}
       <div transition:fade={{ duration: FADE_DURATION }}>
         {#key data.event.payload.plant.id}
           <StatsPollinations

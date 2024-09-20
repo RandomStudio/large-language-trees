@@ -426,7 +426,7 @@ export const getEventForAmbientDisplay = async (
       return event;
     }
 
-    case DisplayEventNames.STATISTICS_1: {
+    case DisplayEventNames.STATS_TIME: {
       const allGardens = (
         await db.query.gardens.findMany({
           // note plants are just bare relation details,
@@ -447,7 +447,7 @@ export const getEventForAmbientDisplay = async (
         throw Error("user/plant info missing");
       }
       const event: DisplayPlantGrowingTime = {
-        name: DisplayEventNames.STATISTICS_1,
+        name: DisplayEventNames.STATS_TIME,
         payload: {
           plant: pickPlant.plant,
           user: stripUserInfo(user),
@@ -458,7 +458,7 @@ export const getEventForAmbientDisplay = async (
       return event;
     }
 
-    case DisplayEventNames.STATISTICS_3: {
+    case DisplayEventNames.STATS_POLLINATIONS: {
       const allNormalUsers = await db.query.users.findMany({
         where: eq(users.isAdmin, false)
       });
@@ -473,38 +473,46 @@ export const getEventForAmbientDisplay = async (
         throw Error("no user to pick");
       }
 
-      const userPlants = await db.query.plants.findMany({
-        where: or(
-          eq(plants.authorTop, pickUser.id),
-          eq(plants.authorBottom, pickUser.id)
-        )
+      const userWithPlants = await db.query.users.findFirst({
+        where: eq(users.id, pickUser.id),
+        with: { myGarden: { with: { plants: { with: { plant: true } } } } }
       });
 
-      if (!userPlants || userPlants.length === 0) {
-        throw Error("user has not plants");
+      if (!userWithPlants || userWithPlants.myGarden.plants.length === 0) {
+        throw Error("user has no plants");
       }
 
-      const pickPlant = pickRandomElement(userPlants);
+      const originalPlant = userWithPlants.myGarden.plants.find((p) => {
+        const { plant } = p;
+        return plant.authorTop === null && plant.authorBottom === null;
+      });
+
+      if (!originalPlant) {
+        throw Error("no original plant for this user");
+      }
 
       const asParentCount = await db
         .select({ id: plants.id, name: plants.commonName })
         .from(plants)
         .where(
-          or(eq(plants.parent1, pickPlant.id), eq(plants.parent2, pickPlant.id))
+          or(
+            eq(plants.parent1, originalPlant.plant.id),
+            eq(plants.parent2, originalPlant.plant.id)
+          )
         );
 
       console.log(
         "plant",
-        pickPlant,
+        originalPlant,
         "appears as parent",
         asParentCount.length,
         "times"
       );
 
       const event: DisplayPlantPollinationStats = {
-        name: DisplayEventNames.STATISTICS_3,
+        name: DisplayEventNames.STATS_POLLINATIONS,
         payload: {
-          plant: pickPlant,
+          plant: originalPlant.plant,
           pollinationCount: asParentCount.length,
           user: stripUserInfo(pickUser)
         },

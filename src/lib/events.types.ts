@@ -99,8 +99,8 @@ export enum DisplayEventNames {
   DETAIL_MULTI = "showMultipleFeaturedPlants",
   ZOOM_OUT = "showFeaturedGarden",
   ROLL_PAN = "showMultipleGardens",
-  STATISTICS_1 = "showPlantGrowingTime",
-  STATISTICS_3 = "showPlantPollinationCount",
+  STATS_TIME = "showPlantGrowingTime",
+  STATS_POLLINATIONS = "showPlantPollinationCount",
   ANNOUNCE_FIRST_PLANT = "newUserFirstPlant",
   ANNOUNCE_POLLINATION_STARTING = "newPollinationStarting",
   ANNOUNCE_NEW_SPROUT = "newPlantSprouted"
@@ -163,7 +163,7 @@ export interface DisplayMultipleGardens extends DisplayEvent {
 }
 
 export interface DisplayPlantGrowingTime extends DisplayEvent {
-  name: DisplayEventNames.STATISTICS_1;
+  name: DisplayEventNames.STATS_TIME;
   payload: {
     plant: SelectPlant;
     user: PublicUserInfo;
@@ -172,7 +172,7 @@ export interface DisplayPlantGrowingTime extends DisplayEvent {
 }
 
 export interface DisplayPlantPollinationStats extends DisplayEvent {
-  name: DisplayEventNames.STATISTICS_3;
+  name: DisplayEventNames.STATS_POLLINATIONS;
   payload: {
     plant: SelectPlant;
     pollinationCount: number;
