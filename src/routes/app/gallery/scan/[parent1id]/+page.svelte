@@ -23,6 +23,7 @@
   import { BROWSER_CONNECTION } from "../../../../../defaults/tether";
   import { error } from "@sveltejs/kit";
   import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
+  import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -301,6 +302,12 @@
 {:else}
   <Layout title="Let's Pollinate">
     <div class="grid grid-rows-[max-content_auto_max-content]">
+      <ReturnButton
+        onClick={async () => {
+          stopScanning();
+          await goto("/app/gallery");
+        }}
+      />
       <p class="pb-4 text-roel_green">
         Point your camera to another gardeners Pollination QR to start
         crossbreeding {data.thisPlant.commonName}.
