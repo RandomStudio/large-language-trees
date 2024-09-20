@@ -50,91 +50,93 @@
   });
 </script>
 
-<h1>Presentation Views: Debug</h1>
-<div>
-  Tether@{agent?.getConfig().brokerOptions.host}: {connected
-    ? "✅ connected"
-    : "❌ not connected"}
-</div>
+<main class="overflow-scroll w-screen h-screen p-10 bg-white">
+  <h1>Presentation Views: Debug</h1>
+  <div>
+    Tether@{agent?.getConfig().brokerOptions.host}: {connected
+      ? "✅ connected"
+      : "❌ not connected"}
+  </div>
 
-<div>
-  Re-initialise dynamic displays:
-  <button
-    class="border-2 border-slate-100 p-2 rounded-md bg-orange-500 text-sm text-slate-50 shadow-md"
-    on:click={async () => {
-      await fetch("/api/displays", {
-        method: "POST",
-        body: JSON.stringify({
-          action: "init"
-        })
-      });
-      invalidateAll();
-    }}
-  >
-    RESET
-  </button>
-  <button
-    class="border-2 border-slate-100 p-2 rounded-md bg-green-500 text-sm text-slate-50 shadow-md"
-    on:click={async () => {
-      await fetch("/api/displays", {
-        method: "POST",
-        body: JSON.stringify({
-          action: "reload"
-        })
-      });
-    }}
-  >
-    RELOAD
-  </button>
-</div>
-
-<div>
-  <h2 class="font-bold text-xl">Test Displays</h2>
-  {#each modes as m}
+  <div>
+    Re-initialise dynamic displays:
     <button
-      class="rounded border-solid border-sky-500 border-2 p-2 m-2"
+      class="border-2 border-slate-100 p-2 rounded-md bg-orange-500 text-sm text-slate-50 shadow-md"
       on:click={async () => {
-        await fetch(`/api/forceDisplay?mode=${m}`, {
-          method: "POST"
+        await fetch("/api/displays", {
+          method: "POST",
+          body: JSON.stringify({
+            action: "init"
+          })
         });
-      }}>{m}</button
+        invalidateAll();
+      }}
     >
-  {/each}
-</div>
+      RESET
+    </button>
+    <button
+      class="border-2 border-slate-100 p-2 rounded-md bg-green-500 text-sm text-slate-50 shadow-md"
+      on:click={async () => {
+        await fetch("/api/displays", {
+          method: "POST",
+          body: JSON.stringify({
+            action: "reload"
+          })
+        });
+      }}
+    >
+      RELOAD
+    </button>
+  </div>
 
-<h2 class="font-bold text-xl">Presentation State</h2>
-<ul>
-  {#each data.displays as display}
-    <div class="border-solid border-2 border-slate-300 m-2 p-2">
-      <h3 class="font-bold border-b-slate-200 border-b-2">
-        Display "{display.id}":
-        <a
-          href={`/presentation/dynamic/${display.id}`}
-          target="_blank"
-          rel="noopener"
-        >
-          <span
-            class="border-2 border-slate-100 p-2 rounded-md bg-slate-50 text-sm text-slate-500 shadow-md"
+  <div>
+    <h2 class="font-bold text-xl">Test Displays</h2>
+    {#each modes as m}
+      <button
+        class="rounded border-solid border-sky-500 border-2 p-2 m-2"
+        on:click={async () => {
+          await fetch(`/api/forceDisplay?mode=${m}`, {
+            method: "POST"
+          });
+        }}>{m}</button
+      >
+    {/each}
+  </div>
+
+  <h2 class="font-bold text-xl">Presentation State</h2>
+  <ul>
+    {#each data.displays as display}
+      <div class="border-solid border-2 border-slate-300 m-2 p-2">
+        <h3 class="font-bold border-b-slate-200 border-b-2">
+          Display "{display.id}":
+          <a
+            href={`/presentation/dynamic/${display.id}`}
+            target="_blank"
+            rel="noopener"
           >
-            Open display in new tab
-          </span>
-        </a>
-      </h3>
-      <div class="h-60 overflow-scroll">
-        Contents: <pre class="text-xs"><code
-            >{display.contents === null
-              ? "empty"
-              : JSON.stringify(display.contents, null, 2)}</code
-          ></pre>
+            <span
+              class="border-2 border-slate-100 p-2 rounded-md bg-slate-50 text-sm text-slate-500 shadow-md"
+            >
+              Open display in new tab
+            </span>
+          </a>
+        </h3>
+        <div class="h-60 overflow-scroll">
+          Contents: <pre class="text-xs"><code
+              >{display.contents === null
+                ? "empty"
+                : JSON.stringify(display.contents, null, 2)}</code
+            ></pre>
+        </div>
       </div>
-    </div>
-  {/each}
-</ul>
+    {/each}
+  </ul>
 
-<h2 class="font-bold text-xl">Incoming Events</h2>
-<h3 class="font-bold">Received {messages.length} events</h3>
-<div>
-  {#each messages as m}
-    <div class="w-screen text-xs"><pre><code>{m}</code></pre></div>
-  {/each}
-</div>
+  <h2 class="font-bold text-xl">Incoming Events</h2>
+  <h3 class="font-bold">Received {messages.length} events</h3>
+  <div>
+    {#each messages as m}
+      <div class="w-screen text-xs"><pre><code>{m}</code></pre></div>
+    {/each}
+  </div>
+</main>
