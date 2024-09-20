@@ -1,4 +1,4 @@
-import type { EventNewSprouting } from "$lib/events.types";
+import { SimpleEventNames, type EventNewSprouting } from "$lib/events.types";
 import type { CandidatePlant, InsertPlant, SelectPlant } from "$lib/types";
 import type { PostPlantToGardenBody } from "../../../api/plantsInGarden/+server";
 
@@ -57,7 +57,7 @@ export async function insertNewPlant(plant: InsertPlant) {
   await addPlantToUser(plant, plant.authorBottom);
 
   const event: EventNewSprouting = {
-    name: "newPlantSprouted",
+    name: SimpleEventNames.POLLINATION_COMPLETE,
     payload: selectPlant
   };
   const eventRes = await fetch("/api/events", {
@@ -78,7 +78,8 @@ export const candidateToPlant = (candidate: CandidatePlant): InsertPlant => {
     parentBottom
   } = candidate;
 
-  const json = JSON.parse(contents as string) as InsertPlant;
+  console.log(candidate);
+  const json = contents as InsertPlant;
 
   const { commonName, description, properties } = json;
 
