@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation";
   import { LOADING_MESSAGES } from "$lib/constants";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import type { CandidatePlant, SelectPlant, SelectUser } from "$lib/types";
@@ -29,6 +30,20 @@
 
   let currentMessage = LOADING_MESSAGES[0];
   let animationEl: HTMLDivElement;
+
+  const removeCandidatePlant = async () => {
+    const p = plant as CandidatePlant;
+    console.log("Trying to remove candidate plant", p.plantId, "...");
+    const res = await fetch(`/api/plants/${p.plantId}/generatedPlant`, {
+      method: "DELETE"
+    });
+    if (res.status === 202) {
+      console.log("ok");
+      invalidateAll();
+    } else {
+      console.error(res.status, res.statusText);
+    }
+  };
 
   onMount(() => {
     console.log({ hasError });
@@ -86,6 +101,7 @@
         ERROR: {hasError}
       </div>
       <button
+        on:click={removeCandidatePlant}
         class="bg-red-500 text-roel_green font-primer text-sm px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full button-with-active"
       >
         Click to remove and retry
