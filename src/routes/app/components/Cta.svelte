@@ -5,6 +5,8 @@
   export let umami: string | undefined = undefined;
   export let test: string | undefined = undefined;
 
+  export let disabled: boolean = false;
+
   let button: HTMLButtonElement;
 
   onMount(() => {
@@ -21,10 +23,13 @@
 <div class="fixed bottom-0 left-10 right-10 content-center buttonContainer">
   <button
     bind:this={button}
+    {disabled}
     on:click={onClick}
     data-test={test}
     data-umami-event={umami}
-    class="w-full bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full button-with-active"
+    class="w-full bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full"
+    class:button-with-active={!disabled}
+    class:button-disabled={disabled}
   >
     <slot />
   </button>
