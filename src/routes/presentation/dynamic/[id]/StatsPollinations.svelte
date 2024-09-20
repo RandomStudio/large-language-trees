@@ -45,7 +45,7 @@
 </script>
 
 <div
-  class="w-full h-full"
+  class="fixed top-0 left-0 w-full h-full"
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
