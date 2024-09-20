@@ -1,1 +1,0 @@
-ALTER TABLE "generated_plants" ADD COLUMN "given_name" text NOT NULL;

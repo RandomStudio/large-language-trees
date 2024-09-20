@@ -1,1 +1,0 @@
-ALTER TABLE "event_logs" ALTER COLUMN "contents" SET DATA TYPE text;

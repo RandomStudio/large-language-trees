@@ -1,1 +1,0 @@
-ALTER TABLE "generated_plants" ADD COLUMN "awaiting_confirmation" boolean DEFAULT false;
