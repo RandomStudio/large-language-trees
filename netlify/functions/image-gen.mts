@@ -95,7 +95,7 @@ export const initImageGeneration = async (
         throw Error("Generate attempt #2 failed");
       }
     } else {
-      console.error("");
+      console.error("generateAttempt1 failed");
       await notifyCandidateImageFailed(
         "Generate attempt indicated shouldRetry==false; complete failure",
         plantId,
@@ -112,6 +112,10 @@ const tryGenerate = async (
   model: string,
   prompt: string
 ): Promise<GenerateResult> => {
+  if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
+    throw Error("simulated image generation failure!");
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
 
   console.log(

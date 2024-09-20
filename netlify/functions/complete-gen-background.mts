@@ -91,7 +91,13 @@ export default async (req: Request) => {
         "There was an error getting image info: ",
         getImageInfoError
       );
-      console.warn("Error should have been added to DB by our server already");
+      notifyCandidateTextFailed(
+        newPlantId,
+        requestBody.authorTop,
+        requestBody.authorBottom,
+        getImageInfoError.toString(),
+        serverOrigin
+      );
     }
   } catch (textGenError) {
     await notifyCandidateTextFailed(
@@ -112,9 +118,9 @@ const initTextGeneration = async (
   requestBody: BackgroundGenerateTextRequest,
   serverOrigin: string
 ): Promise<object> => {
-  if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
-    throw Error("simulated text generation error!");
-  }
+  // if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
+  //   throw Error("simulated text generation error!");
+  // }
 
   const {
     authorTop,
