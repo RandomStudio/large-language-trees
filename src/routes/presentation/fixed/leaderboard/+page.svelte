@@ -51,10 +51,10 @@
   <Idle />
 {:else}
   <div
-    class="w-100 h-100 flex items-center justify-center presentation-gradient"
+    class="w-full h-full flex items-center justify-center presentation-gradient"
   >
     <div
-      class="w-100 text-center text-roel_yellow text-4xl font-gyst absolute top-32 z-10 uppercase"
+      class="w-full text-center text-roel_yellow text-4xl font-gyst absolute top-32 z-10 uppercase"
     >
       Most Active<br />
       Pollinators
@@ -67,7 +67,7 @@
     />
 
     <div
-      class="w-100 text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"
+      class="w-full text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"
     >
       {#each data.gardensWithPlantCounts as { user, count }}
         <div>

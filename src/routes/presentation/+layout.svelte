@@ -11,6 +11,7 @@
   class:fixed-size={isFixed}
   class:w-screen={!isFixed}
   class:h-screen={!isFixed}
+  class:presentation-gradient={!isFixed}
 >
   <slot />
 </div>

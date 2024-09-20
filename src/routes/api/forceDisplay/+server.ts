@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({ url }) => {
     console.log(forceMode, "=>", DisplayEventNames[forceMode as keyType]);
     const ambientMode = DisplayEventNames[forceMode as keyType];
 
-    const data = await getEventForAmbientDisplay(ambientMode, 10000);
+    const data = await getEventForAmbientDisplay(ambientMode, 30000);
 
     if (data !== null) {
       const allScreens = await getAllScreens();
