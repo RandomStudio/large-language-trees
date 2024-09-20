@@ -18,6 +18,7 @@ export const POST: RequestHandler = async ({ request }) => {
     }
     case "reload": {
       publishDisplayRefresh(req);
+      return json(req, { status: 200 });
     }
     default: {
       return json(req, { status: 400 });
