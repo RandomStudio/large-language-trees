@@ -25,7 +25,6 @@ export const DISPLAY_VIEW_WEIGHTINGS = new Map([
   [DisplayEventNames.ZOOM_OUT, 1],
   [DisplayEventNames.ROLL_PAN, 1],
   [DisplayEventNames.STATISTICS_1, 1],
-  [DisplayEventNames.STATISTICS_2, 1],
   [DisplayEventNames.STATISTICS_3, 1]
 ]);
 
