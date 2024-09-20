@@ -49,7 +49,7 @@
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
-    class="w-full h-full text-center text-9xl py-[2vh] font-gyst"
+    class="w-full h-full text-center text-6xl py-32 font-gyst"
     style="color: {brightColor}"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -70,7 +70,7 @@
   </div>
 
   <div
-    class="w-full h-full flex flex-col text-center items-center justify-end absolute bottom-[10vh] text-9xl font-gyst"
+    class="w-full h-full flex flex-col text-center items-center justify-end absolute bottom-[10vh] text-5xl font-gyst"
     style=" color:{darkColor}"
   >
     Has pollinated <br />
@@ -79,7 +79,7 @@
   </div>
 
   <div
-    class="absolute text-5xl font-primer py-[2vw] px-[2vw] right-[2vh] bottom-[4vh]"
+    class="absolute text-3xl font-primer py-[2vw] px-[2vw] right-[2vh] bottom-[4vh]"
     style="background-color:{darkColor}; color: {brightColor}"
   >
     {comment}
