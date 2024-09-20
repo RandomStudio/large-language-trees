@@ -54,6 +54,10 @@ interface ChatResponse {
 // ----------------------------------------------------------------------------
 
 export default async (req: Request) => {
+  if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
+    console.warn("SIMULATE_OPENAI_FAILURES is enabled!");
+  }
+
   const requestBody = (await req.json()) as BackgroundGenerateTextRequest;
 
   const { backgroundSecret, newPlantId } = requestBody;
@@ -70,17 +74,34 @@ export default async (req: Request) => {
   const serverOrigin = useLocalApi || "https://livinggarden.netlify.app";
 
   // First, text generation...
-  const plantResponse = await initTextGeneration(requestBody, serverOrigin);
+  try {
+    const plantResponse = await initTextGeneration(requestBody, serverOrigin);
 
-  // Next, get info from our server for the image generation...
-  const info = await getImageGenInfo(
-    serverOrigin,
-    newPlantId,
-    plantResponse["description"]
-  );
-
-  // Finally, use this info to initiate the image generation...
-  await initImageGeneration(info, serverOrigin);
+    // Next, get info from our server for the image generation...
+    try {
+      const info = await getImageGenInfo(
+        serverOrigin,
+        newPlantId,
+        plantResponse["description"]
+      );
+      // Finally, use this info to initiate the image generation...
+      await initImageGeneration(info, serverOrigin);
+    } catch (getImageInfoError) {
+      console.error(
+        "There was an error getting image info: ",
+        getImageInfoError
+      );
+      console.warn("Error should have been added to DB by our server already");
+    }
+  } catch (textGenError) {
+    await notifyCandidateTextFailed(
+      newPlantId,
+      requestBody.authorTop,
+      requestBody.authorBottom,
+      textGenError.toString(),
+      serverOrigin
+    );
+  }
 };
 
 // ----------------------------------------------------------------------------
@@ -91,6 +112,10 @@ const initTextGeneration = async (
   requestBody: BackgroundGenerateTextRequest,
   serverOrigin: string
 ): Promise<object> => {
+  if (process.env.SIMULATE_OPENAI_FAILURES === "true") {
+    throw Error("simulated text generation error!");
+  }
+
   const {
     authorTop,
     authorBottom,
@@ -227,5 +252,40 @@ const notifyCandidateTextReady = async (
       status
     });
     console.error(addPlantToDbRes);
+  }
+};
+
+const notifyCandidateTextFailed = async (
+  plantId: string,
+  authorTop: string,
+  authorBottom: string,
+  errorMessage: string,
+  serverOrigin: string
+) => {
+  const jsonBody: CandidateTextBody = {
+    authorTop,
+    authorBottom,
+    errorMessage
+  };
+  const updateCandidate = await fetch(
+    `${serverOrigin}/api/plants/${plantId}/candidateText`,
+    {
+      method: "PATCH",
+      mode: "cors",
+      body: JSON.stringify(jsonBody),
+      headers: {
+        origin: serverOrigin
+      }
+    }
+  );
+  if (updateCandidate.status === 200 || updateCandidate.status === 201) {
+    console.log("POSTed error message update OK");
+  } else {
+    const { statusText, status } = updateCandidate;
+    console.error("Something went wrong when POSTing to our API endpoint:", {
+      statusText,
+      status
+    });
+    console.error(updateCandidate);
   }
 };

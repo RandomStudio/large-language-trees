@@ -179,16 +179,18 @@
         isReadyToSprout
         onClick={handleClickPlant}
         plant={candidatePlant}
+        hasError={candidatePlant.errorMessage}
       />
     {/each}
 
-    {#each data.notSproutedPlants as plant}
+    {#each data.notSproutedPlants as candidatePlant}
       <CollectionPlant
-        authorTopUser={plant.authorTopUser}
-        authorBottomUser={plant.authorBottomUser}
+        authorTopUser={candidatePlant.authorTopUser}
+        authorBottomUser={candidatePlant.authorBottomUser}
         isPending
         onClick={handleClickPlant}
-        {plant}
+        hasError={candidatePlant.errorMessage}
+        plant={candidatePlant}
       />
     {/each}
 

@@ -13,6 +13,8 @@
 
   export let isPending = false;
   export let isReadyToSprout = false;
+  export let hasError: null | string = null;
+
   let isReady = !isPending && !isReadyToSprout;
 
   function getName(plant: SelectPlant | CandidatePlant) {
@@ -27,7 +29,9 @@
 
   let currentMessage = LOADING_MESSAGES[0];
   let animationEl: HTMLDivElement;
+
   onMount(() => {
+    console.log({ hasError });
     let i = 0;
     let timer: number;
     const pause = (duration: number) =>
@@ -77,7 +81,18 @@
       applyFilters={false}
     />
 
-    {#if isPending}
+    {#if hasError}
+      <div class="text-md text-red-600">
+        ERROR: {hasError}
+      </div>
+      <button
+        class="bg-red-500 text-roel_green font-primer text-sm px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full button-with-active"
+      >
+        Click to remove and retry
+      </button>
+    {/if}
+
+    {#if isPending && !hasError}
       <div class="text-xs">{getName(plant)}</div>
       <div class="text-small mb-2 rotator">
         {currentMessage}

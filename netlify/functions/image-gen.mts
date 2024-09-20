@@ -169,8 +169,6 @@ const notifyCandidateImageFailed = async (
   plantId: string,
   serverOrigin: string
 ) => {
-  const useLocalApi = process.env.BACKGROUND_FN_USES_LOCAL_API;
-
   const jsonBody: GenerateImageResultBody = {
     errorMessage
   };

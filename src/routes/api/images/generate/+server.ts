@@ -2,6 +2,9 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 import type { GenerateImageRequest, PromptConfig } from "$lib/types";
 import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
+import { db } from "$lib/server/db";
+import { generatedPlants } from "$lib/server/schema";
+import { eq } from "drizzle-orm";
 
 /**
  * Should be identical to version in `neftlify/functions/image-gen-background.mts`
@@ -27,11 +30,31 @@ export interface GenImageToBackground {
   needed for image generation.
 */
 export const POST: RequestHandler = async ({ request, fetch }) => {
-  const { plantId, description } = (await request.json()) as GenImageToServer;
+  try {
+    const { plantId, description } = (await request.json()) as GenImageToServer;
 
-  const bodyJson = await backgroundImageRequestBody(plantId, description);
+    const bodyJson = await backgroundImageRequestBody(plantId, description);
 
-  return json(bodyJson, { status: 200 });
+    return json(bodyJson, { status: 200 });
+  } catch (e) {
+    console.error(
+      "There was an error getting prompt details for Background Function:",
+      e
+    );
+    console.warn("We will update an error message into the candidate entry...");
+
+    const { plantId } = (await request.json()) as GenImageToServer;
+
+    const updated = await db
+      .update(generatedPlants)
+      .set({
+        errorMessage: "Error generating image prompt"
+      })
+      .where(eq(generatedPlants.plantId, plantId))
+      .returning();
+
+    return json({ updated }, { status: 500, statusText: JSON.stringify(e) });
+  }
 };
 
 const backgroundImageRequestBody = async (
