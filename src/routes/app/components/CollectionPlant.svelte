@@ -60,7 +60,7 @@
   on:click={() => onClick(plant)}
 >
   {#if authorTopUser && authorBottomUser}
-    <p class="font-normal text-center">
+    <p class="font-normal text-center capitalize">
       {authorTopUser.username} ♡ {authorBottomUser.username}
     </p>
   {/if}

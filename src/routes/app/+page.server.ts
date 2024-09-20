@@ -161,6 +161,7 @@ export const actions = {
     }
   }
 } satisfies Actions;
+
 async function createNewUserSession(
   existingUser: SelectUser,
   event: RequestEvent<RouteParams, "/app">

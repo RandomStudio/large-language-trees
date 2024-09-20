@@ -5,13 +5,13 @@
   import { onMount } from "svelte";
   import Layout from "../../../components/Layout.svelte";
   import Cta from "../../../components/Cta.svelte";
+  import { capitalise } from "$lib/promptUtils";
 
-  export let thisUser: PublicUserInfo;
   export let otherUser: PublicUserInfo;
   export let onNameChosen: (name: string) => void;
 
   let seedImage: string | null = null;
-  let newName: string = `${thisUser.username}x${otherUser.username}Plant`;
+  let newName: string | null = null;
 
   onMount(() => {
     seedImage = pickRandomElement([
@@ -63,6 +63,15 @@
         bind:value={newName}
       />
     </form>
-    <Cta onClick={() => onNameChosen(newName)}>Let it grow</Cta>
+    <Cta
+      disabled={newName === null}
+      onClick={() => {
+        if (newName) {
+          onNameChosen(capitalise(newName.trim()));
+        } else {
+          console.warn("no valid name yet");
+        }
+      }}>Let it grow</Cta
+    >
   </div>
 </Layout>

@@ -132,3 +132,8 @@ export const promptConfigToRow = (
     imageInstructions: config.image.instructions
   };
 };
+
+export const capitalise = (s: string): string =>
+  Array.from(s)
+    .map((char, index) => (index === 0 ? char.toUpperCase() : char))
+    .join("");
