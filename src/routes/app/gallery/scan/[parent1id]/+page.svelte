@@ -107,8 +107,6 @@
   };
 
   const stopScanning = () => {
-    otherUser = null;
-    otherPlant = null;
     console.log("Stop camera + scanning");
     if (!videoElement) {
       return;
@@ -129,9 +127,15 @@
     if (otherUserId === data.thisUser.id) {
       throw Error("this user is myself; try again");
     }
-    stopScanning();
-
     otherUser = await getOtherUserDetails(otherUserId);
+
+    if (!otherUser) {
+      throw Error("this user does not exist in the DB");
+    } else {
+      console.log("other user fetched OK:", otherUser);
+    }
+
+    stopScanning();
 
     alreadyExistsPlant = findAlreadyExists(
       data.thisPlant.id,
@@ -142,15 +146,22 @@
       console.info("New child plant possible!");
       otherPlant = await getOtherPlantDetails(otherPlantId);
 
+      if (!otherPlant) {
+        throw Error("failed to fetch other plant details");
+      }
+
+      const authorBottom = { ...otherUser };
+
       const e: EventPollinationStarting = {
         name: SimpleEventNames.POLLINATION_STARTING,
         payload: {
           authorTop: data.thisUser,
-          authorBottom: otherUser,
+          authorBottom,
           plantTop: data.thisPlant,
           plantBottom: otherPlant
         }
       };
+      console.log("sending", e);
       await fetch("/api/events", {
         method: "POST",
         body: JSON.stringify(e)
@@ -180,11 +191,35 @@
     return match || null;
   };
 
-  const getOtherUserDetails = async (userId: string) =>
-    (await (await fetch(`/api/users/${userId}`)).json()) as PublicUserInfo;
+  const getOtherUserDetails = async (
+    userId: string
+  ): Promise<PublicUserInfo | null> => {
+    const res = await fetch(`/api/users/${userId}`);
+    if (res.status !== 200) {
+      console.error("user not found", res.status, res.statusText);
+      return null;
+    } else {
+      const user = (await res.json()) as PublicUserInfo;
+      return user;
+    }
+  };
 
-  const getOtherPlantDetails = async (plantId: string) =>
-    (await (await fetch(`/api/plants/${plantId}`)).json()) as SelectPlant;
+  const getOtherPlantDetails = async (
+    plantId: string
+  ): Promise<SelectPlant | null> => {
+    const res = await fetch(`/api/plants/${plantId}`);
+    if (res.status !== 200) {
+      console.error(
+        "Failed to fetch plaint details:",
+        res.status,
+        res.statusText
+      );
+      return null;
+    } else {
+      const plant = (await res.json()) as SelectPlant;
+      return plant;
+    }
+  };
 
   const initiateBackgroundRequest = async (
     otherUserId: string,
@@ -230,6 +265,7 @@
     );
     newPollinationStartedOtherUser.on("message", (payload) => {
       const m = decode(payload) as EventPollinationStarting;
+      // console.log(m.payload.authorBottom.id, data.thisUser.id);
       if (m.payload.authorBottom.id === data.thisUser.id) {
         console.log(
           "New pollination started for plant of which I am the 'other' author",

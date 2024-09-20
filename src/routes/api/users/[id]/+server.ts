@@ -12,7 +12,11 @@ export const GET: RequestHandler = async ({ params }) => {
       const { username, id } = stripUserInfo(user);
       return json({ username, id }, { status: 200 });
     } else {
-      throw Error("user not found");
+      return json(
+        {},
+        { status: 404, statusText: `user not found for id "${id}"` }
+      );
+      // throw Error(`user not found for id "${id}"`);
     }
   } else {
     throw Error("Param missing");

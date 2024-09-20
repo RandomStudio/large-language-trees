@@ -9,8 +9,7 @@ import { error } from "@sveltejs/kit";
 export const load: PageServerLoad = async ({
   locals,
   params,
-  url,
-  parent
+  url
 }): Promise<ScanStartData> => {
   const userId = locals.user?.id || url.searchParams.get("userId");
   if (!userId) {
@@ -42,6 +41,8 @@ export const load: PageServerLoad = async ({
   if (!thisPlant) {
     throw Error("could not find this plant");
   }
+
+  console.log({ userWithGarden });
 
   return {
     thisUser: stripUserInfo(userWithGarden),
