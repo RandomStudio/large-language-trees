@@ -1,26 +1,19 @@
 <script lang="ts">
-  import type { GardenWithPlants, SelectPlant } from "$lib/types";
+  import type {
+    GardenWithPlants,
+    PlantProperties,
+    SelectPlant
+  } from "$lib/types";
   import { remap } from "@anselan/maprange";
-  import type { Position } from "postcss";
   import { beforeUpdate, onMount } from "svelte";
 
   export let garden: GardenWithPlants;
+  export let ignoreOriginal: boolean = false;
   export let width: number = 1000;
   export let height: number = width;
   export let showGardenName = true;
   export let showPlantName = false;
   export let colorBGText = "roel_green";
-
-  const skewDegrees = 2;
-  const animationLength = 6;
-  const skewOffset = 5;
-
-  let containerDiv: HTMLDivElement;
-
-  // width = convertWidth(width, innerwidth);
-  // height = convertHeight(height, innerheight);
-  // xGarden = convertWidth(xGarden, width);
-  // yGarden = convertHeight(yGarden, height);
 
   interface PositionData {
     x: number;
@@ -69,13 +62,42 @@
   //   return proportionalSize;
   // }
 
+  const stringOrNumberToNumber = (x: number | string): number => {
+    if (typeof x === "number") {
+      return x;
+    } else if (typeof x === "string") {
+      try {
+        const n = parseFloat(x);
+        return n;
+      } catch (e) {
+        console.error("failed to parse", x, "as float number");
+        return 1;
+      }
+    } else {
+      console.error("value is neither number nor string");
+      return 1;
+    }
+  };
+
+  const getLargestPlantHeightMetres = (plants: SelectPlant[]) =>
+    plants.map((p) => getPlantHeightMetres(p)).sort((a, b) => a - b)[0];
+
+  const getPlantHeightMetres = (plant: SelectPlant) => {
+    const { heightInMetres } = plant.properties as PlantProperties;
+    const h = stringOrNumberToNumber(heightInMetres);
+    console.log(plant.commonName, "height in metres", h);
+    return h;
+  };
+
   const positionAround = (
     x: number,
     y: number,
     maxDistance: number
   ): { x: number; y: number } => {
     const angle = Math.random() * 2 * Math.PI; // 360 degrees = 2PI Radians
-    const distance = remap(Math.random(), [0, 1.0], [0, maxDistance]);
+    // const distance = remap(Math.random(), [0, 1.0], [0, maxDistance]);
+    const distance = maxDistance;
+    console.log({ angle, distance });
     return {
       x: x + distance * Math.cos(angle),
       y: y + distance * Math.sin(angle)
@@ -84,65 +106,65 @@
 
   const buildLayout = (plantsInGarden: SelectPlant[]): PlantsWithGrasses[] => {
     // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
-    const baseScale = 300;
-    const size = baseScale;
-    const radius = Math.min(width / 2, height / 2);
+    const tallestPlant = getLargestPlantHeightMetres(plantsInGarden);
 
-    console.log({ radius, size });
+    return plantsInGarden
+      .sort((a, b) => {
+        const hA = getPlantHeightMetres(a);
+        const hB = getPlantHeightMetres(b);
+        return hB - hA;
+      })
+      .map((plant, index) => {
+        const heightPixels = remap(
+          getPlantHeightMetres(plant),
+          [0.1, tallestPlant],
+          [height / 20, height / 2]
+        );
+        const { x, y } = positionAround(
+          width / 2,
+          height / 2,
+          remap(index, [0, plantsInGarden.length], [0, width / 2])
+        );
 
-    return plantsInGarden.map((plant, index) => {
-      const isOriginalPlant = plant.parent1 === null;
-
-      const { x, y } = positionAround(
-        width / 2,
-        height / 2,
-        isOriginalPlant
-          ? 0
-          : remap(index, [0, plantsInGarden.length], [0, radius])
-      );
-      console.log({ x, y });
-
-      const plantPositionData = {
-        x,
-        y,
-        size,
-        zIndex: index * 100
-      };
-      return {
-        ...plant,
-        plantPositionData,
-        grassPositions: grassAroundPlant(plantPositionData)
-      };
-    });
+        const plantPositionData = {
+          x,
+          y: height / 2 + heightPixels / 2 + (index * heightPixels) / 8,
+          size: heightPixels,
+          zIndex: index
+        };
+        console.log({ plant: plant.commonName, plantPositionData });
+        return {
+          ...plant,
+          plantPositionData,
+          grassPositions: grassAroundPlant(plantPositionData, 4)
+        };
+      });
   };
 
-  function grassAroundPlant(plantPositionData: PositionData): PositionData[] {
+  const grassAroundPlant = (
+    plantPositionData: PositionData,
+    numPatches: number = 4
+  ): PositionData[] => {
     const { size } = plantPositionData;
-    const grassSize = size / 2;
-    const maxDistance = grassSize / 3;
-
-    const NUM_PATCHES = 4;
+    const offsetY = size / 2;
 
     let grassPatches = [];
-    for (let i = 0; i < NUM_PATCHES; i++) {
-      const { x, y } = positionAround(
-        plantPositionData.x,
-        plantPositionData.y,
-        maxDistance
-      );
+    for (let i = 0; i < numPatches; i++) {
+      const distance = remap(Math.random(), [0, 1], [0, size / 2]);
       grassPatches.push({
-        x,
-        y: y + size / 2,
-        size: grassSize,
+        x:
+          i % 2 === 0
+            ? plantPositionData.x + distance
+            : plantPositionData.x - distance,
+        y: plantPositionData.y + offsetY,
+        size: height / 6,
         zIndex:
-          i === 0 ? plantPositionData.zIndex + 1 : plantPositionData.zIndex - i
+          i === 0 ? plantPositionData.zIndex + 1 : plantPositionData.zIndex
       });
     }
-
     console.log({ grassPatches });
-
     return grassPatches;
-  }
+  };
 
   onMount(() => {
     positions = buildLayout(garden.plants);
@@ -154,37 +176,19 @@
     {#each grassPositions as grassPatch}
       <img
         src="/grassjess.png"
-        alt="Grass"
         class="absolute opacity-90 skew-animated"
-        style={`left: ${grassPatch.x - grassPatch.size / 2}px; top: ${grassPatch.y - grassPatch.size / 2}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex};transform:translate(-50%,-50%)`}
-        style:--skew-animation-delay={(Math.random() * -animationLength) / 3 +
-          "s"}
-        style:--skew-animation-length={animationLength + "s"}
-        style:--skew-degrees={skewDegrees + "deg"}
-        style:--negative-skew-degrees={"-" + skewDegrees + "deg"}
-        style:--skew-offset={skewOffset + "px"}
+        style={`left: ${grassPatch.x - grassPatch.size / 2}px; top: ${grassPatch.y - grassPatch.size / 2}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex};`}
+        alt={`Grass for ${commonName}`}
       />
     {/each}
     <img
       src={imageUrl}
       alt="Plant"
       class="absolute skew-animated"
-      style={`left: ${plantPositionData.x - plantPositionData.size / 2}px; top: ${plantPositionData.y - plantPositionData.size / 2}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex}; transform:translate(-50%,-50%)`}
+      style={`left: ${plantPositionData.x - plantPositionData.size / 2}px; top: ${plantPositionData.y - plantPositionData.size / 2}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex};`}
       crossorigin="anonymous"
-      style:--skew-animation-delay={(Math.random() * -animationLength) / 3 +
-        "s"}
-      style:--skew-animation-length={animationLength + "s"}
-      style:--skew-degrees={skewDegrees + "deg"}
-      style:--negative-skew-degrees={"-" + skewDegrees + "deg"}
-      style:--skew-offset={skewOffset + "px"}
     />
-    {#if parent1 == null && showGardenName}
-      <div
-        class="relative z-2000 font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50"
-      >
-        {garden.name}
-      </div>
-    {:else if showPlantName}
+    {#if showPlantName}
       <div
         class="absolute z-2000 font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
         style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y + plantPositionData.size / 2}px; width: auto; height: auto; z-index:${plantPositionData.zIndex + 1}`}
@@ -194,27 +198,10 @@
     {/if}
   {/each}
 </div>
-
-<style>
-  @keyframes skew-animation {
-    0% {
-      transform: skew(var(--skew-degrees))
-        translateX(calc(var(--skew-offset) * -1));
-    }
-    50% {
-      transform: skew(var(--negative-skew-degrees))
-        translateX(calc(var(--skew-offset) * 1));
-    }
-    100% {
-      transform: skew(var(--skew-degrees))
-        translateX(calc(var(--skew-offset) * -1));
-    }
-  }
-
-  .skew-animated {
-    animation:
-      skew-animation var(--skew-animation-length) infinite
-        var(--skew-animation-delay),
-      birth-animation 2s ease-out;
-  }
-</style>
+{#if showGardenName}
+  <div
+    class="absolute z-[2000] font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50"
+  >
+    {garden.name}
+  </div>
+{/if}

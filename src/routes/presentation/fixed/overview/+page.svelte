@@ -12,13 +12,11 @@
   >
     Bird's Eye View
   </div>
-  <div class="w-full">
-    <DisplayGarden garden={data.gardenWithPlants} />
-    <!-- {#each data.gardenWithPlants as plant}
-      <div>
-        {plant.plantId}
-        <img class="w-1/2" src={plant.imageUrl || ""} />
-      </div>
-    {/each} -->
-  </div>
+  <DisplayGarden
+    width={520}
+    height={800}
+    garden={data.gardenWithPlants}
+    ignoreOriginal={true}
+    showGardenName={false}
+  />
 </div>
