@@ -68,5 +68,6 @@
   .animatedList div:first-child {
     height: 0px;
     padding: 0;
+    overflow: hidden;
   }
 </style>
