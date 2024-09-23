@@ -1,28 +1,32 @@
 <script lang="ts">
   import type { DisplayMultipleGardens } from "$lib/events.types";
   import { onMount } from "svelte";
-  import { tweened } from "svelte/motion";
-  import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";
   import { BROLL_TIMEOUT } from "$lib/constants";
 
   import type { GardenWithPlants } from "$lib/types";
   import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
+  import { tweened } from "svelte/motion";
   export let gardens: GardenWithPlants[];
 
+  const GARDEN_WIDTH = 700;
+  const GARDEN_HEIGHT = 700;
+
   const duration = BROLL_TIMEOUT + 2000; //ms
-  const START_POSITION = -20;
-  const END_POSITION = -180;
+  const START_POSITION = GARDEN_WIDTH;
+  const END_POSITION = (-gardens.length * GARDEN_WIDTH) / 2;
+
+  const Y_OFFSET = 100;
+  const X_OFFSET = GARDEN_WIDTH / 2;
 
   let pan = tweened(START_POSITION, { duration });
 
-  const getPosition = (index: number): { x: number; y: number } => {
-    const xOffset = 100;
-    const yOffset = 100;
-    return {
-      x: index % 2 === 0 ? -xOffset : xOffset,
-      y: index * 100
-    };
-  };
+  const getOffsets = (
+    index: number,
+    pan: number
+  ): { x: number; y: number } => ({
+    x: index * X_OFFSET + pan,
+    y: index % 2 === 0 ? Y_OFFSET : -Y_OFFSET
+  });
 
   onMount(() => {
     pan.set(END_POSITION);
@@ -30,15 +34,31 @@
 </script>
 
 <div
-  class="w-screen h-screen items-center justify-center standard-gradient-rotated"
+  class="w-screen h-screen flex items-center justify-center presentation-gradient-rotated"
 >
-  {#each gardens as garden, index}
-    <DisplayGarden height={700} width={700} {garden} showGardenName={true}
-    ></DisplayGarden>
-  {/each}
+  <div
+    class="relative"
+    style:width={`${GARDEN_WIDTH}px`}
+    style:height={`${GARDEN_HEIGHT}px`}
+  >
+    {#each gardens as garden, index}
+      <div
+        class="relative"
+        style:left={getOffsets(index, $pan).x + "px"}
+        style:top={getOffsets(index, $pan).y + "px"}
+      >
+        <DisplayGarden
+          width={GARDEN_WIDTH}
+          height={GARDEN_HEIGHT}
+          {garden}
+          showGardenName={true}
+        ></DisplayGarden>
+      </div>
+    {/each}
+  </div>
 
   <div
-    class="w-screen h-screen flex text-center justify-center absolute items-end py-[3vh] text-roel_green text-9xl font-gyst"
+    class="w-full text-center text-roel_yellow text-4xl font-gyst absolute bottom-32 z-10 uppercase"
   >
     Join <br /> the Garden!
   </div>
