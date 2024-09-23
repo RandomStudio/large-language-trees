@@ -3,16 +3,16 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import type { RefreshDisplays } from "../../../api/displays/types";
-  import { invalidateAll } from "$app/navigation";
   import type { EventLog } from "$lib/types";
   import Idle from "../../shared-components/Idle.svelte";
   import { flip } from "svelte/animate";
 
   export let data;
 
-  let agent: TetherAgent | null = null;
+  let currentLogs = data.logs;
+  let messageIndex = data.logs.length;
 
-  let alternateOffset = 0;
+  let agent: TetherAgent | null = null;
 
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
@@ -22,10 +22,17 @@
 
     const feedEventLogs = await InputPlug.create(agent, "eventLogs");
     feedEventLogs.on("message", (payload) => {
-      alternateOffset++;
+      messageIndex++;
       const log = decode(payload) as EventLog;
-      console.log("new event log", log);
-      invalidateAll();
+      console.log("New log decoded", log);
+      const formattedLog = {
+        contents: log.contents,
+        messageIndex
+      };
+
+      currentLogs = [formattedLog, ...currentLogs].sort(
+        (a, b) => b.messageIndex - a.messageIndex
+      );
     });
 
     const refreshPlug = await InputPlug.create(agent, "refresh");
@@ -46,28 +53,23 @@
   });
 </script>
 
-{#if data.logs.length === 0}
+{#if currentLogs.length === 0}
   <Idle />
 {/if}
 <div
   class="w-full h-full items-center justify-center bg-purple-950 text-pink-300 animatedList"
 >
-  {#each data.logs as log, index (log.rowIndex)}
+  {#each currentLogs as log, index (log.messageIndex)}
     <div
       class="py-8 px-4 w-full font-primerb text-medium text-purple"
-      class:bg-pink-300={log.rowIndex % 2 === 0}
-      class:text-purple-950={log.rowIndex % 2 === 0}
+      class:bg-pink-300={log.messageIndex % 2 === 0}
+      class:text-purple-950={log.messageIndex % 2 === 0}
       animate:flip
     >
-      {log.content}
+      {log.contents}
     </div>
   {/each}
 </div>
 
 <style scoped>
-  .animatedList div:first-child {
-    height: 0px;
-    padding: 0;
-    overflow: hidden;
-  }
 </style>
