@@ -117,11 +117,11 @@
     let grassPatches = [];
     for (let i = 0; i < numPatches; i++) {
       const offsetX =
-        i === 0 ? 0 : (Math.random() * plantPositionData.size) / 4;
+        i === 0 ? 0 : (Math.random() * plantPositionData.size) / 2;
 
       const offsetY = (Math.random() * plantPositionData.size) / 4;
 
-      const offsetSize = (Math.random() * height) / 20;
+      const offsetSize = (Math.random() * height) / 10;
 
       const size = grassSize - offsetSize;
 
@@ -144,8 +144,8 @@
     const tallestPlantMetres = getLargestPlantHeightMetres(plantsInGarden);
     // console.log({ tallestPlantMetres });
 
-    // "Pushes" the centre of the offset curve later/lower as the number increases
-    const offsetCentreFactor = 1.1;
+    /** "Pushes" the centre of the offset curve later/lower as the number increases */
+    const OFFSET_CENTRE_FACTOR = 1.5;
 
     return plantsInGarden
       .sort((a, b) => {
@@ -163,9 +163,10 @@
         );
 
         const offsetY = remap(
-          index,
+          index * OFFSET_CENTRE_FACTOR,
           [0, plantsInGarden.length - 1],
-          [sizePixels * offsetCentreFactor, height - sizePixels / 2]
+          [sizePixels / 2, height - sizePixels / 2],
+          true
         );
 
         const amplitudeX =
@@ -191,7 +192,7 @@
         const numPatches = remap(
           index,
           [0, plantsInGarden.length - 1],
-          [32, 1],
+          [32, 0],
           true,
           true
         );
