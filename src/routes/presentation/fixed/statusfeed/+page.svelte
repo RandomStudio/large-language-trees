@@ -3,7 +3,6 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import type { RefreshDisplays } from "../../../api/displays/types";
-  import { PLUG_NAMES } from "$lib/constants";
   import { invalidateAll } from "$app/navigation";
   import type { EventLog } from "$lib/types";
   import Idle from "../../shared-components/Idle.svelte";
@@ -60,7 +59,7 @@
       class:text-purple-950={log.rowIndex % 2 === 0}
       animate:flip
     >
-      {log.rowIndex}
+      {log.content}
     </div>
   {/each}
 </div>
