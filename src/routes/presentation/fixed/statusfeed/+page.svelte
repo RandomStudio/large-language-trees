@@ -7,6 +7,7 @@
   import { invalidateAll } from "$app/navigation";
   import type { EventLog } from "$lib/types";
   import Idle from "../../shared-components/Idle.svelte";
+  import { flip } from "svelte/animate";
 
   export let data;
 
@@ -44,25 +45,28 @@
       agent.disconnect();
     }
   });
-
-  const isAlternateColour = (count: number, index: number): boolean => {
-    return (index + alternateOffset) % 2 === 0;
-  };
 </script>
 
 {#if data.logs.length === 0}
   <Idle />
 {/if}
 <div
-  class="w-full h-full items-center justify-center bg-purple-950 text-pink-300"
+  class="w-full h-full items-center justify-center bg-purple-950 text-pink-300 animatedList"
 >
-  {#each data.logs as log, index}
+  {#each data.logs as log, index (log.rowIndex)}
     <div
       class="py-8 px-4 w-full font-primerb text-medium text-purple"
-      class:bg-pink-300={isAlternateColour(data.logs.length, index)}
-      class:text-purple-950={isAlternateColour(data.logs.length, index)}
+      class:bg-pink-300={log.rowIndex % 2 === 0}
+      class:text-purple-950={log.rowIndex % 2 === 0}
+      animate:flip
     >
-      {log}
+      {log.rowIndex}
     </div>
   {/each}
 </div>
+
+<style scoped>
+  .animatedList {
+    transform: translateY(-100px);
+  }
+</style>
