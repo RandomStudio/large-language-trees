@@ -25,14 +25,15 @@
       messageIndex++;
       const log = decode(payload) as EventLog;
       console.log("New log decoded", log);
+
       const formattedLog = {
         contents: log.contents,
         messageIndex
       };
 
-      currentLogs = [formattedLog, ...currentLogs].sort(
-        (a, b) => b.messageIndex - a.messageIndex
-      );
+      currentLogs = [formattedLog, ...currentLogs]
+        .sort((a, b) => b.messageIndex - a.messageIndex)
+        .slice(0, 14);
     });
 
     const refreshPlug = await InputPlug.create(agent, "refresh");
