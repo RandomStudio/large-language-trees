@@ -44,6 +44,13 @@ export interface PlantWithDate extends SelectPlant {
 //   plantsWithDates: PlantWithDate[];
 // }
 
+export interface MinimalGardenPlants {
+  gardenName?: string;
+  plants: {
+    commonName?: string;
+    imageUrl: string;
+  }[];
+}
 export interface GardenWithPlants extends SelectGarden {
   plants: SelectPlant[];
 }

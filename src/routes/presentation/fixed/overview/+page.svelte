@@ -1,4 +1,6 @@
 <script lang="ts">
+  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
+
   export let data;
 </script>
 
@@ -11,11 +13,12 @@
     Bird's Eye View
   </div>
   <div class="w-full">
-    {#each data.gardenWithPlants as plant}
+    <DisplayGarden garden={data.gardenWithPlants} />
+    <!-- {#each data.gardenWithPlants as plant}
       <div>
         {plant.plantId}
         <img class="w-1/2" src={plant.imageUrl || ""} />
       </div>
-    {/each}
+    {/each} -->
   </div>
 </div>
