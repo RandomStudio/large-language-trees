@@ -147,8 +147,6 @@
       selectedPlantForInfo = plant as SelectPlant;
     }
   };
-
-  const allPlants = [...data.awaitingConfirmation, ...data.notSproutedPlants];
 </script>
 
 <Layout hasScroll title={undefined}>
@@ -174,14 +172,24 @@
         description="Has pollinated {data.pollinationCount} other plants"
       />
     </div>
-
-    {#each allPlants as candidatePlant}
+    {#each data.awaitingConfirmation as candidatePlant}
       <CollectionPlant
         authorTopUser={candidatePlant.authorTopUser}
         authorBottomUser={candidatePlant.authorBottomUser}
-        hasError={candidatePlant.errorMessage}
         isReadyToSprout
         onClick={handleClickPlant}
+        plant={candidatePlant}
+        hasError={candidatePlant.errorMessage}
+      />
+    {/each}
+
+    {#each data.notSproutedPlants as candidatePlant}
+      <CollectionPlant
+        authorTopUser={candidatePlant.authorTopUser}
+        authorBottomUser={candidatePlant.authorBottomUser}
+        isPending
+        onClick={handleClickPlant}
+        hasError={candidatePlant.errorMessage}
         plant={candidatePlant}
       />
     {/each}
