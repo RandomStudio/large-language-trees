@@ -80,7 +80,7 @@
   };
 
   const getLargestPlantHeightMetres = (plants: SelectPlant[]) =>
-    plants.map((p) => getPlantHeightMetres(p)).sort((a, b) => a - b)[0];
+    plants.map((p) => getPlantHeightMetres(p)).sort((a, b) => b - a)[0];
 
   const getPlantHeightMetres = (plant: SelectPlant) => {
     const { heightInMetres } = plant.properties as PlantProperties;
@@ -106,7 +106,8 @@
 
   const buildLayout = (plantsInGarden: SelectPlant[]): PlantsWithGrasses[] => {
     // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
-    const tallestPlant = getLargestPlantHeightMetres(plantsInGarden);
+    const tallestPlantMetres = getLargestPlantHeightMetres(plantsInGarden);
+    console.log({ tallestPlantMetres });
 
     return plantsInGarden
       .sort((a, b) => {
@@ -115,10 +116,12 @@
         return hB - hA;
       })
       .map((plant, index) => {
-        const heightPixels = remap(
+        const sizePixels = remap(
           getPlantHeightMetres(plant),
-          [0.1, tallestPlant],
-          [height / 20, height / 2]
+          [0.1, tallestPlantMetres],
+          [width / 10, width],
+          true,
+          true
         );
         const { x, y } = positionAround(
           width / 2,
@@ -127,12 +130,17 @@
         );
 
         const plantPositionData = {
-          x,
-          y,
-          size: heightPixels,
-          zIndex: index
+          x: x - sizePixels / 2,
+          y: y - sizePixels / 2,
+          size: sizePixels,
+          zIndex: (index + 1) * 100
         };
-        console.log({ index, plant: plant.commonName, plantPositionData });
+        console.log({
+          index,
+          plant: plant.commonName,
+          sizePixels,
+          plantPositionData
+        });
         return {
           ...plant,
           plantPositionData,
@@ -145,19 +153,20 @@
     plantPositionData: PositionData,
     numPatches: number = 4
   ): PositionData[] => {
-    const { size } = plantPositionData;
-    const offsetY = size / 2;
+    const plantSize = plantPositionData;
+    const offsetY = plantSize.size;
+    const grassSize = height / 6;
 
     let grassPatches = [];
     for (let i = 0; i < numPatches; i++) {
-      const distance = remap(Math.random(), [0, 1], [0, size / 2]);
+      const distance = remap(Math.random(), [0, 1], [0, grassSize / 2]);
       grassPatches.push({
         x:
           i % 2 === 0
             ? plantPositionData.x + distance
             : plantPositionData.x - distance,
-        y: plantPositionData.y + offsetY,
-        size: height / 6,
+        y: plantPositionData.y + offsetY - grassSize / 2,
+        size: grassSize,
         zIndex:
           i === 0 ? plantPositionData.zIndex + 1 : plantPositionData.zIndex
       });
@@ -177,15 +186,15 @@
       <img
         src="/grassjess.png"
         class="absolute opacity-90 skew-animated"
-        style={`left: ${grassPatch.x - grassPatch.size / 2}px; top: ${grassPatch.y - grassPatch.size / 2}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex};`}
+        style={`left: ${grassPatch.x}px; top: ${grassPatch.y}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex};`}
         alt={`Grass for ${commonName}`}
       />
     {/each}
     <img
       src={imageUrl}
-      alt="Plant"
+      alt={commonName}
       class="absolute skew-animated"
-      style={`left: ${plantPositionData.x - plantPositionData.size / 2}px; top: ${plantPositionData.y - plantPositionData.size / 2}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex};`}
+      style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex};`}
       crossorigin="anonymous"
     />
     {#if showPlantName}
