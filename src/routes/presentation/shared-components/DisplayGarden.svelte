@@ -128,11 +128,11 @@
 
         const plantPositionData = {
           x,
-          y: height / 2 + heightPixels / 2 + (index * heightPixels) / 8,
+          y,
           size: heightPixels,
           zIndex: index
         };
-        console.log({ plant: plant.commonName, plantPositionData });
+        console.log({ index, plant: plant.commonName, plantPositionData });
         return {
           ...plant,
           plantPositionData,
