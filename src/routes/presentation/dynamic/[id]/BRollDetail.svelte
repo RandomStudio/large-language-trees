@@ -4,6 +4,7 @@
   import { cubicOut } from "svelte/easing";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import { capitalise } from "$lib/promptUtils";
 
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
@@ -62,7 +63,7 @@
     <div
       class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
     >
-      {user.username}'s
+      {capitalise(user.username)}'s
       {plant.commonName}
     </div>
     <PlantDisplay

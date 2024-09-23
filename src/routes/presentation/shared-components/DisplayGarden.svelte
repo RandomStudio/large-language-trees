@@ -5,10 +5,9 @@
     SelectPlant
   } from "$lib/types";
   import { remap } from "@anselan/maprange";
-  import { beforeUpdate, onMount } from "svelte";
+  import { beforeUpdate } from "svelte";
 
   export let garden: GardenWithPlants;
-  export let ignoreOriginal: boolean = false;
   export let width: number = 1000;
   export let height: number = width;
   export let showGardenName = true;
@@ -85,7 +84,7 @@
   const getPlantHeightMetres = (plant: SelectPlant) => {
     const { heightInMetres } = plant.properties as PlantProperties;
     const h = stringOrNumberToNumber(heightInMetres);
-    console.log(plant.commonName, "height in metres", h);
+    // console.log(plant.commonName, "height in metres", h);
     return h;
   };
 
@@ -97,7 +96,7 @@
     const angle = Math.random() * 2 * Math.PI; // 360 degrees = 2PI Radians
     // const distance = remap(Math.random(), [0, 1.0], [0, maxDistance]);
     const distance = maxDistance;
-    console.log({ angle, distance });
+    // console.log({ angle, distance });
     return {
       x: x + distance * Math.cos(angle),
       y: y + distance * Math.sin(angle)
@@ -136,14 +135,14 @@
         zIndex: i === 0 && numPatches < 2 ? plantPositionData.zIndex + 1 : 1
       });
     }
-    console.log({ grassPatches });
+    // console.log({ grassPatches });
     return grassPatches;
   };
 
   const buildLayout = (plantsInGarden: SelectPlant[]): PlantsWithGrasses[] => {
     // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
     const tallestPlantMetres = getLargestPlantHeightMetres(plantsInGarden);
-    console.log({ tallestPlantMetres });
+    // console.log({ tallestPlantMetres });
 
     // "Pushes" the centre of the offset curve later/lower as the number increases
     const offsetCentreFactor = 1.1;
@@ -182,12 +181,12 @@
           size: sizePixels,
           zIndex: (index + 1) * 100
         };
-        console.log({
-          index,
-          plant: plant.commonName,
-          sizePixels,
-          plantPositionData
-        });
+        // console.log({
+        //   index,
+        //   plant: plant.commonName,
+        //   sizePixels,
+        //   plantPositionData
+        // });
 
         const numPatches = remap(
           index,
@@ -205,9 +204,8 @@
       });
   };
 
-  onMount(() => {});
-
   beforeUpdate(() => {
+    console.log("..................... buildLayout!");
     positions = buildLayout(garden.plants);
   });
 </script>

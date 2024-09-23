@@ -1,7 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
-  import { decode, InputPlug, TetherAgent } from "tether-agent";
+  import {
+    decode,
+    InputPlug,
+    parseAgentIdOrGroup,
+    TetherAgent
+  } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import { SimpleEventNames, type EventFirstPlant } from "$lib/events.types";
   import { invalidateAll } from "$app/navigation";
@@ -16,13 +21,17 @@
       id: "leaderboard"
     });
 
-    const newPlantsPlug = await InputPlug.create(agent, "events", {
-      id: SimpleEventNames.FIRST_PLANT
-    });
-    newPlantsPlug.on("message", (payload) => {
-      const log = decode(payload) as EventFirstPlant;
-      console.log("new plant!", log);
-      invalidateAll();
+    const newPlantsPlug = await InputPlug.create(agent, "events", {});
+    newPlantsPlug.on("message", (payload, topic) => {
+      const grouping = parseAgentIdOrGroup(topic);
+      console.log({ topic, grouping });
+      if (
+        grouping === SimpleEventNames.FIRST_PLANT ||
+        SimpleEventNames.POLLINATION_COMPLETE
+      ) {
+        console.log("new plant!");
+        invalidateAll();
+      }
     });
   });
 </script>
