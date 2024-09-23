@@ -48,7 +48,6 @@
     width={520}
     height={1400}
     garden={data.gardenWithPlants}
-    ignoreOriginal={true}
     showGardenName={false}
   />
 </div>
