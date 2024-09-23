@@ -9,40 +9,40 @@
   export let userName: string;
   export let garden: GardenWithPlants;
 
-  const duration = BROLL_TIMEOUT; //ms
-  const StartScale = 6;
-  const EndScale = 2;
+  const START_SCALE = 6;
+  const END_SCALE = 1;
 
-  let zoom = tweened(StartScale, { duration, easing: cubicInOut });
+  let zoom = tweened(START_SCALE, {
+    duration: BROLL_TIMEOUT,
+    easing: cubicInOut
+  });
 
   onMount(() => {
-    zoom.set(EndScale);
+    zoom.set(END_SCALE);
   });
 </script>
 
 <div
-  class="w-full h-full relative overflow-hidden bg-gradient-to-t from-roel_blue from-60% to-roel_rose to-85%"
+  class="w-full h-full flex items-center justify-center presentation-gradient"
 >
   <div
-    class="absolute z-10 w-full h-[30vh] flex text-center text-new_purple py-[3vh] justify-center text-9xl font-gyst bg-gradient-to-b from-roel_rose from-20%"
+    class="w-full text-center text-roel_yellow text-4xl font-gyst absolute top-32 z-10 uppercase"
   >
     {userName.toUpperCase()}'S <br /> GARDEN
   </div>
-  <div class="w-full h-full z-0" style="transform: scale({$zoom});">
+
+  <div
+    class="absolute"
+    style={`width:540px; height:800px;`}
+    style:transform={`scale(${$zoom})`}
+  >
     <DisplayGarden
       {garden}
-      xGarden={-65}
-      yGarden={500}
-      height={540}
       width={540}
+      height={800}
       showGardenName={false}
       showPlantName={false}
       colorBGText="roel_rose"
-      innerwidth={window.innerWidth}
-      innerheight={window.innerHeight}
     ></DisplayGarden>
   </div>
-  <div
-    class="absolute z-5 mbt-0 w-full h-[100vh] bg-gradient-to-b from-roel_rose from-5% to-40%"
-  ></div>
 </div>
