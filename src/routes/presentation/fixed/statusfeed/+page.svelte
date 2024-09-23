@@ -65,7 +65,8 @@
 </div>
 
 <style scoped>
-  .animatedList div {
-    transform: translateY(-100%);
+  .animatedList div:first-child {
+    height: 0px;
+    padding: 0;
   }
 </style>
