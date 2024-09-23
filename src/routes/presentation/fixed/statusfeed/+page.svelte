@@ -65,7 +65,7 @@
 </div>
 
 <style scoped>
-  .animatedList {
-    transform: translateY(-100px);
+  .animatedList div {
+    transform: translateY(-100%);
   }
 </style>
