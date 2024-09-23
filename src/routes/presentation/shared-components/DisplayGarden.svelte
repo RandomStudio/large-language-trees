@@ -104,10 +104,49 @@
     };
   };
 
+  const grassAroundPlant = (
+    plantPositionData: PositionData,
+    maxPatches: number = 4
+  ): PositionData[] => {
+    const grassSize = height / 10;
+
+    const startX = plantPositionData.x + plantPositionData.size / 2;
+    const startY = plantPositionData.y + plantPositionData.size;
+
+    const numPatches = Math.ceil(Math.random() * maxPatches);
+
+    let grassPatches = [];
+    for (let i = 0; i < numPatches; i++) {
+      const offsetX =
+        i === 0 ? 0 : (Math.random() * plantPositionData.size) / 4;
+
+      const offsetY = (Math.random() * plantPositionData.size) / 4;
+
+      const offsetSize = (Math.random() * height) / 20;
+
+      const size = grassSize - offsetSize;
+
+      grassPatches.push({
+        x:
+          i % 2 === 0
+            ? startX + offsetX - size / 2
+            : startX - offsetX - size / 2,
+        y: startY - size / 2 - offsetY,
+        size,
+        zIndex: i === 0 && numPatches < 2 ? plantPositionData.zIndex + 1 : 1
+      });
+    }
+    console.log({ grassPatches });
+    return grassPatches;
+  };
+
   const buildLayout = (plantsInGarden: SelectPlant[]): PlantsWithGrasses[] => {
     // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
     const tallestPlantMetres = getLargestPlantHeightMetres(plantsInGarden);
     console.log({ tallestPlantMetres });
+
+    // "Pushes" the centre of the offset curve later/lower as the number increases
+    const offsetCentreFactor = 1.1;
 
     return plantsInGarden
       .sort((a, b) => {
@@ -119,19 +158,27 @@
         const sizePixels = remap(
           getPlantHeightMetres(plant),
           [0.1, tallestPlantMetres],
-          [width / 10, width],
+          [width / 4, width],
           true,
           true
         );
-        const { x, y } = positionAround(
-          width / 2,
-          height / 2,
-          remap(index, [0, plantsInGarden.length], [0, width / 2])
+
+        const offsetY = remap(
+          index,
+          [0, plantsInGarden.length - 1],
+          [sizePixels * offsetCentreFactor, height - sizePixels / 2]
         );
 
+        const amplitudeX =
+          index === 0
+            ? 0
+            : remap(index, [1, plantsInGarden.length - 1], [width / 2, 0]) *
+              Math.random();
+
+        const offsetX = index % 2 === 0 ? -amplitudeX : amplitudeX;
         const plantPositionData = {
-          x: x - sizePixels / 2,
-          y: y - sizePixels / 2,
+          x: width / 2 - sizePixels / 2 + offsetX,
+          y: index === 0 ? 0 : offsetY - sizePixels / 2,
           size: sizePixels,
           zIndex: (index + 1) * 100
         };
@@ -141,41 +188,26 @@
           sizePixels,
           plantPositionData
         });
+
+        const numPatches = remap(
+          index,
+          [0, plantsInGarden.length - 1],
+          [32, 1],
+          true,
+          true
+        );
+
         return {
           ...plant,
           plantPositionData,
-          grassPositions: grassAroundPlant(plantPositionData, 4)
+          grassPositions: grassAroundPlant(plantPositionData, numPatches)
         };
       });
   };
 
-  const grassAroundPlant = (
-    plantPositionData: PositionData,
-    numPatches: number = 4
-  ): PositionData[] => {
-    const plantSize = plantPositionData;
-    const offsetY = plantSize.size;
-    const grassSize = height / 6;
+  onMount(() => {});
 
-    let grassPatches = [];
-    for (let i = 0; i < numPatches; i++) {
-      const distance = remap(Math.random(), [0, 1], [0, grassSize / 2]);
-      grassPatches.push({
-        x:
-          i % 2 === 0
-            ? plantPositionData.x + distance
-            : plantPositionData.x - distance,
-        y: plantPositionData.y + offsetY - grassSize / 2,
-        size: grassSize,
-        zIndex:
-          i === 0 ? plantPositionData.zIndex + 1 : plantPositionData.zIndex
-      });
-    }
-    console.log({ grassPatches });
-    return grassPatches;
-  };
-
-  onMount(() => {
+  beforeUpdate(() => {
     positions = buildLayout(garden.plants);
   });
 </script>
@@ -194,7 +226,7 @@
       src={imageUrl}
       alt={commonName}
       class="absolute skew-animated"
-      style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex};`}
+      style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex}; transition: left 2s, top 5s;`}
       crossorigin="anonymous"
     />
     {#if showPlantName}
