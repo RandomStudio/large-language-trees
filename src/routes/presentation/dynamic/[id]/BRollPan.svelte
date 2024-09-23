@@ -34,8 +34,6 @@
 >
   {#each gardens as garden, index}
     <DisplayGarden
-      xGarden={getPosition(index).x}
-      yGarden={getPosition(index).y}
       height={700}
       width={700}
       {garden}
