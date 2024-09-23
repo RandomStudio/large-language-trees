@@ -147,6 +147,8 @@
       selectedPlantForInfo = plant as SelectPlant;
     }
   };
+
+  const allPlants = [...data.awaitingConfirmation, ...data.notSproutedPlants];
 </script>
 
 <Layout hasScroll title={undefined}>
@@ -157,7 +159,7 @@
       }}>i</TopRightButton
     >
   {/if}
-  <div class="text-new_purple pb-32">
+  <div class="text-new_purple">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
@@ -172,24 +174,14 @@
         description="Has pollinated {data.pollinationCount} other plants"
       />
     </div>
-    {#each data.awaitingConfirmation as candidatePlant}
+
+    {#each allPlants as candidatePlant}
       <CollectionPlant
         authorTopUser={candidatePlant.authorTopUser}
         authorBottomUser={candidatePlant.authorBottomUser}
+        hasError={candidatePlant.errorMessage}
         isReadyToSprout
         onClick={handleClickPlant}
-        plant={candidatePlant}
-        hasError={candidatePlant.errorMessage}
-      />
-    {/each}
-
-    {#each data.notSproutedPlants as candidatePlant}
-      <CollectionPlant
-        authorTopUser={candidatePlant.authorTopUser}
-        authorBottomUser={candidatePlant.authorBottomUser}
-        isPending
-        onClick={handleClickPlant}
-        hasError={candidatePlant.errorMessage}
         plant={candidatePlant}
       />
     {/each}
