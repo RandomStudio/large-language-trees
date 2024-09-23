@@ -33,15 +33,7 @@
   class="w-screen h-screen items-center justify-center standard-gradient-rotated"
 >
   {#each gardens as garden, index}
-    <DisplayGarden
-      xGarden={getPosition(index).x}
-      yGarden={getPosition(index).y}
-      height={700}
-      width={700}
-      {garden}
-      showGardenName={true}
-      innerwidth={window.innerWidth}
-      innerheight={window.innerHeight}
+    <DisplayGarden height={700} width={700} {garden} showGardenName={true}
     ></DisplayGarden>
   {/each}
 
