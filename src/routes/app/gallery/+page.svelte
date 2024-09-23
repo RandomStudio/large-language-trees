@@ -157,7 +157,7 @@
       }}>i</TopRightButton
     >
   {/if}
-  <div class="text-new_purple pb-32">
+  <div class="text-new_purple">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div

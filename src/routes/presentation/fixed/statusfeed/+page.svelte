@@ -3,16 +3,16 @@
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import type { RefreshDisplays } from "../../../api/displays/types";
-  import { PLUG_NAMES } from "$lib/constants";
-  import { invalidateAll } from "$app/navigation";
   import type { EventLog } from "$lib/types";
   import Idle from "../../shared-components/Idle.svelte";
+  import { flip } from "svelte/animate";
 
   export let data;
 
-  let agent: TetherAgent | null = null;
+  let currentLogs = data.logs;
+  let messageIndex = data.logs.length;
 
-  let alternateOffset = 0;
+  let agent: TetherAgent | null = null;
 
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
@@ -22,10 +22,18 @@
 
     const feedEventLogs = await InputPlug.create(agent, "eventLogs");
     feedEventLogs.on("message", (payload) => {
-      alternateOffset++;
+      messageIndex++;
       const log = decode(payload) as EventLog;
-      console.log("new event log", log);
-      invalidateAll();
+      console.log("New log decoded", log);
+
+      const formattedLog = {
+        contents: log.contents,
+        messageIndex
+      };
+
+      currentLogs = [formattedLog, ...currentLogs]
+        .sort((a, b) => b.messageIndex - a.messageIndex)
+        .slice(0, 14);
     });
 
     const refreshPlug = await InputPlug.create(agent, "refresh");
@@ -44,25 +52,25 @@
       agent.disconnect();
     }
   });
-
-  const isAlternateColour = (count: number, index: number): boolean => {
-    return (index + alternateOffset) % 2 === 0;
-  };
 </script>
 
-{#if data.logs.length === 0}
+{#if currentLogs.length === 0}
   <Idle />
 {/if}
 <div
-  class="w-full h-full items-center justify-center bg-purple-950 text-pink-300"
+  class="w-full h-full items-center justify-center bg-purple-950 text-pink-300 animatedList"
 >
-  {#each data.logs as log, index}
+  {#each currentLogs as log, index (log.messageIndex)}
     <div
       class="py-8 px-4 w-full font-primerb text-medium text-purple"
-      class:bg-pink-300={isAlternateColour(data.logs.length, index)}
-      class:text-purple-950={isAlternateColour(data.logs.length, index)}
+      class:bg-pink-300={log.messageIndex % 2 === 0}
+      class:text-purple-950={log.messageIndex % 2 === 0}
+      animate:flip
     >
-      {log}
+      {log.contents}
     </div>
   {/each}
 </div>
+
+<style scoped>
+</style>

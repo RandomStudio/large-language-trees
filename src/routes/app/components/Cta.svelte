@@ -27,7 +27,7 @@
     on:click={onClick}
     data-test={test}
     data-umami-event={umami}
-    class="w-full bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full button-with-active"
+    class="w-full bg-roel_blue text-roel_green font-primer text-3xl px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full button-with-active select-none"
     class:button-disabled={disabled}
   >
     <slot />
