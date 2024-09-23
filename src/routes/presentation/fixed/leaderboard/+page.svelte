@@ -73,11 +73,7 @@
         Pollinators
       </div>
 
-      <DisplayGarden
-        width={500}
-        garden={data.topGardenWithPlants}
-        yGarden={400}
-      />
+      <DisplayGarden width={500} garden={data.topGardenWithPlants} />
 
       <div
         class="w-full text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"

@@ -1,53 +1,45 @@
 <script lang="ts">
   import type { GardenWithPlants, SelectPlant } from "$lib/types";
+  import { remap } from "@anselan/maprange";
+  import type { Position } from "postcss";
   import { beforeUpdate, onMount } from "svelte";
 
   export let garden: GardenWithPlants;
-  export let width = 1000;
-  export let height = width;
+  export let width: number = 1000;
+  export let height: number = width;
   export let xGarden = 0;
   export let yGarden = 0;
   export let showGardenName = true;
   export let showPlantName = false;
   export let colorBGText = "roel_green";
-  export let innerwidth: number = 540;
-  export let innerheight: number = 1620;
 
-  const previousHeight = 1620;
-  const previousWidth = 540;
-
-  const skewDegrees = 6;
+  const skewDegrees = 2;
   const animationLength = 6;
-  const skewOffset = 20;
+  const skewOffset = 5;
 
-  width = convertWidth(width, innerwidth);
-  height = convertHeight(height, innerheight);
-  xGarden = convertWidth(xGarden, innerwidth);
-  yGarden = convertHeight(yGarden, innerheight);
+  let containerDiv: HTMLDivElement;
 
-  interface PlantPosition extends SelectPlant {
+  // width = convertWidth(width, innerwidth);
+  // height = convertHeight(height, innerheight);
+  // xGarden = convertWidth(xGarden, width);
+  // yGarden = convertHeight(yGarden, height);
+
+  interface PositionData {
     x: number;
     y: number;
     size: number;
     zIndex: number;
-    grasses: {
-      x: number;
-      y: number;
-      size: number;
-      zIndexGrass: number;
-    }[];
   }
 
-  let plantProportion = 0.6;
-  let positions: PlantPosition[] = [];
-
-  function convertHeight(y: number, innerheight: number) {
-    return (y * innerheight) / previousHeight;
+  interface PlantsWithPositions extends SelectPlant {
+    plantPositionData: PositionData;
   }
 
-  function convertWidth(x: number, innerwidth: number) {
-    return (x * innerwidth) / previousWidth;
+  interface PlantsWithGrasses extends PlantsWithPositions {
+    grassPositions: PositionData[];
   }
+
+  let positions: PlantsWithGrasses[] = [];
 
   function findMinMaxHeight() {
     if (!garden.plants || garden.plants.length === 0) {
@@ -66,125 +58,115 @@
     return { min, max };
   }
 
-  function calculateProportionalSize(
-    heightInMetres: number,
-    minHeightPlant: number,
-    maxHeightPlant: number,
-    baseScale: number
-  ) {
-    const heightRange = maxHeightPlant - minHeightPlant;
-    const heightProportion = (heightInMetres - minHeightPlant) / heightRange;
-    const proportionalSize = baseScale + heightProportion * baseScale;
+  // function calculateProportionalSize(
+  //   heightInMetres: number,
+  //   minHeightPlant: number,
+  //   maxHeightPlant: number,
+  //   baseScale: number
+  // ) {
+  //   const heightRange = maxHeightPlant - minHeightPlant;
+  //   const heightProportion = (heightInMetres - minHeightPlant) / heightRange;
+  //   const proportionalSize = baseScale + heightProportion * baseScale;
 
-    return proportionalSize;
-  }
+  //   return proportionalSize;
+  // }
 
-  function randomizePositions(plantsInGarden: SelectPlant[]): PlantPosition[] {
-    const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
+  function buildLayout(plantsInGarden: SelectPlant[]): PlantsWithGrasses[] {
+    // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
     const baseScale = 300;
+    const size = baseScale;
     const radius = Math.min(width / 2, height / 2);
+
+    console.log({ radius, size });
 
     return plantsInGarden.map((plant, index) => {
       if (plant.parent1 === null) {
+        const x = width / 2 - size / 2;
+        const y = height / 2 - size / 2;
+        const zIndex = Math.floor(height / 2); // TODO: this is so wrong
+        const plantPositionData = {
+          x,
+          y,
+          size,
+          zIndex
+        };
         return {
           ...plant,
-          x: width / 2,
-          y: height / 4,
-          size: baseScale,
-          zIndex: Math.floor(height / 2),
-          grasses: grassAroundMain(
-            {
-              x: width / 2,
-              y: height / 2,
-              size: baseScale,
-              zIndex: Math.floor(height / 2)
-            },
-            baseScale
-          )
+
+          grassPositions: grassAroundPlant(plantPositionData)
         };
       } else {
         const angle = Math.random() * Math.PI * 2;
-        const distance = ((index + 1) / plantsInGarden.length) * radius;
+        const distance = remap(index, [0, plantsInGarden.length], [0, radius]);
 
-        const x = width / 2 + distance * Math.cos(angle);
-        const y = height / 2 + distance * Math.sin(angle);
+        const x = width / 2 + distance * Math.cos(angle) - size / 2;
+        const y = height / 2 + distance * Math.sin(angle) - size / 2;
 
-        const size = baseScale;
-        console.log(size);
+        console.log({ x, y });
 
         const zIndex = Math.floor(y);
-        const grasses = grassAroundMain({ x, y, size, zIndex }, baseScale);
+        const grasses = grassAroundPlant({ x, y, size, zIndex }, baseScale);
         return { ...plant, x, y, size, zIndex, grasses };
       }
     });
   }
 
-  function grassAroundMain(
-    position: {
-      x: number;
-      y: number;
-      size: number;
-      zIndex: number;
-    },
-    baseScale: number
-  ) {
-    const baseSize = baseScale * 0.5;
+  function randomizeSize(size: number, variationFactor: number) {
+    return size * (1 + Math.random() * variationFactor - variationFactor);
+  }
+
+  function randomizePosition(center: number, maxDistance: number) {
+    return center + (Math.random() * 2 - 1) * maxDistance;
+  }
+
+  function grassAroundPlant(plantPositionData: PositionData) {
+    const { size, x, y } = plantPositionData;
+    const baseSize = size * 0.5;
     const variationFactor = 0.2;
-    const maxDistance = position.size / 3;
-
-    function randomizeSize(size: number) {
-      return size * (1 + Math.random() * variationFactor - variationFactor);
-    }
-
-    function randomizePosition(center: number) {
-      return center + (Math.random() * 2 - 1) * maxDistance;
-    }
+    const maxDistance = baseSize / 3;
 
     const grassPatches = [
       {
-        x: position.x * 1,
-        y: position.y + position.size / 2.8 - 100,
-        size: randomizeSize(baseSize),
-        zIndexGrass: position.zIndex + 0
+        x: plantPositionData.x * 1,
+        y: plantPositionData.y + plantPositionData.size / 2.8 - 100,
+        size: randomizeSize(baseSize, variationFactor),
+        zIndexGrass: plantPositionData.zIndex + 0
       },
       {
-        x: (position.x - position.size / 3) * 1,
-        y: position.y * 1.2,
-        size: randomizeSize(baseSize),
-        zIndexGrass: position.zIndex
+        x: (plantPositionData.x - plantPositionData.size / 3) * 1,
+        y: plantPositionData.y * 1.2,
+        size: randomizeSize(baseSize, variationFactor),
+        zIndexGrass: plantPositionData.zIndex
       },
       {
-        x: position.x * 1.3,
-        y: position.y * 1.2 - position.size / 4,
-        size: randomizeSize(baseSize),
-        zIndexGrass: position.zIndex
+        x: plantPositionData.x * 1.3,
+        y: plantPositionData.y * 1.2 - plantPositionData.size / 4,
+        size: randomizeSize(baseSize, variationFactor),
+        zIndexGrass: plantPositionData.zIndex
       },
       {
-        x: (position.x + position.size / 3) * 1,
-        y: position.y * 1.2,
-        size: randomizeSize(baseSize),
-        zIndexGrass: position.zIndex + 1000
+        x: (plantPositionData.x + plantPositionData.size / 3) * 1,
+        y: plantPositionData.y * 1.2,
+        size: randomizeSize(baseSize, variationFactor),
+        zIndexGrass: plantPositionData.zIndex + 1000
       },
       {
-        x: randomizePosition(position.x * 1),
-        y: randomizePosition(position.y * 1.2),
-        size: randomizeSize(baseSize),
-        zIndexGrass: position.zIndex
+        x: randomizePosition(plantPositionData.x * 1, maxDistance),
+        y: randomizePosition(plantPositionData.y * 1.2, maxDistance),
+        size: randomizeSize(baseSize, variationFactor),
+        zIndexGrass: plantPositionData.zIndex
       }
     ];
 
     return grassPatches;
   }
 
-  beforeUpdate(() => {
-    positions = randomizePositions(garden.plants);
+  onMount(() => {
+    positions = buildLayout(garden.plants);
   });
 </script>
 
-<div
-  class="fixed border-black border-[0px]"
-  style="width: {width}px; height: {height}px; position: absolute; left: {xGarden}px; top: {yGarden}px; "
->
+<div class="absolute" style:width={`${width}px`} style:height={`${height}px`}>
   {#each positions as { parent1, commonName, imageUrl, x, y, size, zIndex, grasses }}
     {#each grasses as grass}
       <img
