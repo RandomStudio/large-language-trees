@@ -27,7 +27,7 @@
       console.log({ topic, grouping });
       if (
         grouping === SimpleEventNames.FIRST_PLANT ||
-        SimpleEventNames.POLLINATION_COMPLETE
+        grouping === SimpleEventNames.POLLINATION_COMPLETE
       ) {
         console.log("new plant!");
         invalidateAll();

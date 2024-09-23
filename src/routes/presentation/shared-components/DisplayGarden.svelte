@@ -217,7 +217,7 @@
       <img
         src="/grassjess.png"
         class="absolute opacity-90 skew-animated"
-        style={`left: ${grassPatch.x}px; top: ${grassPatch.y}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex};`}
+        style={`left: ${grassPatch.x}px; top: ${grassPatch.y}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex}; transition: left 2s, top 5s;`}
         alt={`Grass for ${commonName}`}
       />
     {/each}
