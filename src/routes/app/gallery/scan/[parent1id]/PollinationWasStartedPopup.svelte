@@ -45,9 +45,11 @@
         playsinline
         class="absolute -bottom-10 w-screen pointer-events-none"
       >
-        <!-- Fallback to HEIC H264 MOV with transparency if WebM is not supported -->
-        <source src="/pollination/seedbirth.webm" type="video/webm" />
-        <source src="/pollination/seedbirth.mov" type="video/quicktime" />
+        <img
+          class="absolute -bottom-10 w-screen pointer-events-none"
+          src="/pollination/newplant.gif"
+          alt="Animated seeds flying over the foreground"
+        />
       </video>
     </div>
     <div />
