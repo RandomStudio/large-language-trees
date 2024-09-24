@@ -2,11 +2,16 @@
   import { invalidateAll } from "$app/navigation";
   import { LOADING_MESSAGES } from "$lib/constants";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import type { CandidatePlant, SelectPlant, SelectUser } from "$lib/types";
+  import type {
+    CandidatePlant,
+    PublicUserInfo,
+    SelectPlant,
+    SelectUser
+  } from "$lib/types";
   import { onMount } from "svelte";
 
-  export let authorTopUser: SelectUser | undefined;
-  export let authorBottomUser: SelectUser | undefined;
+  export let authorTopUser: PublicUserInfo | null = null;
+  export let authorBottomUser: PublicUserInfo | null = null;
   export let disableAnimation = true;
   export let plant: SelectPlant | CandidatePlant;
 

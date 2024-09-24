@@ -194,13 +194,13 @@
       />
     {/each}
 
-    {#each data.myOtherPlants as plant, index}
+    {#each data.myOtherPlants as { plant }, index}
       <CollectionPlant
-        authorTopUser={undefined}
-        authorBottomUser={undefined}
+        authorTopUser={plant.authorTopUser}
+        authorBottomUser={plant.authorBottomUser}
         disableAnimation={index > MAX_CANVASSES - 1}
         onClick={handleClickPlant}
-        plant={plant.plant}
+        {plant}
       />
     {/each}
 

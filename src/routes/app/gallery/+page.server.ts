@@ -21,7 +21,15 @@ export const load: PageServerLoad = async ({ locals }) => {
   const userWithPlants = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      myGarden: { with: { plants: { with: { plant: true } } } }
+      myGarden: {
+        with: {
+          plants: {
+            with: {
+              plant: { with: { authorTopUser: true, authorBottomUser: true } }
+            }
+          }
+        }
+      }
     }
   });
 
