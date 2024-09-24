@@ -313,7 +313,7 @@
         crossbreeding your {data.thisPlant.commonName}.
       </p>
       <div class="relative">
-        <div class="overflow-hidden rounded-full bg-transparent">
+        <div class="overflow-hidden rounded-full bg-transparent mb-8">
           <video
             bind:this={videoElement}
             class="object-cover aspect-square w-full pointer-events-none"
