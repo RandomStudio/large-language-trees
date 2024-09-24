@@ -95,10 +95,16 @@
         const readText = result.getText();
         const [part1, part2] = readText.split("&");
         console.log("scan text:", { part1, part2 });
-        const otherPlantId = part1;
-        const otherUserId = part2;
+        if (part1 && part2) {
+          const otherPlantId = part1;
+          const otherUserId = part2;
 
-        onCodeScanned(otherPlantId, otherUserId);
+          onCodeScanned(otherPlantId, otherUserId);
+        } else {
+          console.error("Weird results... stop and restart scanning");
+          stopScanning();
+          startQrScanning();
+        }
       }
       if (err && !(err instanceof NotFoundException)) {
         console.error(err);
