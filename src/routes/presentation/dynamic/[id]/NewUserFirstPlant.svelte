@@ -8,7 +8,6 @@
   export let gardenerName: string;
 
   export let applyFilters: boolean = false;
-  export let positionStyles: string = "w-full";
 
   const soundFiles = [
     "/Sound 1 - Schuup.mp3",
@@ -61,11 +60,7 @@
       crossorigin="anonymous"
     />
     <div class="absolute w-full h-full flex items-center justify-center">
-      <PlantDisplay
-        imageUrl={plant.imageUrl || ""}
-        {applyFilters}
-        {positionStyles}
-      />
+      <PlantDisplay imageUrl={plant.imageUrl || ""} {applyFilters} />
     </div>
   </div>
 

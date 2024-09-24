@@ -23,9 +23,7 @@
   });
 </script>
 
-<div class="flex items-center justify-center">
-  <canvas
-    bind:this={canvasElement}
-    style="width:80%; height: auto; aspect-ratio: 1;"
-  ></canvas>
-</div>
+<canvas
+  bind:this={canvasElement}
+  style="width:60%; height: auto; aspect-ratio: 1;"
+></canvas>

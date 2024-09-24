@@ -301,7 +301,7 @@
   <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
 {:else}
   <Layout title="Let's Pollinate">
-    <div class="grid grid-rows-[max-content_auto_max-content]">
+    <div class="">
       <ReturnButton
         onClick={async () => {
           stopScanning();
@@ -312,37 +312,40 @@
         Point your camera to another gardeners Pollination QR to start
         crossbreeding your {data.thisPlant.commonName}.
       </p>
-      <div class="relative shrink flex flex-col">
-        <div
-          class="object-cover aspect-square h-full w-full place-self-center overflow-hidden rounded-full bg-transparent"
-        >
-          <div class="block relative {errorMessage && 'opacity-30'}">
-            <video
-              bind:this={videoElement}
-              class="object-cover aspect-square pointer-events-none"
-            >
-              <track kind="captions" srclang="en" label="English captions" />
-            </video>
-          </div>
-          <p
-            class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
+      <div class="relative">
+        <div class="overflow-hidden rounded-full bg-transparent">
+          <video
+            bind:this={videoElement}
+            class="object-cover aspect-square w-full pointer-events-none"
+            class:opacity-30={errorMessage}
           >
-            {errorMessage}
-          </p>
-          <PlantDisplay
+            <track kind="captions" srclang="en" label="English captions" />
+          </video>
+        </div>
+        <div class="absolute bottom-0 right-0 translate-x-6 translate-y-6">
+          <img
+            class="w-40"
+            src={data.thisPlant.imageUrl}
+            crossorigin="anonymous"
+          />
+          <!-- <PlantDisplay
             imageUrl={data.thisPlant.imageUrl || ""}
             applyFilters={false}
-            positionStyles={"absolute -bottom-3 -right-8 -mb-1 w-40 h-40 pointer-events-none"}
-          />
+          /> -->
         </div>
+        <p
+          class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
+        >
+          {errorMessage}
+        </p>
       </div>
+    </div>
 
-      <div class="">
-        <PollinationQrCode
-          plantId={data.thisPlant.id}
-          userId={data.thisUser.id}
-        />
-      </div>
+    <div class="flex items-center justify-center">
+      <PollinationQrCode
+        plantId={data.thisPlant.id}
+        userId={data.thisUser.id}
+      />
     </div>
 
     {#if alreadyExistsPlant}

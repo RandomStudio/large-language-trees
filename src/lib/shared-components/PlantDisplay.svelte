@@ -23,8 +23,6 @@
     Default width, can be overridden
   */
   export let imageClass: string = "";
-  export let positionStyles: string =
-    "w-full pointer-events-none " + imageClass;
 
   let canvasElement: HTMLCanvasElement;
 
@@ -127,7 +125,6 @@
       bind:this={canvasElement}
       width="1024"
       height="1024"
-      class={positionStyles}
       class:filter={applyFilters}
       class:grayscale={applyFilters}
       class:opacity-65={applyFilters}
