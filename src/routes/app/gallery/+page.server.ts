@@ -57,12 +57,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   const notSproutedPlants = (
     await db.query.generatedPlants.findMany({
-      where: or(
-        and(
-          eq(generatedPlants.awaitingConfirmation, false),
-          eq(generatedPlants.authorTop, userId)
-        ),
-        eq(generatedPlants.authorBottom, userId)
+      where: and(
+        eq(generatedPlants.awaitingConfirmation, false),
+        or(
+          eq(generatedPlants.authorTop, userId),
+          eq(generatedPlants.authorBottom, userId)
+        )
       ),
       with: {
         parentPlantTop: true,
