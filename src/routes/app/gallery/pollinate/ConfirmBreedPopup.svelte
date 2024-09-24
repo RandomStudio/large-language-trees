@@ -94,7 +94,7 @@
         {finalChildReadyToAdd.description}
       </p>
 
-      <Cta onClick={finalise}>Great!</Cta>
+      <Cta onClick={finalise}>Start Growing!</Cta>
     {/if}
   </Layout>
 </div>
