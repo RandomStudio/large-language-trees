@@ -117,11 +117,12 @@
   });
 </script>
 
-<div>
+<div class="w-full pointer-events-none">
   {#if disableAnimation}
     <img class={imageClass} src={imageUrl} alt="Static plant, no animation" />
   {:else}
     <canvas
+      class="w-full"
       bind:this={canvasElement}
       width="1024"
       height="1024"

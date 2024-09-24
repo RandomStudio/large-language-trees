@@ -326,6 +326,7 @@
           <img
             class="w-40"
             src={data.thisPlant.imageUrl}
+            alt={data.thisPlant.commonName}
             crossorigin="anonymous"
           />
           <!-- <PlantDisplay
