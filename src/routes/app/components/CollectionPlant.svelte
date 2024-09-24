@@ -109,7 +109,7 @@
         on:click={removeCandidatePlant}
         class="bg-red-500 text-roel_green font-primer text-sm px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full button-with-active"
       >
-        Click to remove and retry
+        Tap to remove and retry
       </button>
     {/if}
 
@@ -121,7 +121,7 @@
     {/if}
 
     {#if isReadyToSprout}
-      <div class="text-xs">Click to sprout</div>
+      <div class="text-xs">Tap to sprout</div>
       <div class="text-xs">{getName(plant)}</div>
       <div class="text-xs">now</div>
     {/if}
