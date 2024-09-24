@@ -172,10 +172,18 @@ sequenceDiagram
 
 ...Both this user ("top") and other user ("bottom") should receive the EventNewSprouting message and reload gallery as necessary.
 
-## GIF
+## Moving snapshot of data
 
-One-liner ffmpeg command for converting video (with transparency) into suitable animated GIF:
+From AWS to file:
 
 ```
-ffmpeg -i Seed_Birth_Animation_02.mov -f gif -lavfi "split[v],palettegen,[v]paletteuse" seedbirth.gif
+pg_dump postgresql://postgres:YA3p5NXwPROiAF0FKrQh@thegarden.c9m0yiyim7u1.eu-north-1.rds.amazonaws.com:5432 -f dump.dump --format=custom
 ```
+
+From that file to local PostgreSQL:
+
+```
+pg_restore --clean -d postgresql://postgres:mysecretpassword@localhost:5432 dump.dum
+```
+
+(if clean fails, clear out the database using Admin first, then retry)
