@@ -61,10 +61,11 @@ export const POST: RequestHandler = async ({ request }) => {
     if (!garden) {
       throw Error("Failed to find garden matching userID " + userId);
     }
-    await addPlantToGarden(plantId, garden.id);
+    const result = await addPlantToGarden(plantId, garden.id);
+    return json({ result }, { status: 201 });
   }
 
-  return json(data, { status: 201 });
+  return json({}, { status: 400 });
 };
 
 export const GET: RequestHandler = async ({ url }) => {

@@ -73,7 +73,7 @@
         <div class="text-xs">
           ID {plant.id}
         </div>
-        <div class="text-md">
+        <div class="text-lg">
           {plant.commonName}
         </div>
         <div class="text-md">

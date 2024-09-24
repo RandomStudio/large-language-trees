@@ -270,4 +270,5 @@ export async function addPlantToGarden(plantId: string, gardenId: string) {
   if (result.length === 0) {
     throw Error("error adding plant to garden");
   }
+  return result;
 }

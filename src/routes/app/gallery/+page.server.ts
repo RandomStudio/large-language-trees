@@ -18,6 +18,12 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw Error("no user ID");
   }
 
+  if (username === "admin") {
+    console.error("This is the admin user! Shouldn't be on the gallery");
+    console.warn("Redirecting...");
+    redirect(302, "/app/logout");
+  }
+
   const userWithPlants = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
@@ -42,7 +48,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   );
 
   if (!myOriginalPlant) {
-    throw Error("missing plant(s)");
+    throw Error("missing original plant for user " + userId + ", " + username);
   }
 
   const myOtherPlants = userWithPlants.myGarden.plants.filter(
