@@ -58,7 +58,7 @@
     <ul>
       <li>
         <a href="./admin/plantutils" class="underline"
-          >Test text/image generation...</a
+          >List and edit plants/images...</a
         >
       </li>
     </ul>
