@@ -40,7 +40,9 @@
     const candidatePlants = (await res.json()) as CandidatePlant[];
     return candidatePlants
       .filter((c) => c.awaitingConfirmation === true)
-      .find((c) => c.authorTop === data.user.id);
+      .find(
+        (c) => c.authorTop === data.user.id || c.authorBottom === data.user.id
+      );
   };
 
   const pollForMyPlantsAdded = async () => {
@@ -88,7 +90,10 @@
     newCandidatePlantReady.on("message", (payload) => {
       const m = decode(payload) as EventGeneratedPlantReady;
       console.log("New plant ready. Is it mine...?", m.payload);
-      if (m.payload.authorTop === data.user.id) {
+      if (
+        m.payload.authorTop === data.user.id ||
+        m.payload.authorBottom === data.user.id
+      ) {
         invalidateAll();
         // NB: We wait for user input to set this as the candidate plant to confirm!
       }

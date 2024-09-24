@@ -72,7 +72,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   const awaitingConfirmation = await db.query.generatedPlants.findMany({
     where: and(
-      eq(generatedPlants.authorTop, userId),
+      or(
+        eq(generatedPlants.authorTop, userId),
+        eq(generatedPlants.authorBottom, userId)
+      ),
       eq(generatedPlants.awaitingConfirmation, true)
     ),
     with: {
