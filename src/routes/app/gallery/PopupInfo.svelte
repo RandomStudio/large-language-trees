@@ -1,12 +1,20 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import type { SelectPlant } from "$lib/types";
+  import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import Layout from "../components/Layout.svelte";
+  import { onMount } from "svelte";
 
   export let plantDetails: SelectPlant;
+  export let authorTopUser: PublicUserInfo | null = null;
+  export let authorBottomUser: PublicUserInfo | null = null;
   export let closePopup: () => any;
+  export let isOriginalPlant: boolean = false;
+
+  onMount(() => {
+    console.log("got info", { plantDetails, authorTopUser, authorBottomUser });
+  });
 </script>
 
 <ReturnButton onClick={closePopup} />
@@ -18,8 +26,12 @@
         <PlantDisplay
           imageUrl={plantDetails.imageUrl || ""}
           applyFilters={false}
-          label={plantDetails.commonName}
+          label={isOriginalPlant
+            ? `Your ${plantDetails.commonName}`
+            : plantDetails.commonName}
           description={plantDetails.description}
+          {authorTopUser}
+          {authorBottomUser}
         />
       </div>
     </div>

@@ -310,7 +310,7 @@
       />
       <p class="pb-4 text-roel_green">
         Point your camera to another gardeners Pollination QR to start
-        crossbreeding {data.thisPlant.commonName}.
+        crossbreeding your {data.thisPlant.commonName}.
       </p>
       <div class="relative shrink flex flex-col">
         <div

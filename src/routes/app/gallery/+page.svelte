@@ -1,6 +1,10 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { type CandidatePlant, type SelectPlant } from "../../../lib/types";
+  import {
+    type CandidatePlant,
+    type PublicUserInfo,
+    type SelectPlant
+  } from "../../../lib/types";
   import { onDestroy, onMount } from "svelte";
 
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
@@ -27,7 +31,14 @@
   type GalleryViewData = typeof data;
 
   let candidateChild: CandidatePlant | null = null;
-  let selectedPlantForInfo: SelectPlant | null = null;
+
+  interface PlantWithUsers extends SelectPlant {
+    authorTopUser: PublicUserInfo | null;
+    authorBottomUser: PublicUserInfo | null;
+    isOriginalPlant: boolean;
+  }
+
+  let selectedPlantForInfo: PlantWithUsers | null = null;
 
   let isAppInfoOpen = false;
   let agent: TetherAgent | null = null;
@@ -139,15 +150,15 @@
     goto(`/app/gallery/scan/${plantId}`);
   };
 
-  const handleClickPlant = (plant: SelectPlant | CandidatePlant) => {
-    console.log("handleClickPlant", plant);
-    if ("commonName" in plant) {
-      selectedPlantForInfo = plant as SelectPlant;
-    }
-    if ("awaitingConfirmation" in plant) {
-      candidateChild = plant as CandidatePlant;
-    }
-  };
+  // const handleClickPlant = (plant: SelectPlant | CandidatePlant) => {
+  //   console.log("handleClickPlant", plant);
+  //   if ("commonName" in plant) {
+  //     selectedPlantForInfo = plant as PlantWithUsers;
+  //   }
+  //   if ("awaitingConfirmation" in plant) {
+  //     candidateChild = plant as CandidatePlant;
+  //   }
+  // };
 </script>
 
 <Layout hasScroll title={undefined}>
@@ -163,14 +174,19 @@
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class="mb-12"
-      on:click={() => handleClickPlant(data.myOriginalPlant.plant)}
+      on:click={() => {
+        selectedPlantForInfo = {
+          ...data.myOriginalPlant.plant,
+          isOriginalPlant: true
+        };
+      }}
     >
       <PlantDisplay
         disableAnimation={false}
         imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
         applyFilters={false}
-        label={data.myOriginalPlant.plant.commonName}
-        description="Has pollinated {data.pollinationCount} other plants"
+        label={"Your " + data.myOriginalPlant.plant.commonName}
+        description="...has pollinated {data.pollinationCount} other plants"
       />
     </div>
     {#each data.awaitingConfirmation as candidatePlant}
@@ -178,7 +194,9 @@
         authorTopUser={candidatePlant.authorTopUser}
         authorBottomUser={candidatePlant.authorBottomUser}
         isReadyToSprout
-        onClick={handleClickPlant}
+        onClick={() => {
+          candidateChild = candidatePlant;
+        }}
         plant={candidatePlant}
         hasError={candidatePlant.errorMessage}
       />
@@ -189,7 +207,9 @@
         authorTopUser={candidatePlant.authorTopUser}
         authorBottomUser={candidatePlant.authorBottomUser}
         isPending
-        onClick={handleClickPlant}
+        onClick={() => {
+          console.log("Not sprouted... no info");
+        }}
         hasError={candidatePlant.errorMessage}
         plant={candidatePlant}
       />
@@ -200,7 +220,14 @@
         authorTopUser={plant.authorTopUser}
         authorBottomUser={plant.authorBottomUser}
         disableAnimation={index > MAX_CANVASSES - 1}
-        onClick={handleClickPlant}
+        onClick={() => {
+          selectedPlantForInfo = {
+            ...plant,
+            authorTopUser: plant.authorTopUser,
+            authorBottomUser: plant.authorBottomUser,
+            isOriginalPlant: false
+          };
+        }}
         {plant}
       />
     {/each}
@@ -208,6 +235,9 @@
     {#if selectedPlantForInfo}
       <PopupInfo
         plantDetails={selectedPlantForInfo}
+        authorTopUser={selectedPlantForInfo.authorTopUser}
+        authorBottomUser={selectedPlantForInfo.authorBottomUser}
+        isOriginalPlant={selectedPlantForInfo.isOriginalPlant}
         closePopup={() => {
           selectedPlantForInfo = null;
         }}

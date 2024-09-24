@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { PublicUserInfo } from "$lib/types";
   import {
     Application,
     Assets,
@@ -13,6 +14,8 @@
 
   export let imageUrl: string;
   export let label: string | null = null;
+  export let authorTopUser: PublicUserInfo | null = null;
+  export let authorBottomUser: PublicUserInfo | null = null;
   export let description: string | null = null;
   export let applyFilters: boolean = false;
   export let disableAnimation: boolean = false;
@@ -133,9 +136,15 @@
     />
   {/if}
   {#if label}
-    <div class="pt-2 pb-4 text-center text-medium capitalize">{label}</div>
+    <div class="pt-2 text-center text-small capitalize">{label}</div>
   {/if}
+  {#if authorTopUser && authorBottomUser}
+    <p class="font-normal text-center text-small capitalize">
+      {authorTopUser.username} ♡ {authorBottomUser.username}
+    </p>
+  {/if}
+
   {#if description}
-    <div class="text-center text-xs">{description}</div>
+    <div class="pt-1 text-center text-xs">{description}</div>
   {/if}
 </div>
