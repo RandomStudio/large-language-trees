@@ -64,33 +64,6 @@ export const POST: RequestHandler = async ({ request }) => {
     await addPlantToGarden(plantId, garden.id);
   }
 
-  // if (ADMIN_GARDEN_SHARED === "true") {
-  //   console.warn(
-  //     "ADMIN_GARDEN_SHARED enabled; also add this plant to admin garden"
-  //   );
-  //   const adminUser = await getUserByUsername("admin");
-  //   if (adminUser) {
-  //     const adminGarden = await getUserGarden(adminUser.id);
-  //     if (adminGarden) {
-  //       const exists = await db
-  //         .select()
-  //         .from(gardensToPlants)
-  //         .where(
-  //           and(
-  //             eq(gardensToPlants.plantId, plantId),
-  //             eq(gardensToPlants.gardenId, gardenId)
-  //           )
-  //         );
-  //       if (exists.length === 0) {
-  //         await addPlantToGarden(plantId, adminGarden.id);
-  //         console.log("...added to admin user garden OK");
-  //       } else {
-  //         console.log("...already exist in garden; skip");
-  //       }
-  //     }
-  //   }
-  // }
-
   return json(data, { status: 201 });
 };
 
@@ -136,7 +109,41 @@ export const PATCH: RequestHandler = async ({ request }) => {
         eq(gardensToPlants.gardenId, data.gardenId),
         eq(gardensToPlants.plantId, data.plantId)
       )
-    );
+    )
+    .returning();
 
   return json(result[0], { status: 200 });
+};
+
+export const DELETE: RequestHandler = async ({ request, url }) => {
+  const gardenId = url.searchParams.get("gardenId");
+  const plantId = url.searchParams.get("plantId");
+
+  if (gardenId) {
+    console.warn(
+      "Deleting all plantsInGarden entries where gardenId ==",
+      gardenId
+    );
+    const result = await db
+      .delete(gardensToPlants)
+      .where(eq(gardensToPlants.gardenId, gardenId))
+      .returning();
+    return json(result, { status: result.length > 0 ? 200 : 202 });
+  }
+  if (plantId) {
+    const result = await db
+      .delete(gardensToPlants)
+      .where(eq(gardensToPlants.plantId, plantId))
+      .returning();
+    return json(result, { status: result.length > 0 ? 200 : 202 });
+  }
+
+  return json(
+    {},
+    {
+      status: 400,
+      statusText:
+        "Must provide either gardenId or plantId in request URL searchparams"
+    }
+  );
 };

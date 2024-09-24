@@ -8,7 +8,7 @@
 <main class="container mx-auto px-4">
   <h1 class="text-xl">Admin Page</h1>
 
-  <div class="border-2">
+  <div class="border-t-black border-2">
     <h2 class="font-bold">Initialise default data</h2>
     <div data-test="plant-db-stats">
       Currently {data.allPlants.length} plants in the database
@@ -30,7 +30,7 @@
     </form>
   </div>
 
-  <div class="border-2">
+  <div class="border-t-black border-2">
     <h2 class="font-bold">Reset plants and users</h2>
     <form method="POST" action="?/reset">
       <button
@@ -42,7 +42,7 @@
     </form>
   </div>
 
-  <div class="border-2">
+  <div class="border-t-black border-2">
     <h2 class="font-bold">Prompt engineering</h2>
     <ul>
       <li>
@@ -53,14 +53,19 @@
     </ul>
   </div>
 
-  <div class="m-4">
-    <p>
-      When you're ready, you can proceed to the admin user's <a
-        class="underline font-bold"
-        href="/app/garden">garden...</a
-      >
-    </p>
+  <div class="border-t-black border-2">
+    <h2 class="font-bold">Plant / image utilities</h2>
+    <ul>
+      <li>
+        <a href="./admin/plantutils" class="underline"
+          >Test text/image generation...</a
+        >
+      </li>
+    </ul>
   </div>
-  <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
-  ></UserLoginStatus>
+
+  <div class="border-t-black border-2">
+    <UserLoginStatus isAdmin={data.isAdmin} username={data.username}
+    ></UserLoginStatus>
+  </div>
 </main>
