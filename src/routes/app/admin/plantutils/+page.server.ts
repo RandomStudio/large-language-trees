@@ -1,6 +1,8 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "../$types";
 import { db } from "$lib/server/db";
+import { isNotNull, or } from "drizzle-orm";
+import { plants } from "$lib/server/schema";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const username = locals.user?.username;
@@ -9,9 +11,10 @@ export const load: PageServerLoad = async ({ locals }) => {
     redirect(302, "/app");
   }
 
-  const plantsInGardens = await db.query.gardensToPlants.findMany({
-    with: { plant: true, garden: { with: { myOwner: true } } }
+  const plantsWithOwners = await db.query.plants.findMany({
+    with: { authorTopUser: true, authorBottomUser: true },
+    where: or(isNotNull(plants.authorTop), isNotNull(plants.authorBottom))
   });
 
-  return { plantsInGardens };
+  return { plantsWithOwners };
 };

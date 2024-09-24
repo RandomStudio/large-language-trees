@@ -12,12 +12,16 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const { plantId, url } = (await request.json()) as AttachImageRequest;
 
-  await db
+  if (!plantId || !url) {
+    console.error("missing params in body");
+    return json({}, { status: 400, statusText: "missing params in body" });
+  }
+
+  const res = await db
     .update(plants)
     .set({ imageUrl: url })
     .where(eq(plants.id, plantId))
     .returning();
 
-  const finalResponse: AttachImageResponse = { plantId, url };
-  return json(finalResponse, { status: 200 });
+  return json(res, { status: res.length > 0 ? 200 : 202 });
 };

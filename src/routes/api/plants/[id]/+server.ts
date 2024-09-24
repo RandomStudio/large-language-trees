@@ -25,3 +25,12 @@ export const GET: RequestHandler = async ({ params }) => {
     throw Error("Param missing");
   }
 };
+
+export const DELETE: RequestHandler = async ({ params }) => {
+  const id = params["id"];
+  if (!id) {
+    throw Error("Param missing");
+  }
+  const result = await db.delete(plants).where(eq(plants.id, id)).returning();
+  return json(result, { status: result.length > 0 ? 200 : 202 });
+};
