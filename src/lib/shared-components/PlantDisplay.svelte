@@ -119,7 +119,12 @@
 
 <div class="w-full pointer-events-none">
   {#if disableAnimation}
-    <img class={imageClass} src={imageUrl} alt="Static plant, no animation" />
+    <img
+      class={imageClass}
+      src={imageUrl}
+      alt="Static plant, no animation"
+      crossorigin="anonymous"
+    />
   {:else}
     <canvas
       class="w-full"
