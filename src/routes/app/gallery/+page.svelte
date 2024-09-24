@@ -1,10 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import {
-    type CandidatePlant,
-    type PublicUserInfo,
-    type SelectPlant
-  } from "../../../lib/types";
+  import { type CandidatePlant, type SelectPlant } from "../../../lib/types";
   import { onDestroy, onMount } from "svelte";
 
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
@@ -32,8 +28,6 @@
 
   let candidateChild: CandidatePlant | null = null;
   let selectedPlantForInfo: SelectPlant | null = null;
-
-  let otherUserStartedPollination: PublicUserInfo | null = null;
 
   let isAppInfoOpen = false;
   let agent: TetherAgent | null = null;
@@ -95,8 +89,8 @@
       const m = decode(payload) as EventGeneratedPlantReady;
       console.log("New plant ready. Is it mine...?", m.payload);
       if (m.payload.authorTop === data.user.id) {
-        console.log("New plant ready, and needs my input:", m.payload);
-        candidateChild = m.payload;
+        invalidateAll();
+        // NB: We wait for user input to set this as the candidate plant to confirm!
       }
     });
 
@@ -109,10 +103,8 @@
               "Server polling got new plant that is ready and needs my input:",
               matchingPlant
             );
-            candidateChild = matchingPlant;
-            // if (pollForPlantsReady) {
-            //   clearInterval(pollForPlantsReady);
-            // }
+            // NB: We wait for user input to set this as the candidate plant to confirm!
+            invalidateAll();
           }
         });
       }, 3000);
@@ -143,8 +135,12 @@
   };
 
   const handleClickPlant = (plant: SelectPlant | CandidatePlant) => {
+    console.log("handleClickPlant", plant);
     if ("commonName" in plant) {
       selectedPlantForInfo = plant as SelectPlant;
+    }
+    if ("awaitingConfirmation" in plant) {
+      candidateChild = plant as CandidatePlant;
     }
   };
 </script>
