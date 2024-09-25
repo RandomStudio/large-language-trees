@@ -21,9 +21,10 @@
     type EventPollinationStarting
   } from "$lib/events.types";
   import { BROWSER_CONNECTION } from "../../../../../defaults/tether";
-  import { error } from "@sveltejs/kit";
   import PollinationWasStartedPopup from "./PollinationWasStartedPopup.svelte";
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
+  import type Result from "@zxing/library/esm/core/Result";
+  import type Exception from "@zxing/library/esm/core/Exception";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -73,44 +74,65 @@
     }
   };
 
+  const scanCallback = (result: Result, err?: Exception) => {
+    if (result) {
+      // Handle the result here
+      const readText = result.getText();
+      const [part1, part2] = readText.split("&");
+      console.log("scan text:", { part1, part2 });
+      if (part1 && part2) {
+        const otherPlantId = part1;
+        const otherUserId = part2;
+
+        onCodeScanned(otherPlantId, otherUserId)
+          .then()
+          .catch((e) => {
+            console.warn(
+              `There was an error ("${e}") stop and restart scanning to be safe`
+            );
+          });
+        stopScanning();
+        startQrScanning();
+      } else {
+        console.error("Weird results... stop and restart scanning");
+        stopScanning();
+        startQrScanning();
+      }
+    }
+    if (err && !(err instanceof NotFoundException)) {
+      console.error(err);
+      errorMessage = "Error: " + err;
+    }
+  };
+
   const startQrScanning = async () => {
     errorMessage = "";
     console.log("Attempt to start camera + QR scanning...");
-    const stream = await getStream(); // throws Error if unsuccessful
-    console.log("... stream started OK");
-    isLoadingCamera = false;
-    videoElement.srcObject = stream;
-    videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
+    try {
+      const stream = await getStream(); // throws Error if unsuccessful
 
-    if (codeReader) {
-      console.warn("codeReader was already running; stop it first");
-      codeReader.stopContinuousDecode();
+      if (!stream) {
+        throw Error("stream is null");
+      }
+      console.log("... stream started OK");
+      if (!videoElement) {
+        throw Error("no video element ready");
+      }
+      isLoadingCamera = false;
+      videoElement.srcObject = stream;
+      videoElement.setAttribute("playsinline", "true"); // Required to tell iOS safari we don't want fullscreen
+
+      if (codeReader) {
+        console.warn("codeReader was already running; stop it first");
+        codeReader.stopContinuousDecode();
+      }
+
+      codeReader = new BrowserMultiFormatReader();
+
+      codeReader.decodeFromStream(stream, videoElement, scanCallback);
+    } catch (e) {
+      console.error("error in startQrScanning: ", e);
     }
-
-    codeReader = new BrowserMultiFormatReader();
-
-    codeReader.decodeFromStream(stream, videoElement, (result, err) => {
-      if (result) {
-        // Handle the result here
-        const readText = result.getText();
-        const [part1, part2] = readText.split("&");
-        console.log("scan text:", { part1, part2 });
-        if (part1 && part2) {
-          const otherPlantId = part1;
-          const otherUserId = part2;
-
-          onCodeScanned(otherPlantId, otherUserId);
-        } else {
-          console.error("Weird results... stop and restart scanning");
-          stopScanning();
-          startQrScanning();
-        }
-      }
-      if (err && !(err instanceof NotFoundException)) {
-        console.error(err);
-        errorMessage = "Error: " + err;
-      }
-    });
   };
 
   const stopScanning = () => {
@@ -128,11 +150,12 @@
       stream.getTracks().forEach((track) => track.stop());
     }
     videoElement.srcObject = null;
+    codeReader = null;
   };
 
   const onCodeScanned = async (otherPlantId: string, otherUserId: string) => {
     if (otherUserId === data.thisUser.id) {
-      console.error("this user is myself; try again");
+      throw Error("this user is myself; try again");
     }
     otherUser = await getOtherUserDetails(otherUserId);
 
@@ -278,6 +301,7 @@
           "New pollination started for plant of which I am the 'other' author",
           m.payload
         );
+        stopScanning();
         otherUserStartedPollination = m.payload.authorTop;
       }
     });
