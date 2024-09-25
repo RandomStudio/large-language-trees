@@ -140,7 +140,7 @@
       clearInterval(pollForPlantsReady);
     }
     if (agent) {
-      console.log("...disconnect Tether");
+      console.log("Gallery disconnect Tether");
       agent.disconnect();
       agent = null;
     }

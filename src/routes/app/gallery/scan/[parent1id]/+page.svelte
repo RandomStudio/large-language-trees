@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
   import type {
     GeneratePlantRequestBody,
@@ -137,19 +136,18 @@
 
   const stopScanning = () => {
     console.log("Stop camera + scanning");
-    if (!videoElement) {
-      return;
-    }
 
     if (codeReader) {
       codeReader.stopContinuousDecode();
     }
 
-    const stream = videoElement.srcObject as MediaStream | null;
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
+    if (videoElement) {
+      const stream = videoElement.srcObject as MediaStream | null;
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+        videoElement.srcObject = null;
+      }
     }
-    videoElement.srcObject = null;
     codeReader = null;
   };
 
@@ -201,6 +199,7 @@
         "This child combination already exists!",
         alreadyExistsPlant
       );
+      stopScanning();
     }
   };
 
@@ -309,6 +308,11 @@
 
   onDestroy(() => {
     stopScanning();
+    if (agent) {
+      console.log("Scan disconnect Tether");
+      agent.disconnect();
+      agent = null;
+    }
   });
 </script>
 
