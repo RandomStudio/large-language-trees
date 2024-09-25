@@ -44,7 +44,7 @@
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
-    class="absolute w-full h-full flex text-center items-start justify-center text-9xl py-[2vh] font-gyst"
+    class="absolute w-full h-full flex text-center items-start justify-center text-5xl py-[2vh] font-gyst"
     style="color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -65,7 +65,7 @@
   </div>
 
   <div
-    class="absolute w-full h-full flex text-center items-end justify-center text-9xl py-[2vh] font-gyst"
+    class="absolute w-full h-full flex text-center items-end justify-center text-5xl py-[2vh] font-gyst"
     style="color: {darkColor};"
   >
     Just sprouted <br /> in the garden!

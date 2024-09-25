@@ -16,13 +16,13 @@
   </div>
 
   <div
-    class="grid grid-cols-1 gap-1 place-content-center place-items-center h-full w-full"
+    class="grid grid-cols-1 gap-1 place-content-center place-items-center h-screen w-full"
   >
     {#if plantTop.imageUrl}
       <img
         src={plantTop.imageUrl}
         alt="Pollinating Plant First Parent"
-        class="w-[50vw]"
+        class="w-[90]"
         crossorigin="anonymous"
       />
     {/if}
@@ -31,15 +31,19 @@
       <img
         src={plantBottom.imageUrl}
         alt="Pollinating Plant First Parent"
-        class="w-[50vw] rotate-180"
+        class="w-[90] rotate-180"
         crossorigin="anonymous"
       />
     {/if}
   </div>
 
   <div class="absolute inset-0 flex items-center justify-center">
-    <div class="text-center text-roel_yellow font-gyst text-7xl uppercase z-10">
-      is pollinating with
+    <div
+      class="text-center text-roel_yellow font-gyst text-7xl uppercase z-10 leading-[4rem]"
+    >
+      <div>is</div>
+      <div>pollinating</div>
+      <div>with</div>
     </div>
   </div>
 
