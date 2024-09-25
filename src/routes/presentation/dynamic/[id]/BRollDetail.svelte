@@ -48,9 +48,6 @@
   });
 
   onMount(() => {
-    const xEnd = xStart;
-    const yEnd = yStart;
-
     x.set(-sizePicture / 3);
     y.set(0);
   });
@@ -65,7 +62,9 @@
   {capitalise(user.username)}'s
   {plant.commonName}
 </div>
-<div class="viewport w-full h-full presentation-gradient-rotated">
+<div
+  class="relative overflow-hidden w-full h-full presentation-gradient-rotated"
+>
   <div
     class="absolute"
     style:width={`${sizePicture}px`}
@@ -76,10 +75,3 @@
     <PlantDisplay imageUrl={plant.imageUrl || ""} applyFilters={false} />
   </div>
 </div>
-
-<style>
-  .viewport {
-    overflow: hidden;
-    position: relative;
-  }
-</style>
