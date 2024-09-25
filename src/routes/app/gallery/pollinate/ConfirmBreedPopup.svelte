@@ -37,11 +37,11 @@
         console.info("candidate plant still exists, so we DO need to add it");
         await insertNewPlant(finalInsertPlant);
       } else {
+        console.warn(
+          "The candidate plant no longer exists in the generatedPlants list; probably was added already"
+        );
+        // DO NOTHING
       }
-      console.warn(
-        "The candidate plant no longer exists in the generatedPlants list; probably was already added"
-      );
-      // DO NOTHING
     }
 
     // No matter what happens above, confirm and close...
