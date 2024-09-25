@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getColors } from "./findColors";
+  import { getColourPair } from "./findColors";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import writtenNumber from "written-number";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
@@ -23,7 +23,7 @@
 
   onMount(() => {
     img.onload = () => {
-      const result = getColors(img);
+      const result = getColourPair(img);
       brightColor = result.brightColor;
       darkColor = result.darkColor;
     };

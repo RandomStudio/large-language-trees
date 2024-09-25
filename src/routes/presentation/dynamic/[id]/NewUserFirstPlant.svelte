@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getColors } from "./findColors";
+  import { getColourPair } from "./findColors";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import type { SelectPlant } from "$lib/types";
 
@@ -9,32 +9,16 @@
 
   export let applyFilters: boolean = false;
 
-  const soundFiles = [
-    "/Sound 1 - Schuup.mp3",
-    "/Sound 2 - Dududu.mp3",
-    "/Sound 3 - Whistles.mp3",
-    "/Sound 4 - Schuup2.mp3",
-    "/Sound 5 - Dududu2.mp3",
-    "/Sound 6 - Ghost.mp3"
-  ];
-
-  function getRandomSoundFile() {
-    const randomIndex = Math.floor(Math.random() * soundFiles.length);
-    return soundFiles[randomIndex];
-  }
-
-  let brightColor = "rgb(255, 185, 198)";
-  let darkColor = "rgb(117, 0, 147)";
+  let brightColor: string | null = null;
+  let darkColor: string | null = null;
 
   let img: HTMLImageElement;
 
   onMount(() => {
     img.onload = () => {
-      const result = getColors(img);
+      const result = getColourPair(img);
       brightColor = result.brightColor;
       darkColor = result.darkColor;
-      const audio = new Audio(getRandomSoundFile());
-      audio.play();
     };
   });
 </script>
@@ -44,7 +28,7 @@
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
-    class="absolute w-full h-full flex text-center items-start justify-center text-5xl py-[2vh] font-gyst"
+    class="absolute w-full h-full flex text-center items-start justify-center text-6xl pt-32 font-gyst"
     style="color: {brightColor};"
   >
     {gardenerName.toUpperCase()}'S <br />
@@ -53,9 +37,9 @@
 
   <div class="fixed inset-0 flex items-center justify-center">
     <img
-      class="opacity-0"
+      class="hidden"
       src={plant.imageUrl}
-      alt="Hero view the new user's first plant"
+      alt={plant.commonName}
       bind:this={img}
       crossorigin="anonymous"
     />
@@ -65,9 +49,10 @@
   </div>
 
   <div
-    class="absolute w-full h-full flex text-center items-end justify-center text-5xl py-[2vh] font-gyst"
+    class="w-full text-center text-6xl font-gyst absolute bottom-32 z-10"
     style="color: {darkColor};"
   >
-    Just sprouted <br /> in the garden!
+    <div>Just sprouted</div>
+    <div>in the garden!</div>
   </div>
 </div>

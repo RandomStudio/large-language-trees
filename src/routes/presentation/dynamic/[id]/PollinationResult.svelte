@@ -1,35 +1,42 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { InsertPlant, PublicUserInfo, SelectPlant } from "$lib/types";
+  import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import { getColourPair } from "./findColors";
 
   export let authorTop: PublicUserInfo;
   export let authorBottom: PublicUserInfo;
   export let newPlant: SelectPlant;
 
-  const soundFiles = [
-    "/Sound 1 - Schuup.mp3",
-    "/Sound 2 - Dududu.mp3",
-    "/Sound 3 - Whistles.mp3",
-    "/Sound 4 - Schuup2.mp3",
-    "/Sound 5 - Dududu2.mp3",
-    "/Sound 6 - Ghost.mp3"
-  ];
+  let brightColor: string | null = null;
+  let darkColor: string | null = null;
 
-  function getRandomSoundFile() {
-    const randomIndex = Math.floor(Math.random() * soundFiles.length);
-    return soundFiles[randomIndex];
-  }
+  let img: HTMLImageElement;
 
   onMount(() => {
-    const audio = new Audio(getRandomSoundFile());
-    // audio.play();
+    img.onload = () => {
+      const result = getColourPair(img);
+      darkColor = result.darkColor;
+      brightColor = result.brightColor;
+    };
   });
 </script>
 
-<div class="w-full h-full items-center justify-center standard-gradient">
+<img
+  class="hidden"
+  alt="Featured Plant"
+  src={newPlant.imageUrl}
+  crossorigin="anonymous"
+  bind:this={img}
+/>
+
+<div
+  class="w-full h-full items-center justify-center"
+  style="background: linear-gradient({darkColor}, {brightColor});"
+>
   <div
-    class="w-full text-center text-roel_yellow text-7xl font-gyst absolute top-32 z-10 uppercase"
+    class="w-full text-center text-7xl font-gyst absolute top-32 z-10 uppercase"
+    style:color={brightColor}
   >
     <div>
       {authorTop.username}
@@ -47,7 +54,8 @@
   </div>
 
   <div
-    class="w-full text-center text-new_purple text-7xl font-gyst absolute bottom-32 z-10 uppercase"
+    class="w-full text-center text-7xl font-gyst absolute bottom-32 z-10 uppercase"
+    style:color={darkColor}
   >
     Gave life to<br />
     {newPlant.commonName}

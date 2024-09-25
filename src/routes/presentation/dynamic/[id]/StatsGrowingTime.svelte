@@ -1,11 +1,8 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { getColors } from "./findColors";
+  import { getColourPair } from "./findColors";
   import { DateTime } from "luxon";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-
-  export let applyFilters: boolean = false;
-  export let positionStyles: string = "w-full";
 
   export let imageUrl: string;
   export let plantName: string;
@@ -23,7 +20,7 @@
 
   onMount(() => {
     img.onload = () => {
-      const result = getColors(img);
+      const result = getColourPair(img);
       brightColor = result.brightColor;
       darkColor = result.darkColor;
     };
@@ -53,14 +50,14 @@
 
   <div class="fixed inset-0 flex items-center justify-center">
     <img
-      class="opacity-0"
+      class="hidden"
       alt="Featured Plant"
       src={imageUrl}
       crossorigin="anonymous"
       bind:this={img}
     />
     <div class="absolute w-full h-full flex items-center justify-center">
-      <PlantDisplay imageUrl={imageUrl || ""} {applyFilters} {positionStyles} />
+      <PlantDisplay imageUrl={imageUrl || ""} applyFilters={false} />
     </div>
   </div>
 
