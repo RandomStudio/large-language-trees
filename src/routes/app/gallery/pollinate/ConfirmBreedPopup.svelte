@@ -35,7 +35,11 @@
         (await checkExistingCandidate(finalInsertPlant.id)) !== null;
       if (candidateStillExists) {
         console.info("candidate plant still exists, so we DO need to add it");
-        await insertNewPlant(finalInsertPlant);
+        try {
+          await insertNewPlant(finalInsertPlant);
+        } catch (e) {
+          console.warn("Plant insert failed, possibly it was added already");
+        }
       } else {
         console.warn(
           "The candidate plant no longer exists in the generatedPlants list; probably was added already"

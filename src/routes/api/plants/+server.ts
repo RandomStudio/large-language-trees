@@ -9,6 +9,10 @@ export const GET: RequestHandler = async () =>
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = (await request.json()) as InsertPlant;
-  const result = await addNewPlant(data);
-  return json(result, { status: 201 });
+  try {
+    const result = await addNewPlant(data);
+    return json(result, { status: 201 });
+  } catch (e) {
+    return json({}, { status: 500, statusText: `${e}` });
+  }
 };
