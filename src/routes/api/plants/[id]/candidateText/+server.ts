@@ -34,6 +34,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
   const resInsert = await db
     .update(generatedPlants)
     .set({ contents, errorMessage })
+    .where(eq(generatedPlants.plantId, plantId))
     .returning();
 
   return json(resInsert, { status: 201 });
@@ -56,6 +57,7 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
   const resInsert = await db
     .update(generatedPlants)
     .set({ contents, errorMessage })
+    .where(eq(generatedPlants.plantId, plantId))
     .returning();
 
   return json(resInsert, { status: 201 });

@@ -11,7 +11,7 @@ import {
   sessionTable,
   users
 } from "./schema";
-import { eq, and, isNull } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 import type { InsertPlant, SelectPlant, SelectUser } from "$lib/types";
 import { hash } from "@node-rs/argon2";
 import { v4 as uuidv4 } from "uuid";
@@ -74,17 +74,17 @@ export const checkPlantsExist = async () => {
 
 async function getFirstPlantForUser(): Promise<InsertPlant> {
   // We look for plants that have not been assigned to any garden (yet)
-  // AND are original plants (not generated!)
   const plantsToAdd = await db
     .select()
     .from(plants)
     .leftJoin(gardensToPlants, eq(gardensToPlants.plantId, plants.id))
-    .where(and(isNull(gardensToPlants), isNull(plants.id)));
+    .where(isNull(gardensToPlants));
   if (plantsToAdd.length > 0) {
+    // await db.insert(seedbanksToPlants).values({
+    //   seedbankId: newSeedbank.id,
+    //   plantId: plant[0].plants.id
+    // });
     const thePlant = plantsToAdd[0].plants;
-    if (!thePlant) {
-      throw Error("failed to find a suitable plant!");
-    }
     return thePlant;
   } else {
     const randomPlants = await db.query.plants.findMany({
