@@ -63,11 +63,11 @@
           });
           return stream;
         } catch (err) {
-          errorMessage = "Please check the camera authorisations";
+          errorMessage = "Please reload and allow access to your camera";
           throw Error("Stream attempt #2 failed: " + err);
         }
       } else {
-        errorMessage = "Please check the camera authorisations";
+        errorMessage = "Please reload and allow access to your camera";
         throw Error("Stream attempt #1 failed: " + err);
       }
     }

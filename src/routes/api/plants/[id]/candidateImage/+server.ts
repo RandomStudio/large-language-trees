@@ -5,7 +5,6 @@ import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3 } from "$lib/server/images";
 import { URL_PREFIX } from "$lib/constants";
-import type { GeneratedImage } from "$lib/types";
 import { publishEvent } from "$lib/server/realtime";
 import {
   SimpleEventNames,
