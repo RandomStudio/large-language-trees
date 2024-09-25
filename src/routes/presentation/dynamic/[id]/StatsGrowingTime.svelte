@@ -11,8 +11,8 @@
 
   let age = DateTime.now().diff(DateTime.fromJSDate(created));
 
-  let brightColor = "rgb(255, 185, 198)";
-  let darkColor = "rgb(117, 0, 147)";
+  let brightColor: string | null = null;
+  let darkColor: string | null = null;
 
   let img: HTMLImageElement;
 

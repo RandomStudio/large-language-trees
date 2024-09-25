@@ -5,19 +5,37 @@
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import { capitalise } from "$lib/promptUtils";
+  import { BROLL_TIMEOUT } from "$lib/constants";
+  import { remap } from "@anselan/maprange";
 
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
-  export let applyFilters: boolean = false;
-  export let positionStyles: string = "w-full";
 
-  const sizePicture = 2000;
-  const duration = 15000; //ms
+  let sizePicture: number | null = null;
+  const duration = BROLL_TIMEOUT * 1.5; //ms
 
-  const xStart = Math.floor(Math.random() * (-sizePicture + 540));
-  const xEnd = Math.floor(Math.random() * (-sizePicture + 540));
-  const yStart = Math.floor(Math.random() * (-sizePicture + 1620));
-  const yEnd = Math.floor(Math.random() * (-sizePicture + 1620));
+  // const xStart = Math.floor(Math.random() * (-sizePicture + 540));
+  // const xEnd = Math.floor(Math.random() * (-sizePicture + 540));
+  // const yStart = Math.floor(Math.random() * (-sizePicture + 1620));
+  // const yEnd = Math.floor(Math.random() * (-sizePicture + 1620));
+
+  sizePicture = window.innerHeight * 1.5;
+  console.log({ sizePicture });
+
+  const xStart = remap(
+    Math.random(),
+    [0, 1],
+    [-sizePicture / 2, 0],
+    true,
+    true
+  );
+  const yStart = remap(
+    Math.random(),
+    [0, 1],
+    [-sizePicture / 2, 0],
+    true,
+    true
+  );
 
   let x = tweened(xStart, {
     duration: duration,
@@ -30,47 +48,32 @@
   });
 
   onMount(() => {
-    x.set(xEnd);
-    y.set(yEnd);
+    const xEnd = xStart;
+    const yEnd = yStart;
+
+    x.set(-sizePicture / 3);
+    y.set(0);
   });
-
-  const soundFiles = [
-    "/Sound 1 - Schuup.mp3",
-    "/Sound 2 - Dududu.mp3",
-    "/Sound 3 - Whistles.mp3",
-    "/Sound 4 - Schuup2.mp3",
-    "/Sound 5 - Dududu2.mp3",
-    "/Sound 6 - Ghost.mp3"
-  ];
-
-  function getRandomSoundFile() {
-    const randomIndex = Math.floor(Math.random() * soundFiles.length);
-    return soundFiles[randomIndex];
-  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
+
 <div
-  class="viewport w-full h-full bg-gradient-to-t from-roel_blue from-0% to-roel_rose to-100%"
-  on:click={() => {
-    console.log("SOUND ENABLED");
-    const audio = new Audio(getRandomSoundFile());
-    audio.play();
-  }}
+  class="fixed top-32 left-8 px-2 py-2 text-3xl font-primer text-roel_rose bg-new_purple text-center z-10"
 >
-  <div class="camera" style="transform: translateX({$x}px) translateY({$y}px);">
-    <div
-      class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] left-[80vw] text-center isolate"
-    >
-      {capitalise(user.username)}'s
-      {plant.commonName}
-    </div>
-    <PlantDisplay
-      imageUrl={plant.imageUrl || ""}
-      {applyFilters}
-      {positionStyles}
-    />
+  {capitalise(user.username)}'s
+  {plant.commonName}
+</div>
+<div class="viewport w-full h-full presentation-gradient-rotated">
+  <div
+    class="absolute"
+    style:width={`${sizePicture}px`}
+    style:height={`${sizePicture}px`}
+    style="transform: translateX({$x}px) translateY({$y}px);"
+  >
+    <div class="absolute font-primer"></div>
+    <PlantDisplay imageUrl={plant.imageUrl || ""} applyFilters={false} />
   </div>
 </div>
 
@@ -78,11 +81,5 @@
   .viewport {
     overflow: hidden;
     position: relative;
-  }
-
-  .camera {
-    width: 2000px;
-    height: 2000px;
-    position: absolute;
   }
 </style>
