@@ -8,6 +8,7 @@
   import { fade } from "svelte/transition";
   import {
     candidateToPlant,
+    checkExistingCandidate,
     insertNewPlant
   } from "./PollinationFrontendFunctions";
   import { onMount } from "svelte";
@@ -19,68 +20,70 @@
   let userErrorMessage: string | null = null;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
-   * returning to the parent component ready to add to the database.
+   * attempting to add to the DB
    */
-  let finalChildReadyToAdd: InsertPlant = candidateToPlant(candidateChild);
+  let finalInsertPlant: InsertPlant | null = null;
 
   export let onCancel: () => any;
   export let onConfirm: () => any;
 
-  let waitingForImage = false;
-  let candidateImageUrl: string | null = candidateChild.imageUrl || null;
   let errorText: string = "";
 
   const finalise = async () => {
-    await insertNewPlant(finalChildReadyToAdd);
+    if (finalInsertPlant) {
+      const candidateStillExists =
+        (await checkExistingCandidate(finalInsertPlant.id)) !== null;
+      if (candidateStillExists) {
+        console.info("candidate plant still exists, so we DO need to add it");
+        await insertNewPlant(finalInsertPlant);
+      } else {
+      }
+      console.warn(
+        "The candidate plant no longer exists in the generatedPlants list; probably was already added"
+      );
+      // DO NOTHING
+    }
+
+    // No matter what happens above, confirm and close...
     onConfirm();
   };
 
-  const replaceImage = (url: string) => {
-    console.log(
-      "ConfirmBreedPopup replacing url",
-      candidateImageUrl,
-      "=>",
-      url
-    );
-    candidateImageUrl = url;
-    finalChildReadyToAdd.imageUrl = url;
+  const addProcessedImage = async (url: string) => {
+    if (finalInsertPlant) {
+      // First, check if the generatedPlant entry hasn't ALREADY got a processed image...
+      const candidateStillExisting = await checkExistingCandidate(
+        finalInsertPlant.id
+      );
+      if (
+        candidateStillExisting &&
+        candidateStillExisting.processedImageUrl === null
+      ) {
+        console.log(
+          "Candidate still exists, has not processed image saved (yet)"
+        );
+        finalInsertPlant.imageUrl = url;
+      }
+    }
   };
 
   onMount(() => {
-    console.log("I'm here!", candidateChild);
     const updated = candidateToPlant(candidateChild);
     console.log({ updated });
-    finalChildReadyToAdd = updated;
+    finalInsertPlant = updated;
   });
 </script>
 
 <div class="fixed z-20 top-0 left-0 h-full overflow-auto bg-roel_green pb-32">
   <Layout title="Hooray you made a new plant!">
-    {#if waitingForImage}
-      <div
-        class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
-      >
-        <div class="flex flex-col items-center">
-          <PlantMorphSpinner></PlantMorphSpinner>
-          <div
-            id="message"
-            class="text-roel_blue font-primer text-2xl mt-4 text-center"
-          >
-            Please wait...
-          </div>
-        </div>
-      </div>
-    {/if}
-    {#if candidateImageUrl}
+    {#if candidateChild.originalImageUrl}
       <div class="relative">
         <TransparencyMaker
-          src={candidateImageUrl}
+          src={candidateChild.originalImageUrl}
           useFloodFill={false}
           tolerance={TOLERANCE_SIMPLE}
           doUpload={true}
           onUploadComplete={(url) => {
-            replaceImage(url);
-            waitingForImage = false;
+            addProcessedImage(url);
           }}
         />
         <img
@@ -90,30 +93,13 @@
         />
       </div>
       <p class="mt-8 text-new_purple text-regular">{errorText}</p>
-      <p class="mt-8 text-new_purple text-regular mb-0">
-        {finalChildReadyToAdd.description}
+      <p class="mt-4 text-new_purple text-regular mb-0">
+        {finalInsertPlant?.description}
       </p>
-
-      <Cta onClick={finalise}>Start Growing!</Cta>
     {/if}
+    <Cta onClick={finalise}>Start Growing!</Cta>
   </Layout>
 </div>
-
-{#if waitingForImage}
-  <div
-    class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-roel_green z-50"
-  >
-    <div class="flex flex-col items-center">
-      <PlantMorphSpinner></PlantMorphSpinner>
-      <div
-        id="message"
-        class="text-roel_blue font-primer text-2xl mt-4 text-center"
-      >
-        Please wait...
-      </div>
-    </div>
-  </div>
-{/if}
 
 {#if userErrorMessage}
   <PopupError errorText={userErrorMessage} onClick={onCancel}></PopupError>

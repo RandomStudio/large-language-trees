@@ -16,10 +16,6 @@ import type { BackroundGenerateImageRequest, PromptConfig } from "$lib/types";
 
 export const uploadToS3 = async (fetchImage: Response, id: string) => {
   const stream = fetchImage.body;
-  const filePath =
-    path.resolve(process.cwd(), "static", "plants") + "/" + id + ".png";
-  console.log("writing", filePath, "...");
-
   if (stream) {
     await streamToS3(id, stream);
   } else {

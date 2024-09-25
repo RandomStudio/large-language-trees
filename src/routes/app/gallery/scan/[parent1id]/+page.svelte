@@ -132,7 +132,7 @@
 
   const onCodeScanned = async (otherPlantId: string, otherUserId: string) => {
     if (otherUserId === data.thisUser.id) {
-      throw Error("this user is myself; try again");
+      console.error("this user is myself; try again");
     }
     otherUser = await getOtherUserDetails(otherUserId);
 

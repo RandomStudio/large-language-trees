@@ -75,6 +75,16 @@
     changeMessage();
     return () => clearTimeout(timer);
   });
+
+  const imageForPlantOrCandidate = () => {
+    if ("processedImageUrl" in plant) {
+      return plant.processedImageUrl;
+    }
+    if ("imageUrl" in plant) {
+      return plant.imageUrl;
+    }
+    return null;
+  };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -97,7 +107,7 @@
       {disableAnimation}
       imageUrl={isReadyToSprout
         ? "/pollination/Seed_01.png"
-        : (plant.imageUrl ?? "/pollination/Seed_01.png")}
+        : (imageForPlantOrCandidate() ?? "/pollination/Seed_01.png")}
       applyFilters={false}
     />
 

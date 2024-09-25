@@ -15,9 +15,7 @@
   import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
   import Spinner from "$lib/shared-components/BasicUtilitySpinner.svelte";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
-  import { v4 as uuidv4 } from "uuid";
   import { invalidateAll } from "$app/navigation";
-  import { type GenImageTestToServer } from "../../../api/images/testGenerate/+server";
   import { candidateToPlant } from "../../gallery/pollinate/PollinationFrontendFunctions";
 
   enum Tabs {
@@ -78,8 +76,8 @@
         if (matched.contents) {
           resultPlant = candidateToPlant(matched);
         }
-        if (matched.imageUrl && resultPlant) {
-          resultPlant.imageUrl = matched.imageUrl;
+        if (matched.processedImageUrl && resultPlant) {
+          resultPlant.imageUrl = matched.processedImageUrl;
           busy = false;
         }
       }

@@ -41,7 +41,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
       const res = await db
         .update(generatedPlants)
         .set({
-          imageUrl: s3Url,
+          originalImageUrl: s3Url,
           awaitingConfirmation: true,
           errorMessage
         })
@@ -50,7 +50,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
 
       if (res.length > 0) {
         const candidateReadyPlant = res[0];
-        if (!candidateReadyPlant || !candidateReadyPlant.imageUrl) {
+        if (!candidateReadyPlant || !candidateReadyPlant.originalImageUrl) {
           throw Error("there should be an image URL for the version uploaded");
         }
         // Publish the event (now plant generated and ready)...

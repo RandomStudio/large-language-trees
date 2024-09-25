@@ -15,12 +15,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
     if (matchingCandidatePlant) {
       return json(matchingCandidatePlant, { status: 200 });
     } else {
-      console.log(
-        "No matching candidate plant (text generation) for plantID",
-        plantId,
-        "... this is OK"
-      );
-      return json({}, { status: 202 });
+      return json({}, { status: 404 });
     }
   } else if (userId) {
     // Search with userID for EITHER authorTop or authorBottom
@@ -34,15 +29,13 @@ export const GET: RequestHandler = async ({ params, url }) => {
     if (matchingCandidatePlant) {
       return json(matchingCandidatePlant, { status: 200 });
     } else {
-      console.log(
-        "No matching candidate plant (generated candidate) for userID",
-        userId,
-        "... this is OK"
-      );
-      return json({}, { status: 202 });
+      return json({}, { status: 404 });
     }
   } else {
-    throw Error("either plantID or userID must be provided");
+    return json(
+      {},
+      { status: 400, statusText: "either userId or plantId must be provided" }
+    );
   }
 };
 

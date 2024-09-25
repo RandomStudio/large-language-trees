@@ -47,7 +47,7 @@
   let pollForPlantsAdded: NodeJS.Timeout | null = null;
 
   const pollForMyPlants = async () => {
-    const res = await fetch("/api/plants/generated");
+    const res = await fetch("/api/plants/generated  ");
     const candidatePlants = (await res.json()) as CandidatePlant[];
     return candidatePlants
       .filter((c) => c.awaitingConfirmation === true)

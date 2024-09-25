@@ -49,8 +49,9 @@ export const generatedPlants = pgTable("generated_plants", {
   parentTop: text("plant_top").notNull(),
   parentBottom: text("plant_bottom").notNull(),
   contents: json("contents"), // can be null, if plant not generated yet!
-  imageUrl: text("image_url"), // can be null, if image not generated yet!
-  errorMessage: text("error_message"),
+  originalImageUrl: text("orig_img_url"), // can be null, if image not generated yet!
+  processedImageUrl: text("proc_img_url"), // can be null, if image not processed yet!
+  errorMessage: text("error_message"), // will be null unless there is an error
   awaitingConfirmation: boolean("awaiting_confirmation").default(false)
 });
 

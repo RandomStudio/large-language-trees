@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { URL_PREFIX } from "$lib/constants";
 
 export const POST: RequestHandler = async ({ request }) => {
-  console.log("POST upload/images");
+  console.log("POST upload/images with image Blob in Form");
 
   const data = await request.formData();
   const imageFile = data.get("img");

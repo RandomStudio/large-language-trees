@@ -8,6 +8,20 @@
       "when": 1726830316096,
       "tag": "0000_spicy_shinobi_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1727254796722,
+      "tag": "0001_nostalgic_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1727257892708,
+      "tag": "0002_early_ma_gnuci",
+      "breakpoints": true
     }
   ]
 }

@@ -2,16 +2,9 @@ import { SimpleEventNames, type EventNewSprouting } from "$lib/events.types";
 import type { CandidatePlant, InsertPlant, SelectPlant } from "$lib/types";
 import type { PostPlantToGardenBody } from "../../../api/plantsInGarden/+server";
 
-const awaitTimeout = async (t: number): Promise<void> =>
-  new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      resolve();
-    }, t);
-  });
-
-export async function addConfirmedPlant(
+export const addConfirmedPlant = async (
   candidateChild: InsertPlant
-): Promise<SelectPlant> {
+): Promise<SelectPlant> => {
   console.log("Inserting new plant", candidateChild);
   const res = await fetch("/api/plants", {
     method: "POST",
@@ -33,10 +26,13 @@ export async function addConfirmedPlant(
   }
 
   return plant;
-}
+};
 
 /** Add a new plant to a User Garden */
-export async function addPlantToUser(insertPlant: InsertPlant, userId: string) {
+export const addPlantToUser = async (
+  insertPlant: InsertPlant,
+  userId: string
+) => {
   const gardenBody: PostPlantToGardenBody = {
     plantId: insertPlant.id,
     userId: userId
@@ -45,9 +41,9 @@ export async function addPlantToUser(insertPlant: InsertPlant, userId: string) {
     method: "POST",
     body: JSON.stringify(gardenBody)
   });
-}
+};
 
-export async function insertNewPlant(plant: InsertPlant) {
+export const insertNewPlant = async (plant: InsertPlant) => {
   const selectPlant = await addConfirmedPlant(plant);
   if (!plant.authorTop || !plant.authorBottom) {
     throw Error("plant missing authors");
@@ -65,14 +61,15 @@ export async function insertNewPlant(plant: InsertPlant) {
     body: JSON.stringify(event)
   });
   console.log("event response:", eventRes.status, eventRes.statusText);
-}
+};
 
 export const candidateToPlant = (candidate: CandidatePlant): InsertPlant => {
   const {
     plantId,
     authorTop,
     authorBottom,
-    imageUrl,
+    originalImageUrl,
+    processedImageUrl,
     contents,
     parentTop,
     parentBottom
@@ -88,10 +85,26 @@ export const candidateToPlant = (candidate: CandidatePlant): InsertPlant => {
     commonName,
     authorBottom,
     authorTop,
-    imageUrl,
+    imageUrl: processedImageUrl ?? originalImageUrl ?? "",
     description,
     properties,
     parent1: parentTop,
     parent2: parentBottom
   };
+};
+
+export const checkExistingCandidate = async (
+  plantId: string
+): Promise<CandidatePlant | null> => {
+  const res = await fetch(`/api/plants/${plantId}/generatedPlant`);
+  if (res.status === 404) {
+    return null;
+  }
+
+  if (res.status === 200) {
+    const p = (await res.json()) as CandidatePlant;
+    return p;
+  }
+
+  return null;
 };
