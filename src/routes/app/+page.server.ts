@@ -11,6 +11,7 @@ import { SimpleEventNames, type EventNewUser } from "$lib/events.types";
 import { LIMIT_CHARACTERS_USERNAME } from "$lib/constants";
 import type { SelectUser } from "$lib/types";
 import { stripUserInfo } from "$lib/security";
+import { ADMIN_PASSWORD } from "$env/static/private";
 
 export const load = async ({ locals }) => {
   const username = locals.user?.username;
@@ -59,8 +60,10 @@ export const actions = {
     if (!existingUser) {
       // This is NOT an existing user, so attempt to auto-register new user
 
+      const isAdmin = username === "admin";
+
       const userId = generateIdFromEntropySize(10); // 16 characters long
-      const passwordHash = await hash(password, {
+      const passwordHash = await hash(isAdmin ? ADMIN_PASSWORD : password, {
         // recommended minimum parameters
         memoryCost: 19456,
         timeCost: 2,
@@ -68,7 +71,6 @@ export const actions = {
         parallelism: 1
       });
 
-      const isAdmin = username === "admin";
       const newUser = {
         id: userId,
         username,
@@ -85,7 +87,7 @@ export const actions = {
       await createNewUserSession(newUser, event);
 
       if (username === "admin") {
-        redirect(302, "/app/admin");
+        redirect(302, "/app/loginadmin");
       } else {
         const e: EventNewUser = {
           name: SimpleEventNames.NEW_USER,
@@ -108,7 +110,11 @@ export const actions = {
     const formData = await event.request.formData();
     const username = formData.get("username");
     const password = formData.get("password");
-    console.log({ username, password });
+
+    if (username === "admin") {
+      console.warn("Admin user detected; redirect to proper login screen...");
+      redirect(302, "/app/loginadmin");
+    }
 
     if (!username || typeof username !== "string") {
       console.error("username error", username, typeof username);
@@ -155,7 +161,7 @@ export const actions = {
     });
 
     if (username === "admin") {
-      redirect(302, "/app/admin");
+      redirect(302, "/app/loginadmin");
     } else {
       redirect(302, "/app/gallery");
     }

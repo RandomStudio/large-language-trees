@@ -23,6 +23,8 @@ export interface AdminViewData {
 export const load: PageServerLoad<AdminViewData> = async ({ locals }) => {
   const username = locals.user?.username;
   const userId = locals.user?.id;
+
+  console.log("admin menu page", { username, userId });
   if (!username) {
     console.log("Not logged in!");
     redirect(302, "/app");
