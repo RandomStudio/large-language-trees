@@ -53,7 +53,7 @@ export const actions = {
     }
 
     const existingUser = await db.query.users.findFirst({
-      where: eq(users.username, username.toLowerCase())
+      where: eq(users.username, username)
     });
 
     if (!existingUser) {
