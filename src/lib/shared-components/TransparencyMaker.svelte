@@ -927,11 +927,9 @@
   }
 </script>
 
-<div>
-  <canvas
-    bind:this={canvasElement}
-    width="1024"
-    height="1024"
-    class="w-full md:w-6/12"
-  />
-</div>
+<canvas
+  bind:this={canvasElement}
+  width="1024"
+  height="1024"
+  class="w-full md:w-6/12"
+/>

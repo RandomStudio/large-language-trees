@@ -201,6 +201,8 @@
       <CollectionPlant
         authorTopUser={candidatePlant.authorTopUser}
         authorBottomUser={candidatePlant.authorBottomUser}
+        parentTopPlant={candidatePlant.parentPlantTop.commonName}
+        parentBottomPlant={candidatePlant.parentPlantBottom.commonName}
         isReadyToSprout
         onClick={() => {
           candidateChild = candidatePlant;

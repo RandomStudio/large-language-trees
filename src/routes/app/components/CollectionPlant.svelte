@@ -100,13 +100,13 @@
       'shakingAnimation'} text-center"
     bind:this={animationEl}
   >
-    {#if isReady}
-      <div class="text-md mb-0">{getName(plant)}</div>
-    {/if}
+    <div class="text-md mb-0 capitalize">{getName(plant)}</div>
 
     {#if parentTopPlant && parentBottomPlant}
-      <p class="font-normal text-sm text-center capitalize">
-        ({parentTopPlant} x {parentBottomPlant})
+      <p class="font-normal text-sm text-center">
+        (<span class="capitalize">{parentTopPlant}</span>
+        <span>x</span>
+        <span class="capitalize">{parentBottomPlant}</span>)
       </p>
     {/if}
 
@@ -138,12 +138,14 @@
     {/if}
 
     {#if isReadyToSprout}
-      <div class="text-xs">Tap to sprout</div>
-      <div class="text-xs">{getName(plant)}</div>
-      <div class="text-xs">now</div>
+      <div class="text-xs leading-tight">
+        <div>Tap to sprout</div>
+        <div class="capitalize">{getName(plant)}</div>
+        <div>Now</div>
+      </div>
     {/if}
 
-    {#if authorTopUser && authorBottomUser}
+    {#if !isReadyToSprout && !isPending && authorTopUser && authorBottomUser}
       <p class="font-normal text-center capitalize">
         {authorTopUser.username} ♡ {authorBottomUser.username}
       </p>
