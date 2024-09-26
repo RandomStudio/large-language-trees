@@ -49,6 +49,7 @@
       rgba(200, 245, 143, 1) 100%
     );
     content: "";
+    pointer-events: none;
   }
   :global(.hasScroll) .buttonContainer::after {
     position: absolute;
