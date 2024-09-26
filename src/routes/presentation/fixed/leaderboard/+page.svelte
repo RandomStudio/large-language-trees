@@ -80,11 +80,11 @@
       />
 
       <div
-        class="w-full text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"
+        class="w-full text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10"
       >
         {#each data.gardensWithPlantCounts as { user, count }}
           <div>
-            <span>
+            <span class="uppercase">
               {user.username}
             </span>
             <span>

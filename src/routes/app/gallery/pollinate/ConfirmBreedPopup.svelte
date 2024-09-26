@@ -101,7 +101,7 @@
         {finalInsertPlant?.description}
       </p>
     {/if}
-    <Cta onClick={finalise}>Start Growing!</Cta>
+    <Cta onClick={finalise}>OK</Cta>
   </Layout>
 </div>
 

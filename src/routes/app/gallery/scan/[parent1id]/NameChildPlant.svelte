@@ -52,7 +52,7 @@
         } else {
           console.warn("no valid name yet");
         }
-      }}>Let it grow!</Cta
+      }}>OK</Cta
     >
   </div>
 </Layout>
