@@ -31,7 +31,7 @@
 <div class="fixed z-20 top-0 left-0 h-full overflow-auto bg-roel_green pb-32">
   <Layout title={undefined}>
     <div>
-      <div class="text-roel_green text-center text-large">
+      <div class="text-roel_green text-center text-large -mt-4">
         {isOriginalPlant ? "Your " : ""}
         {plantDetails.commonName}
       </div>

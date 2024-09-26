@@ -186,7 +186,7 @@
       }}
     >
       <div
-        class="text-primer text-roel_green text-center text-large font-semibold"
+        class="text-primer text-roel_green text-center text-large font-semibold -mt-4"
       >
         Your {data.myOriginalPlant.plant.commonName}
       </div>

@@ -335,6 +335,15 @@
   />
 {:else if otherUserStartedPollination}
   <PollinationWasStartedPopup otherUser={otherUserStartedPollination} />
+{:else if alreadyExistsPlant}
+  <PopupDejaVu
+    plantDetails={alreadyExistsPlant}
+    handleClose={() => {
+      alreadyExistsPlant = null;
+      otherPlant = null;
+      startQrScanning();
+    }}
+  />
 {:else}
   <Layout title="Let's Pollinate">
     <div class="">
@@ -384,16 +393,5 @@
         userId={data.thisUser.id}
       />
     </div>
-
-    {#if alreadyExistsPlant}
-      <PopupDejaVu
-        plantDetails={alreadyExistsPlant}
-        handleClose={() => {
-          alreadyExistsPlant = null;
-          otherPlant = null;
-          startQrScanning();
-        }}
-      />
-    {/if}
   </Layout>
 {/if}
