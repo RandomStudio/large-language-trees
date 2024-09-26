@@ -113,7 +113,7 @@ export const actions = {
 
     if (username === "admin") {
       console.warn("Admin user detected; redirect to proper login screen...");
-      redirect(302, "/app/loginadmin");
+      redirect(302, "/app/loginadmin/");
     }
 
     if (!username || typeof username !== "string") {
