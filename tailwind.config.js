@@ -11,35 +11,26 @@ module.exports = {
         light_grey: "#D9D9D9",
         roel_rose: "#FFB9C6",
         roel_red: "#F31C1C",
-        roel_yellow: '#EFE500',
+        roel_yellow: "#EFE500",
 
-        new_purple: '#4B0082'
+        new_purple: "#4B0082"
       },
       fontSize: {
-        xs: '16px',
-        small: '20px',
-        medium: '24px',
-        large: '28px',
-        xl: '40px',
-        '2xl': '64px',
+        small: "16px",
+        medium: "21px",
+        large: "25px",
+        xl: "39px"
       },
       scale: {
         125: "1.25"
       },
       fontFamily: {
-        primer: ["Primer", "serif"],
-        gyst: ["gyst-variable", "sans-serif"]
-      },
-      fontWeight: {
-        light: 300,
-        regular: 400,
-        medium: 500,
-        bold: 700,
-        black: 900
+        primer: ["Primer", "sans-serif"],
+        gyst: ["gyst-variable", "serif"]
       },
       zIndex: {
         "-1": "-1"
-      },
+      }
     }
   },
   plugins: [require("@tailwindcss/forms")]

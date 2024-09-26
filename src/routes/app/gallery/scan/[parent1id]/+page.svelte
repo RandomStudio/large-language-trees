@@ -344,7 +344,7 @@
           await goto("/app/gallery");
         }}
       />
-      <p class="pb-4 text-roel_green">
+      <p class="pb-4 text-roel_green text-small leading-tight">
         Point your camera to another gardeners Pollination QR to start
         crossbreeding your {data.thisPlant.commonName}.
       </p>

@@ -185,10 +185,12 @@
         };
       }}
     >
-      <div class="text-primer text-md text-roel_green text-center">
+      <div
+        class="text-primer text-roel_green text-center text-large font-semibold"
+      >
         Your {data.myOriginalPlant.plant.commonName}
       </div>
-      <div class="text-primer text-sm text-roel_green text-center mb-4">
+      <div class="text-primer text-small text-roel_green text-center mb-4">
         ...has pollinated {data.pollinationCount} other plants
       </div>
       <PlantDisplay

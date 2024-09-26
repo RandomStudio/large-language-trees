@@ -17,7 +17,9 @@
       >
         <header class="py-4">
           {#if title}
-            <h1 class="text-xl text-roel_green font-gyst leading-tight">
+            <h1
+              class="text-xl text-roel_green font-gyst leading-tight font-semibold"
+            >
               {title}
             </h1>
           {/if}

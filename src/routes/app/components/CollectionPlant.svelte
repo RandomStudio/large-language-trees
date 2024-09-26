@@ -100,10 +100,10 @@
       'shakingAnimation'} text-center"
     bind:this={animationEl}
   >
-    <div class="text-md mb-0 capitalize">{getName(plant)}</div>
+    <div class="text-large font-semibold mb-0 capitalize">{getName(plant)}</div>
 
     {#if parentTopPlant && parentBottomPlant}
-      <p class="font-normal text-sm text-center">
+      <p class="text-small text-center">
         (<span class="capitalize">{parentTopPlant}</span>
         <span>x</span>
         <span class="capitalize">{parentBottomPlant}</span>)
@@ -120,7 +120,7 @@
     />
 
     {#if hasError}
-      <div class="text-md text-red-600">
+      <div class="text-medium font-medium text-red-600">
         ERROR: {hasError}
       </div>
       <button
@@ -138,7 +138,7 @@
     {/if}
 
     {#if isReadyToSprout}
-      <div class="text-xs leading-tight">
+      <div class="text-small">
         <div>Tap to sprout</div>
         <div class="capitalize">{getName(plant)}</div>
         <div>Now</div>

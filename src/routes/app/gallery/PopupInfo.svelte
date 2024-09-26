@@ -47,7 +47,7 @@
           applyFilters={false}
         />
       </div>
-      <div class="text-new_purple">
+      <div class="text-new_purple text-small text-center">
         {plantDetails.description}
       </div>
     </div>

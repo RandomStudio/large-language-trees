@@ -18,7 +18,7 @@
 
 <Layout title="Hooray!">
   <div class="grid grid-rows-[max-content_auto_max-content_max-content_]">
-    <div class="text-medium text-roel_green">
+    <div class="text-medium text-roel_green leading-tight">
       Your <span class="capitalize">{yourPlantName}</span> and
       <span class="capitalize">{otherUserName}</span>'s
       <span class="capitalize">{otherPlantName}</span> gave life to a new seed together.

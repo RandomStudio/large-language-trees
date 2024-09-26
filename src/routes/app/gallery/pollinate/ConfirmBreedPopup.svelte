@@ -96,8 +96,10 @@
           alt="Animated seeds flying over the foreground"
         />
       </div>
-      <p class="mt-8 text-new_purple text-regular">{errorText}</p>
-      <p class="mt-4 text-new_purple text-regular mb-0">
+      {#if errorText}
+        <p class="mt-8 text-new_purple text-regular">{errorText}</p>
+      {/if}
+      <p class="mt-4 text-new_purple text-regular text-center text-small mb-0">
         {finalInsertPlant?.description}
       </p>
     {/if}
