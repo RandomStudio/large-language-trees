@@ -106,7 +106,7 @@
 
     {#if parentTopPlant && parentBottomPlant}
       <p class="font-normal text-sm text-center capitalize">
-        {parentTopPlant} x {parentBottomPlant}
+        ({parentTopPlant} x {parentBottomPlant})
       </p>
     {/if}
 

@@ -32,13 +32,15 @@
 
   let candidateChild: CandidatePlant | null = null;
 
-  interface PlantWithUsers extends SelectPlant {
+  interface PlantWithUsersAndParents extends SelectPlant {
     authorTopUser: PublicUserInfo | null;
     authorBottomUser: PublicUserInfo | null;
+    parentTopPlant: string | null;
+    parentBottomPlant: string | null;
     isOriginalPlant: boolean;
   }
 
-  let selectedPlantForInfo: PlantWithUsers | null = null;
+  let selectedPlantForInfo: PlantWithUsersAndParents | null = null;
 
   let isAppInfoOpen = false;
   let agent: TetherAgent | null = null;
@@ -177,6 +179,8 @@
       on:click={() => {
         selectedPlantForInfo = {
           ...data.myOriginalPlant.plant,
+          parentTopPlant: null,
+          parentBottomPlant: null,
           isOriginalPlant: true
         };
       }}
@@ -231,6 +235,8 @@
             ...plant,
             authorTopUser: plant.authorTopUser,
             authorBottomUser: plant.authorBottomUser,
+            parentTopPlant: plant.parentPlantTop?.commonName || null,
+            parentBottomPlant: plant.parentPlantBottom?.commonName || null,
             isOriginalPlant: false
           };
         }}
@@ -243,6 +249,8 @@
         plantDetails={selectedPlantForInfo}
         authorTopUser={selectedPlantForInfo.authorTopUser}
         authorBottomUser={selectedPlantForInfo.authorBottomUser}
+        parentTopPlant={selectedPlantForInfo.parentTopPlant}
+        parentBottomPlant={selectedPlantForInfo.parentBottomPlant}
         isOriginalPlant={selectedPlantForInfo.isOriginalPlant}
         closePopup={() => {
           selectedPlantForInfo = null;
