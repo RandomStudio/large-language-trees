@@ -13,7 +13,7 @@
 
   const duration = BROLL_TIMEOUT; //ms
   const START_POSITION = GARDEN_WIDTH / 2;
-  const END_POSITION = (-gardens.length * GARDEN_WIDTH) / 2;
+  const END_POSITION = ((-gardens.length / 2) * GARDEN_WIDTH) / 2;
 
   const Y_OFFSET = 100;
   const X_OFFSET = GARDEN_WIDTH / 2;
@@ -33,9 +33,7 @@
   });
 </script>
 
-<div
-  class="w-screen h-screen flex items-center justify-center presentation-gradient-rotated"
->
+<div class="w-screen h-screen flex items-center justify-center">
   <div
     class="relative"
     style:width={`${GARDEN_WIDTH}px`}

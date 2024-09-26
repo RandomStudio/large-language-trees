@@ -38,7 +38,7 @@
   });
 </script>
 
-<div class="w-full h-full presentation-gradient">
+<div class="w-full h-full">
   <div class="w-screen h-screen overflow-hidden">
     {#each movingPlants as { url, x, y }, index}
       <div

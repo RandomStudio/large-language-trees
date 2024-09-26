@@ -5,9 +5,6 @@
   import writtenNumber from "written-number";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
 
-  export let applyFilters: boolean = false;
-  export let positionStyles: string = "w-full";
-
   export let plant: SelectPlant;
   export let pollinationCount: number;
   export let user: PublicUserInfo;
@@ -65,7 +62,7 @@
       crossorigin="anonymous"
     />
     <div class="absolute w-full h-full flex items-center justify-center">
-      <PlantDisplay imageUrl={imageUrl || ""} {applyFilters} {positionStyles} />
+      <PlantDisplay imageUrl={imageUrl || ""} applyFilters={false} />
     </div>
   </div>
 

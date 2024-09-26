@@ -15,7 +15,7 @@
   import BRollDetailMulti from "./BRollDetailMulti.svelte";
   import StatsPollinations from "./StatsPollinations.svelte";
 
-  import { fade } from "svelte/transition";
+  import { fade, slide } from "svelte/transition";
 
   import { FADE_DURATION, IDLE_TIMEOUT } from "$lib/constants";
   import PollinationStarting from "./PollinationStarting.svelte";
@@ -166,7 +166,7 @@
 
     {#if data.event.name === DisplayEventNames.DETAIL_MULTI}
       <div transition:fade={{ duration: FADE_DURATION }}>
-        {#key data.event.payload}
+        {#key data.event.payload.plantImages}
           <BRollDetailMulti plantImages={data.event.payload.plantImages} />
         {/key}
       </div>
