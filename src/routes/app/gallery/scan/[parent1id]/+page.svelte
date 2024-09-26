@@ -318,7 +318,9 @@
 
 {#if otherPlant && otherUser}
   <NameChildPlant
-    {otherUser}
+    otherUserName={otherUser.username}
+    otherPlantName={otherPlant.commonName}
+    yourPlantName={data.thisPlant.commonName}
     onNameChosen={(nameChosen) => {
       if (otherPlant && otherUser) {
         initiateBackgroundRequest(otherUser.id, otherPlant.id, nameChosen)

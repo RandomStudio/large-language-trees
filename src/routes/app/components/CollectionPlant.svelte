@@ -19,11 +19,11 @@
 
   export let onClick: (plant: SelectPlant | CandidatePlant) => void;
 
-  export let isPending = false;
+  export let isBeingGenerated = false;
   export let isReadyToSprout = false;
   export let hasError: null | string = null;
 
-  let isReady = !isPending && !isReadyToSprout;
+  let isReady = !isBeingGenerated && !isReadyToSprout;
 
   function getName(plant: SelectPlant | CandidatePlant) {
     if ("givenName" in plant) {
@@ -59,7 +59,7 @@
     const pause = (duration: number) =>
       new Promise((resolve) => setTimeout(resolve, duration));
 
-    if (!isPending) {
+    if (!isBeingGenerated) {
       return;
     }
     const changeMessage = async () => {
@@ -112,6 +112,7 @@
 
     <PlantDisplay
       {disableAnimation}
+      halfFade={isBeingGenerated}
       imageUrl={isReadyToSprout
         ? "/pollination/Seed_01.png"
         : (imageForPlantOrCandidate() ?? "/pollination/Seed_01.png")}
@@ -130,8 +131,7 @@
       </button>
     {/if}
 
-    {#if isPending && !hasError}
-      <div class="text-xs">{getName(plant)}</div>
+    {#if isBeingGenerated && !hasError}
       <div class="text-small mb-2 rotator">
         {currentMessage}
       </div>
@@ -145,7 +145,7 @@
       </div>
     {/if}
 
-    {#if !isReadyToSprout && !isPending && authorTopUser && authorBottomUser}
+    {#if !isReadyToSprout && !isBeingGenerated && authorTopUser && authorBottomUser}
       <p class="font-normal text-center capitalize">
         {authorTopUser.username} ♡ {authorBottomUser.username}
       </p>

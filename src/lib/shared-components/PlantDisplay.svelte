@@ -19,10 +19,7 @@
   export let description: string | null = null;
   export let applyFilters: boolean = false;
   export let disableAnimation: boolean = false;
-  /**
-    Default width, can be overridden
-  */
-  export let imageClass: string = "";
+  export let halfFade: boolean = false;
 
   let canvasElement: HTMLCanvasElement;
 
@@ -120,7 +117,7 @@
 <div class="w-full pointer-events-none">
   {#if disableAnimation}
     <img
-      class={imageClass}
+      class:opacity-40={halfFade}
       src={imageUrl}
       alt="Static plant, no animation"
       crossorigin="anonymous"

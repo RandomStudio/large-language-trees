@@ -7,38 +7,25 @@
   import Cta from "../../../components/Cta.svelte";
   import { capitalise } from "$lib/promptUtils";
 
-  export let otherUser: PublicUserInfo;
+  export let otherUserName: string;
+  export let otherPlantName: string;
+  export let yourPlantName: string;
+
   export let onNameChosen: (name: string) => void;
 
-  let seedImage: string | null = null;
   let newName: string | null = null;
-
-  onMount(() => {
-    seedImage = pickRandomElement([
-      "Seed_01.png",
-      "Seed_02.png",
-      "Seed_03.png",
-      "Seed_04.png",
-      "Seed_05.png",
-      "Seed_06.png"
-    ]);
-  });
 </script>
 
 <Layout title="Hooray!">
   <div class="grid grid-rows-[max-content_auto_max-content_max-content_]">
     <div class="text-medium text-roel_green">
-      You and {otherUser.username} gave life to a new seed together.
+      Your <span class="capitalize">{yourPlantName}</span> and
+      <span class="capitalize">{otherUserName}</span>'s
+      <span class="capitalize">{otherPlantName}</span> gave life to a new seed together.
     </div>
     <div class="relative flex items-center justify-center">
       <div class="flex items-center justify-center">
-        {#if seedImage}
-          <img
-            class="w-3/4"
-            src={`/pollination/${seedImage}`}
-            alt="Random seed"
-          />
-        {/if}
+        <img class="w-3/4" src={`/pollination/Seed_01.png`} alt="Random seed" />
       </div>
       <img
         class="absolute -bottom-10 w-screen pointer-events-none"
@@ -65,7 +52,7 @@
         } else {
           console.warn("no valid name yet");
         }
-      }}>Let it grow</Cta
+      }}>Let it grow!</Cta
     >
   </div>
 </Layout>

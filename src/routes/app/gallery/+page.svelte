@@ -216,7 +216,7 @@
       <CollectionPlant
         authorTopUser={candidatePlant.authorTopUser}
         authorBottomUser={candidatePlant.authorBottomUser}
-        isPending
+        isBeingGenerated
         onClick={() => {
           console.log("Not sprouted... no info");
         }}
