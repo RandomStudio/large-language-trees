@@ -102,6 +102,7 @@
       <p class="mt-4 text-new_purple text-regular text-center text-small mb-0">
         {finalInsertPlant?.description}
       </p>
+      <p class="mb-64"></p>
     {/if}
     <Cta onClick={finalise}>OK</Cta>
   </Layout>
