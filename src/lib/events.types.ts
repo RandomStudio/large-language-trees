@@ -144,9 +144,8 @@ export interface DisplayFeaturedPlant extends DisplayEvent {
 export interface DisplayMultipleFeaturedPlants extends DisplayEvent {
   name: DisplayEventNames.DETAIL_MULTI;
   payload: {
-    plant: SelectPlant;
-    user: PublicUserInfo;
-  }[];
+    plantImages: string[];
+  };
 }
 
 export interface DisplayFeaturedGarden extends DisplayEvent {

@@ -144,7 +144,10 @@
     {/if}
 
     {#if data.event.name == DisplayEventNames.DETAIL}
-      <div class="w-full h-full" transition:fade={{ duration: FADE_DURATION }}>
+      <div
+        class="w-full h-full"
+        transition:fade={{ duration: FADE_DURATION / 2 }}
+      >
         {#key data.event.payload.plant.id}
           <BRollDetail
             plant={data.event.payload.plant}
@@ -157,7 +160,7 @@
     {#if data.event.name === DisplayEventNames.DETAIL_MULTI}
       <div transition:fade={{ duration: FADE_DURATION }}>
         {#key data.event.payload}
-          <BRollDetailMulti plantsWithusers={data.event.payload} />
+          <BRollDetailMulti plantImages={data.event.payload.plantImages} />
         {/key}
       </div>
     {/if}

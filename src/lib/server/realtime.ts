@@ -362,7 +362,9 @@ export const getEventForAmbientDisplay = async (
 
       const event: DisplayMultipleFeaturedPlants = {
         name: DisplayEventNames.DETAIL_MULTI,
-        payload: results,
+        payload: {
+          plantImages: results.map((p) => p.plant.imageUrl || "")
+        },
         timeout
       };
       return event;

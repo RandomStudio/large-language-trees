@@ -5,8 +5,9 @@
   import { cubicIn, cubicOut } from "svelte/easing";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import { MULTI_DETAIL_TIMEOUT } from "$lib/constants";
+  import { remap } from "@anselan/maprange";
 
-  export let plantsWithusers: { plant: SelectPlant; user: PublicUserInfo }[];
+  export let plantImages: string[];
 
   const sizePicture = window.innerWidth * 3;
   console.log({ sizePicture });
@@ -14,70 +15,41 @@
   const duration = MULTI_DETAIL_TIMEOUT * 1.5;
   const delayStart = duration / 4;
 
-  const xStartOdd = -sizePicture / 2.5;
-  const xEndOdd = -sizePicture;
-  const yStartOdd = sizePicture * 1.3;
-  const yEndOdd = -sizePicture * 0.1;
-
-  const xStartEven = xStartOdd / 2;
-  const xEndEven = -xEndOdd;
-  const yStartEven = yStartOdd;
-  const yEndEven = yEndOdd;
-
-  interface MovingPlant {
-    plant: SelectPlant;
-    user: PublicUserInfo;
-    x: Tweened<number>;
-    y: Tweened<number>;
+  interface ImageWithPosition {
+    url: string;
+    x: number;
+    y: number;
   }
 
-  // *****************************************************
-  // TODO: use CSS animations instead?
-
-  let movingPlants: MovingPlant[] = plantsWithusers.map((p, i) => {
-    const isEven = i % 2 === 0;
-    return {
-      plant: p.plant,
-      user: p.user,
-      x: tweened(isEven ? xStartEven : xStartOdd, {
-        duration,
-        easing: cubicIn,
-        delay: delayStart * i
-      }),
-      y: tweened(isEven ? yStartEven : yStartOdd, {
-        duration,
-        easing: cubicIn,
-        delay: delayStart * i
-      })
-    };
-  });
+  let movingPlants: ImageWithPosition[] = plantImages.map((p, i) => ({
+    url: p,
+    x: i % 2 == 0 ? -sizePicture : sizePicture,
+    y: i % 2 == 0 ? 0 : sizePicture / 2
+  }));
 
   onMount(() => {
-    movingPlants.forEach((p, i) => {
-      const isEven = i % 2 === 0;
-
-      p.x.set(isEven ? xEndEven : xEndOdd);
-      p.y.set(isEven ? yEndEven : yEndOdd);
+    setTimeout(() => {
+      movingPlants = movingPlants.map((p, i) => ({
+        ...p,
+        x: remap(Math.random(), [0, 1], [-sizePicture / 2, sizePicture / 2]),
+        y: remap(Math.random(), [0, 1], [sizePicture / 4, -sizePicture / 4])
+      }));
     });
   });
 </script>
 
 <div class="w-full h-full presentation-gradient">
   <div class="w-screen h-screen overflow-hidden">
-    {#each movingPlants as { user, plant, x, y }}
+    {#each movingPlants as { url, x, y }, index}
       <div
         class="mix-blend-difference object-cover absolute"
+        style:transition={`top ${Math.round(duration / 1000)}s ease-out ${index}s, left ${Math.round(duration / 1000)}s ease-out ${index * 2}s`}
         style:width={`${sizePicture}px`}
         style:height={`${sizePicture}px`}
-        style:top={`${x}`}
+        style:left={`${x}px`}
+        style:top={`${y}px`}
       >
-        <div
-          class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center"
-        >
-          {user.username}'s
-          {plant.commonName}
-        </div>
-        <PlantDisplay imageUrl={plant.imageUrl || ""} applyFilters={false} />
+        <PlantDisplay imageUrl={url} applyFilters={false} />
       </div>
     {/each}
   </div>
