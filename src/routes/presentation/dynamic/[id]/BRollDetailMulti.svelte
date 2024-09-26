@@ -31,6 +31,9 @@
     y: Tweened<number>;
   }
 
+  // *****************************************************
+  // TODO: use CSS animations instead?
+
   let movingPlants: MovingPlant[] = plantsWithusers.map((p, i) => {
     const isEven = i % 2 === 0;
     return {
@@ -66,7 +69,7 @@
         class="mix-blend-difference object-cover absolute"
         style:width={`${sizePicture}px`}
         style:height={`${sizePicture}px`}
-        style:top={`${x.get()}`}
+        style:top={`${x}`}
       >
         <div
           class="absolute text-5xl text-roel_rose bg-new_purple py-[2vw] px-[2vw] font-primer top-[80vw] right-[80vw] text-center"
