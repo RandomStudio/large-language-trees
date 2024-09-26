@@ -15,6 +15,8 @@ export const load: PageServerLoad = async ({}) => {
     .from(gardensToPlants)
     .leftJoin(plants, eq(gardensToPlants.plantId, plants.id));
 
+  console.log({ dedupPlantList });
+
   // TODO: neeed more efficient way of doing this, at least for Overview query...
   const gardenWithPlants: GardenWithPlants = {
     id: "overview-generated",

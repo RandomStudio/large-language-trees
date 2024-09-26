@@ -31,36 +31,6 @@
 
   let positions: PlantsWithGrasses[] = [];
 
-  function findMinMaxHeight() {
-    if (!garden.plants || garden.plants.length === 0) {
-      return { min: 0, max: 0 };
-    }
-
-    let min = (garden.plants[0].properties as any).heightInMetres as number;
-    let max = min;
-
-    for (const plant of garden.plants) {
-      const height = (plant.properties as any).heightInMetres;
-      if (height < min) min = height;
-      if (height > max) max = height;
-    }
-
-    return { min, max };
-  }
-
-  // function calculateProportionalSize(
-  //   heightInMetres: number,
-  //   minHeightPlant: number,
-  //   maxHeightPlant: number,
-  //   baseScale: number
-  // ) {
-  //   const heightRange = maxHeightPlant - minHeightPlant;
-  //   const heightProportion = (heightInMetres - minHeightPlant) / heightRange;
-  //   const proportionalSize = baseScale + heightProportion * baseScale;
-
-  //   return proportionalSize;
-  // }
-
   const stringOrNumberToNumber = (x: number | string): number => {
     if (typeof x === "number") {
       return x;
@@ -86,21 +56,6 @@
     const h = stringOrNumberToNumber(heightInMetres);
     // console.log(plant.commonName, "height in metres", h);
     return h;
-  };
-
-  const positionAround = (
-    x: number,
-    y: number,
-    maxDistance: number
-  ): { x: number; y: number } => {
-    const angle = Math.random() * 2 * Math.PI; // 360 degrees = 2PI Radians
-    // const distance = remap(Math.random(), [0, 1.0], [0, maxDistance]);
-    const distance = maxDistance;
-    // console.log({ angle, distance });
-    return {
-      x: x + distance * Math.cos(angle),
-      y: y + distance * Math.sin(angle)
-    };
   };
 
   const grassAroundPlant = (
@@ -169,13 +124,25 @@
           true
         );
 
+        // Offset from centre, as determined by index
         const amplitudeX =
           index === 0
             ? 0
             : remap(index, [1, plantsInGarden.length - 1], [width / 2, 0]) *
               Math.random();
 
-        const offsetX = index % 2 === 0 ? -amplitudeX : amplitudeX;
+        const scaleByNumber = remap(
+          plantsInGarden.length,
+          [0, 10],
+          [0.1, 1.0],
+          true
+        );
+
+        const scaledAmplitudeX = amplitudeX * scaleByNumber;
+
+        console.log({ scaleByNumber, scaledAmplitudeX });
+
+        const offsetX = index % 2 === 0 ? -scaledAmplitudeX : scaledAmplitudeX;
         const plantPositionData = {
           x: width / 2 - sizePixels / 2 + offsetX,
           y: index === 0 ? 0 : offsetY - sizePixels / 2,

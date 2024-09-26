@@ -130,6 +130,8 @@ export const getUserGardenWithPlants = async (userId: string) => {
       throw Error("could not find the plant we just added");
     }
 
+    await addPlantToGarden(thePlant.id, newGarden.id);
+
     if (thePlant && theUser) {
       const e: EventFirstPlant = {
         name: SimpleEventNames.FIRST_PLANT,
@@ -137,8 +139,6 @@ export const getUserGardenWithPlants = async (userId: string) => {
       };
       await publishEvent(e);
     }
-
-    await addPlantToGarden(thePlant.id, newGarden.id);
 
     const gardenWithPlants = await db.query.gardens.findFirst({
       where: eq(gardens.userId, userId),

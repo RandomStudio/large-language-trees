@@ -29,7 +29,6 @@
         grouping === SimpleEventNames.FIRST_PLANT ||
         grouping === SimpleEventNames.POLLINATION_COMPLETE
       ) {
-        console.log("new plant!");
         invalidateAll();
       }
     });
