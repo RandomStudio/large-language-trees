@@ -12,6 +12,8 @@
 
   export let authorTopUser: PublicUserInfo | null = null;
   export let authorBottomUser: PublicUserInfo | null = null;
+  export let parentTopPlant: string | null = null;
+  export let parentBottomPlant: string | null = null;
   export let disableAnimation = true;
   export let plant: SelectPlant | CandidatePlant;
 
@@ -93,16 +95,21 @@
   class="border-new_purple border-2 rounded-[25px] flex flex-col items-center justify-center p-2 mb-8"
   on:click={() => onClick(plant)}
 >
-  {#if authorTopUser && authorBottomUser}
-    <p class="font-normal text-center capitalize">
-      {authorTopUser.username} ♡ {authorBottomUser.username}
-    </p>
-  {/if}
   <div
     class="animationContainer {isReadyToSprout &&
       'shakingAnimation'} text-center"
     bind:this={animationEl}
   >
+    {#if isReady}
+      <div class="text-md mb-0">{getName(plant)}</div>
+    {/if}
+
+    {#if parentTopPlant && parentBottomPlant}
+      <p class="font-normal text-sm text-center capitalize">
+        {parentTopPlant} x {parentBottomPlant}
+      </p>
+    {/if}
+
     <PlantDisplay
       {disableAnimation}
       imageUrl={isReadyToSprout
@@ -136,8 +143,10 @@
       <div class="text-xs">now</div>
     {/if}
 
-    {#if isReady}
-      <div class="text-xs mb-2">{getName(plant)}</div>
+    {#if authorTopUser && authorBottomUser}
+      <p class="font-normal text-center capitalize">
+        {authorTopUser.username} ♡ {authorBottomUser.username}
+      </p>
     {/if}
   </div>
 </div>

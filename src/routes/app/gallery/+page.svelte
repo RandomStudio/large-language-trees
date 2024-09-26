@@ -223,6 +223,8 @@
       <CollectionPlant
         authorTopUser={plant.authorTopUser}
         authorBottomUser={plant.authorBottomUser}
+        parentTopPlant={plant.parentPlantTop?.commonName}
+        parentBottomPlant={plant.parentPlantBottom?.commonName}
         disableAnimation={index > MAX_CANVASSES - 1}
         onClick={() => {
           selectedPlantForInfo = {

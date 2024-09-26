@@ -31,7 +31,14 @@ export const load: PageServerLoad = async ({ locals }) => {
         with: {
           plants: {
             with: {
-              plant: { with: { authorTopUser: true, authorBottomUser: true } }
+              plant: {
+                with: {
+                  authorTopUser: true,
+                  authorBottomUser: true,
+                  parentPlantTop: true,
+                  parentPlantBottom: true
+                }
+              }
             }
           }
         }
