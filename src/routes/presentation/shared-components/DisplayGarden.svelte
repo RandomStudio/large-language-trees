@@ -131,21 +131,23 @@
             : remap(index, [1, plantsInGarden.length - 1], [width / 2, 0]) *
               Math.random();
 
-        const scaleByNumber = remap(
+        // Compress (horizontally and vertically) up to 10 plants
+        const scaleByCount = remap(
           plantsInGarden.length,
           [0, 10],
           [0.1, 1.0],
           true
         );
 
-        const scaledAmplitudeX = amplitudeX * scaleByNumber;
+        const scaledAmplitudeX = amplitudeX * scaleByCount;
+        const scaledOffsetY = offsetY * scaleByCount;
 
-        console.log({ scaleByNumber, scaledAmplitudeX });
+        console.log({ scaleByNumber: scaleByCount, scaledAmplitudeX });
 
         const offsetX = index % 2 === 0 ? -scaledAmplitudeX : scaledAmplitudeX;
         const plantPositionData = {
           x: width / 2 - sizePixels / 2 + offsetX,
-          y: index === 0 ? 0 : offsetY - sizePixels / 2,
+          y: index === 0 ? 0 : scaledOffsetY - sizePixels / 2,
           size: sizePixels,
           zIndex: (index + 1) * 100
         };
