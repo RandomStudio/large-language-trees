@@ -43,6 +43,8 @@
 
       <div class="my-4">
         <PlantDisplay
+          {authorTopUser}
+          {authorBottomUser}
           imageUrl={plantDetails.imageUrl || ""}
           applyFilters={false}
         />
