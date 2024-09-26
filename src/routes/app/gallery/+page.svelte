@@ -181,12 +181,16 @@
         };
       }}
     >
+      <div class="text-primer text-md text-roel_green text-center">
+        Your {data.myOriginalPlant.plant.commonName}
+      </div>
+      <div class="text-primer text-sm text-roel_green text-center mb-4">
+        ...has pollinated {data.pollinationCount} other plants
+      </div>
       <PlantDisplay
         disableAnimation={false}
         imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
         applyFilters={false}
-        label={"Your " + data.myOriginalPlant.plant.commonName}
-        description="...has pollinated {data.pollinationCount} other plants"
       />
     </div>
     {#each data.awaitingConfirmation as candidatePlant}
