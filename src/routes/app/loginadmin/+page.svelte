@@ -28,7 +28,12 @@
   }
 </script>
 
-<form method="post" use:enhance class="mt-0 text-center max-w-md">
+<form
+  method="post"
+  action="/app/loginadmin"
+  use:enhance
+  class="mt-0 text-center max-w-md"
+>
   <input
     class="bg-roel_green/75 border-[3px] border-roel_blue rounded-full text-roel_blue font-primer text-3xl px-4 py-[0.5rem] w-full max-w-xs placeholder-roel_blue placeholder:font-primer"
     type="text"
