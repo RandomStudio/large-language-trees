@@ -5,14 +5,6 @@ import { eq } from "drizzle-orm";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 
-export const load = async ({ locals }) => {
-  const username = locals.user?.username;
-  if (username) {
-    console.log(`${username} was already logged in; simply redirect`);
-    redirect(302, "/app/gallery");
-  }
-};
-
 export const actions = {
   default: async (event) => {
     const formData = await event.request.formData();
