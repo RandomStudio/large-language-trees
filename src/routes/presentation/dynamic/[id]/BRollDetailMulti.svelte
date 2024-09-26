@@ -23,7 +23,7 @@
 
   let movingPlants: ImageWithPosition[] = plantImages.map((p, i) => ({
     url: p,
-    x: i % 2 == 0 ? -sizePicture : sizePicture,
+    x: i % 2 == 0 ? -sizePicture : sizePicture / 2,
     y: i % 2 == 0 ? 0 : sizePicture / 2
   }));
 
@@ -31,7 +31,7 @@
     setTimeout(() => {
       movingPlants = movingPlants.map((p, i) => ({
         ...p,
-        x: remap(Math.random(), [0, 1], [-sizePicture / 2, sizePicture / 2]),
+        x: remap(Math.random(), [0, 1], [-sizePicture / 2, 0]),
         y: remap(Math.random(), [0, 1], [sizePicture / 4, -sizePicture / 4])
       }));
     });

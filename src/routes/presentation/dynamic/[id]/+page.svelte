@@ -111,43 +111,50 @@
 <main class="w-full h-full">
   {#if data.event}
     {#if data.event.name === DisplayEventNames.IDLE}
-      <Idle />
+      <div transition:fade={{ duration: FADE_DURATION }}>
+        {#key data.event.payload}
+          <Idle />
+        {/key}
+      </div>
     {/if}
     {#if data.event.name == DisplayEventNames.ANNOUNCE_FIRST_PLANT}
       <div transition:fade={{ duration: FADE_DURATION }}>
-        <NewUserFirstPlant
-          plant={data.event.payload.plant}
-          gardenerName={data.event.payload.user.username}
-        ></NewUserFirstPlant>
+        {#key data.event.payload}
+          <NewUserFirstPlant
+            plant={data.event.payload.plant}
+            gardenerName={data.event.payload.user.username}
+          ></NewUserFirstPlant>
+        {/key}
       </div>
     {/if}
 
     {#if data.event.name === DisplayEventNames.ANNOUNCE_POLLINATION_STARTING}
       <div transition:fade={{ duration: FADE_DURATION }}>
-        <PollinationStarting
-          authorTop={data.event.payload.authorTop}
-          authorBottom={data.event.payload.authorBottom}
-          plantTop={data.event.payload.plantTop}
-          plantBottom={data.event.payload.plantBottom}
-        />
+        {#key data.event.payload}
+          <PollinationStarting
+            authorTop={data.event.payload.authorTop}
+            authorBottom={data.event.payload.authorBottom}
+            plantTop={data.event.payload.plantTop}
+            plantBottom={data.event.payload.plantBottom}
+          />
+        {/key}
       </div>
     {/if}
 
     {#if data.event.name == DisplayEventNames.ANNOUNCE_NEW_SPROUT}
       <div transition:fade={{ duration: FADE_DURATION }}>
-        <PollinationResult
-          authorTop={data.event.payload.authorTop}
-          authorBottom={data.event.payload.authorBottom}
-          newPlant={data.event.payload.newPlant}
-        ></PollinationResult>
+        {#key data.event.payload}
+          <PollinationResult
+            authorTop={data.event.payload.authorTop}
+            authorBottom={data.event.payload.authorBottom}
+            newPlant={data.event.payload.newPlant}
+          ></PollinationResult>
+        {/key}
       </div>
     {/if}
 
     {#if data.event.name == DisplayEventNames.DETAIL}
-      <div
-        class="w-full h-full"
-        transition:fade={{ duration: FADE_DURATION / 2 }}
-      >
+      <div class="w-full h-full" transition:fade={{ duration: FADE_DURATION }}>
         {#key data.event.payload.plant.id}
           <BRollDetail
             plant={data.event.payload.plant}
@@ -166,23 +173,27 @@
     {/if}
 
     {#if data.event.name == DisplayEventNames.ZOOM_OUT}
-      <div class="w-full h-full" transition:fade={{ duration: FADE_DURATION }}>
-        <BRollZoomOut
-          garden={data.event.payload.garden}
-          userName={data.event.payload.user.username}
-        ></BRollZoomOut>
+      <div transition:fade={{ duration: FADE_DURATION }}>
+        {#key data.event.payload}
+          <BRollZoomOut
+            garden={data.event.payload.garden}
+            userName={data.event.payload.user.username}
+          ></BRollZoomOut>
+        {/key}
       </div>
     {/if}
 
     {#if data.event.name == DisplayEventNames.ROLL_PAN}
       <div transition:fade={{ duration: FADE_DURATION }}>
-        <BRollPan gardens={data.event.payload}></BRollPan>
+        {#key data.event.payload}
+          <BRollPan gardens={data.event.payload}></BRollPan>
+        {/key}
       </div>
     {/if}
 
     {#if data.event.name == DisplayEventNames.STATS_TIME}
-      <div transition:fade>
-        {#key data.event.payload.plant.imageUrl}
+      <div transition:fade={{ duration: FADE_DURATION }}>
+        {#key data.event.payload}
           <StatsGrowingTime
             imageUrl={data.event.payload.plant.imageUrl || ""}
             plantName={data.event.payload.plant.commonName}
@@ -195,7 +206,7 @@
 
     {#if data.event?.name == DisplayEventNames.STATS_POLLINATIONS}
       <div transition:fade={{ duration: FADE_DURATION }}>
-        {#key data.event.payload.plant.id}
+        {#key data.event.payload}
           <StatsPollinations
             plant={data.event.payload.plant}
             pollinationCount={data.event.payload.pollinationCount}

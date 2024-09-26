@@ -11,8 +11,8 @@
   const GARDEN_WIDTH = 700;
   const GARDEN_HEIGHT = 700;
 
-  const duration = BROLL_TIMEOUT + 2000; //ms
-  const START_POSITION = GARDEN_WIDTH;
+  const duration = BROLL_TIMEOUT; //ms
+  const START_POSITION = GARDEN_WIDTH / 2;
   const END_POSITION = (-gardens.length * GARDEN_WIDTH) / 2;
 
   const Y_OFFSET = 100;
@@ -24,7 +24,7 @@
     index: number,
     pan: number
   ): { x: number; y: number } => ({
-    x: index * X_OFFSET + pan,
+    x: index * X_OFFSET + pan + pan * index * 0.1,
     y: index % 2 === 0 ? Y_OFFSET : -Y_OFFSET
   });
 

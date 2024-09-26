@@ -14,7 +14,7 @@
 
   let zoom = tweened(START_SCALE, {
     duration: BROLL_TIMEOUT,
-    easing: cubicInOut
+    easing: cubicOut
   });
 
   onMount(() => {
@@ -22,27 +22,22 @@
   });
 </script>
 
-<div
-  class="w-full h-full flex items-center justify-center presentation-gradient"
->
+<div class="w-screen h-screen grid grid-cols-1 place-items-center">
   <div
-    class="w-full text-center text-roel_yellow text-4xl font-gyst absolute top-32 z-10 uppercase"
+    class="w-full text-center text-roel_yellow text-4xl font-gyst z-[2000] uppercase"
   >
-    {userName.toUpperCase()}'S <br /> GARDEN
+    <div>
+      {userName}'s'
+    </div>
+    <div>garden</div>
   </div>
 
   <div
-    class="absolute"
-    style={`width:540px; height:800px;`}
+    class="w-[1024px] h-[1024px] overflow-hidden"
     style:transform={`scale(${$zoom})`}
   >
-    <DisplayGarden
-      {garden}
-      width={540}
-      height={800}
-      showGardenName={false}
-      showPlantName={false}
-      colorBGText="roel_rose"
-    ></DisplayGarden>
+    <DisplayGarden width={1024} height={1024} {garden} showGardenName={false} />
   </div>
 </div>
+
+<!-- <div class="absolute w-screen h-screen" style:transform={`scale(${$zoom})`}> -->
