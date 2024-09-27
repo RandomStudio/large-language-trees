@@ -509,13 +509,13 @@ export const getEventForAmbientDisplay = async (
           )
         );
 
-      console.log(
-        "plant",
-        originalPlant,
-        "appears as parent",
-        asParentCount.length,
-        "times"
-      );
+      // console.log(
+      //   "plant",
+      //   originalPlant,
+      //   "appears as parent",
+      //   asParentCount.length,
+      //   "times"
+      // );
 
       const event: DisplayPlantPollinationStats = {
         name: DisplayEventNames.STATS_POLLINATIONS,
