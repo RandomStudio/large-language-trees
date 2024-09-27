@@ -18,6 +18,7 @@
   export let candidateChild: CandidatePlant;
 
   let userErrorMessage: string | null = null;
+  let readyWithImage = false;
 
   /** A local copy of the incoming "candidateChild", which we update as necessary before
    * attempting to add to the DB
@@ -68,6 +69,7 @@
         finalInsertPlant.imageUrl = url;
       }
     }
+    readyWithImage = true;
   };
 
   onMount(() => {
@@ -104,7 +106,9 @@
       </p>
       <p class="mb-64"></p>
     {/if}
-    <Cta umami="ConfirmBreed" onClick={finalise}>OK</Cta>
+    {#if readyWithImage}
+      <Cta umami="ConfirmBreed" onClick={finalise}>OK</Cta>
+    {/if}
   </Layout>
 </div>
 
