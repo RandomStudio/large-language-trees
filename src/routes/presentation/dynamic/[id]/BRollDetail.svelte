@@ -7,6 +7,7 @@
   import { capitalise } from "$lib/promptUtils";
   import { BROLL_TIMEOUT } from "$lib/constants";
   import { remap } from "@anselan/maprange";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
@@ -75,3 +76,6 @@
     <PlantDisplay imageUrl={plant.imageUrl || ""} applyFilters={false} />
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

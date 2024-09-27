@@ -10,6 +10,7 @@
   import { BROWSER_CONNECTION } from "../../../../defaults/tether";
   import { SimpleEventNames, type EventFirstPlant } from "$lib/events.types";
   import { invalidateAll } from "$app/navigation";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let data;
 
@@ -50,3 +51,5 @@
     showGardenName={false}
   />
 </div>
+
+<SiteUrl />

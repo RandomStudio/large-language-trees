@@ -3,6 +3,7 @@
   import { getColourPair } from "./findColors";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import type { SelectPlant } from "$lib/types";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let plant: SelectPlant;
   export let gardenerName: string;
@@ -56,3 +57,6 @@
     <div>in the garden!</div>
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

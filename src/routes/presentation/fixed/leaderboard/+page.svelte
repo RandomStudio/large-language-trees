@@ -8,6 +8,7 @@
   import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   import type { RefreshDisplays } from "../../../api/displays/types";
   import Idle from "../../shared-components/Idle.svelte";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let data;
 
@@ -98,3 +99,5 @@
 {:else}
   <Idle />
 {/if}
+
+<SiteUrl />

@@ -6,6 +6,7 @@
   import type { GardenWithPlants } from "$lib/types";
   import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   import { tweened } from "svelte/motion";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
   export let gardens: GardenWithPlants[];
 
   const GARDEN_WIDTH = 700;
@@ -61,3 +62,6 @@
     Join <br /> the Garden!
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

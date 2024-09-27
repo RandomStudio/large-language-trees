@@ -4,6 +4,7 @@
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import writtenNumber from "written-number";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let plant: SelectPlant;
   export let pollinationCount: number;
@@ -82,3 +83,6 @@
     {comment}
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

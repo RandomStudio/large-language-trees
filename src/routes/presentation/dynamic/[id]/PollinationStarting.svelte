@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let authorTop: PublicUserInfo;
   export let authorBottom: PublicUserInfo;
@@ -54,3 +55,6 @@
     {plantBottom.commonName}
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

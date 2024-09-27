@@ -6,6 +6,7 @@
   import type { EventLog } from "$lib/types";
   import Idle from "../../shared-components/Idle.svelte";
   import { flip } from "svelte/animate";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let data;
 
@@ -72,5 +73,4 @@
   {/each}
 </div>
 
-<style scoped>
-</style>
+<SiteUrl background="yelllow" />

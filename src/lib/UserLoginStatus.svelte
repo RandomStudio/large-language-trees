@@ -13,6 +13,3 @@
     class="bg-red-500 text-white py-2 px-4 rounded">Logout</button
   >
 </form>
-
-<style>
-</style>

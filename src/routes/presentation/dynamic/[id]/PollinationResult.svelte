@@ -3,6 +3,7 @@
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import { getColourPair } from "./findColors";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let authorTop: PublicUserInfo;
   export let authorBottom: PublicUserInfo;
@@ -61,3 +62,6 @@
     {newPlant.commonName}
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

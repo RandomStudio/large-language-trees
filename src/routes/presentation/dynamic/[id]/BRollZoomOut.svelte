@@ -5,6 +5,7 @@
   import { tweened } from "svelte/motion";
   import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";
   import { BROLL_TIMEOUT } from "$lib/constants";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let userName: string;
   export let garden: GardenWithPlants;
@@ -40,4 +41,5 @@
   </div>
 </div>
 
-<!-- <div class="absolute w-screen h-screen" style:transform={`scale(${$zoom})`}> -->
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

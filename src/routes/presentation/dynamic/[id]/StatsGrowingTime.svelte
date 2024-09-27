@@ -3,6 +3,7 @@
   import { getColourPair } from "./findColors";
   import { DateTime } from "luxon";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let imageUrl: string;
   export let plantName: string;
@@ -71,3 +72,6 @@
     </div>
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />

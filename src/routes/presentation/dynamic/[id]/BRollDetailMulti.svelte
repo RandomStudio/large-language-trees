@@ -6,6 +6,7 @@
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import { MULTI_DETAIL_TIMEOUT } from "$lib/constants";
   import { remap } from "@anselan/maprange";
+  import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let plantImages: string[];
 
@@ -34,12 +35,12 @@
         x: remap(Math.random(), [0, 1], [-sizePicture / 2, 0]),
         y: remap(Math.random(), [0, 1], [sizePicture / 4, -sizePicture / 4])
       }));
-    });
+    }, 1000);
   });
 </script>
 
 <div class="w-full h-full">
-  <div class="w-screen h-screen overflow-hidden">
+  <div class="w-screen h-screen overflow-hidden isolate">
     {#each movingPlants as { url, x, y }, index}
       <div
         class="mix-blend-difference object-cover absolute"
@@ -54,3 +55,6 @@
     {/each}
   </div>
 </div>
+
+<SiteUrl />
+<SiteUrl position="top" background="yelllow" />
