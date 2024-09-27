@@ -74,4 +74,4 @@
 </div>
 
 <SiteUrl />
-<SiteUrl position="top" background="yelllow" />
+<SiteUrl position="top" background="green" />

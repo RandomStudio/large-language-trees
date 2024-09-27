@@ -77,5 +77,5 @@
   </div>
 </div>
 
-<SiteUrl />
-<SiteUrl position="top" background="yelllow" />
+<SiteUrl position="top" />
+<SiteUrl position="bottom" background="green" />
