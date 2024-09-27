@@ -104,7 +104,7 @@
       </p>
       <p class="mb-64"></p>
     {/if}
-    <Cta onClick={finalise}>OK</Cta>
+    <Cta umami="ConfirmBreed" onClick={finalise}>OK</Cta>
   </Layout>
 </div>
 

@@ -57,6 +57,8 @@
       {otherUser.username} has the privilege to name your new sprout.
     </div>
     <div />
-    <Cta onClick={() => goto(`/app/gallery`)}>Continue</Cta>
+    <Cta umami="PollinationOtherUser" onClick={() => goto(`/app/gallery`)}
+      >Continue</Cta
+    >
   </div>
 </Layout>

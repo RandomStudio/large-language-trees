@@ -28,7 +28,9 @@
     <p class="text-small text-left">
       Now find a fellow gardener and scan their QR code to start pollinating.
     </p>
-    <Cta onClick={() => goto(`/app/gallery/scan/${data.startPlant.plant.id}`)}
+    <Cta
+      umami="Start Pollinating"
+      onClick={() => goto(`/app/gallery/scan/${data.startPlant.plant.id}`)}
       >Start Pollinating</Cta
     >
   </div>

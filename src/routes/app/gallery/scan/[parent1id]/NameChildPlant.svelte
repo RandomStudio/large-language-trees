@@ -45,6 +45,7 @@
       />
     </form>
     <Cta
+      umami="NameChosen"
       disabled={newName === null}
       onClick={() => {
         if (newName) {

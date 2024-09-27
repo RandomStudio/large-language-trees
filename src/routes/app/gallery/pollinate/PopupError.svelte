@@ -15,6 +15,6 @@
     >
       {errorText}
     </div>
-    <Cta {onClick}>Try Again</Cta>
+    <Cta umami="PopupError" {onClick}>Try Again</Cta>
   </div>
 </div>
