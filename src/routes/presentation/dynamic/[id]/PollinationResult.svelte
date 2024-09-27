@@ -36,7 +36,7 @@
   style="background: linear-gradient({darkColor}, {brightColor});"
 >
   <div
-    class="w-full text-center text-7xl font-gyst absolute top-32 z-10 uppercase"
+    class="w-full text-center text-5xl font-gyst absolute top-32 z-10 uppercase"
     style:color={brightColor}
   >
     <div>
@@ -55,7 +55,7 @@
   </div>
 
   <div
-    class="w-full text-center text-7xl font-gyst absolute bottom-32 z-10 uppercase"
+    class="w-full text-center text-5xl font-gyst absolute bottom-32 z-10 uppercase"
     style:color={darkColor}
   >
     Gave life to<br />

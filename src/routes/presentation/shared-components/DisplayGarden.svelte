@@ -151,6 +151,7 @@
           size: sizePixels,
           zIndex: (index + 1) * 100
         };
+
         // console.log({
         //   index,
         //   plant: plant.commonName,

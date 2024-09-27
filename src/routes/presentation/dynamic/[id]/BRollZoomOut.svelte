@@ -10,8 +10,10 @@
   export let userName: string;
   export let garden: GardenWithPlants;
 
-  const START_SCALE = 6;
-  const END_SCALE = 1;
+  const START_SCALE = 4;
+  const END_SCALE = 0.5;
+
+  let ready = false;
 
   let zoom = tweened(START_SCALE, {
     duration: BROLL_TIMEOUT,
@@ -19,13 +21,17 @@
   });
 
   onMount(() => {
-    zoom.set(END_SCALE);
+    setTimeout(() => {
+      zoom.set(END_SCALE);
+      ready = true;
+    });
   });
 </script>
 
-<div class="w-screen h-screen grid grid-cols-1 place-items-center">
+<div class="fixed top-0 w-screen h-screen grid grid-cols-1 place-items-center">
   <div
-    class="w-full text-center text-roel_yellow text-4xl font-gyst z-[2000] uppercase"
+    class="w-full text-center text-roel_yellow text-4xl font-gyst z-[2000] uppercase transition-opacity"
+    style:opacity={ready ? "1.0" : "0"}
   >
     <div>
       {userName}'s'
@@ -33,10 +39,7 @@
     <div>garden</div>
   </div>
 
-  <div
-    class="w-[1024px] h-[1024px] overflow-hidden"
-    style:transform={`scale(${$zoom})`}
-  >
+  <div class="w-[1024px] h-[1024px]" style:transform={`scale(${$zoom})`}>
     <DisplayGarden width={1024} height={1024} {garden} showGardenName={false} />
   </div>
 </div>
