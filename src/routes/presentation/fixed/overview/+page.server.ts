@@ -9,6 +9,7 @@ export const load: PageServerLoad = async ({}) => {
     .selectDistinctOn([gardensToPlants.plantId], {
       plantId: gardensToPlants.plantId,
       imageUrl: plants.imageUrl,
+      properties: plants.properties,
       gardenId: gardensToPlants.gardenId,
       timestamp: gardensToPlants.plantingDate
     })

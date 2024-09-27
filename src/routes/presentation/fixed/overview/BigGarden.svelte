@@ -11,6 +11,7 @@
   interface PlantImageWithDates {
     plantId: string;
     imageUrl: string | null;
+    properties: unknown;
     gardenId: string;
     timestamp: Date;
   }
@@ -35,6 +36,33 @@
   }
 
   let positions: PlantsWithGrasses[] = [];
+
+  const stringOrNumberToNumber = (x: number | string): number => {
+    if (typeof x === "number") {
+      return x;
+    } else if (typeof x === "string") {
+      try {
+        const n = parseFloat(x);
+        return n;
+      } catch (e) {
+        console.error("failed to parse", x, "as float number");
+        return 1;
+      }
+    } else {
+      console.error("value is neither number nor string");
+      return 1;
+    }
+  };
+
+  const getLargestPlantHeightMetres = (plants: PlantImageWithDates[]) =>
+    plants.map((p) => getPlantHeightMetres(p)).sort((a, b) => b - a)[0];
+
+  const getPlantHeightMetres = (plant: PlantImageWithDates) => {
+    const { heightInMetres } = plant.properties as PlantProperties;
+    const h = stringOrNumberToNumber(heightInMetres);
+    // console.log(plant.commonName, "height in metres", h);
+    return h;
+  };
 
   const grassAroundPlant = (
     plantPositionData: PositionData,
@@ -74,7 +102,7 @@
 
   const buildLayout = (plants: PlantImageWithDates[]): PlantsWithGrasses[] => {
     // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
-    // const tallestPlantMetres = getLargestPlantHeightMetres(plantsInGarden);
+    const tallestPlantMetres = getLargestPlantHeightMetres(plants);
     // console.log({ tallestPlantMetres });
 
     /** "Pushes" the centre of the offset curve later/lower as the number increases */
@@ -82,15 +110,14 @@
 
     return plants
       .sort((a, b) => {
-        const dateA = DateTime.fromJSDate(a.timestamp);
-        const dateB = DateTime.fromJSDate(b.timestamp);
-        const diff = dateB.diff(dateA);
-        return diff.as("seconds");
+        const hA = getPlantHeightMetres(a);
+        const hB = getPlantHeightMetres(b);
+        return hB - hA;
       })
       .map((plant, index) => {
         const sizePixels = remap(
-          index,
-          [plants.length + 1, 0],
+          getPlantHeightMetres(plant),
+          [0.1, tallestPlantMetres],
           [width / 4, width],
           true,
           true
