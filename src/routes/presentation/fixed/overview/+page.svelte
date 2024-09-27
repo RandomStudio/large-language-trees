@@ -12,6 +12,7 @@
   import { invalidateAll } from "$app/navigation";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
   import type { RefreshDisplays } from "../../../api/displays/types";
+  import BigGarden from "./BigGarden.svelte";
 
   export let data;
 
@@ -54,12 +55,7 @@
   >
     Bird's Eye View
   </div>
-  <DisplayGarden
-    width={520}
-    height={1400}
-    garden={data.gardenWithPlants}
-    showGardenName={false}
-  />
+  <BigGarden width={520} height={1400} plants={data.dedupPlantList} />
 </div>
 
 <SiteUrl />

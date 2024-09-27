@@ -5,14 +5,19 @@
     SelectPlant
   } from "$lib/types";
   import { remap } from "@anselan/maprange";
+  import { DateTime } from "luxon";
   import { beforeUpdate } from "svelte";
 
-  export let garden: GardenWithPlants;
+  interface PlantImageWithDates {
+    plantId: string;
+    imageUrl: string | null;
+    gardenId: string;
+    timestamp: Date;
+  }
+
+  export let plants: PlantImageWithDates[];
   export let width: number = 1000;
   export let height: number = width;
-  export let showGardenName = true;
-  export let showPlantName = false;
-  export let colorBGText = "roel_green";
 
   interface PositionData {
     x: number;
@@ -21,7 +26,7 @@
     zIndex: number;
   }
 
-  interface PlantsWithPositions extends SelectPlant {
+  interface PlantsWithPositions extends PlantImageWithDates {
     plantPositionData: PositionData;
   }
 
@@ -30,33 +35,6 @@
   }
 
   let positions: PlantsWithGrasses[] = [];
-
-  const stringOrNumberToNumber = (x: number | string): number => {
-    if (typeof x === "number") {
-      return x;
-    } else if (typeof x === "string") {
-      try {
-        const n = parseFloat(x);
-        return n;
-      } catch (e) {
-        console.error("failed to parse", x, "as float number");
-        return 1;
-      }
-    } else {
-      console.error("value is neither number nor string");
-      return 1;
-    }
-  };
-
-  const getLargestPlantHeightMetres = (plants: SelectPlant[]) =>
-    plants.map((p) => getPlantHeightMetres(p)).sort((a, b) => b - a)[0];
-
-  const getPlantHeightMetres = (plant: SelectPlant) => {
-    const { heightInMetres } = plant.properties as PlantProperties;
-    const h = stringOrNumberToNumber(heightInMetres);
-    // console.log(plant.commonName, "height in metres", h);
-    return h;
-  };
 
   const grassAroundPlant = (
     plantPositionData: PositionData,
@@ -94,24 +72,25 @@
     return grassPatches;
   };
 
-  const buildLayout = (plantsInGarden: SelectPlant[]): PlantsWithGrasses[] => {
+  const buildLayout = (plants: PlantImageWithDates[]): PlantsWithGrasses[] => {
     // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
-    const tallestPlantMetres = getLargestPlantHeightMetres(plantsInGarden);
+    // const tallestPlantMetres = getLargestPlantHeightMetres(plantsInGarden);
     // console.log({ tallestPlantMetres });
 
     /** "Pushes" the centre of the offset curve later/lower as the number increases */
     const OFFSET_CENTRE_FACTOR = 1.5;
 
-    return plantsInGarden
+    return plants
       .sort((a, b) => {
-        const hA = getPlantHeightMetres(a);
-        const hB = getPlantHeightMetres(b);
-        return hB - hA;
+        const dateA = DateTime.fromJSDate(a.timestamp);
+        const dateB = DateTime.fromJSDate(b.timestamp);
+        const diff = dateA.diff(dateB);
+        return diff.as("seconds");
       })
       .map((plant, index) => {
         const sizePixels = remap(
-          getPlantHeightMetres(plant),
-          [0.1, tallestPlantMetres],
+          index,
+          [0, plants.length],
           [width / 4, width],
           true,
           true
@@ -119,7 +98,7 @@
 
         const offsetY = remap(
           index * OFFSET_CENTRE_FACTOR,
-          [0, plantsInGarden.length - 1],
+          [0, plants.length - 1],
           [sizePixels / 2, height - sizePixels / 2],
           true
         );
@@ -128,16 +107,11 @@
         const amplitudeX =
           index === 0
             ? 0
-            : remap(index, [1, plantsInGarden.length - 1], [width / 2, 0]) *
+            : remap(index, [1, plants.length - 1], [width / 2, 0]) *
               Math.random();
 
         // Compress (horizontally and vertically) up to 10 plants
-        const scaleByCount = remap(
-          plantsInGarden.length,
-          [0, 10],
-          [0.1, 1.0],
-          true
-        );
+        const scaleByCount = remap(plants.length, [0, 10], [0.1, 1.0], true);
 
         const scaledAmplitudeX = amplitudeX * scaleByCount;
         const scaledOffsetY = offsetY * scaleByCount;
@@ -160,7 +134,7 @@
 
         const numPatches = remap(
           index,
-          [0, plantsInGarden.length - 1],
+          [0, plants.length - 1],
           [32, 0],
           true,
           true
@@ -176,41 +150,26 @@
 
   beforeUpdate(() => {
     console.log("..................... buildLayout!");
-    positions = buildLayout(garden.plants);
+    positions = buildLayout(plants);
   });
 </script>
 
 <div class="absolute" style:width={`${width}px`} style:height={`${height}px`}>
-  {#each positions as { parent1, commonName, imageUrl, plantPositionData, grassPositions }}
+  {#each positions as { imageUrl, plantPositionData, grassPositions }}
     {#each grassPositions as grassPatch}
       <img
         src="/grassjess.png"
         class="absolute opacity-90 skew-animated"
         style={`left: ${grassPatch.x}px; top: ${grassPatch.y}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex}; transition: left 2s, top 5s;`}
-        alt={`Grass for ${commonName}`}
+        alt={`Grass`}
       />
     {/each}
     <img
       src={imageUrl}
-      alt={commonName}
+      alt={"actual plant"}
       class="absolute skew-animated"
       style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex}; transition: left 2s, top 5s;`}
       crossorigin="anonymous"
     />
-    {#if showPlantName}
-      <div
-        class="absolute z-2000 font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
-        style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y + plantPositionData.size / 2}px; width: auto; height: auto; z-index:${plantPositionData.zIndex + 1}`}
-      >
-        {commonName}
-      </div>
-    {/if}
   {/each}
 </div>
-{#if showGardenName}
-  <div
-    class="absolute z-[2000] font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50"
-  >
-    {garden.name}
-  </div>
-{/if}
