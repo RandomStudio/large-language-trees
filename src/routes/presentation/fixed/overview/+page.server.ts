@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({}) => {
     })
     .from(gardensToPlants)
     .leftJoin(plants, eq(gardensToPlants.plantId, plants.id));
+  // .orderBy(gardensToPlants.plantingDate);
 
   console.log({ dedupPlantList });
 

@@ -84,13 +84,13 @@
       .sort((a, b) => {
         const dateA = DateTime.fromJSDate(a.timestamp);
         const dateB = DateTime.fromJSDate(b.timestamp);
-        const diff = dateA.diff(dateB);
+        const diff = dateB.diff(dateA);
         return diff.as("seconds");
       })
       .map((plant, index) => {
         const sizePixels = remap(
           index,
-          [0, plants.length],
+          [plants.length + 1, 0],
           [width / 4, width],
           true,
           true
