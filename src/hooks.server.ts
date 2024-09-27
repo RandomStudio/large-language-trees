@@ -2,13 +2,8 @@ import { lucia } from "$lib/server/auth";
 import { redirect, type Handle } from "@sveltejs/kit";
 
 const publicAccessAllowed = (pathname: string) =>
-  pathname.includes("/api/plants") ||
-  pathname.includes("/api/images") ||
+  pathname.includes("/api") ||
   pathname.includes("/presentation") ||
-  pathname.includes("/api/events") ||
-  pathname.includes("/api/forceDisplay") ||
-  pathname.includes("/api/displays") ||
-  pathname.includes("/api/displayNotifyServer") ||
   pathname.includes("/app/loginadmin");
 
 export const handle: Handle = async ({ event, resolve }) => {
