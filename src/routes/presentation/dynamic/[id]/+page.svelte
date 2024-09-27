@@ -108,7 +108,7 @@
 <!-- <code>
     {JSON.stringify(data.event)}
   </code> -->
-<main class="w-full h-full">
+<main class="w-full h-full presentation-gradient">
   {#if data.event}
     {#if data.event.name === DisplayEventNames.IDLE}
       <div transition:fade={{ duration: FADE_DURATION }}>
