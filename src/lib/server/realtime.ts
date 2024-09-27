@@ -140,6 +140,12 @@ export const publishDisplayRefresh = async (action: RefreshDisplays) => {
     }
   });
 
+  console.log(
+    "publishDisplayRefresh on MQTT broker",
+    PUBLIC_TETHER_HOST,
+    "..."
+  );
+
   const plug = new OutputPlug(agent, "refresh", {
     publishOptions: { qos: 2 }
   });

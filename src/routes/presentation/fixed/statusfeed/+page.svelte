@@ -18,7 +18,7 @@
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
       brokerOptions: BROWSER_CONNECTION,
-      id: "leaderboard"
+      id: "statusfeed"
     });
 
     const feedEventLogs = await InputPlug.create(agent, "eventLogs");

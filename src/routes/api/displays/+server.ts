@@ -17,6 +17,7 @@ export const POST: RequestHandler = async ({ request }) => {
       return json(req, { status: 200 });
     }
     case "reload": {
+      console.warn("displays refresh requested");
       publishDisplayRefresh(req);
       return json(req, { status: 200 });
     }

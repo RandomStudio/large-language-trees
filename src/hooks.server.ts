@@ -7,6 +7,7 @@ const publicAccessAllowed = (pathname: string) =>
   pathname.includes("/presentation") ||
   pathname.includes("/api/events") ||
   pathname.includes("/api/forceDisplay") ||
+  pathname.includes("/api/displays") ||
   pathname.includes("/api/displayNotifyServer") ||
   pathname.includes("/app/loginadmin");
 

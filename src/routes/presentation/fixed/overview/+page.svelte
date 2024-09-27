@@ -11,6 +11,7 @@
   import { SimpleEventNames, type EventFirstPlant } from "$lib/events.types";
   import { invalidateAll } from "$app/navigation";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import type { RefreshDisplays } from "../../../api/displays/types";
 
   export let data;
 
@@ -19,7 +20,7 @@
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
       brokerOptions: BROWSER_CONNECTION,
-      id: "leaderboard"
+      id: "overview"
     });
 
     const newPlantsPlug = await InputPlug.create(agent, "events", {});
@@ -31,6 +32,15 @@
         grouping === SimpleEventNames.POLLINATION_COMPLETE
       ) {
         invalidateAll();
+      }
+    });
+
+    const refreshPlug = await InputPlug.create(agent, "refresh");
+    refreshPlug.on("message", (payload) => {
+      const m = decode(payload) as RefreshDisplays;
+      if (m.action === "reload") {
+        console.info("Server requested reload...");
+        location.reload();
       }
     });
   });
