@@ -34,7 +34,7 @@ export const NUM_GARDENS_MULTI = 5;
 export const LIMIT_LEADERBOARD = 5;
 
 /** The maximum number of latest event logs we need to fetch from the DB */
-export const LIMIT_STATUS_FEED = 14;
+export const LIMIT_STATUS_FEED = 17;
 /** The MINIMUM number of event log entries we need in order to switch to that display */
 export const MIN_STATUS_FEED = 2;
 /** How many entries to cap the table row count; delete where necessary to
@@ -54,7 +54,7 @@ export const IDLE_TIMEOUT = 2000;
 export const BROLL_TIMEOUT = 10000;
 export const MULTI_DETAIL_TIMEOUT = 15000;
 export const NEW_USER_TIMEOUT = 8000;
-export const POLLINATION_START_TIMEOUT = 8000;
+export const POLLINATION_START_TIMEOUT = 10000;
 export const POLLINATION_RESULT_TIMEOUT = 16000;
 export const FADE_DURATION = 1500;
 
