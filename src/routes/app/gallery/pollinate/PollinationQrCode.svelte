@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import QRCode from "qrcode";
+  import { page } from "$app/stores";
 
   export let plantId: string;
   export let userId: string;
@@ -18,7 +19,8 @@
   };
 
   onMount(() => {
-    let text = `${plantId}&${userId}`;
+    const domainName = $page.url.origin;
+    const text = `${domainName}?params=${plantId}&${userId}`;
     generateQRCode(text);
   });
 </script>

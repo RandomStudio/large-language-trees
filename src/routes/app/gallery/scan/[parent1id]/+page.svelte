@@ -77,8 +77,10 @@
     if (result) {
       // Handle the result here
       const readText = result.getText();
-      const [part1, part2] = readText.split("&");
-      console.log("scan text:", { part1, part2 });
+      const [url, dataPart] = readText.split("?params=");
+      console.log({ readText, url, dataPart });
+      const [part1, part2] = dataPart.split("&");
+      console.log("data part:", { part1, part2 });
       if (part1 && part2) {
         const otherPlantId = part1;
         const otherUserId = part2;
