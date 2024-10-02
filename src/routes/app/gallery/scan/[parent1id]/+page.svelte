@@ -359,7 +359,7 @@
         Point your camera to another gardeners Pollination QR to start
         crossbreeding your {data.thisPlant.commonName}.
       </p>
-      <div class="relative">
+      <div class="relative flex items-center justify-center">
         <div class="overflow-hidden rounded-full bg-transparent mb-8">
           <video
             bind:this={videoElement}
@@ -369,17 +369,11 @@
             <track kind="captions" srclang="en" label="English captions" />
           </video>
         </div>
-        <div class="absolute bottom-0 right-0 translate-x-6 translate-y-6">
-          <img
-            class="w-40"
-            src={data.thisPlant.imageUrl}
-            alt={data.thisPlant.commonName}
-            crossorigin="anonymous"
+        <div class="absolute -bottom-[40px] rounded-md bg-green-100">
+          <PollinationQrCode
+            plantId={data.thisPlant.id}
+            userId={data.thisUser.id}
           />
-          <!-- <PlantDisplay
-            imageUrl={data.thisPlant.imageUrl || ""}
-            applyFilters={false}
-          /> -->
         </div>
         <p
           class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
@@ -387,13 +381,6 @@
           {errorMessage}
         </p>
       </div>
-    </div>
-
-    <div class="flex items-center justify-center">
-      <PollinationQrCode
-        plantId={data.thisPlant.id}
-        userId={data.thisUser.id}
-      />
     </div>
   </Layout>
 {/if}
