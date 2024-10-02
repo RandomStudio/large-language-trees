@@ -4,6 +4,7 @@
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import { getColourPair } from "./findColors";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import { playRandomGrow } from "../../AudioEngine";
 
   export let authorTop: PublicUserInfo;
   export let authorBottom: PublicUserInfo;
@@ -19,6 +20,7 @@
       const result = getColourPair(img);
       darkColor = result.darkColor;
       brightColor = result.brightColor;
+      playRandomGrow();
     };
   });
 </script>

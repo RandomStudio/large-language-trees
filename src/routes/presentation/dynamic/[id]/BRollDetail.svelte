@@ -52,8 +52,6 @@
   onMount(() => {
     x.set(-sizePicture / 3);
     y.set(0);
-
-    playRandomGrow();
   });
 </script>
 

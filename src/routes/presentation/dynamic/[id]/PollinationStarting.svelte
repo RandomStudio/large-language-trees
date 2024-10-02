@@ -1,11 +1,17 @@
 <script lang="ts">
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
+  import { onMount } from "svelte";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import { playRandomGrow } from "../../AudioEngine";
 
   export let authorTop: PublicUserInfo;
   export let authorBottom: PublicUserInfo;
   export let plantTop: SelectPlant;
   export let plantBottom: SelectPlant;
+
+  onMount(() => {
+    playRandomGrow();
+  });
 </script>
 
 <div class="w-full h-full items-center justify-center standard-gradient">

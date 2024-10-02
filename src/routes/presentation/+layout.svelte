@@ -16,7 +16,7 @@
 >
   <slot />
 
-  <AudioPlayer debug={true} />
+  <AudioPlayer debug={false} />
 </div>
 
 <style>

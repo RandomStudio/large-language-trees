@@ -4,6 +4,7 @@
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import type { SelectPlant } from "$lib/types";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import { playRandomGrow } from "../../AudioEngine";
 
   export let plant: SelectPlant;
   export let gardenerName: string;
@@ -21,6 +22,7 @@
       brightColor = result.brightColor;
       darkColor = result.darkColor;
     };
+    playRandomGrow();
   });
 </script>
 
