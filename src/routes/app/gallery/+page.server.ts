@@ -5,6 +5,7 @@ import { db } from "$lib/server/db";
 import { and, eq, or } from "drizzle-orm";
 import { generatedPlants, users } from "$lib/server/schema";
 import { stripUserInfo } from "$lib/security";
+import { DateTime } from "luxon";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const username = locals.user?.username;
@@ -58,9 +59,17 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw Error("missing original plant for user " + userId + ", " + username);
   }
 
-  const myOtherPlants = userWithPlants.myGarden.plants.filter(
-    (p) => p.plant.id !== myOriginalPlant.plant.id
-  );
+  const myOtherPlants = userWithPlants.myGarden.plants
+    .filter((p) => p.plant.id !== myOriginalPlant.plant.id)
+    .sort((a, b) => {
+      const dA = DateTime.fromJSDate(a.plantingDate);
+      const dB = DateTime.fromJSDate(b.plantingDate);
+      if (dA.isValid && dB.isValid) {
+        return dB.toMillis() - dA.toMillis();
+      } else {
+        return 0;
+      }
+    });
 
   const notSproutedPlants = (
     await db.query.generatedPlants.findMany({
