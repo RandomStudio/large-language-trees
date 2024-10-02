@@ -24,6 +24,7 @@
   import ReturnButton from "$lib/shared-components/ReturnButton.svelte";
   import type Result from "@zxing/library/esm/core/Result";
   import type Exception from "@zxing/library/esm/core/Exception";
+  import { page } from "$app/stores";
 
   export let data: ScanStartData;
   let otherUser: PublicUserInfo | null = null;
@@ -31,7 +32,7 @@
 
   let videoElement: HTMLVideoElement;
   let codeReader: BrowserMultiFormatReader | null = null;
-  let errorMessage: string = "";
+  let errorMessage: string | null = null;
   let isLoadingCamera: boolean = true;
 
   let agent: TetherAgent | null = null;
@@ -107,7 +108,6 @@
   };
 
   const startQrScanning = async () => {
-    errorMessage = "";
     console.log("Attempt to start camera + QR scanning...");
     try {
       const stream = await getStream(); // throws Error if unsuccessful
@@ -275,6 +275,15 @@
   };
 
   onMount(async () => {
+    const forceError = $page.url.searchParams.get("forceError");
+    console.log({ forceError });
+    if (forceError) {
+      setTimeout(() => {
+        console.log("set error message (force, test)");
+        errorMessage = `forceError: ${forceError}`;
+      }, 2000);
+    }
+
     try {
       await startQrScanning();
     } catch (e) {
@@ -375,11 +384,23 @@
             userId={data.thisUser.id}
           />
         </div>
-        <p
-          class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center"
-        >
-          {errorMessage}
-        </p>
+        {#if errorMessage}
+          <div
+            class="text-medium text-red-500 absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center leading-tight"
+          >
+            <div>
+              ERROR: {errorMessage}
+            </div>
+            <div>
+              <button
+                class="font-bold border-2 border-red-500 p-2 rounded-md"
+                on:click={() => {
+                  location.reload();
+                }}>Retry</button
+              >
+            </div>
+          </div>
+        {/if}
       </div>
     </div>
   </Layout>
