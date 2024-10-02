@@ -8,6 +8,7 @@
   import { BROLL_TIMEOUT } from "$lib/constants";
   import { remap } from "@anselan/maprange";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import { playRandomGrow } from "../../AudioEngine";
 
   export let plant: SelectPlant;
   export let user: PublicUserInfo;
@@ -51,6 +52,8 @@
   onMount(() => {
     x.set(-sizePicture / 3);
     y.set(0);
+
+    playRandomGrow();
   });
 </script>
 

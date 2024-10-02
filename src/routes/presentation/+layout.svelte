@@ -2,6 +2,7 @@
   import "../../index.css";
 
   import { page } from "$app/stores";
+  import AudioPlayer from "./AudioPlayer.svelte";
 
   const isFixed = $page.url.searchParams.has("fixed");
 </script>
@@ -14,6 +15,8 @@
   class:presentation-gradient={!isFixed}
 >
   <slot />
+
+  <AudioPlayer debug={true} />
 </div>
 
 <style>
