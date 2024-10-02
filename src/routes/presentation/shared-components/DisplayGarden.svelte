@@ -140,9 +140,16 @@
         );
 
         const scaledAmplitudeX = amplitudeX * scaleByCount;
-        const scaledOffsetY = offsetY * scaleByCount;
+        const scaledOffsetY = Math.max(offsetY * scaleByCount, sizePixels / 2);
 
-        console.log({ scaleByNumber: scaleByCount, scaledAmplitudeX });
+        console.log({
+          offsetY,
+          sizePixels,
+          scaleByNumber: scaleByCount,
+          scaledAmplitudeX,
+          scaledOffsetY,
+          finalY: scaledOffsetY - sizePixels / 2
+        });
 
         const offsetX = index % 2 === 0 ? -scaledAmplitudeX : scaledAmplitudeX;
         const plantPositionData = {
@@ -180,7 +187,11 @@
   });
 </script>
 
-<div class="absolute" style:width={`${width}px`} style:height={`${height}px`}>
+<div
+  style:width={`${width}px`}
+  style:height={`${height}px`}
+  class="block relative"
+>
   {#each positions as { parent1, commonName, imageUrl, plantPositionData, grassPositions }}
     {#each grassPositions as grassPatch}
       <img
@@ -206,11 +217,13 @@
       </div>
     {/if}
   {/each}
+  {#if showGardenName}
+    <div class="h-full flex flex-col items-center justify-center">
+      <div
+        class="absolute z-[2000] font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50 bottom-[25%]"
+      >
+        {garden.name}
+      </div>
+    </div>
+  {/if}
 </div>
-{#if showGardenName}
-  <div
-    class="absolute z-[2000] font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50"
-  >
-    {garden.name}
-  </div>
-{/if}

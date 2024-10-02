@@ -132,6 +132,16 @@ body {
   );
 }
 
+.pink-gradient {
+  background: linear-gradient(
+    180deg,
+    #4b0082 0%,
+    #4b0082 15%,
+    #ffb9c6 32%,
+    #ffb9c6 100%
+  );
+}
+
 .page-contents {
   opacity: 1;
   transition: opacity 0.3s ease-in-out 0.4s;

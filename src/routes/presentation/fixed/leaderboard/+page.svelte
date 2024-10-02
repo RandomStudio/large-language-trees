@@ -65,23 +65,49 @@
     <Idle />
   {:else}
     <div
-      class="w-full h-full flex items-center justify-center presentation-gradient"
+      class="w-full h-full flex flex-col justify-around items-center pink-gradient"
     >
+      <div>
+        <DisplayGarden
+          width={500}
+          height={500}
+          garden={data.topGardenWithPlants}
+        />
+      </div>
+
+      <div>
+        <div
+          class="text-left text-new_purple text-7xl font-gyst capitalize px-4 my-8"
+        >
+          <div>Most Active</div>
+          <div>Pollinators</div>
+        </div>
+
+        <div class="w-screen">
+          {#each data.gardensWithPlantCounts as { user, count }}
+            <div
+              class="odd:bg-new_purple odd:text-pink-300 even:text-new_purple px-6 py-6 text-xl flex flex-row justify-between"
+            >
+              <div class="capitalize">
+                {user.username}
+              </div>
+              <div>
+                x{count}
+              </div>
+            </div>
+          {/each}
+        </div>
+      </div>
+      <!--
       <div
-        class="w-full text-center text-roel_yellow text-4xl font-gyst absolute top-32 z-10 uppercase"
+        class="w-full text-center text-roel_yellow text-4xl font-gyst absolute z-10 uppercase"
       >
         Most Active<br />
         Pollinators
       </div>
 
-      <DisplayGarden
-        width={500}
-        height={750}
-        garden={data.topGardenWithPlants}
-      />
-
       <div
-        class="w-full text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10"
+        class="w-full text-center text-new_purple text-4xl font-gyst absolute z-10"
       >
         {#each data.gardensWithPlantCounts as { user, count }}
           <div>
@@ -93,7 +119,7 @@
             </span>
           </div>
         {/each}
-      </div>
+      </div> -->
     </div>
   {/if}
 {:else}
