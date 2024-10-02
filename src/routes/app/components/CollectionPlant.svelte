@@ -103,7 +103,7 @@
     <div class="text-large font-semibold mb-0 capitalize">{getName(plant)}</div>
 
     {#if parentTopPlant && parentBottomPlant}
-      <p class="text-small text-center">
+      <p class="text-small text-center -mt-1">
         (<span class="capitalize">{parentTopPlant}</span>
         <span>x</span>
         <span class="capitalize">{parentBottomPlant}</span>)
@@ -138,10 +138,9 @@
     {/if}
 
     {#if isReadyToSprout}
-      <div class="text-small">
+      <div class="text-small font-light">
         <div>Tap to sprout</div>
-        <div class="capitalize">{getName(plant)}</div>
-        <div>Now</div>
+        <div><span class="capitalize">{getName(plant)}</span> now</div>
       </div>
     {/if}
 

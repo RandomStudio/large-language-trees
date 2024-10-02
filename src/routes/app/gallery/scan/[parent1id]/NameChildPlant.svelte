@@ -38,7 +38,7 @@
     </p>
     <form on:submit|preventDefault>
       <input
-        class="bg-transparent border-[2px] border-new_purple rounded-full placeholder:text-neutral-400 text-center text-new_purple p-2 w-full text-3xl"
+        class="bg-transparent border-[2px] border-new_purple rounded-full placeholder:text-neutral-400 text-center text-new_purple p-2 w-full text-lg"
         placeholder="Enter a name"
         type="text w-screen"
         maxlength={LIMIT_CHARACTERS_PLANTNAME}
