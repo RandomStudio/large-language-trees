@@ -87,14 +87,13 @@
         const otherUserId = part2;
 
         onCodeScanned(otherPlantId, otherUserId)
-          .then()
+          .then(() => {
+            stopScanning();
+            startQrScanning();
+          })
           .catch((e) => {
-            console.warn(
-              `There was an error ("${e}") stop and restart scanning to be safe`
-            );
+            errorMessage = e;
           });
-        stopScanning();
-        startQrScanning();
       } else {
         console.error("Weird results... stop and restart scanning");
         stopScanning();
@@ -160,7 +159,7 @@
     otherUser = await getOtherUserDetails(otherUserId);
 
     if (!otherUser) {
-      throw Error("this user does not exist in the DB");
+      throw Error("this user does not exist");
     } else {
       console.log("other user fetched OK:", otherUser);
     }
