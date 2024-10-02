@@ -80,13 +80,13 @@ async function getFirstPlantForUser(): Promise<InsertPlant> {
     .leftJoin(gardensToPlants, eq(gardensToPlants.plantId, plants.id))
     .where(isNull(gardensToPlants));
   if (plantsToAdd.length > 0) {
-    // await db.insert(seedbanksToPlants).values({
-    //   seedbankId: newSeedbank.id,
-    //   plantId: plant[0].plants.id
-    // });
-    const thePlant = plantsToAdd[0].plants;
+    // We found some unassigned plants; so pick a random one...
+    // console.log({ plantsToAdd: plantsToAdd.map((p) => p.plants) });
+    const thePlant = pickRandomElement(plantsToAdd).plants;
     return thePlant;
   } else {
+    // If we can't find one already assigned, just pick any random
+    // "original" plant...
     const randomPlants = await db.query.plants.findMany({
       where: isNull(plants.parent1)
     });
@@ -115,7 +115,7 @@ export const getUserGardenWithPlants = async (userId: string) => {
     console.warn("No garden for this user! We need to create one");
     const newGarden = await createNewGarden(user.id, user.username);
 
-    // Also add their first seed(s) to the garden
+    // Also add their first plant to the garden
 
     const theUser = await db.query.users.findFirst({
       where: eq(users.id, userId)
