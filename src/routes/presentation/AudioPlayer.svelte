@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { playRandomGrow } from "./AudioEngine";
+  import { playRandomGrow, startAmbience, stopAmbience } from "./AudioEngine";
 
   export let debug = false;
 
@@ -8,11 +8,25 @@
   };
 </script>
 
-<div class="fixed top-32 left-0 z-50">
+<div class="fixed top-64 left-32 z-50">
   <div class:hidden={!debug}>
-    <button
-      class="border-2 border-purple-900 rounded-lg p-4"
-      on:click={testGrowSound}>Random</button
-    >
+    <div>
+      FX
+      <button
+        class="border-2 border-purple-900 rounded-lg p-4"
+        on:click={testGrowSound}>Random</button
+      >
+    </div>
+    <div>
+      Ambience
+      <button
+        class="border-2 border-purple-900 rounded-lg p-4"
+        on:click={startAmbience}>Start</button
+      >
+      <button
+        class="border-2 border-purple-900 rounded-lg p-4"
+        on:click={stopAmbience}>Stop</button
+      >
+    </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import {
     decode,
     InputPlug,
@@ -12,6 +12,8 @@
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
   import type { RefreshDisplays } from "../../../api/displays/types";
   import BigGarden from "./BigGarden.svelte";
+  import { page } from "$app/stores";
+  import { startAmbience, stopAmbience } from "../../AudioEngine";
 
   export let data;
 
@@ -43,6 +45,18 @@
         location.reload();
       }
     });
+
+    const muted = $page.url.searchParams.get("muted");
+    if (muted && muted !== "false") {
+      console.warn("ambience muted");
+    } else {
+      console.log("No muted seachparams; play ambient sound...");
+      startAmbience();
+    }
+  });
+
+  onDestroy(() => {
+    stopAmbience();
   });
 </script>
 
