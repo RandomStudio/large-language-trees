@@ -1,6 +1,7 @@
 <script lang="ts">
   export let hasScroll = false;
   export let isFullPage = false;
+  export let hasGradient = true;
   export let title: string | undefined = undefined;
 </script>
 
@@ -11,19 +12,21 @@
       <slot />
     </div>
   {:else}
-    <div class="standard-gradient px-10">
+    <div class="px-10" class:standard-gradient={hasGradient}>
       <div
         class="page-contents h-full grid gridWrapper {hasScroll && 'hasScroll'}"
       >
-        <header class="py-4">
-          {#if title}
+        {#if title}
+          <header class="py-4">
             <h1
-              class="text-xl text-roel_green font-gyst leading-tight font-semibold"
+              class="text-xl font-gyst leading-tight font-semibold"
+              class:text-roel_green={hasGradient}
+              class:text-new_purple={!hasGradient}
             >
               {title}
             </h1>
-          {/if}
-        </header>
+          </header>
+        {/if}
         <slot />
         <!-- cta padding -->
         <div />

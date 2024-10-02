@@ -177,11 +177,11 @@
       }}
     >
       <div
-        class="font-primer text-roel_green text-center text-large font-semibold -mt-4"
+        class="font-primer text-roel_green text-center text-large font-semibold mt-2"
       >
         Your {data.myOriginalPlant.plant.commonName}
       </div>
-      <div class="font-primer text-small text-roel_green text-center mb-4">
+      <div class="font-primer text-small text-roel_green text-center">
         ...has pollinated {data.pollinationCount} other plants
       </div>
       <PlantDisplay

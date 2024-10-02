@@ -30,7 +30,7 @@
   }
 </script>
 
-<Layout isFullPage>
+<Layout isFullPage={true}>
   <div class="grid grid-rows-[auto_max-content] h-full font-primer">
     <div class="relative">
       <img

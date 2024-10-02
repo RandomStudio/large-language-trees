@@ -16,12 +16,13 @@
 </script>
 
 <ReturnButton
+  emptyBackground={true}
   onClick={() => {
     goto("/app/gallery");
   }}
 />
 
-<Layout title={undefined}>
+<Layout hasGradient={false} title={"Plant Info"}>
   <div>
     <div class="text-roel_green text-center text-large -mt-4">
       {isOriginalPlant ? "Your " : ""}
