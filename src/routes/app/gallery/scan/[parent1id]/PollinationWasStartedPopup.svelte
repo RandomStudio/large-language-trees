@@ -8,18 +8,7 @@
 
   export let otherUser: PublicUserInfo;
 
-  let seedImage: string | null = null;
-
-  onMount(() => {
-    seedImage = pickRandomElement([
-      "Seed_01.png",
-      "Seed_02.png",
-      "Seed_03.png",
-      "Seed_04.png",
-      "Seed_05.png",
-      "Seed_06.png"
-    ]);
-  });
+  onMount(() => {});
 </script>
 
 <Layout title="Hooray!">
@@ -30,13 +19,7 @@
     <div />
     <div class="relative flex items-center justify-center">
       <div class="flex items-center justify-center">
-        {#if seedImage}
-          <img
-            class="w-1/2"
-            src={`/pollination/${seedImage}`}
-            alt="Random seed"
-          />
-        {/if}
+        <img class="w-1/2" src={`/pollination/Seed_01.png`} alt="Random seed" />
       </div>
       <video
         autoplay
