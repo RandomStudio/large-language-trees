@@ -139,7 +139,7 @@
     <div class="pt-2 text-center text-small capitalize">{label}</div>
   {/if}
   {#if authorTopUser && authorBottomUser}
-    <p class="font-normal text-center text-small capitalize py-4">
+    <p class="text-new_purple text-center text-small capitalize py-4">
       {authorTopUser.username} ♡ {authorBottomUser.username}
     </p>
   {/if}

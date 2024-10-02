@@ -8,8 +8,6 @@
   import { onDestroy, onMount } from "svelte";
 
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import PopupInfo from "./PopupInfo.svelte";
-
   import { invalidateAll } from "$app/navigation";
   import { decode, InputPlug, TetherAgent } from "tether-agent";
   import { BROWSER_CONNECTION } from "../../../defaults/tether";
@@ -39,8 +37,6 @@
     parentBottomPlant: string | null;
     isOriginalPlant: boolean;
   }
-
-  let selectedPlantForInfo: PlantWithUsersAndParents | null = null;
 
   let isAppInfoOpen = false;
   let agent: TetherAgent | null = null;
@@ -164,7 +160,7 @@
 </script>
 
 <Layout hasScroll title={undefined}>
-  {#if !isAppInfoOpen && !selectedPlantForInfo && !candidateChild}
+  {#if !isAppInfoOpen && !candidateChild}
     <TopRightButton
       onClick={() => {
         isAppInfoOpen = true;
@@ -177,12 +173,7 @@
     <div
       class="mb-12"
       on:click={() => {
-        selectedPlantForInfo = {
-          ...data.myOriginalPlant.plant,
-          parentTopPlant: null,
-          parentBottomPlant: null,
-          isOriginalPlant: true
-        };
+        goto(`/app/gallery/info/${data.myOriginalPlant.plantId}`);
       }}
     >
       <div
@@ -235,32 +226,19 @@
         parentBottomPlant={plant.parentPlantBottom?.commonName}
         disableAnimation={index > MAX_CANVASSES - 1}
         onClick={() => {
-          selectedPlantForInfo = {
-            ...plant,
-            authorTopUser: plant.authorTopUser,
-            authorBottomUser: plant.authorBottomUser,
-            parentTopPlant: plant.parentPlantTop?.commonName || null,
-            parentBottomPlant: plant.parentPlantBottom?.commonName || null,
-            isOriginalPlant: false
-          };
+          goto(`/app/gallery/info/${plant.id}`);
+          // selectedPlantForInfo = {
+          //   ...plant,
+          //   authorTopUser: plant.authorTopUser,
+          //   authorBottomUser: plant.authorBottomUser,
+          //   parentTopPlant: plant.parentPlantTop?.commonName || null,
+          //   parentBottomPlant: plant.parentPlantBottom?.commonName || null,
+          //   isOriginalPlant: false
+          // };
         }}
         {plant}
       />
     {/each}
-
-    {#if selectedPlantForInfo}
-      <PopupInfo
-        plantDetails={selectedPlantForInfo}
-        authorTopUser={selectedPlantForInfo.authorTopUser}
-        authorBottomUser={selectedPlantForInfo.authorBottomUser}
-        parentTopPlant={selectedPlantForInfo.parentTopPlant}
-        parentBottomPlant={selectedPlantForInfo.parentBottomPlant}
-        isOriginalPlant={selectedPlantForInfo.isOriginalPlant}
-        closePopup={() => {
-          selectedPlantForInfo = null;
-        }}
-      ></PopupInfo>
-    {/if}
 
     {#if isAppInfoOpen}
       <AppInfoPopup
