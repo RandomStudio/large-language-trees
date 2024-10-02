@@ -17,7 +17,11 @@
     DisplayEventNames,
     SimpleEventNames
   } from "$lib/events.types";
-  import { MAX_CANVASSES, PLUG_NAMES } from "$lib/constants";
+  import {
+    AUTO_POLL_INTERVAL,
+    MAX_CANVASSES,
+    PLUG_NAMES
+  } from "$lib/constants";
   import ConfirmBreedPopup from "./pollinate/ConfirmBreedPopup.svelte";
   import Layout from "../components/Layout.svelte";
   import Cta from "../components/Cta.svelte";
@@ -108,7 +112,7 @@
       }
     });
 
-    //Also, as a backup, poll for generated plants...
+    // Poll for generated plants...
     if (pollForPlantsReady === null) {
       pollForPlantsReady = setInterval(() => {
         pollForMyPlants().then((matchingPlant) => {
@@ -121,14 +125,14 @@
             invalidateAll();
           }
         });
-      }, 3000);
+      }, AUTO_POLL_INTERVAL);
     }
 
-    // Also, as a backup, poll for added plants...
+    // Poll for added plants...
     if (pollForPlantsAdded === null) {
       pollForPlantsAdded = setInterval(() => {
         pollForMyPlantsAdded();
-      }, 3000);
+      }, AUTO_POLL_INTERVAL);
     }
   });
 

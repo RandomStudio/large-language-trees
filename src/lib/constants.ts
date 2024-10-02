@@ -28,6 +28,9 @@ export const DISPLAY_VIEW_WEIGHTINGS = new Map([
   [DisplayEventNames.STATS_POLLINATIONS, 1]
 ]);
 
+/** Wait between polling from frontend, e.g. for checking new plants */
+export const AUTO_POLL_INTERVAL = 3000;
+
 /** How many gardens to display in "showMultipleGardens" / ROLL_PAN display */
 export const NUM_GARDENS_MULTI = 5;
 
