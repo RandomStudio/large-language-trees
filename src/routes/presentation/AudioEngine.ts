@@ -18,7 +18,7 @@ const AMBIENT_SRC = "/audio/ambience.mp3";
 
 const ambientSound: HowlWithSource = {
   src: AMBIENT_SRC,
-  howl: new Howl({ src: AMBIENT_SRC })
+  howl: new Howl({ src: AMBIENT_SRC, loop: true })
 };
 
 export const playRandomGrow = () => {

@@ -187,3 +187,15 @@ pg_restore --clean -d postgresql://postgres:mysecretpassword@localhost:5432 dump
 ```
 
 (if clean fails, clear out the database using Admin first, then retry)
+
+## Audio
+
+On the presentation screens, audio should be played on the "dynamic" displays at certain key events, namely:
+
+- User got their first plant
+- New pollination started
+- New pollination completed (result)
+
+The `/presentation/fixed/overview` screen will also, by default, play a looping ambient soundtrack. You can disable this, if necessary, by passing the search param `muted`, e.g. `/presentation/fixed/overview?muted=true`
+
+You may need to click on a window to allow the browser to play audio. Alternatively, set Chrome to allow sounds on the correct host name.
