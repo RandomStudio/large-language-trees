@@ -16,7 +16,7 @@
     </p>
     <div />
     <div>
-      <div class="w-full">
+      <div class="w-full py-3">
         <PlantDisplay imageUrl={data.startPlant.plant.imageUrl || ""}
         ></PlantDisplay>
       </div>

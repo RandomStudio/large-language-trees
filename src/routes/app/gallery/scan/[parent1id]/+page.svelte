@@ -305,7 +305,6 @@
     );
     newPollinationStartedOtherUser.on("message", (payload) => {
       const m = decode(payload) as EventPollinationStarting;
-      // console.log(m.payload.authorBottom.id, data.thisUser.id);
       if (m.payload.authorBottom.id === data.thisUser.id) {
         console.log(
           "New pollination started for plant of which I am the 'other' author",
