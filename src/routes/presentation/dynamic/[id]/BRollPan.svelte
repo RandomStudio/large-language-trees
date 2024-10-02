@@ -34,7 +34,7 @@
   });
 </script>
 
-<div class="w-screen h-screen flex items-center justify-center">
+<div class="w-screen h-screen flex flex-col items-center justify-center">
   <div
     class="relative"
     style:width={`${GARDEN_WIDTH}px`}
@@ -42,7 +42,7 @@
   >
     {#each gardens as garden, index}
       <div
-        class="relative"
+        class="absolute"
         style:left={getOffsets(index, $pan).x + "px"}
         style:top={getOffsets(index, $pan).y + "px"}
       >

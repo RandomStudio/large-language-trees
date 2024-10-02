@@ -35,7 +35,7 @@
         x: remap(Math.random(), [0, 1], [-sizePicture / 2, 0]),
         y: remap(Math.random(), [0, 1], [sizePicture / 4, -sizePicture / 4])
       }));
-    }, 1000);
+    }, 500);
   });
 </script>
 

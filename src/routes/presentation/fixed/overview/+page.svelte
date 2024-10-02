@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
   import {
     decode,
     InputPlug,
@@ -51,7 +50,7 @@
   class="w-full h-full flex items-center justify-center presentation-gradient"
 >
   <div
-    class="w-full text-center text-roel_yellow text-4xl font-gyst absolute top-16 z-[2000] uppercase"
+    class="w-full text-center text-roel_green text-4xl font-gyst absolute top-16 z-[2000] uppercase"
   >
     Bird's Eye View
   </div>
