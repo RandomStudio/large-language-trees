@@ -29,7 +29,10 @@
 
   let errorText: string = "";
 
+  let busy = false;
+
   const finalise = async () => {
+    busy = true;
     if (finalInsertPlant) {
       const candidateStillExists =
         (await checkExistingCandidate(finalInsertPlant.id)) !== null;
@@ -50,6 +53,7 @@
 
     // No matter what happens above, confirm and close...
     onConfirm();
+    busy = false;
   };
 
   const addProcessedImage = async (url: string) => {
@@ -106,7 +110,7 @@
       <p class="mb-64"></p>
     {/if}
     {#if readyWithImage}
-      <Cta umami="ConfirmBreed" onClick={finalise}>OK</Cta>
+      <Cta umami="ConfirmBreed" disabled={busy} onClick={finalise}>OK</Cta>
     {/if}
   </Layout>
 </div>
