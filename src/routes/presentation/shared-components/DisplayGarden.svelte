@@ -210,7 +210,7 @@
     />
     {#if showPlantName}
       <div
-        class="absolute z-2000 font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
+        class="absolute z-2000 font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText}"
         style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y + plantPositionData.size / 2}px; width: auto; height: auto; z-index:${plantPositionData.zIndex + 1}`}
       >
         {commonName}
@@ -220,7 +220,7 @@
   {#if showGardenName}
     <div class="h-full flex flex-col items-center justify-center">
       <div
-        class="absolute z-[2000] font-primer text-5xl text-new_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50 bottom-[25%]"
+        class="absolute z-[2000] font-primer text-5xl text-roel_purple py-[2vw] px-[2vw] text-center bg-{colorBGText} scale-50 bottom-[25%]"
       >
         {garden.name}
       </div>

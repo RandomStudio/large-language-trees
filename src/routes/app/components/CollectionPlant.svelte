@@ -92,7 +92,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class="border-new_purple border-2 rounded-[25px] flex flex-col items-center justify-center p-2 mb-8"
+  class="border-roel_purple border-2 rounded-[25px] flex flex-col items-center justify-center p-2 mb-8"
   on:click={() => onClick(plant)}
 >
   <div
@@ -125,7 +125,7 @@
       </div>
       <button
         on:click={removeCandidatePlant}
-        class="bg-red-500 text-roel_green font-primer text-sm px-4 py-[0.5rem] mb-5 border-2 border-roel_blue rounded-full button-with-active"
+        class="bg-red-500 text-roel_green font-primer text-sm px-4 py-[0.5rem] mb-5 border-2 border-roel_purple rounded-full button-with-active"
       >
         Tap to remove and retry
       </button>

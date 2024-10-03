@@ -59,7 +59,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 
 <div
-  class="fixed top-32 left-8 px-2 py-2 text-3xl font-primer text-roel_rose bg-new_purple text-center z-10"
+  class="fixed top-32 left-8 px-2 py-2 text-3xl font-primer text-roel_rose bg-roel_purple text-center z-10"
 >
   {capitalise(user.username)}'s
   {plant.commonName}

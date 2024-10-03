@@ -77,7 +77,7 @@
 
       <div>
         <div
-          class="text-left text-new_purple text-7xl font-gyst capitalize px-4 my-8"
+          class="text-left text-roel_purple text-7xl font-gyst capitalize px-4 my-8"
         >
           <div>Most Active</div>
           <div>Pollinators</div>
@@ -86,7 +86,7 @@
         <div class="w-screen">
           {#each data.gardensWithPlantCounts as { user, count }}
             <div
-              class="odd:bg-new_purple odd:text-pink-300 even:text-new_purple px-6 py-6 text-xl flex flex-row justify-between"
+              class="odd:bg-roel_purple odd:text-roel_rose even:text-roel_purple px-6 py-6 text-xl flex flex-row justify-between"
             >
               <div class="capitalize">
                 {user.username}
@@ -98,28 +98,6 @@
           {/each}
         </div>
       </div>
-      <!--
-      <div
-        class="w-full text-center text-roel_yellow text-4xl font-gyst absolute z-10 uppercase"
-      >
-        Most Active<br />
-        Pollinators
-      </div>
-
-      <div
-        class="w-full text-center text-new_purple text-4xl font-gyst absolute z-10"
-      >
-        {#each data.gardensWithPlantCounts as { user, count }}
-          <div>
-            <span class="uppercase">
-              {user.username}
-            </span>
-            <span>
-              x{count}
-            </span>
-          </div>
-        {/each}
-      </div> -->
     </div>
   {/if}
 {:else}

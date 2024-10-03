@@ -30,7 +30,7 @@
 
 <div class="fixed top-0 w-screen h-screen grid grid-cols-1 place-items-center">
   <div
-    class="w-full text-center text-roel_yellow text-4xl font-gyst z-[2000] uppercase transition-opacity"
+    class="w-full text-center text-roel_green text-4xl font-gyst z-[2000] uppercase transition-opacity"
     style:opacity={ready ? "1.0" : "0"}
   >
     <div>

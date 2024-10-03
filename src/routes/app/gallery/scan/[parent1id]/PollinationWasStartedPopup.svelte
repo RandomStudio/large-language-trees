@@ -36,7 +36,7 @@
       </video>
     </div>
     <div />
-    <div class="text-medium text-new_purple flex items-end">
+    <div class="text-medium text-roel_purple flex items-end">
       {otherUser.username} has the privilege to name your new sprout.
     </div>
     <div />

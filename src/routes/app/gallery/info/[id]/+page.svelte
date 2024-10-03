@@ -24,12 +24,12 @@
 
 <Layout hasGradient={false} title={"Plant Info"}>
   <div>
-    <div class="text-new_purple text-center text-large -mt-4">
+    <div class="text-roel_purple text-center text-large -mt-4">
       {isOriginalPlant ? "Your " : ""}
       {data.commonName}
     </div>
     {#if data.parentPlantTop && data.parentPlantBottom}
-      <p class="text-new_purple text-sm text-center capitalize">
+      <p class="text-roel_purple text-sm text-center capitalize">
         ({data.parentPlantTop.commonName} x {data.parentPlantBottom.commonName})
       </p>
     {/if}
@@ -42,7 +42,7 @@
         applyFilters={false}
       />
     </div>
-    <div class="text-new_purple text-small text-center">
+    <div class="text-roel_purple text-small text-center">
       {data.description}
     </div>
   </div>

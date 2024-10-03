@@ -57,7 +57,7 @@
   </div>
 
   <div
-    class="w-full text-center text-new_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"
+    class="w-full text-center text-roel_purple text-4xl font-gyst absolute bottom-32 z-10 uppercase"
   >
     Join <br /> the Garden!
   </div>

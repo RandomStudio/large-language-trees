@@ -5,15 +5,8 @@ module.exports = {
     extend: {
       colors: {
         roel_green: "#C8F58F",
-        roel_blue: "#670093",
-        dark_grey: "#302F2F",
-        mid_grey: "#898989",
-        light_grey: "#D9D9D9",
         roel_rose: "#FFB9C6",
-        roel_red: "#F31C1C",
-        roel_yellow: "#EFE500",
-
-        new_purple: "#4B0082"
+        roel_purple: "#4B0082"
       },
       fontSize: {
         small: "16px",

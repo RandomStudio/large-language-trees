@@ -21,7 +21,7 @@
             <h1
               class="text-xl font-gyst leading-tight font-semibold"
               class:text-roel_green={hasGradient}
-              class:text-new_purple={!hasGradient}
+              class:text-roel_purple={!hasGradient}
             >
               {title}
             </h1>

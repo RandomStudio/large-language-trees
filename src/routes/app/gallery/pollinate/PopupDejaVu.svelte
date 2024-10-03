@@ -9,7 +9,7 @@
 </script>
 
 <div class="fixed top-0 left-0 bg-roel_green w-screen h-screen overflow-scroll">
-  <div class="mx-10 font-gyst text-roel_blue text-left my-8">
+  <div class="mx-10 font-gyst text-roel_purple text-left my-8">
     <div class="text-large font-semibold">Whoops!</div>
     <div class="text-medium">C'est un déjà-vu!</div>
     <div class="mt-4">

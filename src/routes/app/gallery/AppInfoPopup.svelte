@@ -10,7 +10,7 @@
 <ReturnButton onClick={closePopup} />
 
 <div
-  class="fixed inset-0 p-10 bg-new_purple text-roel_green font-regular font-primer text-xs z-10 overflow-auto info"
+  class="fixed inset-0 p-10 bg-roel_purple text-roel_green font-regular font-primer text-xs z-10 overflow-auto info"
 >
   <div class="w-full relative">
     <img

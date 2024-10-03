@@ -35,7 +35,7 @@
   class="mt-0 text-center max-w-md"
 >
   <input
-    class="bg-roel_green/75 border-[3px] border-roel_blue rounded-full text-roel_blue font-primer text-3xl px-4 py-[0.5rem] w-full max-w-xs placeholder-roel_blue placeholder:font-primer"
+    class="bg-roel_green/75 border-[3px] border-roel_purple rounded-full text-roel_purple font-primer text-3xl px-4 py-[0.5rem] w-full max-w-xs placeholder-roel_purple placeholder:font-primer"
     type="text"
     id="username"
     name="username"
@@ -44,7 +44,7 @@
     on:input={handleInput}
   />
   <input
-    class="bg-roel_green text-roel_blue py-2 px-4 border border-roel_blue rounded-full placeholder-roel_blue focus:outline-none focus:border-roel_blue mt-2 w-11/12 max-w-xs"
+    class="bg-roel_green text-roel_purple py-2 px-4 border border-roel_purple rounded-full placeholder-roel_purple focus:outline-none focus:border-roel_purple mt-2 w-11/12 max-w-xs"
     type="password"
     id="password"
     name="password"
@@ -54,7 +54,7 @@
   <button
     data-umami-event="Start button"
     data-test="start-button"
-    class="text-roel_green bg-roel_blue font-primer text-lg px-4 py-[0.5rem] mt-4 w-full max-w-xs border-[3px] border-roel_blue rounded-full active:bg-roel_blue active:text-roel_green {isSubmitting &&
+    class="text-roel_green bg-roel_purple font-primer text-lg px-4 py-[0.5rem] mt-4 w-full max-w-xs border-[3px] border-roel_purple rounded-full active:bg-roel_purple active:text-roel_green {isSubmitting &&
       'opacity-50'} select-none"
     type="submit"
     disabled={isSubmitting}

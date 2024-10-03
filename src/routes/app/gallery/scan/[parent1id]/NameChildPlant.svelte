@@ -34,12 +34,12 @@
         alt="Animated seeds flying over the foreground"
       />
     </div>
-    <p class="text-medium text-new_purple pb-8 text-center leading-tight">
+    <p class="text-medium text-roel_purple pb-8 text-center leading-tight">
       What will be the name of your sprout?
     </p>
     <form on:submit|preventDefault>
       <input
-        class="bg-transparent border-[2px] border-new_purple rounded-full placeholder:text-neutral-400 text-center text-new_purple p-2 w-full text-lg"
+        class="bg-transparent border-[2px] border-roel_purple rounded-full placeholder:text-neutral-400 text-center text-roel_purple p-2 w-full text-lg"
         placeholder="Enter a name"
         type="text w-screen"
         maxlength={LIMIT_CHARACTERS_PLANTNAME}

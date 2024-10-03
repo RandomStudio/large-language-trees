@@ -9,8 +9,8 @@
     (position === "top" ? "top-0" : "bottom-0") +
     " " +
     (background === "purple"
-      ? "text-roel_green bg-new_purple"
-      : "text-new_purple bg-roel_green")}
+      ? "text-roel_green bg-roel_purple"
+      : "text-roel_purple bg-roel_green")}
 >
   pollinate.garden
 </div>

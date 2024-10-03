@@ -11,7 +11,7 @@
   <div class="flex flex-col items-center">
     <div
       id="message"
-      class="text-roel_blue font-inter text-xl mt-4 text-center"
+      class="text-roel_purple font-inter text-xl mt-4 text-center"
     >
       {errorText}
     </div>

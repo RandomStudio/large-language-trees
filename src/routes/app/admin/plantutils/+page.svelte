@@ -68,7 +68,7 @@
   <h1 class="text-xl">Plant/Image utils</h1>
 
   {#each data.plantsWithOwners as plant}
-    <div class="grid grid-cols-4 p-4 border-dark_grey border-2 m-2">
+    <div class="grid grid-cols-4 p-4 border-2 m-2 border-gray-700">
       <div>
         <div class="text-xs">
           ID {plant.id}

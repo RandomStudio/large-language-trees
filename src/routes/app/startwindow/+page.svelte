@@ -9,7 +9,7 @@
 
 <Layout hasScroll title="Let's Pollinate">
   <div
-    class="font-primer text-roel_blue grid grid-rows-[max-content_1fr_max-content_1fr_max-content]"
+    class="font-primer text-roel_purple grid grid-rows-[max-content_1fr_max-content_1fr_max-content]"
   >
     <p class="text-medium text-roel_green" data-test="welcome-text">
       Here is your plant!
