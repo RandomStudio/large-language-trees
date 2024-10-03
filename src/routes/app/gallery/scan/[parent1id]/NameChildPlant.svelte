@@ -14,6 +14,7 @@
   export let onNameChosen: (name: string) => void;
 
   let newName: string | null = null;
+  let busy = false;
 </script>
 
 <Layout title="Hooray!">
@@ -47,9 +48,10 @@
     </form>
     <Cta
       umami="NameChosen"
-      disabled={newName === null}
+      disabled={busy || newName === null}
       onClick={() => {
-        if (newName) {
+        if (!busy && newName) {
+          busy = true;
           onNameChosen(capitalise(newName.trim()));
         } else {
           console.warn("no valid name yet");

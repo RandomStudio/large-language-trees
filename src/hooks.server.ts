@@ -1,5 +1,5 @@
 import { lucia } from "$lib/server/auth";
-import { redirect, type Handle } from "@sveltejs/kit";
+import { redirect, type Handle, type HandleServerError } from "@sveltejs/kit";
 
 const publicAccessAllowed = (pathname: string) =>
   pathname.includes("/api") ||
@@ -54,4 +54,17 @@ export const handle: Handle = async ({ event, resolve }) => {
   event.locals.session = session;
 
   return resolve(event);
+};
+
+export const handleError: HandleServerError = async ({
+  error,
+  event,
+  status,
+  message
+}) => {
+  const details = (error as any)["code"];
+  console.error(JSON.stringify(error));
+  return {
+    message: `We got an error: ${details}`
+  };
 };
