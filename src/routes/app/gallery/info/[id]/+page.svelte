@@ -24,12 +24,12 @@
 
 <Layout hasGradient={false} title={"Plant Info"}>
   <div>
-    <div class="text-roel_green text-center text-large -mt-4">
+    <div class="text-new_purple text-center text-large -mt-4">
       {isOriginalPlant ? "Your " : ""}
       {data.commonName}
     </div>
     {#if data.parentPlantTop && data.parentPlantBottom}
-      <p class="text-roel_green text-sm text-center capitalize">
+      <p class="text-new_purple text-sm text-center capitalize">
         ({data.parentPlantTop.commonName} x {data.parentPlantBottom.commonName})
       </p>
     {/if}
