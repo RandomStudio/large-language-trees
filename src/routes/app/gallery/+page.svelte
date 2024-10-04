@@ -65,7 +65,7 @@
       console.log(
         `Length of my plants (queried plantsInGarden: ${plants.length} vs data.myOtherPlants ${data.myOtherPlants.length}) seems to have changed; reload`
       );
-      invalidateAll();
+      await invalidateAll();
     }
   };
 
