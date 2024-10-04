@@ -6,7 +6,8 @@ import { sessionTable, users } from "./schema";
 import * as schema from "./schema";
 
 const pool = new pg.Pool({
-  connectionString: DB_CONNECTION_STRING
+  connectionString: DB_CONNECTION_STRING,
+  max: 1
 });
 
 export const db = drizzle(pool, { schema });
