@@ -62,7 +62,9 @@
     const res = await fetch(`/api/plantsInGarden?userId=${data.user.id}`);
     const plants = (await res.json()) as SelectPlant[];
     if (plants.length !== data.myOtherPlants.length + 1) {
-      console.log("Length of my plants seems to have changed; reload");
+      console.log(
+        `Length of my plants (queried plantsInGarden: ${plants.length} vs data.myOtherPlants ${data.myOtherPlants.length}) seems to have changed; reload`
+      );
       invalidateAll();
     }
   };
