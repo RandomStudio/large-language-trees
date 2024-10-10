@@ -166,7 +166,7 @@
   // };
 </script>
 
-<Layout hasScroll title={undefined}>
+<Layout hasScroll title={"Your Plants"}>
   {#if !isAppInfoOpen && !candidateChild}
     <TopRightButton
       onClick={() => {
@@ -183,6 +183,11 @@
         goto(`/app/gallery/info/${data.myOriginalPlant.plantId}`);
       }}
     >
+      <PlantDisplay
+        disableAnimation={false}
+        imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
+        applyFilters={false}
+      />
       <div
         class="font-primer text-roel_green text-center text-large font-semibold mt-2"
       >
@@ -191,11 +196,6 @@
       <div class="font-primer text-small text-roel_green text-center">
         ...has pollinated {data.pollinationCount} other plants
       </div>
-      <PlantDisplay
-        disableAnimation={false}
-        imageUrl={data.myOriginalPlant.plant.imageUrl || ""}
-        applyFilters={false}
-      />
     </div>
     {#each data.awaitingConfirmation as candidatePlant}
       <CollectionPlant
