@@ -4,7 +4,6 @@
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import PopupError from "./PopupError.svelte";
 
-  import { fade } from "svelte/transition";
   import {
     candidateToPlant,
     checkExistingCandidate,
@@ -86,15 +85,21 @@
   <Layout title="Hooray you made a new plant!">
     {#if candidateChild.originalImageUrl}
       <div class="relative">
-        <TransparencyMaker
-          src={candidateChild.originalImageUrl}
-          useFloodFill={false}
-          tolerance={TOLERANCE_SIMPLE}
-          doUpload={true}
-          onUploadComplete={(url) => {
-            addProcessedImage(url);
-          }}
-        />
+        <div
+          style:transition="all 1s ease-in"
+          class:opacity-1={readyWithImage}
+          class:opacity-0={!readyWithImage}
+        >
+          <TransparencyMaker
+            src={candidateChild.originalImageUrl}
+            useFloodFill={false}
+            tolerance={TOLERANCE_SIMPLE}
+            doUpload={true}
+            onUploadComplete={(url) => {
+              addProcessedImage(url);
+            }}
+          />
+        </div>
         <img
           class="absolute -bottom-10 w-screen pointer-events-none"
           src="/pollination/newplant.gif"

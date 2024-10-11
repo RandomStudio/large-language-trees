@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getColourPair } from "./findColors";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import type { SelectPlant } from "$lib/types";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
   import { playRandomGrow } from "../../AudioEngine";
+  import { getColourPair } from "../../shared-components/findColors";
 
   export let plant: SelectPlant;
   export let gardenerName: string;
