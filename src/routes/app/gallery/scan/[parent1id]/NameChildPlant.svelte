@@ -1,8 +1,5 @@
 <script lang="ts">
   import { LIMIT_CHARACTERS_PLANTNAME } from "$lib/constants";
-  import type { PublicUserInfo } from "$lib/types";
-  import { pickRandomElement } from "random-elements";
-  import { onMount } from "svelte";
   import Layout from "../../../components/Layout.svelte";
   import Cta from "../../../components/Cta.svelte";
   import { capitalise } from "$lib/promptUtils";
