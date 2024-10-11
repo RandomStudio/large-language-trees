@@ -1,8 +1,6 @@
 import type OpenAI from "openai";
 
-import DefaultPrompt from "../defaults/prompt-config";
 import type {
-  Characteristics,
   ImageModelNames,
   PromptConfig,
   SelectPlant,
@@ -16,65 +14,18 @@ export const buildTextPrompt = (
   plant2: SelectPlant,
   userPickedNewName: string
 ): OpenAI.Chat.Completions.ChatCompletionMessageParam[] => {
-  const { preamble, explanation, instructions } = config.text;
+  const { template } = config.text;
   return [
     {
-      role: "system",
-      content: preamble.text
-    },
-    {
       role: "user",
-      content: explanation.text
-    },
-    {
-      role: "user",
-      content:
-        "First plant JSON:\n" +
-        "```json\n" +
-        JSON.stringify(
-          {
-            commonName: plant1.commonName,
-            description: plant1.description,
-            properties: filterCharacteristicsForPrompt(
-              plant1.properties as Characteristics
-            )
-          },
-          null,
-          2
-        ) +
-        "\n```" +
-        "\n\n" +
-        "Second plant JSON:\n" +
-        "```json\n" +
-        JSON.stringify(
-          {
-            commonName: plant2.commonName,
-            description: plant2.description,
-            properties: filterCharacteristicsForPrompt(
-              plant2.properties as Characteristics
-            )
-          },
-          null,
-          2
-        ) +
-        "\n```" +
-        "\n\n" +
-        instructions.text.replace("[NEW_PLANT_NAME]", userPickedNewName)
+      content: template
+        .replaceAll("{PARENT1_COMMON_NAME}", plant1.commonName)
+        .replaceAll("{PARENT2_COMMON_NAME", plant2.commonName)
+        .replaceAll("{PARENT1_DESCRIPTION}", plant1.description)
+        .replaceAll("{PARENT2_DESCRIPTION", plant2.description)
+        .replaceAll("{NEW_PLANT_NAME}", userPickedNewName)
     }
   ];
-};
-
-/*** For now, removes any characteristics whose key contains "RGB", since these */
-const filterCharacteristicsForPrompt = (
-  originals: Characteristics
-): Characteristics => {
-  const o: Characteristics = {};
-  Object.keys(originals).forEach((k) => {
-    if (!k.includes("RGB")) {
-      o[k] = originals[k];
-    }
-  });
-  return o;
 };
 
 export const buildImagePrompt = (
@@ -89,25 +40,10 @@ export const buildImagePrompt = (
 export const promptRowToConfig = (
   rowFromTable: SelectPromptSettings
 ): PromptConfig => {
-  const defaults = DefaultPrompt;
   return {
     text: {
       model: rowFromTable.textModel as TextModelNames,
-      preamble: {
-        label: defaults.text.preamble.label,
-        description: defaults.text.preamble.description,
-        text: rowFromTable.textPreamble
-      },
-      explanation: {
-        label: defaults.text.explanation.label,
-        description: defaults.text.explanation.description,
-        text: rowFromTable.textExplanation
-      },
-      instructions: {
-        label: defaults.text.instructions.label,
-        description: defaults.text.instructions.description,
-        text: rowFromTable.textInstructions
-      }
+      template: rowFromTable.textTemplate
     },
     image: {
       model: rowFromTable.imageModel as ImageModelNames,
@@ -125,9 +61,7 @@ export const promptConfigToRow = (
 ): Partial<SelectPromptSettings> => {
   return {
     textModel: config.text.model,
-    textPreamble: config.text.preamble.text,
-    textExplanation: config.text.preamble.text,
-    textInstructions: config.text.instructions.text,
+    textTemplate: config.text.template,
     imageModel: config.image.model,
     imageInstructions: config.image.instructions
   };

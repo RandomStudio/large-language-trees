@@ -112,7 +112,9 @@
       {#if errorText}
         <p class="mt-8 text-roel_purple text-regular">{errorText}</p>
       {/if}
-      <p class="mt-4 text-roel_purple text-regular text-center text-small mb-0">
+      <p
+        class="mt-4 text-roel_purple text-regular text-center text-small mb-32 min-h-screen"
+      >
         {finalInsertPlant?.description}
       </p>
       <p class="mb-64"></p>

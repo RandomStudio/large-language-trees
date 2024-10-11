@@ -80,20 +80,12 @@ export interface PollinationData {
   otherUser?: PublicUserInfo;
 }
 
-export interface PromptSection {
-  label: string;
-  description: string;
-  text: string;
-}
-
-export type TextModelNames = "gpt-3.5-turbo" | "gpt-4-turbo";
+export type TextModelNames = "gpt-3.5-turbo" | "gpt-4-turbo" | "gpt-4o";
 export type ImageModelNames = "dall-e-3" | "dall-e-2";
 export interface PromptConfig {
   text: {
     model: TextModelNames;
-    preamble: PromptSection;
-    explanation: PromptSection;
-    instructions: PromptSection;
+    template: string;
   };
   image: {
     model: ImageModelNames;

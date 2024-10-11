@@ -44,9 +44,7 @@ export const populateDefaultPromptSettings = async () => {
   await db.insert(promptSettingsTable).values({
     id: uuidv4(),
     textModel: defaultPromptSettings.text.model,
-    textPreamble: defaultPromptSettings.text.preamble.text,
-    textExplanation: defaultPromptSettings.text.explanation.text,
-    textInstructions: defaultPromptSettings.text.instructions.text,
+    textTemplate: defaultPromptSettings.text.template,
     imageModel: defaultPromptSettings.image.model,
     imageInstructions: defaultPromptSettings.image.instructions
   });

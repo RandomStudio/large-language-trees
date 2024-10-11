@@ -49,8 +49,8 @@ export const EVENT_LOG_MAX = 100;
 export const MULTIPLE_FEATURED_PLANTS_COUNT = 4;
 
 /** The maximum number of characters for plantname and username */
-export const LIMIT_CHARACTERS_USERNAME = 10;
-export const LIMIT_CHARACTERS_PLANTNAME = 12;
+export const LIMIT_CHARACTERS_USERNAME = 12;
+export const LIMIT_CHARACTERS_PLANTNAME = 24;
 
 // TIMEOUTS -------------------
 export const IDLE_TIMEOUT = 2000;

@@ -150,49 +150,10 @@ export const gardensRelations = relations(gardens, ({ many, one }) => ({
   })
 }));
 
-// export const seedbanks = pgTable("seedbanks", {
-//   id: text("id").primaryKey(),
-//   userId: text("user_id").references(() => users.id)
-// });
-
-// export const seedbanksToPlants = pgTable(
-//   "seedbanks_to_plants",
-//   {
-//     seedbankId: text("seedbank_id")
-//       .notNull()
-//       .references(() => seedbanks.id),
-//     plantId: text("plant_id")
-//       .notNull()
-//       .references(() => plants.id)
-//   },
-//   (t) => ({
-//     pk: primaryKey({ columns: [t.seedbankId, t.plantId] })
-//   })
-// );
-
-// export const seedbanksToPlantsRelations = relations(
-//   seedbanksToPlants,
-//   ({ one }) => ({
-//     seedbank: one(seedbanks, {
-//       fields: [seedbanksToPlants.seedbankId],
-//       references: [seedbanks.id]
-//     }),
-//     plant: one(plants, {
-//       fields: [seedbanksToPlants.plantId],
-//       references: [plants.id]
-//     })
-//   })
-// );
-// export const seedbanksRelations = relations(seedbanks, ({ many }) => ({
-//   plantsInSeedbank: many(seedbanksToPlants)
-// }));
-
 export const promptSettingsTable = pgTable("prompt_settings", {
   id: text("id").primaryKey(),
   textModel: text("text_model").notNull(),
-  textPreamble: text("text_preamble").notNull(),
-  textExplanation: text("text_explanation").notNull(),
-  textInstructions: text("text_instructions").notNull(),
+  textTemplate: text("text_template").notNull(),
   imageModel: text("image_model").notNull(),
   imageInstructions: text("image_instructions").notNull()
 });

@@ -36,6 +36,7 @@ interface ChatResponse {
       content: string;
       role: string;
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logprobs: any;
   }[];
   created: string;
@@ -154,6 +155,10 @@ const initTextGeneration = async (
 
     const message = jsonResponse.choices[0].message.content;
 
+    console.log("------ message:");
+    console.log(message);
+    console.log("---------------");
+
     try {
       const parsedPlant = parseNewPlant(
         newPlantId,
@@ -212,7 +217,7 @@ const parseNewPlant = (
 
     const json = JSON.parse(cleanText);
 
-    if (json["commonName"] && json["description"] && json["properties"]) {
+    if (json["commonName"] && json["description"] && json["heightInMetres"]) {
       console.log("JSON appears to have the valid fields");
       return {
         id: newPlantId,
@@ -220,7 +225,7 @@ const parseNewPlant = (
         parent2: parent2Id,
         commonName: json["commonName"],
         description: json["description"],
-        properties: { ...json["properties"] }
+        properties: { heightInMetres: json["heightInMetres"] }
       };
     } else {
       throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));
