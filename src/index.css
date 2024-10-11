@@ -24,7 +24,7 @@
   font-family: "Primer";
   src: url("/fonts/Primer/MDPrimer-Medium.woff2") format("woff2"),
     url("/fonts/Primer/MDPrimer-Medium.woff") format("woff");
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
