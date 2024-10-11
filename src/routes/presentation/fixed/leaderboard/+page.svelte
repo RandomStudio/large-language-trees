@@ -65,28 +65,20 @@
     <Idle />
   {:else}
     <div
-      class="w-full h-full flex flex-col justify-around items-center pink-gradient"
+      class="w-full h-full flex flex-col items-center pink-gradient-halfscreen"
     >
-      <div>
-        <DisplayGarden
-          width={500}
-          height={500}
-          garden={data.topGardenWithPlants}
-        />
-      </div>
-
-      <div>
+      <div class="h-[55vh]">
         <div
-          class="text-left text-roel_purple text-7xl font-gyst capitalize px-4 my-8"
+          class="text-left text-roel_purple text-7xl font-gyst capitalize px-4 bg-roel_rose py-6"
         >
           <div>Most Active</div>
           <div>Pollinators</div>
         </div>
 
-        <div class="w-screen">
+        <div class="w-screen opacity">
           {#each data.gardensWithPlantCounts as { user, count }}
             <div
-              class="odd:bg-roel_purple odd:text-roel_rose even:text-roel_purple px-6 py-6 text-xl flex flex-row justify-between"
+              class="odd:bg-roel_purple odd:text-roel_rose even:text-roel_purple even:bg-roel_rose px-6 py-6 text-[2em] flex flex-row justify-between"
             >
               <div class="capitalize">
                 {user.username}
@@ -97,6 +89,14 @@
             </div>
           {/each}
         </div>
+      </div>
+
+      <div>
+        <DisplayGarden
+          width={400}
+          height={500}
+          garden={data.topGardenWithPlants}
+        />
       </div>
     </div>
   {/if}

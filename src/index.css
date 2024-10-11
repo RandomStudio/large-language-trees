@@ -142,6 +142,16 @@ body {
   );
 }
 
+.pink-gradient-halfscreen {
+  background: linear-gradient(
+    180deg,
+    #4b0082 0%,
+    #4b0082 50%,
+    #ffb9c6 75%,
+    #ffb9c6 100%
+  );
+}
+
 .page-contents {
   opacity: 1;
   transition: opacity 0.3s ease-in-out 0.4s;
