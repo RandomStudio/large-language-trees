@@ -1,5 +1,5 @@
 import { db } from "$lib/server/db";
-import { plants, users } from "$lib/server/schema";
+import { users } from "$lib/server/schema";
 import type { ScanStartData } from "$lib/types";
 import { eq } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";

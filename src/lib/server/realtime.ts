@@ -10,7 +10,7 @@ import {
   presentationState,
   users
 } from "./schema";
-import { count, desc, eq, or } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import {
   DisplayEventNames,
   SimpleEventNames,
@@ -29,7 +29,7 @@ import {
   type EventNewSprouting,
   type EventNewUser,
   type EventPollinationStarting,
-  type SimpleEvent
+  type SimpleEventTypes
 } from "$lib/events.types";
 import {
   pickKeysWithWeights,
@@ -63,7 +63,7 @@ import { capitalise } from "$lib/promptUtils";
  * Tether, because we cannot keep a persistent server-side client
  * in Netlify.
  */
-export const publishEvent = async (incoming: SimpleEvent) => {
+export const publishEvent = async (incoming: SimpleEventTypes) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
 
   const agent = await TetherAgent.create("server", {
@@ -165,7 +165,9 @@ export const publishDisplayRefresh = async (action: RefreshDisplays) => {
  * messages in the usual way - it is not a persistent process and cannot maintain a
  * persisted TCP connection.
  */
-const rePublishDisplayNotification = async (message: DisplayNotifyServer) => {
+export const rePublishDisplayNotification = async (
+  message: DisplayNotifyServer
+) => {
   const useLocal = PUBLIC_TETHER_HOST === "localhost";
   const agent = await TetherAgent.create("presentation", {
     loglevel: "warn",
@@ -341,7 +343,7 @@ export const getEventForAmbientDisplay = async (
         MULTIPLE_FEATURED_PLANTS_COUNT
       );
 
-      let results = await Promise.all(
+      const results = await Promise.all(
         pickRandomUsers.map(async (u) => {
           const userGarden = u.myGarden;
           const userPlants = await db.query.gardens.findFirst({
@@ -547,7 +549,7 @@ export const getEventForAmbientDisplay = async (
 };
 
 export const getDisplayEvent = async (
-  incoming: SimpleEvent
+  incoming: SimpleEventTypes
 ): Promise<{
   event: DisplayEvent;
   priority: number;
@@ -569,6 +571,7 @@ export const getDisplayEvent = async (
         };
         return { event, priority, targetDisplayId };
       }
+      return null;
     }
     case "newPollinationStarting": {
       const priority = 1;
@@ -588,6 +591,7 @@ export const getDisplayEvent = async (
         };
         return { event, priority, targetDisplayId };
       }
+      return null;
     }
     case "newPlantSprouted": {
       const priority = 1;
@@ -678,7 +682,6 @@ export const updateScreenStateAndPublish = async (
   targetDisplayId: string,
   priority: number | null
 ) => {
-  const { timeout } = event;
   await db
     .update(presentationState)
     .set({ contents: event, priority })
@@ -694,7 +697,7 @@ export const updateScreenStateAndPublish = async (
  * TODO: Some basic log management is possible here; if the table has more than EVENT_LOG_MAX
  * entries, we should delete older entries.
  */
-export const logSimpleEvents = async (event: SimpleEvent) => {
+export const logSimpleEvents = async (event: SimpleEventTypes) => {
   const contents = await eventToLog(event);
   if (contents) {
     const res = await db
@@ -725,7 +728,7 @@ const publishEventLogUpdate = async (entry: EventLog) => {
   await plug.publish(encode(entry));
 };
 
-const eventToLog = async (event: SimpleEvent): Promise<string | null> => {
+const eventToLog = async (event: SimpleEventTypes): Promise<string | null> => {
   switch (event.name) {
     case SimpleEventNames.NEW_USER: {
       const { payload } = event as EventNewUser;

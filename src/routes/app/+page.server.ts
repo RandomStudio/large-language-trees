@@ -33,6 +33,7 @@ export const actions = {
       typeof username !== "string" ||
       username.length < 3 ||
       username.length > LIMIT_CHARACTERS_USERNAME ||
+      // eslint-disable-next-line no-useless-escape
       !/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]+$/.test(username)
     ) {
       console.error("invalid username");

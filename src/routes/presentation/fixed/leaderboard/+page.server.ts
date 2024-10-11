@@ -1,12 +1,12 @@
 import { LIMIT_LEADERBOARD } from "$lib/constants";
 import { stripUserInfo } from "$lib/security";
 import { db } from "$lib/server/db";
-import { gardens, gardensToPlants } from "$lib/server/schema";
+import { gardens } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
 import type { GardenWithPlants } from "$lib/types";
 
-export const load: PageServerLoad = async ({}) => {
+export const load: PageServerLoad = async () => {
   const gardenPlants = await db.query.gardens.findMany({
     with: { plants: true, myOwner: true }
   });

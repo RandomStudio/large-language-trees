@@ -62,12 +62,12 @@ export const actions: Actions = {
     });
     redirect(302, "/app");
   },
-  reset: async (_event) => {
+  reset: async () => {
     console.warn("Full reset happening!");
     await cleanUp();
     redirect(302, "/app");
   },
-  initData: async (_event) => {
+  initData: async () => {
     console.warn("Plants initialisation...");
     await populateDefaultPlants();
     console.log("Also create admin garden...");

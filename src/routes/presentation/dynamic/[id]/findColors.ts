@@ -33,9 +33,9 @@ export interface BrightestAndDarkest {
 export function getColourPair(img: HTMLImageElement): BrightestAndDarkest {
   const colors = getPaletteFromImage(img, 10, 10);
   const brightnessThreshold = 130;
-  let brightColors: RGBColor[] = [];
-  let darkColors: RGBColor[] = [];
-  let validPairs: Array<{ bright: RGBColor; dark: RGBColor }> = [];
+  const brightColors: RGBColor[] = [];
+  const darkColors: RGBColor[] = [];
+  const validPairs: Array<{ bright: RGBColor; dark: RGBColor }> = [];
 
   colors.forEach((color) => {
     const brightness = calculateBrightness(color);

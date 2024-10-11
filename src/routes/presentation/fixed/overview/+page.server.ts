@@ -1,9 +1,9 @@
 import { db } from "$lib/server/db";
 import type { PageServerLoad } from "./$types";
-import { gardens, gardensToPlants, plants } from "$lib/server/schema";
+import { gardensToPlants, plants } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 
-export const load: PageServerLoad = async ({}) => {
+export const load: PageServerLoad = async () => {
   // We get all plants from all gardens, but no duplicates!
   const dedupPlantList = await db
     .selectDistinctOn([gardensToPlants.plantId], {

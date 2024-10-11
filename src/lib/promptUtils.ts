@@ -68,7 +68,7 @@ export const buildTextPrompt = (
 const filterCharacteristicsForPrompt = (
   originals: Characteristics
 ): Characteristics => {
-  let o: Characteristics = {};
+  const o: Characteristics = {};
   Object.keys(originals).forEach((k) => {
     if (!k.includes("RGB")) {
       o[k] = originals[k];

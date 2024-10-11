@@ -56,14 +56,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-export const handleError: HandleServerError = async ({
-  error,
-  event,
-  status,
-  message
-}) => {
-  const details = (error as any)["code"];
+export const handleError: HandleServerError = async ({ error }) => {
   console.error(JSON.stringify(error));
+  const details = (error as { code: unknown })["code"];
   return {
     message: `We got an error: ${details}`
   };

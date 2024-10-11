@@ -1,5 +1,5 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
-import type { GenerateImageRequest, PromptConfig } from "$lib/types";
+import type { PromptConfig } from "$lib/types";
 import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import { db } from "$lib/server/db";
@@ -29,7 +29,7 @@ export interface GenImageToBackground {
   This endpoint is used by the BACKGROUND function to get the full prompt
   needed for image generation.
 */
-export const POST: RequestHandler = async ({ request, fetch }) => {
+export const POST: RequestHandler = async ({ request }) => {
   try {
     const { plantId, description } = (await request.json()) as GenImageToServer;
 

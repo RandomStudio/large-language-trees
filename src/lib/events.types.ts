@@ -8,9 +8,9 @@ import type {
 /** "Simple" Events are used internally, never for directly controlling Presentation Display content.
  * They often, in turn, result in a new DisplayUpdateEvent message, however.
  */
-export interface SimpleEvent {
+interface SimpleEvent {
   name: SimpleEventNames;
-  payload: any;
+  payload: unknown;
 }
 
 export const enum SimpleEventNames {
@@ -35,15 +35,6 @@ export interface EventFirstPlant extends SimpleEvent {
     user: PublicUserInfo;
   };
 }
-
-// TODO: this is currently unused, but probably is needed somewhere
-// export interface EventNewTopPlant extends SimpleEventBody {
-//   name: "newTopPollinator";
-//   payload: {
-//     plant: SelectPlant;
-//     user: PublicUserInfo;
-//   };
-// }
 
 /** 1: We don't even have a name yet */
 export interface EventPollinationStarting extends SimpleEvent {
@@ -73,6 +64,13 @@ export interface EventNewSprouting extends SimpleEvent {
   payload: SelectPlant;
 }
 
+export type SimpleEventTypes =
+  | EventNewUser
+  | EventFirstPlant
+  | EventPollinationStarting
+  | EventGeneratedPlantReady
+  | EventNewSprouting;
+
 /** Interface for "serverInstructDisplays" messages.
  *
  * These messages are always published by the **server** and received
@@ -81,7 +79,7 @@ export interface EventNewSprouting extends SimpleEvent {
 export interface DisplayEvent {
   name: DisplayEventNames;
   /** What content needs to be displayed */
-  payload: any;
+  payload: unknown;
   /** How long, in ms, before the display should notify the server that
    * it is ready for new content. If omitted, the content will stay
    * on that display until further instructions received.

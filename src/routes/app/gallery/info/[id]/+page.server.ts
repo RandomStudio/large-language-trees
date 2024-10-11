@@ -3,7 +3,7 @@ import { plants } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ params }) => {
   const plantId = params["id"];
   if (!plantId) {
     throw Error("no plant ID provided in route");

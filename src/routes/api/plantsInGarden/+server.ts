@@ -3,12 +3,7 @@ import { gardens, gardensToPlants } from "$lib/server/schema";
 import type { GardenPlantEntry } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
-import {
-  addPlantToGarden,
-  getUserByUsername,
-  getUserGardenWithPlants
-} from "$lib/server";
-import { ADMIN_GARDEN_SHARED } from "$env/static/private";
+import { addPlantToGarden } from "$lib/server";
 
 export interface PostPlantToGardenBody {
   plantId: string;
@@ -116,7 +111,7 @@ export const PATCH: RequestHandler = async ({ request }) => {
   return json(result[0], { status: 200 });
 };
 
-export const DELETE: RequestHandler = async ({ request, url }) => {
+export const DELETE: RequestHandler = async ({ url }) => {
   const gardenId = url.searchParams.get("gardenId");
   const plantId = url.searchParams.get("plantId");
 

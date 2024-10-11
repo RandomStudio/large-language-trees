@@ -1,8 +1,7 @@
 import { db } from "$lib/server/db";
 import { generatedPlants } from "$lib/server/schema";
-import type { GenerateImageRequest, InsertPlant } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 /** Should be identical to the interface in
  * `/netlify/functions/complete-gen-background.mts`

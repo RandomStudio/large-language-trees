@@ -1,6 +1,6 @@
 import { lucia } from "$lib/server/auth";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
-import { hash, verify } from "@node-rs/argon2";
+import { verify } from "@node-rs/argon2";
 import { eq } from "drizzle-orm";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";

@@ -3,10 +3,10 @@ import { v4 as uuidv4 } from "uuid";
 import { getPromptSettings } from "$lib/server/promptSettings";
 import { buildTextPrompt } from "$lib/promptUtils";
 import { BACKGROUND_FN_SECRET } from "$env/static/private";
-import type { GeneratePlantRequestBody, SelectPlant } from "$lib/types";
+import type { GeneratePlantRequestBody } from "$lib/types";
 import { db } from "$lib/server/db";
-import { eq, or } from "drizzle-orm";
-import { generatedPlants, plants, users } from "$lib/server/schema";
+import { eq } from "drizzle-orm";
+import { generatedPlants, plants } from "$lib/server/schema";
 
 /** Should be identical to the version in
  * `/netlify/functions/complete-gen-background.mts`

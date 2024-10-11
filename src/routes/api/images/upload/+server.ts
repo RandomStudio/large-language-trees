@@ -1,4 +1,4 @@
-import { streamToS3, uploadToS3 } from "$lib/server/images";
+import { streamToS3 } from "$lib/server/images";
 import type { ImageUploadResult } from "$lib/types";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { v4 as uuidv4 } from "uuid";

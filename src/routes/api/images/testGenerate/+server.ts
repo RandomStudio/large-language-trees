@@ -28,6 +28,10 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
     body: JSON.stringify(bodyJson)
   });
 
+  if (res.status !== 202) {
+    throw Error("error requesting image gen background:" + res.status);
+  }
+
   return json(bodyJson, { status: 202 });
 
   // return json({}, { status: 202 });
