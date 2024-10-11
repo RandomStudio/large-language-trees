@@ -86,9 +86,12 @@
     {#if candidateChild.originalImageUrl}
       <div class="relative">
         <div
-          style:transition="all 1s ease-in"
-          class:opacity-1={readyWithImage}
+          class="origin-bottom"
+          style:transition="all 1s ease-out"
+          class:scale-0={!readyWithImage}
+          class:scale-1={readyWithImage}
           class:opacity-0={!readyWithImage}
+          class:opacity-1={readyWithImage}
         >
           <TransparencyMaker
             src={candidateChild.originalImageUrl}
