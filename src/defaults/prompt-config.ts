@@ -7,7 +7,7 @@ const DefaultPrompt: PromptConfig = {
 
 The first parent plant is "{PARENT1_COMMON_NAME}". {PARENT1_DESCRIPTION}
 
-The second parent plant is "{PARENT2_COMMON_NAME"}. {PARENT2_DESCRIPTION}
+The second parent plant is "{PARENT2_COMMON_NAME}". {PARENT2_DESCRIPTION}
 
 By cross-pollinating these two plants, I create a new plant which is named {NEW_PLANT_NAME}.
 
