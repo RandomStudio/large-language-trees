@@ -20,9 +20,9 @@ export const buildTextPrompt = (
       role: "user",
       content: template
         .replaceAll("{PARENT1_COMMON_NAME}", plant1.commonName)
-        .replaceAll("{PARENT2_COMMON_NAME", plant2.commonName)
+        .replaceAll("{PARENT2_COMMON_NAME}", plant2.commonName)
         .replaceAll("{PARENT1_DESCRIPTION}", plant1.description)
-        .replaceAll("{PARENT2_DESCRIPTION", plant2.description)
+        .replaceAll("{PARENT2_DESCRIPTION}", plant2.description)
         .replaceAll("{NEW_PLANT_NAME}", userPickedNewName)
     }
   ];
