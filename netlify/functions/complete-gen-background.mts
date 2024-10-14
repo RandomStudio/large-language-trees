@@ -225,7 +225,10 @@ const parseNewPlant = (
         parent2: parent2Id,
         commonName: json["commonName"],
         description: json["description"],
-        properties: { heightInMetres: json["heightInMetres"] }
+        properties: {
+          heightInMetres: json["heightInMetres"],
+          funFact: json["funFact"]
+        }
       };
     } else {
       throw Error("Fields missing from: " + JSON.stringify(Object.keys(json)));

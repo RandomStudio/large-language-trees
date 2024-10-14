@@ -7,7 +7,6 @@ import type {
   SelectPromptSettings,
   TextModelNames
 } from "./types";
-import { desc } from "drizzle-orm";
 
 export const buildTextPrompt = (
   config: PromptConfig,

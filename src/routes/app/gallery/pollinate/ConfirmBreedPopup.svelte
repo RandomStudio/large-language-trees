@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { CandidatePlant, InsertPlant } from "$lib/types";
+  import type {
+    CandidatePlant,
+    InsertPlant,
+    PlantProperties
+  } from "$lib/types";
   import { TOLERANCE_SIMPLE } from "$lib/constants";
   import TransparencyMaker from "$lib/shared-components/TransparencyMaker.svelte";
   import PopupError from "./PopupError.svelte";
@@ -74,6 +78,14 @@
     readyWithImage = true;
   };
 
+  const funFactOrDescription = (plant: InsertPlant): string => {
+    const { properties } = plant;
+    return (
+      ((properties as PlantProperties)["funFact"] as string) ??
+      plant.description
+    );
+  };
+
   onMount(() => {
     const updated = candidateToPlant(candidateChild);
     console.log({ updated });
@@ -82,7 +94,7 @@
 </script>
 
 <div class="fixed z-20 top-0 left-0 h-full overflow-auto bg-roel_green pb-32">
-  <Layout title="Hooray you made a new plant!">
+  <Layout title="Hooray, you have grown a new plant!">
     {#if candidateChild.originalImageUrl}
       <div class="relative">
         <div
@@ -112,11 +124,13 @@
       {#if errorText}
         <p class="mt-8 text-roel_purple text-regular">{errorText}</p>
       {/if}
-      <p
-        class="mt-4 text-roel_purple text-regular text-center text-small mb-32 min-h-screen"
-      >
-        {finalInsertPlant?.description}
-      </p>
+      {#if finalInsertPlant}
+        <p
+          class="mt-4 text-roel_purple text-regular text-center text-small mb-32 min-h-screen"
+        >
+          {funFactOrDescription(finalInsertPlant)}
+        </p>
+      {/if}
       <p class="mb-64"></p>
     {/if}
     {#if readyWithImage}
