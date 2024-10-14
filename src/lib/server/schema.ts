@@ -155,7 +155,7 @@ export const promptSettingsTable = pgTable("prompt_settings", {
   textModel: text("text_model").notNull(),
   textTemplate: text("text_template").notNull(),
   imageModel: text("image_model").notNull(),
-  imageInstructions: text("image_instructions").notNull()
+  imageTemplate: text("image_template").notNull()
 });
 
 export const presentationState = pgTable("presentation_state", {

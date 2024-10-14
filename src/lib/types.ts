@@ -89,7 +89,7 @@ export interface PromptConfig {
   };
   image: {
     model: ImageModelNames;
-    instructions: string;
+    template: string;
   };
 }
 

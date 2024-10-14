@@ -7,6 +7,7 @@ import type {
   SelectPromptSettings,
   TextModelNames
 } from "./types";
+import { desc } from "drizzle-orm";
 
 export const buildTextPrompt = (
   config: PromptConfig,
@@ -29,9 +30,13 @@ export const buildTextPrompt = (
 };
 
 export const buildImagePrompt = (
-  instructions: string,
+  template: string,
+  givenName: string,
   description: string
-): string => instructions + "\n\n" + description;
+): string =>
+  template
+    .replaceAll("{NEW_PLANT_NAME}", givenName)
+    .replaceAll("{DESCRIPTION}", description);
 
 /** Given the settings for prompts as loaded from the DB, return
  *  a full PromptConfig object, substituting defaults only where
@@ -47,7 +52,7 @@ export const promptRowToConfig = (
     },
     image: {
       model: rowFromTable.imageModel as ImageModelNames,
-      instructions: rowFromTable.imageInstructions
+      template: rowFromTable.imageTemplate
     }
   };
 };
@@ -63,7 +68,7 @@ export const promptConfigToRow = (
     textModel: config.text.model,
     textTemplate: config.text.template,
     imageModel: config.image.model,
-    imageInstructions: config.image.instructions
+    imageTemplate: config.image.template
   };
 };
 

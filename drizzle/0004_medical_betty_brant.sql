@@ -1,0 +1,1 @@
+ALTER TABLE "prompt_settings" RENAME COLUMN "image_instructions" TO "image_template";

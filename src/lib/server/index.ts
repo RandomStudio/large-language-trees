@@ -46,7 +46,7 @@ export const populateDefaultPromptSettings = async () => {
     textModel: defaultPromptSettings.text.model,
     textTemplate: defaultPromptSettings.text.template,
     imageModel: defaultPromptSettings.image.model,
-    imageInstructions: defaultPromptSettings.image.instructions
+    imageTemplate: defaultPromptSettings.image.template
   });
 };
 

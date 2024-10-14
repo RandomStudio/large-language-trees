@@ -1,4 +1,4 @@
-import { json, type RequestHandler } from "@sveltejs/kit";
+import { error, json, type RequestHandler } from "@sveltejs/kit";
 import type { PromptConfig } from "$lib/types";
 import { buildImagePrompt } from "$lib/promptUtils";
 import { getPromptSettings } from "$lib/server/promptSettings";
@@ -33,7 +33,21 @@ export const POST: RequestHandler = async ({ request }) => {
   try {
     const { plantId, description } = (await request.json()) as GenImageToServer;
 
-    const bodyJson = await backgroundImageRequestBody(plantId, description);
+    const candidate = await db.query.generatedPlants.findFirst({
+      where: eq(generatedPlants.plantId, plantId)
+    });
+
+    if (!candidate) {
+      return error(404, "No matching candidate plant available");
+    }
+
+    const { givenName } = candidate;
+
+    const bodyJson = await backgroundImageRequestBody(
+      plantId,
+      description,
+      givenName
+    );
 
     return json(bodyJson, { status: 200 });
   } catch (e) {
@@ -60,13 +74,14 @@ export const POST: RequestHandler = async ({ request }) => {
 const backgroundImageRequestBody = async (
   plantId: string,
   description: string,
-  instructions?: string,
+  givenName: string,
   model?: string
 ) => {
   const promptSettings: PromptConfig = await getPromptSettings();
 
   const prompt = buildImagePrompt(
-    instructions || promptSettings.image.instructions,
+    promptSettings.image.template,
+    givenName,
     description
   );
 
