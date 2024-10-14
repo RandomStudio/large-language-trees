@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { getColourPair } from "./findColors";
   import { DateTime } from "luxon";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import { getColourPair } from "../../shared-components/findColors";
 
   export let imageUrl: string;
   export let plantName: string;

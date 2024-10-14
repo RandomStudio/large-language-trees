@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getColourPair } from "./findColors";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import writtenNumber from "written-number";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import { getColourPair } from "../../shared-components/findColors";
 
   export let plant: SelectPlant;
   export let pollinationCount: number;
