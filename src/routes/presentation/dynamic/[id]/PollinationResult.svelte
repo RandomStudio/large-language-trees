@@ -2,9 +2,9 @@
   import { onMount } from "svelte";
   import type { PublicUserInfo, SelectPlant } from "$lib/types";
   import PlantDisplay from "$lib/shared-components/PlantDisplay.svelte";
-  import { getColourPair } from "./findColors";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
   import { playRandomGrow } from "../../AudioEngine";
+  import { getColourPair } from "../../shared-components/findColors";
 
   export let authorTop: PublicUserInfo;
   export let authorBottom: PublicUserInfo;
