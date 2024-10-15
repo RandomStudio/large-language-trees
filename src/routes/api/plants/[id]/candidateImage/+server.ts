@@ -29,6 +29,15 @@ export const POST: RequestHandler = async ({ request, params }) => {
   if (plantId) {
     console.log({ url, errorMessage, plantId });
 
+    if (errorMessage) {
+      const res = await db
+        .update(generatedPlants)
+        .set({ errorMessage })
+        .where(eq(generatedPlants.plantId, plantId))
+        .returning();
+      return json(res, { status: 200, statusText: "deleted failed candidate" });
+    }
+
     if (url) {
       console.log("Uploading to our storage first...");
       const resImageFromOpenAI = await fetch(url);
