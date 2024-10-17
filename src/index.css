@@ -74,7 +74,13 @@ body {
 
 .standard-gradient {
   &::before {
-    background: linear-gradient(180deg, #4b0082 0%, #4b0082 60%, #c8f58f 100%);
+    background: linear-gradient(
+      180deg,
+      #4b0082 0%,
+      #4b0082 29%,
+      #c8f58f 64%,
+      #c8f58f 100%
+    );
     content: "";
     height: 100vh;
     position: absolute;
