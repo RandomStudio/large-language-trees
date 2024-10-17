@@ -16,7 +16,7 @@ Let your imagination run wild, then present the new plant (the {NEW_PLANT_NAME})
   image: {
     model: "dall-e-3",
     template:
-      "You are a botanist. Create a 2D image of a {NEW_PLANT_NAME} plant from the following description. The plant is in the centre, standing alone on a pure white background. Make sure there is no text in the image. There is only the plant in the middle of the picture. Here is the description: {DESCRIPTION}. But make it really {NEW_PLANT_NAME}."
+      "Create a 2D image of a {NEW_PLANT_NAME} plant from the following description. The plant is in the centre, standing alone on a pure white background. Make sure there is no text in the image. Here is the description: {DESCRIPTION}. But make it really {NEW_PLANT_NAME}."
   }
 };
 

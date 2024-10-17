@@ -128,7 +128,7 @@ const tryGenerate = async (
 
   const jsonBody = {
     model,
-    prompt,
+    prompt: model === "dall-e-3" ? prompt : prompt.slice(0, 399),
     n: 1,
     size: "1024x1024"
   };

@@ -189,11 +189,11 @@
         applyFilters={false}
       />
       <div
-        class="font-primer text-roel_green text-center text-large font-semibold mt-2"
+        class="font-primer text-roel_purple text-center text-large font-semibold mt-2"
       >
         Your {data.myOriginalPlant.plant.commonName}
       </div>
-      <div class="font-primer text-small text-roel_green text-center">
+      <div class="font-primer text-small text-roel_purple text-center">
         ...has pollinated {data.pollinationCount} other plants
       </div>
     </div>
