@@ -21,7 +21,7 @@
   // const yStart = Math.floor(Math.random() * (-sizePicture + 1620));
   // const yEnd = Math.floor(Math.random() * (-sizePicture + 1620));
 
-  sizePicture = window.innerHeight * 1.5;
+  sizePicture = window.innerHeight * 1.1;
   console.log({ sizePicture });
 
   const xStart = remap(
