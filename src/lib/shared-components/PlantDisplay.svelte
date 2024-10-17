@@ -40,14 +40,14 @@
       backgroundAlpha: 0
     });
 
-    console.log(app, canvasElement);
+    // console.log(app, canvasElement);
 
     // Load the snake texture
     const texture = await Assets.load(imageUrl);
-    console.log("Texture loaded:", texture);
+    // console.log("Texture loaded:", texture);
 
     const sprite = Sprite.from(texture);
-    console.log("Sprite created:", sprite);
+    // console.log("Sprite created:", sprite);
 
     sprite.anchor.set(0, 1); // required so rotation works from centre
     sprite.angle = 90;
@@ -103,7 +103,7 @@
         points[i].x = i * ropeLength + Math.cos(i * 0.3 + count) * 6;
       }
     });
-    console.log("Canvas element:", canvasElement);
+    // console.log("Canvas element:", canvasElement);
   });
 
   onDestroy(() => {

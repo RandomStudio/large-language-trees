@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DisplayMultipleGardens } from "$lib/events.types";
   import { onMount } from "svelte";
-  import { BROLL_TIMEOUT } from "$lib/constants";
+  import { BROLL_TIMEOUT, FADE_DURATION } from "$lib/constants";
 
   import type { GardenWithPlants } from "$lib/types";
   import DisplayGarden from "../../shared-components/DisplayGarden.svelte";
@@ -9,10 +9,12 @@
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
   export let gardens: GardenWithPlants[];
 
+  import { fade } from "svelte/transition";
+
   const GARDEN_WIDTH = 700;
   const GARDEN_HEIGHT = 700;
 
-  const duration = BROLL_TIMEOUT; //ms
+  const duration = BROLL_TIMEOUT + 2000; //ms
   const START_POSITION = GARDEN_WIDTH / 2;
   const END_POSITION = ((-gardens.length / 2) * GARDEN_WIDTH) / 2;
 
@@ -40,8 +42,9 @@
     style:width={`${GARDEN_WIDTH}px`}
     style:height={`${GARDEN_HEIGHT}px`}
   >
-    {#each gardens as garden, index}
+    {#each gardens as garden, index (garden.id)}
       <div
+        transition:fade={{ duration: FADE_DURATION }}
         class="absolute"
         style:left={getOffsets(index, $pan).x + "px"}
         style:top={getOffsets(index, $pan).y + "px"}

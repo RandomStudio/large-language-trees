@@ -9,12 +9,12 @@
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
 
   export let plantImages: string[];
+  let started = false;
 
-  const sizePicture = window.innerWidth * 3;
+  const sizePicture = window.innerWidth * 2;
   console.log({ sizePicture });
 
   const duration = MULTI_DETAIL_TIMEOUT * 1.5;
-  const delayStart = duration / 4;
 
   interface ImageWithPosition {
     url: string;
@@ -24,12 +24,13 @@
 
   let movingPlants: ImageWithPosition[] = plantImages.map((p, i) => ({
     url: p,
-    x: i % 2 == 0 ? -sizePicture : sizePicture / 2,
+    x: i % 2 == 0 ? -sizePicture / 2 : sizePicture / 2,
     y: i % 2 == 0 ? 0 : sizePicture / 2
   }));
 
   onMount(() => {
     setTimeout(() => {
+      started = true;
       movingPlants = movingPlants.map((p, i) => ({
         ...p,
         x: remap(Math.random(), [0, 1], [-sizePicture / 2, 0]),

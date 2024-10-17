@@ -10,7 +10,8 @@ import type {
  */
 interface SimpleEvent {
   name: SimpleEventNames;
-  payload: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any;
 }
 
 export const enum SimpleEventNames {
@@ -79,7 +80,8 @@ export type SimpleEventTypes =
 export interface DisplayEvent {
   name: DisplayEventNames;
   /** What content needs to be displayed */
-  payload: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any;
   /** How long, in ms, before the display should notify the server that
    * it is ready for new content. If omitted, the content will stay
    * on that display until further instructions received.

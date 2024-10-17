@@ -15,7 +15,7 @@
   import BRollDetailMulti from "./BRollDetailMulti.svelte";
   import StatsPollinations from "./StatsPollinations.svelte";
 
-  import { fade, slide } from "svelte/transition";
+  import { fade } from "svelte/transition";
 
   import { FADE_DURATION, IDLE_TIMEOUT } from "$lib/constants";
   import PollinationStarting from "./PollinationStarting.svelte";
