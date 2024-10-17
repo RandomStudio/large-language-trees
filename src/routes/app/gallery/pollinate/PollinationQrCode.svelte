@@ -10,7 +10,7 @@
 
   const generateQRCode = (text: string) => {
     QRCode.toCanvas(canvasElement, text, {
-      width: 120,
+      width: 240,
       color: {
         dark: "#670093", // roel_purple
         light: "#0000" // roel_green

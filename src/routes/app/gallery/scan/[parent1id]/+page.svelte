@@ -376,7 +376,7 @@
             <track kind="captions" srclang="en" label="English captions" />
           </video>
         </div>
-        <div class="absolute -bottom-[40px] rounded-md bg-green-100">
+        <div class="absolute -bottom-[160px] rounded-md bg-green-100">
           <PollinationQrCode
             plantId={data.thisPlant.id}
             userId={data.thisUser.id}
