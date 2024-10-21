@@ -9,10 +9,15 @@
   import type { RefreshDisplays } from "../../../api/displays/types";
   import Idle from "../../shared-components/Idle.svelte";
   import SiteUrl from "../../shared-components/SiteUrl.svelte";
+  import type { GardenWithPlants } from "$lib/types";
+  import { fade, slide } from "svelte/transition";
 
   export let data;
 
   let agent: TetherAgent | null = null;
+
+  let counter = 0;
+  let currentFeaturedGarden: GardenWithPlants | null = null;
 
   onMount(async () => {
     agent = await TetherAgent.create("presentation", {
@@ -51,6 +56,15 @@
         location.reload();
       }
     });
+
+    currentFeaturedGarden =
+      data.featuredGardens[counter % data.featuredGardens.length];
+    setInterval(() => {
+      counter++;
+      currentFeaturedGarden =
+        data.featuredGardens[counter % data.featuredGardens.length];
+      console.log("picked", currentFeaturedGarden.name);
+    }, 8000);
   });
 
   onDestroy(() => {
@@ -60,48 +74,49 @@
   });
 </script>
 
-{#if data.topGardenWithPlants}
-  {#if data.gardensWithPlantCounts.length === 0 || data.topGardenWithPlants.plants.length === 0}
-    <Idle />
-  {:else}
-    <div
-      class="w-full h-full flex flex-col items-center pink-gradient-halfscreen"
-    >
-      <div class="h-[45vh]">
-        <div
-          class="text-left text-roel_purple text-7xl font-gyst capitalize px-8 bg-roel_rose py-6"
-        >
-          <div>Most Active</div>
-          <div>Pollinators</div>
-        </div>
-
-        <div class="w-screen opacity">
-          {#each data.gardensWithPlantCounts as { user, count }}
-            <div
-              class="odd:bg-roel_purple odd:text-roel_rose even:text-roel_purple even:bg-roel_rose px-8 py-6 text-[48px] flex flex-row justify-between"
-            >
-              <div class="capitalize">
-                {user.username}
-              </div>
-              <div>
-                x{count}
-              </div>
-            </div>
-          {/each}
-        </div>
+{#if data.gardensWithPlantCounts.length === 0}
+  <Idle />
+{:else}
+  <div
+    class="w-full h-full flex flex-col items-center pink-gradient-halfscreen"
+  >
+    <div class="h-[45vh]">
+      <div
+        class="text-left text-roel_purple text-7xl font-gyst capitalize px-8 bg-roel_rose py-6"
+      >
+        <div>Most Active</div>
+        <div>Pollinators</div>
       </div>
 
-      <div>
-        <DisplayGarden
-          width={600}
-          height={900}
-          garden={data.topGardenWithPlants}
-        />
+      <div class="w-screen opacity">
+        {#each data.gardensWithPlantCounts as { user, count }}
+          <div
+            class="odd:bg-roel_purple odd:text-roel_rose even:text-roel_purple even:bg-roel_rose px-8 py-6 text-[48px] flex flex-row justify-between"
+          >
+            <div class="capitalize">
+              {user.username}
+            </div>
+            <div>
+              x{count}
+            </div>
+          </div>
+        {/each}
       </div>
     </div>
-  {/if}
-{:else}
-  <Idle />
+
+    {#if currentFeaturedGarden}
+      {#key currentFeaturedGarden.id}
+        <div transition:slide={{ duration: 1000 }} class="absolute bottom-40">
+          <DisplayGarden
+            disableAnimations={true}
+            width={600}
+            height={900}
+            garden={currentFeaturedGarden}
+          />
+        </div>
+      {/key}
+    {/if}
+  </div>
 {/if}
 
 <SiteUrl />

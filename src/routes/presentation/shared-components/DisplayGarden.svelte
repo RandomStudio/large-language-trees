@@ -13,6 +13,7 @@
   export let showGardenName = true;
   export let showPlantName = false;
   export let colorBGText = "roel_green";
+  export let disableAnimations = false;
 
   interface PositionData {
     x: number;
@@ -197,7 +198,8 @@
       <img
         src="/grassjess.png"
         class="absolute opacity-90 skew-animated"
-        style={`left: ${grassPatch.x}px; top: ${grassPatch.y}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex}; transition: left 2s, top 5s;`}
+        style={`left: ${grassPatch.x}px; top: ${grassPatch.y}px; width: ${grassPatch.size}px; z-index: ${grassPatch.zIndex}; `}
+        style:transition={disableAnimations ? null : "left 2s, top 5s"}
         alt={`Grass for ${commonName}`}
       />
     {/each}
@@ -205,7 +207,8 @@
       src={imageUrl}
       alt={commonName}
       class="absolute skew-animated"
-      style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex}; transition: left 2s, top 5s;`}
+      style={`left: ${plantPositionData.x}px; top: ${plantPositionData.y}px; width: ${plantPositionData.size}px; height: auto; z-index: ${plantPositionData.zIndex}`}
+      style:transition={disableAnimations ? null : "left 2s, top 5s"}
       crossorigin="anonymous"
     />
     {#if showPlantName}
