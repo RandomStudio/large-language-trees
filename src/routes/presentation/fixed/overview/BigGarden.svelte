@@ -147,8 +147,7 @@
         const amplitudeX =
           index === 0
             ? 0
-            : remap(index, [1, plants.length - 1], [width / 2, 0]) *
-              Math.random();
+            : remap(index, [1, plants.length], [width / 2, 0]) * Math.random();
 
         // Compress (horizontally and vertically) up to 10 plants
         const scaleByCount = remap(plants.length, [0, 10], [0.1, 1.0], true);
@@ -219,7 +218,7 @@
   class="absolute"
   style:width={`${width}px`}
   style:height={`${height}px`}
-  style:transition="transform 4s ease-in-out"
+  style:transition="transform 6s ease-in-out"
   style:transform={target
     ? `scale(${ZOOM_IN_FACTOR}) translateX(${target.x}px) translateY(${target.y}px)`
     : ``}
