@@ -6,7 +6,8 @@
   } from "$lib/types";
   import { remap } from "@anselan/maprange";
   import { DateTime } from "luxon";
-  import { beforeUpdate } from "svelte";
+  import { pickRandomElement } from "random-elements";
+  import { beforeUpdate, onMount } from "svelte";
 
   interface PlantImageWithDates {
     plantId: string;
@@ -35,7 +36,16 @@
     grassPositions: PositionData[];
   }
 
-  let positions: PlantsWithGrasses[] = [];
+  $: positions = buildLayout(plants);
+
+  const ZOOM_IN_FACTOR = 2.5;
+
+  interface LookingTarget {
+    x: number;
+    y: number;
+  }
+
+  let target: LookingTarget | null = null;
 
   const stringOrNumberToNumber = (x: number | string): number => {
     if (typeof x === "number") {
@@ -92,7 +102,7 @@
             ? startX + offsetX - size / 2
             : startX - offsetX - size / 2,
         y: startY - size / 2 - offsetY,
-        size,
+        size: size / 1.5,
         zIndex: i === 0 && numPatches < 2 ? plantPositionData.zIndex + 1 : 1
       });
     }
@@ -101,6 +111,9 @@
   };
 
   const buildLayout = (plants: PlantImageWithDates[]): PlantsWithGrasses[] => {
+    if (target) {
+      target = null;
+    }
     // const { min: minHeightPlant, max: maxHeightPlant } = findMinMaxHeight();
     const tallestPlantMetres = getLargestPlantHeightMetres(plants);
     // console.log({ tallestPlantMetres });
@@ -176,12 +189,41 @@
   };
 
   beforeUpdate(() => {
-    console.log("..................... buildLayout!");
-    positions = buildLayout(plants);
+    // console.log("..................... buildLayout!");
+    // positions = buildLayout(plants);
+  });
+
+  onMount(() => {
+    setInterval(() => {
+      if (target === null) {
+        const randomPlant = pickRandomElement(positions);
+        const { x, y } = randomPlant.plantPositionData;
+        const centre = {
+          x: width / 2,
+          y: height / 2
+        };
+        console.log("zoom in to", { x, y });
+        target = {
+          x: (centre.x - x) / 2,
+          y: (centre.y - y) / 2
+        };
+      } else {
+        console.log("reset target / zoom out");
+        target = null;
+      }
+    }, 12000);
   });
 </script>
 
-<div class="absolute" style:width={`${width}px`} style:height={`${height}px`}>
+<div
+  class="absolute"
+  style:width={`${width}px`}
+  style:height={`${height}px`}
+  style:transition="transform 4s ease-in-out"
+  style:transform={target
+    ? `scale(${ZOOM_IN_FACTOR}) translateX(${target.x}px) translateY(${target.y}px)`
+    : ``}
+>
   {#each positions as { imageUrl, plantPositionData, grassPositions }}
     {#each grassPositions as grassPatch}
       <img
