@@ -67,9 +67,9 @@
     <div
       class="w-full h-full flex flex-col items-center pink-gradient-halfscreen"
     >
-      <div class="h-[55vh]">
+      <div class="h-[45vh]">
         <div
-          class="text-left text-roel_purple text-7xl font-gyst capitalize px-4 bg-roel_rose py-6"
+          class="text-left text-roel_purple text-7xl font-gyst capitalize px-8 bg-roel_rose py-6"
         >
           <div>Most Active</div>
           <div>Pollinators</div>
@@ -78,7 +78,7 @@
         <div class="w-screen opacity">
           {#each data.gardensWithPlantCounts as { user, count }}
             <div
-              class="odd:bg-roel_purple odd:text-roel_rose even:text-roel_purple even:bg-roel_rose px-6 py-6 text-[2em] flex flex-row justify-between"
+              class="odd:bg-roel_purple odd:text-roel_rose even:text-roel_purple even:bg-roel_rose px-8 py-6 text-[48px] flex flex-row justify-between"
             >
               <div class="capitalize">
                 {user.username}
@@ -93,8 +93,8 @@
 
       <div>
         <DisplayGarden
-          width={400}
-          height={500}
+          width={600}
+          height={900}
           garden={data.topGardenWithPlants}
         />
       </div>
