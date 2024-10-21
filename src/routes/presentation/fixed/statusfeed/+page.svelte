@@ -63,7 +63,7 @@
 >
   {#each currentLogs as log, index (log.messageIndex)}
     <div
-      class="py-8 px-4 w-full font-primer text-medium text-purple"
+      class="py-8 px-8 w-full font-primer text-[32px] text-purple"
       class:bg-roel_rose={log.messageIndex % 2 === 0}
       class:text-purple-950={log.messageIndex % 2 === 0}
       animate:flip
