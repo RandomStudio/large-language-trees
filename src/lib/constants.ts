@@ -20,12 +20,12 @@ export const DURATION_TILL_FERTILE: Duration = Duration.fromObject({
 });
 
 export const DISPLAY_VIEW_WEIGHTINGS = new Map([
-  [DisplayEventNames.DETAIL_MULTI, 4],
+  [DisplayEventNames.DETAIL_MULTI, 2],
   [DisplayEventNames.DETAIL, 4],
   [DisplayEventNames.ZOOM_OUT, 1],
-  [DisplayEventNames.ROLL_PAN, 1],
+  [DisplayEventNames.ROLL_PAN, 2],
   [DisplayEventNames.STATS_TIME, 1],
-  [DisplayEventNames.STATS_POLLINATIONS, 1]
+  [DisplayEventNames.STATS_POLLINATIONS, 3]
 ]);
 
 /** Wait between polling from frontend, e.g. for checking new plants */

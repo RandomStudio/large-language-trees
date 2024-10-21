@@ -16,20 +16,26 @@
 
   const duration = BROLL_TIMEOUT + 2000; //ms
   const START_POSITION = GARDEN_WIDTH / 2;
-  const END_POSITION = ((-gardens.length / 2) * GARDEN_WIDTH) / 2;
+  const END_POSITION = -GARDEN_WIDTH / 2;
 
   const Y_OFFSET = 100;
-  const X_OFFSET = GARDEN_WIDTH / 2;
+  const X_OFFSET = GARDEN_WIDTH / 10;
 
   let pan = tweened(START_POSITION, { duration });
 
   const getOffsets = (
     index: number,
     pan: number
-  ): { x: number; y: number } => ({
-    x: index * X_OFFSET + pan + pan * index * 0.1,
-    y: index % 2 === 0 ? Y_OFFSET : -Y_OFFSET
-  });
+  ): { x: number; y: number; z: number } => {
+    const isEven = index % 2 === 0;
+    const startX = isEven ? index * X_OFFSET : index * -X_OFFSET;
+    const speed = index * 0.2;
+    return {
+      x: GARDEN_WIDTH / 2 + startX + pan + pan * speed,
+      y: speed * 1000,
+      z: 1
+    };
+  };
 
   onMount(() => {
     pan.set(END_POSITION);
@@ -47,7 +53,8 @@
         transition:fade={{ duration: FADE_DURATION }}
         class="absolute"
         style:left={getOffsets(index, $pan).x + "px"}
-        style:top={getOffsets(index, $pan).y + "px"}
+        style:top={getOffsets(index, $pan).y - GARDEN_HEIGHT / 2 + "px"}
+        style:z-index={getOffsets(index, $pan).z}
       >
         <DisplayGarden
           width={GARDEN_WIDTH}

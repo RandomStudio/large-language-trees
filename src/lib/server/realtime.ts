@@ -449,7 +449,13 @@ export const getEventForAmbientDisplay = async (
         where: eq(gardensToPlants.gardenId, pickGarden.id),
         with: { plant: true }
       });
-      const pickPlant = pickRandomElement(plantsInGarden);
+      const onlyNewPlants = plantsInGarden.filter(
+        (p) => p.plant.parent1 !== null
+      );
+      if (onlyNewPlants.length === 0) {
+        throw Error("no new plants for this garden");
+      }
+      const pickPlant = pickRandomElement(onlyNewPlants);
       const user = await db.query.users.findFirst({
         where: eq(users.id, pickGarden.userId)
       });
