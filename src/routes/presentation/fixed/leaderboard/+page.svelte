@@ -106,7 +106,7 @@
 
     {#if currentFeaturedGarden}
       {#key currentFeaturedGarden.id}
-        <div transition:slide={{ duration: 1000 }} class="absolute bottom-40">
+        <div transition:fade={{ duration: 1000 }} class="absolute bottom-40">
           <DisplayGarden
             disableAnimations={true}
             width={600}
