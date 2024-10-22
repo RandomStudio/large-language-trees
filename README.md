@@ -107,7 +107,7 @@ sequenceDiagram
 BackgroundGenerateTextRequest contains:
 
 - ID strings: `authorTop`, `authorBottom`, `newPlantId`, `parent1id`, `parent2id`
-- string `model` (typically, Chat-GTP-4)
+- string `model` (typically, gpt-4-turbo)
 - array of `messages` objects (`role`, `content`)
 - `backgroundSecret` string used for basic authentication
 

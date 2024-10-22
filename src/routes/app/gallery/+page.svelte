@@ -234,14 +234,6 @@
         disableAnimation={index > MAX_CANVASSES - 1}
         onClick={() => {
           goto(`/app/gallery/info/${plant.id}`);
-          // selectedPlantForInfo = {
-          //   ...plant,
-          //   authorTopUser: plant.authorTopUser,
-          //   authorBottomUser: plant.authorBottomUser,
-          //   parentTopPlant: plant.parentPlantTop?.commonName || null,
-          //   parentBottomPlant: plant.parentPlantBottom?.commonName || null,
-          //   isOriginalPlant: false
-          // };
         }}
         {plant}
       />
